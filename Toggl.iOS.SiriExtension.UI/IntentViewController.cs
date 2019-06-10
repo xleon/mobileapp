@@ -75,6 +75,15 @@ namespace Toggl.iOS.SiriExtension.UI
                         desiredSize = showMessage(message);
                     }
 
+                    if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Failure)
+                    {
+                        if (interaction.IntentResponse is StartTimerIntentResponse response)
+                        {
+                            var message = response.UserActivity.GetResponseText();
+                            desiredSize = showMessage(message);
+                        }
+                    }
+
                     break;
                 case StartTimerFromClipboardIntent _:
                     var description = interaction.IntentResponse.UserActivity.GetResponseText();
@@ -89,6 +98,15 @@ namespace Toggl.iOS.SiriExtension.UI
                             ? Resources.SiriStartTimerWithEmptyDescConfirmationMessage
                             : string.Format(Resources.SiriStartTimerConfirmationMessage, description);
                         desiredSize = showMessage(message);
+                    }
+
+                    if (interaction.IntentHandlingStatus == INIntentHandlingStatus.Failure)
+                    {
+                        if (interaction.IntentResponse is StartTimerFromClipboardIntentResponse response)
+                        {
+                            var message = response.UserActivity.GetResponseText();
+                            desiredSize = showMessage(message);
+                        }
                     }
                     break;
                 case StopTimerIntent _:
@@ -113,7 +131,7 @@ namespace Toggl.iOS.SiriExtension.UI
                     {
                         if (interaction.IntentResponse is StopTimerIntentResponse response)
                         {
-                            var message = interaction.IntentResponse.UserActivity.GetResponseText();
+                            var message = response.UserActivity.GetResponseText();
                             desiredSize = showMessage(message);
                         }
                     }

@@ -37,6 +37,17 @@ namespace Toggl.Core.Interactors
                 null,
                 (TimeEntryStartOrigin)continueMode);
 
+        public IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueTimeEntryFromMainLog(ITimeEntryPrototype prototype,
+            ContinueTimeEntryMode continueMode, int indexInLog, int dayInLog, int daysInThePast)
+            => new ContinueTimeEntryFromMainLogInteractor(
+                this,
+                analyticsService,
+                prototype,
+                continueMode,
+                indexInLog,
+                dayInLog,
+                daysInThePast);
+
         public IInteractor<IObservable<IThreadSafeTimeEntry>> StartSuggestion(Suggestion suggestion)
             => new CreateTimeEntryInteractor(
                 idProvider,

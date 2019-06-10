@@ -1,29 +1,29 @@
-﻿using System.Reactive.Disposables;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Activities
 {
-    [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme.OutdatedAppStatusBarColor",
+    [Activity(Theme = "@style/Theme.Splash",
               ScreenOrientation = ScreenOrientation.Portrait,
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
-    public sealed partial class OutdatedAppActivity : MvxAppCompatActivity<OutdatedAppViewModel>
+    public sealed partial class OutdatedAppActivity : ReactiveActivity<OutdatedAppViewModel>
     {
-        public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
-
         protected override void OnCreate(Bundle bundle)
         {
+            SetTheme(Resource.Style.AppTheme_OutdatedAppStatusBarColor);
             base.OnCreate(bundle);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.OutdatedAppActivity);
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
-            initializeViews();
+            InitializeViews();
 
             updateAppButton.Rx()
                 .BindAction(ViewModel.UpdateApp)

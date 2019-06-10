@@ -20,18 +20,24 @@ namespace Toggl.Core.Tests.UI.ViewModels
         {
             protected override SyncFailuresViewModel CreateViewModel()
             {
-                var vm = new SyncFailuresViewModel(InteractorFactory);
+                var vm = new SyncFailuresViewModel(InteractorFactory, NavigationService);
                 return vm;
             }
         }
 
         public sealed class TheConstructor : SyncFailuresViewModelTest
         {
-            [Fact, LogIfTooSlow]
-            public void ThrowsIfTheArgumentIsNull()
+            [Theory, LogIfTooSlow]
+            [ConstructorData]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(
+                bool useInteractorFactory,
+                bool useNavigationService)
             {
+                var interactorFactory = useInteractorFactory ? InteractorFactory : null;
+                var navigationService = useNavigationService ? NavigationService : null;
+
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SyncFailuresViewModel(null);
+                    () => new SyncFailuresViewModel(interactorFactory, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();

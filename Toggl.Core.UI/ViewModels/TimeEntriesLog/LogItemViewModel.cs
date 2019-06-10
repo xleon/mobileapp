@@ -30,6 +30,10 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
 
         public IMainLogKey Identity { get; }
 
+        public int IndexInLog { get; }
+        public int DayInLog { get; }
+        public int DaysInThePast { get; }
+
         public bool IsTimeEntryGroupHeader =>
             VisualizationIntent == LogItemVisualizationIntent.ExpandedGroupHeader ||
             VisualizationIntent == LogItemVisualizationIntent.CollapsedGroupHeader;
@@ -51,7 +55,10 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
             bool hasTags,
             bool needsSync,
             bool canSync,
-            bool isInaccessible)
+            bool isInaccessible,
+            int indexInLog,
+            int dayInLog,
+            int daysInThePast)
         {
             GroupId = groupId;
             RepresentedTimeEntriesIds = representedTimeEntriesIds.OrderBy(id => id).ToArray();
@@ -70,6 +77,10 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
             Identity = IsTimeEntryGroupHeader
                 ? new TimeEntriesGroupKey(groupId) as IMainLogKey
                 : new SingleTimeEntryKey(representedTimeEntriesIds.Single());
+
+            IndexInLog = indexInLog;
+            DayInLog = dayInLog;
+            DaysInThePast = daysInThePast;
         }
 
         public bool Equals(LogItemViewModel other)
@@ -116,6 +127,6 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
         public static bool operator ==(LogItemViewModel left, LogItemViewModel right) => Equals(left, right);
 
         public static bool operator !=(LogItemViewModel left, LogItemViewModel right) => !Equals(left, right);
-      
+
     }
 }

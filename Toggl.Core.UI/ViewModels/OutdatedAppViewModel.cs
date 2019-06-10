@@ -1,5 +1,6 @@
 ﻿using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
@@ -18,7 +19,8 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly IBrowserService browserService;
 
-        public OutdatedAppViewModel(IBrowserService browserService, IRxActionFactory rxActionFactory)
+        public OutdatedAppViewModel(IBrowserService browserService, IRxActionFactory rxActionFactory, INavigationService navigationService)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(browserService, nameof(browserService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
 using CoreGraphics;
-using Foundation;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
@@ -13,15 +11,14 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [MvxRootPresentation(WrapInNavigationController = true)]
     public sealed partial class OnboardingViewController : ReactiveViewController<OnboardingViewModel>, IUIScrollViewDelegate
     {
         private readonly TrackPage trackPagePlaceholder = TrackPage.Create();
         private readonly MostUsedPage mostUsedPagePlaceholder = MostUsedPage.Create();
         private readonly ReportsPage reportsPagePlaceholder = ReportsPage.Create();
 
-        public OnboardingViewController()
-            : base(nameof(OnboardingViewController))
+        public OnboardingViewController(OnboardingViewModel viewModel)
+            : base(viewModel, nameof(OnboardingViewController))
         {
         }
 

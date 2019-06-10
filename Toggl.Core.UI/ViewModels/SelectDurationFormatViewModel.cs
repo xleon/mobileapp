@@ -12,8 +12,6 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public class SelectDurationFormatViewModel : ViewModel<DurationFormat, DurationFormat>
     {
-        private readonly INavigationService navigationService;
-
         private DurationFormat defaultResult;
 
         public IImmutableList<SelectableDurationFormatViewModel> DurationFormats { get; }
@@ -25,11 +23,9 @@ namespace Toggl.Core.UI.ViewModels
         public SelectDurationFormatViewModel(
             INavigationService navigationService,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-
-            this.navigationService = navigationService;
 
             Close = rxActionFactory.FromAsync(close);
             SelectDurationFormat = rxActionFactory.FromAsync<SelectableDurationFormatViewModel>(selectFormat);
@@ -40,16 +36,18 @@ namespace Toggl.Core.UI.ViewModels
                             .ToImmutableList();
         }
 
-        public override void Prepare(DurationFormat parameter)
+        public override Task Initialize(DurationFormat defaultDuration)
         {
-            defaultResult = parameter;
-            updateSelectedFormat(parameter);
+            defaultResult = defaultDuration;
+            updateSelectedFormat(defaultDuration);
+
+            return base.Initialize(defaultDuration);
         }
 
-        private Task close() => navigationService.Close(this, defaultResult);
+        private Task close() => Finish(defaultResult);
 
         private Task selectFormat(SelectableDurationFormatViewModel viewModel)
-            => navigationService.Close(this, viewModel.DurationFormat);
+            => Finish(viewModel.DurationFormat);
 
         private void updateSelectedFormat(DurationFormat selected)
             => DurationFormats.ForEach(viewModel

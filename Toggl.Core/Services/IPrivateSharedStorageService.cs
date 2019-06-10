@@ -8,10 +8,12 @@ namespace Toggl.Core.Services
 
         void SaveUserId(long userId);
 
-        void SaveLastUpdateDate(DateTimeOffset date);
-
         void SaveDefaultWorkspaceId(long workspaceId);
 
         void ClearAll();
+
+        bool HasUserDataStored();
+
+        string GetApiToken();
     }
 }

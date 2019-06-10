@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Services;
@@ -15,33 +18,41 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class SiriShortcutsViewModel : ViewModel
     {
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
+        private readonly ISchedulerProvider schedulerProvider;
 
         public UIAction NavigateToCustomReportShortcut;
         public UIAction NavigateToCustomTimeEntryShortcut;
 
         public SiriShortcutsViewModel(
             IInteractorFactory interactorFactory,
-            INavigationService navigationService,
-            IRxActionFactory rxActionFactory)
+            IRxActionFactory rxActionFactory,
+            ISchedulerProvider schedulerProvider,
+            INavigationService navigationService) : base(navigationService)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
+            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
+            this.schedulerProvider = schedulerProvider;
 
             NavigateToCustomReportShortcut = rxActionFactory.FromAsync(navigateToCustomReportShortcut);
             NavigateToCustomTimeEntryShortcut = rxActionFactory.FromAsync(navigateToCustomTimeEntryShortcut);
         }
 
-        private Task navigateToCustomReportShortcut() => navigationService.Navigate<SiriShortcutsSelectReportPeriodViewModel>();
+        private Task navigateToCustomReportShortcut()
+            => Navigate<SiriShortcutsSelectReportPeriodViewModel>();
 
-        private Task navigateToCustomTimeEntryShortcut() =>
-            navigationService.Navigate<SiriShortcutsCustomTimeEntryViewModel>();
+        private Task navigateToCustomTimeEntryShortcut()
+            => Navigate<SiriShortcutsCustomTimeEntryViewModel>();
 
         public IObservable<IThreadSafeProject> GetProject(long projectId)
-            => interactorFactory.GetProjectById(projectId).Execute();
+            => interactorFactory.GetProjectById(projectId).Execute()
+                .ObserveOn(schedulerProvider.MainScheduler);
+
+        public IObservable<IEnumerable<IThreadSafeWorkspace>> GetUserWorkspaces()
+            => interactorFactory.GetAllWorkspaces().Execute()
+                .Select(ws => ws.ToList()) // <- This is to avoid Realm threading issues
+                .ObserveOn(schedulerProvider.MainScheduler);
     }
 }

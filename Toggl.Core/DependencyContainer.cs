@@ -16,6 +16,7 @@ using Toggl.Storage;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Storage.Settings;
+using System.Threading.Tasks;
 
 namespace Toggl.Core
 {
@@ -35,7 +36,6 @@ namespace Toggl.Core
         private readonly Lazy<ITogglDatabase> database;
         private readonly Lazy<ITimeService> timeService;
         private readonly Lazy<IPlatformInfo> platformInfo;
-        private readonly Lazy<IGoogleService> googleService;
         private readonly Lazy<IRatingService> ratingService;
         private readonly Lazy<ICalendarService> calendarService;
         private readonly Lazy<IKeyValueStorage> keyValueStorage;
@@ -103,7 +103,6 @@ namespace Toggl.Core
             timeService = new Lazy<ITimeService>(CreateTimeService);
             dataSource = new Lazy<ITogglDataSource>(CreateDataSource);
             platformInfo = new Lazy<IPlatformInfo>(CreatePlatformInfo);
-            googleService = new Lazy<IGoogleService>(CreateGoogleService);
             ratingService = new Lazy<IRatingService>(CreateRatingService);
             calendarService = new Lazy<ICalendarService>(CreateCalendarService);
             keyValueStorage = new Lazy<IKeyValueStorage>(CreateKeyValueStorage);
@@ -132,7 +131,6 @@ namespace Toggl.Core
             UserAccessManager = new UserAccessManager(
                 apiFactory,
                 database,
-                googleService,
                 privateSharedStorageService);
 
             UserAccessManager
@@ -148,7 +146,6 @@ namespace Toggl.Core
 
         protected abstract ITogglDatabase CreateDatabase();
         protected abstract IPlatformInfo CreatePlatformInfo();
-        protected abstract IGoogleService CreateGoogleService();
         protected abstract IRatingService CreateRatingService();
         protected abstract ICalendarService CreateCalendarService();
         protected abstract IKeyValueStorage CreateKeyValueStorage();
@@ -175,7 +172,7 @@ namespace Toggl.Core
             => new BackgroundService(TimeService, AnalyticsService);
 
         protected virtual IAutomaticSyncingService CreateAutomaticSyncingService()
-            => new AutomaticSyncingService(BackgroundService, TimeService);
+            => new AutomaticSyncingService(BackgroundService, TimeService, LastTimeUsageStorage);
 
         protected virtual ISyncErrorHandlingService CreateSyncErrorHandlingService()
             => new SyncErrorHandlingService(ErrorHandlingService);
@@ -235,7 +232,7 @@ namespace Toggl.Core
             interactorFactory = shortcutCreator.Select(creator =>
             {
                 var factory = CreateInteractorFactory();
-                creator.OnLogin(factory);
+                Task.Run(() => creator.OnLogin(factory));
                 return factory;
             });
         }

@@ -17,11 +17,6 @@ namespace Toggl.iOS.Services
             SharedStorage.instance.SetUserId(userId);
         }
 
-        public void SaveLastUpdateDate(DateTimeOffset date)
-        {
-            SharedStorage.instance.SetLastUpdateDate(date);
-        }
-
         public void SaveDefaultWorkspaceId(long workspaceId)
         {
             SharedStorage.instance.SetDefaultWorkspaceId(workspaceId);
@@ -31,5 +26,11 @@ namespace Toggl.iOS.Services
         {
             SharedStorage.instance.DeleteEverything();
         }
+
+        public bool HasUserDataStored()
+            => !string.IsNullOrEmpty(SharedStorage.instance.GetApiToken());
+        
+        public string GetApiToken()
+            => SharedStorage.instance.GetApiToken();
     }
 }

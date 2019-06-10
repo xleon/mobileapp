@@ -256,6 +256,30 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string WorkspacePlaceholder {
+            get {
+                return ResourceManager.GetString("WorkspacePlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string ProjectPlaceholder {
+            get {
+                return ResourceManager.GetString("ProjectPlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string TaskPlaceholder {
+            get {
+                return ResourceManager.GetString("TaskPlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string TagPlaceholder {
+            get {
+                return ResourceManager.GetString("TagPlaceholder", resourceCulture);
+            }
+        }
+        
         public static string SyncCompleted {
             get {
                 return ResourceManager.GetString("SyncCompleted", resourceCulture);

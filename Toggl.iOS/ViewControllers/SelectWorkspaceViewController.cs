@@ -5,7 +5,6 @@ using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Views;
 using Toggl.iOS.ViewSources.Generic.TableView;
 using Toggl.Shared.Extensions;
@@ -13,14 +12,13 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalCardPresentation]
     public partial class SelectWorkspaceViewController : ReactiveViewController<SelectWorkspaceViewModel>, IDismissableViewController
     {
         private const int rowHeight = 64;
         private const double headerHeight = 54;
 
-        public SelectWorkspaceViewController()
-            : base(nameof(SelectWorkspaceViewController))
+        public SelectWorkspaceViewController(SelectWorkspaceViewModel viewModel)
+            : base(viewModel, nameof(SelectWorkspaceViewController))
         {
         }
 

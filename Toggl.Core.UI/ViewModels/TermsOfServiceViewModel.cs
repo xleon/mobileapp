@@ -21,17 +21,17 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<bool> Close { get; }
 
         public TermsOfServiceViewModel(IBrowserService browserService, IRxActionFactory rxActionFactory, INavigationService navigationService)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(browserService, nameof(browserService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
             this.browserService = browserService;
             this.rxActionFactory = rxActionFactory;
 
             ViewPrivacyPolicy = rxActionFactory.FromAction(() => openUrl(privacyPolicyUrl));
             ViewTermsOfService = rxActionFactory.FromAction(() => openUrl(termsOfServiceUrl));
-            Close = rxActionFactory.FromAsync<bool>(result => navigationService.Close(this, result));
+            Close = rxActionFactory.FromAsync<bool>(result => Finish(result));
         }
 
         private void openUrl(string url)

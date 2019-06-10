@@ -10,16 +10,24 @@ namespace Toggl.Core.Extensions
 {
     public static class TimeEntryExtensions
     {
-        public static ITimeEntryPrototype AsTimeEntryPrototype(this string description, DateTimeOffset startTime, long workspaceId)
+        public static ITimeEntryPrototype AsTimeEntryPrototype(
+            this string description,
+            DateTimeOffset startTime,
+            long workspaceId,
+            TimeSpan? duration = null,
+            long? projectId = null,
+            long? taskId = null,
+            long[] tagIds = null,
+            bool isBillable = false)
             => new TimeEntryPrototype(
                 workspaceId,
                 description: description,
-                duration: null,
+                duration: duration,
                 startTime: startTime,
-                projectId: null,
-                taskId: null,
-                tagIds: null,
-                isBillable: false
+                projectId: projectId,
+                taskId: taskId,
+                tagIds: tagIds,
+                isBillable: isBillable
             );
 
         public static ITimeEntryPrototype AsTimeEntryPrototype(this CalendarItem calendarItem, long workspaceId)
@@ -34,7 +42,8 @@ namespace Toggl.Core.Extensions
                 isBillable: false
             );
 
-        public static ITimeEntryPrototype AsTimeEntryPrototype(this TimeSpan timeSpan, DateTimeOffset startTime, long workspaceId)
+        public static ITimeEntryPrototype AsTimeEntryPrototype(this TimeSpan timeSpan, DateTimeOffset startTime,
+            long workspaceId)
             => new TimeEntryPrototype(
                 workspaceId,
                 description: "",
@@ -46,7 +55,8 @@ namespace Toggl.Core.Extensions
                 isBillable: false
             );
 
-        public static ITimeEntryPrototype AsTimeEntryPrototype(this TextFieldInfo textFieldInfo, DateTimeOffset startTime, TimeSpan? duration, bool billable)
+        public static ITimeEntryPrototype AsTimeEntryPrototype(this TextFieldInfo textFieldInfo,
+            DateTimeOffset startTime, TimeSpan? duration, bool billable)
             => new TimeEntryPrototype(
                 textFieldInfo.WorkspaceId,
                 textFieldInfo.Description,
@@ -56,7 +66,7 @@ namespace Toggl.Core.Extensions
                 textFieldInfo.Spans.OfType<ProjectSpan>().SingleOrDefault()?.TaskId,
                 textFieldInfo.Spans.OfType<TagSpan>().Select(span => span.TagId).Distinct().ToArray(),
                 billable
-                );
+            );
 
 
         public static ITimeEntryPrototype AsTimeEntryPrototype(this IThreadSafeTimeEntry timeEntry)

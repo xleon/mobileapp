@@ -46,6 +46,7 @@ namespace Toggl.Storage.Settings
         private const string lastSyncAttemptKey = "LastSyncAttempt";
         private const string lastSuccessfulSyncKey = "LastSuccessfulSync";
         private const string lastLoginKey = "LastLogin";
+        private const string lastTimePlaceholdersWereCreated = "LastPullTimeEntries";
 
         private const string enabledCalendarsKey = "EnabledCalendars";
         private const char calendarIdSeparator = ';';
@@ -447,6 +448,7 @@ namespace Toggl.Storage.Settings
 
         public DateTimeOffset? LastLogin => keyValueStorage.GetDateTimeOffset(lastLoginKey);
 
+        public DateTimeOffset? LastTimePlaceholdersWereCreated => keyValueStorage.GetDateTimeOffset(lastTimePlaceholdersWereCreated);
 
         public void SetFullSyncAttempt(DateTimeOffset now)
         {
@@ -461,6 +463,11 @@ namespace Toggl.Storage.Settings
         public void SetLogin(DateTimeOffset now)
         {
             keyValueStorage.SetDateTimeOffset(lastLoginKey, now);
+        }
+
+        public void SetPlaceholdersWereCreated(DateTimeOffset now)
+        {
+            keyValueStorage.SetDateTimeOffset(lastTimePlaceholdersWereCreated, now);
         }
 
         #endregion

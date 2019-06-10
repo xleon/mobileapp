@@ -1,13 +1,10 @@
 ﻿using System;
 using Android.Graphics;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Commands;
 using Toggl.Core.Suggestions;
 using Toggl.Droid.Extensions;
-using Toggl.Droid.ViewHolders;
 
 namespace Toggl.Droid.ViewHolders
 {
@@ -25,8 +22,6 @@ namespace Toggl.Droid.ViewHolders
         private TextView timeEntriesLogCellProjectLabel;
         private TextView timeEntriesLogCellClientLabel;
         private ImageView timeEntriesLogCellContinueImage;
-
-        public MvxAsyncCommand<Suggestion> ItemTapped { get; set; }
 
         public void RecalculateMargins()
         {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Platforms.Ios.Views;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core.Models.Interfaces;
@@ -11,16 +10,15 @@ using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.iOS.Presentation;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Views.Reports;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.iOS.Extensions.AnimationExtensions;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [TabPresentation]
     public sealed partial class ReportsViewController : ReactiveViewController<ReportsViewModel>, IScrollableToTop
     {
         private const string boundsKey = "bounds";
@@ -30,23 +28,18 @@ namespace Toggl.iOS.ViewControllers
 
         private const double maxWidth = 834;
 
-        private nfloat calendarHeight => CalendarContainer.Bounds.Height;
 
         private UIButton titleButton;
+        private bool calendarIsVisible;
+        private bool alreadyLoadedCalendar;
+        private ReportsTableViewSource source;
+        private IDisposable calendarSizeDisposable;
+        private ReportsCalendarViewController calendarViewController;
+        private nfloat calendarHeight => CalendarContainer.Bounds.Height;
         private ReportsOverviewCardView overview = ReportsOverviewCardView.CreateFromNib();
         private ReportsBarChartCardView barChart = ReportsBarChartCardView.CreateFromNib();
 
-        private ReportsTableViewSource source;
-
-        private ReportsCalendarViewController popoverCalendar;
-
-        private IDisposable calendarSizeDisposable;
-
-        internal UIView CalendarContainerView => CalendarContainer;
-
-        internal bool CalendarIsVisible { get; private set; }
-
-        public ReportsViewController() : base(nameof(ReportsViewController))
+        public ReportsViewController(ReportsViewModel viewModel) : base(viewModel, nameof(ReportsViewController))
         {
         }
 
@@ -68,9 +61,8 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            calendarViewController = ViewControllerLocator.GetViewController(ViewModel.CalendarViewModel) as ReportsCalendarViewController;
             prepareViews();
-
-            popoverCalendar = this.CreateViewControllerFor(ViewModel.CalendarViewModel) as ReportsCalendarViewController;
 
             OverviewContainerView.AddSubview(overview);
             overview.Frame = OverviewContainerView.Bounds;
@@ -93,7 +85,7 @@ namespace Toggl.iOS.ViewControllers
 
             ReportsTableView.Source = source;
 
-            bool areThereEnoughWorkspaces(ICollection<(string ItemName, IThreadSafeWorkspace Item)> workspaces) => workspaces.Count > 1;
+            bool areThereEnoughWorkspaces(ICollection<SelectOption<IThreadSafeWorkspace>> workspaces) => workspaces.Count > 1;
 
             bool isWorkspaceNameTooLong(string workspaceName)
             {
@@ -127,16 +119,63 @@ namespace Toggl.iOS.ViewControllers
 
             //Commands
             titleButton.Rx().Tap()
-                .Subscribe(ViewModel.ToggleCalendar)
+                .Subscribe(toggleCalendar)
                 .DisposedBy(DisposeBag);
 
             ReportsTableView.Rx().Tap()
-                .Subscribe(ViewModel.HideCalendar)
+                .Subscribe(HideCalendar)
                 .DisposedBy(DisposeBag);
 
             WorkspaceButton.Rx()
                 .BindAction(ViewModel.SelectWorkspace)
                 .DisposedBy(DisposeBag);
+
+            void toggleCalendar()
+            {
+                if (calendarIsVisible)
+                {
+                    HideCalendar();
+                    return;
+                }
+
+                if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact)
+                {
+                    ShowCalendar();
+                    return;
+                }
+
+                ShowPopoverCalendar();
+            }
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            IosDependencyContainer.Instance.IntentDonationService.DonateShowReport();
+
+            if (alreadyLoadedCalendar)
+                return;
+
+            // Calendar
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
+            {
+                AddChildViewController(calendarViewController);
+                CalendarContainer.AddSubview(calendarViewController.View);
+
+                calendarViewController.View.TopAnchor.ConstraintEqualTo(CalendarContainer.TopAnchor).Active = true;
+                calendarViewController.View.BottomAnchor.ConstraintEqualTo(CalendarContainer.BottomAnchor).Active = true;
+                calendarViewController.View.LeftAnchor.ConstraintEqualTo(CalendarContainer.LeftAnchor).Active = true;
+                calendarViewController.View.RightAnchor.ConstraintEqualTo(CalendarContainer.RightAnchor).Active = true;
+                calendarViewController.View.TranslatesAutoresizingMaskIntoConstraints = false;
+                calendarViewController.DidMoveToParentViewController(this);
+            }
+            else
+            {
+                ViewModel.CalendarViewModel.SelectInitialShortcut();
+            }
+
+            alreadyLoadedCalendar = true;
         }
 
         public void ScrollToTop()
@@ -157,7 +196,7 @@ namespace Toggl.iOS.ViewControllers
 
         private void onReportsTableScrolled(CGPoint offset)
         {
-            if (CalendarIsVisible)
+            if (calendarIsVisible)
             {
                 var topConstant = (TopCalendarConstraint.Constant + offset.Y).Clamp(0, calendarHeight);
                 TopCalendarConstraint.Constant = topConstant;
@@ -185,29 +224,29 @@ namespace Toggl.iOS.ViewControllers
                 Animation.Curves.SharpCurve,
                 () => View.LayoutIfNeeded(),
                 () => {
-                    CalendarIsVisible = true;
+                    calendarIsVisible = true;
                     ViewModel.CalendarViewModel.Reload();
                 });
         }
 
         internal void HideCalendar()
         {
-            popoverCalendar.DismissViewController(false, null);
+            calendarViewController.DismissViewController(false, null);
 
             TopCalendarConstraint.Constant = calendarHeight;
             Animate(
                 Animation.Timings.EnterTiming,
                 Animation.Curves.SharpCurve,
                 () => View.LayoutIfNeeded(),
-                () => CalendarIsVisible = false);
+                () => calendarIsVisible = false);
         }
 
         internal void ShowPopoverCalendar()
         {
             HideCalendar();
 
-            popoverCalendar.ModalPresentationStyle = UIModalPresentationStyle.Popover;
-            UIPopoverPresentationController presentationPopover = popoverCalendar.PopoverPresentationController;
+            calendarViewController.ModalPresentationStyle = UIModalPresentationStyle.Popover;
+            UIPopoverPresentationController presentationPopover = calendarViewController.PopoverPresentationController;
             if (presentationPopover != null)
             {
                 presentationPopover.SourceView = titleButton;
@@ -215,15 +254,8 @@ namespace Toggl.iOS.ViewControllers
                 presentationPopover.SourceRect = titleButton.Frame;
             }
 
-            PresentViewController(popoverCalendar, true, null);
+            PresentViewController(calendarViewController, true, null);
             ViewModel.CalendarViewModel.Reload();
-        }
-
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-
-            IosDependencyContainer.Instance.IntentDonationService.DonateShowReport();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -259,7 +291,7 @@ namespace Toggl.iOS.ViewControllers
 
         private void onCalendarSizeChanged(NSObservedChange change)
         {
-            TopCalendarConstraint.Constant = CalendarIsVisible ? 0 : calendarHeight;
+            TopCalendarConstraint.Constant = calendarIsVisible ? 0 : calendarHeight;
         }
     }
 }

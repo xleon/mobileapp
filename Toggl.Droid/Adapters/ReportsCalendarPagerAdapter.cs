@@ -20,9 +20,8 @@ namespace Toggl.Droid.Adapters
 {
     public sealed class ReportsCalendarPagerAdapter : PagerAdapter
     {
-        private static readonly int itemWidth;
+        private Dictionary<int, CompositeDisposable> disposableBags = new Dictionary<int, CompositeDisposable>();
 
-        private CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly Context context;
         private readonly RecyclerView.RecycledViewPool recyclerviewPool = new RecyclerView.RecycledViewPool();
         private IReadOnlyList<ReportsCalendarPageViewModel> currentMonths = ImmutableList<ReportsCalendarPageViewModel>.Empty;
@@ -42,6 +41,8 @@ namespace Toggl.Droid.Adapters
         {
         }
 
+        private Dictionary<int, ReportsCalendarRecyclerView> recyclerViews = new Dictionary<int, ReportsCalendarRecyclerView>();
+
         public override int Count => currentMonths.Count;
 
         public override Object InstantiateItem(ViewGroup container, int position)
@@ -49,13 +50,28 @@ namespace Toggl.Droid.Adapters
             var inflater = LayoutInflater.FromContext(context);
             var inflatedView = inflater.Inflate(Resource.Layout.ReportsCalendarFragmentPage, container, false);
 
-            var calendarRecyclerView = (ReportsCalendarRecyclerView) inflatedView;
+            var calendarRecyclerView = (ReportsCalendarRecyclerView)inflatedView;
             calendarRecyclerView.SetRecycledViewPool(recyclerviewPool);
             calendarRecyclerView.SetLayoutManager(new ReportsCalendarLayoutManager(context));
+
+            setupAdapter(calendarRecyclerView, position);
+
+            recyclerViews[position] = calendarRecyclerView;
+
+            container.AddView(inflatedView);
+
+            return inflatedView;
+        }
+
+        private void setupAdapter(ReportsCalendarRecyclerView calendarRecyclerView, int position)
+        {
             var adapter = new ReportsCalendarRecyclerAdapter(currentDateRange)
             {
                 Items = currentMonths[position].Days
             };
+
+            var disposeBag = new CompositeDisposable();
+            disposableBags[position] = disposeBag;
 
             calendarRecyclerView.SetAdapter(adapter);
 
@@ -67,14 +83,34 @@ namespace Toggl.Droid.Adapters
                 .ObserveOn(SynchronizationContext.Current)
                 .Subscribe(adapter.UpdateDateRangeParameter)
                 .DisposedBy(disposeBag);
+        }
 
-            container.AddView(inflatedView);
+        private void notifyPageContentAdapters()
+        {
+            foreach (var recyclerViewInfo in recyclerViews)
+            {
+                var position = recyclerViewInfo.Key;
+                var recyclerView = recyclerViewInfo.Value;
 
-            return inflatedView;
+                var adapter = recyclerView.GetAdapter() as ReportsCalendarRecyclerAdapter;
+                adapter.Items = currentMonths[position].Days;
+            }
+        }
+
+        private void disposeOfAdapterSubscriptions(int position)
+        {
+            if (disposableBags.TryGetValue(position, out var disposableBag))
+            {
+                disposableBag.Dispose();
+                disposableBags.Remove(position);
+            }
         }
 
         public override void DestroyItem(ViewGroup container, int position, Object @object)
         {
+            disposeOfAdapterSubscriptions(position);
+
+            recyclerViews.Remove(position);
             container.RemoveView(@object as View);
         }
 
@@ -85,6 +121,7 @@ namespace Toggl.Droid.Adapters
         {
             currentMonths = newMonths.ToImmutableList();
             NotifyDataSetChanged();
+            notifyPageContentAdapters();
         }
 
         protected override void Dispose(bool disposing)
@@ -92,7 +129,10 @@ namespace Toggl.Droid.Adapters
             base.Dispose(disposing);
             if (!disposing) return;
 
-            disposeBag.Dispose();
+            disposableBags.Values.ForEach(bag => bag.Dispose());
+            disposableBags.Clear();
+
+            recyclerViews.Clear();
         }
 
         public void UpdateSelectedRange(ReportsDateRangeParameter newDateRange)

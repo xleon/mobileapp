@@ -6,7 +6,6 @@ using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -14,7 +13,6 @@ using static Toggl.iOS.Extensions.RangeExtensions;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalDialogPresentation]
     public sealed partial class TermsOfServiceViewController
         : ReactiveViewController<TermsOfServiceViewModel>
     {
@@ -34,7 +32,8 @@ namespace Toggl.iOS.ViewControllers
             ForegroundColor = Colors.Signup.HighlightedText.ToNativeColor()
         };
 
-        public TermsOfServiceViewController() : base(nameof(TermsOfServiceViewController))
+        public TermsOfServiceViewController(TermsOfServiceViewModel viewModel)
+            : base(viewModel, nameof(TermsOfServiceViewController))
         {
         }
 

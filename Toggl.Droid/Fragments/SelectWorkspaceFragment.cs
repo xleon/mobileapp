@@ -1,33 +1,32 @@
-﻿using System.Reactive.Disposables;
-using Android.OS;
+﻿using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Platforms.Android.Binding.BindingContext;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    [MvxFragmentPresentation(typeof(EditProjectViewModel), Resource.Id.SelectWorkspaceContainer, AddToBackStack = true)]
-    public partial class SelectWorkspaceFragment : MvxFragment<SelectWorkspaceViewModel>
+    public partial class SelectWorkspaceFragment : ReactiveDialogFragment<SelectWorkspaceViewModel>
     {
-        public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
-
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
             var view = inflater.Inflate(Resource.Layout.SelectWorkspaceFragment, container, false);
             InitializeViews(view);
+            return view;
+        }
 
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             var adapter = new SimpleAdapter<SelectableWorkspaceViewModel>(
                 Resource.Layout.SelectWorkspaceFragmentCell,
                 SelectWorkspaceViewHolder.Create
             );
-
+            
             adapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectWorkspace.Inputs)
                 .DisposedBy(DisposeBag);
@@ -36,8 +35,12 @@ namespace Toggl.Droid.Fragments
 
             recyclerView.SetAdapter(adapter);
             recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
+        }
 
-            return view;
+        public override void OnResume()
+        {
+            base.OnResume();
+            Dialog.Window.SetDefaultDialogLayout(Activity, Context, ViewGroup.LayoutParams.WrapContent);
         }
 
         public override void OnDestroy()

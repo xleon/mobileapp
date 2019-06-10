@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Foundation;
-using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using MvvmCross.Platforms.Ios.Views;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
@@ -18,8 +16,6 @@ using static Toggl.iOS.Extensions.ViewExtensions;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [MvxRootPresentation(WrapInNavigationController = true)]
-    [MvxFromStoryboard("Login")]
     public sealed partial class LoginViewController : ReactiveViewController<LoginViewModel>
     {
         private const int iPhoneSeScreenHeight = 568;
@@ -34,6 +30,14 @@ namespace Toggl.iOS.ViewControllers
 
         private const int tabletFormOffset = 246;
         private const int tabletLandscapeKeyboardOffset = 90;
+
+        public static LoginViewController NewInstance(LoginViewModel viewModel)
+        {
+            var storyboard = UIStoryboard.FromName("Login", null);
+            var instance = storyboard.InstantiateViewController(nameof(LoginViewController)) as LoginViewController;
+            instance.ViewModel = viewModel;
+            return instance;
+        }
 
         public LoginViewController(IntPtr handle) : base(handle)
         {
@@ -52,8 +56,6 @@ namespace Toggl.iOS.ViewControllers
             SignUpForFreeLabel.Text = Resources.SignUpTitle;
 
             NavigationController.NavigationBarHidden = true;
-            IosDependencyContainer.Instance.OnePasswordService.SetSourceView(PasswordManagerButton);
-            PasswordManagerButton.Hidden = !ViewModel.IsPasswordManagerAvailable;
 
             UIKeyboard.Notifications.ObserveWillShow(KeyboardWillShow);
             UIKeyboard.Notifications.ObserveWillHide(KeyboardWillHide);
@@ -122,10 +124,6 @@ namespace Toggl.iOS.ViewControllers
 
             ForgotPasswordButton.Rx()
                 .BindAction(ViewModel.ForgotPassword)
-                .DisposedBy(DisposeBag);
-
-            PasswordManagerButton.Rx()
-                .BindAction(ViewModel.StartPasswordManager)
                 .DisposedBy(DisposeBag);
 
             ShowPasswordButton.Rx().Tap()

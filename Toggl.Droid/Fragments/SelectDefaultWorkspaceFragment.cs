@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.ViewHolders;
@@ -15,11 +12,8 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    [MvxDialogFragmentPresentation(AddToBackStack = true, Cancelable = false)]
-    public sealed partial class SelectDefaultWorkspaceFragment : MvxDialogFragment<SelectDefaultWorkspaceViewModel>
+    public sealed partial class SelectDefaultWorkspaceFragment : ReactiveDialogFragment<SelectDefaultWorkspaceViewModel>
     {
-        public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
-
         public SelectDefaultWorkspaceFragment() { }
 
         public SelectDefaultWorkspaceFragment(IntPtr javaReference, JniHandleOwnership transfer)
@@ -29,8 +23,15 @@ namespace Toggl.Droid.Fragments
         {
             base.OnCreateView(inflater, container, savedInstanceState);
             var view = inflater.Inflate(Resource.Layout.SelectDefaultWorkspaceFragment, null);
+
             InitializeViews(view);
 
+            return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             var adapter = new SimpleAdapter<SelectableWorkspaceViewModel>(
                 Resource.Layout.SelectDefaultWorkspaceFragmentCell,
                 SelectDefaultWorkspaceViewHolder.Create
@@ -42,8 +43,6 @@ namespace Toggl.Droid.Fragments
 
             recyclerView.SetAdapter(adapter);
             recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
-
-            return view;
         }
 
         public override void OnDestroy()

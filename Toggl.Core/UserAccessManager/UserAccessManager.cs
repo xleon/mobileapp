@@ -2,10 +2,8 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Core.Services;
-using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
@@ -19,7 +17,6 @@ namespace Toggl.Core.Login
     {
         private readonly Lazy<IApiFactory> apiFactory;
         private readonly Lazy<ITogglDatabase> database;
-        private readonly Lazy<IGoogleService> googleService;
         private readonly Lazy<IPrivateSharedStorageService> privateSharedStorageService;
 
         private readonly ISubject<ITogglApi> userLoggedInSubject = new Subject<ITogglApi>();
@@ -31,17 +28,14 @@ namespace Toggl.Core.Login
         public UserAccessManager(
             Lazy<IApiFactory> apiFactory,
             Lazy<ITogglDatabase> database,
-            Lazy<IGoogleService> googleService,
             Lazy<IPrivateSharedStorageService> privateSharedStorageService)
         {
             Ensure.Argument.IsNotNull(database, nameof(database));
             Ensure.Argument.IsNotNull(apiFactory, nameof(apiFactory));
-            Ensure.Argument.IsNotNull(googleService, nameof(googleService));
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
 
             this.database = database;
             this.apiFactory = apiFactory;
-            this.googleService = googleService;
             this.privateSharedStorageService = privateSharedStorageService;
         }
 
@@ -64,12 +58,10 @@ namespace Toggl.Core.Login
                 .SelectUnit();
         }
 
-        public IObservable<Unit> LoginWithGoogle()
+        public IObservable<Unit> LoginWithGoogle(string googleToken)
             => database.Value
                 .Clear()
-                .SelectMany(_ => googleService.Value.LogOutIfNeeded())
-                .SelectMany(_ => googleService.Value.GetAuthToken())
-                .SelectMany(loginWithGoogle);
+                .SelectMany(_ => loginWithGoogle(googleToken));
 
         public IObservable<Unit> SignUp(Email email, Password password, bool termsAccepted, int countryId, string timezone)
         {
@@ -88,12 +80,10 @@ namespace Toggl.Core.Login
                 .SelectUnit();
         }
 
-        public IObservable<Unit> SignUpWithGoogle(bool termsAccepted, int countryId, string timezone)
+        public IObservable<Unit> SignUpWithGoogle(string googleToken, bool termsAccepted, int countryId, string timezone)
             => database.Value
                 .Clear()
-                .SelectMany(_ => googleService.Value.LogOutIfNeeded())
-                .SelectMany(_ => googleService.Value.GetAuthToken())
-                .SelectMany(authToken => signUpWithGoogle(authToken, termsAccepted, countryId, timezone));
+                .SelectMany(_ => signUpWithGoogle(googleToken, termsAccepted, countryId, timezone));
 
         public IObservable<string> ResetPassword(Email email)
         {
@@ -105,12 +95,32 @@ namespace Toggl.Core.Login
         }
 
         public bool CheckIfLoggedIn()
-            => database.Value
+        {
+            if (privateSharedStorageService.Value.HasUserDataStored())
+            {
+                userLoggedInSubject.OnNext(apiFromSharedStorage());
+                return true;
+            }
+
+            return
+                database.Value
                 .User.Single()
                 .Do(user => userLoggedInSubject.OnNext(apiFromUser(user)))
                 .SelectValue(true)
                 .Catch(Observable.Return(false))
                 .Wait();
+        }
+
+        public string GetSavedApiToken()
+            => privateSharedStorageService.Value.GetApiToken();
+
+        private ITogglApi apiFromSharedStorage()
+        {
+            var apiToken = privateSharedStorageService.Value.GetApiToken();
+            var newCredentials = Credentials.WithApiToken(apiToken);
+            var api = apiFactory.Value.CreateApiWith(newCredentials);
+            return api;
+        }
 
         public IObservable<Unit> RefreshToken(Password password)
         {

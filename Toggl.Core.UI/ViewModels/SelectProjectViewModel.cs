@@ -13,7 +13,6 @@ using Toggl.Core.Interactors;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -26,9 +25,7 @@ namespace Toggl.Core.UI.ViewModels
         : ViewModel<SelectProjectParameter, SelectProjectParameter>
     {
         private readonly ITogglDataSource dataSource;
-        private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IStopwatchProvider stopwatchProvider;
 
@@ -37,6 +34,7 @@ namespace Toggl.Core.UI.ViewModels
         private long workspaceId;
         private IStopwatch navigationFromEditTimeEntryViewModelStopwatch;
 
+        private bool creationEnabled = true;
         private bool projectCreationSuggestionsAreEnabled;
 
         public bool UseGrouping { get; private set; }
@@ -62,22 +60,18 @@ namespace Toggl.Core.UI.ViewModels
             IRxActionFactory rxActionFactory,
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
-            IDialogService dialogService,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
             this.dataSource = dataSource;
-            this.dialogService = dialogService;
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
             this.schedulerProvider = schedulerProvider;
             this.stopwatchProvider = stopwatchProvider;
 
@@ -106,16 +100,14 @@ namespace Toggl.Core.UI.ViewModels
             return true;
         }
 
-        public override void Prepare(SelectProjectParameter parameter)
+        public override async Task Initialize(SelectProjectParameter parameter)
         {
+            await base.Initialize(parameter);
+            creationEnabled = parameter.CreationEnabled;
             taskId = parameter.TaskId;
             projectId = parameter.ProjectId;
             workspaceId = parameter.WorkspaceId;
-        }
 
-        public override async Task Initialize()
-        {
-            await base.Initialize();
             navigationFromEditTimeEntryViewModelStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenSelectProjectFromEditView);
             stopwatchProvider.Remove(MeasuredOperation.OpenSelectProjectFromEditView);
 
@@ -137,7 +129,7 @@ namespace Toggl.Core.UI.ViewModels
                     .Select(grouping => collectionSection(grouping, prependNoProject: string.IsNullOrEmpty(text)))
                     .ToList();
 
-                if (shouldSuggestCreation(text))
+                if (creationEnabled && shouldSuggestCreation(text))
                 {
                     var createEntitySuggestion = new CreateEntitySuggestion(Resources.CreateProject, text);
                     var section = new SectionModel<string, AutocompleteSuggestion>(null, new[] { createEntitySuggestion });
@@ -182,23 +174,21 @@ namespace Toggl.Core.UI.ViewModels
         private ProjectSuggestion setSelectedProject(ProjectSuggestion suggestion)
         {
             suggestion.Selected = suggestion.ProjectId == projectId;
-            return suggestion; 
+            return suggestion;
         }
 
         private async Task createProject(string name)
         {
-            var createdProjectId = await navigationService.Navigate<EditProjectViewModel, string, long?>(name);
+            var createdProjectId = await Navigate<EditProjectViewModel, string, long?>(name);
             if (createdProjectId == null) return;
 
             var project = await interactorFactory.GetProjectById(createdProjectId.Value).Execute();
-            var parameter = SelectProjectParameter.WithIds(project.Id, null, project.WorkspaceId);
-            await navigationService.Close(this, parameter);
+            var parameter = new SelectProjectParameter(project.Id, null, project.WorkspaceId);
+            await Finish(parameter);
         }
 
         private Task close()
-            => navigationService.Close(
-                this,
-                SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
+            => Finish(new SelectProjectParameter(projectId, taskId, workspaceId));
 
         private async Task selectProject(AutocompleteSuggestion suggestion)
         {
@@ -214,7 +204,7 @@ namespace Toggl.Core.UI.ViewModels
                 return;
             }
 
-            var shouldSetProject = await dialogService.Confirm(
+            var shouldSetProject = await View.Confirm(
                 Resources.DifferentWorkspaceAlertTitle,
                 Resources.DifferentWorkspaceAlertMessage,
                 Resources.Ok,
@@ -246,9 +236,7 @@ namespace Toggl.Core.UI.ViewModels
                     throw new ArgumentException($"{nameof(suggestion)} must be either of type {nameof(ProjectSuggestion)} or {nameof(TaskSuggestion)}.");
             }
 
-            navigationService.Close(
-                this,
-                SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
+            Finish(new SelectProjectParameter(projectId, taskId, workspaceId));
         }
 
         private void toggleTaskSuggestions(ProjectSuggestion projectSuggestion)

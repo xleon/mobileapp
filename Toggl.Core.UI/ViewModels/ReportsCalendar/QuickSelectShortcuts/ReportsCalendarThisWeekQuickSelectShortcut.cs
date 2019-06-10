@@ -3,6 +3,7 @@ using Toggl.Core.Models;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts
 {
@@ -20,7 +21,7 @@ namespace Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts
 
         public override ReportsDateRangeParameter GetDateRange()
         {
-            var now = TimeService.CurrentDateTime.Date;
+            var now = TimeService.CurrentDateTime.RoundDownToLocalDate();
             var difference = (now.DayOfWeek - beginningOfWeek.ToDayOfWeekEnum() + 7) % 7;
             var start = now.AddDays(-difference);
             var end = start.AddDays(6);

@@ -78,7 +78,7 @@ namespace Toggl.Core.Tests.UI.Services
             {
                 ErrorHandlingService.TryHandleDeprecationError(exception);
 
-                NavigationService.Received().Navigate<OutdatedAppViewModel>();
+                NavigationService.Received().Navigate<OutdatedAppViewModel>(null);
             }
         }
 
@@ -107,7 +107,7 @@ namespace Toggl.Core.Tests.UI.Services
             {
                 ErrorHandlingService.TryHandleDeprecationError(exception);
 
-                NavigationService.Received().Navigate<OutdatedAppViewModel>();
+                NavigationService.Received().Navigate<OutdatedAppViewModel>(null);
             }
         }
 
@@ -141,7 +141,7 @@ namespace Toggl.Core.Tests.UI.Services
             {
                 ErrorHandlingService.TryHandleDeprecationError(exception);
 
-                NavigationService.DidNotReceive().Navigate<OutdatedAppViewModel>();
+                NavigationService.DidNotReceive().Navigate<OutdatedAppViewModel>(null);
             }
 
             [Fact, LogIfTooSlow]
@@ -158,7 +158,7 @@ namespace Toggl.Core.Tests.UI.Services
             {
                 ErrorHandlingService.TryHandleDeprecationError(exception);
 
-                NavigationService.DidNotReceive().Navigate<OutdatedAppViewModel>();
+                NavigationService.DidNotReceive().Navigate<OutdatedAppViewModel>(null);
             }
         }
 
@@ -195,7 +195,7 @@ namespace Toggl.Core.Tests.UI.Services
             {
                 ErrorHandlingService.TryHandleUnauthorizedError(exception);
 
-                NavigationService.Received().Navigate<TokenResetViewModel>();
+                NavigationService.Received().Navigate<TokenResetViewModel>(null);
             }
 
             [Fact, LogIfTooSlow]
@@ -208,7 +208,7 @@ namespace Toggl.Core.Tests.UI.Services
                 var handled = ErrorHandlingService.TryHandleUnauthorizedError(exceptionWithoutApiToken);
 
                 handled.Should().BeTrue();
-                NavigationService.DidNotReceive().Navigate<TokenResetViewModel>();
+                NavigationService.DidNotReceive().Navigate<TokenResetViewModel>(null);
                 AccessRestrictionStorage.DidNotReceive().SetUnauthorizedAccess(Arg.Any<string>());
             }
         }
@@ -222,7 +222,7 @@ namespace Toggl.Core.Tests.UI.Services
             {
                 ErrorHandlingService.TryHandleUnauthorizedError(exception);
 
-                NavigationService.DidNotReceive().Navigate<TokenResetViewModel>();
+                NavigationService.DidNotReceive().Navigate<TokenResetViewModel>(null);
             }
 
             [Fact, LogIfTooSlow]
@@ -238,7 +238,7 @@ namespace Toggl.Core.Tests.UI.Services
             {
                 ErrorHandlingService.TryHandleUnauthorizedError(exception);
 
-                NavigationService.DidNotReceive().Navigate<TokenResetViewModel>();
+                NavigationService.DidNotReceive().Navigate<TokenResetViewModel>(null);
             }
         }
 

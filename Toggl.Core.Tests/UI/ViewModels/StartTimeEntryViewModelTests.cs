@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FsCheck;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
@@ -22,26 +22,23 @@ using Toggl.Core.Interactors.AutocompleteSuggestions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Shared;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.Storage.Exceptions;
-using Toggl.Storage.Models;
+using Toggl.Shared;
 using Xunit;
 using static Toggl.Core.Helper.Constants;
-using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 using TextFieldInfo = Toggl.Core.Autocomplete.TextFieldInfo;
+using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 using CollectionSections = System.Collections.Generic.IEnumerable<Toggl.Core.UI.Collections.SectionModel<string, Toggl.Core.Autocomplete.Suggestions.AutocompleteSuggestion>>;
-using FsCheck;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class StartTimeEntryViewModelTests
     {
-        public abstract class StartTimeEntryViewModelTest : BaseViewModelTests<StartTimeEntryViewModel>
+        public abstract class StartTimeEntryViewModelTest : BaseViewModelWithInputTests<StartTimeEntryViewModel, StartTimeEntryParameters>
         {
             protected const string TagName = "Mobile";
 
@@ -61,7 +58,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             protected override void AdditionalSetup()
             {
-                DialogService.Confirm(
+                View.Confirm(
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -79,7 +76,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 => new StartTimeEntryViewModel(
                     TimeService,
                     DataSource,
-                    DialogService,
                     UserPreferences,
                     OnboardingStorage,
                     InteractorFactory,
@@ -98,7 +94,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
                 bool useTimeService,
-                bool useDialogService,
                 bool useUserPreferences,
                 bool useInteractorFactory,
                 bool useOnboardingStorage,
@@ -110,7 +105,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
-                var dialogService = useDialogService ? DialogService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
@@ -124,7 +118,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     () => new StartTimeEntryViewModel(
                         timeService,
                         dataSource,
-                        dialogService,
                         userPreferences,
                         onboardingStorage,
                         interactorFactory,
@@ -136,44 +129,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
-            }
-        }
-
-        public sealed class ThePrepareMethod : StartTimeEntryViewModelTest
-        {
-            [Property]
-            public void SetsTheDateAccordingToTheDateParameterReceived(string placeholder)
-            {
-                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, placeholder, TimeSpan.Zero, null);
-                ViewModel.Prepare(parameter);
-
-                ViewModel.PlaceholderText.Should().Be(placeholder);
-            }
-
-            [Fact, LogIfTooSlow]
-            public void StarsTheTimerWhenDurationIsNull()
-            {
-                var observable = Substitute.For<IConnectableObservable<DateTimeOffset>>();
-                TimeService.CurrentDateTimeObservable.Returns(observable);
-                var parameter = StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now);
-
-                ViewModel.Prepare(parameter);
-
-                TimeService.CurrentDateTimeObservable.ReceivedWithAnyArgs().Subscribe(null);
-            }
-
-            [Fact, LogIfTooSlow]
-            public void SetsTheDisplayedTimeToTheValueOfTheDurationParameter()
-            {
-                var duration = TimeSpan.FromSeconds(130);
-                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", duration, null);
-                var observer = TestScheduler.CreateObserver<string>();
-                ViewModel.DisplayedTime.Subscribe(observer);
-
-                ViewModel.Prepare(parameter);
-                TestScheduler.Start();
-
-                observer.LastEmittedValue().Should().Be(duration.ToFormattedString(DurationFormat.Improved));
             }
         }
 
@@ -193,11 +148,45 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Suggestions.Subscribe();
 
                 var parameter = new StartTimeEntryParameters(DateTimeOffset.UtcNow, "", null, null);
-                ViewModel.Prepare(parameter);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(parameter);
 
                 TestScheduler.Start();
                 observer.LastEmittedValue().Should().Be(billableValue);
+            }
+
+            [Property]
+            public void SetsTheDateAccordingToTheDateParameterReceived(string placeholder)
+            {
+                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, placeholder, TimeSpan.Zero, null);
+                ViewModel.Initialize(parameter);
+
+                ViewModel.PlaceholderText.Should().Be(placeholder);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void StarsTheTimerWhenDurationIsNull()
+            {
+                var observable = Substitute.For<IConnectableObservable<DateTimeOffset>>();
+                TimeService.CurrentDateTimeObservable.Returns(observable);
+                var parameter = StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now);
+
+                ViewModel.Initialize(parameter);
+
+                TimeService.CurrentDateTimeObservable.ReceivedWithAnyArgs().Subscribe(null);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void SetsTheDisplayedTimeToTheValueOfTheDurationParameter()
+            {
+                var duration = TimeSpan.FromSeconds(130);
+                var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", duration, null);
+                var observer = TestScheduler.CreateObserver<string>();
+                ViewModel.DisplayedTime.Subscribe(observer);
+
+                ViewModel.Initialize(parameter);
+                TestScheduler.Start();
+
+                observer.LastEmittedValue().Should().Be(duration.ToFormattedString(DurationFormat.Improved));
             }
         }
 
@@ -213,7 +202,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<CollectionSections>();
                 ViewModel.Suggestions.Subscribe(observer);
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
 
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan("", 0));
 
@@ -229,7 +218,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<CollectionSections>();
                 ViewModel.Suggestions.Subscribe(observer);
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
 
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan($"{QuerySymbol}", 1));
 
@@ -245,7 +234,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<CollectionSections>();
                 ViewModel.Suggestions.Subscribe(observer);
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
 
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan($"{QuerySymbol}    ", 1));
 
@@ -261,7 +250,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<CollectionSections>();
                 ViewModel.Suggestions.Subscribe(observer);
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
 
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan($"{QuerySymbol}{createLongString(MaxLength + 1)}",
                     1));
@@ -278,7 +267,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<CollectionSections>();
                 ViewModel.Suggestions.Subscribe(observer);
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
 
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan($"{QuerySymbol}{QueryWithExactSuggestionMatch}",
                     1));
@@ -299,7 +288,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var workspace = new MockWorkspace { Id = 1, Admin = false, OnlyAdminsMayCreateProjects = true };
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
 
                 TestScheduler.Start();
                 observer.LastEmittedValue()
@@ -344,7 +333,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         .Execute()
                         .Returns(Observable.Return(new ProjectSuggestion[] { projectSuggestion }));
 
-                    ViewModel.Prepare(DefaultParameter);
+                    ViewModel.Initialize(DefaultParameter);
                     ViewModel.Suggestions.Subscribe(); // Otherwise the observable chaing won't trigger
                 }
 
@@ -395,8 +384,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var workspace = new MockWorkspace { Id = 1, Name = "ws", Admin = true };
                     InteractorFactory.GetAllWorkspaces().Execute().Returns(Observable.Return(new[] { workspace }));
 
-                    ViewModel.Prepare();
-                    await ViewModel.Initialize();
+                    await ViewModel.Initialize(DefaultParameter);
                     TestScheduler.Start();
 
                     var projectName = "bongo";
@@ -417,8 +405,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var workspace = new MockWorkspace { Id = 1, Name = "ws", Admin = true };
                     InteractorFactory.GetAllWorkspaces().Execute().Returns(Observable.Return(new[] { workspace }));
 
-                    ViewModel.Prepare();
-                    await ViewModel.Initialize();
+                    await ViewModel.Initialize(DefaultParameter);
                     TestScheduler.Start();
 
                     ViewModel.OnTextFieldInfoFromView(new QueryTextSpan($"@{ProjectName}", 6));
@@ -432,9 +419,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 [Fact, LogIfTooSlow]
                 public async Task TracksProjectSelection()
                 {
-                    ViewModel.Prepare();
-
-                    await ViewModel.Initialize();
+                    await ViewModel.Initialize(DefaultParameter);
 
                     ViewModel.OnTextFieldInfoFromView(new QueryTextSpan("abcde @fgh", 10));
 
@@ -460,7 +445,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         .Execute()
                         .Returns(Observable.Return(new TagSuggestion[] { tagSuggestion }));
 
-                    ViewModel.Prepare(DefaultParameter);
+                    ViewModel.Initialize(DefaultParameter);
                     ViewModel.Suggestions.Subscribe(); // Otherwise the observable chaing won't trigger
 
                 }
@@ -474,7 +459,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var tagName = "fgh";
                     var querySpan = new QueryTextSpan($"abcde #{tagName}", 10);
 
-                    await ViewModel.Initialize();
+                    await ViewModel.Initialize(DefaultParameter);
 
                     ViewModel.SetTextSpans.ExecuteSequentally(
                         new List<ISpan> { projectSpan },
@@ -495,7 +480,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var tagName = "fgh";
                     var querySpan = new QueryTextSpan($"abcde #{tagName}", 10);
 
-                    await ViewModel.Initialize();
+                    await ViewModel.Initialize(DefaultParameter);
                     var observer = TestScheduler.CreateObserver<CollectionSections>();
                     ViewModel.Suggestions.Subscribe(observer);
 
@@ -519,8 +504,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var projectSpan = new ProjectSpan(ProjectId, ProjectName, ProjectColor, null, null);
                     var querySpan = new QueryTextSpan("#mobile", 7);
 
-                    ViewModel.Prepare();
-                    await ViewModel.Initialize();
+                    await ViewModel.Initialize(DefaultParameter);
                     ViewModel.OnTextFieldInfoFromView(projectSpan);
                     ViewModel.ToggleTagSuggestions.Execute();
 
@@ -536,7 +520,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 [Fact, LogIfTooSlow]
                 public async Task TracksTagSelection()
                 {
-                    ViewModel.Prepare();
+                    ViewModel.Initialize(DefaultParameter);
                     TestScheduler.Start();
 
                     ViewModel.OnTextFieldInfoFromView(new QueryTextSpan("abcde #fgh", 10));
@@ -554,15 +538,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 public WhenSuggestingProjects()
                 {
+                    ViewModel.Initialize(DefaultParameter).Wait();
+
                     var project = Substitute.For<IThreadSafeProject>();
                     project.Id.Returns(10);
                     InteractorFactory.GetProjectById(Arg.Any<long>()).Execute().Returns(Observable.Return(project));
                     ViewModel.OnTextFieldInfoFromView(
                         new QueryTextSpan($"@{currentQuery}", 15)
                     );
-
-                    ViewModel.Prepare();
-                    ViewModel.Prepare(DefaultParameter);
 
                     TestScheduler.Start();
                 }
@@ -576,7 +559,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     TestScheduler.Start();
                     await NavigationService.Received()
-                        .Navigate<EditProjectViewModel, string, long?>(Arg.Any<string>());
+                        .Navigate<EditProjectViewModel, string, long?>(Arg.Any<string>(), ViewModel.View);
                 }
 
                 [Fact, LogIfTooSlow]
@@ -588,7 +571,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     TestScheduler.Start();
                     await NavigationService.Received()
-                        .Navigate<EditProjectViewModel, string, long?>(currentQuery);
+                        .Navigate<EditProjectViewModel, string, long?>(currentQuery, ViewModel.View);
                 }
 
                 [Fact, LogIfTooSlow]
@@ -596,7 +579,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     long projectId = 200;
                     NavigationService
-                        .Navigate<EditProjectViewModel, string, long?>(Arg.Is(currentQuery))
+                        .Navigate<EditProjectViewModel, string, long?>(Arg.Is(currentQuery), ViewModel.View)
                         .Returns(projectId);
                     var project = Substitute.For<IThreadSafeProject>();
                     project.Id.Returns(projectId);
@@ -621,8 +604,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             public WhenSuggestingTags()
             {
-                ViewModel.Prepare();
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter).Wait();
                 TestScheduler.Start();
                 ViewModel.OnTextFieldInfoFromView(querySpan);
                 TestScheduler.Start();
@@ -657,7 +639,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var projectSpan = new ProjectSpan(projectId, "Project", "0000AF", null, null);
                 var tagSuggestion = new CreateEntitySuggestion(Resources.CreateTag, "");
 
-                InteractorFactory.GetProjectById(Arg.Is(projectId)).Execute().Returns(Observable.Return(project));
+                InteractorFactory.GetProjectById(Arg.Is(projectId)).Execute()
+                    .Returns(Observable.Return(project));
 
                 ViewModel.SelectSuggestion.ExecuteWithCompletion(new ProjectSuggestion(project))
                     .PrependAction(ViewModel.SetTextSpans, new List<ISpan> { querySpan, projectSpan })
@@ -680,7 +663,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var user = Substitute.For<IThreadSafeUser>();
                 user.DefaultWorkspaceId.Returns(workspaceId);
                 DataSource.User.Get().Returns(Observable.Return(user));
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
 
                 ViewModel.SelectSuggestion.Execute(new CreateEntitySuggestion(Resources.CreateTag, ""));
 
@@ -704,7 +687,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Execute()
                     .Returns(Observable.Return(tag));
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
                 ViewModel.Suggestions.Subscribe();
 
                 ViewModel.SelectSuggestion.Execute(new CreateEntitySuggestion(Resources.CreateTag, ""));
@@ -720,7 +703,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public TheBackAction()
             {
                 var parameter = StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now);
-                ViewModel.Prepare(parameter);
+                ViewModel.Initialize(parameter);
             }
 
             [Fact, LogIfTooSlow]
@@ -729,7 +712,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute(Unit.Default);
 
                 TestScheduler.Start();
-                await NavigationService.Received().Close(ViewModel);
+                await View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -740,33 +723,33 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute(Unit.Default);
 
                 TestScheduler.Start();
-                await DialogService.Received().ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
+                await View.Received().ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
             }
 
             [Fact, LogIfTooSlow]
             public async Task DoesNotCloseTheViewIfUserWantsToContinueEditing()
             {
                 makeDirty();
-                DialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
+                View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
                     .Returns(_ => Observable.Return(false));
 
                 ViewModel.Close.Execute(Unit.Default);
 
                 TestScheduler.Start();
-                await NavigationService.DidNotReceive().Close(ViewModel);
+                await View.DidNotReceive().Close();
             }
 
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewIfUserWantsToDiscardTheEnteredInformation()
             {
                 makeDirty();
-                DialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
+                View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
                     .Returns(_ => Observable.Return(true));
 
                 ViewModel.Close.Execute(Unit.Default);
 
                 TestScheduler.Start();
-                await NavigationService.Received().Close(ViewModel);
+                await View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -852,7 +835,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task StartProjectSuggestionEvenIfTheProjectHasAlreadyBeenSelected()
             {
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
                 ViewModel.OnTextFieldInfoFromView(
                     new QueryTextSpan(Description, Description.Length),
                     new ProjectSpan(ProjectId, ProjectName, ProjectColor, null, null)
@@ -872,7 +855,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var isSuggestingObserver = TestScheduler.CreateObserver<bool>();
                 var suggestionObserver = TestScheduler.CreateObserver<IList<SectionModel<string, AutocompleteSuggestion>>>();
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
                 ViewModel.Suggestions.Subscribe(suggestionObserver);
                 ViewModel.IsSuggestingProjects.Subscribe(isSuggestingObserver);
 
@@ -893,8 +876,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetAutocompleteSuggestions(Arg.Any<QueryInfo>())
                     .Execute()
                     .Returns(Observable.Return(projectSuggestions));
-                ViewModel.Prepare(DefaultParameter);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(Description, Description.Length));
                 var observer = TestScheduler
                     .CreateObserver<IEnumerable<SectionModel<string, AutocompleteSuggestion>>>();
@@ -920,8 +902,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Execute()
                     .Returns(Observable.Return(projectSuggestions));
 
-                ViewModel.Prepare(DefaultParameter);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(Description, Description.Length));
 
                 var suggestionsObserver = TestScheduler
@@ -943,7 +924,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 const string description = "Testing Toggl Apps";
                 var expected = $"{description} @";
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(description, description.Length));
 
                 ViewModel.ToggleProjectSuggestions.Execute();
@@ -964,7 +945,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData("Testing Toggl Apps @some query @query")]
             public void SetsTheIsSuggestingProjectsPropertyToFalseIfAlreadyInProjectSuggestionMode(string description)
             {
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(description, description.Length));
                 var isSuggestingProjectsObserver = TestScheduler.CreateObserver<bool>();
                 ViewModel.IsSuggestingProjects.Subscribe(isSuggestingProjectsObserver);
@@ -989,7 +970,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.Suggestions.Subscribe();
 
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
                 ViewModel.SetTextSpans.Execute( new List<ISpan> { new QueryTextSpan(description, description.Length) });
 
                 ViewModel.ToggleProjectSuggestions.Execute();
@@ -1036,7 +1017,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void SetsTheIsSuggestingTagsPropertyToTrueIfNotInTagSuggestionMode()
             {
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
                 ViewModel.Suggestions.Subscribe();
                 var observer = TestScheduler.CreateObserver<bool>();
                 ViewModel.IsSuggestingTags.Subscribe(observer);
@@ -1052,7 +1033,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 const string description = "Testing Toggl Apps";
                 var expected = $"{description} #";
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
                 ViewModel.Suggestions.Subscribe();
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(description, description.Length));
 
@@ -1074,7 +1055,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData("Testing Toggl Apps #some query #query")]
             public async Task SetsTheIsSuggestingTagsPropertyToFalseIfAlreadyInTagSuggestionMode(string description)
             {
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
                 ViewModel.Suggestions.Subscribe();
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(description, description.Length));
                 var observer = TestScheduler.CreateObserver<bool>();
@@ -1103,7 +1084,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<TextFieldInfo>();
                 ViewModel.TextFieldInfo.Subscribe(observer);
 
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
                 ViewModel.Suggestions.Subscribe();
 
                 ViewModel.SetTextSpans.ExecuteSequentally(
@@ -1150,9 +1131,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var parameters = StartTimeEntryParameters.ForTimerMode(now);
                 var returnParameter = DurationParameter.WithStartAndDuration(now, TimeSpan.FromMinutes(1));
                 NavigationService
-                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>())
+                    .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>(), ViewModel.View)
                     .Returns(Task.FromResult(returnParameter));
-                ViewModel.Prepare(parameters);
+                ViewModel.Initialize(parameters);
 
                 ViewModel.ChangeTime.Execute();
 
@@ -1174,39 +1155,39 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task NavigatesToTheSelectDateTimeViewModel()
             {
-                ViewModel.Prepare(prepareParameters);
+                ViewModel.Initialize(prepareParameters);
 
                 ViewModel.SetStartDate.Execute();
 
                 TestScheduler.Start();
-                await NavigationService.Received().Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>());
+                await NavigationService.Received().Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>(), ViewModel.View);
             }
 
             [Fact]
             public async Task OpensTheSelectDateTimeViewModelWithCorrectLimitsForARunningTimeEntry()
             {
-                ViewModel.Prepare(prepareParameters);
+                ViewModel.Initialize(prepareParameters);
 
                 ViewModel.SetStartDate.Execute();
 
                 TestScheduler.Start();
                 await NavigationService.Received()
                     .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(
-                        Arg.Is<DateTimePickerParameters>(param => param.MinDate == now - MaxTimeEntryDuration && param.MaxDate == now));
+                        Arg.Is<DateTimePickerParameters>(param => param.MinDate == now - MaxTimeEntryDuration && param.MaxDate == now), ViewModel.View);
             }
 
             [Fact]
             public async Task OpensTheSelectDateTimeViewModelWithCorrectLimitsForAStoppedTimeEntry()
             {
                 var stoppedParametsrs = StartTimeEntryParameters.ForManualMode(now);
-                ViewModel.Prepare(stoppedParametsrs);
+                ViewModel.Initialize(stoppedParametsrs);
 
                 ViewModel.SetStartDate.Execute();
 
                 TestScheduler.Start();
                 await NavigationService.Received()
                     .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(
-                        Arg.Is<DateTimePickerParameters>(param => param.MinDate == EarliestAllowedStartTime && param.MaxDate == LatestAllowedStartTime));
+                        Arg.Is<DateTimePickerParameters>(param => param.MinDate == EarliestAllowedStartTime && param.MaxDate == LatestAllowedStartTime), ViewModel.View);
             }
 
             [Fact, LogIfTooSlow]
@@ -1214,9 +1195,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 TimeService.CurrentDateTime.Returns(now);
                 NavigationService
-                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>())
+                    .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(Arg.Any<DateTimePickerParameters>(), ViewModel.View)
                     .Returns(now);
-                ViewModel.Prepare(prepareParameters);
+                ViewModel.Initialize(prepareParameters);
 
                 ViewModel.SetStartDate.Execute();
 
@@ -1263,8 +1244,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Returns(Observable.Return(project));
 
                 var parameter = new StartTimeEntryParameters(startDate, "", null, null);
-                ViewModel.Prepare(parameter);
-                ViewModel.Initialize().GetAwaiter().GetResult();
+                ViewModel.Initialize(parameter).GetAwaiter().GetResult();
             }
 
             [Fact, LogIfTooSlow]
@@ -1332,7 +1312,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", duration, null);
 
-                ViewModel.Prepare(parameter);
+                ViewModel.Initialize(parameter);
                 ViewModel.Done.Execute(Unit.Default);
 
                 TestScheduler.Start();
@@ -1347,7 +1327,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null, null);
 
-                ViewModel.Prepare(parameter);
+                ViewModel.Initialize(parameter);
                 ViewModel.Done.Execute(Unit.Default);
 
                 TestScheduler.Start();
@@ -1373,13 +1353,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 user.DefaultWorkspaceId.Returns(10);
                 DataSource.User.Current.Returns(Observable.Return(user));
                 var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null, null);
-                ViewModel.Prepare(parameter);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(parameter);
 
                 ViewModel.Done.Execute(Unit.Default);
 
                 TestScheduler.Start();
-                await NavigationService.Received().Close(ViewModel);
+                await View.Received().Close();
             }
         }
 
@@ -1562,13 +1541,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var user = Substitute.For<IThreadSafeUser>();
                     user.DefaultWorkspaceId.Returns(100);
                     DataSource.User.Current.Returns(Observable.Return(user));
-                    ViewModel.Prepare();
-                    await ViewModel.Initialize();
+                    await ViewModel.Initialize(DefaultParameter);
 
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
                     TestScheduler.Start();
-                    await DialogService.Received().Confirm(
+                    await View.Received().Confirm(
                         Arg.Is(Resources.DifferentWorkspaceAlertTitle),
                         Arg.Is(Resources.DifferentWorkspaceAlertMessage),
                         Arg.Is(Resources.Ok),
@@ -1584,13 +1562,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var user = Substitute.For<IThreadSafeUser>();
                     user.DefaultWorkspaceId.Returns(WorkspaceId);
                     DataSource.User.Current.Returns(Observable.Return(user));
-                    ViewModel.Prepare();
-                    await ViewModel.Initialize();
+                    await ViewModel.Initialize(DefaultParameter);
 
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
                     TestScheduler.Start();
-                    await DialogService.DidNotReceive().Confirm(
+                    await View.DidNotReceive().Confirm(
                         Arg.Any<string>(),
                         Arg.Any<string>(),
                         Arg.Any<string>(),
@@ -1604,8 +1581,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var user = Substitute.For<IThreadSafeUser>();
                     user.DefaultWorkspaceId.Returns(100);
                     DataSource.User.Current.Returns(Observable.Return(user));
-                    ViewModel.Prepare();
-                    ViewModel.Initialize();
+                    ViewModel.Initialize(DefaultParameter);
                     var suggestions = Enumerable.Range(100, 10)
                         .Select(i =>
                         {
@@ -1740,7 +1716,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 [Fact, LogIfTooSlow]
                 public async Task TracksWhenProjectSuggestionSelected()
                 {
-                    DialogService
+                    View
                         .Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
                         .Returns(Observable.Return(false));
 
@@ -1865,13 +1841,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetAutocompleteSuggestions(Arg.Any<QueryInfo>())
                     .Execute()
                     .Returns(suggestionsObservable);
-                ViewModel.Prepare();
 
                 var observer = TestScheduler
                     .CreateObserver<IEnumerable<SectionModel<string, AutocompleteSuggestion>>>();
                 ViewModel.Suggestions.Subscribe(observer);
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
 
                 TestScheduler.Start();
                 foreach (var group in observer.LastEmittedValue())
@@ -1921,7 +1896,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Execute()
                     .Returns(suggestions);
 
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
 
                 ViewModel.OnTextFieldInfoFromView(
                     new QueryTextSpan(description, description.Length),
@@ -1981,8 +1956,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .CreateObserver<IEnumerable<SectionModel<string, AutocompleteSuggestion>>>();
                 ViewModel.Suggestions.Subscribe(observer);
 
-                ViewModel.Prepare();
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
 
                 TestScheduler.Start();
 
@@ -2007,7 +1981,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var interactor = Substitute.For<GetAutocompleteSuggestions>(InteractorFactory, new QueryInfo("", AutocompleteSuggestionType.None));
                 InteractorFactory.GetAutocompleteSuggestions(Arg.Any<QueryInfo>()).Returns(interactor);
 
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(text, text.Length));
 
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(text, 0));
@@ -2027,7 +2001,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Suggestions.Subscribe();
 
                 var extendedText = text + "x";
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(extendedText, text.Length));
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(extendedText, 0));
 
@@ -2047,7 +2021,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.Suggestions.Subscribe();
 
-                ViewModel.Prepare(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter);
                 ViewModel.SetTextSpans.ExecuteSequentally(
                     new List<ISpan> { new QueryTextSpan(text, text.Length) },
                     new List<ISpan> { new QueryTextSpan(text, 0) }
@@ -2075,8 +2049,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<CollectionSections>();
                 ViewModel.Suggestions.Subscribe(observer);
 
-                ViewModel.Prepare(DefaultParameter);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
                 ViewModel.OnTextFieldInfoFromView(
                     new QueryTextSpan($"{QuerySymbols.Tags}{query}", 1)
                 );
@@ -2102,8 +2075,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Range(0, tagCount)
                     .Select(_ => Substitute.For<IThreadSafeTag>());
                 DataSource.Tags.GetAll().Returns(Observable.Return(tags));
-                ViewModel.Prepare(DefaultParameter);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
                 ViewModel.OnTextFieldInfoFromView(
                     new QueryTextSpan(query, 1)
                 );
@@ -2128,8 +2100,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.CreateTag(Arg.Any<string>(), Arg.Any<long>())
                     .Execute()
                     .Returns(Observable.Return(tag));
-                ViewModel.Prepare(DefaultParameter);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(DefaultParameter);
 
                 ViewModel.SetTextSpans.ExecuteWithCompletion(
                         new List<ISpan> { new QueryTextSpan($"{QuerySymbols.Tags}{query}", 1) }

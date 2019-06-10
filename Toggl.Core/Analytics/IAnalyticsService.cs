@@ -34,6 +34,8 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<TimeEntryStopOrigin> TimeEntryStopped { get; }
 
+        IAnalyticsEvent<ContinueTimeEntryOrigin, int, int, int> TimeEntryContinued { get; }
+
         IAnalyticsEvent RatingViewWasShown { get; }
 
         IAnalyticsEvent<bool> UserFinishedRatingViewFirstStep { get; }
@@ -70,7 +72,13 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent OfflineModeDetected { get; }
 
+        IAnalyticsEvent<int> WorkspacePlaceholdersCreated { get; }
+
         IAnalyticsEvent<int> ProjectPlaceholdersCreated { get; }
+
+        IAnalyticsEvent<int> TaskPlaceholdersCreated { get; }
+
+        IAnalyticsEvent<int> TagPlaceholdersCreated { get; }
 
         IAnalyticsEvent<EditViewTapSource> EditViewTapped { get; }
 
@@ -157,7 +165,7 @@ namespace Toggl.Core.Analytics
         IAnalyticsEvent<bool> GroupTimeEntriesSettingsChanged { get; }
 
         IAnalyticsEvent<EditTimeEntryOrigin> EditViewOpened { get; }
-        
+
         IAnalyticsEvent<string, string, string, string> DebugScheduleError { get; }
 
         IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; }

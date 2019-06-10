@@ -35,7 +35,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public abstract class SelectUserCalendarsViewModelBaseTest : BaseViewModelTests<MockSelectUserCalendarsViewModel>
+        public abstract class SelectUserCalendarsViewModelBaseTest : BaseViewModelTests<MockSelectUserCalendarsViewModel, bool, string[]>
         {
             protected SelectUserCalendarsViewModelBaseTest()
             {
@@ -63,7 +63,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var viewModel = new MockSelectUserCalendarsViewModel(UserPreferences, InteractorFactory, NavigationService, RxActionFactory);
 
-                await viewModel.Initialize();
+                await viewModel.Initialize(false);
                 var calendars = await viewModel.Calendars.FirstAsync();
 
                 calendars.Should().HaveCount(3);
@@ -81,7 +81,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Execute()
                     .Returns(Observable.Throw<IEnumerable<UserCalendar>>(new NotAuthorizedException("")));
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(false);
                 var calendars = await ViewModel.Calendars.FirstAsync();
 
                 calendars.Should().HaveCount(0);
@@ -100,7 +100,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Apply(Observable.Return);
                 InteractorFactory.GetUserCalendars().Execute().Returns(userCalendarsObservable);
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(false);
                 var calendars = await ViewModel.Calendars.FirstAsync();
 
                 foreach (var calendarGroup in calendars)
@@ -130,7 +130,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .GetUserCalendars()
                     .Execute()
                     .Returns(Observable.Return(userCalendars));
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(false);
                 var selectedIds = new[] { "0", "2", "4", "7" };
 
                 var calendars = userCalendars
@@ -143,7 +143,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(ViewModel, Arg.Is<string[]>(ids => ids.SequenceEqual(initialSelectedIds)));
+                (await ViewModel.Result).Should().BeSequenceEquivalentTo(initialSelectedIds);
             }
         }
 
@@ -165,7 +165,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Execute()
                     .Returns(Observable.Return(userCalendars));
 
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(false);
                 var selectedIds = new[] { "0", "2", "4", "7" };
 
                 var calendars = userCalendars
@@ -178,7 +178,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(ViewModel, Arg.Is<string[]>(ids => ids.SequenceEqual(selectedIds)));
+                (await ViewModel.Result).Should().BeSequenceEquivalentTo(selectedIds);
             }
         }
 
@@ -188,8 +188,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 public WhenYouDoNotForceItemSelection()
                 {
-                    ViewModel.Prepare(false);
-                    ViewModel.Initialize().Wait();
+                    ViewModel.Initialize(false).Wait();
                 }
 
                 [Fact, LogIfTooSlow]
@@ -208,8 +207,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 public WhenYouForceItemSelection()
                 {
-                    ViewModel.Prepare(true);
-                    ViewModel.Initialize().Wait();
+                    ViewModel.Initialize(true).Wait();
                 }
 
                 [Fact, LogIfTooSlow]
@@ -321,7 +319,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         false));
                 var userCalendarsObservable = Observable.Return(userCalendars);
                 InteractorFactory.GetUserCalendars().Execute().Returns(userCalendarsObservable);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(false);
                 var viewModelCalendars = await ViewModel.Calendars.FirstAsync();
                 var calendarToBeSelected = viewModelCalendars.First().Items.First();
 
@@ -343,7 +341,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         true));
                 var userCalendarsObservable = Observable.Return(userCalendars);
                 InteractorFactory.GetUserCalendars().Execute().Returns(userCalendarsObservable);
-                await ViewModel.Initialize();
+                await ViewModel.Initialize(false);
                 var viewModelCalendars = await ViewModel.Calendars.FirstAsync();
                 var calendarToBeSelected = viewModelCalendars.First().Items.First();
 

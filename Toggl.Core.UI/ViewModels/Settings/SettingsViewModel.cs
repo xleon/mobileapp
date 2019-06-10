@@ -42,18 +42,16 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly ISyncManager syncManager;
         private readonly IUserAccessManager userAccessManager;
-        private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly IPlatformInfo platformInfo;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly IPrivateSharedStorageService privateSharedStorageService;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly IRxActionFactory rxActionFactory;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly IPermissionsService permissionsService;
+        private readonly IPermissionsChecker permissionsChecker;
 
         private bool isSyncing;
         private bool isLoggingOut;
@@ -108,7 +106,6 @@ namespace Toggl.Core.UI.ViewModels
             ITogglDataSource dataSource,
             ISyncManager syncManager,
             IPlatformInfo platformInfo,
-            IDialogService dialogService,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
             IUserAccessManager userAccessManager,
@@ -118,41 +115,38 @@ namespace Toggl.Core.UI.ViewModels
             IPrivateSharedStorageService privateSharedStorageService,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory,
-            IPermissionsService permissionsService,
+            IPermissionsChecker permissionsChecker,
             ISchedulerProvider schedulerProvider)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
+            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.dataSource = dataSource;
             this.syncManager = syncManager;
             this.platformInfo = platformInfo;
-            this.dialogService = dialogService;
             this.userPreferences = userPreferences;
             this.rxActionFactory = rxActionFactory;
             this.analyticsService = analyticsService;
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
             this.userAccessManager = userAccessManager;
             this.onboardingStorage = onboardingStorage;
             this.stopwatchProvider = stopwatchProvider;
             this.privateSharedStorageService = privateSharedStorageService;
             this.rxActionFactory = rxActionFactory;
             this.schedulerProvider = schedulerProvider;
-            this.permissionsService = permissionsService;
+            this.permissionsChecker = permissionsChecker;
 
             IsSynced =
                 syncManager.ProgressObservable
@@ -286,7 +280,7 @@ namespace Toggl.Core.UI.ViewModels
             SelectBeginningOfWeek = rxActionFactory.FromAsync(selectBeginningOfWeek);
             ToggleTimeEntriesGrouping = rxActionFactory.FromAsync(toggleTimeEntriesGrouping);
             SelectDefaultWorkspace = rxActionFactory.FromAsync<SelectableWorkspaceViewModel>(selectDefaultWorkspace);
-            Close = rxActionFactory.FromAsync(close);
+            Close = rxActionFactory.FromAsync(Finish);
         }
 
         public override async Task Initialize()
@@ -347,13 +341,13 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task openCalendarSettings()
-            => navigationService.Navigate<CalendarSettingsViewModel>();
+            => Navigate<CalendarSettingsViewModel, bool, string[]>(false);
 
         private Task openCalendarSmartReminders()
-            => navigationService.Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
+            => Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
 
         private Task openNotificationSettings()
-            => navigationService.Navigate<NotificationSettingsViewModel>();
+            => Navigate<NotificationSettingsViewModel>();
 
         private IObservable<Unit> logout()
         {
@@ -362,7 +356,7 @@ namespace Toggl.Core.UI.ViewModels
 
             return interactorFactory.Logout(LogoutSource.Settings)
                 .Execute()
-                .Do(_ => navigationService.Navigate<LoginViewModel>());
+                .Do(_ => Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty));
         }
 
         private IObservable<bool> isSynced()
@@ -412,7 +406,7 @@ namespace Toggl.Core.UI.ViewModels
                     .ToList();
 
         private Task openHelpView() =>
-            navigationService.Navigate<BrowserViewModel, BrowserParameters>(
+            Navigate<BrowserViewModel, BrowserParameters>(
                 BrowserParameters.WithUrlAndTitle(platformInfo.HelpUrl, Resources.Help)
             );
 
@@ -429,31 +423,30 @@ namespace Toggl.Core.UI.ViewModels
                 ? (Resources.SettingsSyncInProgressTitle, Resources.SettingsSyncInProgressMessage)
                 : (Resources.SettingsUnsyncedTitle, Resources.SettingsUnsyncedMessage);
 
-            await dialogService
+            await View
                 .Confirm(title, message, Resources.SettingsDialogButtonSignOut, Resources.Cancel)
                 .SelectMany(shouldLogout
                     => shouldLogout ? logout() : Observable.Return(Unit.Default));
         }
 
         private Task openAboutView()
-            => navigationService.Navigate<AboutViewModel>();
+            => Navigate<AboutViewModel>();
 
         private Task openSiriShorcuts()
-            => navigationService.Navigate<SiriShortcutsViewModel>();
+            => Navigate<SiriShortcutsViewModel>();
 
         private Task openSiriWorkflows()
-            => navigationService.Navigate<SiriWorkflowsViewModel>();
+            => Navigate<SiriWorkflowsViewModel>();
 
         private async Task submitFeedback()
         {
-            var sendFeedbackSucceed = await navigationService.Navigate<SendFeedbackViewModel, bool>();
+            var sendFeedbackSucceed = await Navigate<SendFeedbackViewModel, bool>();
             isFeedbackSuccessViewShowing.OnNext(sendFeedbackSucceed);
         }
 
         private async Task selectDateFormat()
         {
-            var newDateFormat = await navigationService
-                .Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(currentPreferences.DateFormat);
+            var newDateFormat = await Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(currentPreferences.DateFormat);
 
             if (currentPreferences.DateFormat == newDateFormat)
                 return;
@@ -468,8 +461,7 @@ namespace Toggl.Core.UI.ViewModels
                 .Execute();
 
             var selectedWorkspaceId =
-                await navigationService
-                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(new SelectWorkspaceParameters(Resources.SetDefaultWorkspace, defaultWorkspace.Id));
+                await Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(new SelectWorkspaceParameters(Resources.SetDefaultWorkspace, defaultWorkspace.Id));
 
             await changeDefaultWorkspace(selectedWorkspaceId);
         }
@@ -483,8 +475,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task selectDurationFormat()
         {
-            var newDurationFormat = await navigationService
-                .Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(currentPreferences.DurationFormat);
+            var newDurationFormat = await Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(currentPreferences.DurationFormat);
 
             if (currentPreferences.DurationFormat == newDurationFormat)
                 return;
@@ -494,8 +485,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task selectBeginningOfWeek()
         {
-            var newBeginningOfWeek = await navigationService
-                .Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(currentUser
+            var newBeginningOfWeek = await Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(currentUser
                     .BeginningOfWeek);
 
             if (currentUser.BeginningOfWeek == newBeginningOfWeek)
@@ -507,10 +497,8 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task checkCalendarPermissions()
         {
-            var authorized = await permissionsService.CalendarPermissionGranted;
+            var authorized = permissionsChecker.CalendarPermissionGranted.FirstAsync().GetAwaiter().GetResult();
             calendarPermissionGranted.OnNext(authorized);
         }
-
-        private Task close() => navigationService.Close(this);
     }
 }

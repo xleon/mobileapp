@@ -16,14 +16,13 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
+using Toggl.Core.UI.Views;
 using Toggl.Core.Sync;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
 using Toggl.Storage.Settings;
-using MvvmCross.ViewModels;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -34,9 +33,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
-        private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly IAnalyticsService analyticsService;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly ISyncManager syncManager;
@@ -117,19 +114,17 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
             IOnboardingStorage onboardingStorage,
-            IDialogService dialogService,
             IAnalyticsService analyticsService,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory actionFactory,
             ISchedulerProvider schedulerProvider)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
@@ -138,9 +133,7 @@ namespace Toggl.Core.UI.ViewModels
             this.dataSource = dataSource;
             this.syncManager = syncManager;
             this.timeService = timeService;
-            this.dialogService = dialogService;
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
             this.analyticsService = analyticsService;
             this.stopwatchProvider = stopwatchProvider;
             this.schedulerProvider = schedulerProvider;
@@ -239,35 +232,15 @@ namespace Toggl.Core.UI.ViewModels
             Delete = actionFactory.FromAsync(delete);
         }
 
-        protected override void ReloadFromBundle(IMvxBundle state)
+        public override async Task Initialize(long[] timeEntryIds)
         {
-            base.ReloadFromBundle(state);
+            await base.Initialize(timeEntryIds);
 
-            var ids = state.Data[nameof(TimeEntryIds)];
-
-            if (ids == null)
-                return;
-
-            TimeEntryIds = ids.Split(',').Select(long.Parse).ToArray();
-        }
-
-        protected override void SaveStateToBundle(IMvxBundle bundle)
-        {
-            base.SaveStateToBundle(bundle);
-
-            bundle.Data[nameof(TimeEntryIds)] = string.Join(",", TimeEntryIds);
-        }
-
-        public override void Prepare(long[] parameter)
-        {
-            if (parameter == null || parameter.Length == 0)
+            if (timeEntryIds == null || timeEntryIds.Length == 0)
                 throw new ArgumentException("Edit view has no Time Entries to edit.");
 
-            TimeEntryIds = parameter;
-        }
+            TimeEntryIds = timeEntryIds;
 
-        public override async Task Initialize()
-        {
             stopwatchFromCalendar = stopwatchProvider.Get(MeasuredOperation.EditTimeEntryFromCalendar);
             stopwatchProvider.Remove(MeasuredOperation.EditTimeEntryFromCalendar);
             stopwatchFromMainLog = stopwatchProvider.Get(MeasuredOperation.EditTimeEntryFromMainLog);
@@ -338,9 +311,9 @@ namespace Toggl.Core.UI.ViewModels
             stopwatchFromMainLog = null;
         }
 
-        public override void ViewDestroy(bool viewFinishing)
+        public override void ViewDestroyed()
         {
-            base.ViewDestroy(viewFinishing);
+            base.ViewDestroyed();
 
             disposeBag?.Dispose();
         }
@@ -369,9 +342,8 @@ namespace Toggl.Core.UI.ViewModels
 
             selectProjectStopwatch.Start();
 
-            var chosenProject = await navigationService
-                .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(
-                    SelectProjectParameter.WithIds(projectId, taskId, workspaceId));
+            var chosenProject = await Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(
+                                    new SelectProjectParameter(projectId, taskId, workspaceId));
 
             if (chosenProject.WorkspaceId == workspaceId
                 && chosenProject.ProjectId == projectId
@@ -428,8 +400,7 @@ namespace Toggl.Core.UI.ViewModels
 
             var currentTags = tagIds.OrderBy(CommonFunctions.Identity).ToArray();
 
-            var chosenTags = await navigationService
-                .Navigate<SelectTagsViewModel, (long[], long), long[]>((currentTags, workspaceId));
+            var chosenTags = await Navigate<SelectTagsViewModel, SelectTagsParameter, long[]>(new SelectTagsParameter(currentTags, workspaceId));
 
             if (chosenTags.OrderBy(CommonFunctions.Identity).SequenceEqual(currentTags))
                 return;
@@ -457,8 +428,7 @@ namespace Toggl.Core.UI.ViewModels
             var currentDuration = DurationParameter.WithStartAndDuration(startTime, duration);
             var editDurationParam = new EditDurationParameters(currentDuration, false, isDurationInitiallyFocused);
 
-            var selectedDuration = await navigationService
-                .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(editDurationParam)
+            var selectedDuration = await Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(editDurationParam)
                 .ConfigureAwait(false);
 
             startTimeSubject.OnNext(selectedDuration.Start);
@@ -475,8 +445,7 @@ namespace Toggl.Core.UI.ViewModels
                 ? DateTimePickerParameters.ForStartDateOfRunningTimeEntry(startTime, timeService.CurrentDateTime)
                 : DateTimePickerParameters.ForStartDateOfStoppedTimeEntry(startTime);
 
-            var selectedStartTime = await navigationService
-                .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
+            var selectedStartTime = await Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
                 .ConfigureAwait(false);
 
             startTimeSubject.OnNext(selectedStartTime);
@@ -497,13 +466,13 @@ namespace Toggl.Core.UI.ViewModels
         {
             if (await isDirty())
             {
-                var userConfirmedDiscardingChanges = await dialogService.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                var userConfirmedDiscardingChanges = await View.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
 
                 if (!userConfirmedDiscardingChanges)
                     return false;
             }
 
-            await navigationService.Close(this);
+            await Finish();
             return true;
         }
 
@@ -548,7 +517,8 @@ namespace Toggl.Core.UI.ViewModels
             interactorFactory
                 .UpdateMultipleTimeEntries(timeEntriesDtos)
                 .Execute()
-                .SubscribeToErrorsAndCompletion((Exception ex) => close(), () => close())
+                .ObserveOn(schedulerProvider.MainScheduler)
+                .SubscribeToErrorsAndCompletion((Exception ex) => Finish(), () => Finish())
                 .DisposedBy(disposeBag);
         }
 
@@ -579,12 +549,12 @@ namespace Toggl.Core.UI.ViewModels
             var isDeletionConfirmed = await delete(actionType, TimeEntryIds.Length, interactor);
 
             if (isDeletionConfirmed)
-                await close();
+                await Finish();
         }
 
         private async Task<bool> delete(ActionType actionType, int entriesCount, IInteractor<IObservable<Unit>> deletionInteractor)
         {
-            var isDeletionConfirmed = await dialogService.ConfirmDestructiveAction(actionType, entriesCount);
+            var isDeletionConfirmed = await View.ConfirmDestructiveAction(actionType, entriesCount);
 
             if (!isDeletionConfirmed)
                 return false;
@@ -596,9 +566,6 @@ namespace Toggl.Core.UI.ViewModels
 
             return true;
         }
-
-        private Task close()
-            => navigationService.Close(this);
 
         public struct ProjectClientTaskInfo
         {

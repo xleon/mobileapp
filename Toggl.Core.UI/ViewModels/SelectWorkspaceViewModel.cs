@@ -15,7 +15,6 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class SelectWorkspaceViewModel : ViewModel<SelectWorkspaceParameters, long>
     {
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
 
         private long currentWorkspaceId;
 
@@ -29,27 +28,23 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
             IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.interactorFactory = interactorFactory;
-            this.navigationService = navigationService;
 
             Close = rxActionFactory.FromAsync(close);
             SelectWorkspace = rxActionFactory.FromAsync<SelectableWorkspaceViewModel>(selectWorkspace);
         }
 
-        public override void Prepare(SelectWorkspaceParameters parameter)
+        public override async Task Initialize(SelectWorkspaceParameters parameter)
         {
+            base.Initialize(parameter);
+
             Title = parameter.Title;
             currentWorkspaceId = parameter.CurrentWorkspaceId;
-        }
-
-        public override async Task Initialize()
-        {
-            await base.Initialize();
 
             var workspaces = await interactorFactory.GetAllWorkspaces().Execute();
 
@@ -61,9 +56,9 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task close()
-            => navigationService.Close(this, currentWorkspaceId);
+            => Finish(currentWorkspaceId);
 
         private Task selectWorkspace(SelectableWorkspaceViewModel workspace)
-            => navigationService.Close(this, workspace.WorkspaceId);
+            => Finish(workspace.WorkspaceId);
     }
 }

@@ -223,6 +223,18 @@ Please try again.</value>
     <data name="InaccessibleProject" xml:space="preserve">
     <value>(inaccessible project)</value>
   </data>
+    <data name="WorkspacePlaceholder" xml:space="preserve">
+    <value>(unsynced workspace)</value>
+  </data>
+  <data name="ProjectPlaceholder" xml:space="preserve">
+    <value>(unsynced project)</value>
+  </data>
+  <data name="TaskPlaceholder" xml:space="preserve">
+    <value>(unsynced task)</value>
+  </data>
+  <data name="TagPlaceholder" xml:space="preserve">
+    <value>(unsynced tag)</value>
+  </data>
     <data name="SyncCompleted" xml:space="preserve">
     <value>Synced</value>
   </data>
@@ -842,12 +854,6 @@ Use them to add keywords to your time entries.</value>
     <data name="EditingTimeEntryGroup" xml:space="preserve">
     <value>Editing {0} time entries</value>
   </data>
-    <data name="NumberOfTasksPlural" xml:space="preserve">
-    <value>{0} Tasks</value>
-  </data>
-    <data name="NumberOfTasksSingular" xml:space="preserve">
-    <value>{0} Task</value>
-  </data>
     <data name="SelectCalendars" xml:space="preserve">
     <value>Select calendars</value>
   </data>
@@ -925,9 +931,6 @@ Use them to add keywords to your time entries.</value>
   </data>
     <data name="ShowReportsInvocationPhrase" xml:space="preserve">
     <value>Show my time</value>
-  </data>
-    <data name="ContinueTimerInvocationPhrase" xml:space="preserve">
-    <value>Continue tracking</value>
   </data>
   <data name="ContinueTimerInvocationPhrase">
       <value>Continue timer</value>

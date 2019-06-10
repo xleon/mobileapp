@@ -7,7 +7,6 @@ using System.Reactive.Subjects;
 using System.Threading;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.WeakSubscription;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
@@ -22,7 +21,6 @@ using Toggl.iOS.ExtensionKit;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Presentation;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Suggestions;
 using Toggl.iOS.Views;
 using Toggl.iOS.ViewSources;
@@ -38,7 +36,6 @@ namespace Toggl.iOS.ViewControllers
 {
     using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
 
-    [TabPresentation]
     public partial class MainViewController : ReactiveViewController<MainViewModel>, IScrollableToTop
     {
         private const float showCardDelay = 0.1f;
@@ -86,8 +83,8 @@ namespace Toggl.iOS.ViewControllers
         private SnackBar snackBar;
         private RatingView ratingView;
 
-        public MainViewController()
-            : base(nameof(MainViewController))
+        public MainViewController(MainViewModel viewModel)
+            : base(viewModel, nameof(MainViewController))
         {
         }
 
@@ -298,6 +295,16 @@ namespace Toggl.iOS.ViewControllers
             NSNotificationCenter.DefaultCenter.AddObserver(UIApplication.DidBecomeActiveNotification, onApplicationDidBecomeActive);
         }
 
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewDidDisappear(animated);
+
+            if (!TapToEditBubbleView.Hidden)
+            {
+                tapToEditStep.Dismiss();
+            }
+        }
+
         private void setupTableViewHeader()
         {
             TimeEntriesLogTableView.TableHeaderView = tableHeader;
@@ -330,7 +337,7 @@ namespace Toggl.iOS.ViewControllers
             return (item.RepresentedTimeEntriesIds, origin);
         }
 
-        private (long, ContinueTimeEntryMode) timeEntryContinuation(LogItemViewModel itemViewModel, bool isSwipe)
+        private ContinueTimeEntryInfo timeEntryContinuation(LogItemViewModel itemViewModel, bool isSwipe)
         {
             var continueMode = default(ContinueTimeEntryMode);
 
@@ -347,7 +354,7 @@ namespace Toggl.iOS.ViewControllers
                     : ContinueTimeEntryMode.SingleTimeEntryContinueButton;
             }
 
-            return (itemViewModel.RepresentedTimeEntriesIds.First(), continueMode);
+            return new ContinueTimeEntryInfo(itemViewModel, continueMode);
         }
 
         public override void ViewWillAppear(bool animated)
@@ -415,7 +422,7 @@ namespace Toggl.iOS.ViewControllers
                 text: undoText);
 
             snackBar.SnackBottomAnchor = StartTimeEntryButton.TopAnchor;
-            snackBar.Show(superView: View);
+            snackBar.Show(View);
         }
 
         protected override void Dispose(bool disposing)
@@ -425,7 +432,6 @@ namespace Toggl.iOS.ViewControllers
             if (!disposing) return;
 
             spiderBroView.Dispose();
-            ViewModel.NavigationService.AfterNavigate -= onNavigate;
 
             disposeBag?.Dispose();
             disposeBag = null;
@@ -493,7 +499,7 @@ namespace Toggl.iOS.ViewControllers
         {
             ratingView = RatingView.Create();
             ratingView.TranslatesAutoresizingMaskIntoConstraints = false;
-            ratingView.DataContext = ViewModel.RatingViewModel;
+            ratingView.ViewModel = ViewModel.RatingViewModel;
             ratingViewContainer.AddSubview(ratingView);
             ratingView.ConstrainInView(ratingViewContainer);
             View.SetNeedsLayout();
@@ -690,8 +696,6 @@ namespace Toggl.iOS.ViewControllers
             tapToEditStep.ManageVisibilityOf(TapToEditBubbleView).DisposedBy(disposeBag);
 
             prepareSwipeGesturesOnboarding(storage, tapToEditStep.ShouldBeVisible);
-
-            ViewModel.NavigationService.AfterNavigate += onNavigate;
         }
 
         private void prepareSwipeGesturesOnboarding(IOnboardingStorage storage, IObservable<bool> tapToEditStepIsVisible)
@@ -734,18 +738,6 @@ namespace Toggl.iOS.ViewControllers
             updateSwipeDismissGestures(nextFirstTimeEntry);
             firstTimeEntryCell = nextFirstTimeEntry;
             updateTooltipPositions();
-        }
-
-        private void onNavigate(object sender, EventArgs e)
-        {
-            bool isHidden = false;
-            InvokeOnMainThread(() => isHidden = TapToEditBubbleView.Hidden);
-
-            if (isHidden == false)
-            {
-                tapToEditStep.Dismiss();
-                ViewModel.NavigationService.AfterNavigate -= onNavigate;
-            }
         }
 
         private void updateTooltipPositions()

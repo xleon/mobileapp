@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using System.Threading;
+using System.Collections.Generic;
 using Foundation;
+using Newtonsoft.Json;
 using Toggl.Core.Models;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
@@ -14,11 +19,20 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
+
 namespace Toggl.iOS.ViewControllers.Settings.Siri
 {
     public partial class SiriWorkflowsViewController : ReactiveViewController<SiriWorkflowsViewModel>
     {
-        public SiriWorkflowsViewController() : base(nameof(SiriWorkflowsViewController))
+        #if USE_PRODUCTION_API
+            private const string baseURL = "https://toggl-mobile.firebaseapp.com/";
+        #elif DEBUG
+            private const string baseURL = "https://toggl-mobile.firebaseapp.com/dev/";
+        #else
+            private const string baseURL = "https://toggl-mobile.firebaseapp.com/adhoc/";
+        #endif
+
+        public SiriWorkflowsViewController(SiriWorkflowsViewModel viewModel) : base(viewModel, nameof(SiriWorkflowsViewController))
         {
         }
 
@@ -47,7 +61,9 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
                 SiriWorkflowCell.CellConfiguration(SiriWorkflowCell.Identifier)
             );
 
-            ViewModel.Workflows
+            downloadJson()
+                .Select(JsonConvert.DeserializeObject<List<SiriWorkflow>>)
+                .ObserveOn(SynchronizationContext.Current)
                 .Subscribe(TableView.Rx().ReloadItems(source))
                 .DisposedBy(DisposeBag);
 
@@ -60,7 +76,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
 
         private void workflowSelected(SiriWorkflow workflow)
         {
-            var path = ViewModel.PathForWorkflow(workflow);
+            var path = pathForWorkflow(workflow);
             var escapedPath =
                 ((NSString) path).CreateStringByAddingPercentEncoding(NSUrlUtilities_NSCharacterSet
                     .UrlQueryAllowedCharacterSet);
@@ -79,6 +95,17 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
             }
 
             UIApplication.SharedApplication.OpenUrl(url);
+        }
+
+        private IObservable<string> downloadJson()
+        {
+            var url = $"{baseURL}workflows.json";
+            return new WebClient().DownloadStringTaskAsync(url).ToObservable();
+        }
+
+        private string pathForWorkflow(SiriWorkflow workflow)
+        {
+            return $"shortcuts://import-workflow?url={baseURL}{workflow.FileName}&name={workflow.Title}";
         }
     }
 }

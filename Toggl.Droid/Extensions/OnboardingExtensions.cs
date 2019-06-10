@@ -6,7 +6,6 @@ using Android.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Base;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -163,8 +162,7 @@ namespace Toggl.Droid.Extensions
             {
                 return windowTokenIsReady;
             }
-
-            tokenObservable.DisposeIfDisposable();
+            
             return false;
         }
     }

@@ -30,6 +30,7 @@ using static Toggl.Core.Helper.Constants;
 using static Toggl.Shared.Extensions.CommonFunctions;
 using IStopwatch = Toggl.Core.Diagnostics.IStopwatch;
 using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
+using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -37,10 +38,8 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class StartTimeEntryViewModel : ViewModelWithInput<StartTimeEntryParameters>
     {
         private readonly ITimeService timeService;
-        private readonly IDialogService dialogService;
         private readonly IUserPreferences userPreferences;
         private readonly IInteractorFactory interactorFactory;
-        private readonly INavigationService navigationService;
         private readonly IAnalyticsService analyticsService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IStopwatchProvider stopwatchProvider;
@@ -112,7 +111,6 @@ namespace Toggl.Core.UI.ViewModels
         public StartTimeEntryViewModel(
             ITimeService timeService,
             ITogglDataSource dataSource,
-            IDialogService dialogService,
             IUserPreferences userPreferences,
             IOnboardingStorage onboardingStorage,
             IInteractorFactory interactorFactory,
@@ -120,25 +118,21 @@ namespace Toggl.Core.UI.ViewModels
             IAnalyticsService analyticsService,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
-            IRxActionFactory rxActionFactory
-        )
+            IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.timeService = timeService;
-            this.dialogService = dialogService;
             this.userPreferences = userPreferences;
-            this.navigationService = navigationService;
             this.interactorFactory = interactorFactory;
             this.analyticsService = analyticsService;
             this.schedulerProvider = schedulerProvider;
@@ -190,17 +184,10 @@ namespace Toggl.Core.UI.ViewModels
                 .AsDriver(schedulerProvider);
         }
 
-        public void Init()
+        public override async Task Initialize(StartTimeEntryParameters parameter)
         {
-            var now = timeService.CurrentDateTime;
-            var startTimeEntryParameters = userPreferences.IsManualModeEnabled
-                ? StartTimeEntryParameters.ForManualMode(now)
-                : StartTimeEntryParameters.ForTimerMode(now);
-            Prepare(startTimeEntryParameters);
-        }
+            await base.Initialize(parameter);
 
-        public override void Prepare(StartTimeEntryParameters parameter)
-        {
             this.parameter = parameter;
             startTime = parameter.StartTime;
             duration = parameter.Duration;
@@ -217,11 +204,7 @@ namespace Toggl.Core.UI.ViewModels
                 .Where(_ => isRunning)
                 .Subscribe(currentTime => displayedTime.Accept(currentTime - startTime))
                 .DisposedBy(disposeBag);
-        }
 
-        public override async Task Initialize()
-        {
-            await base.Initialize();
             startTimeEntryStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenStartView);
             stopwatchProvider.Remove(MeasuredOperation.OpenStartView);
 
@@ -282,9 +265,9 @@ namespace Toggl.Core.UI.ViewModels
             startTimeEntryStopwatch = null;
         }
 
-        public override void ViewDestroy(bool viewFinishing)
+        public override void ViewDestroyed()
         {
-            base.ViewDestroy(viewFinishing);
+            base.ViewDestroyed();
             disposeBag?.Dispose();
         }
 
@@ -298,12 +281,12 @@ namespace Toggl.Core.UI.ViewModels
         {
             if (isDirty)
             {
-                var shouldDiscard = await dialogService.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
+                var shouldDiscard = await View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
                 if (!shouldDiscard)
                     return false;
             }
 
-            await navigationService.Close(this);
+            await Finish();
             return true;
         }
 
@@ -384,11 +367,11 @@ namespace Toggl.Core.UI.ViewModels
                 case CreateEntitySuggestion createEntitySuggestion:
                     if (isSuggestingProjects.Value)
                     {
-                        createProject();
+                        await createProject();
                     }
                     else
                     {
-                        createTag();
+                        await createTag();
                     }
                     break;
 
@@ -397,7 +380,7 @@ namespace Toggl.Core.UI.ViewModels
             }
 
             IObservable<bool> workspaceChangeDenied()
-                => dialogService.Confirm(
+                => View.Confirm(
                     Resources.DifferentWorkspaceAlertTitle,
                     Resources.DifferentWorkspaceAlertMessage,
                     Resources.Ok,
@@ -410,7 +393,7 @@ namespace Toggl.Core.UI.ViewModels
             var createProjectStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.OpenCreateProjectViewFromStartTimeEntryView);
             createProjectStopwatch.Start();
 
-            var projectId = await navigationService.Navigate<EditProjectViewModel, string, long?>(currentQuery);
+            var projectId = await Navigate<EditProjectViewModel, string, long?>(currentQuery);
             if (projectId == null) return;
 
             var project = await interactorFactory.GetProjectById(projectId.Value).Execute();
@@ -426,7 +409,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             var createdTag = await interactorFactory.CreateTag(currentQuery, textFieldInfo.Value.WorkspaceId).Execute();
             var tagSuggestion = new TagSuggestion(createdTag);
-            await SelectSuggestion.ExecuteWithCompletion(tagSuggestion);
+            await selectSuggestion(tagSuggestion);
             hasAnyTags = true;
             toggleTagSuggestions();
         }
@@ -503,8 +486,7 @@ namespace Toggl.Core.UI.ViewModels
 
             var currentDuration = DurationParameter.WithStartAndDuration(startTime, duration);
 
-            var selectedDuration = await navigationService
-                .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(new EditDurationParameters(currentDuration, isStartingNewEntry: true))
+            var selectedDuration = await Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(new EditDurationParameters(currentDuration, isStartingNewEntry: true))
                 .ConfigureAwait(false);
 
             startTime = selectedDuration.Start;
@@ -522,8 +504,7 @@ namespace Toggl.Core.UI.ViewModels
 
             var duration = this.duration;
 
-            startTime = await navigationService
-                .Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
+            startTime = await Navigate<SelectDateTimeViewModel, DateTimePickerParameters, DateTimeOffset>(parameters)
                 .ConfigureAwait(false);
 
             if (isRunning == false)
@@ -542,7 +523,7 @@ namespace Toggl.Core.UI.ViewModels
             }
 
             return interactorFactory.CreateTimeEntry(timeEntry, origin).Execute()
-                .Do(_ => navigationService.Close(this));
+                .Do(_ => Finish());
         }
 
         private void onParsedQuery(QueryInfo parsedQuery)

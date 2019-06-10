@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Android.Graphics;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions.Reactive;
@@ -13,7 +11,6 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    [MvxDialogFragmentPresentation(AddToBackStack = true, Cancelable = false)]
     public sealed partial class SelectUserCalendarsFragment : ReactiveDialogFragment<SelectUserCalendarsViewModel>
     {
         private UserCalendarsRecyclerAdapter userCalendarsAdapter;
@@ -28,6 +25,12 @@ namespace Toggl.Droid.Fragments
             var view = wrappedInflater.Inflate(Resource.Layout.SelectUserCalendarsFragment, container, false);
             InitializeViews(view);
 
+            return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             setupRecyclerView();
 
             cancelButton
@@ -50,8 +53,6 @@ namespace Toggl.Droid.Fragments
                 .ItemTapObservable
                 .Subscribe(ViewModel.SelectCalendar.Inputs)
                 .DisposedBy(DisposeBag);
-
-            return view;
         }
 
         public override void OnResume()

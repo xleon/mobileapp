@@ -5,7 +5,6 @@ using Android.Runtime;
 using Android.Support.V4.Graphics;
 using Android.Util;
 using Android.Views;
-using MvvmCross.Base;
 using Toggl.Droid.Extensions;
 using Toggl.Shared.Extensions;
 using static System.Math;
@@ -116,13 +115,12 @@ namespace Toggl.Droid.Views
 
             Hue = pointX / width;
             Saturation = complement(pointY / height);
-
-            HueChanged.Raise(this);
-            SaturationChanged.Raise(this);
+            
+            HueChanged?.Invoke(this, new EventArgs());
+            SaturationChanged?.Invoke(this, new EventArgs());
 
             Invalidate();
         }
-
 
         public override void Draw(Canvas canvas)
         {

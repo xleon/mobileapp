@@ -64,7 +64,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 else
                     UserPreferences.DidNotReceive().SetTimeSpanBeforeCalendarNotifications(Arg.Any<TimeSpan>());
 
-                await NavigationService.Received().Close(Arg.Any<UpcomingEventsNotificationSettingsViewModel>(), Unit.Default);
+                await View.Received().Close();
             }
         }
     }

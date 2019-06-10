@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.UI.Navigation;
-using MvvmCross.ViewModels;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
@@ -35,13 +34,12 @@ namespace Toggl.Core.UI.ViewModels
 
         private bool hasOpenedReports = false;
 
-        public IList<MvxViewModel> Tabs { get; }
+        public IList<ViewModel> Tabs { get; }
 
         public MainTabBarViewModel(
             ITimeService timeService,
             ITogglDataSource dataSource,
             ISyncManager syncManager,
-            IDialogService dialogService,
             IRatingService ratingService,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
@@ -49,7 +47,7 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
             ISchedulerProvider schedulerProvider,
-            IPermissionsService permissionsService,
+            IPermissionsChecker permissionsChecker,
             INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
             ISuggestionProviderContainer suggestionProviders,
@@ -59,11 +57,11 @@ namespace Toggl.Core.UI.ViewModels
             IUserAccessManager userAccessManager,
             IPrivateSharedStorageService privateSharedStorageService,
             IPlatformInfo platformInfo)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(ratingService, nameof(ratingService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
@@ -71,12 +69,10 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
-            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
+            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
             Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
@@ -111,7 +107,6 @@ namespace Toggl.Core.UI.ViewModels
                 navigationService,
                 interactorFactory,
                 analyticsService,
-                dialogService,
                 schedulerProvider,
                 stopwatchProvider,
                 rxActionFactory);
@@ -119,14 +114,13 @@ namespace Toggl.Core.UI.ViewModels
             calendarViewModel = new CalendarViewModel(
                 dataSource,
                 timeService,
-                dialogService,
                 userPreferences,
                 analyticsService,
                 backgroundService,
                 interactorFactory,
                 onboardingStorage,
                 schedulerProvider,
-                permissionsService,
+                permissionsChecker,
                 navigationService,
                 stopwatchProvider,
                 rxActionFactory);
@@ -135,7 +129,6 @@ namespace Toggl.Core.UI.ViewModels
                 dataSource,
                 syncManager,
                 platformInfo,
-                dialogService,
                 userPreferences,
                 analyticsService,
                 userAccessManager,
@@ -145,7 +138,7 @@ namespace Toggl.Core.UI.ViewModels
                 privateSharedStorageService,
                 stopwatchProvider,
                 rxActionFactory,
-                permissionsService,
+                permissionsChecker,
                 schedulerProvider);
 
             Tabs = getViewModels().ToList();
@@ -170,7 +163,7 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        private IEnumerable<MvxViewModel> getViewModels()
+        private IEnumerable<ViewModel> getViewModels()
         {
             yield return mainViewModel;
             yield return reportsViewModel;
