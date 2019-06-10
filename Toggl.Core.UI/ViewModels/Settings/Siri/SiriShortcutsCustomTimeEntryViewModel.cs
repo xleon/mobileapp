@@ -173,7 +173,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
         {
             if (!onboardingStorage.DidShowSiriClipboardInstruction())
             {
-                await Navigate<PasteFromClipboardViewModel, bool>();
+                await Navigate<PasteFromClipboardViewModel>();
             }
 
             PasteFromClipboard.Accept(!PasteFromClipboard.Value);
