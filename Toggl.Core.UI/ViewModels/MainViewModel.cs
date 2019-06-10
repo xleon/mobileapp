@@ -27,6 +27,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
+using Toggl.Core.UI.Services;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -57,6 +58,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IRxActionFactory rxActionFactory;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly IPermissionsService permissionsService;
 
         private readonly RatingViewExperiment ratingViewExperiment;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
@@ -115,7 +117,8 @@ namespace Toggl.Core.UI.ViewModels
             IAccessRestrictionStorage accessRestrictionStorage,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
-            IRxActionFactory rxActionFactory)
+            IRxActionFactory rxActionFactory,
+            IPermissionsService permissionsService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
@@ -131,6 +134,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
+            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
 
             this.dataSource = dataSource;
             this.syncManager = syncManager;
@@ -143,10 +147,11 @@ namespace Toggl.Core.UI.ViewModels
             this.accessRestrictionStorage = accessRestrictionStorage;
             this.stopwatchProvider = stopwatchProvider;
             this.rxActionFactory = rxActionFactory;
+            this.permissionsService = permissionsService;
 
             TimeService = timeService;
 
-            SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory);
+            SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsService);
             RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, schedulerProvider, rxActionFactory);
             TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, syncManager, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 

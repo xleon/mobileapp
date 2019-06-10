@@ -135,7 +135,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.StopwatchProvider,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.PermissionsService);
 
             if (viewModelType == typeof(NoWorkspaceViewModel))
                 return new NoWorkspaceViewModel(
@@ -280,7 +281,10 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.OnboardingStorage,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.AnalyticsService,
+                    dependencyContainer.TimeService,
+                    dependencyContainer.PermissionsService);
 
             if (viewModelType == typeof(SyncFailuresViewModel))
                 return new SyncFailuresViewModel(

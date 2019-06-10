@@ -11,6 +11,10 @@ using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Toggl.Core.Services;
 using System.Collections.Immutable;
+using System.Collections.Generic;
+using Toggl.Core.Analytics;
+using System.Linq;
+using Toggl.Core.UI.Services;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -24,6 +28,9 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ITogglDataSource dataSource;
         private readonly IRxActionFactory rxActionFactory;
+        private readonly IAnalyticsService analyticsService;
+        private readonly ITimeService timeService;
+        private readonly IPermissionsService permissionsService;
 
         public IObservable<IImmutableList<Suggestion>> Suggestions { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
@@ -34,19 +41,28 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
             ISchedulerProvider schedulerProvider,
-            IRxActionFactory rxActionFactory)
+            IRxActionFactory rxActionFactory,
+            IAnalyticsService analyticsService,
+            ITimeService timeService,
+            IPermissionsService permissionsService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
+            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
 
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
             this.schedulerProvider = schedulerProvider;
             this.dataSource = dataSource;
             this.rxActionFactory = rxActionFactory;
+            this.analyticsService = analyticsService;
+            this.timeService = timeService;
+            this.permissionsService = permissionsService;
         }
 
         public override async Task Initialize()
@@ -58,6 +74,9 @@ namespace Toggl.Core.UI.ViewModels
             Suggestions = interactorFactory.ObserveWorkspaceOrTimeEntriesChanges().Execute()
                 .StartWith(Unit.Default)
                 .SelectMany(_ => getSuggestions())
+                .WithLatestFrom(permissionsService.CalendarPermissionGranted, (suggestions, isCalendarAuthorized) => (suggestions, isCalendarAuthorized))
+                .Do(item => trackPresentedSuggestions(item.suggestions, item.isCalendarAuthorized))
+                .Select(item => item.suggestions)
                 .AsDriver(onErrorJustReturn: ImmutableList.Create<Suggestion>(), schedulerProvider: schedulerProvider);
 
             IsEmpty = Suggestions
@@ -74,9 +93,35 @@ namespace Toggl.Core.UI.ViewModels
         {
             onboardingStorage.SetTimeEntryContinued();
 
-            return interactorFactory
+            var timeEntry = interactorFactory
                 .StartSuggestion(suggestion)
                 .Execute();
+
+            analyticsService.SuggestionStarted.Track(suggestion.ProviderType);
+
+            if (suggestion.ProviderType == SuggestionProviderType.Calendar)
+                trackCalendarOffset(suggestion);
+
+            return timeEntry;
+        }
+
+        private void trackPresentedSuggestions(IImmutableList<Suggestion> suggestions, bool isAuthorized)
+        {
+            var suggestionsCount = suggestions
+                .GroupBy(s => s.ProviderType)
+                .Select(group => (group.Key, group.Count()));
+
+            analyticsService.Track(new SuggestionPresentedEvent(suggestionsCount, isAuthorized));
+        }
+
+        private void trackCalendarOffset(Suggestion suggestion)
+        {
+            var currentTime = timeService.CurrentDateTime;
+            var startTime = suggestion.StartTime;
+
+            var offset = currentTime - startTime;
+
+            analyticsService.Track(new CalendarSuggestionContinuedEvent(offset));
         }
     }
 }

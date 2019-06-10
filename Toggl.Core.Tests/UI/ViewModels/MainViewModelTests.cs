@@ -61,7 +61,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     AccessRestrictionStorage,
                     SchedulerProvider,
                     StopwatchProvider,
-                    RxActionFactory);
+                    RxActionFactory,
+                    PermissionsService);
 
                 vm.Prepare();
 
@@ -109,7 +110,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useAccessRestrictionStorage,
                 bool useSchedulerProvider,
                 bool useStopwatchProvider,
-                bool useRxActionFactory)
+                bool useRxActionFactory,
+                bool usePermissionsService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
@@ -125,6 +127,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var permissionsService = usePermissionsService ? PermissionsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -141,7 +144,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         accessRestrictionStorage,
                         schedulerProvider,
                         stopwatchProvider,
-                        rxActionFactory);
+                        rxActionFactory,
+                        permissionsService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 
 namespace Toggl.Core.Analytics
@@ -167,6 +168,8 @@ namespace Toggl.Core.Analytics
         IAnalyticsEvent<string, string, string, string> DebugScheduleError { get; }
 
         IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; }
+
+        IAnalyticsEvent<SuggestionProviderType> SuggestionStarted { get; }
 
         void Track(string eventName, Dictionary<string, string> parameters = null);
 

@@ -100,7 +100,8 @@ namespace Toggl.Core.UI.ViewModels
                 accessRestrictionStorage,
                 schedulerProvider,
                 stopwatchProvider,
-                rxActionFactory);
+                rxActionFactory,
+                permissionsService);
 
             reportsViewModel = new ReportsViewModel(
                 dataSource,

@@ -19,6 +19,10 @@ using Toggl.Core.UI.Extensions;
 using Toggl.Shared.Extensions;
 using Toggl.Core.Tests.TestExtensions;
 using System.Collections.Immutable;
+using Toggl.Core.Analytics;
+using System.Collections.Generic;
+using static Toggl.Core.Analytics.CalendarSuggestionProviderState;
+using static Toggl.Core.Analytics.SuggestionPresentedEvent;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -27,7 +31,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class SuggestionsViewModelTest : BaseViewModelTests<SuggestionsViewModel>
         {
             protected override SuggestionsViewModel CreateViewModel()
-                => new SuggestionsViewModel(DataSource, InteractorFactory, OnboardingStorage, SchedulerProvider, RxActionFactory);
+                => new SuggestionsViewModel(DataSource, InteractorFactory, OnboardingStorage, SchedulerProvider, RxActionFactory, AnalyticsService, TimeService, PermissionsService);
 
             protected override void AdditionalViewModelSetup()
             {
@@ -47,16 +51,22 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useOnboardingStorage,
                 bool useInteractorFactory,
                 bool useSchedulerProvider,
-                bool useRxActionFactory)
+                bool useRxActionFactory,
+                bool useAnalyticsService,
+                bool useTimeService,
+                bool usePermissionsService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var analyticsService = useAnalyticsService ? AnalyticsService : null;
+                var timeService = useTimeService ? TimeService : null;
+                var permissionsService = usePermissionsService ? PermissionsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory);
+                    () => new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -120,20 +130,131 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 observer.LastEmittedValue().Should().HaveCount(0);
             }
 
+            [Fact, LogIfTooSlow]
+            public async Task TracksSuggestionPresentedEvent()
+            {
+                var suggestions = prepareSuggestionsForSuggestionsPresentedEvent();
+                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
+
+                await ViewModel.Initialize();
+                ViewModel.Suggestions.Subscribe(observer);
+                TestScheduler.Start();
+
+                AnalyticsService.Received().Track(Arg.Is<SuggestionPresentedEvent>(e =>
+                    e.ToDictionary()[SuggestionProviderType.Calendar.ToString()] == "3"
+                    && e.ToDictionary()[SuggestionProviderType.MostUsedTimeEntries.ToString()] == "2"
+                    && e.ToDictionary()[SuggestionProviderType.RandomForest.ToString()] == "1"
+                ));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksSuggestionPresentedEventWhenCalendarUnauthorized()
+            {
+                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(false));
+                var suggestions = prepareSuggestionsForSuggestionsPresentedEvent();
+                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
+
+                await ViewModel.Initialize();
+                ViewModel.Suggestions.Subscribe(observer);
+                TestScheduler.Start();
+
+                AnalyticsService.Received().Track(Arg.Is<SuggestionPresentedEvent>(e =>
+                    e.ToDictionary()[CalendarProviderStateName] == Unauthorized.ToString()
+                ));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksSuggestionPresentedEventWhenCalendarYieldsNoSuggestions()
+            {
+                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                var suggestions = prepareSuggestionsForSuggestionsPresentedEvent(hasCalendarSuggestions: false);
+                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
+
+                await ViewModel.Initialize();
+                ViewModel.Suggestions.Subscribe(observer);
+                TestScheduler.Start();
+
+                AnalyticsService.Received().Track(Arg.Is<SuggestionPresentedEvent>(e =>
+                    e.ToDictionary()[CalendarProviderStateName] == NoEvents.ToString()
+                ));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksSuggestionPresentedEventWhenCalendarYieldsSuggestions()
+            {
+                PermissionsService.CalendarPermissionGranted.Returns(Observable.Return(true));
+                var suggestions = prepareSuggestionsForSuggestionsPresentedEvent();
+                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
+
+                await ViewModel.Initialize();
+                ViewModel.Suggestions.Subscribe(observer);
+                TestScheduler.Start();
+
+                AnalyticsService.Received().Track(Arg.Is<SuggestionPresentedEvent>(e =>
+                    e.ToDictionary()[CalendarProviderStateName] == SuggestionsAvailable.ToString()
+                ));
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksSuggestionPresentedEventWithCorrectTotalCount()
+            {
+                var suggestions = prepareSuggestionsForSuggestionsPresentedEvent();
+                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
+
+                await ViewModel.Initialize();
+                ViewModel.Suggestions.Subscribe(observer);
+                TestScheduler.Start();
+
+                AnalyticsService.Received().Track(Arg.Is<SuggestionPresentedEvent>(e =>
+                    e.ToDictionary()[SuggestionsCountName] == suggestions.Length.ToString()
+                ));
+            }
+
+            private Suggestion[] prepareSuggestionsForSuggestionsPresentedEvent(bool hasCalendarSuggestions = true)
+            {
+                var suggestions = new[] {
+                    createDefaultSuggestionFor(SuggestionProviderType.MostUsedTimeEntries),
+                    createDefaultSuggestionFor(SuggestionProviderType.MostUsedTimeEntries),
+                    createDefaultSuggestionFor(SuggestionProviderType.RandomForest),
+                };
+
+                if (hasCalendarSuggestions)
+                {
+                    suggestions = suggestions.Concat(new[] {
+                        createDefaultSuggestionFor(SuggestionProviderType.Calendar),
+                        createDefaultSuggestionFor(SuggestionProviderType.Calendar),
+                        createDefaultSuggestionFor(SuggestionProviderType.Calendar),
+                    }).ToArray();
+                }
+
+                var getSuggestionsInteractor = Substitute.For<IInteractor<IObservable<IEnumerable<Suggestion>>>>();
+                getSuggestionsInteractor.Execute().Returns(Observable.Return(suggestions));
+                InteractorFactory.GetSuggestions(Arg.Any<int>()).Returns(getSuggestionsInteractor);
+                var changeInteractor = Substitute.For<IInteractor<IObservable<Unit>>>();
+                changeInteractor.Execute().Returns(Observable.Empty<Unit>());
+                InteractorFactory.ObserveWorkspaceOrTimeEntriesChanges().Returns(changeInteractor);
+
+                return suggestions;
+            }
+
             private Suggestion createSuggestion(int index) => createSuggestion($"te{index}", 0, 0);
 
-            private Suggestion createSuggestion(string description, long taskId, long projectId) => new Suggestion(
-                TimeEntry.Builder.Create(0)
-                    .SetDescription(description)
-                    .SetStart(DateTimeOffset.UtcNow)
-                    .SetAt(DateTimeOffset.UtcNow)
-                    .SetTaskId(taskId)
-                    .SetProjectId(projectId)
-                    .SetWorkspaceId(11)
-                    .SetUserId(12)
-                    .Build(),
-                SuggestionProviderType.MostUsedTimeEntries
-            );
+            private Suggestion createDefaultSuggestionFor(SuggestionProviderType type)
+                => createSuggestion("Description", 12, 20, type);
+
+            private Suggestion createSuggestion(string description, long taskId, long projectId, SuggestionProviderType type = SuggestionProviderType.MostUsedTimeEntries)
+                => new Suggestion(
+                    TimeEntry.Builder.Create(0)
+                        .SetDescription(description)
+                        .SetStart(DateTimeOffset.UtcNow)
+                        .SetAt(DateTimeOffset.UtcNow)
+                        .SetTaskId(taskId)
+                        .SetProjectId(projectId)
+                        .SetWorkspaceId(11)
+                        .SetUserId(12)
+                        .Build(),
+                    type
+                );
 
             private Recorded<Notification<Suggestion>> createRecorded(int ticks, Suggestion suggestion)
                 => new Recorded<Notification<Suggestion>>(ticks, Notification.CreateOnNext(suggestion));
@@ -211,13 +332,42 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 OnboardingStorage.Received().SetTimeEntryContinued();
             }
 
-            private Suggestion createSuggestion()
+            [Fact, LogIfTooSlow]
+            public async Task TracksCalendarSuggestionContinued()
+            {
+                var suggestion = createSuggestion(SuggestionProviderType.Calendar);
+                await ViewModel.Initialize();
+
+                ViewModel.StartTimeEntry.Execute(suggestion);
+
+                TestScheduler.Start();
+
+                AnalyticsService.Received().Track(Arg.Is<CalendarSuggestionContinuedEvent>(e => true));
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData(SuggestionProviderType.Calendar)]
+            [InlineData(SuggestionProviderType.MostUsedTimeEntries)]
+            [InlineData(SuggestionProviderType.RandomForest)]
+            public async Task TracksSuggestionStarted(SuggestionProviderType type)
+            {
+                var suggestion = createSuggestion(type);
+                await ViewModel.Initialize();
+
+                ViewModel.StartTimeEntry.Execute(suggestion);
+
+                TestScheduler.Start();
+
+                AnalyticsService.SuggestionStarted.Received().Track(type);
+            }
+
+            private Suggestion createSuggestion(SuggestionProviderType type = SuggestionProviderType.MostUsedTimeEntries)
             {
                 var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
                 timeEntry.Duration.Returns((long)TimeSpan.FromMinutes(30).TotalSeconds);
                 timeEntry.Description.Returns("Testing");
                 timeEntry.WorkspaceId.Returns(10);
-                return new Suggestion(timeEntry, SuggestionProviderType.MostUsedTimeEntries);
+                return new Suggestion(timeEntry, type);
             }
         }
     }
