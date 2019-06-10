@@ -1,10 +1,10 @@
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Networking.Models;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Networking.ApiClients
 {
@@ -23,12 +23,12 @@ namespace Toggl.Networking.ApiClients
         }
 
         public IObservable<Unit> Subscribe(PushNotificationsToken token)
-            => Observable.Return(Unit.Default);
+            => SendRequest(endPoints.Subscribe, AuthHeader, json(token)).SelectUnit();
 
         public IObservable<Unit> Unsubscribe(PushNotificationsToken token)
             => Observable.Return(Unit.Default);
 
         private string json(PushNotificationsToken token)
-            => $"{{\"fcm_token\": \"{(string)token}\"}}";
+            => $"{{\"fcm_registration_token\": \"{(string)token}\"}}";
     }
 }
