@@ -20,8 +20,6 @@ namespace Toggl.Core.Tests.Suggestions
     {
         public abstract class RandomForestSuggestionProviderTest
         {
-            protected const int NumberOfSuggestions = 7;
-
             protected RandomForestSuggestionProvider Provider { get; }
             protected IStopwatchProvider StopwatchProvider { get; } = Substitute.For<IStopwatchProvider>();
             protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
@@ -31,7 +29,7 @@ namespace Toggl.Core.Tests.Suggestions
 
             protected RandomForestSuggestionProviderTest()
             {
-                Provider = new RandomForestSuggestionProvider(StopwatchProvider, DataSource, TimeService, NumberOfSuggestions);
+                Provider = new RandomForestSuggestionProvider(StopwatchProvider, DataSource, TimeService);
 
                 TimeService.CurrentDateTime.Returns(_ => Now);
             }
@@ -48,7 +46,7 @@ namespace Toggl.Core.Tests.Suggestions
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new RandomForestSuggestionProvider(stopwatchProvider, dataSource, timeService, NumberOfSuggestions);
+                    () => new RandomForestSuggestionProvider(stopwatchProvider, dataSource, timeService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -119,7 +117,7 @@ namespace Toggl.Core.Tests.Suggestions
                 int numberOfExpectedResults,
                 bool expectedToHaveProject)
             {
-                var provider = new RandomForestSuggestionProvider(StopwatchProvider, DataSource, TimeService, 6);
+                var provider = new RandomForestSuggestionProvider(StopwatchProvider, DataSource, TimeService);
 
                 var timeEntries = getTimeEntries(numberOfTimeEntrieWithProject, true)
                     .Concat(getTimeEntries(numberOfTimeEntrieWithoutProject, false, numberOfTimeEntrieWithProject + 1));

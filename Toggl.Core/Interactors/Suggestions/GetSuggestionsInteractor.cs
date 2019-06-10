@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.DataSources;
@@ -54,7 +55,7 @@ namespace Toggl.Core.Interactors.Suggestions
         {
             return new List<ISuggestionProvider>
             {
-                new RandomForestSuggestionProvider(stopwatchProvider, dataSource, timeService, suggestionCount),
+                new RandomForestSuggestionProvider(stopwatchProvider, dataSource, timeService),
                 new CalendarSuggestionProvider(timeService, calendarService, defaultWorkspaceInteractor),
                 new MostUsedTimeEntrySuggestionProvider(timeService, dataSource, suggestionCount)
             };
