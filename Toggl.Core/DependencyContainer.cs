@@ -202,7 +202,8 @@ namespace Toggl.Core
                 LastTimeUsageStorage,
                 SchedulerProvider.DefaultScheduler,
                 StopwatchProvider,
-                AutomaticSyncingService
+                AutomaticSyncingService,
+                InteractorFactory
             );
             SyncErrorHandlingService.HandleErrorsOf(syncManager);
 

@@ -2,6 +2,7 @@ using System.Reactive.Concurrency;
 using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
+using Toggl.Core.Interactors;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
@@ -37,6 +38,8 @@ namespace Toggl.Core.Tests.Sync.Helpers
 
         public IAutomaticSyncingService AutomaticSyncingService { get; } = Substitute.For<IAutomaticSyncingService>();
 
+        public IInteractorFactory InteractorFactory { get; } = Substitute.For<IInteractorFactory>();
+
         public AppServices(ITogglApi api, ITogglDatabase database)
         {
             Scheduler = System.Reactive.Concurrency.Scheduler.Default;
@@ -59,7 +62,8 @@ namespace Toggl.Core.Tests.Sync.Helpers
                 LastTimeUsageStorageSubstitute,
                 Scheduler,
                 StopwatchProvider,
-                AutomaticSyncingService);
+                AutomaticSyncingService,
+                InteractorFactory);
 
             syncErrorHandlingService.HandleErrorsOf(SyncManager);
         }

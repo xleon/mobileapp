@@ -5,6 +5,7 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
+using Toggl.Core.Interactors;
 using Toggl.Core.Sync;
 using Toggl.Storage;
 using Toggl.Networking;
@@ -44,6 +45,7 @@ namespace Toggl.Core.Tests.Sync
                 Substitute.For<ITimeService>(),
                 Substitute.For<IAnalyticsService>(),
                 Substitute.For<ILastTimeUsageStorage>(),
+                Substitute.For<IInteractorFactory>(),
                 entryPoints,
                 Substitute.For<ISyncStateQueue>()
             );
