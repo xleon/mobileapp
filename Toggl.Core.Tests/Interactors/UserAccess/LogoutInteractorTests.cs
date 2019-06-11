@@ -143,7 +143,7 @@ namespace Toggl.Core.Tests.Interactors.UserAccess
             await interactor.Execute();
 
             PushNotificationsTokenService.Received().InvalidateCurrentToken();
-            KeyValueStorage.Received().Remove(PushNotificationTokenKeys.TokenKey);
+            KeyValueStorage.Received().Remove(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey);
         }
     }
 }

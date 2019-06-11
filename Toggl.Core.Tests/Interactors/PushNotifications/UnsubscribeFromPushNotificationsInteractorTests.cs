@@ -12,13 +12,13 @@ using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.PushNotifications
 {
-    public class InvalidateCurrentTokenInteractorTests : BaseInteractorTests
+    public class UnsubscribeFromPushNotificationsInteractorTests : BaseInteractorTests
     {
         private readonly IInteractor<IObservable<Unit>> interactor;
 
-        public InvalidateCurrentTokenInteractorTests()
+        public UnsubscribeFromPushNotificationsInteractorTests()
         {
-            interactor = new InvalidateCurrentTokenInteractor(
+            interactor = new UnsubscribeFromPushNotificationsInteractor(
                 PushNotificationsTokenService,
                 KeyValueStorage,
                 Api);
@@ -29,7 +29,7 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
         {
             await interactor.Execute();
 
-            KeyValueStorage.Received().Remove(PushNotificationTokenKeys.TokenKey);
+            KeyValueStorage.Received().Remove(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey);
         }
 
         [Fact, LogIfTooSlow]

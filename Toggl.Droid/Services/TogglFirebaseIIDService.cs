@@ -14,16 +14,12 @@ namespace Toggl.Droid.Services
     public class TogglFirebaseIIDService : FirebaseInstanceIdService
     {
         private CompositeDisposable disposeBag = new CompositeDisposable();
-        
+
         public override void OnTokenRefresh()
         {
             AndroidDependencyContainer.EnsureInitialized(Application.Context);
 
-            var token = FirebaseInstanceId.Instance.Token;
-
             var dependencyContainer = AndroidDependencyContainer.Instance;
-            dependencyContainer.InteractorFactory.StoreNewTokenInteractor(token).Execute();
-
             registerTokenIfNecessary(dependencyContainer);
         }
 
@@ -31,7 +27,7 @@ namespace Toggl.Droid.Services
         {
             var userLoggedIn = dependencyContainer.UserAccessManager.CheckIfLoggedIn();
             if (!userLoggedIn) return;
-            
+
             var subscribeToPushNotificationsInteractor = dependencyContainer.InteractorFactory.SubscribeToPushNotifications();
             subscribeToPushNotificationsInteractor
                 .Execute()
@@ -45,7 +41,7 @@ namespace Toggl.Droid.Services
             base.Dispose(disposing);
 
             if (!disposing) return;
-            
+
             disposeBag?.Dispose();
         }
     }

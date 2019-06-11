@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Linq;
 using Firebase.CloudMessaging;
 using Foundation;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS
@@ -20,7 +21,17 @@ namespace Toggl.iOS
         [Export("messaging:didReceiveRegistrationToken:")]
         public void DidReceiveRegistrationToken(Messaging messaging, string fcmToken)
         {
-            IosDependencyContainer.Instance.InteractorFactory.StoreNewTokenInteractor(fcmToken).Execute();
+            var dependencyContainer = IosDependencyContainer.Instance;
+            var interactorFactory = dependencyContainer.InteractorFactory;
+
+            if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
+            {
+                return;
+            }
+
+            interactorFactory.SubscribeToPushNotifications().Execute()
+                .Take(1)
+                .Subscribe();
         }
 
         public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)

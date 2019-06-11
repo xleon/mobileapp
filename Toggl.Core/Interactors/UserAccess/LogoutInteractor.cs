@@ -73,7 +73,7 @@ namespace Toggl.Core.Interactors.UserAccess
                     notificationService
                         .UnscheduleAllNotifications()
                         .Catch(Observable.Return(Unit.Default)))
-                .SelectMany(interactorFactory.InvalidateCurrentToken().Execute())
+                .SelectMany(interactorFactory.UnsubscribeFromPushNotifications().Execute())
                 .Do(userAccessManager.OnUserLoggedOut)
                 .FirstAsync();
     }

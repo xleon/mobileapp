@@ -9,13 +9,13 @@ using Toggl.Storage.Settings;
 
 namespace Toggl.Core.Interactors
 {
-    internal class InvalidateCurrentTokenInteractor : IInteractor<IObservable<Unit>>
+    internal class UnsubscribeFromPushNotificationsInteractor : IInteractor<IObservable<Unit>>
     {
         private readonly IPushNotificationsTokenService pushNotificationsTokenService;
         private readonly IKeyValueStorage keyValueStorage;
         private readonly IPushServicesApi pushServicesApi;
 
-        public InvalidateCurrentTokenInteractor(
+        public UnsubscribeFromPushNotificationsInteractor(
             IPushNotificationsTokenService pushNotificationsTokenService,
             IKeyValueStorage keyValueStorage,
             ITogglApi togglApi
@@ -34,7 +34,7 @@ namespace Toggl.Core.Interactors
         {
             var currentToken = pushNotificationsTokenService.Token;
 
-            keyValueStorage.Remove(PushNotificationTokenKeys.TokenKey);
+            keyValueStorage.Remove(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey);
             pushNotificationsTokenService.InvalidateCurrentToken();
 
             if (currentToken.HasValue)

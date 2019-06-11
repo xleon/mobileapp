@@ -235,9 +235,7 @@ namespace Toggl.Core.Interactors
 
         #region PushNotifications
 
-        IInteractor<Unit> StoreNewTokenInteractor(string token);
-
-        IInteractor<IObservable<Unit>> InvalidateCurrentToken();
+        IInteractor<IObservable<Unit>> UnsubscribeFromPushNotifications();
 
         IInteractor<IObservable<Unit>> SubscribeToPushNotifications();
 
