@@ -1,9 +1,6 @@
-using System;
 using Android.App;
 using Android.Content;
-using MvvmCross;
 using Toggl.Core;
-using Toggl.Core.UI;
 
 namespace Toggl.Droid.BroadcastReceivers
 {

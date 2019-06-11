@@ -113,7 +113,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectWorkspace.Execute(selectedWorkspace);
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(ViewModel, Unit.Default);
+                await View.Received().Close();
             }
         }
     }

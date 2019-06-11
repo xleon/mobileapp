@@ -13,7 +13,7 @@ namespace Toggl.Droid.Services
         {
         }
 
-        public void SaveLastUpdateDate(DateTimeOffset date)
+        public void SaveDefaultWorkspaceId(long workspaceId)
         {
         }
 

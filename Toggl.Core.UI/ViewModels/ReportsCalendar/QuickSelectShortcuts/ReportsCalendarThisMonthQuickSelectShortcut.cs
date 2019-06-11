@@ -1,8 +1,10 @@
 ﻿using System;
 using Toggl.Core.Analytics;
+using Toggl.Core.Models;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts
 {
@@ -16,8 +18,7 @@ namespace Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts
 
         public override ReportsDateRangeParameter GetDateRange()
         {
-            var now = TimeService.CurrentDateTime.Date;
-            var start = new DateTimeOffset(now.Year, now.Month, 1, 0, 0, 0, TimeSpan.Zero);
+            var start = TimeService.CurrentDateTime.RoundDownToLocalMonth();
             var end = start.AddMonths(1).AddDays(-1);
             return ReportsDateRangeParameter
                 .WithDates(start, end)

@@ -6,7 +6,7 @@ about: A checklist before releasing to the AppStore and Play Store.
 ## During development phase
 
 - [ ] Add this issue to the release project
-- [ ] Pick a release name, iOS uses [planet names from Foundation of your choice][3], Android uses [elements from the periodic table in order][4]
+- [ ] Pick a release name. iOS uses fruits while Android uses desserts. Check the latest release and pick a fruit/dessert with the next letter of the alphabet.
 - [ ] Create a release branch from `develop` (or the latest tag for a hotfix) named after the release
 - [ ] Bump the version numbers (including app extensions in iOS)
 - [ ] Create a release pull request, including the diff and write the user-facing changelog following [the guidelines][2], and add it to the release project
@@ -63,5 +63,3 @@ about: A checklist before releasing to the AppStore and Play Store.
 
 [1]: https://github.com/toggl/mobile-docs/blob/develop/release-flow.md
 [2]: https://github.com/toggl/mobile-docs/blob/develop/release-flow.md#write-a-changelog-our-users-can-understand
-[3]: https://en.wikipedia.org/wiki/List_of_Foundation_universe_planets
-[4]: https://en.wikipedia.org/wiki/Periodic_table

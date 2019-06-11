@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive.Linq;
 using FluentAssertions;
 using FsCheck;
@@ -14,12 +13,13 @@ using Toggl.Shared;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
 using Xunit;
+using System.Threading.Tasks;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class ForgotPasswordViewModelTests
     {
-        public abstract class ForgotPasswordViewModelTest : BaseViewModelTests<ForgotPasswordViewModel>
+        public abstract class ForgotPasswordViewModelTest : BaseViewModelTests<ForgotPasswordViewModel, EmailParameter, EmailParameter>
         {
             protected Email ValidEmail { get; } = Email.From("person@company.com");
             protected Email InvalidEmail { get; } = Email.From("This is not an email");
@@ -61,7 +61,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var email = Email.From(emailString.Get);
 
-                ViewModel.Prepare(EmailParameter.With(email));
+                ViewModel.Initialize(EmailParameter.With(email));
 
                 ViewModel.Email.Value.Should().Be(email);
             }
@@ -231,12 +231,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public void ClosesTheViewModelAfterFourSecondDelay()
+                public async Task ClosesTheViewModelAfterFourSecondDelay()
                 {
                     var testScheduler = new TestScheduler();
                     var timeService = new TimeService(testScheduler);
                     var viewModel = new ForgotPasswordViewModel(
                         timeService, UserAccessManager, AnalyticsService, NavigationService, RxActionFactory);
+                    viewModel.AttachView(View);
                     viewModel.Email.OnNext(ValidEmail);
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
@@ -246,12 +247,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     TestScheduler.Start();
                     testScheduler.AdvanceBy(TimeSpan.FromSeconds(4).Ticks);
 
-                    NavigationService
-                        .Received()
-                        .Close(
-                            viewModel,
-                            Arg.Is<EmailParameter>(
-                                parameter => parameter.Email.Equals(ValidEmail)));
+                    var result = await viewModel.Result;
+                    result.Email.Should().BeEquivalentTo(ValidEmail);
                 }
             }
 
@@ -354,18 +351,17 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Property]
             public void ClosesTheViewModelReturningTheEmail(NonEmptyString emailString)
             {
+                var viewModel = CreateViewModel();
+                viewModel.AttachView(View);
                 var email = Email.From(emailString.Get);
-                ViewModel.Email.OnNext(email);
+                viewModel.Email.OnNext(email);
 
-                ViewModel.Close.Execute();
+                viewModel.Close.Execute();
 
                 TestScheduler.Start();
-                NavigationService
-                    .Received()
-                    .Close(
-                        ViewModel,
-                        Arg.Is<EmailParameter>(
-                            parameter => parameter.Email.Equals(email)));
+
+                var result = viewModel.Result.GetAwaiter().GetResult();
+                result.Email.Should().BeEquivalentTo(email);
             }
         }
     }

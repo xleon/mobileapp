@@ -6,20 +6,18 @@ using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalDialogPresentation]
     public sealed partial class NoWorkspaceViewController
         : ReactiveViewController<NoWorkspaceViewModel>
     {
         private const float cardHeight = 368;
 
-        public NoWorkspaceViewController() : base(nameof(NoWorkspaceViewController))
+        public NoWorkspaceViewController(NoWorkspaceViewModel viewModel) : base(viewModel, nameof(NoWorkspaceViewController))
         {
         }
 

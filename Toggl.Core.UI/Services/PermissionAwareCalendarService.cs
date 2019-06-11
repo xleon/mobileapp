@@ -13,13 +13,13 @@ namespace Toggl.Core.Calendar
 {
     public abstract class PermissionAwareCalendarService : ICalendarService
     {
-        private readonly IPermissionsService permissionsService;
+        private readonly IPermissionsChecker permissionsChecker;
 
-        protected PermissionAwareCalendarService(IPermissionsService permissionsService)
+        protected PermissionAwareCalendarService(IPermissionsChecker permissionsChecker)
         {
-            Ensure.Argument.IsNotNull(permissionsService, nameof(permissionsService));
+            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
 
-            this.permissionsService = permissionsService;
+            this.permissionsChecker = permissionsChecker;
         }
 
         public IObservable<IEnumerable<CalendarItem>> GetEventsForDate(DateTime date)
@@ -31,21 +31,21 @@ namespace Toggl.Core.Calendar
         }
 
         public IObservable<CalendarItem> GetEventWithId(string id)
-            => permissionsService
+            => permissionsChecker
                 .CalendarPermissionGranted
                 .DeferAndThrowIfPermissionNotGranted(
                     () => Observable.Return(NativeGetCalendarItemWithId(id))
                 );
 
         public IObservable<IEnumerable<CalendarItem>> GetEventsInRange(DateTimeOffset start, DateTimeOffset end)
-            => permissionsService
+            => permissionsChecker
                 .CalendarPermissionGranted
                 .DeferAndThrowIfPermissionNotGranted(
                     () => Observable.Return(NativeGetEventsInRange(start, end))
                 );
 
         public IObservable<IEnumerable<UserCalendar>> GetUserCalendars()
-            => permissionsService
+            => permissionsChecker
                 .CalendarPermissionGranted
                 .DeferAndThrowIfPermissionNotGranted(
                     () => Observable.Return(NativeGetUserCalendars())

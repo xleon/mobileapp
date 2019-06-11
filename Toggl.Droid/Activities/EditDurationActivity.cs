@@ -8,7 +8,6 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
@@ -21,8 +20,7 @@ using static Toggl.Core.UI.Helper.TemporalInconsistency;
 
 namespace Toggl.Droid.Activities
 {
-    [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme.BlueStatusBar",
+    [Activity(Theme = "@style/Theme.Splash",
         WindowSoftInputMode = SoftInput.StateHidden | SoftInput.AdjustResize,
         ScreenOrientation = ScreenOrientation.Portrait,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
@@ -51,7 +49,13 @@ namespace Toggl.Droid.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
+            SetTheme(Resource.Style.AppTheme_BlueStatusBar);
             base.OnCreate(bundle);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.EditDurationActivity);
             InitializeViews();
             setupToolbar();
@@ -250,7 +254,6 @@ namespace Toggl.Droid.Activities
         public override void OnBackPressed()
         {
             navigateBack();
-            base.OnBackPressed();
         }
 
         private void navigateBack()

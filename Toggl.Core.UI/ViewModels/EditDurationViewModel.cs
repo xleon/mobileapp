@@ -23,7 +23,6 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class EditDurationViewModel : ViewModel<EditDurationParameters, DurationParameter>
     {
         private readonly ITimeService timeService;
-        private readonly INavigationService navigationService;
         private readonly IAnalyticsService analyticsService;
         private readonly ITogglDataSource dataSource;
 
@@ -81,8 +80,8 @@ namespace Toggl.Core.UI.ViewModels
         public bool IsDurationInitiallyFocused { get; private set; }
 
         public EditDurationViewModel(INavigationService navigationService, ITimeService timeService, ITogglDataSource dataSource, IAnalyticsService analyticsService, IRxActionFactory rxActionFactory, ISchedulerProvider schedulerProvider)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
@@ -90,7 +89,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.timeService = timeService;
-            this.navigationService = navigationService;
             this.analyticsService = analyticsService;
             this.dataSource = dataSource;
 
@@ -145,14 +143,6 @@ namespace Toggl.Core.UI.ViewModels
             MaximumStopTime = startTime.Select(v => v.AddHours(MaxTimeEntryDurationInHours)).AsDriver(schedulerProvider);
         }
 
-        public override async Task Initialize()
-        {
-            await base.Initialize();
-
-            beginningOfWeekDisposable = dataSource.User.Current
-                .Subscribe(user => BeginningOfWeek = user.BeginningOfWeek);
-        }
-
         private void updateStopTime(DateTimeOffset stopTime)
         {
             this.stopTime.OnNext(stopTime.RoundDownToMinute());
@@ -163,10 +153,13 @@ namespace Toggl.Core.UI.ViewModels
             this.startTime.OnNext(startTime.RoundDownToMinute());
         }
 
-        public override void Prepare(EditDurationParameters parameter)
+        public override Task Initialize(EditDurationParameters parameter)
         {
             defaultResult = parameter.DurationParam;
             isRunning.OnNext(defaultResult.Duration.HasValue == false);
+
+            beginningOfWeekDisposable = dataSource.User.Current
+                .Subscribe(user => BeginningOfWeek = user.BeginningOfWeek);
 
             analyticsEvent = new EditDurationEvent(isRunning.Value,
                 parameter.IsStartingNewEntry
@@ -190,6 +183,8 @@ namespace Toggl.Core.UI.ViewModels
             minimumDateTime.OnNext(start);
             maximumDateTime.OnNext(stop);
             IsDurationInitiallyFocused = parameter.IsDurationInitiallyFocused;
+
+            return base.Initialize(parameter);
         }
 
         public void TimeEditedWithSource(EditTimeSource source)
@@ -201,7 +196,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             analyticsEvent = analyticsEvent.With(result: EditDurationEvent.Result.Cancel);
             analyticsService.Track(analyticsEvent);
-            return navigationService.Close(this, defaultResult);
+            return Finish(defaultResult);
         }
 
         private Task save()
@@ -210,7 +205,7 @@ namespace Toggl.Core.UI.ViewModels
             analyticsService.Track(analyticsEvent);
             var duration = stopTime.Value - startTime.Value;
             var result = DurationParameter.WithStartAndDuration(startTime.Value, isRunning.Value ? (TimeSpan?)null : duration);
-            return navigationService.Close(this, result);
+            return Finish(result);
         }
 
         private void stopTimeEntry()
@@ -335,9 +330,9 @@ namespace Toggl.Core.UI.ViewModels
             return timeSpan.ToFormattedString(format);
         }
 
-        public override void ViewDestroy(bool viewFinishing)
+        public override void ViewDestroyed()
         {
-            base.ViewDestroy(viewFinishing);
+            base.ViewDestroyed();
             runningTimeEntryDisposable?.Dispose();
             beginningOfWeekDisposable?.Dispose();
         }

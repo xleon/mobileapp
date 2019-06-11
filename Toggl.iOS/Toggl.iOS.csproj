@@ -10,6 +10,7 @@
     <RootNamespace>Toggl.iOS</RootNamespace>
     <AssemblyName>Toggl.iOS</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,7 +64,7 @@
     <MtouchLink>Full</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <CodesignProvision>Daneel_AppStore</CodesignProvision>
+    <CodesignProvision>Daneel AppStore</CodesignProvision>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -138,9 +139,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="OnePasswordExtension">
-      <HintPath>..\packages\Xamarin.1PasswordExtension.1.8.4\lib\Xamarin.iOS10\OnePasswordExtension.dll</HintPath>
-    </Reference>
     <Reference Include="Google.Core">
       <HintPath>..\packages\Xamarin.Google.iOS.Core.3.1.0\lib\Xamarin.iOS10\Google.Core.dll</HintPath>
     </Reference>
@@ -206,15 +204,6 @@
     </Reference>
     <Reference Include="Firebase.PerformanceMonitoring">
       <HintPath>..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.2.1.2\lib\Xamarin.iOS10\Firebase.PerformanceMonitoring.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross">
-      <HintPath>..\packages\MvvmCross.6.1.2\lib\xamarinios10\MvvmCross.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugin.Color">
-      <HintPath>..\packages\MvvmCross.Plugin.Color.6.1.2\lib\xamarinios10\MvvmCross.Plugin.Color.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugin.Visibility">
-      <HintPath>..\packages\MvvmCross.Plugin.Visibility.6.1.2\lib\xamarinios10\MvvmCross.Plugin.Visibility.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Essentials">
       <HintPath>..\packages\Xamarin.Essentials.1.0.0\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
@@ -464,9 +453,6 @@
     <ImageAsset Include="Resources\Images.xcassets\togglCronometer.imageset\illustration2%403x.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\icOnePassword.imageset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Resources\Images.xcassets\icPassword.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -518,73 +504,25 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-29x29.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\Icon-App-29x29.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\Icon-App-29x29.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-80x80.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\Icon-App-80x80.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\Icon-App-80x80.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-120x120.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\Icon-App-120x120.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\Icon-App-120x120.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-58x58.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\Icon-App-58x58.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\Icon-App-58x58.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-87x87.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\Icon-App-87x87.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\Icon-App-87x87.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-57x57.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\Icon-App-57x57.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\Icon-App-57x57.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-114x114.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\Icon-App-114x114.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\Icon-App-114x114.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-180x180.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\Icon-App-180x180.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\Icon-App-180x180.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Images.xcassets\icAdd.imageset\Contents.json">
@@ -696,12 +634,6 @@
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\toggl-app-icon-1024x1024.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\toggl-app-icon-1024x1024.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\toggl-app-icon-1024x1024.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Images.xcassets\search.imageset\Contents.json">
@@ -1025,15 +957,6 @@
     <ImageAsset Include="Resources\Images.xcassets\icGoogleColored.imageset\google%403x.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\icOnePassword.imageset\passwordman.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\icOnePassword.imageset\passwordman%402x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\icOnePassword.imageset\passwordman%403x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Resources\Images.xcassets\thumbsup.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -1220,17 +1143,131 @@
     <ImageAsset Include="Resources\Images.xcassets\stripes.imageset\stripes%403x.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboard.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboard.imageset\pasteFromClipboard.pdf" />
+    <ImageAsset Include="Resources\Images.xcassets\clipboardInstruction.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\clipboardInstruction.imageset\clipboardInstruction.pdf" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboardEnabled.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboardEnabled.imageset\pasteFromClipboardEnabled.pdf" />
+    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-20x20.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-40x40.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-76x76.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-152x152.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-167x167.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icTimer.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icTimer.imageset\timer.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icTimer.imageset\timer%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icTimer.imageset\timer%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icMic.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icMic.imageset\microphone.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icMic.imageset\microphone%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icMic.imageset\microphone%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icMagnifier.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icMagnifier.imageset\search.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icMagnifier.imageset\search%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icMagnifier.imageset\search%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\circled_stop.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\circled_stop%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\circled_stop%403x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_20pt%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_20pt%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_29pt%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_29pt%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_40pt%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_40pt%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_60pt%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_60pt%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_20pt.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_29pt.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_40pt.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_76pt.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_76pt%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_83.5%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_1024pt.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_20pt%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_20pt%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_29pt%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_29pt%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_40pt%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_40pt%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_60pt%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_60pt%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_20pt.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_29pt.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_40pt.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_76pt.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_76pt%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_83.5%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_1024pt.png">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="ViewControllers\OnboardingViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\MainViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\EditTimeEntryViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriShortcutsSelectReportPeriodViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriShortcutsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\StartTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\EditDurationViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectProjectViewController.xib" />
@@ -1313,6 +1350,14 @@
     <InterfaceDefinition Include="Views\Reports\ReportsOverviewCardView.xib" />
     <InterfaceDefinition Include="Views\Reports\ReportsBarChartCardView.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\CreateEntityViewCell.xib" />
+    <InterfaceDefinition Include="Views\Settings\SiriShortcutCell.xib" />
+    <InterfaceDefinition Include="Views\Settings\CustomSiriShortcutCell.xib" />
+    <InterfaceDefinition Include="Views\Settings\SiriShortcutTableViewHeader.xib" />
+    <InterfaceDefinition Include="Views\Settings\SiriShortcutReportPeriodCell.xib" />
+    <InterfaceDefinition Include="Views\Settings\SiriWorkflowCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\Siri\PasteFromClipboardViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriWorkflowsViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1332,7 +1377,17 @@
     <Compile Include="Extensions\Reactive\UISliderExtensions.cs" />
     <Compile Include="Extensions\Reactive\WheelForegroundViewExtensions.cs" />
     <Compile Include="Extensions\SectionedIndexExtensions.cs" />
-    <Compile Include="Services\PermissionsServiceIos.cs" />
+    <Compile Include="Extensions\ViewControllerExtensions.cs" />
+    <Compile Include="Helper\PermissionsHelper.cs" />
+    <Compile Include="Presentation\IosPresenter.cs" />
+    <Compile Include="Presentation\NavigationPresenter.cs" />
+    <Compile Include="Presentation\ModalDialogPresenter.cs" />
+    <Compile Include="Presentation\ModalCardPresenter.cs" />
+    <Compile Include="Presentation\RootPresenter.cs" />
+    <Compile Include="Presentation\ViewControllerLocator.cs" />
+    <Compile Include="Services\PermissionsCheckerIos.cs" />
+    <Compile Include="Models\SiriShortcut.cs" />
+    <Compile Include="Models\SiriShortcutType.cs" />
     <Compile Include="Services\CalendarServiceIos.cs" />
     <Compile Include="Extensions\Reactive\NSConstraintExtensions.cs" />
     <Compile Include="Extensions\Reactive\UIApplicationExtensions.cs" />
@@ -1343,27 +1398,54 @@
     <Compile Include="Extensions\Reactive\UITableViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\UITextViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\UIViewExtensions.cs" />
-    <Compile Include="Services\IntentDonationServiceIos.cs" />
     <Compile Include="Services\PushNotificationsTokenServiceIos.cs" />
+    <Compile Include="Services\IntentDonationService.cs" />
     <Compile Include="Services\UserDefaultsStorageIos.cs" />
+    <Compile Include="Startup\AppDelegate.Deeplink.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Startup\AppDelegate.Notifications.cs">
       <DependentUpon>AppDelegate.cs</DependentUpon>
     </Compile>
     <Compile Include="Startup\IosDependencyContainer.cs" />
     <Compile Include="Startup\IOSSchedulerProvider.cs" />
-    <Compile Include="Startup\Setup.cs" />
     <Compile Include="Extensions\AnimationExtensions.cs" />
     <Compile Include="Transformations\ProjectTaskClientToAttributedString.cs" />
     <Compile Include="ViewControllers\OnboardingViewController.cs" />
     <Compile Include="ViewControllers\OnboardingViewController.designer.cs">
       <DependentUpon>OnboardingViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\OnePasswordServiceIos.cs" />
     <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationController.cs" />
+    <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.cs" />
+    <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.DialogProvider.cs">
+      <DependentUpon>ReactiveTableViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.PermissionsHandler.cs">
+      <DependentUpon>ReactiveTableViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Reactive\ReactiveViewController.cs" />
+    <Compile Include="ViewControllers\Reactive\ReactiveViewController.DialogProvider.cs">
+      <DependentUpon>ReactiveViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Reactive\ReactiveViewController.GoogleTokenProvider.cs">
+      <DependentUpon>ReactiveViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Reactive\ReactiveViewController.PermissionsHandler.cs">
+      <DependentUpon>ReactiveViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsSelectReportPeriodViewController.cs" />
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsSelectReportPeriodViewController.designer.cs">
+      <DependentUpon>SiriShortcutsSelectReportPeriodViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsViewController.cs" />
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsViewController.designer.cs">
+      <DependentUpon>SiriShortcutsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutViewModel.cs" />
     <Compile Include="ViewControllers\SyncFailuresViewController.cs" />
     <Compile Include="ViewSources\Generic\CollectionView\ReloadCollectionViewSource.cs" />
     <Compile Include="ViewSources\Generic\TableView\BaseTableViewSource.cs" />
-    <Compile Include="Presentation\TogglPresenter.cs" />
+    <Compile Include="ViewSources\SiriShortcutsTableViewSource.cs" />
     <Compile Include="ViewSources\TimeEntriesLogViewSource.cs" />
     <Compile Include="ViewControllers\MainViewController.cs" />
     <Compile Include="ViewControllers\MainViewController.designer.cs">
@@ -1374,8 +1456,6 @@
       <DependentUpon>StartTimeEntryViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ActivityIndicatorView.cs" />
-    <Compile Include="Presentation\Attributes\ModalCardPresentationAttribute.cs" />
-    <Compile Include="Presentation\Attributes\NestedChildPresentationAttribute.cs" />
     <Compile Include="Presentation\Transition\FromBottomTransition.cs" />
     <Compile Include="Presentation\Transition\FromBottomTransitionDelegate.cs" />
     <Compile Include="Presentation\Transition\ModalPresentationController.cs" />
@@ -1386,7 +1466,6 @@
     <Compile Include="Extensions\FontExtensions.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="ViewSources\StartTimeEntryTableViewSource.cs" />
-    <Compile Include="Presentation\Attributes\ModalDialogPresentationAttribute.cs" />
     <Compile Include="Presentation\Transition\ModalDialogPresentationController.cs" />
     <Compile Include="Presentation\Transition\ModalDialogTransitionDelegate.cs" />
     <Compile Include="ViewControllers\EditDurationViewController.cs" />
@@ -1438,7 +1517,6 @@
     <Compile Include="Views\Onboarding\ReportsPage.designer.cs">
       <DependentUpon>ReportsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\DialogServiceIos.cs" />
     <Compile Include="Views\FadeView.cs" />
     <Compile Include="Views\Interfaces\IHeaderViewCellWithHideableTopSeparator.cs" />
     <Compile Include="ViewControllers\BrowserViewController.cs" />
@@ -1462,15 +1540,33 @@
     <Compile Include="ViewControllers\SelectClientViewController.designer.cs">
       <DependentUpon>SelectClientViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Reports\ReportsCalendarCollectionViewLayout.cs" />
     <Compile Include="Views\TextViewWithPlaceholder.cs" />
     <Compile Include="Startup\AppDelegate.cs" />
+    <Compile Include="Startup\AppDelegate.Analytics.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Startup\AppDelegate.UI.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Startup\AppDelegate.Siri.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Startup\AppDelegate.Notification.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Startup\AppDelegate.Background.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Startup\AppDelegate.Shortcuts.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Startup\Main.cs" />
     <Compile Include="ViewControllers\OutdatedAppViewController.cs" />
     <Compile Include="ViewControllers\OutdatedAppViewController.designer.cs">
       <DependentUpon>OutdatedAppViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\BrowserServiceIos.cs" />
-    <Compile Include="Services\GoogleServiceIos.cs" />
     <Compile Include="ViewControllers\TokenResetViewController.cs" />
     <Compile Include="ViewControllers\TokenResetViewController.designer.cs">
       <DependentUpon>TokenResetViewController.cs</DependentUpon>
@@ -1528,7 +1624,6 @@
       <DependentUpon>ReportsCalendarViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\ReportsCalendarCollectionViewSource.cs" />
-    <Compile Include="ReportsCalendarCollectionViewLayout.cs" />
     <Compile Include="Views\Reports\ReportsCalendarViewCell.cs" />
     <Compile Include="Views\Reports\ReportsCalendarViewCell.designer.cs">
       <DependentUpon>ReportsCalendarViewCell.cs</DependentUpon>
@@ -1542,7 +1637,6 @@
     <Compile Include="Views\Reports\PieChartView.cs" />
     <Compile Include="Views\Reports\PercentageView.cs" />
     <Compile Include="Services\ITopViewControllerProvider.cs" />
-    <Compile Include="Presentation\NestedPresentationInfo.cs" />
     <Compile Include="Views\Reports\ReportsLegendViewCell.cs" />
     <Compile Include="Views\Reports\ReportsLegendViewCell.designer.cs">
       <DependentUpon>ReportsLegendViewCell.cs</DependentUpon>
@@ -1649,7 +1743,6 @@
     <Compile Include="Services\RemoteConfigServiceIos.cs" />
     <Compile Include="Extensions\ImageExtension.cs" />
     <Compile Include="Services\RatingServiceIos.cs" />
-    <Compile Include="ViewControllers\ReactiveViewController.cs" />
     <Compile Include="Cells\BaseTableViewCell.cs" />
     <Compile Include="Cells\BaseTableHeaderFooterView.cs" />
     <Compile Include="Cells\SyncFailures\SyncFailureCell.cs" />
@@ -1749,7 +1842,6 @@
       <DependentUpon>UpcomingEventsOptionCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\ScrollViewExtensions.cs" />
-    <Compile Include="Presentation\Attributes\TabPresentationAttribute.cs" />
     <Compile Include="Views\Calendar\CalendarCollectionViewAutoScrollHelper.cs" />
     <Compile Include="Extensions\Reactive\UIControlExtensions.cs" />
     <Compile Include="ViewControllers\IDismissableViewController.cs" />
@@ -1822,7 +1914,39 @@
       <DependentUpon>ReportsBarChartCardView.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentation\IScrollableToTop.cs" />
+    <Compile Include="Views\Settings\SiriShortcutCell.cs" />
+    <Compile Include="Views\Settings\SiriShortcutCell.designer.cs">
+      <DependentUpon>SiriShortcutCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\CustomSiriShortcutCell.cs" />
+    <Compile Include="Views\Settings\CustomSiriShortcutCell.designer.cs">
+      <DependentUpon>CustomSiriShortcutCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\SiriShortcutTableViewHeader.cs" />
+    <Compile Include="Views\Settings\SiriShortcutTableViewHeader.designer.cs">
+      <DependentUpon>SiriShortcutTableViewHeader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\SiriShortcutReportPeriodCell.cs" />
+    <Compile Include="Views\Settings\SiriShortcutReportPeriodCell.designer.cs">
+      <DependentUpon>SiriShortcutReportPeriodCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\SiriWorkflowCell.cs" />
+    <Compile Include="Views\Settings\SiriWorkflowCell.designer.cs">
+      <DependentUpon>SiriWorkflowCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.cs" />
+    <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.designer.cs">
+      <DependentUpon>SiriShortcutsCustomTimeEntryViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Settings\Siri\PasteFromClipboardViewController.cs" />
+    <Compile Include="ViewControllers\Settings\Siri\PasteFromClipboardViewController.designer.cs">
+      <DependentUpon>PasteFromClipboardViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\EmailTextField.cs" />
+    <Compile Include="ViewControllers\Settings\Siri\SiriWorkflowsViewController.cs" />
+    <Compile Include="ViewControllers\Settings\Siri\SiriWorkflowsViewController.designer.cs">
+      <DependentUpon>SiriWorkflowsViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">
@@ -1901,6 +2025,12 @@
     <Folder Include="Resources\Images.xcassets\thumbsdown.imageset\" />
     <Folder Include="Resources\Images.xcassets\thumbsup.imageset\" />
     <Folder Include="Resources\Images.xcassets\togglLogoBig.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icGears.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icStop.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icTimer.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icMic.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icMagnifier.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icRoundStop.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

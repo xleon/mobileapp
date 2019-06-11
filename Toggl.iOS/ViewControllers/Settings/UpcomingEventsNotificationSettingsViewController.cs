@@ -1,33 +1,27 @@
 ﻿using System.Reactive;
 using CoreGraphics;
-using Foundation;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.iOS.ViewSources;
-using Toggl.Core;
 using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Cells.Settings;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.ViewSources.Generic.TableView;
-using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
+using Toggl.Shared;
 
 namespace Toggl.iOS.ViewControllers.Settings
 {
     using CalendarSectionModel = SectionModel<Unit, SelectableCalendarNotificationsOptionViewModel>;
 
-    [ModalCardPresentation]
     public sealed partial class UpcomingEventsNotificationSettingsViewController : ReactiveViewController<UpcomingEventsNotificationSettingsViewModel>
     {
 
         private const int rowHeight = 44;
 
-        public UpcomingEventsNotificationSettingsViewController() : base(nameof(UpcomingEventsNotificationSettingsViewController))
+        public UpcomingEventsNotificationSettingsViewController(UpcomingEventsNotificationSettingsViewModel viewModel)
+            : base(viewModel, nameof(UpcomingEventsNotificationSettingsViewController))
         {
         }
 

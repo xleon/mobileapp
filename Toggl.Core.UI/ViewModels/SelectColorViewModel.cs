@@ -17,7 +17,6 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public class SelectColorViewModel : ViewModel<ColorParameters, Color>
     {
-        private readonly INavigationService navigationService;
         private readonly IRxActionFactory rxActionFactory;
 
         private Color defaultColor;
@@ -43,11 +42,10 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<Color> SelectColor { get; }
 
         public SelectColorViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
+            : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            this.navigationService = navigationService;
             this.rxActionFactory = rxActionFactory;
 
             // Public properties
@@ -73,7 +71,7 @@ namespace Toggl.Core.UI.ViewModels
                 .CombineLatest(selectedColor, updateSelectableColors);
         }
 
-        public override void Prepare(ColorParameters parameter)
+        public override Task Initialize(ColorParameters parameter)
         {
             defaultColor = parameter.Color;
             AllowCustomColors = parameter.AllowCustomColors;
@@ -98,6 +96,8 @@ namespace Toggl.Core.UI.ViewModels
             {
                 selectedColor.OnNext(defaultColor);
             }
+
+            return base.Initialize(parameter);
         }
 
         private IEnumerable<Color> combineAllColors(Color[] defaultColors, Color custom)
@@ -122,9 +122,9 @@ namespace Toggl.Core.UI.ViewModels
             => availableColors.Select(color => new SelectableColorViewModel(color, color == selectedColor));
 
         private Task close()
-            => navigationService.Close(this, defaultColor);
+            => Finish(defaultColor);
 
         private Task save()
-            => navigationService.Close(this, selectedColor.Value);
+            => Finish(selectedColor.Value);
     }
 }

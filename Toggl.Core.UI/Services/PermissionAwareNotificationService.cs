@@ -1,34 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Reactive;
-using System.Reactive.Linq;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
-using Toggl.Shared;
 using Notification = Toggl.Shared.Notification;
 
 namespace Toggl.Core.Calendar
 {
     public abstract class PermissionAwareNotificationService : INotificationService
     {
-        private readonly IPermissionsService permissionsService;
+        private readonly IPermissionsChecker permissionsChecker;
 
-        protected PermissionAwareNotificationService(IPermissionsService permissionsService)
+        protected PermissionAwareNotificationService(IPermissionsChecker permissionsChecker)
         {
-            this.permissionsService = permissionsService;
+            this.permissionsChecker = permissionsChecker;
         }
 
         public IObservable<Unit> Schedule(IImmutableList<Notification> notifications)
-            => permissionsService
+            => permissionsChecker
                 .NotificationPermissionGranted
                 .DeferAndThrowIfPermissionNotGranted(
                     () => NativeSchedule(notifications)
                 );
 
         public IObservable<Unit> UnscheduleAllNotifications()
-            => permissionsService
+            => permissionsChecker
                 .NotificationPermissionGranted
                 .DeferAndThrowIfPermissionNotGranted(NativeUnscheduleAllNotifications);
 

@@ -5,7 +5,6 @@ using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels.Calendar;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -13,7 +12,6 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers.Calendar
 {
-    [ModalDialogPresentation]
     public sealed partial class SelectUserCalendarsViewController
         : ReactiveViewController<SelectUserCalendarsViewModel>
     {
@@ -25,8 +23,8 @@ namespace Toggl.iOS.ViewControllers.Calendar
         private const float enabledDoneButtonAlpha = 1;
         private const float disabledDoneButtonAlpha = 0.32f;
 
-        public SelectUserCalendarsViewController()
-            : base(null)
+        public SelectUserCalendarsViewController(SelectUserCalendarsViewModel viewModel)
+            : base(viewModel)
         {
         }
 

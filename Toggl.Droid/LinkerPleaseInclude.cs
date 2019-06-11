@@ -2,10 +2,6 @@
 using Android.Support.Constraints;
 using Android.Support.V7.Widget;
 using Firebase.Provider;
-using MvvmCross.Binding.BindingContext;
-using MvvmCross.IoC;
-using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Newtonsoft.Json.Converters;
 using V4Space = Android.Support.V4.Widget.Space;
 
@@ -15,28 +11,6 @@ namespace Toggl.Droid
     // are preserved in the deployed app
     public class LinkerPleaseInclude
     {
-        public void Include(MvxTaskBasedBindingContext c)
-        {
-            c.Dispose();
-            var c2 = new MvxTaskBasedBindingContext();
-            c2.Dispose();
-        }
-
-        public void Include(MvxPropertyInjector injector)
-        {
-            injector = new MvxPropertyInjector ();
-        }
-
-        public void Include(MvxViewModelViewTypeFinder typeFinder)
-        {
-            typeFinder = new MvxViewModelViewTypeFinder(null, null);
-        }
-
-        public void Include(MvxNavigationService service, IMvxViewModelLoader loader)
-        {
-            service = new MvxNavigationService(null, loader);
-        }
-
         public void Include(FitWindowsLinearLayout linearLayout)
         {
             linearLayout = new FitWindowsLinearLayout(null);

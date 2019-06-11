@@ -14,6 +14,7 @@ using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Math = System.Math;
 using Colors = Toggl.Core.UI.Helper.Colors;
+using Toggl.Core.UI.Parameters;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -40,7 +41,6 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly IAnalyticsService analyticsService;
         private readonly IOnboardingStorage onboardingStorage;
-        private readonly INavigationService navigationService;
         private readonly BehaviorSubject<int> currentPage = new BehaviorSubject<int>(0);
         private readonly bool[] pagesVisited = new bool[pageInfo.Length];
         private bool visitedAllPages => pagesVisited.All(CommonFunctions.Identity);
@@ -66,15 +66,14 @@ namespace Toggl.Core.UI.ViewModels
             IAnalyticsService analyticsService,
             IRxActionFactory rxActionFactory,
             ISchedulerProvider schedulerProvider)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.analyticsService = analyticsService;
-            this.navigationService = navigationService;
             this.onboardingStorage = onboardingStorage;
 
             pagesVisited[0] = true;
@@ -101,7 +100,7 @@ namespace Toggl.Core.UI.ViewModels
 
             if (onboardingStorage.CompletedOnboarding())
             {
-                await navigationService.Navigate<LoginViewModel>();
+                await Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty);
             }
         }
 
@@ -120,10 +119,9 @@ namespace Toggl.Core.UI.ViewModels
             currentPage.OnNext(boundCheckedPage);
         }
 
-        private IObservable<Unit> skip() => navigationService.Navigate<LoginViewModel>()
+        private IObservable<Unit> skip() => Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty)
             .ToObservable()
             .Do(_ => analyticsService.OnboardingSkip.Track(pageNames[currentPage.Value]));
-
 
         private Task completeOnboarding()
         {
@@ -132,7 +130,7 @@ namespace Toggl.Core.UI.ViewModels
                 onboardingStorage.SetCompletedOnboarding();
             }
 
-            return navigationService.Navigate<LoginViewModel>();
+            return Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty);
         }
 
         private Task next() => ChangePage(currentPage.Value + 1);

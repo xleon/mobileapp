@@ -13,20 +13,11 @@ namespace Toggl.Droid.Services
     [IntentFilter(new[] { "com.google.firebase.INSTANCE_ID_EVENT" })]
     public class TogglFirebaseIIDService : FirebaseInstanceIdService
     {
-        private const ApiEnvironment environment =
-        #if USE_PRODUCTION_API
-            ApiEnvironment.Production;
-        #else
-            ApiEnvironment.Staging;
-        #endif
-
         private CompositeDisposable disposeBag = new CompositeDisposable();
         
         public override void OnTokenRefresh()
         {
-            var applicationContext = Application.Context;
-            var packageInfo = applicationContext.PackageManager.GetPackageInfo(applicationContext.PackageName, 0);
-            AndroidDependencyContainer.EnsureInitialized(environment, Platform.Giskard, packageInfo.VersionName);
+            AndroidDependencyContainer.EnsureInitialized(Application.Context);
 
             var token = FirebaseInstanceId.Instance.Token;
 

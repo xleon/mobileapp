@@ -36,7 +36,6 @@ namespace Toggl.Core
         private readonly Lazy<ITogglDatabase> database;
         private readonly Lazy<ITimeService> timeService;
         private readonly Lazy<IPlatformInfo> platformInfo;
-        private readonly Lazy<IGoogleService> googleService;
         private readonly Lazy<IRatingService> ratingService;
         private readonly Lazy<ICalendarService> calendarService;
         private readonly Lazy<IKeyValueStorage> keyValueStorage;
@@ -54,7 +53,6 @@ namespace Toggl.Core
         private readonly Lazy<ILastTimeUsageStorage> lastTimeUsageStorage;
         private readonly Lazy<IApplicationShortcutCreator> shortcutCreator;
         private readonly Lazy<IBackgroundSyncService> backgroundSyncService;
-        private readonly Lazy<IIntentDonationService> intentDonationService;
         private readonly Lazy<IAutomaticSyncingService> automaticSyncingService;
         private readonly Lazy<IAccessRestrictionStorage> accessRestrictionStorage;
         private readonly Lazy<ISyncErrorHandlingService> syncErrorHandlingService;
@@ -88,7 +86,6 @@ namespace Toggl.Core
         public IErrorHandlingService ErrorHandlingService => errorHandlingService.Value;
         public ILastTimeUsageStorage LastTimeUsageStorage => lastTimeUsageStorage.Value;
         public IBackgroundSyncService BackgroundSyncService => backgroundSyncService.Value;
-        public IIntentDonationService IntentDonationService => intentDonationService.Value;
         public IAutomaticSyncingService AutomaticSyncingService => automaticSyncingService.Value;
         public IAccessRestrictionStorage AccessRestrictionStorage => accessRestrictionStorage.Value;
         public ISyncErrorHandlingService SyncErrorHandlingService => syncErrorHandlingService.Value;
@@ -108,7 +105,6 @@ namespace Toggl.Core
             timeService = new Lazy<ITimeService>(CreateTimeService);
             dataSource = new Lazy<ITogglDataSource>(CreateDataSource);
             platformInfo = new Lazy<IPlatformInfo>(CreatePlatformInfo);
-            googleService = new Lazy<IGoogleService>(CreateGoogleService);
             ratingService = new Lazy<IRatingService>(CreateRatingService);
             calendarService = new Lazy<ICalendarService>(CreateCalendarService);
             keyValueStorage = new Lazy<IKeyValueStorage>(CreateKeyValueStorage);
@@ -127,7 +123,6 @@ namespace Toggl.Core
             errorHandlingService = new Lazy<IErrorHandlingService>(CreateErrorHandlingService);
             lastTimeUsageStorage = new Lazy<ILastTimeUsageStorage>(CreateLastTimeUsageStorage);
             backgroundSyncService = new Lazy<IBackgroundSyncService>(CreateBackgroundSyncService);
-            intentDonationService = new Lazy<IIntentDonationService>(CreateIntentDonationService);
             automaticSyncingService = new Lazy<IAutomaticSyncingService>(CreateAutomaticSyncingService);
             accessRestrictionStorage = new Lazy<IAccessRestrictionStorage>(CreateAccessRestrictionStorage);
             syncErrorHandlingService = new Lazy<ISyncErrorHandlingService>(CreateSyncErrorHandlingService);
@@ -140,7 +135,6 @@ namespace Toggl.Core
             UserAccessManager = new UserAccessManager(
                 apiFactory,
                 database,
-                googleService,
                 privateSharedStorageService);
 
             UserAccessManager
@@ -156,7 +150,6 @@ namespace Toggl.Core
 
         protected abstract ITogglDatabase CreateDatabase();
         protected abstract IPlatformInfo CreatePlatformInfo();
-        protected abstract IGoogleService CreateGoogleService();
         protected abstract IRatingService CreateRatingService();
         protected abstract ICalendarService CreateCalendarService();
         protected abstract IKeyValueStorage CreateKeyValueStorage();
@@ -172,7 +165,6 @@ namespace Toggl.Core
         protected abstract ILastTimeUsageStorage CreateLastTimeUsageStorage();
         protected abstract IApplicationShortcutCreator CreateShortcutCreator();
         protected abstract IBackgroundSyncService CreateBackgroundSyncService();
-        protected abstract IIntentDonationService CreateIntentDonationService();
         protected abstract IAccessRestrictionStorage CreateAccessRestrictionStorage();
         protected abstract IPrivateSharedStorageService CreatePrivateSharedStorageService();
         protected abstract ISuggestionProviderContainer CreateSuggestionProviderContainer();
@@ -233,7 +225,6 @@ namespace Toggl.Core
             notificationService,
             lastTimeUsageStorage,
             shortcutCreator,
-            intentDonationService,
             privateSharedStorageService,
             keyValueStorage,
             pushNotificationsTokenService

@@ -121,7 +121,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 year = Math.Abs(year % 25) + 2000;
                 month = Math.Abs(month % 12) + 1;
                 today = Math.Abs(today % DateTime.DaysInMonth(year, month)) + 1;
-                prepare(year, month, beginningOfWeek, new DateTimeOffset(year, month, today, 11, 22, 33, TimeSpan.Zero));
+                prepare(year, month, beginningOfWeek, new DateTimeOffset(year, month, today, 11, 22, 33, DateTimeOffset.Now.Offset));
 
                 viewModel.Days.Should().OnlyContain(day =>
                     ((day.CalendarMonth.Month != month || day.Day != today) && day.IsToday == false)

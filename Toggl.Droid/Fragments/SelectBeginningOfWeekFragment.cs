@@ -3,24 +3,17 @@ using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Platforms.Android.Binding.BindingContext;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Extensions;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHolders;
-using System.Reactive.Disposables;
 using Android.Support.V7.Widget;
 
 namespace Toggl.Droid.Fragments
 {
-    [MvxDialogFragmentPresentation(AddToBackStack = true)]
-    public sealed partial class SelectBeginningOfWeekFragment : MvxDialogFragment<SelectBeginningOfWeekViewModel>
+    public sealed partial class SelectBeginningOfWeekFragment : ReactiveDialogFragment<SelectBeginningOfWeekViewModel>
     {
-        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
-
         public SelectBeginningOfWeekFragment() { }
 
         public SelectBeginningOfWeekFragment(IntPtr javaReference, JniHandleOwnership transfer)
@@ -32,16 +25,20 @@ namespace Toggl.Droid.Fragments
         {
             base.OnCreateView(inflater, container, savedInstanceState);
             var view = inflater.Inflate(Resource.Layout.SelectBeginningOfWeekFragment, null);
+            InitializeViews(view);
+            
+            return view;
+        }
 
-            initializeViews(view);
-
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
+            
             setupRecyclerView();
-
+            
             adapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectBeginningOfWeek.Inputs)
-                .DisposedBy(disposeBag);
-
-            return view;
+                .DisposedBy(DisposeBag);
         }
 
         private void setupRecyclerView()
