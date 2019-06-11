@@ -49,9 +49,7 @@ namespace Toggl.Droid
             base.OnCreate(savedInstanceState);
 
             var dependencyContainer = AndroidDependencyContainer.Instance;
-
             registerTimezoneChangedBroadcastReceiver(dependencyContainer.TimeService);
-            registerApplicationLifecycleObserver(dependencyContainer.BackgroundService);
 
             var app = new AppStart(dependencyContainer);
             app.UpdateOnboardingProgress();
@@ -85,21 +83,6 @@ namespace Toggl.Droid
                 .GetAwaiter()
                 .GetResult();
             viewModelCache.Cache(viewModel);  
-        }
-
-        private void registerApplicationLifecycleObserver(IBackgroundService backgroundService)
-        {
-            var togglApplication = getTogglApplication();
-            var currentAppLifecycleObserver = togglApplication.ApplicationLifecycleObserver;
-            if (currentAppLifecycleObserver != null)
-            {
-                Application.UnregisterActivityLifecycleCallbacks(currentAppLifecycleObserver);
-                Application.UnregisterComponentCallbacks(currentAppLifecycleObserver);
-            }
-            
-            togglApplication.ApplicationLifecycleObserver = new ApplicationLifecycleObserver(backgroundService);
-            Application.RegisterActivityLifecycleCallbacks(togglApplication.ApplicationLifecycleObserver);
-            Application.RegisterComponentCallbacks(togglApplication.ApplicationLifecycleObserver);
         }
 
         private void registerTimezoneChangedBroadcastReceiver(ITimeService timeService)
