@@ -21,6 +21,7 @@ namespace Toggl.Core.Interactors.PushNotifications
             Ensure.Argument.IsNotNull(togglApi, nameof(togglApi));
             Ensure.Argument.IsNotNull(keyValueStorage, nameof(keyValueStorage));
             Ensure.Argument.IsNotNull(pushNotificationsTokenService, nameof(pushNotificationsTokenService));
+
             this.keyValueStorage = keyValueStorage;
             this.pushNotificationsTokenService = pushNotificationsTokenService;
             pushServicesApi = togglApi.PushServices;

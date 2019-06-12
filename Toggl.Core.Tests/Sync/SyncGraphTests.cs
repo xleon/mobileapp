@@ -5,10 +5,12 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.Interactors;
+using Toggl.Core.Services;
 using Toggl.Core.Sync;
+using Toggl.Core.UI;
 using Toggl.Storage;
 using Toggl.Networking;
+using Toggl.Networking.Network;
 using Toggl.Storage.Settings;
 using Xunit;
 
@@ -34,6 +36,10 @@ namespace Toggl.Core.Tests.Sync
             var configurator = new TestConfigurator();
             var entryPoints = new StateMachineEntryPoints();
 
+            var dependencyContainer = new TestDependencyContainer();
+            dependencyContainer.MockKeyValueStorage = Substitute.For<IKeyValueStorage>();
+            dependencyContainer.MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>();
+
             configurator.AllDistinctStatesInOrder.Add(entryPoints);
 
             TogglSyncManager.ConfigureTransitions(
@@ -45,9 +51,9 @@ namespace Toggl.Core.Tests.Sync
                 Substitute.For<ITimeService>(),
                 Substitute.For<IAnalyticsService>(),
                 Substitute.For<ILastTimeUsageStorage>(),
-                Substitute.For<IInteractorFactory>(),
                 entryPoints,
-                Substitute.For<ISyncStateQueue>()
+                Substitute.For<ISyncStateQueue>(),
+                dependencyContainer
             );
 
             return configurator;

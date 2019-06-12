@@ -36,12 +36,12 @@ namespace Toggl.Core
             IScheduler scheduler,
             IStopwatchProvider stopwatchProvider,
             IAutomaticSyncingService automaticSyncingService,
-            IInteractorFactory interactorFactory)
+            DependencyContainer dependencyContainer)
         {
             var queue = new SyncStateQueue();
             var entryPoints = new StateMachineEntryPoints();
             var transitions = new TransitionHandlerProvider(analyticsService);
-            ConfigureTransitions(transitions, database, api, dataSource, scheduler, timeService, analyticsService, lastTimeUsageStorage, interactorFactory, entryPoints, queue);
+            ConfigureTransitions(transitions, database, api, dataSource, scheduler, timeService, analyticsService, lastTimeUsageStorage, entryPoints, queue, dependencyContainer);
             var stateMachine = new StateMachine(transitions, scheduler);
             var orchestrator = new StateMachineOrchestrator(stateMachine, entryPoints);
 
@@ -57,16 +57,16 @@ namespace Toggl.Core
             ITimeService timeService,
             IAnalyticsService analyticsService,
             ILastTimeUsageStorage lastTimeUsageStorage,
-            IInteractorFactory interactorFactory,
             StateMachineEntryPoints entryPoints,
-            ISyncStateQueue queue)
+            ISyncStateQueue queue,
+            DependencyContainer dependencyContainer)
         {
             var minutesLeakyBucket = new LeakyBucket(timeService, analyticsService, slotsPerWindow: 60, movingWindowSize: TimeSpan.FromSeconds(60));
             var secondsLeakyBucket = new LeakyBucket(timeService, analyticsService, slotsPerWindow: 3, movingWindowSize: TimeSpan.FromSeconds(1));
             var rateLimiter = new RateLimiter(secondsLeakyBucket, scheduler);
 
             configurePullTransitions(transitions, database, api, dataSource, timeService, analyticsService, scheduler, entryPoints.StartPullSync, minutesLeakyBucket, rateLimiter, queue);
-            configurePushTransitions(transitions, api, dataSource, analyticsService, minutesLeakyBucket, rateLimiter, scheduler, interactorFactory, entryPoints.StartPushSync);
+            configurePushTransitions(transitions, api, dataSource, analyticsService, minutesLeakyBucket, rateLimiter, scheduler, entryPoints.StartPushSync, dependencyContainer);
             configureCleanUpTransitions(transitions, timeService, dataSource, analyticsService, entryPoints.StartCleanUp);
             configurePullTimeEntriesTransitions(transitions, api, dataSource, database, analyticsService, timeService, minutesLeakyBucket, rateLimiter, lastTimeUsageStorage, entryPoints.StartPullTimeEntries);
         }
@@ -256,16 +256,15 @@ namespace Toggl.Core
             ILeakyBucket minutesLeakyBucket,
             IRateLimiter rateLimiter,
             IScheduler scheduler,
-            IInteractorFactory interactorFactory,
-            StateResult entryPoint)
+            StateResult entryPoint,
+            DependencyContainer dependencyContainer)
         {
             var delayState = new WaitForAWhileState(scheduler, analyticsService);
+            var pushNotificationsToken = new SyncPushNotificationsTokenState(dependencyContainer.KeyValueStorage, api, dependencyContainer.PushNotificationsTokenService);
 
-            var syncPushNotificationsToken = new SyncPushNotificationsTokenState(interactorFactory);
+            transitions.ConfigureTransition(entryPoint, pushNotificationsToken);
 
-            transitions.ConfigureTransition(entryPoint, syncPushNotificationsToken);
-
-            var pushingWorkspaces = configureCreateOnlyPush(transitions, syncPushNotificationsToken.Done, dataSource.Workspaces, analyticsService, api.Workspaces, minutesLeakyBucket, rateLimiter, delayState, Workspace.Clean, Workspace.Unsyncable);
+            var pushingWorkspaces = configureCreateOnlyPush(transitions, pushNotificationsToken.Done, dataSource.Workspaces, analyticsService, api.Workspaces, minutesLeakyBucket, rateLimiter, delayState, Workspace.Clean, Workspace.Unsyncable);
             var pushingUsers = configurePushSingleton(transitions, pushingWorkspaces.NoMoreChanges, dataSource.User, analyticsService, api.User, minutesLeakyBucket, rateLimiter, delayState, User.Clean, User.Unsyncable);
             var pushingPreferences = configurePushSingleton(transitions, pushingUsers.NoMoreChanges, dataSource.Preferences, analyticsService, api.Preferences, minutesLeakyBucket, rateLimiter, delayState, Preferences.Clean, Preferences.Unsyncable);
             var pushingTags = configureCreateOnlyPush(transitions, pushingPreferences.NoMoreChanges, dataSource.Tags, analyticsService, api.Tags, minutesLeakyBucket, rateLimiter, delayState, Tag.Clean, Tag.Unsyncable);

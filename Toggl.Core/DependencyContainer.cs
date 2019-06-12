@@ -203,7 +203,7 @@ namespace Toggl.Core
                 SchedulerProvider.DefaultScheduler,
                 StopwatchProvider,
                 AutomaticSyncingService,
-                InteractorFactory
+                this
             );
             SyncErrorHandlingService.HandleErrorsOf(syncManager);
 

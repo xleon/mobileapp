@@ -8,7 +8,6 @@ using NSubstitute;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.Interactors;
 using Toggl.Core.Sync;
 using Toggl.Core.Sync.States;
 using Toggl.Storage;
@@ -231,9 +230,9 @@ namespace SyncDiagramGenerator
                 Substitute.For<ITimeService>(),
                 Substitute.For<IAnalyticsService>(),
                 Substitute.For<ILastTimeUsageStorage>(),
-                Substitute.For<IInteractorFactory>(),
                 entryPoints,
-                Substitute.For<ISyncStateQueue>()
+                Substitute.For<ISyncStateQueue>(),
+                Substitute.For<DependencyContainer>()
             );
         }
     }
