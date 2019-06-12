@@ -116,7 +116,12 @@ namespace Toggl.Core.UI.ViewModels
                 .GroupBy(s => s.ProviderType)
                 .Select(group => (group.Key, group.Count()));
 
-            analyticsService.Track(new SuggestionPresentedEvent(suggestionsCount, isAuthorized));
+            var workspaceCount = suggestions
+                .Select(suggestion => suggestion.WorkspaceId)
+                .Distinct()
+                .Count();
+
+            analyticsService.Track(new SuggestionsPresentedEvent(suggestionsCount, isAuthorized, workspaceCount));
         }
 
         private void trackCalendarOffset(Suggestion suggestion)

@@ -22,7 +22,7 @@ using System.Collections.Immutable;
 using Toggl.Core.Analytics;
 using System.Collections.Generic;
 using static Toggl.Core.Analytics.CalendarSuggestionProviderState;
-using static Toggl.Core.Analytics.SuggestionPresentedEvent;
+using static Toggl.Core.Analytics.SuggestionsPresentedEvent;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -142,7 +142,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Suggestions.Subscribe(observer);
                 TestScheduler.Start();
 
-                AnalyticsService.Received().Track(Arg.Is<SuggestionPresentedEvent>(e =>
+                AnalyticsService.Received().Track(Arg.Is<SuggestionsPresentedEvent>(e =>
                     e.ToDictionary()[SuggestionProviderType.Calendar.ToString()] == "3"
                     && e.ToDictionary()[SuggestionProviderType.MostUsedTimeEntries.ToString()] == "2"
                     && e.ToDictionary()[SuggestionProviderType.RandomForest.ToString()] == "1"
@@ -160,7 +160,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Suggestions.Subscribe(observer);
                 TestScheduler.Start();
 
-                AnalyticsService.Received().Track(Arg.Is<SuggestionPresentedEvent>(e =>
+                AnalyticsService.Received().Track(Arg.Is<SuggestionsPresentedEvent>(e =>
                     e.ToDictionary()[CalendarProviderStateName] == Unauthorized.ToString()
                 ));
             }
@@ -176,7 +176,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Suggestions.Subscribe(observer);
                 TestScheduler.Start();
 
-                AnalyticsService.Received().Track(Arg.Is<SuggestionPresentedEvent>(e =>
+                AnalyticsService.Received().Track(Arg.Is<SuggestionsPresentedEvent>(e =>
                     e.ToDictionary()[CalendarProviderStateName] == NoEvents.ToString()
                 ));
             }
@@ -192,7 +192,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Suggestions.Subscribe(observer);
                 TestScheduler.Start();
 
-                AnalyticsService.Received().Track(Arg.Is<SuggestionPresentedEvent>(e =>
+                AnalyticsService.Received().Track(Arg.Is<SuggestionsPresentedEvent>(e =>
                     e.ToDictionary()[CalendarProviderStateName] == SuggestionsAvailable.ToString()
                 ));
             }
@@ -207,8 +207,33 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Suggestions.Subscribe(observer);
                 TestScheduler.Start();
 
-                AnalyticsService.Received().Track(Arg.Is<SuggestionPresentedEvent>(e =>
+                AnalyticsService.Received().Track(Arg.Is<SuggestionsPresentedEvent>(e =>
                     e.ToDictionary()[SuggestionsCountName] == suggestions.Length.ToString()
+                ));
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData(1, 1, 1, 1)]
+            [InlineData(1, 1, 2, 2)]
+            [InlineData(1, 2, 3, 3)]
+            public async Task TracksSuggestionPresentedEventWithCorrectDistinctWorkspaceCount(
+                long workspaceA, long workspaceB, long workspaceC, int distinctWorkspacesCount)
+            {
+                var sameDescription = "Description";
+                var suggestions = new[] {
+                    createSuggestionWithWorkspace(workspaceA, sameDescription, 100, 1000),
+                    createSuggestionWithWorkspace(workspaceB, sameDescription, 100, 1000),
+                    createSuggestionWithWorkspace(workspaceC, sameDescription, 100, 1000),
+                };
+                setupSuggestionsInteractors(suggestions);
+                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
+
+                await ViewModel.Initialize();
+                ViewModel.Suggestions.Subscribe(observer);
+                TestScheduler.Start();
+
+                AnalyticsService.Received().Track(Arg.Is<SuggestionsPresentedEvent>(e =>
+                    e.ToDictionary()[DistinctWorkspaceCountName] == distinctWorkspacesCount.ToString()
                 ));
             }
 
@@ -229,22 +254,27 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     }).ToArray();
                 }
 
+                setupSuggestionsInteractors(suggestions);
+                return suggestions;
+            }
+
+            private void setupSuggestionsInteractors(params Suggestion[] suggestions)
+            {
                 var getSuggestionsInteractor = Substitute.For<IInteractor<IObservable<IEnumerable<Suggestion>>>>();
                 getSuggestionsInteractor.Execute().Returns(Observable.Return(suggestions));
                 InteractorFactory.GetSuggestions(Arg.Any<int>()).Returns(getSuggestionsInteractor);
                 var changeInteractor = Substitute.For<IInteractor<IObservable<Unit>>>();
                 changeInteractor.Execute().Returns(Observable.Empty<Unit>());
                 InteractorFactory.ObserveWorkspaceOrTimeEntriesChanges().Returns(changeInteractor);
-
-                return suggestions;
             }
-
-            private Suggestion createSuggestion(int index) => createSuggestion($"te{index}", 0, 0);
 
             private Suggestion createDefaultSuggestionFor(SuggestionProviderType type)
                 => createSuggestion("Description", 12, 20, type);
 
             private Suggestion createSuggestion(string description, long taskId, long projectId, SuggestionProviderType type = SuggestionProviderType.MostUsedTimeEntries)
+                => createSuggestionWithWorkspace(11, description, taskId, projectId, type);
+
+            private Suggestion createSuggestionWithWorkspace(long workspaceId, string description, long taskId, long projectId, SuggestionProviderType type = SuggestionProviderType.MostUsedTimeEntries)
                 => new Suggestion(
                     TimeEntry.Builder.Create(0)
                         .SetDescription(description)
@@ -252,7 +282,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         .SetAt(DateTimeOffset.UtcNow)
                         .SetTaskId(taskId)
                         .SetProjectId(projectId)
-                        .SetWorkspaceId(11)
+                        .SetWorkspaceId(workspaceId)
                         .SetUserId(12)
                         .Build(),
                     type

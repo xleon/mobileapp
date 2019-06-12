@@ -7,16 +7,17 @@ using static Toggl.Core.Analytics.CalendarSuggestionProviderState;
 
 namespace Toggl.Core.Analytics
 {
-    public class SuggestionPresentedEvent : ITrackableEvent
+    public class SuggestionsPresentedEvent : ITrackableEvent
     {
         public const string SuggestionsCountName = "SuggestionsCount";
         public const string CalendarProviderStateName = "CalendarProviderState";
+        public const string DistinctWorkspaceCountName = "DistinctWorkspaceCount";
         
-        public string EventName => "SuggestionPresented";
+        public string EventName => "SuggestionsPresented";
 
         private Dictionary<string, string> parameters;
 
-        public SuggestionPresentedEvent(IEnumerable<(SuggestionProviderType Type, int Count)> suggestions, bool isCalendarAuthorized)
+        public SuggestionsPresentedEvent(IEnumerable<(SuggestionProviderType Type, int Count)> suggestions, bool isCalendarAuthorized, int workspaceCount)
         {
             var counts = suggestions.ToDictionary(s => s.Type, s => s.Count);
 
@@ -41,6 +42,8 @@ namespace Toggl.Core.Analytics
                     : NoEvents;
             }
             parameters[CalendarProviderStateName] = calendarState.ToString();
+
+            parameters[DistinctWorkspaceCountName] = workspaceCount.ToString();
         }
 
         public Dictionary<string, string> ToDictionary() => parameters;
