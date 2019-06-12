@@ -8,6 +8,7 @@ using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Shared;
 using Toggl.Storage.Models;
+using Toggl.Storage;
 
 namespace Toggl.Core.Suggestions
 {
@@ -38,9 +39,10 @@ namespace Toggl.Core.Suggestions
 
         public IObservable<Suggestion> GetSuggestions()
             => dataSource.TimeEntries
-                     .GetAll()
-                     .Select(predictUsingRandomForestClassifier)
-                     .SelectMany(toSuggestions);
+                .GetAll()
+                .Select(timeEntries => timeEntries.Where(te => te.SyncStatus == SyncStatus.InSync))
+                .Select(predictUsingRandomForestClassifier)
+                .SelectMany(toSuggestions);
 
         private IEnumerable<Suggestion> toSuggestions(IEnumerable<IDatabaseTimeEntry> timeEntries)
             => timeEntries.Select(timeEntry => new Suggestion(timeEntry, SuggestionProviderType.RandomForest));

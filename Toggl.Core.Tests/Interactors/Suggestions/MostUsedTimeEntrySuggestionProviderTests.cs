@@ -149,6 +149,32 @@ namespace Toggl.Core.Tests.Intereactors.Suggestions
                     suggestion => !string.IsNullOrWhiteSpace(suggestion.Description) || suggestion.ProjectId.HasValue
                 );
             }
+
+            [Fact, LogIfTooSlow]
+            public async Task DoesNotReturnUnsyncedEntries()
+            {
+                const string synced = "SYNCED";
+                var syncStatusesCount = Enum.GetValues(typeof(SyncStatus)).Length;
+                var timeEntries = getCustomTimeEntries(10, (te, index) =>
+                {
+                    te.SyncStatus = (SyncStatus)(index % syncStatusesCount);
+                    te.Description = te.SyncStatus == SyncStatus.InSync ? synced : te.Description;
+                    return te;
+                });
+
+                DataSource.TimeEntries
+                          .GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>())
+                          .Returns(c => Observable.Return(
+                                timeEntries.Where(c.Arg<Func<IDatabaseTimeEntry, bool>>()).OfType<IThreadSafeTimeEntry>()));
+
+                var suggestions = await Provider.GetSuggestions().ToList();
+
+                suggestions.Should().OnlyContain(suggestion =>
+                    suggestion.Description == synced
+                    && !string.IsNullOrWhiteSpace(suggestion.Description)
+                    || suggestion.ProjectId.HasValue
+                );
+            }
         }
     }
 }

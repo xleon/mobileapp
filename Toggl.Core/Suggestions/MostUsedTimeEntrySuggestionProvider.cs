@@ -43,8 +43,9 @@ namespace Toggl.Core.Suggestions
             var hasProject = timeEntry.ProjectId.HasValue;
             var isRecent = calculateDelta(timeEntry) <= thresholdPeriod;
             var isActive = isTimeEntryActive(timeEntry);
+            var isSynced = timeEntry.SyncStatus == SyncStatus.InSync;
 
-            return isRecent && isActive && (hasDescription || hasProject);
+            return isRecent && isActive && isSynced && (hasDescription || hasProject);
         }
 
         private TimeSpan calculateDelta(IDatabaseTimeEntry timeEntry)
