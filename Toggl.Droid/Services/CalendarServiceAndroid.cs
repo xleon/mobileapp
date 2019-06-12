@@ -47,8 +47,8 @@ namespace Toggl.Droid.Services
         private const int eventCalendarIdIndex = 5;
         private const int eventIsAllDayIndex = 6;
 
-        public CalendarServiceAndroid(IPermissionsService permissionsService)
-            : base(permissionsService)
+        public CalendarServiceAndroid(IPermissionsChecker permissionsChecker)
+            : base(permissionsChecker)
         {
         }
 

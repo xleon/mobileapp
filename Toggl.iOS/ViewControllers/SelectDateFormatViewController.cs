@@ -1,13 +1,11 @@
 ﻿using System.Reactive.Disposables;
 using System.Threading.Tasks;
-using MvvmCross.Platforms.Ios.Views;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Selectable;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Views.Settings;
 using Toggl.iOS.ViewSources.Generic.TableView;
 using Toggl.Shared;
@@ -15,16 +13,16 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalCardPresentation]
     public sealed partial class SelectDateFormatViewController
-        : MvxViewController<SelectDateFormatViewModel>,
+        : ReactiveViewController<SelectDateFormatViewModel>,
           IDismissableViewController
     {
         private const int rowHeight = 48;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
-        public SelectDateFormatViewController() : base(nameof(SelectDateFormatViewController), null)
+        public SelectDateFormatViewController(SelectDateFormatViewModel viewModel)
+            : base(viewModel, nameof(SelectDateFormatViewController))
         {
         }
 

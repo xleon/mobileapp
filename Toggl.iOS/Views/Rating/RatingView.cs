@@ -3,8 +3,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Foundation;
-using MvvmCross.Commands;
-using MvvmCross.Platforms.Ios.Binding.Views;
 using ObjCRuntime;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
@@ -18,7 +16,7 @@ using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.iOS
 {
-    public partial class RatingView : MvxView
+    public partial class RatingView : UIView
     {
         private readonly UIStringAttributes descriptionStringAttributes = new UIStringAttributes
         {
@@ -30,18 +28,13 @@ namespace Toggl.iOS
             }
         };
 
-        private NSLayoutConstraint heightConstraint;
-
-        public IMvxCommand CTATappedCommand { get; set; }
-        public IMvxCommand DismissTappedCommand { get; set; }
-        public IMvxCommand<bool> ImpressionTappedCommand { get; set; }
-
-        public new RatingViewModel DataContext
+        private RatingViewModel viewModel;
+        public RatingViewModel ViewModel
         {
-            get => base.DataContext as RatingViewModel;
+            get => viewModel;
             set
             {
-                base.DataContext = value;
+                viewModel = value;
                 updateBindings();
             }
         }
@@ -60,54 +53,54 @@ namespace Toggl.iOS
 
         private void updateBindings()
         {
-            DataContext.CallToActionTitle
+            ViewModel.CallToActionTitle
                 .Subscribe(CtaTitle.Rx().Text())
                 .DisposedBy(DisposeBag);
 
-            DataContext.CallToActionButtonTitle
+            ViewModel.CallToActionButtonTitle
                 .Subscribe(CtaButton.Rx().Title())
                 .DisposedBy(DisposeBag);
 
-            DataContext.Impression
+            ViewModel.Impression
                 .Select(impression => impression.HasValue)
                 .Subscribe(CtaView.Rx().IsVisibleWithFade())
                 .DisposedBy(DisposeBag);
 
-            DataContext.CallToActionDescription.Select(attributedDescription)
+            ViewModel.CallToActionDescription.Select(attributedDescription)
                 .Subscribe(CtaDescription.Rx().AttributedText())
                 .DisposedBy(DisposeBag);
 
-            DataContext.Impression
+            ViewModel.Impression
                 .Select(impression => impression.HasValue)
                 .Select(Invert)
                 .Subscribe(QuestionView.Rx().IsVisibleWithFade())
                 .DisposedBy(DisposeBag);
 
-            DataContext.Impression
+            ViewModel.Impression
                 .Select(impression => impression.HasValue)
                 .Subscribe(CtaViewBottomConstraint.Rx().Active())
                 .DisposedBy(DisposeBag);
 
-            DataContext.Impression
+            ViewModel.Impression
                 .Select(impression => impression.HasValue)
                 .Select(Invert)
                 .Subscribe(QuestionViewBottomConstraint.Rx().Active())
                 .DisposedBy(DisposeBag);
 
             YesView.Rx().Tap()
-                .Subscribe(() => DataContext.RegisterImpression(true))
+                .Subscribe(() => ViewModel.RegisterImpression(true))
                 .DisposedBy(DisposeBag);
 
             NotReallyView.Rx().Tap()
-                .Subscribe(() => DataContext.RegisterImpression(false))
+                .Subscribe(() => ViewModel.RegisterImpression(false))
                 .DisposedBy(DisposeBag);
 
             CtaButton.Rx()
-                .BindAction(DataContext.PerformMainAction)
+                .BindAction(ViewModel.PerformMainAction)
                 .DisposedBy(DisposeBag);
 
             DismissButton.Rx().Tap()
-                .Subscribe(DataContext.Dismiss)
+                .Subscribe(ViewModel.Dismiss)
                 .DisposedBy(DisposeBag);
         }
 

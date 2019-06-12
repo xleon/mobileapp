@@ -1,14 +1,8 @@
 using System;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
-using Android.Widget;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
-using MvvmCross.Platforms.Android.Views;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
@@ -16,11 +10,8 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    [MvxDialogFragmentPresentation(Cancelable = false)]
-    public sealed partial class NoWorkspaceFragment : MvxDialogFragment<NoWorkspaceViewModel>
+    public sealed partial class NoWorkspaceFragment : ReactiveDialogFragment<NoWorkspaceViewModel>
     {
-        public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
-
         public NoWorkspaceFragment()
         {
         }
@@ -35,7 +26,12 @@ namespace Toggl.Droid.Fragments
             base.OnCreateView(LayoutInflater, container, savedInstanceState);
             var rootView = inflater.Inflate(Resource.Layout.NoWorkspaceFragment, container, false);
             InitializeViews(rootView);
+            return rootView;
+        }
 
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             createWorkspaceTextView.Rx()
                 .BindAction(ViewModel.CreateWorkspaceWithDefaultName)
                 .DisposedBy(DisposeBag);
@@ -58,8 +54,6 @@ namespace Toggl.Droid.Fragments
                 .StartWith(false)
                 .Subscribe(onLoadingStateChanged)
                 .DisposedBy(DisposeBag);
-
-            return rootView;
         }
 
         public override void OnResume()

@@ -3,6 +3,7 @@ using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Services;
 using Toggl.Core.Exceptions;
+using Toggl.Core.UI.Views;
 using Toggl.Shared;
 using Toggl.Storage.Settings;
 using Toggl.Networking.Exceptions;
@@ -31,11 +32,11 @@ namespace Toggl.Core.UI.Services
             {
                 case ApiDeprecatedException _:
                     accessRestrictionStorage.SetApiOutdated();
-                    navigationService.Navigate<OutdatedAppViewModel>();
+                    navigationService.Navigate<OutdatedAppViewModel>(null);
                     return true;
                 case ClientDeprecatedException _:
                     accessRestrictionStorage.SetClientOutdated();
-                    navigationService.Navigate<OutdatedAppViewModel>();
+                    navigationService.Navigate<OutdatedAppViewModel>(null);
                     return true;
             }
 
@@ -50,7 +51,7 @@ namespace Toggl.Core.UI.Services
                 if (token != null)
                 {
                     accessRestrictionStorage.SetUnauthorizedAccess(token);
-                    navigationService.Navigate<TokenResetViewModel>();
+                    navigationService.Navigate<TokenResetViewModel>(null);
                 }
 
                 return true;

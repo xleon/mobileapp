@@ -4,7 +4,6 @@ using Toggl.Core;
 using Toggl.Core.UI.ViewModels.Settings.Siri;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -12,14 +11,13 @@ using UIKit;
 namespace Toggl.iOS.ViewControllers.Settings.Siri
 {
 
-    [ModalDialogPresentation]
     public partial class PasteFromClipboardViewController : ReactiveViewController<PasteFromClipboardViewModel>
     {
         private readonly int cardHeight = 374;
         private readonly int cardWidth = 288;
 
-        public PasteFromClipboardViewController()
-            : base(nameof(PasteFromClipboardViewController))
+        public PasteFromClipboardViewController(PasteFromClipboardViewModel viewModel)
+            : base(viewModel, nameof(PasteFromClipboardViewController))
         {
         }
 

@@ -1,5 +1,4 @@
-﻿using MvvmCross.ViewModels;
-using Toggl.Core.UI.Interfaces;
+﻿using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels.Selectable

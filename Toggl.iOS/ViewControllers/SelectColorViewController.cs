@@ -6,7 +6,6 @@ using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Views;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;
@@ -15,19 +14,16 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    [ModalDialogPresentation]
     public sealed partial class SelectColorViewController : ReactiveViewController<SelectColorViewModel>
     {
         private const int customColorEnabledHeightPad = 490;
         private const int customColorEnabledHeight = 365;
         private const int customColorDisabledHeight = 233;
 
-
-
         private ColorSelectionCollectionViewSource source;
 
-        public SelectColorViewController()
-            : base(nameof(SelectColorViewController))
+        public SelectColorViewController(SelectColorViewModel viewModel)
+            : base(viewModel, nameof(SelectColorViewController))
         {
         }
 

@@ -138,6 +138,9 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("Origin")]
         public IAnalyticsEvent<TimeEntryStopOrigin> TimeEntryStopped { get; protected set; }
 
+        [AnalyticsEvent("Origin", "IndexInLog", "DayInLog", "DaysInThePast")]
+        public IAnalyticsEvent<ContinueTimeEntryOrigin, int, int, int> TimeEntryContinued { get; protected set; }
+
         [AnalyticsEvent]
         public IAnalyticsEvent LostWorkspaceAccess { get; protected set; }
 

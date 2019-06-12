@@ -6,8 +6,6 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
-using MvvmCross.Binding.BindingContext;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
@@ -15,8 +13,7 @@ using Toggl.Networking.Exceptions;
 
 namespace Toggl.Droid.Activities
 {
-    [MvxActivityPresentation]
-    [Activity(Theme = "@style/AppTheme",
+    [Activity(Theme = "@style/Theme.Splash",
         ScreenOrientation = ScreenOrientation.Portrait,
         WindowSoftInputMode = SoftInput.StateVisible,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
@@ -24,11 +21,16 @@ namespace Toggl.Droid.Activities
     {
         private bool sendEnabled;
         private Subject<Unit> sendFeedbackSubject = new Subject<Unit>();
-        private Subject<Unit> closeSubject = new Subject<Unit>();
 
         protected override void OnCreate(Bundle bundle)
         {
+            SetTheme(Resource.Style.AppTheme);
             base.OnCreate(bundle);
+            if (ViewModelWasNotCached())
+            {
+                BailOutToSplashScreen();
+                return;
+            }
             SetContentView(Resource.Layout.SendFeedbackActivity);
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 
@@ -59,10 +61,6 @@ namespace Toggl.Droid.Activities
 
             sendFeedbackSubject
                 .Subscribe(ViewModel.Send.Inputs)
-                .DisposedBy(DisposeBag);
-
-            closeSubject
-                .Subscribe(ViewModel.Close.Inputs)
                 .DisposedBy(DisposeBag);
 
             ViewModel.Error
@@ -102,7 +100,7 @@ namespace Toggl.Droid.Activities
                     return true;
 
                 case Android.Resource.Id.Home:
-                    closeSubject.OnNext(Unit.Default);
+                    ViewModel.Close.Execute();
                     return true;
 
                 default:
@@ -112,7 +110,7 @@ namespace Toggl.Droid.Activities
 
         public override void OnBackPressed()
         {
-            closeSubject.OnNext(Unit.Default);
+            ViewModel.Close.Execute();
         }
 
         private void onSendEnabled(bool enabled)

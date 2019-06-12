@@ -1,10 +1,8 @@
-using MvvmCross;
 using Toggl.Core.Models;
 using Toggl.Core.UI.Interfaces;
 
 namespace Toggl.Core.UI.ViewModels.Selectable
 {
-    [Preserve(AllMembers = true)]
     public class SelectableReportPeriodViewModel : IDiffableByIdentifier<SelectableReportPeriodViewModel>
     {
         public ReportPeriod ReportPeriod { get; }

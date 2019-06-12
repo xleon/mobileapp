@@ -4,14 +4,11 @@ using System.Reactive.Linq;
 using Foundation;
 using Intents;
 using IntentsUI;
-using Toggl.Core;
-using Toggl.Core.Helper;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Intents;
-using Toggl.iOS.Presentation.Attributes;
 using Toggl.iOS.Transformations;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -27,8 +24,8 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
         private UIImage pasteFromClipboardButtonImage = UIImage.FromBundle("pasteFromClipboard");
         private UIImage pasteFromClipboardButtonImageEnabled = UIImage.FromBundle("pasteFromClipboardEnabled");
 
-        public SiriShortcutsCustomTimeEntryViewController()
-            : base(nameof(SiriShortcutsCustomTimeEntryViewController))
+        public SiriShortcutsCustomTimeEntryViewController(SiriShortcutsCustomTimeEntryViewModel viewModel)
+            : base(viewModel, nameof(SiriShortcutsCustomTimeEntryViewController))
         {
         }
 

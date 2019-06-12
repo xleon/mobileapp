@@ -14,7 +14,7 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    public sealed partial class ReportsFragment : ReactiveFragment<ReportsViewModel>, IScrollableToTop
+    public sealed partial class ReportsFragment : ReactiveTabFragment<ReportsViewModel>, IScrollableToTop
     {
         private static readonly TimeSpan toggleCalendarThrottleDuration = TimeSpan.FromMilliseconds(300);
         private ReportsRecyclerAdapter reportsRecyclerAdapter;
@@ -58,12 +58,12 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             reportsRecyclerAdapter.SummaryCardClicks
-                .Subscribe(ViewModel.HideCalendar)
+                .Subscribe(hideCalendar)
                 .DisposedBy(DisposeBag);
 
             toolbarCurrentDateRangeText.Rx().Tap()
                 .Throttle(toggleCalendarThrottleDuration)
-                .Subscribe(ViewModel.ToggleCalendar)
+                .Subscribe(toggleCalendar)
                 .DisposedBy(DisposeBag);
 
             ViewModel.CurrentDateRangeStringObservable
@@ -71,6 +71,48 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
+            ViewModel?.CalendarViewModel.AttachView(this);
+        }
+
+        public override void OnStart()
+        {
+            base.OnStart();
+            ViewModel?.CalendarViewModel.ViewAppearing();
+        }
+
+        public override void OnResume()
+        {
+            base.OnResume();
+            
+            if (IsHidden) return;
+            
+            ViewModel?.CalendarViewModel.ViewAppeared();
+        }
+
+        public override void OnStop()
+        {
+            base.OnStop();
+            ViewModel?.CalendarViewModel.ViewDisappeared();
+        }
+
+        public override void OnDestroy()
+        {
+            ViewModel?.CalendarViewModel.DetachView();
+            base.OnDestroy();
+        }
+
+        public override void OnHiddenChanged(bool hidden)
+        {
+            base.OnHiddenChanged(hidden);
+            if (hidden)
+                ViewModel.CalendarViewModel.ViewDisappeared();
+            else
+                ViewModel.CalendarViewModel.ViewAppeared();
         }
 
         public void ScrollToTop()
@@ -85,16 +127,23 @@ namespace Toggl.Droid.Fragments
             reportsRecyclerView.SetAdapter(reportsRecyclerAdapter);
         }
 
-        internal void ToggleCalendarState(bool forceHide)
-        {
-            reportsMainContainer.ToggleCalendar(forceHide);
-        }
-
         private void setupToolbar()
         {
             var activity = Activity as AppCompatActivity;
             toolbar.Title = "";
             activity.SetSupportActionBar(toolbar);
+        }
+
+        private void toggleCalendar()
+        {
+            reportsMainContainer.ToggleCalendar(false);
+            ViewModel.CalendarViewModel.SelectStartOfSelectionIfNeeded();
+        }
+
+        private void hideCalendar()
+        {
+            reportsMainContainer.ToggleCalendar(true);
+            ViewModel.CalendarViewModel.SelectStartOfSelectionIfNeeded();
         }
     }
 }

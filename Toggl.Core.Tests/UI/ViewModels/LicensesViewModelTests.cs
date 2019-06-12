@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using FluentAssertions;
 using NSubstitute;
+using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using Xunit;
@@ -15,7 +16,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class LicensesViewModelTest : BaseViewModelTests<LicensesViewModel>
         {
             protected override LicensesViewModel CreateViewModel()
-                => new LicensesViewModel(LicenseProvider);
+                => new LicensesViewModel(LicenseProvider, NavigationService);
         }
 
         public sealed class TheConstructor : LicensesViewModelTest
@@ -34,11 +35,18 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 return base.CreateViewModel();
             }
 
-            [Fact, LogIfTooSlow]
-            public void ThrowsIfTheArgumentIsNull()
+            [Theory, LogIfTooSlow]
+            [ConstructorData]
+            public void ThrowsIfAnyOfTheArgumentsIsNull(
+                bool useLicenseProvider,
+                bool useNavigationService)
             {
-                Action tryingToConstructWithEmptyParameters =
-                    () => new LicensesViewModel(null);
+
+                var licenseProvider = useLicenseProvider ? LicenseProvider : null;
+                var navigationService = useNavigationService ? NavigationService : null;
+
+               Action tryingToConstructWithEmptyParameters =
+                    () => new LicensesViewModel(licenseProvider, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -50,7 +58,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var expectedLicenses = licenses
                     .Select(license => new License(license.Key, license.Value))
                     .ToImmutableList();
-                
+
                 ViewModel.Licenses.Should().BeEquivalentTo(expectedLicenses);
             }
         }

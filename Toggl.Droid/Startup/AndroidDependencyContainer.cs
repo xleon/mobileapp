@@ -3,7 +3,6 @@ using Toggl.Droid.Services;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
-using Toggl.Core.Login;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
@@ -18,25 +17,35 @@ using Toggl.Networking.Network;
 using Android.Content;
 using Android.App;
 using Toggl.Core.UI.Navigation;
+using Toggl.Droid.Presentation;
 
 namespace Toggl.Droid
 {
     public sealed class AndroidDependencyContainer : UIDependencyContainer
     {
         private const int numberOfSuggestions = 5;
+        private const ApiEnvironment environment =
+#if USE_PRODUCTION_API
+                        ApiEnvironment.Production;
+#else
+                        ApiEnvironment.Staging;
+#endif
 
+        private readonly CompositePresenter viewPresenter;
         private readonly Lazy<SettingsStorage> settingsStorage;
 
-        public INavigationService MvxNavigationService { get; internal set; }
+        public ViewModelCache ViewModelCache { get; } = new ViewModelCache();
 
         public new static AndroidDependencyContainer Instance { get; private set; }
 
-        public static void EnsureInitialized(ApiEnvironment environment, Platform platform, string version)
+        public static void EnsureInitialized(Context context)
         {
             if (Instance != null)
                 return;
 
-            Instance = new AndroidDependencyContainer(environment, platform, version);
+            var packageInfo = context.PackageManager.GetPackageInfo(context.PackageName, 0);
+
+            Instance = new AndroidDependencyContainer(environment, Platform.Giskard, packageInfo.VersionName);
             UIDependencyContainer.Instance = Instance;
         }
 
@@ -45,6 +54,7 @@ namespace Toggl.Droid
         {
             var appVersion = Version.Parse(version);
 
+            viewPresenter = new CompositePresenter(new ActivityPresenter(), new DialogFragmentPresenter());
             settingsStorage = new Lazy<SettingsStorage>(() => new SettingsStorage(appVersion, KeyValueStorage));
         }
 
@@ -58,16 +68,10 @@ namespace Toggl.Droid
             => new BrowserServiceAndroid();
 
         protected override ICalendarService CreateCalendarService()
-            => new CalendarServiceAndroid(PermissionsService);
+            => new CalendarServiceAndroid(PermissionsChecker);
 
         protected override ITogglDatabase CreateDatabase()
             => new Database();
-
-        protected override IDialogService CreateDialogService()
-            => new DialogServiceAndroid();
-
-        protected override IGoogleService CreateGoogleService()
-            => new GoogleServiceAndroid();
 
         protected override IKeyValueStorage CreateKeyValueStorage()
         {
@@ -81,17 +85,14 @@ namespace Toggl.Droid
         protected override INotificationService CreateNotificationService()
             => new NotificationServiceAndroid();
 
-        protected override IPasswordManagerService CreatePasswordManagerService()
-            => new StubPasswordManagerService();
-
-        protected override IPermissionsService CreatePermissionsService()
-            => new PermissionsServiceAndroid();
+        protected override IPermissionsChecker CreatePermissionsChecker()
+            => new PermissionsCheckerAndroid();
 
         protected override IPlatformInfo CreatePlatformInfo()
             => new PlatformInfoAndroid();
 
         protected override IPrivateSharedStorageService CreatePrivateSharedStorageService()
-            => new NoopPrivateSharedStorageServiceAndroid();
+            => new PrivateSharedStorageServiceAndroid(KeyValueStorage);
 
         protected override IRatingService CreateRatingService()
             => new RatingServiceAndroid(Application.Context);
@@ -109,7 +110,11 @@ namespace Toggl.Droid
             => new FirebaseStopwatchProviderAndroid();
 
         protected override INavigationService CreateNavigationService()
-            => MvxNavigationService;
+            => new NavigationService(
+                viewPresenter,
+                ViewModelLoader,
+                AnalyticsService
+            );
 
         protected override ILastTimeUsageStorage CreateLastTimeUsageStorage()
             => settingsStorage.Value;
@@ -122,5 +127,6 @@ namespace Toggl.Droid
 
         protected override IAccessRestrictionStorage CreateAccessRestrictionStorage()
             => settingsStorage.Value;
+
     }
 }

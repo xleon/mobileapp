@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels
@@ -14,7 +15,8 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly IInteractorFactory interactorFactory;
 
-        public SyncFailuresViewModel(IInteractorFactory interactorFactory)
+        public SyncFailuresViewModel(IInteractorFactory interactorFactory, INavigationService navigationService)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
 

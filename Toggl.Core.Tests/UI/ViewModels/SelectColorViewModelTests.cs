@@ -11,12 +11,13 @@ using Xunit;
 using System.Reactive.Linq;
 using Toggl.Core.Tests.Generators;
 using Toggl.Shared;
+using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class SelectColorViewModelTests
     {
-        public abstract class SelectColorViewModelTest : BaseViewModelTests<SelectColorViewModel>
+        public abstract class SelectColorViewModelTest : BaseViewModelTests<SelectColorViewModel, ColorParameters, Color>
         {
             protected override SelectColorViewModel CreateViewModel()
                 => new SelectColorViewModel(NavigationService, RxActionFactory);
@@ -53,7 +54,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
                 ViewModel.SelectableColors.Subscribe(observer);
 
-                ViewModel.Prepare(parameters);
+                ViewModel.Initialize(parameters);
 
                 ViewModel.SelectColor.Execute(colorToSelect);
 
@@ -73,12 +74,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
                 ViewModel.SelectableColors.Subscribe(observer);
 
-                ViewModel.Prepare(parameters);
+                await ViewModel.Initialize(parameters);
 
                 ViewModel.SelectColor.Execute(colorToSelect);
 
-                await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Is<Color>(c => c == colorToSelect));
+                (await ViewModel.Result).Should().Be(colorToSelect);
             }
 
             [Fact, LogIfTooSlow]
@@ -91,12 +91,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
                 ViewModel.SelectableColors.Subscribe(observer);
 
-                ViewModel.Prepare(parameters);
+                ViewModel.Initialize(parameters);
 
                 ViewModel.SelectColor.Execute(colorToSelect);
 
-                await NavigationService.DidNotReceive()
-                    .Close(Arg.Is(ViewModel), Arg.Any<Color>());
+                await View.DidNotReceive().Close();
             }
         }
 
@@ -112,7 +111,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
                 ViewModel.SelectableColors.Subscribe(observer);
 
-                ViewModel.Prepare(parameters);
+                ViewModel.Initialize(parameters);
 
                 observer.Messages
                     .Select( m => m.Value.Value)
@@ -129,7 +128,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
                 ViewModel.SelectableColors.Subscribe(observer);
 
-                ViewModel.Prepare(parameters);
+                ViewModel.Initialize(parameters);
 
                 observer.Messages
                     .Select( m => m.Value.Value)
@@ -146,7 +145,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
                 ViewModel.SelectableColors.Subscribe(observer);
 
-                ViewModel.Prepare(parameters);
+                ViewModel.Initialize(parameters);
 
                 observer.Messages
                     .Select( m => m.Value.Value)
@@ -164,7 +163,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
                 ViewModel.SelectableColors.Subscribe(observer);
 
-                ViewModel.Prepare(parameters);
+                ViewModel.Initialize(parameters);
 
                 observer.Messages
                     .Select( m => m.Value.Value)
@@ -180,7 +179,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<IEnumerable<SelectableColorViewModel>>();
                 ViewModel.SelectableColors.Subscribe(observer);
 
-                ViewModel.Prepare(parameters);
+                ViewModel.Initialize(parameters);
 
                 observer.Messages
                     .Select( m => m.Value.Value)
@@ -197,7 +196,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<Color>());
+                await View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -205,12 +204,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var color = Colors.DefaultProjectColors.Last();
                 var parameters = ColorParameters.Create(color, true);
-                ViewModel.Prepare(parameters);
+                await ViewModel.Initialize(parameters);
 
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
-
-                NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Is(color)).Wait();
+                
+                (await ViewModel.Result).Should().Be(color);
             }
         }
 
@@ -222,7 +221,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(Arg.Is(ViewModel), Arg.Any<Color>());
+                await View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -230,15 +229,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var someColor = new Color(23, 45, 125);
                 var parameters = ColorParameters.Create(someColor, true);
-                ViewModel.Prepare(parameters);
+                await ViewModel.Initialize(parameters);
                 var expected = Colors.DefaultProjectColors.First();
                 ViewModel.SelectColor.Execute(expected);
 
                 ViewModel.Save.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received()
-                    .Close(Arg.Is(ViewModel), Arg.Is<Color>(c => c == expected));
+                (await ViewModel.Result).Should().Be(expected);
             }
         }
     }

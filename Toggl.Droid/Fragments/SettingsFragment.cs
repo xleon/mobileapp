@@ -20,7 +20,7 @@ using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Fragments
 {
-    public sealed partial class SettingsFragment : ReactiveFragment<SettingsViewModel>, IScrollableToTop
+    public sealed partial class SettingsFragment : ReactiveTabFragment<SettingsViewModel>, IScrollableToTop
     {
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {

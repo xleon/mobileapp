@@ -14,7 +14,6 @@ using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -29,10 +28,8 @@ namespace Toggl.Core.UI.ViewModels
         private const long noClientId = 0;
 
         private readonly Random random = new Random();
-        private readonly IDialogService dialogService;
         private readonly IInteractorFactory interactorFactory;
         private readonly IStopwatchProvider stopwatchProvider;
-        private readonly INavigationService navigationService;
         private readonly ITogglDataSource dataSource;
 
         private long initialWorkspaceId;
@@ -57,23 +54,19 @@ namespace Toggl.Core.UI.ViewModels
 
         public EditProjectViewModel(
             ITogglDataSource dataSource,
-            IDialogService dialogService,
             IRxActionFactory rxActionFactory,
             IInteractorFactory interactorFactory,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
             INavigationService navigationService)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(dialogService, nameof(dialogService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
-            this.dialogService = dialogService;
-            this.navigationService = navigationService;
             this.stopwatchProvider = stopwatchProvider;
             this.interactorFactory = interactorFactory;
             this.dataSource = dataSource;
@@ -167,12 +160,14 @@ namespace Toggl.Core.UI.ViewModels
                     && name.LengthInBytes() <= Constants.MaxProjectNameLengthInBytes;
         }
 
-        public override void Prepare(string parameter)
+        public override Task Initialize(string name)
         {
-            Name.Accept(parameter);
+            Name.Accept(name);
 
             navigationFromStartTimeEntryViewModelStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenCreateProjectViewFromStartTimeEntryView);
             stopwatchProvider.Remove(MeasuredOperation.OpenCreateProjectViewFromStartTimeEntryView);
+
+            return base.Initialize(name);
         }
 
         public override void ViewAppeared()
@@ -183,15 +178,14 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task close()
-            => navigationService.Close(this, null);
+            => Finish(null);
 
         private IObservable<IThreadSafeWorkspace> pickWorkspace()
         {
             return currentWorkspace.FirstAsync().SelectMany(workspaceFromViewModel);
 
             IObservable<IThreadSafeWorkspace> workspaceFromViewModel(IThreadSafeWorkspace currentWorkspace)
-                => navigationService
-                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(new SelectWorkspaceParameters(Resources.SetDefaultWorkspace, currentWorkspace.Id))
+                => Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(new SelectWorkspaceParameters(Resources.SetDefaultWorkspace, currentWorkspace.Id))
                     .ToObservable()
                     .SelectMany(selectedWorkspaceId => workspaceFromId(selectedWorkspaceId, currentWorkspace));
 
@@ -210,8 +204,7 @@ namespace Toggl.Core.UI.ViewModels
                     .SelectMany(currentClient => clientFromViewModel(currentClient, currentWorkspace)));
 
             IObservable<IThreadSafeClient> clientFromViewModel(IThreadSafeClient currentClient, IThreadSafeWorkspace currentWorkspace)
-                => navigationService
-                    .Navigate<SelectClientViewModel, SelectClientParameters, long?>(
+                => Navigate<SelectClientViewModel, SelectClientParameters, long?>(
                         SelectClientParameters.WithIds(currentWorkspace.Id, currentClient?.Id))
                     .ToObservable()
                     .SelectMany(clientFromId);
@@ -238,8 +231,7 @@ namespace Toggl.Core.UI.ViewModels
                             colorFromViewmodel(currentColor, areCustomColorsEnabled))));
 
             IObservable<Color> colorFromViewmodel(Color currentColor, bool areCustomColorsEnabled)
-                => navigationService
-                    .Navigate<SelectColorViewModel, ColorParameters, Color>(
+                => Navigate<SelectColorViewModel, ColorParameters, Color>(
                         ColorParameters.Create(currentColor, areCustomColorsEnabled))
                     .ToObservable();
         }
@@ -258,7 +250,7 @@ namespace Toggl.Core.UI.ViewModels
                         : getDto(workspace)
                             .SelectMany(dto => interactorFactory.CreateProject(dto).Execute())
                             .SelectMany(createdProject =>
-                                navigationService.Close(this, createdProject.Id).ToObservable())
+                                Finish(createdProject.Id).ToObservable())
                             .SelectUnit()
                     )
                 );
@@ -278,7 +270,7 @@ namespace Toggl.Core.UI.ViewModels
                 if (initialWorkspaceId == workspace.Id)
                     return Observable.Return(true);
 
-                return dialogService.Confirm(
+                return View.Confirm(
                     Resources.WorkspaceChangedAlertTitle,
                     Resources.WorkspaceChangedAlertMessage,
                     Resources.Ok,

@@ -6,12 +6,13 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Shared;
 using Xunit;
+using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
     public class SelectDurationFormatViewModelTests
     {
-        public abstract class SelectDurationFormatViewModelTest : BaseViewModelTests<SelectDurationFormatViewModel>
+        public abstract class SelectDurationFormatViewModelTest : BaseViewModelTests<SelectDurationFormatViewModel, DurationFormat, DurationFormat>
         {
             protected override SelectDurationFormatViewModel CreateViewModel()
                 => new SelectDurationFormatViewModel(NavigationService, RxActionFactory);
@@ -39,7 +40,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void HasThreeAvailableOptions()
             {
-                ViewModel.Initialize();
+                ViewModel.Initialize(DurationFormat.Classic);
+
                 ViewModel.DurationFormats.Should().HaveCount(3);
                 ViewModel.DurationFormats[0].DurationFormat.Should().Be(DurationFormat.Classic);
                 ViewModel.DurationFormats[1].DurationFormat.Should().Be(DurationFormat.Improved);
@@ -49,8 +51,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void TheSelectedOptionIsSelected()
             {
-                ViewModel.Initialize();
-                ViewModel.Prepare(DurationFormat.Improved);
+                ViewModel.Initialize(DurationFormat.Improved);
+
                 ViewModel.DurationFormats[0].Selected.Should().BeFalse();
                 ViewModel.DurationFormats[1].Selected.Should().BeTrue();
                 ViewModel.DurationFormats[2].Selected.Should().BeFalse();
@@ -63,14 +65,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ReturnsTheDefaultDurationFormat()
             {
                 var durationFormat = DurationFormat.Improved;
-
-                await ViewModel.Initialize();
-                ViewModel.Prepare(durationFormat);
+                
+                await ViewModel.Initialize(durationFormat);
 
                 ViewModel.Close.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(ViewModel, durationFormat);
+                (await ViewModel.Result).Should().Be(durationFormat);
             }
         }
 
@@ -80,16 +81,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ReturnsTheDefaultDurationFormat()
             {
                 var defaultDuration = DurationFormat.Classic;
-
-                await ViewModel.Initialize();
-                ViewModel.Prepare(defaultDuration);
+                
+                await ViewModel.Initialize(defaultDuration);
 
                 var selectedDuration = ViewModel.DurationFormats[1];
 
                 ViewModel.SelectDurationFormat.Execute(selectedDuration);
                 TestScheduler.Start();
 
-                await NavigationService.Received().Close(ViewModel, selectedDuration.DurationFormat);
+                (await ViewModel.Result).Should().Be(selectedDuration.DurationFormat);
             }
         }
     }

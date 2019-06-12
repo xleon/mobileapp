@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels
@@ -11,7 +12,8 @@ namespace Toggl.Core.UI.ViewModels
     {
         public IImmutableList<License> Licenses { get; }
 
-        public LicensesViewModel(ILicenseProvider licenseProvider)
+        public LicensesViewModel(ILicenseProvider licenseProvider, INavigationService navigationService)
+            : base(navigationService)
         {
             Ensure.Argument.IsNotNull(licenseProvider, nameof(licenseProvider));
 

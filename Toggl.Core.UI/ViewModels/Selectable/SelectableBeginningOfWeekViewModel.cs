@@ -1,5 +1,4 @@
 ﻿using System;
-using MvvmCross.ViewModels;
 using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 

@@ -20,7 +20,6 @@ using Toggl.Storage.Settings;
 
 namespace Toggl.Core.UI.ViewModels.Settings
 {
-    [MvvmCross.Preserve(AllMembers = true)]
     public class SiriShortcutsCustomTimeEntryViewModel : ViewModel
     {
         private readonly INavigationService navigationService;
@@ -53,10 +52,10 @@ namespace Toggl.Core.UI.ViewModels.Settings
         public SiriShortcutsCustomTimeEntryViewModel(
             ITogglDataSource dataSource,
             IInteractorFactory interactorFactory,
-            INavigationService navigationService,
             IRxActionFactory rxActionFactory,
             IOnboardingStorage onboardingStorage,
-            ISchedulerProvider schedulerProvider)
+            ISchedulerProvider schedulerProvider,
+            INavigationService navigationService) : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
@@ -69,7 +68,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
 
-            Close = rxActionFactory.FromAsync(close);
+            Close = rxActionFactory.FromAsync(Finish);
             SelectTags = rxActionFactory.FromAsync(selectTags);
             SelectProject = rxActionFactory.FromAsync(selectProject);
             SelectClipboard = rxActionFactory.FromAsync(selectClipboard);
@@ -95,9 +94,9 @@ namespace Toggl.Core.UI.ViewModels.Settings
             Workspace.Accept(defaultWorkspace);
         }
 
-        public override void ViewDestroy(bool viewFinishing)
+        public override void ViewDestroyed()
         {
-            base.ViewDestroy(viewFinishing);
+            base.ViewDestroyed();
             disposeBag?.Dispose();
         }
 
@@ -110,8 +109,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
             var currentTags = Tags.Value.Select(t => t.Id).OrderBy(CommonFunctions.Identity).ToArray();
 
-            var chosenTags = await navigationService
-                .Navigate<SelectTagsViewModel, SelectTagsParameter, long[]>(
+            var chosenTags = await Navigate<SelectTagsViewModel, SelectTagsParameter, long[]>(
                     new SelectTagsParameter(currentTags, workspaceId, false));
 
             if (chosenTags.OrderBy(CommonFunctions.Identity).SequenceEqual(currentTags))
@@ -131,8 +129,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
                 return;
             }
 
-            var chosenProjectParams = await navigationService
-                .Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(
+            var chosenProjectParams = await Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(
                     new SelectProjectParameter(Project.Value?.Id, TaskId.Value, workspaceId, false));
 
             if (chosenProjectParams.WorkspaceId == workspaceId
@@ -176,13 +173,11 @@ namespace Toggl.Core.UI.ViewModels.Settings
         {
             if (!onboardingStorage.DidShowSiriClipboardInstruction())
             {
-                await navigationService.Navigate<PasteFromClipboardViewModel, bool>();
+                await Navigate<PasteFromClipboardViewModel, bool>();
             }
 
             PasteFromClipboard.Accept(!PasteFromClipboard.Value);
         }
-
-        private Task close() => navigationService.Close(this);
 
         private void clearTagsIfNeeded(long currentWorkspaceId, long newWorkspaceId)
         {
