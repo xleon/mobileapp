@@ -8,8 +8,10 @@ using NSubstitute;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
+using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Core.Sync.States;
+using Toggl.Core.UI;
 using Toggl.Storage;
 using Toggl.Networking;
 using Toggl.Storage.Settings;
@@ -221,6 +223,11 @@ namespace SyncDiagramGenerator
 
         private static void configureTransitions(Configurator configurator, StateMachineEntryPoints entryPoints)
         {
+            var dependencyContainer = new TestDependencyContainer();
+            dependencyContainer.MockKeyValueStorage = Substitute.For<IKeyValueStorage>();
+            dependencyContainer.MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>();
+            dependencyContainer.MockTimeService = Substitute.For<ITimeService>();
+
             TogglSyncManager.ConfigureTransitions(
                 configurator,
                 Substitute.For<ITogglDatabase>(),
@@ -232,7 +239,7 @@ namespace SyncDiagramGenerator
                 Substitute.For<ILastTimeUsageStorage>(),
                 entryPoints,
                 Substitute.For<ISyncStateQueue>(),
-                Substitute.For<DependencyContainer>()
+                dependencyContainer
             );
         }
     }
