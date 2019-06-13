@@ -412,16 +412,13 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.OnboardingStorage,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.NavigationService
-                    );
+                    dependencyContainer.NavigationService);
 
             if (viewModelType == typeof(PasteFromClipboardViewModel))
                 return new PasteFromClipboardViewModel(
-                    dependencyContainer.InteractorFactory,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.OnboardingStorage,
-                    dependencyContainer.NavigationService
-                    );
+                    dependencyContainer.NavigationService);
 
             throw new InvalidOperationException($"Trying to locate ViewModel {viewModelType.Name} failed.");
         }
