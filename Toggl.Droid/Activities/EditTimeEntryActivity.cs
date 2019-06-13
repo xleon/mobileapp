@@ -302,10 +302,13 @@ namespace Toggl.Droid.Activities
 
         private ISpannable generateProjectTaskClientFormattedString(EditTimeEntryViewModel.ProjectClientTaskInfo projectClientTask)
             => TimeEntryExtensions.ToProjectTaskClient(
-                    projectClientTask.HasProject,
-                    projectClientTask.Project,
-                    projectClientTask.ProjectColor,
-                    projectClientTask.Task,
-                    projectClientTask.Client);
+                this,
+                projectClientTask.HasProject,
+                projectClientTask.Project,
+                projectClientTask.ProjectColor,
+                projectClientTask.Task,
+                projectClientTask.Client,
+                projectClientTask.ProjectIsPlaceholder,
+                projectClientTask.TaskIsPlaceholder);
     }
 }
