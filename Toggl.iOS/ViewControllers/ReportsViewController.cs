@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Foundation;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Reports;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Reports;
@@ -74,6 +76,8 @@ namespace Toggl.iOS.ViewControllers
             calendarSizeDisposable = CalendarContainer.AddObserver(boundsKey, NSKeyValueObservingOptions.New, onCalendarSizeChanged);
 
             source = new ReportsTableViewSource(ReportsTableView, ViewModel);
+            source.SetItems(Enumerable.Empty<ChartSegment>().ToList().AsReadOnly());
+            ReportsTableView.ReloadData();
 
             ViewModel.SegmentsObservable
                 .Subscribe(ReportsTableView.Rx().ReloadItems(source))
