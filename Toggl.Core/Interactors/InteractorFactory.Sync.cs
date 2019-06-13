@@ -26,20 +26,14 @@ namespace Toggl.Core.Interactors
             => new RunSyncInteractor(
                 syncManager,
                 stopwatchProvider,
-                manager => manager.ForceFullSync(),
-                MeasuredOperation.BackgroundSync,
-                null,
-                null,
-                null);
+                analyticsService,
+                PushNotificationSyncSourceState.Foreground);
 
         public IInteractor<IObservable<SyncOutcome>> RunPushNotificationInitiatedSyncInBackground()
             => new RunSyncInteractor(
                 syncManager,
                 stopwatchProvider,
-                manager => manager.PullTimeEntries(),
-                MeasuredOperation.PullTimeEntriesSync,
-                null,
-                null,
-                null);
+                analyticsService,
+                PushNotificationSyncSourceState.Background);
     }
 }

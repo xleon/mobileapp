@@ -25,17 +25,14 @@ namespace Toggl.Core.Tests.Interactors.Workspace
         {
             [Theory, LogIfTooSlow]
             [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useSyncManager, bool useSyncManagerAction, bool userStopwatchProvider)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useSyncManager, bool useStopwatchProvider, bool useAnalyticsService)
             {
                 Action tryingToConstructWithNull = () =>
                     new RunSyncInteractor(
                         useSyncManager ? SyncManager : null,
-                        userStopwatchProvider ? StopwatchProvider : null,
-                        useSyncManagerAction ? Substitute.For<Func<ISyncManager, IObservable<SyncState>>>() : null,
-                        MeasuredOperation.Sync,
-                        null,
-                        null,
-                        null
+                        useStopwatchProvider ? StopwatchProvider : null,
+                        useAnalyticsService ? AnalyticsService : null,
+                        PushNotificationSyncSourceState.Foreground
                     );
 
                 tryingToConstructWithNull.Should().Throw<ArgumentNullException>();
@@ -44,34 +41,21 @@ namespace Toggl.Core.Tests.Interactors.Workspace
 
         public class TheExecuteMethod : BaseInteractorTests
         {
-            protected readonly IAnalyticsEvent SyncStartedAnalyticsEvent = Substitute.For<IAnalyticsEvent>();
-            protected readonly IAnalyticsEvent<string> SyncFinishedAnalyticsEvent = Substitute.For<IAnalyticsEvent<string>>();
-            protected readonly IAnalyticsEvent<string, string, string> SyncFailedAnalyticsEvent = Substitute.For<IAnalyticsEvent<string, string, string>>();
-
-            public static IEnumerable<object[]> SyncMethods =>
+            public static IEnumerable<object[]> SyncSources =>
                 new List<object[]>
                 {
-                    new object[] { new NamedFuncHolder<ISyncManager, IObservable<SyncState>>("ForceFullSync", manager => manager.ForceFullSync()) },
-                    new object[] { new NamedFuncHolder<ISyncManager, IObservable<SyncState>>("PullTimeEntries", manager => manager.PullTimeEntries()) },
-                    new object[] { new NamedFuncHolder<ISyncManager, IObservable<SyncState>>("PushSync", manager => manager.PushSync()) },
-                    new object[] { new NamedFuncHolder<ISyncManager, IObservable<SyncState>>("CleanUp", manager => manager.CleanUp()) },
+                    new object[] { PushNotificationSyncSourceState.Foreground },
+                    new object[] { PushNotificationSyncSourceState.Background }
                 };
 
-            public RunSyncInteractor CreateSyncInteractor(
-                Func<ISyncManager, IObservable<SyncState>> syncAction,
-                MeasuredOperation measuredSyncOperation = MeasuredOperation.None,
-                IAnalyticsEvent syncStartedAnalyticsEvent = null,
-                IAnalyticsEvent<string> syncFinishedAnalyticsEvent = null,
-                IAnalyticsEvent<string, string, string> syncFailedAnalyticsEvent = null)
+            public RunSyncInteractor CreateSyncInteractor(PushNotificationSyncSourceState sourceState)
             {
                 return new RunSyncInteractor(
                     SyncManager,
                     StopwatchProvider,
-                    syncAction,
-                    measuredSyncOperation,
-                    syncStartedAnalyticsEvent,
-                    syncFinishedAnalyticsEvent,
-                    syncFailedAnalyticsEvent);
+                    AnalyticsService,
+                    sourceState
+                );
             }
         }
 
@@ -86,26 +70,26 @@ namespace Toggl.Core.Tests.Interactors.Workspace
             }
 
             [Theory, LogIfTooSlow]
-            [MemberData(nameof(SyncMethods))]
-            public async Task ReturnsFailedIfSyncFails(NamedFuncHolder<ISyncManager, IObservable<SyncState>> syncAction)
+            [MemberData(nameof(SyncSources))]
+            public async Task ReturnsFailedIfSyncFails(PushNotificationSyncSourceState sourceState)
             {
-                var interactor = CreateSyncInteractor(syncAction.Func);
+                var interactor = CreateSyncInteractor(sourceState);
                 (await interactor.Execute().SingleAsync()).Should().Be(SyncOutcome.Failed);
             }
 
-            [Fact, LogIfTooSlow]
-            public async Task TracksIfSyncFails()
+            [Theory, LogIfTooSlow]
+            [MemberData(nameof(SyncSources))]
+            public async Task TracksIfSyncFails(PushNotificationSyncSourceState sourceState)
             {
                 var exception = new Exception();
                 SyncManager.ForceFullSync().Returns(Observable.Throw<SyncState>(exception));
-                var interactor = CreateSyncInteractor(manager => manager.ForceFullSync(), MeasuredOperation.None, SyncStartedAnalyticsEvent, SyncFinishedAnalyticsEvent, SyncFailedAnalyticsEvent);
+                var interactor = CreateSyncInteractor(sourceState);
 
                 await interactor.Execute().SingleAsync();
 
-                SyncStartedAnalyticsEvent.Received().Track();
-                SyncFinishedAnalyticsEvent.Received().Track(nameof(SyncOutcome.Failed));
-                SyncFailedAnalyticsEvent.Received()
-                    .Track(exception.GetType().FullName, exception.Message, exception.StackTrace);
+                AnalyticsService.PushNotificationSyncStarted.Received().Track(sourceState.ToString());
+                AnalyticsService.PushNotificationSyncFinished.Received().Track(sourceState.ToString());
+                AnalyticsService.PushNotificationSyncFailed.Received().Track(sourceState.ToString(), exception.GetType().FullName, exception.Message, exception.StackTrace);
             }
         }
 
@@ -120,42 +104,25 @@ namespace Toggl.Core.Tests.Interactors.Workspace
             }
 
             [Theory, LogIfTooSlow]
-            [MemberData(nameof(SyncMethods))]
-            public async Task ReturnsNewDataIfSyncSucceeds(NamedFuncHolder<ISyncManager, IObservable<SyncState>> syncAction)
+            [MemberData(nameof(SyncSources))]
+            public async Task ReturnsNewDataIfSyncSucceeds(PushNotificationSyncSourceState sourceState)
             {
-                var interactor = CreateSyncInteractor(syncAction.Func);
+                var interactor = CreateSyncInteractor(sourceState);
                 (await interactor.Execute().SingleAsync()).Should().Be(SyncOutcome.NewData);
             }
 
-            [Fact, LogIfTooSlow]
-            public async Task TracksIfSyncSucceeds()
+            [Theory, LogIfTooSlow]
+            [MemberData(nameof(SyncSources))]
+            public async Task TracksIfSyncSucceeds(PushNotificationSyncSourceState sourceState)
             {
                 SyncManager.ForceFullSync().Returns(Observable.Return(SyncState.Sleep));
-                var interactor = CreateSyncInteractor(manager => manager.ForceFullSync(), MeasuredOperation.None, SyncStartedAnalyticsEvent, SyncFinishedAnalyticsEvent, SyncFailedAnalyticsEvent);
+                var interactor = CreateSyncInteractor(sourceState);
 
                 await interactor.Execute().SingleAsync();
 
-                SyncStartedAnalyticsEvent.Received().Track();
-                SyncFinishedAnalyticsEvent.Received().Track(nameof(SyncOutcome.NewData));
-                SyncFailedAnalyticsEvent.DidNotReceive().Track(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
-            }
-        }
-
-        [Serializable]
-        public struct NamedFuncHolder<T, T2>
-        {
-            private readonly string name;
-            public Func<T, T2> Func { get; }
-
-            public NamedFuncHolder(string name, Func<T, T2> func)
-            {
-                this.name = name;
-                Func = func;
-            }
-
-            public override string ToString()
-            {
-                return name;
+                AnalyticsService.PushNotificationSyncStarted.Received().Track(sourceState.ToString());
+                AnalyticsService.PushNotificationSyncFinished.Received().Track(sourceState.ToString());
+                AnalyticsService.PushNotificationSyncFailed.DidNotReceive().Track(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
             }
         }
     }

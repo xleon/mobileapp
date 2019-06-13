@@ -12,55 +12,54 @@ namespace Toggl.Core.Interactors
     {
         private readonly ISyncManager syncManager;
         private readonly IStopwatchProvider stopwatchProvider;
-        private readonly Func<ISyncManager, IObservable<SyncState>> syncAction;
-        private readonly MeasuredOperation measuredSyncOperation;
-        private readonly IAnalyticsEvent syncStartedAnalyticsEvent;
-        private readonly IAnalyticsEvent<string> syncFinishedAnalyticsEvent;
-        private readonly IAnalyticsEvent<string, string, string> syncFailedAnalyticsEvent;
+        private readonly IAnalyticsService analyticsService;
+        private readonly PushNotificationSyncSourceState sourceState;
 
         public RunSyncInteractor(
             ISyncManager syncManager,
             IStopwatchProvider stopwatchProvider,
-            Func<ISyncManager, IObservable<SyncState>> syncAction,
-            MeasuredOperation measuredSyncOperation,
-            IAnalyticsEvent syncStartedAnalyticsEvent,
-            IAnalyticsEvent<string> syncFinishedAnalyticsEvent,
-            IAnalyticsEvent<string, string, string> syncFailedAnalyticsEvent)
+            IAnalyticsService analyticsService,
+            PushNotificationSyncSourceState sourceState)
         {
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
-            Ensure.Argument.IsNotNull(syncAction, nameof(syncAction));
-            Ensure.Argument.IsADefinedEnumValue(measuredSyncOperation, nameof(measuredSyncOperation));
+            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(sourceState, nameof(sourceState));
 
             this.syncManager = syncManager;
             this.stopwatchProvider = stopwatchProvider;
-            this.syncAction = syncAction;
-            this.measuredSyncOperation = measuredSyncOperation;
-            this.syncStartedAnalyticsEvent = syncStartedAnalyticsEvent;
-            this.syncFinishedAnalyticsEvent = syncFinishedAnalyticsEvent;
-            this.syncFailedAnalyticsEvent = syncFailedAnalyticsEvent;
+            this.analyticsService = analyticsService;
+            this.sourceState = sourceState;
         }
 
         public IObservable<SyncOutcome> Execute()
         {
-            var syncTimeStopwatch = stopwatchProvider.Create(measuredSyncOperation);
+            var meassuredOperation = sourceState == PushNotificationSyncSourceState.Foreground
+                ? MeasuredOperation.FullSync
+                : MeasuredOperation.PullTimeEntriesSync;
+
+            var syncTimeStopwatch = stopwatchProvider.Create(meassuredOperation);
             syncTimeStopwatch.Start();
-            syncStartedAnalyticsEvent?.Track();
-            return syncAction(syncManager)
-                .LastAsync()
+
+            analyticsService.PushNotificationSyncStarted.Track(sourceState.ToString());
+
+            var syncAction = sourceState == PushNotificationSyncSourceState.Foreground
+                ? syncManager.ForceFullSync()
+                : syncManager.PullTimeEntries();
+
+            return syncAction.LastAsync()
                 .Select(_ => SyncOutcome.NewData)
                 .Catch((Exception error) => syncFailed(error))
                 .Do(outcome =>
                 {
                     syncTimeStopwatch.Stop();
-                    syncFinishedAnalyticsEvent?.Track(outcome.ToString());
+                    analyticsService.PushNotificationSyncFinished.Track(sourceState.ToString());
                 });
         }
 
         private IObservable<SyncOutcome> syncFailed(Exception error)
         {
-            syncFailedAnalyticsEvent?
-                .Track(error.GetType().FullName, error.Message, error.StackTrace);
+            analyticsService.PushNotificationSyncFailed.Track(sourceState.ToString(), error.GetType().FullName, error.Message, error.StackTrace);
             return Observable.Return(SyncOutcome.Failed);
         }
     }

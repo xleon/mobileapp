@@ -260,6 +260,18 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("Platform")]
         public IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; protected set; }
 
+        [AnalyticsEvent("NumberOfEntitiesFetched")]
+        public IAnalyticsEvent<string> PushInitiatedSyncFetch { get; protected set; }
+
+        [AnalyticsEvent("Source")]
+        public IAnalyticsEvent<string> PushNotificationSyncStarted { get; protected set; }
+
+        [AnalyticsEvent("Source")]
+        public IAnalyticsEvent<string> PushNotificationSyncFinished { get; protected set; }
+
+        [AnalyticsEvent("Source", "Type", "Message", "StackTrace")]
+        public IAnalyticsEvent<string, string, string, string> PushNotificationSyncFailed { get; protected set; }
+
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())

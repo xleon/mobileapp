@@ -345,6 +345,7 @@ namespace Toggl.Core
             var persistTimeEntries =
                 new PersistListState<ITimeEntry, IDatabaseTimeEntry, IThreadSafeTimeEntry>(dataSource.TimeEntries, TimeEntry.Clean);
             var updateTimeEntriesSinceDate = new UpdateSinceDateState<ITimeEntry>(database.SinceParameters);
+            var timeEntriesAnalytics = new TimeEntriesAnalyticsState(analyticsService);
 
             var detect = new DetectPlaceholdersWereCreatedState(
                 lastTimeUsageStorage,
@@ -356,7 +357,9 @@ namespace Toggl.Core
             transitions.ConfigureTransition(fetchTimeEntries.Done, ensureFetchTimeEntriesSucceeded);
             transitions.ConfigureTransition(ensureFetchTimeEntriesSucceeded.ErrorOccured, new FailureState());
 
-            transitions.ConfigureTransition(ensureFetchTimeEntriesSucceeded.Done, createWorkspacePlaceholder);
+            transitions.ConfigureTransition(ensureFetchTimeEntriesSucceeded.Done, timeEntriesAnalytics);
+
+            transitions.ConfigureTransition(timeEntriesAnalytics.Done, createWorkspacePlaceholder);
             transitions.ConfigureTransition(createWorkspacePlaceholder.Done, createProjectPlaceholder);
             transitions.ConfigureTransition(createProjectPlaceholder.Done, createTaskPlaceholder);
             transitions.ConfigureTransition(createTaskPlaceholder.Done, createTagPlaceholder);
