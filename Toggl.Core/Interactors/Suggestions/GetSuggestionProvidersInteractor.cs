@@ -48,7 +48,7 @@ namespace Toggl.Core.Interactors.Suggestions
                 {
                     new RandomForestSuggestionProvider(stopwatchProvider, dataSource, timeService),
                     new CalendarSuggestionProvider(timeService, calendarService, defaultWorkspaceInteractor),
-                    new MostUsedTimeEntrySuggestionProvider(timeService, dataSource, suggestionCount)
+                    new MostUsedTimeEntrySuggestionProvider(stopwatchProvider, timeService, dataSource, suggestionCount)
                 }
             );
         }

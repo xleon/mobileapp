@@ -27,6 +27,7 @@
         Diffing,
         RandomForest2StepsProjectPrediction,
         RandomForest2StepsTimeEntryPrediction,
-        RandomForest1StepTimeEntryPrediction
+        RandomForest1StepTimeEntryPrediction,
+        MostUsedTimeEntriesPrediction
     }
 }

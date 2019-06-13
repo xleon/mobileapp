@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.DataSources;
+using Toggl.Core.Diagnostics;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Models;
@@ -16,16 +18,20 @@ namespace Toggl.Core.Suggestions
 
         private readonly ITogglDataSource dataSource;
         private readonly ITimeService timeService;
+        private readonly IStopwatchProvider stopwatchProvider;
         private readonly int maxNumberOfSuggestions;
 
         public MostUsedTimeEntrySuggestionProvider(
+            IStopwatchProvider stopwatchProvider,
             ITimeService timeService,
             ITogglDataSource dataSource,
             int maxNumberOfSuggestions)
         {
+            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
 
+            this.stopwatchProvider = stopwatchProvider;
             this.dataSource = dataSource;
             this.timeService = timeService;
             this.maxNumberOfSuggestions = maxNumberOfSuggestions;
@@ -34,6 +40,7 @@ namespace Toggl.Core.Suggestions
         public IObservable<Suggestion> GetSuggestions()
             => dataSource.TimeEntries
                 .GetAll(isSuitableForSuggestion)
+                .Do(_ => startStopwatch())
                 .SelectMany(mostUsedTimeEntry)
                 .Take(maxNumberOfSuggestions);
 
@@ -57,9 +64,29 @@ namespace Toggl.Core.Suggestions
                && (timeEntry.Project?.Active ?? true);
 
         private IEnumerable<Suggestion> mostUsedTimeEntry(IEnumerable<IDatabaseTimeEntry> timeEntries)
-            => timeEntries.GroupBy(te => new { te.Description, te.ProjectId, te.TaskId })
+        {
+            var suggestions = timeEntries
+                .GroupBy(te => new { te.Description, te.ProjectId, te.TaskId })
                 .OrderByDescending(g => g.Count())
                 .Select(grouping => grouping.First())
                 .Select(timeEntry => new Suggestion(timeEntry, SuggestionProviderType.MostUsedTimeEntries));
+
+            stopStopwatch();
+
+            return suggestions;
+        }
+
+        private void startStopwatch()
+        {
+            stopwatchProvider.Remove(MeasuredOperation.MostUsedTimeEntriesPrediction);
+            var mostUsedTimeEntriesPredictionStopWatch = stopwatchProvider.CreateAndStore(MeasuredOperation.MostUsedTimeEntriesPrediction);
+            mostUsedTimeEntriesPredictionStopWatch.Start();
+        }
+
+        private void stopStopwatch()
+        {
+            var mostUsedTimeEntriesPredictionStopWatch = stopwatchProvider.Get(MeasuredOperation.MostUsedTimeEntriesPrediction);
+            mostUsedTimeEntriesPredictionStopWatch?.Stop();
+        }
     }
 }
