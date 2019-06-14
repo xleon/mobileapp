@@ -40,14 +40,14 @@ namespace Toggl.Core.Interactors.PushNotifications
         {
             var token = pushNotificationsTokenService.Token;
             var defaultToken = default(PushNotificationsToken);
-            if (!token.HasValue || (string)token.Value == (string)defaultToken)
+            if (!token.HasValue || token == defaultToken)
                 return Observable.Return(Unit.Default);
 
             var previouslyRegisteredToken = keyValueStorage.GetString(PreviouslyRegisteredTokenKey);
             var dateOfRegisteringTheToken = keyValueStorage.GetDateTimeOffset(DateOfRegisteringPreviousTokenKey);
 
             if (!string.IsNullOrEmpty(previouslyRegisteredToken)
-                && previouslyRegisteredToken == (string)token.Value
+                && previouslyRegisteredToken == token.ToString()
                 && dateOfRegisteringTheToken.HasValue
                 && !shouldReSubmitToken(dateOfRegisteringTheToken.Value))
             {
@@ -56,16 +56,16 @@ namespace Toggl.Core.Interactors.PushNotifications
 
             return pushServicesApi
                 .Subscribe(token.Value)
-                .Do(_ => storeRegisteredToken(token.Value.ToString()))
+                .Do(_ => storeRegisteredToken(token.Value))
                 .Catch((Exception ex) => Observable.Return(Unit.Default));
         }
 
         private bool shouldReSubmitToken(DateTimeOffset dateOfRegisteringTheToken)
             => timeService.CurrentDateTime - dateOfRegisteringTheToken >= tokenReSubmissionPeriod;
 
-        private void storeRegisteredToken(string token)
+        private void storeRegisteredToken(PushNotificationsToken token)
         {
-            keyValueStorage.SetString(PreviouslyRegisteredTokenKey, token);
+            keyValueStorage.SetString(PreviouslyRegisteredTokenKey, token.ToString());
             keyValueStorage.SetDateTimeOffset(DateOfRegisteringPreviousTokenKey, timeService.CurrentDateTime);
         }
     }

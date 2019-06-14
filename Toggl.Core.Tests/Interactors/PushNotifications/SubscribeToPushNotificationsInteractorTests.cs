@@ -94,7 +94,7 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
             public async Task CallsTheApiToSubscribeForPushNotificationsAfterATimePeriod()
             {
                 var token = new PushNotificationsToken("tokenA");
-                KeyValueStorage.GetString(PreviouslyRegisteredTokenKey).Returns((string)token);
+                KeyValueStorage.GetString(PreviouslyRegisteredTokenKey).Returns(token.ToString());
                 KeyValueStorage.GetDateTimeOffset(DateOfRegisteringPreviousTokenKey).Returns(now - TimeSpan.FromDays(10));
                 PushNotificationsTokenService.Token.Returns(token);
                 pushServicesApi.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(Observable.Return(Unit.Default));

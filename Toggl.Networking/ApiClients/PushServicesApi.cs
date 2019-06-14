@@ -28,6 +28,6 @@ namespace Toggl.Networking.ApiClients
             => SendRequest(endPoints.Unsubscribe, AuthHeader, json(token)).SelectUnit();
 
         private string json(PushNotificationsToken token)
-            => $"{{\"fcm_registration_token\": \"{(string)token}\"}}";
+            => $"{{\"fcm_registration_token\": \"{token}\"}}";
     }
 }
