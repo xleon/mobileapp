@@ -260,7 +260,7 @@ namespace Toggl.Core
             DependencyContainer dependencyContainer)
         {
             var delayState = new WaitForAWhileState(scheduler, analyticsService);
-            var pushNotificationsToken = new SyncPushNotificationsTokenState(dependencyContainer.KeyValueStorage, api, dependencyContainer.PushNotificationsTokenService);
+            var pushNotificationsToken = new SyncPushNotificationsTokenState(dependencyContainer.KeyValueStorage, api, dependencyContainer.PushNotificationsTokenService, dependencyContainer.TimeService);
 
             transitions.ConfigureTransition(entryPoint, pushNotificationsToken);
 

@@ -10,6 +10,6 @@ namespace Toggl.Core.Interactors
             => new UnsubscribeFromPushNotificationsInteractor(pushNotificationsTokenService, keyValueStorage, api);
 
         public IInteractor<IObservable<Unit>> SubscribeToPushNotifications()
-            => new SubscribeToPushNotificationsInteractor(keyValueStorage, api, pushNotificationsTokenService);
+            => new SubscribeToPushNotificationsInteractor(keyValueStorage, api, pushNotificationsTokenService, timeService);
     }
 }

@@ -15,27 +15,31 @@ namespace Toggl.Core.Sync.States.Push
         private readonly IKeyValueStorage keyValueStorage;
         private readonly ITogglApi togglApi;
         private readonly IPushNotificationsTokenService pushNotificationsTokenService;
+        private readonly ITimeService timeService;
 
         public StateResult Done { get; } = new StateResult();
 
         public SyncPushNotificationsTokenState(
             IKeyValueStorage keyValueStorage,
             ITogglApi togglApi,
-            IPushNotificationsTokenService pushNotificationsTokenService)
+            IPushNotificationsTokenService pushNotificationsTokenService,
+            ITimeService timeService)
         {
             Ensure.Argument.IsNotNull(keyValueStorage, nameof(keyValueStorage));
             Ensure.Argument.IsNotNull(togglApi, nameof(togglApi));
             Ensure.Argument.IsNotNull(pushNotificationsTokenService, nameof(pushNotificationsTokenService));
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
 
             this.keyValueStorage = keyValueStorage;
             this.togglApi = togglApi;
             this.pushNotificationsTokenService = pushNotificationsTokenService;
+            this.timeService = timeService;
         }
 
         public IObservable<ITransition> Start()
             => createInteractor().Execute().SelectValue(Done.Transition());
 
         private IInteractor<IObservable<Unit>> createInteractor()
-            => new SubscribeToPushNotificationsInteractor(keyValueStorage, togglApi, pushNotificationsTokenService);
+            => new SubscribeToPushNotificationsInteractor(keyValueStorage, togglApi, pushNotificationsTokenService, timeService);
     }
 }

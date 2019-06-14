@@ -21,15 +21,16 @@ namespace Toggl.Core.Tests.Sync.States.Push
         {
             [Theory]
             [ConstructorData]
-            public void ThrowsWhenArgumentIsNull(bool useKeyValueStorage, bool useTogglApi, bool usePushNotificationsTokenService)
+            public void ThrowsWhenArgumentIsNull(bool useKeyValueStorage, bool useTogglApi, bool usePushNotificationsTokenService, bool useTimeService)
             {
                 var keyValueStorage = useKeyValueStorage ? Substitute.For<IKeyValueStorage>() : null;
                 var togglApi = useTogglApi ? Substitute.For<ITogglApi>() : null;
                 var pushNotificationsTokenService = usePushNotificationsTokenService
                     ? Substitute.For<IPushNotificationsTokenService>()
                     : null;
+                var timeService = useTimeService ? Substitute.For<ITimeService>() : null;
 
-                Action constructor = () => new SyncPushNotificationsTokenState(keyValueStorage, togglApi, pushNotificationsTokenService);
+                Action constructor = () => new SyncPushNotificationsTokenState(keyValueStorage, togglApi, pushNotificationsTokenService, timeService);
 
                 constructor.Should().Throw<ArgumentNullException>();
             }
@@ -40,12 +41,13 @@ namespace Toggl.Core.Tests.Sync.States.Push
             private readonly IKeyValueStorage keyValueStorage = Substitute.For<IKeyValueStorage>();
             private readonly ITogglApi togglApi = Substitute.For<ITogglApi>();
             private readonly IPushNotificationsTokenService pushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>();
+            private readonly ITimeService timeService = Substitute.For<ITimeService>();
 
             private readonly SyncPushNotificationsTokenState state;
 
             public TheStartMehtod()
             {
-                state = new SyncPushNotificationsTokenState(keyValueStorage, togglApi, pushNotificationsTokenService);
+                state = new SyncPushNotificationsTokenState(keyValueStorage, togglApi, pushNotificationsTokenService, timeService);
             }
 
             [Fact]

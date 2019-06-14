@@ -54,6 +54,7 @@ namespace Toggl.Core.Tests.Sync.Helpers
             var dependencyContainer = new TestDependencyContainer();
             dependencyContainer.MockKeyValueStorage = Substitute.For<IKeyValueStorage>();
             dependencyContainer.MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>();
+            dependencyContainer.MockTimeService = TimeService;
 
             SyncManager = TogglSyncManager.CreateSyncManager(
                 database,

@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -15,16 +16,19 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
 {
     public class SubscribeToPushNotificationsInteractorTests : BaseInteractorTests
     {
+        private static readonly DateTimeOffset now = new DateTimeOffset(2019, 06, 13, 12, 13, 14, TimeSpan.Zero);
+
         public sealed class TheConstructor : BaseInteractorTests
         {
             [Theory, LogIfTooSlow]
             [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useKeyValueStorage, bool usePushServicesApi, bool usePushNotificationTokenService)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useKeyValueStorage, bool usePushServicesApi, bool usePushNotificationTokenService, bool useTimeService)
             {
                 Action tryingToConstructWithNull = () => new SubscribeToPushNotificationsInteractor(
                     useKeyValueStorage ? KeyValueStorage : null,
                     usePushServicesApi ? Api : null,
-                    usePushNotificationTokenService ? PushNotificationsTokenService : null);
+                    usePushNotificationTokenService ? PushNotificationsTokenService : null,
+                    useTimeService ? TimeService : null);
 
                 tryingToConstructWithNull.Should().Throw<ArgumentNullException>();
             }
@@ -38,7 +42,8 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
             public TheExecuteMethod()
             {
                 Api.PushServices.Returns(pushServicesApi);
-                interactor = new SubscribeToPushNotificationsInteractor(KeyValueStorage, Api, PushNotificationsTokenService);
+                TimeService.CurrentDateTime.Returns(now);
+                interactor = new SubscribeToPushNotificationsInteractor(KeyValueStorage, Api, PushNotificationsTokenService, TimeService);
             }
 
             [Fact]
@@ -62,9 +67,10 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
             }
 
             [Fact]
-            public async Task DoesNothingWhenTheTokenHasAlreadyBeenRegistered()
+            public async Task DoesNothingWhenTheTokenHasAlreadyBeenRegisteredRecently()
             {
                 KeyValueStorage.GetString(PreviouslyRegisteredTokenKey).Returns("tokenA");
+                KeyValueStorage.GetDateTimeOffset(DateOfRegisteringPreviousTokenKey).Returns(now - TimeSpan.FromDays(2));
                 PushNotificationsTokenService.Token.Returns(new PushNotificationsToken("tokenA"));
 
                 (await interactor.Execute().SingleAsync()).Should().Be(Unit.Default);
@@ -85,6 +91,19 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
             }
 
             [Fact]
+            public async Task CallsTheApiToSubscribeForPushNotificationsAfterATimePeriod()
+            {
+                var token = new PushNotificationsToken("tokenA");
+                KeyValueStorage.GetString(PreviouslyRegisteredTokenKey).Returns((string)token);
+                KeyValueStorage.GetDateTimeOffset(DateOfRegisteringPreviousTokenKey).Returns(now - TimeSpan.FromDays(10));
+                PushNotificationsTokenService.Token.Returns(token);
+                pushServicesApi.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(Observable.Return(Unit.Default));
+
+                (await interactor.Execute().SingleAsync()).Should().Be(Unit.Default);
+                pushServicesApi.Received().Subscribe(token);
+            }
+
+            [Fact]
             public async Task StoresTheTokenWhenSucceedsToRegisterIt()
             {
                 KeyValueStorage.GetString(PreviouslyRegisteredTokenKey).Returns(default(string));
@@ -94,6 +113,7 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
 
                 (await interactor.Execute().SingleAsync()).Should().Be(Unit.Default);
                 KeyValueStorage.Received().SetString(PreviouslyRegisteredTokenKey, expectedPushNotificationToken.ToString());
+                KeyValueStorage.Received().SetDateTimeOffset(DateOfRegisteringPreviousTokenKey, now);
             }
 
             [Fact]
@@ -107,6 +127,7 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
                 (await interactor.Execute().SingleAsync()).Should().Be(Unit.Default);
                 pushServicesApi.Received().Subscribe(expectedPushNotificationToken);
                 KeyValueStorage.DidNotReceive().SetString(PreviouslyRegisteredTokenKey, expectedPushNotificationToken.ToString());
+                KeyValueStorage.DidNotReceive().SetDateTimeOffset(DateOfRegisteringPreviousTokenKey, Arg.Any<DateTimeOffset>());
             }
         }
     }
