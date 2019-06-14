@@ -2,20 +2,17 @@
 using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Android.Gms.Tasks;
 using Firebase.RemoteConfig;
 using Toggl.Core.Services;
 using Toggl.Shared;
+using static Toggl.Core.Services.RemoteConfigKeys;
 using GmsTask = Android.Gms.Tasks.Task;
 
 namespace Toggl.Droid.Services
 {
     public class RemoteConfigServiceAndroid : IRemoteConfigService
     {
-        private const string delayParameter = "day_count";
-        private const string triggerParameter = "criterion";
-
         [Conditional("DEBUG")]
         private void enableDeveloperModeInDebugModel(FirebaseRemoteConfig remoteConfig)
         {
@@ -28,25 +25,36 @@ namespace Toggl.Droid.Services
         }
 
         public IObservable<RatingViewConfiguration> RatingViewConfiguration
-            => Observable.Create<RatingViewConfiguration>(observer =>
+            => FetchConfiguration(extractRatingViewConfiguration);
+
+        public IObservable<PushNotificationsConfiguration> PushNotificationsConfiguration
+            => FetchConfiguration(extractPushNotificationsConfiguration);
+        
+        private RatingViewConfiguration extractRatingViewConfiguration(FirebaseRemoteConfig remoteConfig)
+            => new RatingViewConfiguration(
+                (int)remoteConfig.GetValue(RatingViewDelayParameter).AsLong(),
+                remoteConfig.GetString(RatingViewTriggerParameter).ToRatingViewCriterion());
+
+        private PushNotificationsConfiguration extractPushNotificationsConfiguration(FirebaseRemoteConfig remoteConfig)
+            => new PushNotificationsConfiguration(
+                remoteConfig.GetBoolean(RegisterPushNotificationsTokenWithServerParameter),
+                remoteConfig.GetBoolean(HandlePushNotificationsParameter));
+            
+        private IObservable<TConfiguration> FetchConfiguration<TConfiguration>(Func<FirebaseRemoteConfig, TConfiguration> remoteConfigExtractor) 
+            => Observable.Create<TConfiguration>(observer =>
             {
                 var remoteConfig = FirebaseRemoteConfig.Instance;
 
                 enableDeveloperModeInDebugModel(remoteConfig);
 
                 remoteConfig.SetDefaults(Resource.Xml.RemoteConfigDefaults);
-
+                
                 remoteConfig.Fetch(error =>
                 {
                     if (error == null)
                         remoteConfig.ActivateFetched();
-
-                    var configuration = new RatingViewConfiguration(
-                        (int)remoteConfig.GetValue(delayParameter).AsLong(),
-                        remoteConfig.GetString(triggerParameter).ToRatingViewCriterion()
-                    );
-
-                    observer.OnNext(configuration);
+                    
+                    observer.OnNext(remoteConfigExtractor(remoteConfig));
                     observer.OnCompleted();
                 });
 
@@ -54,12 +62,12 @@ namespace Toggl.Droid.Services
             });
     }
 
-    public class RatingViewCompletionHandler : Java.Lang.Object, IOnCompleteListener
+    public class RemoteConfigCompletionHandler : Java.Lang.Object, IOnCompleteListener
     {
         private FirebaseRemoteConfig remoteConfig;
         private Action<Exception> action;
 
-        public RatingViewCompletionHandler(FirebaseRemoteConfig remoteConfig, Action<Exception> action)
+        public RemoteConfigCompletionHandler(FirebaseRemoteConfig remoteConfig, Action<Exception> action)
         {
             this.remoteConfig = remoteConfig;
             this.action = action;
@@ -75,7 +83,7 @@ namespace Toggl.Droid.Services
     {
         public static void Fetch(this FirebaseRemoteConfig remoteConfig, Action<Exception> action)
         {
-            remoteConfig.Fetch().AddOnCompleteListener(new RatingViewCompletionHandler(remoteConfig, action));
+            remoteConfig.Fetch().AddOnCompleteListener(new RemoteConfigCompletionHandler(remoteConfig, action));
         }
     }
 }

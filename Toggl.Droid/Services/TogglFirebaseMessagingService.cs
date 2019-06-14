@@ -1,7 +1,10 @@
 using System;
+using System.Reactive;
 using System.Reactive.Linq;
 using Android.App;
 using Firebase.Messaging;
+using Toggl.Core.Extensions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Services
 {
@@ -24,7 +27,12 @@ namespace Toggl.Droid.Services
                 ? interactorFactory.RunPushNotificationInitiatedSyncInForeground()
                 : interactorFactory.RunPushNotificationInitiatedSyncInBackground();
 
-            syncDisposable = syncInteractor.Execute()
+            var shouldHandlePushNotifications = dependencyContainer.RemoteConfigService.ShouldHandlePushNotifications(); 
+
+            syncDisposable = shouldHandlePushNotifications
+                .SelectMany(willHandlePushNotification => willHandlePushNotification
+                    ? syncInteractor.Execute().SelectUnit()
+                    : Observable.Return(Unit.Default))
                 .ObserveOn(dependencyContainerSchedulerProvider.BackgroundScheduler)
                 .Subscribe(_ => StopSelf());
         }

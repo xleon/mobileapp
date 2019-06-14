@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Linq;
 using Firebase.CloudMessaging;
 using Foundation;
+using Toggl.Core.Extensions;
 using Toggl.Shared.Extensions;
 using UIKit;
 
@@ -49,7 +50,12 @@ namespace Toggl.iOS
                 ? interactorFactory.RunPushNotificationInitiatedSyncInForeground()
                 : interactorFactory.RunPushNotificationInitiatedSyncInBackground();
 
-            syncInteractor.Execute()
+            var shouldHandlePushNotifications = dependencyContainer.RemoteConfigService.ShouldHandlePushNotifications(); 
+
+            shouldHandlePushNotifications
+                .SelectMany(willHandlePushNotification => willHandlePushNotification
+                    ? syncInteractor.Execute()
+                    : Observable.Return(Core.Models.SyncOutcome.NoData))
                 .Select(mapToNativeOutcomes)
                 .Subscribe(completionHandler);
         }

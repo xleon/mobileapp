@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using Firebase.RemoteConfig;
 using Toggl.Core.Services;
 using Toggl.Shared;
+using static Toggl.Core.Services.RemoteConfigKeys;
 
 namespace Toggl.iOS.Services
 {
@@ -18,19 +19,31 @@ namespace Toggl.iOS.Services
         }
 
         public IObservable<RatingViewConfiguration> RatingViewConfiguration
-            => Observable.Create<RatingViewConfiguration>(observer =>
+            => FetchConfiguration(extractRatingViewConfiguration);
+
+        public IObservable<PushNotificationsConfiguration> PushNotificationsConfiguration
+            => FetchConfiguration(extractPushNotificationsConfiguration);
+        
+        private RatingViewConfiguration extractRatingViewConfiguration(RemoteConfig remoteConfig) 
+            => new RatingViewConfiguration(
+                remoteConfig[RatingViewDelayParameter].NumberValue.Int32Value,
+                remoteConfig[RatingViewTriggerParameter].StringValue.ToRatingViewCriterion());
+
+        private PushNotificationsConfiguration extractPushNotificationsConfiguration(RemoteConfig remoteConfig)
+            => new PushNotificationsConfiguration(
+                remoteConfig[RegisterPushNotificationsTokenWithServerParameter].BoolValue,
+                remoteConfig[HandlePushNotificationsParameter].BoolValue); 
+            
+        private IObservable<TConfiguration> FetchConfiguration<TConfiguration>(Func<RemoteConfig, TConfiguration> remoteConfigExtractor)
+            => Observable.Create<TConfiguration>(observer =>
             {
                 var remoteConfig = RemoteConfig.SharedInstance;
                 remoteConfig.Fetch((status, error) =>
                 {
                     if (error == null)
                         remoteConfig.ActivateFetched();
-
-                    var configuration = new RatingViewConfiguration(
-                        remoteConfig["day_count"].NumberValue.Int32Value,
-                        remoteConfig["criterion"].StringValue.ToRatingViewCriterion()
-                    );
-                    observer.OnNext(configuration);
+                    
+                    observer.OnNext(remoteConfigExtractor(remoteConfig));
                     observer.OnCompleted();
                 });
                 return Disposable.Empty;
