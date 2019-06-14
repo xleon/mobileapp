@@ -1,45 +1,38 @@
-﻿using Toggl.Core.UI.Services;
-using Toggl.Core.Services;
+﻿using Toggl.Core.Services;
 using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
+using Xamarin.Essentials;
+using System.Threading.Tasks;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class OutdatedAppViewModel : ViewModel
     {
-        private readonly IRxActionFactory rxActionFactory;
-
-        public UIAction OpenWebsite { get; }
-
-        public UIAction UpdateApp { get; }
-
         private const string togglWebsiteUrl = "https://toggl.com";
 
-        private readonly IBrowserService browserService;
+        private readonly string storeUrl;
 
-        public OutdatedAppViewModel(IBrowserService browserService, IRxActionFactory rxActionFactory, INavigationService navigationService)
+        public UIAction OpenWebsite { get; }
+        public UIAction UpdateApp { get; }
+
+        public OutdatedAppViewModel(IPlatformInfo platformInfo, IRxActionFactory rxActionFactory, INavigationService navigationService)
             : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(browserService, nameof(browserService));
+            Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            this.browserService = browserService;
-            this.rxActionFactory = rxActionFactory;
+            storeUrl = platformInfo.StoreUrl;
 
-            UpdateApp = rxActionFactory.FromAction(updateApp);
-            OpenWebsite = rxActionFactory.FromAction(openWebsite);
+            UpdateApp = rxActionFactory.FromAsync(updateApp);
+            OpenWebsite = rxActionFactory.FromAsync(openWebsite);
         }
 
-        private void openWebsite()
-        {
-            browserService.OpenUrl(togglWebsiteUrl);
-        }
-
-        private void updateApp()
-        {
-            browserService.OpenStore();
-        }
+        private Task openWebsite()
+         => Browser.OpenAsync(togglWebsiteUrl, BrowserLaunchMode.External);
+        
+        private Task updateApp()
+            => Browser.OpenAsync(storeUrl, BrowserLaunchMode.External);
     }
 }

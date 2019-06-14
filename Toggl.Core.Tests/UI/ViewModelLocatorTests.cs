@@ -33,7 +33,6 @@ namespace Toggl.Core.Tests.UI
                 MockAccessRestrictionStorage = Substitute.For<IAccessRestrictionStorage>(),
                 MockAnalyticsService = Substitute.For<IAnalyticsService>(),
                 MockBackgroundSyncService = Substitute.For<IBackgroundSyncService>(),
-                MockBrowserService = Substitute.For<IBrowserService>(),
                 MockCalendarService = Substitute.For<ICalendarService>(),
                 MockDatabase = Substitute.For<ITogglDatabase>(),
                 MockKeyValueStorage = Substitute.For<IKeyValueStorage>(),

@@ -44,10 +44,6 @@ namespace Toggl.Core.UI
         protected override IBackgroundSyncService CreateBackgroundSyncService()
             => MockBackgroundSyncService;
 
-        internal IBrowserService MockBrowserService { get; set; }
-        protected override IBrowserService CreateBrowserService()
-            => MockBrowserService;
-
         internal ICalendarService MockCalendarService { get; set; }
         protected override ICalendarService CreateCalendarService()
             => MockCalendarService;

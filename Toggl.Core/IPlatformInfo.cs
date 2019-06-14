@@ -12,6 +12,7 @@ namespace Toggl.Core
         string BuildNumber { get; }
         string OperatingSystem { get; }
         string TimezoneIdentifier { get; }
+        string StoreUrl { get; }
     }
 
     public enum Platform

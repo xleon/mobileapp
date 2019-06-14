@@ -10,13 +10,11 @@ namespace Toggl.Core.UI
     public abstract class UIDependencyContainer : DependencyContainer
     {
         private readonly Lazy<IDeeplinkParser> deeplinkParser;
-        private readonly Lazy<IBrowserService> browserService;
         private readonly Lazy<ViewModelLoader> viewModelLoader;
         private readonly Lazy<INavigationService> navigationService;
         private readonly Lazy<IPermissionsChecker> permissionsService;
 
         public IDeeplinkParser DeeplinkParser => deeplinkParser.Value;
-        public IBrowserService BrowserService => browserService.Value;
         public ViewModelLoader ViewModelLoader => viewModelLoader.Value;
         public INavigationService NavigationService => navigationService.Value;
         public IPermissionsChecker PermissionsChecker => permissionsService.Value;
@@ -27,7 +25,6 @@ namespace Toggl.Core.UI
             : base(apiEnvironment, userAgent)
         {
             deeplinkParser = new Lazy<IDeeplinkParser>(createDeeplinkParser);
-            browserService = new Lazy<IBrowserService>(CreateBrowserService);
             viewModelLoader = new Lazy<ViewModelLoader>(CreateViewModelLoader);
             navigationService = new Lazy<INavigationService>(CreateNavigationService);
             permissionsService = new Lazy<IPermissionsChecker>(CreatePermissionsChecker);
@@ -36,7 +33,6 @@ namespace Toggl.Core.UI
         private IDeeplinkParser createDeeplinkParser()
             => new DeeplinkParser();
 
-        protected abstract IBrowserService CreateBrowserService();
         protected abstract INavigationService CreateNavigationService();
         protected abstract IPermissionsChecker CreatePermissionsChecker();
 

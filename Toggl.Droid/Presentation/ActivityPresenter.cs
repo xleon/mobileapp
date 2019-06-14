@@ -17,7 +17,6 @@ namespace Toggl.Droid.Presentation
         protected override HashSet<Type> AcceptedViewModels { get; } = new HashSet<Type>
         {
             typeof(AboutViewModel),
-            typeof(BrowserViewModel),
             typeof(CalendarSettingsViewModel),
             typeof(EditDurationViewModel),
             typeof(EditProjectViewModel),
@@ -39,7 +38,6 @@ namespace Toggl.Droid.Presentation
         private readonly Dictionary<Type, ActivityPresenterInfo> presentableActivitiesInfos = new Dictionary<Type,ActivityPresenterInfo>
         {
             [typeof(AboutViewModel)] = new ActivityPresenterInfo(typeof(AboutActivity)),
-            [typeof(BrowserViewModel)] = new ActivityPresenterInfo(typeof(BrowserActivity)),
             [typeof(CalendarSettingsViewModel)] = new ActivityPresenterInfo(typeof(CalendarSettingsActivity)),
             [typeof(EditDurationViewModel)] = new ActivityPresenterInfo(typeof(EditDurationActivity)),
             [typeof(EditProjectViewModel)] = new ActivityPresenterInfo(typeof(EditProjectActivity)),

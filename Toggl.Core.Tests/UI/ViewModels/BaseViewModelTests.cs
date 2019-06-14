@@ -24,7 +24,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
         protected ISyncManager SyncManager { get; } = Substitute.For<ISyncManager>();
         protected IUserAccessManager UserAccessManager { get; } = Substitute.For<IUserAccessManager>();
         protected IRatingService RatingService { get; } = Substitute.For<IRatingService>();
-        protected IBrowserService BrowserService { get; } = Substitute.For<IBrowserService>();
         protected ILicenseProvider LicenseProvider { get; } = Substitute.For<ILicenseProvider>();
         protected IBackgroundService BackgroundService { get; } = Substitute.For<IBackgroundService>();
         protected IPlatformInfo PlatformInfo { get; } = Substitute.For<IPlatformInfo>();

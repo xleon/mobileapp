@@ -71,10 +71,7 @@ namespace Toggl.iOS
 
         protected override IBackgroundSyncService CreateBackgroundSyncService()
             => new BackgroundSyncServiceIos();
-
-        protected override IBrowserService CreateBrowserService()
-            => new BrowserServiceIos();
-
+        
         protected override ICalendarService CreateCalendarService()
             => new CalendarServiceIos(PermissionsChecker);
 

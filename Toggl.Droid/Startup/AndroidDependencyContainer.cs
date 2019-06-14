@@ -64,9 +64,6 @@ namespace Toggl.Droid
         protected override IBackgroundSyncService CreateBackgroundSyncService()
             => new BackgroundSyncServiceAndroid();
 
-        protected override IBrowserService CreateBrowserService()
-            => new BrowserServiceAndroid();
-
         protected override ICalendarService CreateCalendarService()
             => new CalendarServiceAndroid(PermissionsChecker);
 

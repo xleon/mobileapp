@@ -475,33 +475,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 UserPreferences.Received().EnableManualMode();
             }
         }
-
-        public sealed class TheOpenHelpViewMethod : SettingsViewModelTest
-        {
-            [Property]
-            public void NavigatesToBrowserViewModelWithUrlFromplatformInfo(
-                NonEmptyString nonEmptyString)
-            {
-                var helpUrl = nonEmptyString.Get;
-                PlatformInfo.HelpUrl.Returns(helpUrl);
-
-                ViewModel.OpenHelpView.Execute();
-                TestScheduler.Start();
-
-                NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
-                    Arg.Is<BrowserParameters>(parameter => parameter.Url == helpUrl), ViewModel.View);
-            }
-
-            [Fact, LogIfTooSlow]
-            public void NavigatesToBrowserViewModelWithHelpTitle()
-            {
-                ViewModel.OpenHelpView.Execute();
-
-                NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
-                    Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.Help), ViewModel.View);
-            }
-        }
-
+        
         public sealed class TheVersionProperty : SettingsViewModelTest
         {
             [Fact, LogIfTooSlow]

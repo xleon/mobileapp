@@ -26,6 +26,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using static Toggl.Shared.Extensions.CommonFunctions;
+using Xamarin.Essentials;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -143,10 +144,9 @@ namespace Toggl.Core.UI.ViewModels
             this.userAccessManager = userAccessManager;
             this.onboardingStorage = onboardingStorage;
             this.stopwatchProvider = stopwatchProvider;
-            this.privateSharedStorageService = privateSharedStorageService;
-            this.rxActionFactory = rxActionFactory;
             this.schedulerProvider = schedulerProvider;
             this.permissionsChecker = permissionsChecker;
+            this.privateSharedStorageService = privateSharedStorageService;
 
             IsSynced =
                 syncManager.ProgressObservable
@@ -406,9 +406,7 @@ namespace Toggl.Core.UI.ViewModels
                     .ToList();
 
         private Task openHelpView() =>
-            Navigate<BrowserViewModel, BrowserParameters>(
-                BrowserParameters.WithUrlAndTitle(platformInfo.HelpUrl, Resources.Help)
-            );
+            Browser.OpenAsync(platformInfo.HelpUrl, BrowserLaunchMode.SystemPreferred);
 
         private async Task tryLogout()
         {

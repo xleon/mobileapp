@@ -26,11 +26,6 @@ namespace Toggl.Core.UI.Navigation
 
         private IViewModel findViewModel(Type viewModelType)
         {
-            if (viewModelType == typeof(BrowserViewModel))
-                return new BrowserViewModel(
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.RxActionFactory);
-
             if (viewModelType == typeof(EditDurationViewModel))
                 return new EditDurationViewModel(
                     dependencyContainer.NavigationService,
@@ -142,7 +137,7 @@ namespace Toggl.Core.UI.Navigation
 
             if (viewModelType == typeof(OutdatedAppViewModel))
                 return new OutdatedAppViewModel(
-                    dependencyContainer.BrowserService,
+                    dependencyContainer.PlatformInfo,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.NavigationService);
 
@@ -276,7 +271,6 @@ namespace Toggl.Core.UI.Navigation
 
             if (viewModelType == typeof(TermsOfServiceViewModel))
                 return new TermsOfServiceViewModel(
-                    dependencyContainer.BrowserService,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.NavigationService);
 
@@ -332,8 +326,8 @@ namespace Toggl.Core.UI.Navigation
 
             if (viewModelType == typeof(AboutViewModel))
                 return new AboutViewModel(
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.NavigationService);
 
             if (viewModelType == typeof(CalendarSettingsViewModel))
                 return new CalendarSettingsViewModel(
