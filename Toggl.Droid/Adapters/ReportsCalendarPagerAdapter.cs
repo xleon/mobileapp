@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using Android.Content;
+using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.View;
 using Android.Support.V7.Widget;
@@ -28,12 +29,14 @@ namespace Toggl.Droid.Adapters
         private Subject<ReportsCalendarDayViewModel> dayTaps = new Subject<ReportsCalendarDayViewModel>();
         private Subject<ReportsDateRangeParameter> selectionChanges = new Subject<ReportsDateRangeParameter>();
         private ReportsDateRangeParameter currentDateRange;
+        private Handler mainHandler;
 
         public IObservable<ReportsCalendarDayViewModel> DayTaps => dayTaps.AsObservable();
 
         public ReportsCalendarPagerAdapter(Context context)
         {
             this.context = context;
+            mainHandler = new Handler(Looper.MainLooper);
         }
 
         public ReportsCalendarPagerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
@@ -120,7 +123,7 @@ namespace Toggl.Droid.Adapters
         public void UpdateMonths(List<ReportsCalendarPageViewModel> newMonths)
         {
             currentMonths = newMonths.ToImmutableList();
-            NotifyDataSetChanged();
+            mainHandler.Post(NotifyDataSetChanged);
             notifyPageContentAdapters();
         }
 
