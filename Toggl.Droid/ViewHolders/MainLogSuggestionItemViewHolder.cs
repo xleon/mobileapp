@@ -53,6 +53,7 @@ namespace Toggl.Droid.ViewHolders
             clientLabel.Visibility = Item.HasProject.ToVisibility();
         }
 
+        [Conditional("ADHOC")]
         [Conditional("DEBUG")]
         private void prefixWithProviderNameInDebug()
         {

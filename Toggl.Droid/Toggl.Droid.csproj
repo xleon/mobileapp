@@ -41,7 +41,7 @@
     <DebugType>
     </DebugType>
     <OutputPath>..\bin</OutputPath>
-    <DefineConstants>USE_APPCENTER</DefineConstants>
+    <DefineConstants>USE_APPCENTER;ADHOC</DefineConstants>
     <AndroidKeyStore>True</AndroidKeyStore>
     <AndroidSigningKeyStore>../giskard.keystore</AndroidSigningKeyStore>
     <AndroidSigningStorePass>{KEYSTORE_PASSWORD}</AndroidSigningStorePass>
