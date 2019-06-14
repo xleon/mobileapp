@@ -24,7 +24,13 @@ namespace Toggl.Droid.Fragments
         {
             var view = inflater.Inflate(Resource.Layout.CalendarFragment, container, false);
             InitializeViews(view);
+            return view;
+        }
 
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
+            
             var timeService = AndroidDependencyContainer.Instance.TimeService;
             var schedulerProvider = AndroidDependencyContainer.Instance.SchedulerProvider;
 
@@ -90,13 +96,11 @@ namespace Toggl.Droid.Fragments
             ViewModel.ShouldShowOnboarding
                 .Subscribe(onboardingVisibilityChanged)
                 .DisposedBy(DisposeBag);
-
-            return view;
         }
 
         public void ScrollToTop()
         {
-            calendarRecyclerView.SmoothScrollToPosition(0);
+            calendarRecyclerView?.SmoothScrollToPosition(0);
         }
 
         private void onboardingVisibilityChanged(bool visible)
