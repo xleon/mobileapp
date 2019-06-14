@@ -173,6 +173,8 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<SuggestionProviderType> SuggestionStarted { get; }
 
+        IAnalyticsEvent SuggestionsRecalculatedPeriodically { get; }
+
         void Track(string eventName, Dictionary<string, string> parameters = null);
 
         void TrackAnonymized(Exception exception);

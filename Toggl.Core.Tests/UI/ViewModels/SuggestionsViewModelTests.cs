@@ -212,6 +212,49 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ));
             }
 
+            [Fact, LogIfTooSlow]
+            public async Task RecalculatesSuggestionsAfterCorrectPeriodOfTime()
+            {
+                prepareSuggestionsForSuggestionsPresentedEvent();
+                var now = DateTimeOffset.Now;
+                var subject = new BehaviorSubject<DateTimeOffset>(now);
+                TimeService.CurrentDateTime.Returns(now);
+                TimeService.CurrentDateTimeObservable.Returns(subject);
+                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
+
+                await ViewModel.Initialize();
+                ViewModel.Suggestions.Subscribe(observer);
+                TestScheduler.Start();
+
+                observer.Messages.Should().HaveCount(1);
+                subject.OnNext(now + TimeSpan.FromMinutes(9));
+                TestScheduler.Start();
+                observer.Messages.Should().HaveCount(1);
+                subject.OnNext(now + TimeSpan.FromMinutes(10));
+                TestScheduler.Start();
+                observer.Messages.Should().HaveCount(2);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksSuggestionsRecalculatedPeriodically()
+            {
+                prepareSuggestionsForSuggestionsPresentedEvent();
+                var now = DateTimeOffset.Now;
+                var subject = new BehaviorSubject<DateTimeOffset>(now);
+                TimeService.CurrentDateTime.Returns(now);
+                TimeService.CurrentDateTimeObservable.Returns(subject);
+                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
+
+                await ViewModel.Initialize();
+                ViewModel.Suggestions.Subscribe(observer);
+                TestScheduler.Start();
+
+                subject.OnNext(now + TimeSpan.FromMinutes(10));
+                TestScheduler.Start();
+
+                AnalyticsService.SuggestionsRecalculatedPeriodically.Received(1).Track();
+            }
+
             [Theory, LogIfTooSlow]
             [InlineData(1, 1, 1, 1)]
             [InlineData(1, 1, 2, 2)]

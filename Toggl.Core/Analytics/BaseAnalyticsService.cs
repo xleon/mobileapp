@@ -264,6 +264,9 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("SuggestionProvider")]
         public IAnalyticsEvent<SuggestionProviderType> SuggestionStarted { get; protected set; }
 
+        [AnalyticsEvent]
+        public IAnalyticsEvent SuggestionsRecalculatedPeriodically { get; protected set; }
+
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())

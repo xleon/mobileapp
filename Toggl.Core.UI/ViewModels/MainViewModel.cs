@@ -308,6 +308,12 @@ namespace Toggl.Core.UI.ViewModels
             viewDisappearedAsync();
         }
 
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            SuggestionsViewModel.ViewAppeared();
+        }
+
         private async Task viewDisappearedAsync()
         {
             await TimeEntriesViewModel.FinalizeDelayDeleteTimeEntryIfNeeded();

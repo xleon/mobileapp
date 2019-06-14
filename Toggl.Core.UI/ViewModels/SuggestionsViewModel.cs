@@ -11,11 +11,12 @@ using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Toggl.Core.Services;
 using System.Collections.Immutable;
-using System.Collections.Generic;
 using Toggl.Core.Analytics;
 using System.Linq;
 using Toggl.Core.UI.Services;
 using Toggl.Core.UI.Navigation;
+using System.Reactive.Subjects;
+using Toggl.Core.Extensions;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -23,6 +24,8 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class SuggestionsViewModel : ViewModel
     {
         private const int suggestionCount = 3;
+
+        private readonly TimeSpan recalculatePeriod = TimeSpan.FromMinutes(10);
 
         private readonly IInteractorFactory interactorFactory;
         private readonly IOnboardingStorage onboardingStorage;
@@ -32,6 +35,10 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IAnalyticsService analyticsService;
         private readonly ITimeService timeService;
         private readonly IPermissionsChecker permissionsChecker;
+        private readonly IBackgroundService backgroundService;
+
+        private DateTimeOffset nextRecalculationTimestamp;
+        private Subject<Unit> recalculationRequested = new Subject<Unit>();
 
         public IObservable<IImmutableList<Suggestion>> Suggestions { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
@@ -74,8 +81,18 @@ namespace Toggl.Core.UI.ViewModels
 
             StartTimeEntry = rxActionFactory.FromObservable<Suggestion, IThreadSafeTimeEntry>(startTimeEntry);
 
+            nextRecalculationTimestamp = timeService.CurrentDateTime + recalculatePeriod;
+
+            var recalculateSuggestionsPeriodicTrigger = timeService.CurrentDateTimeObservable
+                .Where(time => time >= nextRecalculationTimestamp)
+                .Do(_ => nextRecalculationTimestamp += recalculatePeriod)
+                .Track(analyticsService.SuggestionsRecalculatedPeriodically)
+                .SelectUnit();
+
             Suggestions = interactorFactory.ObserveWorkspaceOrTimeEntriesChanges().Execute()
                 .StartWith(Unit.Default)
+                .Merge(recalculateSuggestionsPeriodicTrigger)
+                .Merge(recalculationRequested)
                 .SelectMany(_ => getSuggestions())
                 .WithLatestFrom(permissionsChecker.CalendarPermissionGranted, (suggestions, isCalendarAuthorized) => (suggestions, isCalendarAuthorized))
                 .Do(item => trackPresentedSuggestions(item.suggestions, item.isCalendarAuthorized))
@@ -132,6 +149,12 @@ namespace Toggl.Core.UI.ViewModels
             var offset = currentTime - startTime;
 
             analyticsService.Track(new CalendarSuggestionContinuedEvent(offset));
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            recalculationRequested.OnNext(Unit.Default);
         }
     }
 }
