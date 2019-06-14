@@ -4,8 +4,11 @@ namespace Toggl.Core.Reports
 {
     public sealed class ProjectSummaryReport
     {
+        public static readonly ProjectSummaryReport Empty =
+            new ProjectSummaryReport(new ChartSegment[0], 0);
+
         private const float textDrawingThreshold = 0.1f;
-        
+
         public float TotalSeconds { get; }
 
         public float BillablePercentage { get; }
