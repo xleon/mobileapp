@@ -345,7 +345,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task handleNoDefaultWorkspaceState()
         {
-            if (accessRestrictionStorage.HasNoDefaultWorkspace() && !noDefaultWorkspaceViewPresented)
+            if (!accessRestrictionStorage.HasNoWorkspace() && accessRestrictionStorage.HasNoDefaultWorkspace() && !noDefaultWorkspaceViewPresented)
             {
                 noDefaultWorkspaceViewPresented = true;
                 await Navigate<SelectDefaultWorkspaceViewModel, Unit>();
