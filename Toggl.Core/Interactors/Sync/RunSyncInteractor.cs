@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Linq;
 using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
+using Toggl.Core.Extensions;
 using Toggl.Core.Models;
 using Toggl.Core.Sync;
 using Toggl.Shared;
@@ -44,7 +45,9 @@ namespace Toggl.Core.Interactors
             analyticsService.PushNotificationSyncStarted.Track(sourceState.ToString());
 
             var syncAction = sourceState == PushNotificationSyncSourceState.Foreground
-                ? syncManager.ForceFullSync()
+                ? syncManager.PullTimeEntries()
+                    .LastAsync()
+                    .ThenExecute(syncManager.ForceFullSync)
                 : syncManager.PullTimeEntries();
 
             return syncAction.LastAsync()
