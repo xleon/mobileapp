@@ -24,6 +24,14 @@ namespace Toggl.Droid.Fragments
             var view = inflater.Inflate(Resource.Layout.ReportsFragment, container, false);
             InitializeViews(view);
             setupToolbar();
+            
+            return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
+            ViewModel?.CalendarViewModel.AttachView(this);
 
             selectWorkspaceFAB.Rx().Tap()
                 .Subscribe(ViewModel.SelectWorkspace.Inputs)
@@ -62,21 +70,12 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             toolbarCurrentDateRangeText.Rx().Tap()
-                .Throttle(toggleCalendarThrottleDuration)
                 .Subscribe(toggleCalendar)
                 .DisposedBy(DisposeBag);
 
             ViewModel.CurrentDateRangeStringObservable
                 .Subscribe(toolbarCurrentDateRangeText.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
-
-            return view;
-        }
-
-        public override void OnViewCreated(View view, Bundle savedInstanceState)
-        {
-            base.OnViewCreated(view, savedInstanceState);
-            ViewModel?.CalendarViewModel.AttachView(this);
         }
 
         public override void OnStart()
@@ -117,7 +116,7 @@ namespace Toggl.Droid.Fragments
 
         public void ScrollToTop()
         {
-            reportsRecyclerView.SmoothScrollToPosition(0);
+            reportsRecyclerView?.SmoothScrollToPosition(0);
         }
 
         private void setupReportsRecyclerView()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.Util;
 using Android.Support.V7.Widget;
@@ -108,14 +109,11 @@ namespace Toggl.Droid.Adapters
         private void processUpdate(IList<T> newItems)
         {
             var oldItems = items;
-            var handler = new Handler();
+            var handler = new Handler(Looper.MainLooper);
             Task.Run(() =>
             {
                 var diffResult = DiffUtil.CalculateDiff(new BaseDiffCallBack(oldItems, newItems, diffingStrategy));
-                handler.Post(() =>
-                {
-                    dispatchUpdates(newItems, diffResult);
-                });
+                handler.Post(() => dispatchUpdates(newItems, diffResult));
             });
         }
 
