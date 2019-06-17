@@ -70,7 +70,6 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             toolbarCurrentDateRangeText.Rx().Tap()
-                .Throttle(toggleCalendarThrottleDuration)
                 .Subscribe(toggleCalendar)
                 .DisposedBy(DisposeBag);
 
