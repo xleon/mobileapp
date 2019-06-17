@@ -111,7 +111,7 @@ namespace Toggl.Core.Interactors
         private IObservable<IClient> findClient(IProject project)
             => project != null && project.ClientId.HasValue
                 ? clientsRepository.GetAll()
-                    .SelectMany(CommonFunctions.Identity)
+                    .Flatten()
                     .Where(c => c.Id == project.ClientId.Value)
                     .FirstOrDefaultAsync()
                 : Observable.Return<IClient>(null);
@@ -149,7 +149,7 @@ namespace Toggl.Core.Interactors
                     ? databaseProjectsObservable
                     : databaseProjectsObservable
                         .Merge(searchMemoryAndApi(workspaceId, notInDatabaseIds))
-                        .SelectMany(CommonFunctions.Identity)
+                        .Flatten()
                         .ToList();
             });
 
@@ -172,7 +172,7 @@ namespace Toggl.Core.Interactors
                     ? memoryProjectsObservable
                     : memoryProjectsObservable
                         .Merge(searchApi(workspaceId, notInMemoryIds))
-                        .SelectMany(CommonFunctions.Identity)
+                        .Flatten()
                         .ToList();
             });
 

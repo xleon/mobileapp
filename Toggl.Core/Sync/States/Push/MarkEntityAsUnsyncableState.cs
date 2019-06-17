@@ -48,7 +48,7 @@ namespace Toggl.Core.Sync.States.Push
         private IObservable<ITransition> markAsUnsyncable(T entity, string reason)
             => dataSource
                 .OverwriteIfOriginalDidNotChange(entity, createUnsyncableFrom(entity, reason))
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .OfType<UpdateResult<T>>()
                 .Select(result => result.Entity)
                 .DefaultIfEmpty(entity)

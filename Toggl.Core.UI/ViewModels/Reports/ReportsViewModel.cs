@@ -385,12 +385,12 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             var aboveStandAloneThresholdSegments = groupedData
                 .Where(group => group.Key)
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .ToList();
 
             var otherProjectsCandidates = groupedData
                 .Where(group => !group.Key)
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .ToList();
 
             var finalOtherProjects = otherProjectsCandidates

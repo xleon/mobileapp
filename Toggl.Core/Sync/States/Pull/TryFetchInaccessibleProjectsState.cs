@@ -64,7 +64,7 @@ namespace Toggl.Core.Sync.States.Pull
             => projectsApi.Search(
                     workspaceId: projectsToFetch.Key,
                     projectIds: projectsToFetch.Select(p => p.Id).ToArray())
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .Select(Project.Clean)
                 .SelectMany(dataSource.Update)
                 .ToList()

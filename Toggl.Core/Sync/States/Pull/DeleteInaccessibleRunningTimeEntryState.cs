@@ -28,7 +28,7 @@ namespace Toggl.Core.Sync.States.Pull
         public IObservable<ITransition> Start(IFetchObservables fetch)
             => dataSource
                 .GetAll(inaccessibleSyncedRunningTimeEntry, includeInaccessibleEntities: true)
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .SelectMany(deleteIfNeeded)
                 .ToList()
                 .Select(_ => Done.Transition(fetch));

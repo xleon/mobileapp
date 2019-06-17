@@ -28,7 +28,7 @@ namespace Toggl.Core.Sync.States.Pull
             var fetchObservables = stateParams.FetchObservables;
 
             return Observable.Return(workspaces)
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .SelectMany(markAsInaccessible)
                 .ToList()
                 .SelectValue(Done.Transition(fetchObservables));

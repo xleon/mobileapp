@@ -87,7 +87,7 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
         {
             var interactor = new GetProjectsAutocompleteSuggestions(dataSource, new string[0]);
 
-            var suggestions = await interactor.Execute().SelectMany(s => s).ToList();
+            var suggestions = await interactor.Execute().Flatten().ToList();
 
             suggestions
                 .Select(s => ((ProjectSuggestion)s).ProjectId)

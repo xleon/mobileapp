@@ -101,7 +101,7 @@ namespace Toggl.Shared.Extensions
             executionObservables
                 .Amb(error)
                 .Take(1)
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .Subscribe(subject)
                 .DisposedBy(disposeBag);
 
