@@ -18,6 +18,8 @@ namespace Toggl.Core.Tests.Sync.Helpers
     {
         private readonly ISyncErrorHandlingService syncErrorHandlingService;
 
+        public ITogglApi TogglApi { get; }
+
         public IScheduler Scheduler { get; }
 
         public ITimeService TimeService { get; }
@@ -38,8 +40,14 @@ namespace Toggl.Core.Tests.Sync.Helpers
 
         public IAutomaticSyncingService AutomaticSyncingService { get; } = Substitute.For<IAutomaticSyncingService>();
 
+        public IKeyValueStorage KeyValueStorage { get; } = Substitute.For<IKeyValueStorage>();
+
+        public IPushNotificationsTokenService PushNotificationsTokenService { get; } =
+            Substitute.For<IPushNotificationsTokenService>();
+
         public AppServices(ITogglApi api, ITogglDatabase database)
         {
+            TogglApi = api;
             Scheduler = System.Reactive.Concurrency.Scheduler.Default;
             TimeService = new TimeService(Scheduler);
 
@@ -52,8 +60,8 @@ namespace Toggl.Core.Tests.Sync.Helpers
                 AnalyticsServiceSubstitute);
 
             var dependencyContainer = new TestDependencyContainer();
-            dependencyContainer.MockKeyValueStorage = Substitute.For<IKeyValueStorage>();
-            dependencyContainer.MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>();
+            dependencyContainer.MockKeyValueStorage = KeyValueStorage;
+            dependencyContainer.MockPushNotificationsTokenService = PushNotificationsTokenService;
             dependencyContainer.MockTimeService = TimeService;
 
             SyncManager = TogglSyncManager.CreateSyncManager(

@@ -12,6 +12,8 @@ namespace Toggl.Networking.Network
             this.baseUrl = baseUrl;
         }
 
+        public Endpoint Get => Endpoint.Get(baseUrl, "me/push_services");
+
         public Endpoint Subscribe => Endpoint.Post(baseUrl, "me/push_services");
 
         public Endpoint Unsubscribe => Endpoint.Delete(baseUrl, "me/push_services");

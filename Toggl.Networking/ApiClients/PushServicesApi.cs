@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
 using Toggl.Shared;
@@ -20,6 +23,10 @@ namespace Toggl.Networking.ApiClients
         {
             this.endPoints = endPoints.PushServices;
         }
+
+        public IObservable<List<PushNotificationsToken>> GetAll()
+            => SendRequest<List<string>>(endPoints.Get, AuthHeader)
+                .Select(list => list.Select(token => new PushNotificationsToken(token)).ToList());
 
         public IObservable<Unit> Subscribe(PushNotificationsToken token)
             => SendRequest(endPoints.Subscribe, AuthHeader, json(token)).SelectUnit();
