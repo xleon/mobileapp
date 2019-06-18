@@ -11,8 +11,10 @@ namespace Toggl.iOS.Presentation
     {
         protected override HashSet<Type> AcceptedViewModels { get; } = new HashSet<Type>
         {
+            typeof(AboutViewModel),
             typeof(CalendarSettingsViewModel),
             typeof(ForgotPasswordViewModel),
+            typeof(LicensesViewModel),
             typeof(NotificationSettingsViewModel),
             typeof(SettingsViewModel),
             typeof(SiriShortcutsCustomTimeEntryViewModel),
