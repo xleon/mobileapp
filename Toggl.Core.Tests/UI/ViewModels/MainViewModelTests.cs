@@ -56,7 +56,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     SchedulerProvider,
                     StopwatchProvider,
                     RxActionFactory,
-                    PermissionsChecker);
+                    PermissionsChecker,
+                    BackgroundService);
 
                 vm.Initialize();
 
@@ -105,7 +106,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useSchedulerProvider,
                 bool useStopwatchProvider,
                 bool useRxActionFactory,
-                bool usePermissionsChecker)
+                bool usePermissionsChecker,
+                bool useBackgroundService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
@@ -122,6 +124,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var permissionsChecker = usePermissionsChecker ? PermissionsChecker : null;
+                var backgroundService = useBackgroundService ? BackgroundService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -139,7 +142,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         schedulerProvider,
                         stopwatchProvider,
                         rxActionFactory,
-                        permissionsChecker);
+                        permissionsChecker,
+                        backgroundService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();

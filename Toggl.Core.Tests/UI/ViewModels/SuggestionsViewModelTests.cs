@@ -21,6 +21,7 @@ using Toggl.Core.Tests.TestExtensions;
 using System.Collections.Immutable;
 using Toggl.Core.Analytics;
 using System.Collections.Generic;
+using Toggl.Core.Sync;
 using static Toggl.Core.Analytics.CalendarSuggestionProviderState;
 using static Toggl.Core.Analytics.SuggestionsPresentedEvent;
 
@@ -31,7 +32,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class SuggestionsViewModelTest : BaseViewModelTests<SuggestionsViewModel>
         {
             protected override SuggestionsViewModel CreateViewModel()
-                => new SuggestionsViewModel(DataSource, InteractorFactory, OnboardingStorage, SchedulerProvider, RxActionFactory, AnalyticsService, TimeService, PermissionsChecker, NavigationService);
+                => new SuggestionsViewModel(DataSource, InteractorFactory, OnboardingStorage, SchedulerProvider, RxActionFactory, AnalyticsService, TimeService, PermissionsChecker, NavigationService, BackgroundService, UserPreferences, SyncManager);
 
             protected override void AdditionalViewModelSetup()
             {
@@ -55,7 +56,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useAnalyticsService,
                 bool useTimeService,
                 bool usePermissionsChecker,
-                bool useNavigationService)
+                bool useNavigationService,
+                bool useBackgroundService,
+                bool useUserPreferences,
+                bool useSyncManager)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
@@ -66,9 +70,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var timeService = useTimeService ? TimeService : null;
                 var permissionsChecker = usePermissionsChecker ? PermissionsChecker : null;
                 var navigationService = useNavigationService ? NavigationService : null;
+                var backgroundService = useBackgroundService ? BackgroundService : null;
+                var userPreferences = useUserPreferences ? UserPreferences : null;
+                var syncManager = useSyncManager ? SyncManager : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService);
+                    () => new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -89,47 +96,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var suggestions = observer.Messages.First().Value.Value;
                 suggestions.Should().HaveCount(0);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ReloadsSuggestionsWhenWorkspacesUpdate()
-            {
-                var workspaceUpdatedSubject = new Subject<Unit>();
-                InteractorFactory.ObserveWorkspaceOrTimeEntriesChanges().Execute()
-                    .Returns(workspaceUpdatedSubject.AsObservable());
-
-                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
-
-                await ViewModel.Initialize();
-                ViewModel.Suggestions.Subscribe(observer);
-
-                workspaceUpdatedSubject.OnNext(Unit.Default);
-
-                TestScheduler.Start();
-
-                observer.Messages.Should().HaveCount(2);
-                observer.Messages.First().Value.Value.Should().HaveCount(0);
-                observer.LastEmittedValue().Should().HaveCount(0);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ReloadsSuggestionsWhenTimeEntriesUpdate()
-            {
-                var changesSubject = new Subject<Unit>();
-                InteractorFactory.ObserveWorkspaceOrTimeEntriesChanges().Execute().Returns(changesSubject);
-
-                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
-
-                await ViewModel.Initialize();
-                ViewModel.Suggestions.Subscribe(observer);
-
-                changesSubject.OnNext(Unit.Default);
-
-                TestScheduler.Start();
-
-                observer.Messages.Should().HaveCount(2);
-                observer.Messages.First().Value.Value.Should().HaveCount(0);
-                observer.LastEmittedValue().Should().HaveCount(0);
             }
 
             [Fact, LogIfTooSlow]
@@ -231,6 +197,62 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
                 observer.Messages.Should().HaveCount(1);
                 subject.OnNext(now + TimeSpan.FromMinutes(10));
+                TestScheduler.Start();
+                observer.Messages.Should().HaveCount(2);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task RecalculatesSuggestionsAfterSync()
+            {
+                prepareSuggestionsForSuggestionsPresentedEvent();
+                var subject = new Subject<SyncProgress>();
+                SyncManager.ProgressObservable.Returns(subject);
+                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
+
+                await ViewModel.Initialize();
+                ViewModel.Suggestions.Subscribe(observer);
+                TestScheduler.Start();
+
+                observer.Messages.Should().HaveCount(1);
+                subject.OnNext(SyncProgress.Synced);
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(501).Ticks);
+                observer.Messages.Should().HaveCount(2);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task RecalculatesSuggestionsAfterAfterReturningFromBackground()
+            {
+                prepareSuggestionsForSuggestionsPresentedEvent();
+                var subject = new Subject<TimeSpan>();
+                BackgroundService.AppResumedFromBackground.Returns(subject);
+                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
+
+                await ViewModel.Initialize();
+                ViewModel.Suggestions.Subscribe(observer);
+                subject.OnNext(TimeSpan.Zero); // the app start event
+                TestScheduler.Start();
+
+                observer.Messages.Should().HaveCount(1);
+                subject.OnNext(TimeSpan.Zero);
+                TestScheduler.Start();
+                observer.Messages.Should().HaveCount(2);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task RecalculatesSuggestionsAfterAfterUserSelectedCalendarsChange()
+            {
+                prepareSuggestionsForSuggestionsPresentedEvent();
+                var subject = new Subject<List<string>>();
+                UserPreferences.EnabledCalendars.Returns(subject);
+                var observer = TestScheduler.CreateObserver<IImmutableList<Suggestion>>();
+
+                await ViewModel.Initialize();
+                ViewModel.Suggestions.Subscribe(observer);
+                subject.OnNext(new List<string> { "" }); // the app start event
+                TestScheduler.Start();
+
+                observer.Messages.Should().HaveCount(1);
+                subject.OnNext(new List<string> { "" });
                 TestScheduler.Start();
                 observer.Messages.Should().HaveCount(2);
             }

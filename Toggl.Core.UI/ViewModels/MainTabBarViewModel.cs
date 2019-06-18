@@ -97,7 +97,8 @@ namespace Toggl.Core.UI.ViewModels
                 schedulerProvider,
                 stopwatchProvider,
                 rxActionFactory,
-                permissionsChecker);
+                permissionsChecker,
+                backgroundService);
 
             reportsViewModel = new ReportsViewModel(
                 dataSource,

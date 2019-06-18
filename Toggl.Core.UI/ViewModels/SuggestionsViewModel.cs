@@ -17,6 +17,7 @@ using Toggl.Core.UI.Services;
 using Toggl.Core.UI.Navigation;
 using System.Reactive.Subjects;
 using Toggl.Core.Extensions;
+using Toggl.Core.Sync;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -24,6 +25,7 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class SuggestionsViewModel : ViewModel
     {
         private const int suggestionCount = 3;
+        private static readonly TimeSpan recalculationThrottleDuration = TimeSpan.FromMilliseconds(500);
 
         private readonly TimeSpan recalculatePeriod = TimeSpan.FromMinutes(10);
 
@@ -36,6 +38,8 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ITimeService timeService;
         private readonly IPermissionsChecker permissionsChecker;
         private readonly IBackgroundService backgroundService;
+        private readonly IUserPreferences userPreferences;
+        private readonly ISyncManager syncManager;
 
         private DateTimeOffset nextRecalculationTimestamp;
         private Subject<Unit> recalculationRequested = new Subject<Unit>();
@@ -53,7 +57,10 @@ namespace Toggl.Core.UI.ViewModels
             IAnalyticsService analyticsService,
             ITimeService timeService,
             IPermissionsChecker permissionsChecker,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            IBackgroundService backgroundService,
+            IUserPreferences userPreferences,
+            ISyncManager syncManager)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -64,6 +71,9 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
+            Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
+            Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
+            Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
 
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
@@ -73,6 +83,9 @@ namespace Toggl.Core.UI.ViewModels
             this.analyticsService = analyticsService;
             this.timeService = timeService;
             this.permissionsChecker = permissionsChecker;
+            this.backgroundService = backgroundService;
+            this.userPreferences = userPreferences;
+            this.syncManager = syncManager;
         }
 
         public override Task Initialize()
@@ -89,10 +102,25 @@ namespace Toggl.Core.UI.ViewModels
                 .Track(analyticsService.SuggestionsRecalculatedPeriodically)
                 .SelectUnit();
 
-            Suggestions = interactorFactory.ObserveWorkspaceOrTimeEntriesChanges().Execute()
+            var appResumedFromBackground = backgroundService
+                .AppResumedFromBackground
+                .SelectUnit()
+                .Skip(1);
+
+            var userCalendarPreferencesChanged = userPreferences
+                .EnabledCalendars
+                .SelectUnit()
+                .Skip(1);
+
+            Suggestions = syncManager.ProgressObservable
+                .Where(progress => progress != SyncProgress.Syncing && progress != SyncProgress.Unknown)
+                .Throttle(recalculationThrottleDuration, schedulerProvider.DefaultScheduler)
+                .SelectUnit()
                 .StartWith(Unit.Default)
                 .Merge(recalculateSuggestionsPeriodicTrigger)
                 .Merge(recalculationRequested)
+                .Merge(appResumedFromBackground)
+                .Merge(userCalendarPreferencesChanged)
                 .SelectMany(_ => getSuggestions())
                 .WithLatestFrom(permissionsChecker.CalendarPermissionGranted, (suggestions, isCalendarAuthorized) => (suggestions, isCalendarAuthorized))
                 .Do(item => trackPresentedSuggestions(item.suggestions, item.isCalendarAuthorized))
