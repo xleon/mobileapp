@@ -282,8 +282,10 @@ namespace Toggl.Droid.Fragments
         {
             switch (syncProgress)
             {
-                case Failed:
                 case Unknown:
+                    return;
+
+                case Failed:
                 case OfflineModeDetected:
 
                     var errorMessage = syncProgress == OfflineModeDetected
