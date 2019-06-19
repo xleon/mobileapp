@@ -17,13 +17,10 @@ namespace Toggl.Core.UI.Navigation
             this.dependencyContainer = dependencyContainer;
         }
 
-        public async Task<ViewModel<TInput, TOutput>> Load<TInput, TOutput>(Type viewModelType, TInput payload)
-        {
-            var viewModel = (ViewModel<TInput, TOutput>)findViewModel(viewModelType);
-            await viewModel.Initialize(payload);
-            return viewModel;
-        }
-
+        public TViewModel Load<TViewModel>()
+            where TViewModel : IViewModel
+            => (TViewModel)findViewModel(typeof(TViewModel));
+            
         private IViewModel findViewModel(Type viewModelType)
         {
             if (viewModelType == typeof(EditDurationViewModel))

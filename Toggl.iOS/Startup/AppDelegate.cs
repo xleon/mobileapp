@@ -103,8 +103,10 @@ namespace Toggl.iOS
                     navigationService.Navigate<TokenResetViewModel>(null);
                     return;
                 case AccessLevel.LoggedIn:
-                    var viewModel = IosDependencyContainer.Instance.ViewModelLoader
-                    .Load<Unit, Unit>(typeof(MainTabBarViewModel), Unit.Default).GetAwaiter().GetResult();
+                    var viewModel = IosDependencyContainer.Instance
+                        .ViewModelLoader
+                        .Load<MainTabBarViewModel>();
+                    viewModel.Initialize();
                     Window.RootViewController = ViewControllerLocator.GetViewController(viewModel);
                     return;
             }
