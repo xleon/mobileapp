@@ -40,6 +40,7 @@ namespace Toggl.Core.Tests.Sync
             dependencyContainer.MockKeyValueStorage = Substitute.For<IKeyValueStorage>();
             dependencyContainer.MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>();
             dependencyContainer.MockTimeService = Substitute.For<ITimeService>();
+            dependencyContainer.MockRemoteConfigService = Substitute.For<IRemoteConfigService>();
 
             configurator.AllDistinctStatesInOrder.Add(entryPoints);
 

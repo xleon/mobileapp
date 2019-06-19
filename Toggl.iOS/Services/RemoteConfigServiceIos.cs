@@ -22,7 +22,7 @@ namespace Toggl.iOS.Services
             => FetchConfiguration(extractRatingViewConfiguration);
 
         public IObservable<PushNotificationsConfiguration> PushNotificationsConfiguration
-            => FetchConfiguration(extractPushNotificationsConfiguration);
+            => Observable.Return(new PushNotificationsConfiguration(false, false));
         
         private RatingViewConfiguration extractRatingViewConfiguration(RemoteConfig remoteConfig) 
             => new RatingViewConfiguration(

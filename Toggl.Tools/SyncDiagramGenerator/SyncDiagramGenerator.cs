@@ -227,6 +227,7 @@ namespace SyncDiagramGenerator
             dependencyContainer.MockKeyValueStorage = Substitute.For<IKeyValueStorage>();
             dependencyContainer.MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>();
             dependencyContainer.MockTimeService = Substitute.For<ITimeService>();
+            dependencyContainer.MockRemoteConfigService = Substitute.For<IRemoteConfigService>();
 
             TogglSyncManager.ConfigureTransitions(
                 configurator,

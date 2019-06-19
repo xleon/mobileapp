@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Firebase.Iid;
 using Toggl.Core.Services;
 using Toggl.Shared;
@@ -10,7 +11,7 @@ namespace Toggl.Droid.Services
 
         public void InvalidateCurrentToken()
         {
-            FirebaseInstanceId.Instance.DeleteInstanceId();
+            Task.Run(() => FirebaseInstanceId.Instance.DeleteInstanceId());
         }
 
         private PushNotificationsToken? getToken()

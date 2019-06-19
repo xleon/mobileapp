@@ -1,10 +1,10 @@
 using System;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Android.App;
 using Firebase.Iid;
-using Toggl.Core;
-using Toggl.Networking;
+using Toggl.Core.Extensions;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Services
@@ -28,9 +28,12 @@ namespace Toggl.Droid.Services
             var userLoggedIn = dependencyContainer.UserAccessManager.CheckIfLoggedIn();
             if (!userLoggedIn) return;
 
+            var shouldBeSubscribedToPushNotifications = dependencyContainer.RemoteConfigService.ShouldBeSubscribedToPushNotifications();
             var subscribeToPushNotificationsInteractor = dependencyContainer.InteractorFactory.SubscribeToPushNotifications();
-            subscribeToPushNotificationsInteractor
-                .Execute()
+
+            shouldBeSubscribedToPushNotifications.SelectMany(willSubscribe => willSubscribe
+                    ? subscribeToPushNotificationsInteractor.Execute().SelectUnit()
+                    : Observable.Return(Unit.Default))
                 .ObserveOn(dependencyContainer.SchedulerProvider.BackgroundScheduler)
                 .Subscribe(_ => StopSelf())
                 .DisposedBy(disposeBag);

@@ -27,6 +27,9 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
         [Fact, LogIfTooSlow]
         public async Task ClearsTheKeyValueStorage()
         {
+            PushNotificationsTokenService.Token.Returns(new PushNotificationsToken("token"));
+            KeyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+
             await interactor.Execute();
 
             KeyValueStorage.Received().Remove(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey);
@@ -35,6 +38,9 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
         [Fact, LogIfTooSlow]
         public async Task InvalidatesTheToken()
         {
+            PushNotificationsTokenService.Token.Returns(new PushNotificationsToken("token"));
+            KeyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+
             await interactor.Execute();
 
             PushNotificationsTokenService.Received().InvalidateCurrentToken();
@@ -45,6 +51,7 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
         {
             var token = new PushNotificationsToken("token");
             PushNotificationsTokenService.Token.Returns(token);
+            KeyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
 
             await interactor.Execute();
 

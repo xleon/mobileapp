@@ -33,17 +33,22 @@ namespace Toggl.Core.Interactors
         public IObservable<Unit> Execute()
         {
             var currentToken = pushNotificationsTokenService.Token;
+            var registeredToken = keyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey);
 
-            keyValueStorage.Remove(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey);
-            pushNotificationsTokenService.InvalidateCurrentToken();
-
-            if (currentToken.HasValue)
+            if (currentToken.HasValue && currentToken.Value.ToString() == registeredToken)
             {
                 return pushServicesApi.Unsubscribe(currentToken.Value)
-                    .Catch<Unit, Exception>(_ => Observable.Return(Unit.Default));
+                    .Catch<Unit, Exception>(_ => Observable.Return(Unit.Default))
+                    .Do(_ => clearTokenReferences());
             }
 
             return Observable.Return(Unit.Default);
+        }
+
+        private void clearTokenReferences()
+        {
+            keyValueStorage.Remove(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey);
+            pushNotificationsTokenService.InvalidateCurrentToken();
         }
     }
 }

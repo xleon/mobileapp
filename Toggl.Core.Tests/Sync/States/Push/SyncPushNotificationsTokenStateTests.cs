@@ -21,7 +21,7 @@ namespace Toggl.Core.Tests.Sync.States.Push
         {
             [Theory]
             [ConstructorData]
-            public void ThrowsWhenArgumentIsNull(bool useKeyValueStorage, bool useTogglApi, bool usePushNotificationsTokenService, bool useTimeService)
+            public void ThrowsWhenArgumentIsNull(bool useKeyValueStorage, bool useTogglApi, bool usePushNotificationsTokenService, bool useTimeService, bool useRemoteConfig)
             {
                 var keyValueStorage = useKeyValueStorage ? Substitute.For<IKeyValueStorage>() : null;
                 var togglApi = useTogglApi ? Substitute.For<ITogglApi>() : null;
@@ -29,8 +29,9 @@ namespace Toggl.Core.Tests.Sync.States.Push
                     ? Substitute.For<IPushNotificationsTokenService>()
                     : null;
                 var timeService = useTimeService ? Substitute.For<ITimeService>() : null;
+                var remoteConfig = useRemoteConfig ? Substitute.For<IRemoteConfigService>() : null;
 
-                Action constructor = () => new SyncPushNotificationsTokenState(keyValueStorage, togglApi, pushNotificationsTokenService, timeService);
+                Action constructor = () => new SyncPushNotificationsTokenState(keyValueStorage, togglApi, pushNotificationsTokenService, timeService, remoteConfig);
 
                 constructor.Should().Throw<ArgumentNullException>();
             }
@@ -42,12 +43,13 @@ namespace Toggl.Core.Tests.Sync.States.Push
             private readonly ITogglApi togglApi = Substitute.For<ITogglApi>();
             private readonly IPushNotificationsTokenService pushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>();
             private readonly ITimeService timeService = Substitute.For<ITimeService>();
+            private readonly IRemoteConfigService remoteConfigService = Substitute.For<IRemoteConfigService>();
 
             private readonly SyncPushNotificationsTokenState state;
 
             public TheStartMehtod()
             {
-                state = new SyncPushNotificationsTokenState(keyValueStorage, togglApi, pushNotificationsTokenService, timeService);
+                state = new SyncPushNotificationsTokenState(keyValueStorage, togglApi, pushNotificationsTokenService, timeService, remoteConfigService);
             }
 
             [Fact]
@@ -56,6 +58,7 @@ namespace Toggl.Core.Tests.Sync.States.Push
                 var unit = Observable.Return(Unit.Default);
                 togglApi.PushServices.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(unit);
                 keyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+                configureRemoteConfig(shouldSubscribeToPushes: true);
 
                 var transition = await state.Start();
 
@@ -66,6 +69,7 @@ namespace Toggl.Core.Tests.Sync.States.Push
             public async Task DoesNotMakeAnApiRequestIfThereIsNotApiToken()
             {
                 pushNotificationsTokenService.Token.Returns(default(PushNotificationsToken));
+                configureRemoteConfig(shouldSubscribeToPushes: true);
 
                 await state.Start();
 
@@ -84,16 +88,57 @@ namespace Toggl.Core.Tests.Sync.States.Push
                 await togglApi.PushServices.DidNotReceive().Subscribe(Arg.Any<PushNotificationsToken>());
             }
 
+            [Fact, LogIfTooSlow]
+            public async Task UnsubscribeIfRemoteConfigSaysTheAppShouldntBeSubscribedToPushNotifications()
+            {
+                var unit = Observable.Return(Unit.Default);
+                togglApi.PushServices.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(unit);
+                togglApi.PushServices.Unsubscribe(Arg.Any<PushNotificationsToken>()).Returns(unit);
+                pushNotificationsTokenService.Token.Returns(new PushNotificationsToken("token"));
+                keyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+                configureRemoteConfig(shouldSubscribeToPushes: false);
+
+                await state.Start();
+
+                await togglApi.PushServices.DidNotReceive().Subscribe(Arg.Any<PushNotificationsToken>());
+                await togglApi.PushServices.Received().Unsubscribe(Arg.Any<PushNotificationsToken>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task SubscribeIfRemoteConfigSaysTheAppShouldBeSubscribedToPushNotifications()
+            {
+                var unit = Observable.Return(Unit.Default);
+                togglApi.PushServices.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(unit);
+                togglApi.PushServices.Unsubscribe(Arg.Any<PushNotificationsToken>()).Returns(unit);
+                pushNotificationsTokenService.Token.Returns(new PushNotificationsToken("token"));
+                keyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+                configureRemoteConfig(shouldSubscribeToPushes: true);
+
+                await state.Start();
+
+                await togglApi.PushServices.Received().Subscribe(Arg.Any<PushNotificationsToken>());
+                await togglApi.PushServices.DidNotReceive().Unsubscribe(Arg.Any<PushNotificationsToken>());
+            }
+
             [Fact]
             public async Task ReturnsDoneEvenIfApiFailsThrows()
             {
                 var throwingObservable = Observable.Throw<Unit>(new Exception());
                 togglApi.PushServices.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(throwingObservable);
                 keyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+                configureRemoteConfig(shouldSubscribeToPushes: true);
 
                 var transition = await state.Start();
 
                 transition.Result.Should().Be(state.Done);
+            }
+
+            private void configureRemoteConfig(bool shouldSubscribeToPushes)
+            {
+                remoteConfigService.PushNotificationsConfiguration
+                    .Returns(Observable.Return(
+                        new PushNotificationsConfiguration(shouldSubscribeToPushes, true))
+                    );
             }
         }
     }

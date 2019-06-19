@@ -10,6 +10,7 @@ using Toggl.Core.Analytics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Interactors.UserAccess;
 using Toggl.Core.Sync;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.UserAccess
@@ -140,6 +141,9 @@ namespace Toggl.Core.Tests.Interactors.UserAccess
         [Fact, LogIfTooSlow]
         public async Task ClearsPushNotificationsToken()
         {
+            PushNotificationsTokenService.Token.Returns(new PushNotificationsToken("token"));
+            KeyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+
             await interactor.Execute();
 
             PushNotificationsTokenService.Received().InvalidateCurrentToken();

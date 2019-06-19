@@ -1,4 +1,5 @@
 using System;
+using System.Reactive;
 using System.Reactive.Linq;
 using Firebase.CloudMessaging;
 using Foundation;
@@ -26,12 +27,14 @@ namespace Toggl.iOS
             var interactorFactory = dependencyContainer.InteractorFactory;
 
             if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
-            {
                 return;
-            }
 
-            interactorFactory.SubscribeToPushNotifications().Execute()
-                .Take(1)
+            var shouldBeSubscribedToPushNotifications = dependencyContainer.RemoteConfigService.ShouldBeSubscribedToPushNotifications();
+            var subscribeToPushNotificationsInteractor = interactorFactory.SubscribeToPushNotifications();
+
+            shouldBeSubscribedToPushNotifications.SelectMany(willSubscribe => willSubscribe
+                    ? subscribeToPushNotificationsInteractor.Execute().Take(1).SelectUnit()
+                    : Observable.Return(Unit.Default))
                 .Subscribe();
         }
 
