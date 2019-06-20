@@ -15,6 +15,7 @@ using Toggl.Droid.Activities;
 using Toggl.Droid.BroadcastReceivers;
 using Toggl.Droid.Presentation;
 using static Android.Content.Intent;
+using System.Threading.Tasks;
 
 namespace Toggl.Droid
 {
@@ -63,9 +64,11 @@ namespace Toggl.Droid
                 Finish();
                 return;
             }
-            
-            clearAllViewModelsAndSetupRootViewModel(dependencyContainer.ViewModelCache, dependencyContainer.ViewModelLoader); 
-            
+
+            clearAllViewModelsAndSetupRootViewModel(
+                dependencyContainer.ViewModelCache,
+                dependencyContainer.ViewModelLoader); 
+
             var navigationUrl = Intent.Data?.ToString() ?? getTrackUrlFromProcessedText();
             if (string.IsNullOrEmpty(navigationUrl))
             {
@@ -81,10 +84,10 @@ namespace Toggl.Droid
         private void clearAllViewModelsAndSetupRootViewModel(ViewModelCache viewModelCache, ViewModelLoader viewModelLoader)
         {
             viewModelCache.ClearAll();
-            var viewModel = (MainTabBarViewModel)viewModelLoader.Load<Unit, Unit>(typeof(MainTabBarViewModel), Unit.Default)
-                .GetAwaiter()
-                .GetResult();
-            viewModelCache.Cache(viewModel);  
+            var viewModel = viewModelLoader.Load<MainTabBarViewModel>();
+            viewModelCache.Cache(viewModel);
+
+            viewModel.Initialize();
         }
 
         private void registerApplicationLifecycleObserver(IBackgroundService backgroundService)

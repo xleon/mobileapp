@@ -26,7 +26,7 @@ namespace Toggl.Droid.Activities
 
         private void clearOnboardingOnStop()
         {
-            projectTooltip.Dismiss();
+            projectTooltip?.Dismiss();
             projectTooltip = null;
         }
 

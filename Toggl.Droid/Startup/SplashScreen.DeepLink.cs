@@ -1,5 +1,6 @@
 using System;
 using System.Reactive;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.OS;
 using Android.Support.V4.App;
@@ -101,16 +102,16 @@ namespace Toggl.Droid
         }
 
         private void loadAndCacheViewModelWithParams<TViewModelType, TViewModelParams>(TViewModelParams viewModelParams)
+            where TViewModelType : ViewModel<TViewModelParams, Unit>
         {
             var dependencyContainer = AndroidDependencyContainer.Instance;
             var vmLoader = dependencyContainer.ViewModelLoader;
             var vmCache = dependencyContainer.ViewModelCache;
 
-            var viewModel = vmLoader.Load<TViewModelParams, Unit>(typeof(TViewModelType), viewModelParams)
-                .GetAwaiter()
-                .GetResult();
-            
+            var viewModel = vmLoader.Load<TViewModelType>();
             vmCache.Cache(viewModel);
+
+            viewModel.Initialize(viewModelParams);
         }
         
         private Intent createRootActivityIntent(Bundle extras = null)

@@ -225,6 +225,18 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await NavigationService.Received(1).Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
+            
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask DoesNotNavigateToSelectDefaultWorkspaceViewModelWhenTheresNoWorkspaceAvaialable()
+            {
+                AccessRestrictionStorage.HasNoWorkspace().Returns(true);
+                AccessRestrictionStorage.HasNoDefaultWorkspace().Returns(true);
+
+                await ViewModel.ViewAppearingAsync();
+
+                await NavigationService.Received().Navigate<NoWorkspaceViewModel, Unit>(View);
+                await NavigationService.DidNotReceive().Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
+            }
         }
 
         public sealed class TheStartTimeEntryAction : MainViewModelTest

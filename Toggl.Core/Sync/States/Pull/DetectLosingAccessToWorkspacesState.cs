@@ -47,7 +47,7 @@ namespace Toggl.Core.Sync.States.Pull
 
         private IObservable<IThreadSafeWorkspace> allStoredWorkspaces()
             => dataSource.GetAll(ws => ws.Id > 0 && ws.IsInaccessible == false)
-                         .SelectMany(CommonFunctions.Identity);
+                         .Flatten();
 
         private ITransition processLostWorkspaces(
             IEnumerable<IThreadSafeWorkspace> workspaces,

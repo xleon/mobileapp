@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+using System;
 using System.Reactive.Linq;
-using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using Android.Support.V7.App;
@@ -29,6 +27,13 @@ namespace Toggl.Droid.Fragments
             InitializeViews(view);
             setupToolbar();
 
+            return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
+            
             var adapter = new SimpleAdapter<SelectableWorkspaceViewModel>(
                 Resource.Layout.SettingsFragmentWorkspaceCell,
                 WorkspaceSelectionViewHolder.Create
@@ -170,13 +175,11 @@ namespace Toggl.Droid.Fragments
             smartRemindersView.Rx().Tap()
                 .Subscribe(ViewModel.OpenCalendarSmartReminders.Inputs)
                 .DisposedBy(DisposeBag);
-
-            return view;
         }
 
         public void ScrollToTop()
         {
-            scrollView.SmoothScrollTo(0, 0);
+            scrollView?.SmoothScrollTo(0, 0);
         }
 
         private void showFeedbackSuccessToast(bool succeeeded)

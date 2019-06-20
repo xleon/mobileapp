@@ -86,7 +86,7 @@ namespace Toggl.Core.UI.Calendar
             return groupColumns
                 .Select((column, columnIndex) =>
                     column.Select(item => (attributesForItem(item.Item, groupColumns.Count, columnIndex), item.Index)))
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .ToList();
         }
 

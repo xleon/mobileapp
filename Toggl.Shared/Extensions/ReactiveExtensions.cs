@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Toggl.Shared.Extensions
 {
@@ -175,5 +176,11 @@ namespace Toggl.Shared.Extensions
 
         public static IObservable<TOther> SelectLatestFrom<TFirst, TOther>(this IObservable<TFirst> observable, IObservable<TOther> otherObservable)
             => observable.WithLatestFrom(otherObservable, (first, other) => other);
+
+        public static IObservable<T> Flatten<T>(this IObservable<IObservable<T>> observable)
+            => observable.SelectMany(CommonFunctions.Identity);
+
+        public static IObservable<T> Flatten<T>(this IObservable<IEnumerable<T>> observable)
+            => observable.SelectMany(CommonFunctions.Identity);
     }
 }

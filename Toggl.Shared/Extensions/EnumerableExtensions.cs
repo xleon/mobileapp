@@ -107,5 +107,8 @@ namespace Toggl.Shared.Extensions
 
             return hashSet.SetEquals(second);
         }
+
+        public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> observable)
+            => observable.SelectMany(CommonFunctions.Identity);
     }
 }

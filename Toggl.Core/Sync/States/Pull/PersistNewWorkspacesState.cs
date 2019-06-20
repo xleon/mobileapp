@@ -26,7 +26,7 @@ namespace Toggl.Core.Sync.States.Pull
 
         public IObservable<ITransition> Start(IEnumerable<IWorkspace> workspaces)
             => Observable.Return(workspaces)
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .Select(Workspace.Clean)
                 .SelectMany(createOrUpdate)
                 .ToList()

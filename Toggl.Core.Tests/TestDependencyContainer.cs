@@ -13,6 +13,7 @@ using Toggl.Storage.Settings;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Core.UI.Navigation;
+using Toggl.Core.DataSources;
 
 namespace Toggl.Core.UI
 {
@@ -127,5 +128,9 @@ namespace Toggl.Core.UI
         internal ISyncManager MockSyncManager { get; set; }
         protected override ISyncManager CreateSyncManager()
             => MockSyncManager;
+
+        internal ITogglDataSource MockDataSource { get; set; }
+        protected override ITogglDataSource CreateDataSource()
+            => MockDataSource;
     }
 }

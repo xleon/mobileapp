@@ -267,7 +267,7 @@ namespace Toggl.Core.Tests.UI.Transformations
             DateTimeOffset date,
             params IThreadSafeTimeEntry[][] groups)
             => groups
-                .SelectMany(group => group)
+                .Flatten()
                 .GroupBy(_ => date.DateTime)
                 .First();
 
