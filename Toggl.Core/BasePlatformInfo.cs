@@ -24,5 +24,7 @@ namespace Toggl.Core
         public virtual string PhoneModel { get; } = DeviceInfo.Model;
 
         public virtual string OperatingSystem { get; } = $"{DeviceInfo.Platform} {DeviceInfo.VersionString}";
+
+        public virtual ApplicationInstallLocation InstallLocation => ApplicationInstallLocation.Internal;
     }
 }

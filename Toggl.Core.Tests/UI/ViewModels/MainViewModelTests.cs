@@ -56,7 +56,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     AccessRestrictionStorage,
                     SchedulerProvider,
                     StopwatchProvider,
-                    RxActionFactory);
+                    RxActionFactory,
+                    PlatformInfo);
 
                 vm.Initialize();
 
@@ -109,7 +110,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useAccessRestrictionStorage,
                 bool useSchedulerProvider,
                 bool useStopwatchProvider,
-                bool useRxActionFactory)
+                bool useRxActionFactory,
+                bool usePlatformInfo)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
@@ -126,6 +128,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var platformInfo = usePlatformInfo ? PlatformInfo : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -143,7 +146,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         accessRestrictionStorage,
                         schedulerProvider,
                         stopwatchProvider,
-                        rxActionFactory);
+                        rxActionFactory,
+                        platformInfo);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -858,6 +862,27 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     TestScheduler.Start();
                     observer.LastEmittedValue().Should().BeFalse();
+                }
+
+                [Theory, LogIfTooSlow]
+                [InlineData(ApplicationInstallLocation.Internal, Platform.Giskard, true)]
+                [InlineData(ApplicationInstallLocation.External, Platform.Giskard, true)]
+                [InlineData(ApplicationInstallLocation.Unknown, Platform.Giskard, true)]
+                [InlineData(ApplicationInstallLocation.Internal, Platform.Daneel, false)]
+                [InlineData(ApplicationInstallLocation.External, Platform.Daneel, false)]
+                [InlineData(ApplicationInstallLocation.Unknown, Platform.Daneel, false)]
+                public async void TracksApplicationInstallLocation(ApplicationInstallLocation location, Platform platform, bool shouldTrack)
+                {
+                    PlatformInfo.InstallLocation.Returns(location);
+                    PlatformInfo.Platform.Returns(platform);
+
+                    await ViewModel.Initialize();
+                    TestScheduler.Start();
+
+                    if (shouldTrack)
+                        AnalyticsService.ApplicationInstallLocation.Received().Track(location);
+                    else
+                        AnalyticsService.ApplicationInstallLocation.DidNotReceive().Track(location);
                 }
             }
         }

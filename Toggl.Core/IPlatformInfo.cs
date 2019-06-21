@@ -1,4 +1,5 @@
-﻿using Toggl.Networking.Network;
+﻿using Toggl.Core.Analytics;
+using Toggl.Networking.Network;
 
 namespace Toggl.Core
 {
@@ -13,6 +14,8 @@ namespace Toggl.Core
         string OperatingSystem { get; }
         string TimezoneIdentifier { get; }
         string StoreUrl { get; }
+
+        ApplicationInstallLocation InstallLocation { get; }
     }
 
     public enum Platform

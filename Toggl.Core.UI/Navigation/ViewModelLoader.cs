@@ -113,7 +113,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.StopwatchProvider,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.PlatformInfo);
 
             if (viewModelType == typeof(NoWorkspaceViewModel))
                 return new NoWorkspaceViewModel(

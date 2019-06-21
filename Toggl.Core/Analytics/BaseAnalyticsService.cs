@@ -260,6 +260,9 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("Platform")]
         public IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; protected set; }
 
+        [AnalyticsEvent("Location")]
+        public IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; protected set; }
+        
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())

@@ -170,6 +170,8 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; }
 
+        IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; }
+
         void Track(string eventName, Dictionary<string, string> parameters = null);
 
         void TrackAnonymized(Exception exception);

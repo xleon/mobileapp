@@ -166,6 +166,30 @@ namespace Toggl.Core.Tests.Interactors.Settings
                     data => data[ManualModeIsOn] == (isManualModeEnabled ? "yes" : "no"))).Wait();
             }
 
+            [Property]
+            public void SendsApplicationInstallLocation(ApplicationInstallLocation installLocation)
+            {
+                PlatformInfo.InstallLocation.Returns(installLocation);
+                PlatformInfo.Platform.Returns(Platform.Giskard);
+
+                executeInteractor().Wait();
+
+                feedbackApi.Received().Send(Arg.Any<Email>(), Arg.Any<string>(), Arg.Is<Dictionary<string, string>>(
+                    data => data[InstallLocation] == installLocation.ToString())).Wait();
+            }
+
+            [Property]
+            public void DoesNotSendApplicationInstallLocationOnIOs(ApplicationInstallLocation installLocation)
+            {
+                PlatformInfo.InstallLocation.Returns(installLocation);
+                PlatformInfo.Platform.Returns(Platform.Daneel);
+
+                executeInteractor().Wait();
+
+                feedbackApi.DidNotReceive().Send(Arg.Any<Email>(), Arg.Any<string>(), Arg.Is<Dictionary<string, string>>(
+                    data => data[InstallLocation] == installLocation.ToString())).Wait();
+            }
+
             [Fact, LogIfTooSlow]
             public async Task CountsAllWorkspaces()
             {

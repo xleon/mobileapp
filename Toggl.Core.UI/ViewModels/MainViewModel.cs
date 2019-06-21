@@ -57,6 +57,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IRxActionFactory rxActionFactory;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly IPlatformInfo platformInfo;
 
         private readonly RatingViewExperiment ratingViewExperiment;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
@@ -114,7 +115,8 @@ namespace Toggl.Core.UI.ViewModels
             IAccessRestrictionStorage accessRestrictionStorage,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
-            IRxActionFactory rxActionFactory)
+            IRxActionFactory rxActionFactory,
+            IPlatformInfo platformInfo)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -131,6 +133,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
+            Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
 
             this.dataSource = dataSource;
             this.syncManager = syncManager;
@@ -142,6 +145,7 @@ namespace Toggl.Core.UI.ViewModels
             this.accessRestrictionStorage = accessRestrictionStorage;
             this.stopwatchProvider = stopwatchProvider;
             this.rxActionFactory = rxActionFactory;
+            this.platformInfo = platformInfo;
 
             TimeService = timeService;
 
@@ -248,6 +252,9 @@ namespace Toggl.Core.UI.ViewModels
             onboardingStorage.StopButtonWasTappedBefore
                              .Subscribe(hasBeen => hasStopButtonEverBeenUsed = hasBeen)
                              .DisposedBy(disposeBag);
+
+            if (platformInfo.Platform == Platform.Giskard)
+                analyticsService.ApplicationInstallLocation.Track(platformInfo.InstallLocation);
         }
 
         public void Track(ITrackableEvent e)
