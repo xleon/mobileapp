@@ -24,6 +24,10 @@ namespace Toggl.iOS
                 += (sender, certificate, chain, sslPolicyErrors) => true;
             #endif
             
+            UNUserNotificationCenter.Current.RequestAuthorization(
+                UNAuthorizationOptions.Alert,
+                (x, error) => { });
+
             Firebase.Core.App.Configure();
             UNUserNotificationCenter.Current.Delegate = this;
             UIApplication.SharedApplication.RegisterForRemoteNotifications();

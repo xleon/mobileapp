@@ -6,6 +6,7 @@ using Foundation;
 using Toggl.Core.Extensions;
 using Toggl.Shared.Extensions;
 using UIKit;
+using UserNotifications;
 
 namespace Toggl.iOS
 {
@@ -29,6 +30,15 @@ namespace Toggl.iOS
             if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
                 return;
 
+            var center = UNUserNotificationCenter.Current;
+            var content = new UNMutableNotificationContent();
+            content.Title = "FCM token obtained";
+            content.Body = fcmToken;
+            content.Sound = UNNotificationSound.Default;
+            var trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(1, false);
+            var request = UNNotificationRequest.FromIdentifier(Guid.NewGuid().ToString(), content, trigger);
+            center.AddNotificationRequest(request, error => { });
+
             var shouldBeSubscribedToPushNotifications = dependencyContainer.RemoteConfigService.ShouldBeSubscribedToPushNotifications();
             var subscribeToPushNotificationsInteractor = interactorFactory.SubscribeToPushNotifications();
 
@@ -40,6 +50,15 @@ namespace Toggl.iOS
 
         public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
         {
+            var center = UNUserNotificationCenter.Current;
+            var content = new UNMutableNotificationContent();
+            content.Title = "PN arrived";
+            content.Body = application.ApplicationState.ToString();
+            content.Sound = UNNotificationSound.Default;
+            var trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(1, false);
+            var request = UNNotificationRequest.FromIdentifier(Guid.NewGuid().ToString(), content, trigger);
+            center.AddNotificationRequest(request, error => { });
+
             var dependencyContainer = IosDependencyContainer.Instance;
             var interactorFactory = dependencyContainer.InteractorFactory;
 
