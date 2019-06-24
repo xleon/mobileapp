@@ -1,51 +1,50 @@
 using System;
-using System.Reactive;
-using System.Reactive.Linq;
 using Android.App;
+using Android.App.Job;
+using Android.Content;
 using Firebase.Messaging;
-using Toggl.Core.Extensions;
-using Toggl.Shared.Extensions;
+using Toggl.Droid.Helper;
+using Toggl.Storage.Settings;
+using static Toggl.Droid.Services.JobServicesConstants;
 
 namespace Toggl.Droid.Services
 {
     [Service]
-    [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
+    [IntentFilter(new[] {"com.google.firebase.MESSAGING_EVENT"})]
     public class TogglFirebaseMessagingService : FirebaseMessagingService
     {
-        private IDisposable syncDisposable;
-        
+        private const int jobScheduleExpirationInHours = 1;
+
         public override void OnMessageReceived(RemoteMessage message)
         {
             var dependencyContainer = AndroidDependencyContainer.Instance;
             var userIsLoggedIn = dependencyContainer.UserAccessManager.CheckIfLoggedIn();
             if (!userIsLoggedIn) return;
+
+            var keyValueStorage = dependencyContainer.KeyValueStorage;
+            if (!shouldScheduleSyncJob(keyValueStorage)) return;
+
+            var jobClass = Java.Lang.Class.FromType(typeof(SyncJobService));
+            var jobScheduler = (JobScheduler) GetSystemService(JobSchedulerService);
+            var serviceName = new ComponentName(this, jobClass);
+            var jobInfoBuilder = new JobInfo.Builder(SyncJobServiceJobId, serviceName)
+                .SetRequiredNetworkType(NetworkType.Any);
+
+            if (PieApis.AreAvailable)
+                jobInfoBuilder = jobInfoBuilder.SetImportantWhileForeground(true);
             
-            var interactorFactory = dependencyContainer.InteractorFactory;
-            var dependencyContainerSchedulerProvider = dependencyContainer.SchedulerProvider;
-
-            var syncInteractor = togglApplication().IsInForeground
-                ? interactorFactory.RunPushNotificationInitiatedSyncInForeground()
-                : interactorFactory.RunPushNotificationInitiatedSyncInBackground();
-
-            var shouldHandlePushNotifications = dependencyContainer.RemoteConfigService.ShouldHandlePushNotifications(); 
-
-            syncDisposable = shouldHandlePushNotifications
-                .SelectMany(willHandlePushNotification => willHandlePushNotification
-                    ? syncInteractor.Execute().SelectUnit()
-                    : Observable.Return(Unit.Default))
-                .ObserveOn(dependencyContainerSchedulerProvider.BackgroundScheduler)
-                .Subscribe(_ => StopSelf());
+            jobScheduler.Schedule(jobInfoBuilder.Build());
+            keyValueStorage.SetBool(HasPendingSyncJobServiceScheduledKey, true);
+            keyValueStorage.SetDateTimeOffset(LastSyncJobScheduledAtKey, DateTimeOffset.Now);
         }
 
-        private TogglApplication togglApplication() => (TogglApplication) Application;
-
-        protected override void Dispose(bool disposing)
+        private bool shouldScheduleSyncJob(IKeyValueStorage keyValueStorage)
         {
-            base.Dispose(disposing);
-            
-            if (!disposing) return;
-            
-            syncDisposable?.Dispose();
+            var now = DateTimeOffset.Now; 
+            var hasPendingJobScheduled = keyValueStorage.GetBool(HasPendingSyncJobServiceScheduledKey);
+            var lastSyncJobScheduledAt = keyValueStorage.GetDateTimeOffset(LastSyncJobScheduledAtKey).GetValueOrDefault();
+
+            return !hasPendingJobScheduled || now.Subtract(lastSyncJobScheduledAt).TotalHours > jobScheduleExpirationInHours;
         }
     }
 }
