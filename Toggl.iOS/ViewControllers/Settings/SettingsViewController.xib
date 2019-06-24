@@ -49,10 +49,13 @@
                 <outlet property="ManualModeDescriptionLabel" destination="OGc-fM-VQ8" id="wWc-Dj-XRV"/>
                 <outlet property="ManualModeSwitch" destination="ohF-qt-ZZa" id="xth-Kj-iue"/>
                 <outlet property="ManualModeView" destination="oxz-tC-Puw" id="lbe-hw-A8S"/>
+                <outlet property="MiscSection" destination="e5t-dK-F9o" id="Az3-ka-5kp"/>
                 <outlet property="NotificationSettingsView" destination="taq-h9-x0G" id="3je-rW-ChT"/>
                 <outlet property="ScrollView" destination="fDP-ob-6P0" id="ARR-dd-Woy"/>
                 <outlet property="SendFeedbackSuccessView" destination="lLQ-ez-Mpw" id="lHr-i2-pKo"/>
                 <outlet property="ShortcutsSettingsView" destination="9un-IH-5NU" id="rGg-xG-tJs"/>
+                <outlet property="SiriSection" destination="UYV-Xu-uHs" id="Exg-ca-bEk"/>
+                <outlet property="SiriSectionTopConstraint" destination="8WJ-Gr-KMT" id="BV6-b9-9CJ"/>
                 <outlet property="SmartAlertCellLabel" destination="vZb-rZ-97C" id="rEn-ka-ebD"/>
                 <outlet property="SubmitFeedbackCellLabel" destination="7KY-Cw-c2h" id="ZRg-UQ-hX7"/>
                 <outlet property="SyncedIcon" destination="2Xf-GA-0Ym" id="BfG-Gy-Dva"/>

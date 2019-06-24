@@ -30,6 +30,9 @@ namespace Toggl.iOS.Services
 
         public IObservable<IEnumerable<SiriShortcut>> GetCurrentShortcuts()
         {
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                return Observable.Return(Enumerable.Empty<SiriShortcut>());
+
             return Observable.Create<IEnumerable<SiriShortcut>>(observer =>
                 {
                     INVoiceShortcutCenter.SharedCenter.GetAllVoiceShortcuts((shortcuts, error) =>
@@ -81,9 +84,7 @@ namespace Toggl.iOS.Services
         public void SetDefaultShortcutSuggestions()
         {
             if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
-            {
                 return;
-            }
 
             setupDefaultShortcuts();
         }
@@ -91,9 +92,7 @@ namespace Toggl.iOS.Services
         public void DonateStartTimeEntry(IThreadSafeTimeEntry timeEntry)
         {
             if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
-            {
                 return;
-            }
 
             var relevantShortcuts = new List<INRelevantShortcut>();
 
@@ -104,9 +103,7 @@ namespace Toggl.iOS.Services
             {
                 // If any of the tags or the project id were just created and haven't sync we ignore this action until the user repeats it
                 if (timeEntry.ProjectId < 0 || timeEntry.TagIds.Any(tagId => tagId < 0))
-                {
                     return;
-                }
 
                 if (timeEntry.ProjectId is long projectId)
                 {
@@ -147,9 +144,7 @@ namespace Toggl.iOS.Services
         public void DonateStopCurrentTimeEntry()
         {
             if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
-            {
                 return;
-            }
 
             var intent = new StopTimerIntent();
             intent.SuggestedInvocationPhrase = Resources.StopTimerInvocationPhrase;
@@ -164,9 +159,7 @@ namespace Toggl.iOS.Services
         public void DonateShowReport(ReportPeriod period)
         {
             if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
-            {
                 return;
-            }
 
             var intent = new ShowReportPeriodIntent();
             switch (period)
@@ -208,9 +201,7 @@ namespace Toggl.iOS.Services
         public void DonateShowReport()
         {
             if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
-            {
                 return;
-            }
 
             var intent = new ShowReportIntent();
             intent.SuggestedInvocationPhrase = Resources.ShowReportsInvocationPhrase;
@@ -221,9 +212,7 @@ namespace Toggl.iOS.Services
         public void ClearAll()
         {
             if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
-            {
                 return;
-            }
 
             INInteraction.DeleteAllInteractions(_ => { });
             INVoiceShortcutCenter.SharedCenter.SetShortcutSuggestions(new INShortcut[0]);
