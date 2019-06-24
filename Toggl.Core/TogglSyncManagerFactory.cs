@@ -330,7 +330,11 @@ namespace Toggl.Core
             var fetchTimeEntries = new FetchJustTimeEntriesSinceState(api, database.SinceParameters, timeService, leakyBucket, rateLimiter);
             var ensureFetchTimeEntriesSucceeded = new EnsureFetchListSucceededState<ITimeEntry>();
 
-            var placeholderStateFactory = new CreatePlaceholdersStateFactory(dataSource, analyticsService);
+            var placeholderStateFactory = new CreatePlaceholdersStateFactory(
+                dataSource,
+                analyticsService,
+                lastTimeUsageStorage,
+                timeService);
             var createWorkspacePlaceholder = placeholderStateFactory.ForWorkspaces();
             var createProjectPlaceholder = placeholderStateFactory.ForProjects();
             var createTaskPlaceholder = placeholderStateFactory.ForTasks();
@@ -340,10 +344,6 @@ namespace Toggl.Core
                 new PersistListState<ITimeEntry, IDatabaseTimeEntry, IThreadSafeTimeEntry>(dataSource.TimeEntries, TimeEntry.Clean);
             var updateTimeEntriesSinceDate = new UpdateSinceDateState<ITimeEntry>(database.SinceParameters);
 
-            var detect = new DetectPlaceholdersWereCreatedState(
-                lastTimeUsageStorage,
-                timeService,
-                () => new ContainsPlaceholdersInteractor(dataSource));
 
             transitions.ConfigureTransition(entryPoint, fetchTimeEntries);
             transitions.ConfigureTransition(fetchTimeEntries.PreventOverloadingServer, new DeadEndState());
@@ -357,9 +357,7 @@ namespace Toggl.Core
 
             transitions.ConfigureTransition(createTagPlaceholder.Done, persistTimeEntries);
             transitions.ConfigureTransition(persistTimeEntries.Done, updateTimeEntriesSinceDate);
-            transitions.ConfigureTransition(updateTimeEntriesSinceDate.Done, detect);
-
-            transitions.ConfigureTransition(detect.Done, new DeadEndState());
+            transitions.ConfigureTransition(updateTimeEntriesSinceDate.Done, new DeadEndState());
         }
 
         private static LookForChangeToPushState<TDatabase, TThreadsafe> configurePush<TModel, TDatabase, TThreadsafe>(
