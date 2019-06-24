@@ -301,7 +301,7 @@ namespace Toggl.iOS.ViewControllers
 
             if (!TapToEditBubbleView.Hidden)
             {
-                tapToEditStep.Dismiss();
+                tapToEditStep?.Dismiss();
             }
         }
 
