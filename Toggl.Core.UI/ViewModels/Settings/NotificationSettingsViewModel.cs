@@ -16,11 +16,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
     [Preserve(AllMembers = true)]
     public sealed class NotificationSettingsViewModel : ViewModel
     {
-        private readonly IPermissionsChecker permissionsChecker;
-        private readonly IUserPreferences userPreferences;
-        private readonly ISchedulerProvider schedulerProvider;
-        private readonly IRxActionFactory rxActionFactory;
-
         public IObservable<bool> PermissionGranted;
         public IObservable<string> UpcomingEvents;
 
@@ -41,11 +36,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-
-            this.permissionsChecker = permissionsChecker;
-            this.userPreferences = userPreferences;
-            this.schedulerProvider = schedulerProvider;
-            this.rxActionFactory = rxActionFactory;
 
             PermissionGranted = backgroundService.AppResumedFromBackground
                 .SelectUnit()

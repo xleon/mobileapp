@@ -63,17 +63,17 @@ namespace Toggl.Core.UI.ViewModels
 
             if (anyWorkspaceIsAvailable)
             {
-                close();
+                Close();
             }
         }
 
         private IObservable<Unit> createWorkspaceWithDefaultName()
-            => interactorFactory.CreateDefaultWorkspace().Execute().Do(close);
+            => interactorFactory.CreateDefaultWorkspace().Execute().Do(() => Close());
 
-        private void close()
+        public override void Close()
         {
             accessRestrictionStorage.SetNoWorkspaceStateReached(false);
-            Finish();
+            base.Close();
         }
     }
 }

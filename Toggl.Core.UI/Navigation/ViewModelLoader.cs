@@ -142,7 +142,6 @@ namespace Toggl.Core.UI.Navigation
             if (viewModelType == typeof(RatingViewModel))
                 return new RatingViewModel(
                     dependencyContainer.TimeService,
-                    dependencyContainer.DataSource,
                     dependencyContainer.RatingService,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.OnboardingStorage,
@@ -254,7 +253,6 @@ namespace Toggl.Core.UI.Navigation
 
             if (viewModelType == typeof(SuggestionsViewModel))
                 return new SuggestionsViewModel(
-                    dependencyContainer.DataSource,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.OnboardingStorage,
                     dependencyContainer.SuggestionProviderContainer,

@@ -1,12 +1,11 @@
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
-using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
@@ -19,7 +18,6 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class EditDurationViewController
         : KeyboardAwareViewController<EditDurationViewModel>,
-          IDismissableViewController,
           IUIGestureRecognizerDelegate
     {
         private const int additionalVerticalContentSize = 100;
@@ -51,8 +49,8 @@ namespace Toggl.iOS.ViewControllers
                 .BindAction(ViewModel.Save)
                 .DisposedBy(disposeBag);
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(disposeBag);
 
             // Start and stop date/time
@@ -275,12 +273,6 @@ namespace Toggl.iOS.ViewControllers
             {
                 DurationInput.BecomeFirstResponder();
             }
-        }
-
-        public async Task<bool> Dismiss()
-        {
-            ViewModel.Close.Execute();
-            return true;
         }
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)

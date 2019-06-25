@@ -50,11 +50,6 @@ namespace Toggl.Droid.Fragments
             Dialog.Window.SetDefaultDialogLayout(Activity, Context, heightDp: 400);
         }
 
-        public override void OnCancel(IDialogInterface dialog)
-        {
-            ViewModel.Close.Execute();
-        }
-
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);

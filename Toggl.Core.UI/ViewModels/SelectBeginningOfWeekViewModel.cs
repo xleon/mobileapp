@@ -15,7 +15,6 @@ namespace Toggl.Core.UI.ViewModels
 
         public SelectableBeginningOfWeekViewModel[] BeginningOfWeekCollection { get; }
 
-        public UIAction Close { get; }
         public InputAction<SelectableBeginningOfWeekViewModel> SelectBeginningOfWeek { get; }
 
         public SelectBeginningOfWeekViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
@@ -23,13 +22,12 @@ namespace Toggl.Core.UI.ViewModels
         {
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            Close = rxActionFactory.FromAsync(close);
-            SelectBeginningOfWeek = rxActionFactory.FromAsync<SelectableBeginningOfWeekViewModel>(selectFormat);
+            SelectBeginningOfWeek = rxActionFactory.FromAction<SelectableBeginningOfWeekViewModel>(selectFormat);
 
             BeginningOfWeekCollection = Enum.GetValues(typeof(BeginningOfWeek))
-                            .Cast<BeginningOfWeek>()
-                            .Select(beginningOfWeek => new SelectableBeginningOfWeekViewModel(beginningOfWeek, false))
-                            .ToArray();
+                .Cast<BeginningOfWeek>()
+                .Select(beginningOfWeek => new SelectableBeginningOfWeekViewModel(beginningOfWeek, false))
+                .ToArray();
         }
 
         public override Task Initialize(BeginningOfWeek defaultValue)
@@ -40,10 +38,15 @@ namespace Toggl.Core.UI.ViewModels
             return base.Initialize(defaultValue);
         }
 
-        private Task close() => Finish(defaultResult);
+        public override void CloseWithDefaultResult()
+        {
+            Close(defaultResult);
+        }
 
-        private Task selectFormat(SelectableBeginningOfWeekViewModel viewModel)
-            => Finish(viewModel.BeginningOfWeek);
+        private void selectFormat(SelectableBeginningOfWeekViewModel viewModel)
+        {
+            Close(viewModel.BeginningOfWeek);
+        }
 
         private void updateSelectedFormat(BeginningOfWeek selected)
             => BeginningOfWeekCollection.ForEach(viewModel

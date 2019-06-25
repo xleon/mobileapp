@@ -1,9 +1,9 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Views;
 using Toggl.iOS.ViewSources.Generic.TableView;
@@ -12,7 +12,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public partial class SelectWorkspaceViewController : ReactiveViewController<SelectWorkspaceViewModel>, IDismissableViewController
+    public partial class SelectWorkspaceViewController : ReactiveViewController<SelectWorkspaceViewModel>
     {
         private const int rowHeight = 64;
         private const double headerHeight = 54;
@@ -38,8 +38,8 @@ namespace Toggl.iOS.ViewControllers
 
             TitleLabel.Text = ViewModel.Title;
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             source.Rx().ModelSelected()
@@ -60,12 +60,6 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewWillLayoutSubviews();
             View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
-        }
-
-        public async Task<bool> Dismiss()
-        {
-            await ViewModel.Close.ExecuteWithCompletion();
-            return true;
         }
     }
 }

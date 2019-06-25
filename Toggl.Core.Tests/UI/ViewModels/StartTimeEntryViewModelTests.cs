@@ -698,21 +698,21 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheBackAction : StartTimeEntryViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : StartTimeEntryViewModelTest
         {
-            public TheBackAction()
+            public TheCloseWithDefaultResultMethod()
             {
                 var parameter = StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now);
                 ViewModel.Initialize(parameter);
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModelIfUserDoesNotChangeAnything()
+            public void ClosesTheViewModelIfUserDoesNotChangeAnything()
             {
-                ViewModel.Close.Execute(Unit.Default);
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -720,42 +720,42 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 makeDirty();
 
-                ViewModel.Close.Execute(Unit.Default);
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
                 await View.Received().ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
             }
 
             [Fact, LogIfTooSlow]
-            public async Task DoesNotCloseTheViewIfUserWantsToContinueEditing()
+            public void DoesNotCloseTheViewIfUserWantsToContinueEditing()
             {
                 makeDirty();
                 View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
                     .Returns(_ => Observable.Return(false));
 
-                ViewModel.Close.Execute(Unit.Default);
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                await View.DidNotReceive().Close();
+                View.DidNotReceive().Close();
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewIfUserWantsToDiscardTheEnteredInformation()
+            public void ClosesTheViewIfUserWantsToDiscardTheEnteredInformation()
             {
                 makeDirty();
                 View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
                     .Returns(_ => Observable.Return(true));
 
-                ViewModel.Close.Execute(Unit.Default);
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
-            public async Task DoesNotCallTheAnalyticsServiceSinceNoTimeEntryWasCreated()
+            public void DoesNotCallTheAnalyticsServiceSinceNoTimeEntryWasCreated()
             {
-                ViewModel.Close.Execute(Unit.Default);
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
                 AnalyticsService.DidNotReceive().Track(Arg.Any<StartTimeEntryEvent>());
@@ -1358,7 +1358,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Done.Execute(Unit.Default);
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                View.Received().Close();
             }
         }
 

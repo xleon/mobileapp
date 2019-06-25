@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using CoreGraphics;
+﻿using CoreGraphics;
 using Toggl.iOS.Extensions;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions.Reactive;
@@ -13,7 +13,7 @@ using static Toggl.Shared.Extensions.ReactiveExtensions;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed partial class SelectProjectViewController : KeyboardAwareViewController<SelectProjectViewModel>, IDismissableViewController
+    public sealed partial class SelectProjectViewController : KeyboardAwareViewController<SelectProjectViewModel>
     {
         private const double headerHeight = 99;
         private const double placeHolderHeight = 250;
@@ -84,8 +84,8 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(ViewModel.FilterText)
                 .DisposedBy(DisposeBag);
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             source.Rx().ModelSelected()
@@ -103,12 +103,6 @@ namespace Toggl.iOS.ViewControllers
             TextField.BecomeFirstResponder();
 
             BottomConstraint.Active |= UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Pad;
-        }
-
-        public async Task<bool> Dismiss()
-        {
-            ViewModel.Close.Execute();
-            return true;
         }
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)

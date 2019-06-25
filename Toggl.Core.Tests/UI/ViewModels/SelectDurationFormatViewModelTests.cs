@@ -59,7 +59,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : SelectDurationFormatViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : SelectDurationFormatViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ReturnsTheDefaultDurationFormat()
@@ -68,7 +68,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 
                 await ViewModel.Initialize(durationFormat);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 (await ViewModel.Result).Should().Be(durationFormat);

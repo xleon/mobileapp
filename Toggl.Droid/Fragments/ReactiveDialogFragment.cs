@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
@@ -82,7 +81,7 @@ namespace Toggl.Droid.Fragments
             DisposeBag?.Dispose();
         }
         
-        public Task Close()
+        public void Close()
         {
             AndroidDependencyContainer
                 .Instance
@@ -90,19 +89,11 @@ namespace Toggl.Droid.Fragments
                 .Clear<TViewModel>();
             
             Dismiss();
-            return Task.CompletedTask;
         }
 
         public override void OnCancel(IDialogInterface dialog)
         {
-            base.OnCancel(dialog);
-            
-            AndroidDependencyContainer
-                .Instance
-                .ViewModelCache
-                .Clear<TViewModel>();
-            
-            ViewModel.Cancel();
+            ViewModel.CloseWithDefaultResult();
         }
 
         public void OpenAppSettings()

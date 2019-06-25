@@ -68,19 +68,19 @@ namespace Toggl.Core.UI.ViewModels.Settings
             calendarListVisibleSubject.OnNext(calendarListVisible);
         }
 
-        protected override async Task OnClose()
+        public override void CloseWithDefaultResult()
         {
             UserPreferences.SetEnabledCalendars(InitialSelectedCalendarIds.ToArray());
-            await base.OnClose();
+            base.CloseWithDefaultResult();
         }
 
-        protected override async Task OnDone()
+        protected override void Done()
         {
             if (!calendarListVisible)
                 SelectedCalendarIds.Clear();
 
             UserPreferences.SetEnabledCalendars(SelectedCalendarIds.ToArray());
-            await base.OnDone();
+            base.Done();
         }
 
         private void requestAccess()

@@ -96,7 +96,6 @@ namespace Toggl.Core.UI.ViewModels
 
         public IObservable<IThreadSafePreferences> Preferences { get; private set; }
 
-        public OutputAction<bool> Close { get; private set; }
         public UIAction SelectProject { get; private set; }
         public UIAction SelectTags { get; private set; }
         public UIAction ToggleBillable { get; private set; }
@@ -220,7 +219,6 @@ namespace Toggl.Core.UI.ViewModels
                 .AsDriver(null, schedulerProvider);
 
             // Actions
-            Close = actionFactory.FromAsync(closeWithConfirmation);
             SelectProject = actionFactory.FromAsync(selectProject);
             SelectTags = actionFactory.FromAsync(selectTags);
             ToggleBillable = actionFactory.FromAction(toggleBillable);
@@ -462,18 +460,16 @@ namespace Toggl.Core.UI.ViewModels
             syncErrorMessageSubject.OnNext(null);
         }
 
-        private async Task<bool> closeWithConfirmation()
+        public override async void CloseWithDefaultResult()
         {
             if (await isDirty())
             {
                 var userConfirmedDiscardingChanges = await View.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
-
                 if (!userConfirmedDiscardingChanges)
-                    return false;
+                    return;
             }
 
-            await Finish();
-            return true;
+            base.CloseWithDefaultResult();
         }
 
         private async Task<bool> isDirty()
@@ -518,7 +514,7 @@ namespace Toggl.Core.UI.ViewModels
                 .UpdateMultipleTimeEntries(timeEntriesDtos)
                 .Execute()
                 .ObserveOn(schedulerProvider.MainScheduler)
-                .SubscribeToErrorsAndCompletion((Exception ex) => Finish(), () => Finish())
+                .SubscribeToErrorsAndCompletion((Exception ex) => Close(), () => Close())
                 .DisposedBy(disposeBag);
         }
 
@@ -549,7 +545,7 @@ namespace Toggl.Core.UI.ViewModels
             var isDeletionConfirmed = await delete(actionType, TimeEntryIds.Length, interactor);
 
             if (isDeletionConfirmed)
-                await Finish();
+                Close();
         }
 
         private async Task<bool> delete(ActionType actionType, int entriesCount, IInteractor<IObservable<Unit>> deletionInteractor)

@@ -248,30 +248,30 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseCommand : EditDurationViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : EditDurationViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
                 var parameter = DurationParameter.WithStartAndDuration(DateTimeOffset.UtcNow, null);
                 ViewModel.Initialize(new EditDurationParameters(parameter));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
             public async Task ReturnsTheDefaultParameter()
             {
                 var parameter = DurationParameter.WithStartAndDuration(DateTimeOffset.UtcNow, null);
-                ViewModel.Initialize(new EditDurationParameters(parameter));
+                await ViewModel.Initialize(new EditDurationParameters(parameter));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                (await ViewModel.Result).Should().Be(parameter);
             }
         }
 
@@ -286,7 +286,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Save.Execute();
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Property]
@@ -756,7 +756,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.Initialize(new EditDurationParameters(parameter));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
                 AnalyticsService.Received().Track(

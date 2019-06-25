@@ -1,6 +1,6 @@
 ﻿using System;
 using CoreGraphics;
-using Toggl.Core;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Settings.Siri;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
@@ -31,8 +31,8 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
                 cardHeight
             );
 
-            OkayButton.Rx()
-                .BindAction(ViewModel.Ok)
+            OkayButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             DoNotShowAgainButton.Rx()

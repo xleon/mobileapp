@@ -1,8 +1,8 @@
 ﻿using System;
-using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
@@ -43,8 +43,8 @@ namespace Toggl.Droid.Fragments
                 .BindAction(ViewModel.ViewTermsOfService)
                 .DisposedBy(DisposeBag);
 
-            acceptButton.Rx()
-                .BindAction(ViewModel.Close, _ => true)
+            acceptButton.Rx().Tap()
+                .Subscribe(() => ViewModel.Close(true))
                 .DisposedBy(DisposeBag);
         }
 
@@ -53,11 +53,6 @@ namespace Toggl.Droid.Fragments
             base.OnResume();
 
             Dialog.Window.SetDefaultDialogLayout(Activity, Context, heightDp: 350);
-        }
-
-        public override void OnCancel(IDialogInterface dialog)
-        {
-            ViewModel.Close.Execute(false);
         }
     }
 }

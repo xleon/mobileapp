@@ -40,18 +40,18 @@ namespace Toggl.iOS.ViewControllers.Calendar
             TableView.Source = source;
 
             DoneButton.Rx()
-                .BindAction(ViewModel.Done)
+                .BindAction(ViewModel.Save)
                 .DisposedBy(DisposeBag);
 
             source.Rx().ModelSelected()
                 .Subscribe(ViewModel.SelectCalendar.Inputs)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.Done.Enabled
+            ViewModel.Save.Enabled
                 .Subscribe(DoneButton.Rx().Enabled())
                 .DisposedBy(DisposeBag);
 
-            ViewModel.Done.Enabled
+            ViewModel.Save.Enabled
                 .Select(alphaForEnabled)
                 .Subscribe(DoneButton.Rx().AnimatedAlpha())
                 .DisposedBy(DisposeBag);

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
@@ -88,8 +88,8 @@ namespace Toggl.Droid.Fragments
                 .BindAction(ViewModel.Save)
                 .DisposedBy(DisposeBag);
 
-            closeButton.Rx()
-                .BindAction(ViewModel.Close)
+            closeButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             ViewModel.SelectableColors
@@ -112,11 +112,6 @@ namespace Toggl.Droid.Fragments
             var height = ViewModel.AllowCustomColors ? customColorEnabledHeight : customColorDisabledHeight;
 
             Dialog.Window.SetDefaultDialogLayout(Activity, Context, heightDp: height);
-        }
-
-        public override void OnCancel(IDialogInterface dialog)
-        {
-            ViewModel.Close.Execute();
         }
 
         private float invertedNormalizedProgress(int progress)

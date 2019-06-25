@@ -15,9 +15,6 @@ namespace Toggl.Core.UI.ViewModels
         private DurationFormat defaultResult;
 
         public IImmutableList<SelectableDurationFormatViewModel> DurationFormats { get; }
-
-        public UIAction Close { get; }
-
         public InputAction<SelectableDurationFormatViewModel> SelectDurationFormat { get; }
 
         public SelectDurationFormatViewModel(
@@ -27,8 +24,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            Close = rxActionFactory.FromAsync(close);
-            SelectDurationFormat = rxActionFactory.FromAsync<SelectableDurationFormatViewModel>(selectFormat);
+            SelectDurationFormat = rxActionFactory.FromAction<SelectableDurationFormatViewModel>(selectFormat);
 
             DurationFormats = Enum.GetValues(typeof(DurationFormat))
                             .Cast<DurationFormat>()
@@ -44,10 +40,15 @@ namespace Toggl.Core.UI.ViewModels
             return base.Initialize(defaultDuration);
         }
 
-        private Task close() => Finish(defaultResult);
+        public override void CloseWithDefaultResult()
+        {
+            Close(defaultResult);
+        }
 
-        private Task selectFormat(SelectableDurationFormatViewModel viewModel)
-            => Finish(viewModel.DurationFormat);
+        private void selectFormat(SelectableDurationFormatViewModel viewModel)
+        {
+            Close(viewModel.DurationFormat);
+        }
 
         private void updateSelectedFormat(DurationFormat selected)
             => DurationFormats.ForEach(viewModel

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Views.Client;
@@ -16,7 +14,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public partial class SelectClientViewController : KeyboardAwareViewController<SelectClientViewModel>, IDismissableViewController
+    public partial class SelectClientViewController : KeyboardAwareViewController<SelectClientViewModel>
     {
         private const double headerHeight = 100;
 
@@ -58,8 +56,8 @@ namespace Toggl.iOS.ViewControllers
 
             clientsReplay.Connect();
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             SearchTextField.Rx().Text()
@@ -71,12 +69,6 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             BottomConstraint.Active |= UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Pad;
-        }
-
-        public async Task<bool> Dismiss()
-        {
-            ViewModel.Close.Execute(Unit.Default);
-            return true;
         }
 
         public override void ViewWillAppear(bool animated)

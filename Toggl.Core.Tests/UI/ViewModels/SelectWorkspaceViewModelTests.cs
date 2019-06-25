@@ -102,16 +102,16 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : SelectWorkspaceViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : SelectWorkspaceViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.Initialize(new SelectWorkspaceParameters("Some workspace", 1));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -120,7 +120,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 const long expectedId = 10;
                 await ViewModel.Initialize(new SelectWorkspaceParameters(string.Empty, expectedId));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 (await ViewModel.Result).Should().Be(expectedId);
             }
@@ -137,7 +137,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectWorkspace.Execute(selectableWorkspace);
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]

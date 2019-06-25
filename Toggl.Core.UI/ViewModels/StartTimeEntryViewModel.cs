@@ -92,7 +92,6 @@ namespace Toggl.Core.UI.ViewModels
 
         public IOnboardingStorage OnboardingStorage { get; }
 
-        public OutputAction<bool> Close { get; }
         public OutputAction<IThreadSafeTimeEntry> Done { get; }
         public UIAction DurationTapped { get; }
         public UIAction ToggleBillable { get; }
@@ -150,7 +149,6 @@ namespace Toggl.Core.UI.ViewModels
                 .Select(time => time.ToFormattedString(DurationFormat.Improved))
                 .AsDriver(schedulerProvider);
 
-            Close = rxActionFactory.FromAsync(close);
             Done = rxActionFactory.FromObservable<IThreadSafeTimeEntry>(done);
             DurationTapped = rxActionFactory.FromAction(durationTapped);
             ToggleBillable = rxActionFactory.FromAction(toggleBillable);
@@ -277,17 +275,16 @@ namespace Toggl.Core.UI.ViewModels
             suggestionsRenderingStopwatch = null;
         }
 
-        private async Task<bool> close()
+        public override async void CloseWithDefaultResult()
         {
             if (isDirty)
             {
                 var shouldDiscard = await View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
                 if (!shouldDiscard)
-                    return false;
+                    return;
             }
 
-            await Finish();
-            return true;
+            Close();
         }
 
         private void setTextSpans(IEnumerable<ISpan> spans)
@@ -522,8 +519,9 @@ namespace Toggl.Core.UI.ViewModels
                 origin = paramOrigin;
             }
 
-            return interactorFactory.CreateTimeEntry(timeEntry, origin).Execute()
-                .Do(_ => Finish());
+            return interactorFactory.CreateTimeEntry(timeEntry, origin)
+                .Execute()
+                .Do(_ => Close());
         }
 
         private void onParsedQuery(QueryInfo parsedQuery)

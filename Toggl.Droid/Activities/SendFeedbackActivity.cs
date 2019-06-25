@@ -100,17 +100,12 @@ namespace Toggl.Droid.Activities
                     return true;
 
                 case Android.Resource.Id.Home:
-                    ViewModel.Close.Execute();
+                    ViewModel.CloseWithDefaultResult();
                     return true;
 
                 default:
                     return base.OnOptionsItemSelected(item);
             }
-        }
-
-        public override void OnBackPressed()
-        {
-            ViewModel.Close.Execute();
         }
 
         private void onSendEnabled(bool enabled)

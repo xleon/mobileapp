@@ -46,7 +46,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
         public UIAction SelectTags { get; }
         public UIAction SelectProject { get; }
-        public UIAction Close { get; }
         public UIAction SelectClipboard { get; }
 
         public SiriShortcutsCustomTimeEntryViewModel(
@@ -68,7 +67,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
 
-            Close = rxActionFactory.FromAsync(Finish);
             SelectTags = rxActionFactory.FromAsync(selectTags);
             SelectProject = rxActionFactory.FromAsync(selectProject);
             SelectClipboard = rxActionFactory.FromAsync(selectClipboard);

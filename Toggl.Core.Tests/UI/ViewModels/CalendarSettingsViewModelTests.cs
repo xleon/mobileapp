@@ -165,7 +165,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : CalendarSettingsViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : CalendarSettingsViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task SavesThePreviouslySelectedCalendarIds()
@@ -193,9 +193,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Where(calendar => selectedIds.Contains(calendar.Id))
                     .Select(calendar => new SelectableUserCalendarViewModel(calendar, false));
 
-                ViewModel.SelectCalendar.ExecuteSequentally(calendars)
-                    .PrependAction(ViewModel.Close)
-                    .Subscribe();
+                ViewModel.SelectCalendar.ExecuteSequentally(calendars).Subscribe();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
 
@@ -233,7 +232,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Select(calendar => new SelectableUserCalendarViewModel(calendar, false));
 
                 ViewModel.SelectCalendar.ExecuteSequentally(calendars)
-                    .PrependAction(ViewModel.Done)
+                    .PrependAction(ViewModel.Save)
                     .Subscribe();
 
                 TestScheduler.Start();
@@ -276,7 +275,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectCalendar.ExecuteSequentally(calendars)
                     .PrependAction(ViewModel.TogglCalendarIntegration)
-                    .PrependAction(ViewModel.Done)
+                    .PrependAction(ViewModel.Save)
                     .Subscribe();
 
                 TestScheduler.Start();

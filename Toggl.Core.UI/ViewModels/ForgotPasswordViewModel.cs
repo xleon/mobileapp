@@ -30,7 +30,6 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> PasswordResetSuccessful { get; }
 
         public UIAction Reset { get; }
-        public UIAction Close { get; }
 
         public ForgotPasswordViewModel(
             ITimeService timeService,
@@ -51,7 +50,6 @@ namespace Toggl.Core.UI.ViewModels
             this.rxActionFactory = rxActionFactory;
 
             Reset = rxActionFactory.FromObservable(reset, Email.Select(email => email.IsValid));
-            Close = rxActionFactory.FromAction(returnEmail, Reset.Executing.Invert());
 
             var resetActionStartedObservable = Reset
                 .Executing
@@ -86,12 +84,12 @@ namespace Toggl.Core.UI.ViewModels
 
         private void closeWithDelay()
         {
-            timeService.RunAfterDelay(delayAfterPassordReset, returnEmail);
+            timeService.RunAfterDelay(delayAfterPassordReset, CloseWithDefaultResult);
         }
-
-        private void returnEmail()
+        
+        public override void CloseWithDefaultResult()
         {
-            Finish(EmailParameter.With(Email.Value)).Wait();
+            Close(EmailParameter.With(Email.Value));
         }
 
         private string toErrorString(Exception exception)

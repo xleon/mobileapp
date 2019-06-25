@@ -95,7 +95,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectColor.Execute(colorToSelect);
 
-                await View.DidNotReceive().Close();
+                View.DidNotReceive().Close();
             }
         }
 
@@ -188,15 +188,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public class TheCloseCommand : SelectColorViewModelTest
+        public class TheCloseWithDefaultResultMethod : SelectColorViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -206,7 +206,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var parameters = ColorParameters.Create(color, true);
                 await ViewModel.Initialize(parameters);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
                 
                 (await ViewModel.Result).Should().Be(color);
@@ -218,10 +218,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
-                ViewModel.Close.Execute();
+                ViewModel.Save.Execute();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]

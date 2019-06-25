@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions.Reactive;
@@ -37,7 +37,8 @@ namespace Toggl.Droid.Activities
             setupLayoutManager(selectTagsRecyclerAdapter);
 
             ViewModel.Tags
-                .Subscribe(replaceTags)
+                .Select(tags => tags.ToList())
+                .Subscribe(selectTagsRecyclerAdapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 
             ViewModel.FilterText
@@ -53,8 +54,8 @@ namespace Toggl.Droid.Activities
                 .Subscribe(clearIcon.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
-            backIcon.Rx()
-                .BindAction(ViewModel.Close)
+            backIcon.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             clearIcon.Click += (sender, e) =>
@@ -88,11 +89,6 @@ namespace Toggl.Droid.Activities
         {
             base.Finish();
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
-        }
-
-        private void replaceTags(IEnumerable<SelectableTagBaseViewModel> tags)
-        {
-            selectTagsRecyclerAdapter.Items = tags.ToList();
         }
     }
 }

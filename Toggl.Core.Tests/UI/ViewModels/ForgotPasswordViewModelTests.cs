@@ -346,7 +346,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseCommand : ForgotPasswordViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : ForgotPasswordViewModelTest
         {
             [Property]
             public void ClosesTheViewModelReturningTheEmail(NonEmptyString emailString)
@@ -356,7 +356,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var email = Email.From(emailString.Get);
                 viewModel.Email.OnNext(email);
 
-                viewModel.Close.Execute();
+                viewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
 

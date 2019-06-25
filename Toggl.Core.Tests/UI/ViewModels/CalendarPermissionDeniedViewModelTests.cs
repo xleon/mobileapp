@@ -60,7 +60,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact]
@@ -71,7 +71,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
 
-                await View.DidNotReceive().Close();
+                View.DidNotReceive().Close();
             }
         }
     }

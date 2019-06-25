@@ -42,7 +42,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             protected TimeEntriesViewModel ViewModel { get; private set; }
 
             protected TimeEntriesViewModel CreateViewModel()
-                => new TimeEntriesViewModel(DataSource, SyncManager, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
+                => new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
 
             protected TimeEntriesViewModelTest()
             {
@@ -57,7 +57,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
-                bool useSyncManager,
                 bool useInteractorFactory,
                 bool useAnalyticsService,
                 bool useSchedulerProvider,
@@ -65,7 +64,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useTimeService)
             {
                 var dataSource = useDataSource ? DataSource : null;
-                var syncManager = useSyncManager ? SyncManager : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
@@ -73,7 +71,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var timeService = useTimeService ? TimeService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new TimeEntriesViewModel(dataSource, syncManager, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
+                    () => new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -137,7 +135,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             public TheDelayDeleteTimeEntryAction()
             {
-                viewModel = new TimeEntriesViewModel(DataSource, SyncManager, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
+                viewModel = new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
                 viewModel.TimeEntriesPendingDeletion.Subscribe(observer);
             }
 
@@ -256,7 +254,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             public TheCancelDeleteTimeEntryAction()
             {
-                viewModel = new TimeEntriesViewModel(DataSource, SyncManager, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
+                viewModel = new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
                 viewModel.TimeEntriesPendingDeletion.Subscribe(observer);
             }
 

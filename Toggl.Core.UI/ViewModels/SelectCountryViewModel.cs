@@ -20,7 +20,6 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<IEnumerable<SelectableCountryViewModel>> Countries { get; private set; }
         public ISubject<string> FilterText { get; } = new BehaviorSubject<string>(string.Empty);
         public InputAction<SelectableCountryViewModel> SelectCountry { get; }
-        public UIAction Close { get; }
 
         public SelectCountryViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
             : base(navigationService)
@@ -29,8 +28,7 @@ namespace Toggl.Core.UI.ViewModels
 
             this.rxActionFactory = rxActionFactory;
 
-            SelectCountry = rxActionFactory.FromAsync<SelectableCountryViewModel>(selectCountry);
-            Close = rxActionFactory.FromAsync(close);
+            SelectCountry = rxActionFactory.FromAction<SelectableCountryViewModel>(selectCountry);
         }
 
         public override async Task Initialize(long? selectedCountryId)
@@ -57,10 +55,9 @@ namespace Toggl.Core.UI.ViewModels
                 });
         }
 
-        private Task close()
-            => Finish(null);
-
-        private async Task selectCountry(SelectableCountryViewModel selectedCountry)
-            => await Finish(selectedCountry.Country.Id);
+        private void selectCountry(SelectableCountryViewModel selectedCountry)
+        {
+            Close(selectedCountry.Country.Id);
+        }
     }
 }

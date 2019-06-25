@@ -23,8 +23,6 @@ namespace Toggl.Droid.Activities
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class ForgotPasswordActivity : ReactiveActivity<ForgotPasswordViewModel>
     {
-        private Subject<Unit> closeSubject = new Subject<Unit>();
-
         protected override void OnCreate(Bundle bundle)
         {
             SetTheme(Resource.Style.AppTheme_WhiteStatusBar);
@@ -70,10 +68,6 @@ namespace Toggl.Droid.Activities
             resetPasswordButton.Rx()
                 .BindAction(ViewModel.Reset)
                 .DisposedBy(DisposeBag);
-
-            closeSubject
-                .Subscribe(ViewModel.Close.Inputs)
-                .DisposedBy(DisposeBag);
         }
 
         public override void Finish()
@@ -108,9 +102,10 @@ namespace Toggl.Droid.Activities
         {
             if (item.ItemId == Android.Resource.Id.Home)
             {
-                closeSubject.OnNext(Unit.Default);
+                ViewModel.CloseWithDefaultResult();
                 return true;
             }
+
             return base.OnOptionsItemSelected(item);
         }
     }

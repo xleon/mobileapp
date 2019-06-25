@@ -33,7 +33,6 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<IEnumerable<SelectableTagBaseViewModel>> Tags { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
         public BehaviorSubject<string> FilterText { get; } = new BehaviorSubject<string>(String.Empty);
-        public UIAction Close { get; }
         public UIAction Save { get; }
 
         public InputAction<SelectableTagBaseViewModel> SelectTag { get; }
@@ -55,8 +54,7 @@ namespace Toggl.Core.UI.ViewModels
             this.interactorFactory = interactorFactory;
             this.schedulerProvider = schedulerProvider;
 
-            Close = rxActionFactory.FromAsync(close);
-            Save = rxActionFactory.FromAsync(save);
+            Save = rxActionFactory.FromAction(save);
             SelectTag = rxActionFactory.FromAsync<SelectableTagBaseViewModel>(selectTag);
         }
 
@@ -121,6 +119,11 @@ namespace Toggl.Core.UI.ViewModels
             navigationFromEditTimeEntryStopwatch = null;
         }
 
+        public override void CloseWithDefaultResult()
+        {
+            Close(defaultResult);
+        }
+
         private SelectableTagBaseViewModel toSelectableTagViewModel(TagSuggestion tagSuggestion)
             => new SelectableTagViewModel(
                 tagSuggestion.TagId,
@@ -156,9 +159,9 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        private Task close()
-            => Finish(defaultResult);
-
-        private Task save() => Finish(selectedTagIds.ToArray());
+        private void save()
+        {
+            Close(selectedTagIds.ToArray());
+        }
     }
 }

@@ -18,19 +18,17 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class SuggestionsViewModel : ViewModel
     {
+        private readonly IRxActionFactory rxActionFactory;
         private readonly IInteractorFactory interactorFactory;
         private readonly IOnboardingStorage onboardingStorage;
-        private readonly ISuggestionProviderContainer suggestionProviders;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly ITogglDataSource dataSource;
-        private readonly IRxActionFactory rxActionFactory;
+        private readonly ISuggestionProviderContainer suggestionProviders;
 
         public IObservable<Suggestion[]> Suggestions { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
         public RxAction<Suggestion, IThreadSafeTimeEntry> StartTimeEntry { get; private set; }
 
         public SuggestionsViewModel(
-            ITogglDataSource dataSource,
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
             ISuggestionProviderContainer suggestionProviders,
@@ -39,7 +37,6 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService)
             : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
@@ -50,7 +47,6 @@ namespace Toggl.Core.UI.ViewModels
             this.onboardingStorage = onboardingStorage;
             this.suggestionProviders = suggestionProviders;
             this.schedulerProvider = schedulerProvider;
-            this.dataSource = dataSource;
             this.rxActionFactory = rxActionFactory;
         }
 

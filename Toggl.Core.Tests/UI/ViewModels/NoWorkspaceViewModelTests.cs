@@ -59,7 +59,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.TryAgain.Execute();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -83,7 +83,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.TryAgain.Execute();
                 TestScheduler.Start();
 
-                await View.DidNotReceive().Close();
+                View.DidNotReceive().Close();
                 AccessRestrictionStorage.DidNotReceive().SetNoWorkspaceStateReached(Arg.Any<bool>());
             }
 
@@ -133,7 +133,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.CreateWorkspaceWithDefaultName.Execute();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]

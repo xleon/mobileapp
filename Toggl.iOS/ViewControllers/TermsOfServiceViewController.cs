@@ -3,7 +3,7 @@ using CoreGraphics;
 using Foundation;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
@@ -52,12 +52,12 @@ namespace Toggl.iOS.ViewControllers
 
             prepareTextView();
 
-            AcceptButton.Rx()
-                .BindAction(ViewModel.Close, _ => true)
+            AcceptButton.Rx().Tap()
+                .Subscribe(() => ViewModel.Close(true))
                 .DisposedBy(DisposeBag);
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close, _ => false)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
         }
 

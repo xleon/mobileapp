@@ -25,9 +25,7 @@ namespace Toggl.Core.UI.ViewModels
         private DateFormat defaultResult;
 
         public ImmutableList<SelectableDateFormatViewModel> DateTimeFormats { get; }
-
-        public UIAction Close { get; }
-
+        
         public InputAction<SelectableDateFormatViewModel> SelectDateFormat { get; }
 
         public SelectDateFormatViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
@@ -35,8 +33,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            Close = rxActionFactory.FromAsync(close);
-            SelectDateFormat = rxActionFactory.FromAsync<SelectableDateFormatViewModel>(selectFormat);
+            SelectDateFormat = rxActionFactory.FromAction<SelectableDateFormatViewModel>(selectFormat);
 
             DateTimeFormats = availableDateFormats
                 .Select(dateFormat => new SelectableDateFormatViewModel(dateFormat, false))
@@ -51,10 +48,15 @@ namespace Toggl.Core.UI.ViewModels
             return base.Initialize(parameter);
         }
 
-        private Task close() => Finish(defaultResult);
+        public override void CloseWithDefaultResult()
+        {
+            Close(defaultResult);
+        }
 
-        private Task selectFormat(SelectableDateFormatViewModel dateFormatViewModel)
-            => Finish(dateFormatViewModel.DateFormat);
+        private void selectFormat(SelectableDateFormatViewModel dateFormatViewModel)
+        {
+            Close(dateFormatViewModel.DateFormat);
+        }
 
         private void updateSelectedFormat(DateFormat selected)
             => DateTimeFormats.ForEach(dateFormat

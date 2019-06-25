@@ -15,22 +15,7 @@ namespace Toggl.iOS.Extensions
     {
         internal static void Dismiss(this UIViewController viewController)
         {
-            // Is this on a navigation stack?
-            if (viewController.NavigationController != null && viewController.ParentViewController == viewController.NavigationController)
-            {
-                // Is this the root of that navigation stack?
-                if (viewController.NavigationController.ViewControllers.First() == viewController)
-                {
-                    viewController.NavigationController.DismissViewController(true, null);
-                }
-                else
-                {
-                    viewController.NavigationController.PopToRootViewController(true);
-                }
-            }
-
-            // Is this a modal?
-            else if (viewController.PresentingViewController != null)
+            if (viewController.NavigationController == null && viewController.PresentingViewController != null)
             {
                 viewController.DismissViewController(true, null);
             }

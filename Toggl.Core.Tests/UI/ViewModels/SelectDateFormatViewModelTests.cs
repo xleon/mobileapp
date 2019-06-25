@@ -50,7 +50,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseCommand : SelectDateFormatViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : SelectDateFormatViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModelPassingTheDefaultResult()
@@ -58,7 +58,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var defaultResult = DateFormat.FromLocalizedDateFormat("YYYY.MM.DD");
                 await ViewModel.Initialize(defaultResult);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 (await ViewModel.Result).Should().Be(defaultResult);

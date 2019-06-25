@@ -1,20 +1,20 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Views;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Droid.Extensions;
-using Toggl.Droid.Extensions.Reactive;
-using Toggl.Shared.Extensions;
-using Toggl.Core.Extensions;
 using Android.Text;
 using Android.Support.V7.Widget;
-using System.Linq;
+using Toggl.Core.Extensions;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Transformations;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.ViewHolders;
+using Toggl.Shared.Extensions;
 using TimeEntryExtensions = Toggl.Droid.Extensions.TimeEntryExtensions;
 using TextResources = Toggl.Shared.Resources;
 using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
@@ -83,17 +83,6 @@ namespace Toggl.Droid.Activities
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
         }
 
-        public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
-        {
-            if (keyCode == Keycode.Back)
-            {
-                ViewModel.Close.Execute();
-                return true;
-            }
-
-            return base.OnKeyDown(keyCode, e);
-        }
-
         private void setupViews()
         {
             singleTimeEntryModeViews.Visibility = (!ViewModel.IsEditingGroup).ToVisibility();
@@ -119,7 +108,7 @@ namespace Toggl.Droid.Activities
         private void setupBindings()
         {
             closeButton.Rx().Tap()
-                .Subscribe(ViewModel.Close.Inputs)
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             confirmButton.Rx().Tap()

@@ -3,6 +3,7 @@ using CoreGraphics;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Cells.Settings;
@@ -46,8 +47,8 @@ namespace Toggl.iOS.ViewControllers.Settings
 
             TableView.Source = source;
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
         }
     }

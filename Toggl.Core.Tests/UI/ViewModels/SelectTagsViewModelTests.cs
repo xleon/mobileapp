@@ -32,8 +32,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     RxActionFactory
                 );
 
-            protected Task EnsureClosesTheViewModel()
-                => View.Received().Close();
+            protected void EnsureClosesTheViewModel()
+            {
+                View.Received().Close();
+            }
 
             protected bool EnsureExpectedTagsAreReturned(long[] actual, long[] expected)
             {
@@ -92,17 +94,17 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : SelectTagsViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : SelectTagsViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.Initialize(DefaultParameter);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
-                await EnsureClosesTheViewModel();
+                EnsureClosesTheViewModel();
             }
 
             [Fact, LogIfTooSlow]
@@ -111,7 +113,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var tagids = new long[] { 1, 4, 29, 2 };
                 await ViewModel.Initialize( new SelectTagsParameter(tagids, 0));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 (await ViewModel.Result).Should().BeSequenceEquivalentTo(tagids);
@@ -128,7 +130,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Save.Execute();
                 TestScheduler.Start();
 
-                await EnsureClosesTheViewModel();
+                EnsureClosesTheViewModel();
             }
 
             [Fact, LogIfTooSlow]

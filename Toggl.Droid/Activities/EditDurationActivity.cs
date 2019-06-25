@@ -36,7 +36,7 @@ namespace Toggl.Droid.Activities
 
         private readonly Subject<DateTimeOffset> activeEditionChangedSubject = new Subject<DateTimeOffset>();
         private readonly Subject<Unit> viewClosedSubject = new Subject<Unit>();
-        private readonly Subject<Unit> saveSubject = new Subject<Unit>();
+        //private readonly Subject<Unit> saveSubject = new Subject<Unit>();
 
         private DateTimeOffset minDateTime;
         private DateTimeOffset maxDateTime;
@@ -152,11 +152,6 @@ namespace Toggl.Droid.Activities
                 .Subscribe(ViewModel.StopEditingTime.Inputs)
                 .DisposedBy(DisposeBag);
 
-            saveSubject
-                .Do(wheelNumericInput.ApplyDurationIfBeingEdited)
-                .Subscribe(ViewModel.Save.Inputs)
-                .DisposedBy(DisposeBag);
-
             ViewModel.IsEditingTime
                 .Invert()
                 .Subscribe(wheelNumericInput.Rx().Enabled())
@@ -222,11 +217,12 @@ namespace Toggl.Droid.Activities
             switch (item.ItemId)
             {
                 case Resource.Id.SaveMenuItem:
-                    saveSubject.OnNext(Unit.Default);
+                    wheelNumericInput.ApplyDurationIfBeingEdited();
+                    ViewModel.Save.Execute();
                     return true;
 
                 case Android.Resource.Id.Home:
-                    navigateBack();
+                    ViewModel.CloseWithDefaultResult();
                     return true;
             }
             return base.OnOptionsItemSelected(item);
@@ -249,16 +245,6 @@ namespace Toggl.Droid.Activities
             stopTimeText.Visibility = stopDateTimeViewsVisibility;
             stopDateText.Visibility = stopDateTimeViewsVisibility;
             stopDotSeparator.Visibility = stopDateTimeViewsVisibility;
-        }
-
-        public override void OnBackPressed()
-        {
-            navigateBack();
-        }
-
-        private void navigateBack()
-        {
-            ViewModel.Close.Execute();
         }
 
         protected override void OnStop()

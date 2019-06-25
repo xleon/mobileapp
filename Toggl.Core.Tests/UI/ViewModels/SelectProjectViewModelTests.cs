@@ -58,14 +58,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseCommand : SelectProjectViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : SelectProjectViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Theory]
@@ -77,7 +77,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 await ViewModel.Initialize(new SelectProjectParameter(projectId, 10, 11));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 (await ViewModel.Result)
                     .ProjectId.Should().Be(projectId);
@@ -92,7 +92,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 await ViewModel.Initialize(new SelectProjectParameter(10, taskId, 11));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 (await ViewModel.Result)
                     .TaskId.Should().Be(taskId);
@@ -107,7 +107,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectProject
                     .Execute(ProjectSuggestion.NoProject(0, ""));
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -323,7 +323,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.SelectProject.Execute(createProjectSuggestion);
                     TestScheduler.Start();
 
-                    await View.DidNotReceive().Close();
+                    View.DidNotReceive().Close();
                 }
 
                 [Fact, LogIfTooSlow]

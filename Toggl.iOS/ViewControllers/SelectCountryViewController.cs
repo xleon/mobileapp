@@ -1,19 +1,17 @@
-﻿using System.Reactive;
+﻿using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
-using UIKit;
 using Toggl.iOS.Extensions;
-using System.Threading.Tasks;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
-using Toggl.Shared.Extensions;
-using Toggl.Core.UI.Collections;
 using Toggl.iOS.Views.CountrySelection;
 using Toggl.iOS.ViewSources.Generic.TableView;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed partial class SelectCountryViewController : KeyboardAwareViewController<SelectCountryViewModel>, IDismissableViewController
+    public sealed partial class SelectCountryViewController : KeyboardAwareViewController<SelectCountryViewModel>
     {
         private const int rowHeight = 48;
 
@@ -45,23 +43,15 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(CountriesTableView.Rx().ReloadItems(source))
                 .DisposedBy(DisposeBag);
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             SearchTextField.Rx().Text()
                 .Subscribe(ViewModel.FilterText)
                 .DisposedBy(DisposeBag);
 
-
-
             SearchTextField.BecomeFirstResponder();
-        }
-
-        public async Task<bool> Dismiss()
-        {
-            ViewModel.Close.Execute(Unit.Default);
-            return true;
         }
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)

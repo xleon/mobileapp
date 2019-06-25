@@ -49,8 +49,6 @@ namespace Toggl.Core.UI.ViewModels
 
         public IObservable<string> PlaceholderText { get; }
 
-        public UIAction Close { get; }
-
         public InputAction<ProjectSuggestion> ToggleTaskSuggestions { get; }
 
         public InputAction<AutocompleteSuggestion> SelectProject { get; }
@@ -75,7 +73,6 @@ namespace Toggl.Core.UI.ViewModels
             this.schedulerProvider = schedulerProvider;
             this.stopwatchProvider = stopwatchProvider;
 
-            Close = rxActionFactory.FromAsync(close);
             ToggleTaskSuggestions = rxActionFactory.FromAction<ProjectSuggestion>(toggleTaskSuggestions);
             SelectProject = rxActionFactory.FromAsync<AutocompleteSuggestion>(selectProject);
 
@@ -155,6 +152,11 @@ namespace Toggl.Core.UI.ViewModels
             navigationFromEditTimeEntryViewModelStopwatch?.Stop();
             navigationFromEditTimeEntryViewModelStopwatch = null;
         }
+        public override void CloseWithDefaultResult()
+        {
+            Close(new SelectProjectParameter(projectId, taskId, workspaceId));
+        }
+
 
         private SectionModel<string, AutocompleteSuggestion> collectionSection(IEnumerable<ProjectSuggestion> suggestions, bool prependNoProject)
         {
@@ -184,11 +186,8 @@ namespace Toggl.Core.UI.ViewModels
 
             var project = await interactorFactory.GetProjectById(createdProjectId.Value).Execute();
             var parameter = new SelectProjectParameter(project.Id, null, project.WorkspaceId);
-            await Finish(parameter);
+            Close(parameter);
         }
-
-        private Task close()
-            => Finish(new SelectProjectParameter(projectId, taskId, workspaceId));
 
         private async Task selectProject(AutocompleteSuggestion suggestion)
         {
@@ -236,7 +235,7 @@ namespace Toggl.Core.UI.ViewModels
                     throw new ArgumentException($"{nameof(suggestion)} must be either of type {nameof(ProjectSuggestion)} or {nameof(TaskSuggestion)}.");
             }
 
-            Finish(new SelectProjectParameter(projectId, taskId, workspaceId));
+            Close(new SelectProjectParameter(projectId, taskId, workspaceId));
         }
 
         private void toggleTaskSuggestions(ProjectSuggestion projectSuggestion)

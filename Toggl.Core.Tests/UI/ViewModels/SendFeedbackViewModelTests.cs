@@ -188,7 +188,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var viewModel = CreateViewModel();
 
                 viewModel.IsLoading.StartWith(true).Subscribe(observer);
-                viewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
                 observer.LastEmittedValue().Should().BeFalse();
@@ -236,10 +236,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.FeedbackText.OnNext(string.Empty);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Property]
@@ -247,7 +247,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.FeedbackText.OnNext(feedbackText.Get);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
                 View.Received().ConfirmDestructiveAction(Arg.Any<ActionType>());
@@ -259,10 +259,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 View.ConfirmDestructiveAction(Arg.Any<ActionType>()).Returns(Observable.Return(true));
                 ViewModel.FeedbackText.OnNext(feedbackText.Get);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                View.Received().Close().Wait();
+                View.Received().Close();
             }
 
             [Property]
@@ -271,10 +271,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 View.ConfirmDestructiveAction(Arg.Any<ActionType>()).Returns(Observable.Return(false));
                 ViewModel.FeedbackText.OnNext(feedbackText.Get);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                View.DidNotReceive().Close().Wait();
+                View.DidNotReceive().Close();
             }
         }
 

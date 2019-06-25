@@ -26,7 +26,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class SuggestionsViewModelTest : BaseViewModelTests<SuggestionsViewModel>
         {
             protected override SuggestionsViewModel CreateViewModel()
-                => new SuggestionsViewModel(DataSource, InteractorFactory, OnboardingStorage, SuggestionProviderContainer, SchedulerProvider, RxActionFactory, NavigationService);
+                => new SuggestionsViewModel(InteractorFactory, OnboardingStorage, SuggestionProviderContainer, SchedulerProvider, RxActionFactory, NavigationService);
 
             protected override void AdditionalViewModelSetup()
             {
@@ -48,7 +48,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Theory, LogIfTooSlow]
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
-                bool useDataSource,
                 bool useContainer,
                 bool useOnboardingStorage,
                 bool useInteractorFactory,
@@ -57,7 +56,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useNavigationService)
             {
                 var container = useContainer ? SuggestionProviderContainer : null;
-                var dataSource = useDataSource ? DataSource : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
@@ -65,7 +63,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, container,
+                    () => new SuggestionsViewModel(interactorFactory, onboardingStorage, container,
                         schedulerProvider, rxActionFactory, navigationService);
 
                 tryingToConstructWithEmptyParameters

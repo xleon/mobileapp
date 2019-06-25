@@ -11,7 +11,6 @@ using Android.Views;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
-using Toggl.Droid.Fragments;
 using Toggl.Shared.Extensions;
 using FoundationResources = Toggl.Shared.Resources;
 
@@ -143,31 +142,14 @@ namespace Toggl.Droid.Activities
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
         }
 
-        public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
-        {
-            if (keyCode == Keycode.Back)
-            {
-                var fragment = SupportFragmentManager.Fragments.FirstOrDefault();
-                if (fragment is SelectWorkspaceFragment selectWorkspaceFragment)
-                {
-                    selectWorkspaceFragment.ViewModel.Close.Execute();
-                    return true;
-                }
-
-                ViewModel.Close.Execute();
-                return true;
-            }
-
-            return base.OnKeyDown(keyCode, e);
-        }
-
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             if (item.ItemId == Android.Resource.Id.Home)
             {
-                navigateBack();
+                ViewModel.CloseWithDefaultResult();
                 return true;
             }
+
             return base.OnOptionsItemSelected(item);
         }
 
@@ -180,11 +162,6 @@ namespace Toggl.Droid.Activities
 
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetDisplayShowHomeEnabled(true);
-        }
-
-        private void navigateBack()
-        {
-            ViewModel.Close.Execute();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Toggl.Core.UI.ViewModels;
 
 namespace Toggl.Droid.Presentation
@@ -29,9 +30,10 @@ namespace Toggl.Droid.Presentation
 
         public void ClearAll()
         {
-            foreach (var cacheValue in cache.Values)
+            foreach (var cacheValue in cache.Values.ToList())
             {
-                cacheValue?.Cancel();
+                cacheValue?.DetachView();
+                cacheValue?.CloseWithDefaultResult();
             }
             
             cache.Clear();

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.App;
-using Android.Util;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 
@@ -82,9 +80,13 @@ namespace Toggl.Droid.Activities
 
         public override void OnBackPressed()
         {
-            ViewModel?.Cancel();
+            if (ViewModel == null)
+            {
+                base.OnBackPressed();
+                return;
+            }
 
-            base.OnBackPressed();
+            ViewModel.CloseWithDefaultResult();
         }
 
         protected override void Dispose(bool disposing)
@@ -107,15 +109,13 @@ namespace Toggl.Droid.Activities
             }
         }
 
-        public Task Close()
+        public void Close()
         {
             AndroidDependencyContainer.Instance
                 .ViewModelCache
                 .Clear<TViewModel>();
             
             Finish();
-            
-            return Task.CompletedTask;
         }
     }
 }

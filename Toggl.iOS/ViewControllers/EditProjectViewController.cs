@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
-using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
@@ -14,7 +12,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed partial class EditProjectViewController : ReactiveViewController<EditProjectViewModel>, IDismissableViewController
+    public sealed partial class EditProjectViewController : ReactiveViewController<EditProjectViewModel>
     {
         private const double desiredIpadHeight = 360;
         private static readonly nfloat errorVisibleHeight = 16;
@@ -22,12 +20,6 @@ namespace Toggl.iOS.ViewControllers
         public EditProjectViewController(EditProjectViewModel viewModel)
             : base(viewModel, nameof(EditProjectViewController))
         {
-        }
-
-        public Task<bool> Dismiss()
-        {
-            ViewModel.Close.Execute();
-            return Task.FromResult(true);
         }
 
         public override void ViewDidLoad()
@@ -113,8 +105,8 @@ namespace Toggl.iOS.ViewControllers
                 .BindAction(ViewModel.Save)
                 .DisposedBy(DisposeBag);
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             NSAttributedString attributedClientName(string clientName)

@@ -822,16 +822,16 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : InitializableEditTimeEntryViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : InitializableEditTimeEntryViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModelIfNothingChanged()
             {
                 await ViewModel.Initialize(TimeEntriesGroupIds);
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -840,7 +840,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.Description.Accept("Something Else");
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -865,7 +865,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.SelectProject.Execute();
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -890,7 +890,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.SelectProject.Execute();
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -915,7 +915,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.SelectProject.Execute();
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -937,7 +937,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.EditTimes.Execute(EditViewTapSource.StartTime);
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -961,7 +961,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.EditTimes.Execute(EditViewTapSource.Duration);
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -982,7 +982,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.StopTimeEntry.Execute();
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -1000,7 +1000,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.ToggleBillable.Execute();
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -1022,7 +1022,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 TestScheduler.Start();
                 ViewModel.SelectTags.Execute();
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 await View.Received().ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
@@ -1038,10 +1038,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 TestScheduler.Start();
                 ViewModel.Description.Accept("This changes the description.");
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -1054,10 +1054,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 TestScheduler.Start();
                 ViewModel.Description.Accept("This changes the description.");
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
-                await View.DidNotReceive().Close();
+                View.DidNotReceive().Close();
             }
         }
 
@@ -1790,7 +1790,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Delete.Execute();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -1802,7 +1802,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Delete.Execute();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -1926,7 +1926,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Save.Execute();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -1940,7 +1940,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Save.Execute();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
         }
     }

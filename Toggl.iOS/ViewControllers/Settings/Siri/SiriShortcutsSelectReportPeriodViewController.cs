@@ -122,7 +122,7 @@ namespace Toggl.iOS.ViewControllers.Settings
         public void DidFinish(INUIAddVoiceShortcutViewController controller, INVoiceShortcut voiceShortcut, NSError error)
         {
             controller.DismissViewController(true, null);
-            ViewModel.Close.Execute();
+            ViewModel.CloseWithDefaultResult();
         }
 
         public void DidCancel(INUIAddVoiceShortcutViewController controller)

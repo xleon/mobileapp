@@ -72,10 +72,10 @@ namespace Toggl.Droid.Activities
             switch (item.ItemId)
             {
                 case Resource.Id.Done:
-                    ViewModel.Done.Execute();
+                    ViewModel.Save.Execute();
                     return true;
                 case Android.Resource.Id.Home:
-                    ViewModel.Close.Execute();
+                    ViewModel.CloseWithDefaultResult();
                     return true;
             }
 

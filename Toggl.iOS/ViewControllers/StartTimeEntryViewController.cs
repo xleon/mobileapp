@@ -5,14 +5,13 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
-using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Onboarding.CreationView;
 using Toggl.Core.UI.Onboarding.StartTimeEntryView;
@@ -25,7 +24,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed partial class StartTimeEntryViewController : KeyboardAwareViewController<StartTimeEntryViewModel>, IDismissableViewController
+    public sealed partial class StartTimeEntryViewController : KeyboardAwareViewController<StartTimeEntryViewModel>
     {
         private const double desiredIpadHeight = 360;
 
@@ -148,8 +147,8 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             // Actions
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             DoneButton.Rx()
@@ -207,11 +206,6 @@ namespace Toggl.iOS.ViewControllers
             {
                 ViewModel.StopSuggestionsRenderingStopwatch();
             };
-        }
-
-        public async Task<bool> Dismiss()
-        {
-            return await ViewModel.Close.ExecuteWithCompletion(Unit.Default);
         }
 
         private void onTextFieldInfo(TextFieldInfo textFieldInfo)

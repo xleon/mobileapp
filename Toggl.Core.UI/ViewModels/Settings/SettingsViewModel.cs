@@ -99,7 +99,6 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction SelectDurationFormat { get; }
         public UIAction ToggleTimeEntriesGrouping { get; }
         public UIAction SelectBeginningOfWeek { get; }
-        public UIAction Close { get; }
 
         public InputAction<SelectableWorkspaceViewModel> SelectDefaultWorkspace { get; }
 
@@ -280,7 +279,6 @@ namespace Toggl.Core.UI.ViewModels
             SelectBeginningOfWeek = rxActionFactory.FromAsync(selectBeginningOfWeek);
             ToggleTimeEntriesGrouping = rxActionFactory.FromAsync(toggleTimeEntriesGrouping);
             SelectDefaultWorkspace = rxActionFactory.FromAsync<SelectableWorkspaceViewModel>(selectDefaultWorkspace);
-            Close = rxActionFactory.FromAsync(Finish);
         }
 
         public override async Task Initialize()

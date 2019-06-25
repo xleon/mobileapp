@@ -322,15 +322,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : EditProjectViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : EditProjectViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -338,7 +338,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.Initialize("Some name");
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 (await ViewModel.Result)
@@ -350,7 +350,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.Initialize("Some name");
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 InteractorFactory.CreateProject(Arg.Any<CreateProjectDTO>()).DidNotReceive().Execute();

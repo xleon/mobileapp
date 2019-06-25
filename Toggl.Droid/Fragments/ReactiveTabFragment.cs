@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.App;
@@ -86,9 +85,8 @@ namespace Toggl.Droid.Fragments
             DisposeBag?.Dispose();
         }
 
-        public Task Close()
+        public void Close()
         {
-            return Task.CompletedTask;
         }
 
         public IObservable<string> GetGoogleToken()

@@ -116,6 +116,6 @@ namespace Toggl.iOS.Presentation
             => GetViewController(viewModel).Apply(wrapInNavigationController);
 
         private static UIViewController wrapInNavigationController(UIViewController viewController)
-            => new UINavigationController(viewController);
+            => new ReactiveNavigationController(viewController);
     }
 }

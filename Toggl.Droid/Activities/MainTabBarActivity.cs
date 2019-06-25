@@ -182,7 +182,7 @@ namespace Toggl.Droid.Activities
         {
             if (navigationView.SelectedItemId == Resource.Id.MainTabTimerItem)
             {
-                base.OnBackPressed();
+                FinishAfterTransition();
                 return;
             }
 

@@ -15,7 +15,6 @@ namespace Toggl.Core.UI.ViewModels
 
         public UIAction ViewTermsOfService { get; }
         public UIAction ViewPrivacyPolicy { get; }
-        public InputAction<bool> Close { get; }
 
         public TermsOfServiceViewModel(IRxActionFactory rxActionFactory, INavigationService navigationService)
             : base(navigationService)
@@ -24,7 +23,6 @@ namespace Toggl.Core.UI.ViewModels
 
             ViewPrivacyPolicy = rxActionFactory.FromAsync(openPrivacyPolicy);
             ViewTermsOfService = rxActionFactory.FromAsync(openTermsOfService);
-            Close = rxActionFactory.FromAsync<bool>(result => Finish(result));
         }
 
         private Task openPrivacyPolicy()

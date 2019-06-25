@@ -1,5 +1,4 @@
 ﻿using System;
-using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -41,6 +40,13 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
         }
 
+        public override void OnResume()
+        {
+            base.OnResume();
+
+            Dialog.Window.SetDefaultDialogLayout(Activity, Context, heightDp: 400);
+        }
+
         private void setupRecyclerView()
         {
             recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
@@ -52,18 +58,6 @@ namespace Toggl.Droid.Fragments
             adapter.Items = ViewModel.BeginningOfWeekCollection;
 
             recyclerView.SetAdapter(adapter);
-        }
-
-        public override void OnResume()
-        {
-            base.OnResume();
-
-            Dialog.Window.SetDefaultDialogLayout(Activity, Context, heightDp: 400);
-        }
-
-        public override void OnCancel(IDialogInterface dialog)
-        {
-            ViewModel.Close.Execute();
         }
     }
 }

@@ -1841,7 +1841,6 @@
     <Compile Include="Extensions\ScrollViewExtensions.cs" />
     <Compile Include="Views\Calendar\CalendarCollectionViewAutoScrollHelper.cs" />
     <Compile Include="Extensions\Reactive\UIControlExtensions.cs" />
-    <Compile Include="ViewControllers\IDismissableViewController.cs" />
     <Compile Include="Services\PrivateSharedStorageServiceIos.cs" />
     <Compile Include="Extensions\Reactive\FadeViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\NSObjectExtensions.cs" />
@@ -1944,6 +1943,8 @@
     <Compile Include="ViewControllers\Settings\Siri\SiriWorkflowsViewController.designer.cs">
       <DependentUpon>SiriWorkflowsViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\Reactive\IReactiveViewController.cs" />
+    <Compile Include="ViewControllers\Reactive\ReactiveNavigationController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">

@@ -64,7 +64,10 @@ namespace Toggl.Droid.Activities
 
         private void onNavigateBack(object sender, Toolbar.NavigationClickEventArgs e)
         {
-            Finish();
+            var toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
+            toolbar.NavigationClick -= onNavigateBack;
+
+            ViewModel.CloseWithDefaultResult();
         }
     }
 }

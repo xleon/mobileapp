@@ -26,7 +26,6 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class TimeEntriesViewModel
     {
-        private readonly ISyncManager syncManager;
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly ISchedulerProvider schedulerProvider;
@@ -49,7 +48,6 @@ namespace Toggl.Core.UI.ViewModels
 
         public TimeEntriesViewModel(
             ITogglDataSource dataSource,
-            ISyncManager syncManager,
             IInteractorFactory interactorFactory,
             IAnalyticsService analyticsService,
             ISchedulerProvider schedulerProvider,
@@ -57,14 +55,12 @@ namespace Toggl.Core.UI.ViewModels
             ITimeService timeService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
 
-            this.syncManager = syncManager;
             this.interactorFactory = interactorFactory;
             this.analyticsService = analyticsService;
             this.schedulerProvider = schedulerProvider;
