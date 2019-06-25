@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.V7.Widget;
 using Android.Views;
+using System;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Shared.Extensions;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHolders;
-using Android.Support.V7.Widget;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
@@ -25,16 +26,16 @@ namespace Toggl.Droid.Fragments
             base.OnCreateView(inflater, container, savedInstanceState);
             var view = inflater.Inflate(Resource.Layout.SelectBeginningOfWeekFragment, null);
             InitializeViews(view);
-            
+
             return view;
         }
 
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-            
+
             setupRecyclerView();
-            
+
             adapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectBeginningOfWeek.Inputs)
                 .DisposedBy(DisposeBag);

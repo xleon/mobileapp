@@ -1,6 +1,3 @@
-﻿using Toggl.Core.Analytics;
-using Toggl.Networking.Network;
-
 namespace Toggl.Core
 {
     public interface IPlatformInfo

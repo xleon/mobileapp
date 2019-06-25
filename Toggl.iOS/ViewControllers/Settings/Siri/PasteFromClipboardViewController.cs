@@ -1,4 +1,3 @@
-﻿using System;
 using CoreGraphics;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Settings.Siri;

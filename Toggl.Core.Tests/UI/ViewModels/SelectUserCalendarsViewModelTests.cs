@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
-using Toggl.Core.UI.ViewModels.Calendar;
+using System;
+using System.Collections.Generic;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.UI.ViewModels.Calendar;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

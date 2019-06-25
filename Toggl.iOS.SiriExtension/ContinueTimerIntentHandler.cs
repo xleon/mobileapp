@@ -1,18 +1,18 @@
+using Foundation;
+using SiriExtension.Models;
 using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Foundation;
-using SiriExtension.Models;
 using Toggl.iOS.ExtensionKit;
 using Toggl.iOS.ExtensionKit.Analytics;
 using Toggl.iOS.ExtensionKit.Extensions;
 using Toggl.iOS.Intents;
-using Toggl.Shared.Models;
 using Toggl.Networking;
+using Toggl.Shared.Models;
 
 namespace SiriExtension
 {
-    public class ContinueTimerIntentHandler: ContinueTimerIntentHandling
+    public class ContinueTimerIntentHandler : ContinueTimerIntentHandling
     {
         private ITogglApi togglAPI;
         private static ITimeEntry lastEntry;

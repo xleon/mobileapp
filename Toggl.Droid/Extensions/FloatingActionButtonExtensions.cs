@@ -1,7 +1,6 @@
-﻿using Toggl.Shared;
+﻿using Android.Graphics.Drawables;
 using Android.Support.Design.Widget;
 using System;
-using Android.Graphics.Drawables;
 
 namespace Toggl.Droid.Extensions
 {

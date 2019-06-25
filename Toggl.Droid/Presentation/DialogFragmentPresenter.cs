@@ -1,7 +1,6 @@
+using Android.Support.V7.App;
 using System;
 using System.Collections.Generic;
-using Android.Support.V7.App;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Settings;

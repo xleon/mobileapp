@@ -1,4 +1,4 @@
-﻿using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;

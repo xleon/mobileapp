@@ -1,24 +1,15 @@
-using System;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Core.Analytics;
-using Toggl.Core.Models.Interfaces;
-using Toggl.Core.Suggestions;
-using Toggl.Core.Tests.Mocks;
-using Toggl.Storage;
-using Toggl.Storage.Models;
-using Toggl.Shared.Models;
-using Xunit;
-using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
-using Toggl.Core.Interactors;
-using System.Reactive;
+using System;
 using System.Collections.Generic;
-using Toggl.Shared.Extensions;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using Toggl.Core.DataSources;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Mocks;
+using Toggl.Shared.Extensions;
+using Xunit;
 
 namespace Toggl.Core.Tests.Interactors
 {

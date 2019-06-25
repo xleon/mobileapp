@@ -18,7 +18,7 @@ namespace SyncDiagramGenerator
 {
     internal sealed class SyncDiagramGenerator
     {
-        private readonly static string[] commonInterfacePrefixes =
+        private static readonly string[] commonInterfacePrefixes =
         {
             "IDatabase", "IThreadSafe"
         };

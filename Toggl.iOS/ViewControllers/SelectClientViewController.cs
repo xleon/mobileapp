@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.iOS.Extensions;
-using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Views.Client;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;

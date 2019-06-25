@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Toggl.Core.Analytics
+﻿namespace Toggl.Core.Analytics
 {
     public enum TimeEntryStartOrigin
     {

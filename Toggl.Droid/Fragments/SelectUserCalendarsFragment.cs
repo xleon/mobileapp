@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using Android.OS;
+﻿using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Droid.Adapters;

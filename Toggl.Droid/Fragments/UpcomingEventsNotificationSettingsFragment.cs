@@ -18,7 +18,7 @@ namespace Toggl.Droid.Fragments
 
             var view = wrappedInflater.Inflate(Resource.Layout.UpcomingEventsNotificationSettingsFragment, container, false);
             InitializeViews(view);
-            
+
             return view;
         }
 

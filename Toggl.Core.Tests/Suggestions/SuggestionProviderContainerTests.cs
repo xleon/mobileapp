@@ -1,6 +1,6 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
+using System;
 using Toggl.Core.Suggestions;
 using Xunit;
 

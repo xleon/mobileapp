@@ -16,7 +16,7 @@ namespace Toggl.Core.Tests.Generators
                 .GetTypes()
                 .Where(isAValidViewModel)
                 .Select(viewModelType => new object[] { viewModelType });
-    
+
         private bool isAValidViewModel(Type type)
             => type.IsAbstract == false &&
                type.Name != nameof(IViewModel) &&

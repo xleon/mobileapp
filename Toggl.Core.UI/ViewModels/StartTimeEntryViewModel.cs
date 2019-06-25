@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Span;
@@ -17,11 +15,12 @@ using Toggl.Core.Diagnostics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
-using Toggl.Core.Services;
+using Toggl.Core.UI.Views;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
@@ -30,7 +29,6 @@ using static Toggl.Core.Helper.Constants;
 using static Toggl.Shared.Extensions.CommonFunctions;
 using IStopwatch = Toggl.Core.Diagnostics.IStopwatch;
 using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
-using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI.ViewModels
 {

@@ -1,8 +1,9 @@
+using CoreGraphics;
+using Foundation;
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using CoreGraphics;
-using Foundation;
+using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Extensions;
@@ -192,7 +193,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(disposeBag);
 
             ViewModel.MinimumStopTime
-                .Subscribe(v => WheelView.MinimumEndTime= v)
+                .Subscribe(v => WheelView.MinimumEndTime = v)
                 .DisposedBy(disposeBag);
 
             ViewModel.MaximumStopTime

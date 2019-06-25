@@ -1,21 +1,21 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Autocomplete.Suggestions;
-using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Extensions;
-using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using Xunit;
 
@@ -314,7 +314,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     var projectName = "New project name";
                     var createProjectSuggestion = new CreateEntitySuggestion(Resources.CreateProject, projectName);
-                    setupProjectCreationResult(null );
+                    setupProjectCreationResult(null);
 
                     await ViewModel.Initialize(new SelectProjectParameter(null, null, 10));
 
@@ -330,7 +330,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 public async Task ClosesTheViewModelReturningTheCreatedIdIfTheProjectIsCreated()
                 {
                     var workspace = new MockWorkspace { Id = 1, Name = "ws", Admin = true, OnlyAdminsMayCreateProjects = true };
-                    InteractorFactory.GetAllWorkspaces().Execute().Returns(Observable.Return(new[] { workspace } ));
+                    InteractorFactory.GetAllWorkspaces().Execute().Returns(Observable.Return(new[] { workspace }));
                     const long projectId = 10;
                     setupProjectCreationResult(projectId);
 
@@ -795,7 +795,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheIsEmptyProperty : SelectProjectViewModelTest
         {
-            const long workspaceId = 1;
+            private const long workspaceId = 1;
 
             private IThreadSafeProject createArbitraryProject(int id)
                 => new MockProject

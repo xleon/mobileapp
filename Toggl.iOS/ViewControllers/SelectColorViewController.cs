@@ -1,7 +1,7 @@
-﻿using System;
+﻿using CoreGraphics;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
-using CoreGraphics;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;

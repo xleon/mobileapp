@@ -1,7 +1,7 @@
-﻿using System;
-using Foundation;
-using CoreAnimation;
+﻿using CoreAnimation;
 using CoreGraphics;
+using Foundation;
+using System;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using UIKit;

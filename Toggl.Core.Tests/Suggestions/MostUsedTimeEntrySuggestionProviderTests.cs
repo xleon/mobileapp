@@ -1,15 +1,14 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
-using NSubstitute;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Generators;
-using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 using Xunit;
@@ -110,7 +109,7 @@ namespace Toggl.Core.Tests.Suggestions
                 Database.TimeEntries
                         .GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>())
                         .Returns(Observable.Return(timeEntries));
-                
+
                 var suggestions = await Provider.GetSuggestions().ToList();
 
                 suggestions.Should().OnlyContain(suggestion => expectedDescriptions.Contains(suggestion.Description));

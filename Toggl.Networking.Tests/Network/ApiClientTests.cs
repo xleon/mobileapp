@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using FluentAssertions;
+using System.Linq;
 using System.Net.Http;
-using FluentAssertions;
 using Toggl.Networking.Network;
 using Xunit;
 

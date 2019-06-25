@@ -2,8 +2,8 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Core.UI.Reactive;
-using UIKit;
 using Toggl.Shared.Extensions;
+using UIKit;
 
 namespace Toggl.iOS.Extensions
 {

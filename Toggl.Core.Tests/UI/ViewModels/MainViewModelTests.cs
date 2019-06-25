@@ -1,4 +1,7 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,25 +10,21 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Shared.Models;
 using Toggl.Storage;
 using Xunit;
 using static Toggl.Core.Helper.Constants;
@@ -229,7 +228,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await NavigationService.Received(1).Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
-            
+
             [Fact, LogIfTooSlow]
             public async ThreadingTask DoesNotNavigateToSelectDefaultWorkspaceViewModelWhenTheresNoWorkspaceAvaialable()
             {

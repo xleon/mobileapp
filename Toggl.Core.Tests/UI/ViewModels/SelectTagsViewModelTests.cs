@@ -1,17 +1,17 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Extensions;
 using Xunit;
 
@@ -111,7 +111,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ReturnsTheSameTagsThatWerePassedToTheViewModel()
             {
                 var tagids = new long[] { 1, 4, 29, 2 };
-                await ViewModel.Initialize( new SelectTagsParameter(tagids, 0));
+                await ViewModel.Initialize(new SelectTagsParameter(tagids, 0));
 
                 ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
@@ -199,8 +199,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheIsEmptyProperty : SelectTagsViewModelTest
         {
-            const long workspaceId = 1;
-            const long irrelevantWorkspaceId = 2;
+            private const long workspaceId = 1;
+            private const long irrelevantWorkspaceId = 2;
 
             private void setup(Func<long, long> workspaceIdSelector)
             {
@@ -495,11 +495,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task AppendsTheTagIdToSelectedTagIdsIfNotSelectedAlready()
             {
-               var selectableTag = new SelectableTagViewModel(tagSuggestion.TagId, tagSuggestion.Name, true, 1);
+                var selectableTag = new SelectableTagViewModel(tagSuggestion.TagId, tagSuggestion.Name, true, 1);
 
-               ViewModel.SelectTag.Execute(selectableTag);
-               ViewModel.Save.Execute();
-               TestScheduler.Start();
+                ViewModel.SelectTag.Execute(selectableTag);
+                ViewModel.Save.Execute();
+                TestScheduler.Start();
 
                 var ids = await ViewModel.Result;
                 EnsureExpectedTagsAreReturned(ids, new[] { selectableTag.Id });
@@ -508,13 +508,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task RemovesTheTagIdFromSelectedTagIdsIfSelectedAlready()
             {
-               var selectableTag = new SelectableTagViewModel(tagSuggestion.TagId, tagSuggestion.Name, true, 1);
+                var selectableTag = new SelectableTagViewModel(tagSuggestion.TagId, tagSuggestion.Name, true, 1);
 
-               await ViewModel.Initialize(new SelectTagsParameter(new long[] { selectableTag.Id }, 0));
+                await ViewModel.Initialize(new SelectTagsParameter(new long[] { selectableTag.Id }, 0));
 
-               ViewModel.SelectTag.Execute(selectableTag);
-               ViewModel.Save.Execute();
-               TestScheduler.Start();
+                ViewModel.SelectTag.Execute(selectableTag);
+                ViewModel.Save.Execute();
+                TestScheduler.Start();
 
                 var ids = await ViewModel.Result;
                 EnsureExpectedTagsAreReturned(ids, new long[0]);

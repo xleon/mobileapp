@@ -4,11 +4,11 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Toggl.Core.Interactors;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Core.Interactors;
-using Toggl.Core.Services;
 
 namespace Toggl.Core.UI.ViewModels
 {

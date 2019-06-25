@@ -1,9 +1,9 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Reactive.Linq;
-using CoreGraphics;
-using Foundation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Views;
 using Toggl.Shared;
@@ -20,7 +20,7 @@ namespace Toggl.iOS.ViewSources
                 .Select(e => e.EventArgs.Color);
 
         public ColorSelectionCollectionViewSource(IObservable<IEnumerable<SelectableColorViewModel>> colors)
-            : base (ImmutableList<SelectableColorViewModel>.Empty, configureCell)
+            : base(ImmutableList<SelectableColorViewModel>.Empty, configureCell)
         {
         }
 

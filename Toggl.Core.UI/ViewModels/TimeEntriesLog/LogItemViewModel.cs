@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared;

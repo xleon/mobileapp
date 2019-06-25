@@ -1,9 +1,8 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
+using System;
+using System.Linq;
 using Toggl.Shared.Extensions;
 using Xunit;
 using static System.Math;
@@ -119,7 +118,7 @@ namespace Toggl.Shared.Tests
             [InlineData("🍌 🍄 🍆", 2, 3, "🍄 🍆")]
             public void ReturnsExpectedSubstring(
                 string original, int start, int length, string substring)
-            {  
+            {
                 original.UnicodeSafeSubstring(start, length).Should().Be(substring);
             }
         }

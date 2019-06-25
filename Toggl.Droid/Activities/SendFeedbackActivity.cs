@@ -1,15 +1,15 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions.Reactive;
-using Toggl.Shared.Extensions;
 using Toggl.Networking.Exceptions;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Activities
 {
@@ -50,9 +50,9 @@ namespace Toggl.Droid.Activities
 
             var sendButtonEnabled = ViewModel.SendEnabled.CombineLatest(ViewModel.IsLoading,
                 (sendIsEnabled, isLoading) => sendIsEnabled && !isLoading);
-           sendButtonEnabled
-                .Subscribe(onSendEnabled)
-                .DisposedBy(DisposeBag);
+            sendButtonEnabled
+                 .Subscribe(onSendEnabled)
+                 .DisposedBy(DisposeBag);
 
             ViewModel.Error
                 .Select(selectErrorMessage)

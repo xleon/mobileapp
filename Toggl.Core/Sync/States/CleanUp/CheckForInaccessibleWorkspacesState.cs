@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.Extensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 

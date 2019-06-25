@@ -1,15 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Selectable;
+using System;
+using System.Threading.Tasks;
 using Toggl.Core.Services;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Shared;
 using Xunit;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -76,7 +75,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectDateFormat.Execute(selectableDateFormatViewModel);
                 TestScheduler.Start();
 
-                (await ViewModel.Result).Should().Be(selectedDateFormat);    
+                (await ViewModel.Result).Should().Be(selectedDateFormat);
             }
         }
     }

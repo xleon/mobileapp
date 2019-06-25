@@ -5,7 +5,6 @@ using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Exceptions;
-using Toggl.Core.Extensions;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;

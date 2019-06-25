@@ -1,7 +1,7 @@
-﻿using System;
-using Android.Runtime;
+﻿using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System;
 using Toggl.Core.Extensions;
 using Toggl.Core.UI.ViewModels.Selectable;
 

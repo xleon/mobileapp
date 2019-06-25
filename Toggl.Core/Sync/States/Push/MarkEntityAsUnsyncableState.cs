@@ -2,10 +2,10 @@
 using System.Reactive.Linq;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Networking.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
-using Toggl.Networking.Exceptions;
 
 namespace Toggl.Core.Sync.States.Push
 {

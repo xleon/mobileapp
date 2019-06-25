@@ -1,7 +1,4 @@
 using System;
-using System.Reactive;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.UI.ViewModels;
 
 namespace Toggl.Core.UI
 {

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
+using System;
+using System.Threading.Tasks;
+using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Tests.Generators;
 using Xunit;
-using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {

@@ -1,16 +1,14 @@
-﻿using System;
-using System.IO;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
-using Toggl.Shared;
-using Toggl.Shared.Models;
 using Toggl.Networking.ApiClients;
-using Toggl.Networking.Exceptions;
 using Toggl.Networking.Models;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 

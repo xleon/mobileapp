@@ -1,11 +1,10 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Linq;
-using CoreGraphics;
-using Foundation;
-using Toggl.iOS.Extensions;
-using Toggl.iOS.Extensions.Reactive;
+using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.UI.Extensions;
@@ -13,6 +12,8 @@ using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Onboarding.EditView;
 using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Transformations;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -422,7 +423,7 @@ namespace Toggl.iOS.ViewControllers
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
         {
-            keyboardHeight = (float) e.FrameEnd.Height;
+            keyboardHeight = (float)e.FrameEnd.Height;
             adjustDistanceFromTop();
         }
 

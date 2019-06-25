@@ -10,9 +10,9 @@ namespace Toggl.Core.DataSources.Interfaces
         where TThreadsafe : IThreadSafeModel, TDatabase
     {
         IObservable<TThreadsafe> Created { get; }
-        
+
         IObservable<EntityUpdate<TThreadsafe>> Updated { get; }
-        
+
         IObservable<long> Deleted { get; }
     }
 }

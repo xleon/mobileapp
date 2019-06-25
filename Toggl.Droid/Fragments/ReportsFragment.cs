@@ -1,9 +1,9 @@
-﻿using System;
-using System.Reactive.Linq;
-using Android.OS;
+﻿using Android.OS;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Droid.Adapters;
@@ -24,7 +24,7 @@ namespace Toggl.Droid.Fragments
             var view = inflater.Inflate(Resource.Layout.ReportsFragment, container, false);
             InitializeViews(view);
             setupToolbar();
-            
+
             return view;
         }
 
@@ -87,9 +87,9 @@ namespace Toggl.Droid.Fragments
         public override void OnResume()
         {
             base.OnResume();
-            
+
             if (IsHidden) return;
-            
+
             ViewModel?.CalendarViewModel.ViewAppeared();
         }
 

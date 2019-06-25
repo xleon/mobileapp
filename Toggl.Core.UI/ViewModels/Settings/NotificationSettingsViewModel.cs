@@ -2,11 +2,11 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Extensions;
-using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
@@ -16,8 +16,8 @@ namespace Toggl.Core.UI.ViewModels.Settings
     [Preserve(AllMembers = true)]
     public sealed class NotificationSettingsViewModel : ViewModel
     {
-        public IObservable<bool> PermissionGranted;
-        public IObservable<string> UpcomingEvents;
+        public IObservable<bool> PermissionGranted { get; }
+        public IObservable<string> UpcomingEvents { get; }
 
         public UIAction RequestAccess { get; }
         public UIAction OpenUpcomingEvents { get; }

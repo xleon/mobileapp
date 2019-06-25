@@ -1,7 +1,7 @@
-﻿using System;
-using Newtonsoft.Json;
-using Toggl.Shared.Models;
+﻿using Newtonsoft.Json;
+using System;
 using Toggl.Networking.Serialization;
+using Toggl.Shared.Models;
 
 namespace Toggl.Networking.Models
 {

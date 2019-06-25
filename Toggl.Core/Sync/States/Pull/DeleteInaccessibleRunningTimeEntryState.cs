@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Core.DataSources.Interfaces;
-using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;

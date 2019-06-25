@@ -5,11 +5,11 @@ using Android.Service.QuickSettings;
 
 namespace Toggl.Droid.Tiles
 {
-    [Service(Name = "toggl.giskard.Tiles.NewTimeEntryTileService", 
-             Label = "@string/NewTimeEntry", 
+    [Service(Name = "toggl.giskard.Tiles.NewTimeEntryTileService",
+             Label = "@string/NewTimeEntry",
              Icon = "@drawable/play",
              Permission = "android.permission.BIND_QUICK_SETTINGS_TILE")]
-    [IntentFilter(new [] { "android.service.quicksettings.action.QS_TILE" })]
+    [IntentFilter(new[] { "android.service.quicksettings.action.QS_TILE" })]
     public sealed class NewTimeEntryTileService : TileService
     {
         public override void OnClick()
@@ -17,7 +17,7 @@ namespace Toggl.Droid.Tiles
             base.OnClick();
 
             var intent = new Intent(Intent.ActionView).SetData(Uri.Parse("toggl://start"));
-            StartActivityAndCollapse(intent); 
+            StartActivityAndCollapse(intent);
         }
     }
 }

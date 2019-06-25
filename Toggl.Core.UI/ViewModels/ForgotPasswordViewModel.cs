@@ -2,16 +2,16 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Toggl.Core.UI.Navigation;
+using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Login;
-using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
+using Toggl.Networking.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Networking.Exceptions;
-using System.Threading.Tasks;
 
 namespace Toggl.Core.UI.ViewModels
 {

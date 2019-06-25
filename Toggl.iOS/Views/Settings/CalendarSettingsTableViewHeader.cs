@@ -1,12 +1,11 @@
-using ObjCRuntime;
 using Foundation;
+using ObjCRuntime;
 using System;
-using UIKit;
-using Toggl.iOS.Extensions;
 using System.Reactive;
-using Toggl.Core;
+using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared;
+using UIKit;
 
 namespace Toggl.iOS
 {
@@ -14,7 +13,7 @@ namespace Toggl.iOS
     {
         public IObservable<Unit> EnableCalendarAccessTapped { get; private set; }
 
-        public CalendarSettingsTableViewHeader (IntPtr handle) : base (handle)
+        public CalendarSettingsTableViewHeader(IntPtr handle) : base(handle)
         {
         }
 

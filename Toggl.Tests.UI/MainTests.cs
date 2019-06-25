@@ -1,5 +1,5 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System;
 using Xamarin.UITest;
 using Xamarin.UITest.Queries;
 using static Toggl.Tests.UI.Extensions.MainExtensions;

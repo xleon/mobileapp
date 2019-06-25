@@ -10,13 +10,13 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Helper;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Services;
+using Toggl.Core.Sync;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
-using Toggl.Core.Services;
-using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 

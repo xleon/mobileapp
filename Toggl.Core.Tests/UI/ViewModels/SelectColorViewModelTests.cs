@@ -1,17 +1,16 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
+using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
-using Xunit;
-using System.Reactive.Linq;
-using Toggl.Core.Tests.Generators;
 using Toggl.Shared;
-using Toggl.Core.Tests.TestExtensions;
+using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -59,7 +58,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectColor.Execute(colorToSelect);
 
                 observer.Messages
-                    .Select( m => m.Value.Value)
+                    .Select(m => m.Value.Value)
                     .Last()
                     .Single(c => c.Selected).Color.Should().BeEquivalentTo(colorToSelect);
             }
@@ -114,7 +113,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Initialize(parameters);
 
                 observer.Messages
-                    .Select( m => m.Value.Value)
+                    .Select(m => m.Value.Value)
                     .Last()
                     .Should().HaveCount(14);
             }
@@ -131,7 +130,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Initialize(parameters);
 
                 observer.Messages
-                    .Select( m => m.Value.Value)
+                    .Select(m => m.Value.Value)
                     .Last()
                     .Should().HaveCount(15);
             }
@@ -148,7 +147,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Initialize(parameters);
 
                 observer.Messages
-                    .Select( m => m.Value.Value)
+                    .Select(m => m.Value.Value)
                     .Last()
                     .Single(c => c.Selected).Color.Should().Be(passedColor);
             }
@@ -166,7 +165,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Initialize(parameters);
 
                 observer.Messages
-                    .Select( m => m.Value.Value)
+                    .Select(m => m.Value.Value)
                     .Last()
                     .Single(c => c.Selected).Color.Should().Be(expected);
             }
@@ -182,7 +181,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Initialize(parameters);
 
                 observer.Messages
-                    .Select( m => m.Value.Value)
+                    .Select(m => m.Value.Value)
                     .Last()
                     .Single(c => c.Selected).Color.Should().Be(someColor);
             }
@@ -208,7 +207,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
-                
+
                 (await ViewModel.Result).Should().Be(color);
             }
         }

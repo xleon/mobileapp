@@ -2,20 +2,19 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Extensions;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Transformations;
-using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Core.Helper.Constants;
 using static Toggl.Core.UI.Helper.TemporalInconsistency;
-using static Toggl.Shared.BeginningOfWeek;
 
 namespace Toggl.Core.UI.ViewModels
 {

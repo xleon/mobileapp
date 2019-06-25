@@ -5,15 +5,15 @@ using System.Reactive.Linq;
 using Toggl.Core.Analytics;
 using Toggl.Core.Models;
 using Toggl.Core.Reports;
+using Toggl.Networking;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.ApiClients.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.Shared.Models.Reports;
 using Toggl.Storage;
 using Toggl.Storage.Models;
-using Toggl.Networking;
-using Toggl.Networking.ApiClients;
-using Toggl.Networking.ApiClients.Interfaces;
 
 namespace Toggl.Core.Interactors
 {

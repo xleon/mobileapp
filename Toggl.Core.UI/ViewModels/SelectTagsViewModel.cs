@@ -4,13 +4,13 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -32,7 +32,7 @@ namespace Toggl.Core.UI.ViewModels
 
         public IObservable<IEnumerable<SelectableTagBaseViewModel>> Tags { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
-        public BehaviorSubject<string> FilterText { get; } = new BehaviorSubject<string>(String.Empty);
+        public BehaviorSubject<string> FilterText { get; } = new BehaviorSubject<string>(string.Empty);
         public UIAction Save { get; }
 
         public InputAction<SelectableTagBaseViewModel> SelectTag { get; }

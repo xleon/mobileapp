@@ -3,12 +3,12 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.Interactors;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.Services;
-using Toggl.Shared;
-using Toggl.Shared.Extensions;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Views;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels
 {

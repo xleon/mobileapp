@@ -1,8 +1,8 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
+using Toggl.Networking.Serialization.Converters;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.Networking.Serialization.Converters;
 
 namespace Toggl.Networking.Models
 {
@@ -11,7 +11,7 @@ namespace Toggl.Networking.Models
         public long Id { get; set; }
 
         public string ApiToken { get; set; }
-        
+
         public long? DefaultWorkspaceId { get; set; }
 
         [JsonConverter(typeof(EmailConverter))]

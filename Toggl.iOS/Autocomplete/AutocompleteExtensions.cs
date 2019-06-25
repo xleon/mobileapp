@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Collections.Generic;
-using Foundation;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Span;
-using Toggl.iOS.Extensions;
 using Toggl.Core.UI.Helper;
+using Toggl.iOS.Extensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;

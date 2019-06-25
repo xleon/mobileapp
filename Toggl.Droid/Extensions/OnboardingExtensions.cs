@@ -1,11 +1,11 @@
-﻿using System;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Threading;
-using Android.App;
+﻿using Android.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Threading;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -22,7 +22,7 @@ namespace Toggl.Droid.Extensions
 
         public static IDisposable ManageDismissableTooltip(
             this IOnboardingStep step,
-            IObservable<bool> componentIsVisible, 
+            IObservable<bool> componentIsVisible,
             PopupWindow tooltip,
             View anchor,
             Func<PopupWindow, View, PopupOffsets> popupOffsetsGenerator,
@@ -162,7 +162,7 @@ namespace Toggl.Droid.Extensions
             {
                 return windowTokenIsReady;
             }
-            
+
             return false;
         }
     }

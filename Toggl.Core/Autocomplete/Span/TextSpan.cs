@@ -1,5 +1,4 @@
-﻿using System;
-namespace Toggl.Core.Autocomplete.Span
+﻿namespace Toggl.Core.Autocomplete.Span
 {
     public class TextSpan : ISpan
     {

@@ -31,14 +31,14 @@ namespace Toggl.Core.UI.ViewModels.Settings
             new BehaviorSubject<EditTimeEntryViewModel.ProjectClientTaskInfo>(EditTimeEntryViewModel
                 .ProjectClientTaskInfo.Empty);
 
-        public BehaviorRelay<bool> IsBillable = new BehaviorRelay<bool>(false);
-        public BehaviorRelay<string> Description = new BehaviorRelay<string>(string.Empty);
-        public BehaviorRelay<IThreadSafeWorkspace> Workspace = new BehaviorRelay<IThreadSafeWorkspace>(null);
-        public BehaviorRelay<IThreadSafeProject> Project = new BehaviorRelay<IThreadSafeProject>(null);
-        public BehaviorRelay<long?> TaskId = new BehaviorRelay<long?>(null);
-        public BehaviorRelay<IEnumerable<IThreadSafeTag>> Tags =
+        public BehaviorRelay<bool> IsBillable { get; } = new BehaviorRelay<bool>(false);
+        public BehaviorRelay<string> Description { get; } = new BehaviorRelay<string>(string.Empty);
+        public BehaviorRelay<IThreadSafeWorkspace> Workspace { get; } = new BehaviorRelay<IThreadSafeWorkspace>(null);
+        public BehaviorRelay<IThreadSafeProject> Project { get; } = new BehaviorRelay<IThreadSafeProject>(null);
+        public BehaviorRelay<long?> TaskId { get; } = new BehaviorRelay<long?>(null);
+        public BehaviorRelay<IEnumerable<IThreadSafeTag>> Tags { get; } =
             new BehaviorRelay<IEnumerable<IThreadSafeTag>>(Enumerable.Empty<IThreadSafeTag>());
-        public BehaviorRelay<bool> PasteFromClipboard = new BehaviorRelay<bool>(false);
+        public BehaviorRelay<bool> PasteFromClipboard { get; } = new BehaviorRelay<bool>(false);
         public IObservable<bool> IsBillableAvailable { get; }
         public IObservable<IEnumerable<string>> TagNames { get; }
         public IObservable<bool> HasTags { get; }

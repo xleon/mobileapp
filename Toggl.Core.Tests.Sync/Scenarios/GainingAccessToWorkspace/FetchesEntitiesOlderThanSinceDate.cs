@@ -1,16 +1,16 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.Sync.Extensions;
 using Toggl.Core.Tests.Sync.Helpers;
 using Toggl.Core.Tests.Sync.State;
+using Toggl.Networking.Helpers;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.Storage;
-using Toggl.Networking.Helpers;
 
 namespace Toggl.Core.Tests.Sync.Scenarios.GainingAccessToWorkspace
 {

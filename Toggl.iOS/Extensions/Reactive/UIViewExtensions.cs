@@ -1,8 +1,8 @@
-﻿using System;
+﻿using CoreGraphics;
+using System;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using CoreGraphics;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Reactive;
 using Toggl.Shared.Extensions;
@@ -41,7 +41,7 @@ namespace Toggl.iOS.Extensions.Reactive
                     {
                         reactive.Base.RemoveGestureRecognizer(gestureRecognizer);
                     });
-               });
+                });
             });
 
         public static Action<bool> IsVisible(this IReactive<UIView> reactive)

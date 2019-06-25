@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.Reactive.Testing;
+﻿using Microsoft.Reactive.Testing;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 

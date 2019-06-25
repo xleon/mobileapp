@@ -1,14 +1,14 @@
 ﻿using CoreGraphics;
-using Toggl.iOS.Extensions;
-using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Helper;
-using Toggl.Core.UI.ViewModels;
-using Toggl.iOS.Extensions.Reactive;
-using UIKit;
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.ViewSources;
+using UIKit;
 using static Toggl.Shared.Extensions.ReactiveExtensions;
 
 namespace Toggl.iOS.ViewControllers

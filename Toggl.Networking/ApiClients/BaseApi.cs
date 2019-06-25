@@ -6,12 +6,11 @@ using System.Net.Http;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
-using Toggl.Shared;
-using Toggl.Shared.Models;
+using Toggl.Networking.Exceptions;
 using Toggl.Networking.Helpers;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
-using Toggl.Networking.Exceptions;
+using Toggl.Shared;
 
 namespace Toggl.Networking.ApiClients
 {

@@ -1,5 +1,5 @@
-﻿using AndroidColor = Android.Graphics.Color;
-using Toggl.Shared;
+﻿using Toggl.Shared;
+using AndroidColor = Android.Graphics.Color;
 
 namespace Toggl.Droid.Extensions
 {

@@ -1,7 +1,6 @@
-﻿using System;
+﻿using CoreAnimation;
 using Foundation;
-using CoreAnimation;
-using static Toggl.Core.UI.Helper.Animation;
+using System;
 using System.Reactive.Disposables;
 using Toggl.iOS.Views;
 

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Core.UI.Services;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Extensions;
 

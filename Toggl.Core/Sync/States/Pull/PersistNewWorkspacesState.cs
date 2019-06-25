@@ -7,7 +7,6 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
-using Toggl.Storage;
 using Toggl.Storage.Models;
 
 namespace Toggl.Core.Sync.States.Pull

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Reactive.Disposables;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.App;
+using System;
+using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 
@@ -114,7 +115,7 @@ namespace Toggl.Droid.Activities
             AndroidDependencyContainer.Instance
                 .ViewModelCache
                 .Clear<TViewModel>();
-            
+
             Finish();
         }
     }

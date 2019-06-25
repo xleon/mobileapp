@@ -1,9 +1,9 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using CoreGraphics;
-using Foundation;
 using Toggl.Core.Helper;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;

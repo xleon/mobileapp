@@ -1,10 +1,10 @@
 ﻿using System.Reactive;
-using UIKit;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Models;
 using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Cells;
 using Toggl.iOS.ViewSources.Generic.TableView;
+using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {

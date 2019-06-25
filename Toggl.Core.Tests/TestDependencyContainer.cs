@@ -1,19 +1,19 @@
 ﻿using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Toggl.Networking;
-using Toggl.Networking.Network;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.DataSources;
 
 namespace Toggl.Core.UI
 {

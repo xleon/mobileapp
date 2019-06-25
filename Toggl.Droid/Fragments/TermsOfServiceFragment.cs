@@ -1,9 +1,9 @@
-﻿using System;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
-using Toggl.Core.UI.Extensions;
+using System;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Extensions;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;

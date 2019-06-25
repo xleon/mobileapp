@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Foundation;
-using Toggl.Core;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
@@ -86,7 +85,7 @@ namespace Toggl.iOS.ViewSources
             if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
                 return new[] { deleteTableViewRowAction };
 
-            return new UITableViewRowAction[]{};
+            return new UITableViewRowAction[] { };
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -114,7 +113,7 @@ namespace Toggl.iOS.ViewSources
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             var header = (TimeEntriesLogHeaderView)tableView.DequeueReusableHeaderFooterView(TimeEntriesLogHeaderView.Identifier);
-            header.Item = HeaderOf((int) section);
+            header.Item = HeaderOf((int)section);
             return header;
         }
 

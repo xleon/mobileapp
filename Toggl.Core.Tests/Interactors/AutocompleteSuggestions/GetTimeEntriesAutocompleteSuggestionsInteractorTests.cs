@@ -1,8 +1,8 @@
-﻿using System.Linq;
+﻿using FluentAssertions;
+using NSubstitute;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors.AutocompleteSuggestions;

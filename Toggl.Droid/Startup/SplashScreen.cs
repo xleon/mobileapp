@@ -1,10 +1,9 @@
-using System;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.App;
-using System.Reactive;
+using System;
 using Toggl.Core;
 using Toggl.Core.Services;
 using Toggl.Core.UI;
@@ -15,7 +14,6 @@ using Toggl.Droid.Activities;
 using Toggl.Droid.BroadcastReceivers;
 using Toggl.Droid.Presentation;
 using static Android.Content.Intent;
-using System.Threading.Tasks;
 
 namespace Toggl.Droid
 {
@@ -67,7 +65,7 @@ namespace Toggl.Droid
 
             clearAllViewModelsAndSetupRootViewModel(
                 dependencyContainer.ViewModelCache,
-                dependencyContainer.ViewModelLoader); 
+                dependencyContainer.ViewModelLoader);
 
             var navigationUrl = Intent.Data?.ToString() ?? getTrackUrlFromProcessedText();
             if (string.IsNullOrEmpty(navigationUrl))
@@ -99,7 +97,7 @@ namespace Toggl.Droid
                 Application.UnregisterActivityLifecycleCallbacks(currentAppLifecycleObserver);
                 Application.UnregisterComponentCallbacks(currentAppLifecycleObserver);
             }
-            
+
             togglApplication.ApplicationLifecycleObserver = new ApplicationLifecycleObserver(backgroundService);
             Application.RegisterActivityLifecycleCallbacks(togglApplication.ApplicationLifecycleObserver);
             Application.RegisterComponentCallbacks(togglApplication.ApplicationLifecycleObserver);
@@ -115,7 +113,7 @@ namespace Toggl.Droid
             }
 
             togglApplication.TimezoneChangedBroadcastReceiver = new TimezoneChangedBroadcastReceiver(timeService);
-            ApplicationContext.RegisterReceiver(togglApplication.TimezoneChangedBroadcastReceiver, new IntentFilter(ActionTimezoneChanged));    
+            ApplicationContext.RegisterReceiver(togglApplication.TimezoneChangedBroadcastReceiver, new IntentFilter(ActionTimezoneChanged));
         }
 
         private TogglApplication getTogglApplication()

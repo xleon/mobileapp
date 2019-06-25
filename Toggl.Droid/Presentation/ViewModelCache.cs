@@ -13,7 +13,7 @@ namespace Toggl.Droid.Presentation
             where TViewModel : IViewModel
         {
             cache.TryGetValue(typeof(TViewModel), out var cachedViewModel);
-            return (TViewModel) cachedViewModel;
+            return (TViewModel)cachedViewModel;
         }
 
         public void Cache<TViewModel>(TViewModel viewModel)
@@ -35,7 +35,7 @@ namespace Toggl.Droid.Presentation
                 cacheValue?.DetachView();
                 cacheValue?.CloseWithDefaultResult();
             }
-            
+
             cache.Clear();
         }
     }

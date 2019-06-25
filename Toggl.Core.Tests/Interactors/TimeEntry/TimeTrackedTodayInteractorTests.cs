@@ -1,3 +1,6 @@
+using FluentAssertions;
+using NSubstitute;
+using NSubstitute.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,9 +8,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
-using NSubstitute.Core;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
@@ -312,7 +312,7 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
                 IsDeleted = deleted
             };
 
-        static IThreadSafeTimeEntry createInaccessibleMock(long? duration)
+        private static IThreadSafeTimeEntry createInaccessibleMock(long? duration)
             => new MockTimeEntry { Start = now, Duration = duration, Workspace = inaccessibleWorkspace };
     }
 }

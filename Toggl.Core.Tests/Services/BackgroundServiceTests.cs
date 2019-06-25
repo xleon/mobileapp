@@ -1,12 +1,12 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck;
-using NSubstitute;
-using Xunit;
 using FsCheck.Xunit;
+using NSubstitute;
+using System;
+using Toggl.Core.Analytics;
 using Toggl.Core.Services;
 using Toggl.Core.Tests.Generators;
-using Toggl.Core.Analytics;
+using Xunit;
 
 namespace Toggl.Core.Tests.Services
 {
@@ -14,8 +14,8 @@ namespace Toggl.Core.Tests.Services
     {
         public abstract class BackgroundServiceTest
         {
-            protected readonly ITimeService TimeService;
-            protected readonly IAnalyticsService AnalyticsService;
+            protected ITimeService TimeService { get; }
+            protected IAnalyticsService AnalyticsService { get; }
 
             public BackgroundServiceTest()
             {

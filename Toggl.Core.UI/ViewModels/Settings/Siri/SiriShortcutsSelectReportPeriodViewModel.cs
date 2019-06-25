@@ -23,8 +23,8 @@ namespace Toggl.Core.UI.ViewModels.Settings
     {
         private readonly IInteractorFactory interactorFactory;
 
-        public readonly BehaviorRelay<IThreadSafeWorkspace> SelectedWorkspace = new BehaviorRelay<IThreadSafeWorkspace>(null);
-        public readonly BehaviorRelay<ReportPeriod> SelectReportPeriod = new BehaviorRelay<ReportPeriod>(ReportPeriod.Today);
+        public BehaviorRelay<IThreadSafeWorkspace> SelectedWorkspace { get; } = new BehaviorRelay<IThreadSafeWorkspace>(null);
+        public BehaviorRelay<ReportPeriod> SelectReportPeriod { get; } = new BehaviorRelay<ReportPeriod>(ReportPeriod.Today);
         public IObservable<IEnumerable<SelectableReportPeriodViewModel>> ReportPeriods { get; }
         public UIAction PickWorkspace { get; }
 

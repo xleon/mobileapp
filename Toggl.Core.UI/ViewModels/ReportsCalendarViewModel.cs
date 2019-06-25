@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -62,9 +61,9 @@ namespace Toggl.Core.UI.ViewModels
 
         public IObservable<Unit> ReloadObservable { get; private set; }
 
-        public IObservable<ReportsDateRangeParameter> SelectedDateRangeObservable;
+        public IObservable<ReportsDateRangeParameter> SelectedDateRangeObservable { get; }
 
-        public IObservable<ReportsDateRangeParameter> HighlightedDateRangeObservable;
+        public IObservable<ReportsDateRangeParameter> HighlightedDateRangeObservable { get; }
 
         public List<ReportsCalendarBaseQuickSelectShortcut> QuickSelectShortcuts { get; private set; }
 
@@ -74,9 +73,9 @@ namespace Toggl.Core.UI.ViewModels
 
         public IObservable<IReadOnlyList<string>> DayHeadersObservable { get; private set; }
 
-        public readonly InputAction<ReportsCalendarDayViewModel> SelectDay;
+        public InputAction<ReportsCalendarDayViewModel> SelectDay { get; }
 
-        public readonly InputAction<ReportsCalendarBaseQuickSelectShortcut> SelectShortcut;
+        public InputAction<ReportsCalendarBaseQuickSelectShortcut> SelectShortcut { get; }
 
         public ReportsCalendarViewModel(
             ITimeService timeService,

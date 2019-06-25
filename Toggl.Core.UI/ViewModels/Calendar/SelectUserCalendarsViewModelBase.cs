@@ -6,12 +6,12 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Interactors;
-using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
@@ -23,15 +23,12 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
     public abstract class SelectUserCalendarsViewModelBase : ViewModel<bool, string[]>
     {
-        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+        protected IUserPreferences UserPreferences { get; }
 
-        protected readonly IUserPreferences UserPreferences;
         private readonly IInteractorFactory interactorFactory;
-        private readonly IRxActionFactory rxActionFactory;
-
-        private ISubject<bool> doneEnabledSubject = new BehaviorSubject<bool>(false);
-
-        private ISubject<ImmutableCalendarSectionModel> calendarsSubject =
+        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+        private readonly ISubject<bool> doneEnabledSubject = new BehaviorSubject<bool>(false);
+        private readonly ISubject<ImmutableCalendarSectionModel> calendarsSubject =
             new BehaviorSubject<ImmutableCalendarSectionModel>(ImmutableList.Create<CalendarSectionModel>());
 
         public IObservable<ImmutableCalendarSectionModel> Calendars { get; }
@@ -56,7 +53,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
             UserPreferences = userPreferences;
             this.interactorFactory = interactorFactory;
-            this.rxActionFactory = rxActionFactory;
 
             Save = rxActionFactory.FromAction(Done, doneEnabledSubject.AsObservable());
             SelectCalendar = rxActionFactory.FromAction<SelectableUserCalendarViewModel>(toggleCalendarSelection);

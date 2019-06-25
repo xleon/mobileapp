@@ -1,10 +1,10 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck.Xunit;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using FluentAssertions;
-using FsCheck.Xunit;
-using NSubstitute;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
@@ -20,7 +20,7 @@ namespace Toggl.Core.Tests.Sync
             private readonly Subject<StateMachineEvent> stateMachineEventSubject
                 = new Subject<StateMachineEvent>();
 
-            protected IStateMachine StateMachine = Substitute.For<IStateMachine>();
+            protected IStateMachine StateMachine { get; } = Substitute.For<IStateMachine>();
             protected StateMachineEntryPoints EntryPoints { get; } = new StateMachineEntryPoints();
             protected IStateMachineOrchestrator Orchestrator { get; }
             protected List<SyncState> StateEvents { get; } = new List<SyncState>();

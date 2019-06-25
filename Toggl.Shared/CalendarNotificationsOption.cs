@@ -1,5 +1,4 @@
-﻿using System;
-namespace Toggl.Shared
+﻿namespace Toggl.Shared
 {
     public enum CalendarNotificationsOption
     {

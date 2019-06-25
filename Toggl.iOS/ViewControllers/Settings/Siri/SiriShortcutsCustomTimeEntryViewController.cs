@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using Foundation;
+﻿using Foundation;
 using Intents;
 using IntentsUI;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Extensions;
@@ -159,7 +159,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
         }
         private void localizeLabels()
         {
-            NavigationItem.Title= Resources.SiriShortcutCustomTimeEntryTitle;
+            NavigationItem.Title = Resources.SiriShortcutCustomTimeEntryTitle;
             BillabelLabel.Text = Resources.Billable;
             AddProjectTaskLabel.Text = Resources.AddProjectTask;
             AddTagsLabel.Text = Resources.AddTags;
@@ -205,7 +205,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
             AddToSiriWrapperView.AddSubview(button);
             AddToSiriWrapperView.AddSubview(descriptionLabel);
 
-            NSLayoutConstraint.ActivateConstraints(new []
+            NSLayoutConstraint.ActivateConstraints(new[]
             {
                 descriptionLabel.CenterXAnchor.ConstraintEqualTo(AddToSiriWrapperView.CenterXAnchor),
                 descriptionLabel.TopAnchor.ConstraintEqualTo(AddToSiriWrapperView.TopAnchor, 16),
@@ -261,7 +261,10 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
             {
                 return new StartTimerFromClipboardIntent
                 {
-                    Workspace = workspace, ProjectId = project, Tags = tags, Billable = billable
+                    Workspace = workspace,
+                    ProjectId = project,
+                    Tags = tags,
+                    Billable = billable
                 };
             }
 

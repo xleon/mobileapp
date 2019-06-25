@@ -1,20 +1,17 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Reactive.Concurrency;
-using Toggl.Networking;
-using Toggl.Networking.Network;
-using Toggl.iOS.Intents;
 using Foundation;
-using Toggl.Shared.Models;
-using SiriExtension.Models;
 using SiriExtension.Exceptions;
+using SiriExtension.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
 using Toggl.iOS.ExtensionKit;
 using Toggl.iOS.ExtensionKit.Analytics;
 using Toggl.iOS.ExtensionKit.Extensions;
+using Toggl.iOS.Intents;
+using Toggl.Networking;
 using Toggl.Shared;
+using Toggl.Shared.Models;
 
 namespace SiriExtension
 {
@@ -122,7 +119,7 @@ namespace SiriExtension
 
         private IObservable<ITimeEntry> stopTimeEntry(ITimeEntry timeEntry)
         {
-            var duration = (long) (DateTime.Now - timeEntry.Start).TotalSeconds;
+            var duration = (long)(DateTime.Now - timeEntry.Start).TotalSeconds;
             return togglAPI.TimeEntries.Update(
                 TimeEntry.from(timeEntry).with(duration)
             );

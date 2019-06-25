@@ -1,7 +1,7 @@
-﻿using System;
-using FluentAssertions;
-using Toggl.Core.UI.ViewModels;
+﻿using FluentAssertions;
+using System;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.UI.ViewModels;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

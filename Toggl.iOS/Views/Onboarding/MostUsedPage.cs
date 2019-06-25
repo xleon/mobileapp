@@ -1,14 +1,14 @@
 using Foundation;
-using System;
-using UIKit;
 using ObjCRuntime;
+using System;
 using Toggl.iOS.Extensions;
+using UIKit;
 
 namespace Toggl.iOS
 {
     public sealed partial class MostUsedPage : UIView
     {
-        public MostUsedPage (IntPtr handle) : base (handle)
+        public MostUsedPage(IntPtr handle) : base(handle)
         {
         }
 

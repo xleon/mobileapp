@@ -1,5 +1,4 @@
-﻿using System;
-using CoreText;
+﻿using CoreText;
 using UIKit;
 
 namespace Toggl.iOS.Extensions

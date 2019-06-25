@@ -1,8 +1,8 @@
 using Android.App;
 using Android.App.Job;
 using Android.Content;
-using Toggl.Droid.Extensions;
 using Toggl.Core.Services;
+using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Services
 {

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Android.OS;
+using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using Android.OS;
+using Toggl.Core.Analytics;
 
 namespace Toggl.Droid
 {
     public sealed class HandlerScheduler : IScheduler
-    {        
+    {
         private readonly long looperId;
         private readonly Handler handler;
 
@@ -17,7 +18,7 @@ namespace Toggl.Droid
             this.handler = handler;
             looperId = threadIdAssociatedWithHandler ?? -1;
         }
-        
+
         public IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             bool isCancelled = false;

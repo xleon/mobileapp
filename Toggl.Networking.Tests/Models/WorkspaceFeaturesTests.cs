@@ -1,12 +1,12 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
-using FluentAssertions;
+using Toggl.Networking.Models;
+using Toggl.Networking.Serialization;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Networking.Serialization;
-using Toggl.Networking.Models;
+using Xunit;
 
 namespace Toggl.Networking.Tests.Models
 {

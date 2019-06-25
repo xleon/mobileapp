@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Threading.Tasks;
-using Android.OS;
+﻿using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.Util;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
+using System.Collections.Generic;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Threading.Tasks;
+using Toggl.Core.UI.Interfaces;
+using Toggl.Droid.Adapters.DiffingStrategies;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
-using Toggl.Core.UI.Interfaces;
 using Handler = Android.OS.Handler;
-using Toggl.Droid.Adapters.DiffingStrategies;
 
 namespace Toggl.Droid.Adapters
 {

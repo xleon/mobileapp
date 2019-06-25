@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
@@ -28,7 +28,7 @@ namespace Toggl.Droid.Activities
         public static string WorkspaceIdExtra = "WorkspaceIdExtra";
         public static string StartDateExtra = "StartDateExtra";
         public static string EndDateExtra = "EndDateExtra";
-        
+
         private readonly Dictionary<int, Fragment> fragments = new Dictionary<int, Fragment>();
         private Fragment activeFragment;
         private bool activityResumedBefore = false;
@@ -54,7 +54,7 @@ namespace Toggl.Droid.Activities
             restoreFragmentsViewModels();
             showInitialFragment(getInitialTab(Intent));
             loadReportsIntentExtras(Intent);
-            
+
             navigationView
                 .Rx()
                 .ItemSelected()
@@ -64,7 +64,7 @@ namespace Toggl.Droid.Activities
 
         private int getInitialTab(Intent intent)
             => intent.GetIntExtra(StartingTabExtra, Resource.Id.MainTabTimerItem);
-        
+
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
@@ -86,7 +86,7 @@ namespace Toggl.Droid.Activities
                 reportsRequestedStartDate = null;
                 reportsRequestedEndDate = null;
             }
-            
+
             reportsRequestedStartDate = DateTimeOffset.FromUnixTimeSeconds(startDate);
             reportsRequestedEndDate = DateTimeOffset.FromUnixTimeSeconds(endDate);
         }
@@ -136,13 +136,13 @@ namespace Toggl.Droid.Activities
         {
             if (reportsRequestedStartDate == null || reportsRequestedEndDate == null)
                 return;
-            
+
             var reportsViewModel = getTabViewModel<ReportsViewModel>();
             if (reportsViewModel != null && navigationView.SelectedItemId == Resource.Id.MainTabReportsItem)
             {
                 reportsViewModel.LoadReport(reportsRequestedWorkspaceId, reportsRequestedStartDate.Value, reportsRequestedEndDate.Value, ReportsSource.Other);
             }
-            
+
             reportsRequestedWorkspaceId = null;
             reportsRequestedStartDate = null;
             reportsRequestedEndDate = null;

@@ -1,8 +1,8 @@
+using FluentAssertions;
+using NSubstitute;
 using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Sync;
 using Toggl.Core.Sync.States;
 using Toggl.Core.Sync.States.CleanUp;

@@ -1,8 +1,8 @@
-﻿using System;
-using Android.Graphics;
+﻿using Android.Graphics;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
+using System;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.ViewHolders;
 

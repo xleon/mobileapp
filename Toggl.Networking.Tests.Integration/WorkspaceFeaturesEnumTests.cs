@@ -1,11 +1,11 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Linq;
 using System.Reactive.Linq;
-using FluentAssertions;
-using Toggl.Networking.Tests.Integration.BaseTests;
-using Xunit;
-using Toggl.Shared;
 using Toggl.Networking.Models;
+using Toggl.Networking.Tests.Integration.BaseTests;
+using Toggl.Shared;
+using Xunit;
 
 namespace Toggl.Networking.Tests.Integration
 {
@@ -36,13 +36,13 @@ namespace Toggl.Networking.Tests.Integration
                 enumName.Should().Be(responseName);
             }
         }
-            
+
         private string toPascalCase(string snakeCasedString)
         {
             var segments = snakeCasedString
                 .Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => char.ToUpperInvariant(s[0]) + s.Substring(1));
-    
+
             return string.Join("", segments);
         }
     }

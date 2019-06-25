@@ -1,7 +1,7 @@
-﻿using System;
-using CoreAnimation;
+﻿using CoreAnimation;
 using CoreGraphics;
 using Foundation;
+using System;
 using UIKit;
 
 namespace Toggl.iOS.Views

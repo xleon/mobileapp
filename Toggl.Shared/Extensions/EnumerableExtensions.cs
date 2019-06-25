@@ -43,7 +43,7 @@ namespace Toggl.Shared.Extensions
         public static IEnumerable<TLeft> SelectAllLeft<TLeft, TRight>(this IEnumerable<Either<TLeft, TRight>> self)
             => self.Where(either => either.IsLeft).Select(either => either.Left);
 
-        public static IEnumerable<T> SelectNonNulls<T>(this IEnumerable<Nullable<T>> self) where T : struct
+        public static IEnumerable<T> SelectNonNulls<T>(this IEnumerable<T?> self) where T : struct
             => self.Where(nullable => nullable.HasValue).Select(nullable => nullable.Value);
 
         public static bool None<T>(this IEnumerable<T> collection, Func<T, bool> condition)

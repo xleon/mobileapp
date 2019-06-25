@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Android.OS;
+using System;
 using System.Reactive.Concurrency;
-using Android.OS;
 using Toggl.Core.Analytics;
 using Toggl.Shared;
 

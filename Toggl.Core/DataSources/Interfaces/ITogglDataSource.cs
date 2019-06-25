@@ -1,9 +1,7 @@
 ﻿using System;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.Sync;
 using Toggl.Storage.Models;
-using Toggl.Networking.ApiClients;
 
 namespace Toggl.Core.DataSources
 {

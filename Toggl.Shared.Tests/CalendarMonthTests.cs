@@ -1,10 +1,10 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
 using Xunit;
 
 namespace Toggl.Shared.Tests
@@ -24,7 +24,7 @@ namespace Toggl.Shared.Tests
             IEnumerator IEnumerable.GetEnumerator()
                 => GetEnumerator();
         }
-        
+
         public sealed class TheConstructor
         {
             [Fact, LogIfTooSlow]
@@ -70,7 +70,7 @@ namespace Toggl.Shared.Tests
             {
                 if (month == 12) return;
                 var calendarMonth = new CalendarMonth(2018, month);
-                
+
                 var nextCalendarMonth = calendarMonth.Next();
 
                 nextCalendarMonth.Month.Should().Be(month + 1);
@@ -103,7 +103,7 @@ namespace Toggl.Shared.Tests
             [Property]
             public void SetsTheMonthTo1IfMonthIs12(NonNegativeInt nonNegativeInt)
             {
-                var year = nonNegativeInt.Get; 
+                var year = nonNegativeInt.Get;
                 var calendarMonth = new CalendarMonth(year, 12);
 
                 var nextCalendarMonth = calendarMonth.Next();
@@ -125,7 +125,7 @@ namespace Toggl.Shared.Tests
 
                 previousCalendarMonth.Month.Should().Be(month - 1);
             }
-            
+
             [Theory, LogIfTooSlow]
             [ClassData(typeof(MonthTestData))]
             public void DoesNotDecrementTheYearWhenMonthIsGreaterThan1(int month)
@@ -153,7 +153,7 @@ namespace Toggl.Shared.Tests
             [Property]
             public void SetsTheMonthTo12IfMonthIs1(PositiveInt positiveInt)
             {
-                var year = positiveInt.Get; 
+                var year = positiveInt.Get;
                 var calendarMonth = new CalendarMonth(year, 1);
 
                 var nextCalendarMonth = calendarMonth.Previous();
@@ -187,7 +187,7 @@ namespace Toggl.Shared.Tests
                 result.Year.Should().Be(expectedYear);
                 result.Month.Should().Be(expectedMonth);
             }
-            
+
             [Theory, LogIfTooSlow]
             [InlineData(2018, 7, -3, 2018, 4)]
             [InlineData(2014, 4, -12, 2013, 4)]

@@ -1,18 +1,18 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
-using Toggl.Core.UI.ViewModels;
+using System;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
-using Xunit;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Extensions;
-using System.Reactive.Linq;
-using Toggl.Core.Interactors;
-using System.Reactive;
-using Toggl.Core.Models.Interfaces;
-using Toggl.Core.Exceptions;
+using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Tests.TestExtensions;
+using System;
+using System.Threading.Tasks;
 using Toggl.Core.Tests.Generators;
-using Xunit;
+using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
+using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {

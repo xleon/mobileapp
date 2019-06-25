@@ -5,10 +5,10 @@ using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Services;
+using Toggl.Networking.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
-using Toggl.Networking.Exceptions;
 using static Toggl.Core.Sync.SyncState;
 
 namespace Toggl.Core.Sync

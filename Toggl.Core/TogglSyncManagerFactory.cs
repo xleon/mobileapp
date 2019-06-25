@@ -3,7 +3,6 @@ using System.Reactive.Concurrency;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.DataSources.Interfaces;
-using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
@@ -14,13 +13,14 @@ using Toggl.Core.Sync.States.CleanUp;
 using Toggl.Core.Sync.States.Pull;
 using Toggl.Core.Sync.States.PullTimeEntries;
 using Toggl.Core.Sync.States.Push;
+using Toggl.Networking;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.ApiClients.Interfaces;
 using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 using Toggl.Storage.Settings;
-using Toggl.Networking;
-using Toggl.Networking.ApiClients;
-using Toggl.Networking.ApiClients.Interfaces;
+using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 
 namespace Toggl.Core
 {

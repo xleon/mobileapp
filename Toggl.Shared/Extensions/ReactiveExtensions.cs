@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Reactive;
-using System.Reactive.Disposables;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Runtime.InteropServices.ComTypes;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Reactive;
+using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace Toggl.Shared.Extensions
 {

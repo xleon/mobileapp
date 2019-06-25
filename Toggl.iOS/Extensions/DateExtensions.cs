@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
+using System;
 
 namespace Toggl.iOS.Extensions
 {

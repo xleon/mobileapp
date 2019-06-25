@@ -1,11 +1,9 @@
-using System.Reactive;
 using Foundation;
 using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Presentation;
-using Toggl.Networking;
 using UIKit;
 using UserNotifications;
 
@@ -18,10 +16,10 @@ namespace Toggl.iOS
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
-            #if !USE_PRODUCTION_API
+#if !USE_PRODUCTION_API
             System.Net.ServicePointManager.ServerCertificateValidationCallback
                   += (sender, certificate, chain, sslPolicyErrors) => true;
-            #endif
+#endif
 
             initializeAnalytics();
 
@@ -44,9 +42,9 @@ namespace Toggl.iOS
 
             UNUserNotificationCenter.Current.Delegate = this;
 
-            #if ENABLE_TEST_CLOUD
+#if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();
-            #endif
+#endif
 
             return true;
         }
@@ -69,10 +67,10 @@ namespace Toggl.iOS
                 return true;
             }
 
-            #if USE_ANALYTICS
+#if USE_ANALYTICS
             var openUrlOptions = new UIApplicationOpenUrlOptions(options);
             return Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
-            #endif
+#endif
 
             return false;
         }

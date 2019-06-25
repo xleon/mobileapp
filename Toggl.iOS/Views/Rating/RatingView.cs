@@ -1,14 +1,13 @@
-﻿using System;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using CoreGraphics;
+﻿using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
-using Toggl.iOS.Extensions;
-using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
+using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -41,7 +40,7 @@ namespace Toggl.iOS
 
         public CompositeDisposable DisposeBag { get; } = new CompositeDisposable();
 
-        public RatingView (IntPtr handle) : base (handle)
+        public RatingView(IntPtr handle) : base(handle)
         {
         }
 

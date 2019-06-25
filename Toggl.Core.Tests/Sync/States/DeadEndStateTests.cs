@@ -1,6 +1,6 @@
-﻿using System.Reactive.Linq;
+﻿using FluentAssertions;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Toggl.Core.Sync.States;
 using Xunit;
 

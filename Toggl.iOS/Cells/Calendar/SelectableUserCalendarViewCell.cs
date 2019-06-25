@@ -1,6 +1,5 @@
-﻿using System;
-using Foundation;
-using Toggl.iOS.Extensions;
+﻿using Foundation;
+using System;
 using Toggl.Core.UI.ViewModels.Selectable;
 using UIKit;
 

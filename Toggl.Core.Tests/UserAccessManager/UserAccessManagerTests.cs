@@ -1,27 +1,27 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
-using Toggl.Core.Services;
 using Toggl.Core.Login;
+using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
+using Toggl.Networking;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 using Toggl.Storage.Settings;
-using Toggl.Networking;
-using Toggl.Networking.Exceptions;
-using Toggl.Networking.Network;
 using Xunit;
 using FoundationUser = Toggl.Core.Models.User;
 using User = Toggl.Networking.Models.User;
@@ -42,9 +42,9 @@ namespace Toggl.Core.Tests.Login
             protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
             protected IApiFactory ApiFactory { get; } = Substitute.For<IApiFactory>();
             protected ITogglDatabase Database { get; } = Substitute.For<ITogglDatabase>();
-             protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
+            protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
             protected ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
-            protected readonly IUserAccessManager UserAccessManager;
+            protected IUserAccessManager UserAccessManager { get; }
             protected IScheduler Scheduler { get; } = System.Reactive.Concurrency.Scheduler.Default;
             protected ISyncManager SyncManager { get; } = Substitute.For<ISyncManager>();
             protected IInteractorFactory InteractorFactory { get; } = Substitute.For<IInteractorFactory>();
@@ -71,7 +71,7 @@ namespace Toggl.Core.Tests.Login
 
         public abstract class UserAccessManagerWithTestSchedulerTest : UserAccessManagerTest
         {
-            protected readonly TestScheduler TestScheduler = new TestScheduler();
+            protected TestScheduler TestScheduler { get; } = new TestScheduler();
             protected override IScheduler CreateScheduler => TestScheduler;
         }
 
@@ -478,7 +478,7 @@ namespace Toggl.Core.Tests.Login
             {
                 await UserAccessManager.RefreshToken(Password);
 
-                 await Api.User.Received().Get();
+                await Api.User.Received().Get();
             }
 
             [Fact, LogIfTooSlow]

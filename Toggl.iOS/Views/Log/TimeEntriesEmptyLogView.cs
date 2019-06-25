@@ -1,6 +1,6 @@
-using System;
 using Foundation;
 using ObjCRuntime;
+using System;
 using UIKit;
 
 namespace Toggl.iOS.Views

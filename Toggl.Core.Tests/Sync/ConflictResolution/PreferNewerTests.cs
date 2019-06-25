@@ -1,10 +1,10 @@
-﻿using System;
+﻿using FluentAssertions;
 using FsCheck.Xunit;
-using Xunit;
-using FluentAssertions;
+using System;
 using Toggl.Core.Sync.ConflictResolution;
-using Toggl.Storage;
 using Toggl.Shared.Models;
+using Toggl.Storage;
+using Xunit;
 
 namespace Toggl.Core.Tests.Sync.ConflictResolution
 {

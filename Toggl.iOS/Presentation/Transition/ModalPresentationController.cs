@@ -1,12 +1,11 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CoreGraphics;
-using Foundation;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.ViewControllers;
-using Toggl.Shared;
 using UIKit;
 using static System.Math;
 

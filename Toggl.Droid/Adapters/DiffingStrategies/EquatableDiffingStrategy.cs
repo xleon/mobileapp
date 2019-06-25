@@ -1,6 +1,5 @@
 ﻿using Android.Support.V7.Widget;
 using System;
-using System.Linq;
 
 namespace Toggl.Droid.Adapters.DiffingStrategies
 {

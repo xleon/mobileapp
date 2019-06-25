@@ -1,30 +1,30 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
-using NSubstitute;
-using Microsoft.Reactive.Testing;
+using Toggl.Core.Analytics;
 using Toggl.Core.DTOs;
+using Toggl.Core.Extensions;
+using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
-using Toggl.Core.Tests.Generators;
-using Toggl.Core.Analytics;
-using Toggl.Core.Extensions;
-using Toggl.Core.Interactors;
-using Toggl.Core.Tests.Mocks;
-using Toggl.Core.Tests.TestExtensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Xunit;
-using Task = System.Threading.Tasks.Task;
-using ProjectClientTaskInfo = Toggl.Core.UI.ViewModels.EditTimeEntryViewModel.ProjectClientTaskInfo;
 using static Toggl.Core.Helper.Constants;
+using ProjectClientTaskInfo = Toggl.Core.UI.ViewModels.EditTimeEntryViewModel.ProjectClientTaskInfo;
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -85,7 +85,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public abstract class InitializableEditTimeEntryViewModelTest : EditTimeEntryViewModelTest
         {
-            protected IEnumerable<MockTimeEntry> entries;
+            protected IEnumerable<MockTimeEntry> Entries { get; set; }
             protected long[] TimeEntriesIds { get; set; }
 
             public InitializableEditTimeEntryViewModelTest() : this(SingleTimeEntryId)
@@ -117,11 +117,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             protected virtual void SetupTimeEntries(long[] ids, Func<MockTimeEntry, int, MockTimeEntry> timeEntryModifier)
             {
-                entries = ids
+                Entries = ids
                    .Select(id => CreateTimeEntry(Now, id, false))
                    .Select(timeEntryModifier)
                    .ToList();
-                var observable = Observable.Return(entries);
+                var observable = Observable.Return(Entries);
 
                 InteractorFactory
                     .GetMultipleTimeEntriesById(Arg.Any<long[]>())
@@ -1577,7 +1577,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheSelectStartDateAction : InitializableEditTimeEntryViewModelTest
         {
-            private MockTimeEntry entry => entries.Single();
+            private MockTimeEntry entry => Entries.Single();
 
             [Fact]
             public async Task OpensTheSelectDateTimeViewModel()
@@ -1843,7 +1843,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 NavigationService
                     .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>(), ViewModel.View)
                     .Returns(new DurationParameter { Start = new DateTimeOffset(), Duration = TimeSpan.FromDays(365) });
-                var interactor = SetupUpdateInteractor(entries);
+                var interactor = SetupUpdateInteractor(Entries);
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.EditTimes.Execute(EditViewTapSource.StartDate);
@@ -1852,7 +1852,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 InteractorFactory
                    .Received()
-                   .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => DtosEqualTimeEntries(dtos, entries)));
+                   .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => DtosEqualTimeEntries(dtos, Entries)));
                 await interactor.Received().Execute();
             }
         }
@@ -1872,7 +1872,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task CallsInteractorWithValidDtoForSingleTimeEntry()
             {
-                var interactor = SetupUpdateInteractor(entries);
+                var interactor = SetupUpdateInteractor(Entries);
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.Save.Execute();
@@ -1880,14 +1880,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 InteractorFactory
                    .Received()
-                   .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => DtosEqualTimeEntries(dtos, entries)));
+                   .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => DtosEqualTimeEntries(dtos, Entries)));
                 await interactor.Received().Execute();
             }
 
             [Fact, LogIfTooSlow]
             public async Task AllowsEditingStartAndEndTimesWhenEditingASingleTimeEntry()
             {
-                var timeEntry = entries.Single();
+                var timeEntry = Entries.Single();
                 var interactor = SetupUpdateInteractor(new[] { timeEntry });
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
@@ -1905,7 +1905,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task CallsInteractorWithValidDtoForTimeEntriesGroup()
             {
                 AdjustTimeEntries(TimeEntriesGroupIds, te => te);
-                var interactor = SetupUpdateInteractor(entries);
+                var interactor = SetupUpdateInteractor(Entries);
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.Save.Execute();
@@ -1913,14 +1913,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 InteractorFactory
                    .Received()
-                   .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => DtosEqualTimeEntries(dtos, entries)));
+                   .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => DtosEqualTimeEntries(dtos, Entries)));
                 await interactor.Received().Execute();
             }
 
             [Fact, LogIfTooSlow]
             public async Task ClosesAfterSuccessfulSave()
             {
-                SetupUpdateInteractor(entries);
+                SetupUpdateInteractor(Entries);
 
                 await ViewModel.Initialize(TimeEntriesGroupIds);
                 ViewModel.Save.Execute();
@@ -1932,7 +1932,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ClosesEvenAfterFailedSave()
             {
-                var interactor = SetupUpdateInteractor(entries);
+                var interactor = SetupUpdateInteractor(Entries);
                 interactor.Execute()
                     .Returns(Observable.Throw<IEnumerable<IThreadSafeTimeEntry>>(new Exception()));
 

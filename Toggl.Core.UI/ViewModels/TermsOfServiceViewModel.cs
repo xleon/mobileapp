@@ -1,9 +1,9 @@
-﻿using Toggl.Core.UI.Navigation;
+﻿using System.Threading.Tasks;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Xamarin.Essentials;
-using System.Threading.Tasks;
 
 namespace Toggl.Core.UI.ViewModels
 {

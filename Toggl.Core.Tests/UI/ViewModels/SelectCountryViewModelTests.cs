@@ -1,14 +1,13 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FsCheck;
-using NSubstitute;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
-using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Models;
 using Xunit;
 
@@ -69,7 +68,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task SetsTheAppropriateCountryAsTheCurrentlySelectedOne(int id)
             {
                 await ViewModel.Initialize(id);
-                
+
                 var countries = await ViewModel.Countries.FirstAsync();
                 countries.Single(c => c.Selected).Country.Id.Should().Be(id);
             }
@@ -78,7 +77,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task DoesNotSetTheSelectedCountryIfPreparingWithNull()
             {
                 await ViewModel.Initialize(null);
-                
+
                 var countries = await ViewModel.Countries.FirstAsync();
                 countries.All(suggestion => !suggestion.Selected);
             }

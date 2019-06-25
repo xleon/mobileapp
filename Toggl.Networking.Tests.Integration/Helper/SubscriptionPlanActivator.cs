@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Shared.Models;
 using Toggl.Networking.Helpers;
+using Toggl.Shared.Models;
 
 namespace Toggl.Networking.Tests.Integration.Helper
 {

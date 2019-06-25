@@ -1,23 +1,21 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Interactors;
-using Toggl.Core.UI.ViewModels;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Shared.Extensions;
 using Xunit;
 using TimeEntry = Toggl.Core.Models.TimeEntry;
-using Toggl.Core.Models.Interfaces;
-using Toggl.Core.DataSources;
-using System.Reactive.Subjects;
-using Toggl.Core.UI.Extensions;
-using Toggl.Shared.Extensions;
-using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {

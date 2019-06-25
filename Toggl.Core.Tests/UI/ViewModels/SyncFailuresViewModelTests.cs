@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
+using System;
+using System.Collections.Generic;
+using System.Reactive.Linq;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Storage.Models;
+using Toggl.Core.UI.ViewModels;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
@@ -63,7 +61,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var mockedInteractor = Substitute.For<IInteractor<IObservable<IEnumerable<SyncFailureItem>>>>();
                 InteractorFactory.GetItemsThatFailedToSync().Returns(mockedInteractor);
 
-                SyncFailureItem[] result = {
+                SyncFailureItem[] result =
+                {
                     new SyncFailureItem(new MockProject { Name = "MyProject" }),
                     new SyncFailureItem(new MockProject { Name = "MyProject 2" }),
                     new SyncFailureItem(new MockTag { Name = "MyTag" })

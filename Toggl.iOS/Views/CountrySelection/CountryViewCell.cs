@@ -1,8 +1,8 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.Core.UI.ViewModels;
-using UIKit;
 using Toggl.iOS.Cells;
+using UIKit;
 
 namespace Toggl.iOS.Views.CountrySelection
 {

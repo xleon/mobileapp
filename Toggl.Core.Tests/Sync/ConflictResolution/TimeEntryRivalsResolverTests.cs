@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
+using System;
+using System.Linq;
 using Toggl.Core.Models;
 using Toggl.Core.Sync.ConflictResolution;
 using Toggl.Core.Tests.Mocks;

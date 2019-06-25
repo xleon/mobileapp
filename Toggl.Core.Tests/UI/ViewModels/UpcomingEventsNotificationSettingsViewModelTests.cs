@@ -1,12 +1,10 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
+using System;
+using System.Threading.Tasks;
+using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.UI.ViewModels.Settings;
-using Toggl.Core.Tests.Generators;
 using Toggl.Shared;
 using Xunit;
 

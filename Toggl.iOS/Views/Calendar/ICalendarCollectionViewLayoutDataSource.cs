@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Foundation;
+﻿using Foundation;
+using System.Collections.Generic;
 using Toggl.Core.UI.Calendar;
 
 namespace Toggl.iOS.Views.Calendar

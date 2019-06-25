@@ -5,12 +5,11 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Networking.ApiClients;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 using Toggl.Storage.Settings;
-using Toggl.Networking.ApiClients;
-using Toggl.Networking.Network;
 
 namespace Toggl.Core.Interactors.Settings
 {

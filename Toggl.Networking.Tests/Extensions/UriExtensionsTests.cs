@@ -1,7 +1,7 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
+using System;
 using Toggl.Networking.Extensions;
 using Toggl.Networking.Network;
 

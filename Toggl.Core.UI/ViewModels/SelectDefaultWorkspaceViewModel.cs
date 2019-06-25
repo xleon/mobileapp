@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Reactive.Linq;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.DataSources;
+using Toggl.Core.Exceptions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using System.Linq;
-using System.Collections.Generic;
-using Toggl.Core.Exceptions;
-using System.Collections.Immutable;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.Services;
 using Toggl.Storage.Settings;
 
 namespace Toggl.Core.UI.ViewModels

@@ -1,24 +1,24 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Text;
 using Android.Support.V7.Widget;
+using Android.Text;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
+using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Analytics;
 using Toggl.Core.UI.Transformations;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
-using TimeEntryExtensions = Toggl.Droid.Extensions.TimeEntryExtensions;
-using TextResources = Toggl.Shared.Resources;
-using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
 using static Toggl.Droid.Resource.String;
+using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
+using TextResources = Toggl.Shared.Resources;
+using TimeEntryExtensions = Toggl.Droid.Extensions.TimeEntryExtensions;
 
 namespace Toggl.Droid.Activities
 {
@@ -40,7 +40,7 @@ namespace Toggl.Droid.Activities
             }
             SetContentView(Resource.Layout.EditTimeEntryActivity);
             restoreTimeEntryIds(bundle);
-            
+
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
 
             InitializeViews();
@@ -52,10 +52,10 @@ namespace Toggl.Droid.Activities
         {
             if (bundle == null) return;
             if (!bundle.ContainsKey(nameof(ViewModel.TimeEntryIds))) return;
-            
+
             var viewModelTimeEntryIds = bundle.GetLongArray(nameof(ViewModel.TimeEntryIds));
             if (viewModelTimeEntryIds == null) return;
-            
+
             ViewModel.TimeEntryIds = viewModelTimeEntryIds;
         }
 

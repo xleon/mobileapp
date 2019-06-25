@@ -1,15 +1,15 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.ViewModels;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

@@ -1,19 +1,18 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck.Xunit;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FsCheck.Xunit;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Sync;
 using Toggl.Core.Sync.States;
 using Toggl.Core.Sync.States.Pull;
+using Toggl.Networking;
 using Toggl.Shared.Models;
 using Toggl.Storage;
-using Toggl.Storage.Models;
-using Toggl.Networking;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States.Pull

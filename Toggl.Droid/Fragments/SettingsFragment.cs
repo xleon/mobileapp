@@ -1,11 +1,11 @@
-using System;
-using System.Reactive.Linq;
 using Android.Graphics;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using System;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
@@ -33,7 +33,7 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-            
+
             var adapter = new SimpleAdapter<SelectableWorkspaceViewModel>(
                 Resource.Layout.SettingsFragmentWorkspaceCell,
                 WorkspaceSelectionViewHolder.Create

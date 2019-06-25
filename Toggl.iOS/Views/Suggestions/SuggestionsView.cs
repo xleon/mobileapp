@@ -1,14 +1,13 @@
 ﻿using System.Reactive.Subjects;
-using Toggl.Core;
-using Toggl.Core.UI.Helper;
 using Toggl.Core.Suggestions;
-using UIKit;
+using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
+using UIKit;
 
 namespace Toggl.iOS.Suggestions
 {
-    public sealed class SuggestionsView: UIView
+    public sealed class SuggestionsView : UIView
     {
         private const float titleSize = 12;
         private const float sideMargin = 16;
@@ -108,7 +107,7 @@ namespace Toggl.iOS.Suggestions
             }
             return count * (suggestionHeight + distanceBetweenSuggestions) + distanceAboveTitleLabel
                                                                            + distanceBelowTitleLabel
-                                                                           + (float) titleLabel.Frame.Height;
+                                                                           + (float)titleLabel.Frame.Height;
         }
     }
 }

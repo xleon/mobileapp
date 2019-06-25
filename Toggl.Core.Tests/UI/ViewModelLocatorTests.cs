@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using System;
+using System.Collections.Generic;
 using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
@@ -9,16 +11,14 @@ using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
+using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI;
-using Toggl.Core.UI.Services;
 using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Xunit;
-using Toggl.Core.DataSources;
-using Toggl.Core.Tests.Generators;
-using System.Collections.Generic;
 
 namespace Toggl.Core.Tests.UI
 {
@@ -30,7 +30,7 @@ namespace Toggl.Core.Tests.UI
         {
             var container = createContainer();
             var loader = new ViewModelLoader(container);
-            
+
             var loadMethod = typeof(ViewModelLoader)
                 .GetMethod(nameof(ViewModelLoader.Load));
 

@@ -1,5 +1,4 @@
-﻿using System;
-namespace Toggl.Storage.Onboarding
+﻿namespace Toggl.Storage.Onboarding
 {
     public interface IDismissable
     {

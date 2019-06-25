@@ -1,11 +1,11 @@
-﻿using System;
-using CoreAnimation;
+﻿using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using Toggl.iOS.Extensions;
+using System;
 using Toggl.Core.Extensions;
 using Toggl.Core.Reports;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
 using Toggl.Shared;
 using UIKit;
 
