@@ -166,8 +166,6 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<EditTimeEntryOrigin> EditViewOpened { get; }
 
-        IAnalyticsEvent<string, string, string, string> DebugScheduleError { get; }
-
         IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; }
 
         IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; }

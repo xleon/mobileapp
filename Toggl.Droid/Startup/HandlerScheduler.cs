@@ -2,8 +2,6 @@
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using Android.OS;
-using Toggl.Core.Analytics;
-using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid
 {
@@ -11,14 +9,12 @@ namespace Toggl.Droid
     {        
         private readonly long looperId;
         private readonly Handler handler;
-        private IAnalyticsService analyticsService;
 
         public DateTimeOffset Now => DateTimeOffset.Now;
 
-        public HandlerScheduler(Handler handler, long? threadIdAssociatedWithHandler, IAnalyticsService analyticsService)
+        public HandlerScheduler(Handler handler, long? threadIdAssociatedWithHandler)
         {
             this.handler = handler;
-            this.analyticsService = analyticsService;
             looperId = threadIdAssociatedWithHandler ?? -1;
         }
         
@@ -27,43 +23,16 @@ namespace Toggl.Droid
             bool isCancelled = false;
             var innerDisp = new SerialDisposable { Disposable = Disposable.Empty };
 
-            try
-            {
-                if (looperId > 0 && looperId == Java.Lang.Thread.CurrentThread().Id)
-                    return action(this, state);
-            }
-            catch (Exception exception)
-            {
-                analyticsService.DebugScheduleError.Track(nameof(HandlerScheduler), "Schedule:1:1", exception.GetType().Name, exception.StackTrace);
-                analyticsService.Track(exception, exception.Message);
-                throw;
-            }
+            if (looperId > 0 && looperId == Java.Lang.Thread.CurrentThread().Id)
+                return action(this, state);
 
-            try
+            handler.Post(() => 
             {
-                handler.Post(() => 
-                {
-                    if (isCancelled)
-                        return;
+                if (isCancelled)
+                    return;
 
-                    try
-                    {
-                        innerDisp.Disposable = action(this, state);
-                    }
-                    catch (Exception exception)
-                    {
-                        analyticsService.DebugScheduleError.Track(nameof(HandlerScheduler), "Schedule:1:2", exception.GetType().Name, exception.StackTrace);
-                        analyticsService.Track(exception, exception.Message);
-                        throw;
-                    }                    
-                });    
-            }
-            catch (Exception exception)
-            {
-                analyticsService.DebugScheduleError.Track(nameof(HandlerScheduler), "Schedule:1:3", exception.GetType().Name, exception.StackTrace);
-                analyticsService.Track(exception, exception.Message);
-                throw;
-            }
+                innerDisp.Disposable = action(this, state);
+            });
 
             return new CompositeDisposable(
                 Disposable.Create(() => isCancelled = true),
@@ -76,32 +45,14 @@ namespace Toggl.Droid
             var isCancelled = false;
             var innerDisp = new SerialDisposable { Disposable = Disposable.Empty };
 
-            try
-            {
                 handler.PostDelayed(() => 
-                    {
-                        if (isCancelled)
-                            return;
+                {
+                    if (isCancelled)
+                        return;
 
-                        try
-                        {
-                            innerDisp.Disposable = action(this, state);
-                        }
-                        catch (Exception exception)
-                        {
-                            analyticsService.DebugScheduleError.Track(nameof(HandlerScheduler), "Schedule:2:1", exception.GetType().Name, exception.StackTrace);
-                            analyticsService.Track(exception, exception.Message);
-                            throw;
-                        }
-                    }, dueTime.Ticks / TimeSpan.TicksPerMillisecond);
-            }
-            catch (Exception exception)
-            {
-                analyticsService.DebugScheduleError.Track(nameof(HandlerScheduler), "Schedule:2:2", exception.GetType().Name, exception.StackTrace);
-                analyticsService.Track(exception, exception.Message);
-                throw;
-            }
-            
+                    innerDisp.Disposable = action(this, state);
+                }, dueTime.Ticks / TimeSpan.TicksPerMillisecond);
+
             return new CompositeDisposable(
                 Disposable.Create(() => isCancelled = true),
                 innerDisp

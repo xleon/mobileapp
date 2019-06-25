@@ -98,7 +98,7 @@ namespace Toggl.Droid
             => new RemoteConfigServiceAndroid();
 
         protected override ISchedulerProvider CreateSchedulerProvider()
-            => new AndroidSchedulerProvider(AnalyticsService);
+            => new AndroidSchedulerProvider();
 
         protected override IApplicationShortcutCreator CreateShortcutCreator()
             => new ApplicationShortcutCreator(Application.Context);
