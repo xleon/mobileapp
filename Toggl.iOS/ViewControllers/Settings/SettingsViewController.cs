@@ -124,7 +124,6 @@ namespace Toggl.iOS.ViewControllers
                 hideSiriSection();
             }
             
-
             FeedbackView.Rx()
                 .BindAction(ViewModel.SubmitFeedback)
                 .DisposedBy(DisposeBag);
