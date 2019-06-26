@@ -52,4 +52,20 @@ _This section will be added in the future._
 
 ## Android Specific Documentation
 
-_This section will be added in the future._
+The push notifications handling is done by the book, following Firebase and Xamarin guidelines; except that we are using an outdated version of the Firebase libraries, because of currently available Xamarin libraries and the incompatibility issues with our app. Basically there's some missing methods in `Firebase.Perf`, we have a custom built library and updating to use more recent Firebase libraries is problematic. Please check https://github.com/toggl/mobileapp/issues/3542, https://github.com/toggl/mobileapp/pull/5303 and https://github.com/xamarin/GooglePlayServicesComponents/issues/151 for more information.
+ 
+There are three important classes involved in droid specifics:
+- `TogglFirebaseIIDService`:
+
+  Responsible for reacting to FCM token changes, triggering registration with backend if necessary.
+
+- `TogglFirebaseMessagingService`:
+
+  Responsible for reacting to incoming push notifications, scheduling a `SyncJobService` that will actually trigger a sync when run.
+
+- `SyncJobService`:
+
+  One of these jobs is scheduled when a push notification arrives. A simple lock based on shared preferences is used to prevent multiple sync jobs to be scheduled at the same time.
+  When the job runs, it will check whether or not the application is in background or foreground, running the appropriate sync strategy described in [one of the sections above](#app-response-to-push-notifications).
+  
+  This job is common android `JobService`, scheduled using the `JobScheduler` and it's up to the system to decided when it runs. Ideally, it should run as soon as the device has internet access, but it can take more time or run only when the app comes to foreground (e.g on lower end devices; when the device is on power saving mode; when the user has blacklisted the app). On android devices with API levels > Pie, an extra job build option is put to make sure the job runs as soon as possible when the app is in foreground.
