@@ -52,7 +52,7 @@ namespace Toggl.Droid.Presentation
                     return new CalendarPermissionDeniedFragment();
 
                 case NoWorkspaceViewModel _:
-                    return new NoWorkspaceFragment();
+                    return new NoWorkspaceFragment { Cancelable = false };
 
                 case SelectBeginningOfWeekViewModel _:
                     return new SelectBeginningOfWeekFragment();
@@ -64,7 +64,7 @@ namespace Toggl.Droid.Presentation
                     return new SelectDateFormatFragment();
 
                 case SelectDefaultWorkspaceViewModel _:
-                    return new SelectDefaultWorkspaceFragment();
+                    return new SelectDefaultWorkspaceFragment { Cancelable = false };
 
                 case SelectDurationFormatViewModel _:
                     return new SelectDurationFormatFragment();
