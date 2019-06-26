@@ -17,7 +17,7 @@ namespace Toggl.Droid
         public TimezoneChangedBroadcastReceiver TimezoneChangedBroadcastReceiver { get; set; }
 
         public bool IsInForeground { get; private set; } = false;
-        
+
         public TogglApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
@@ -27,7 +27,10 @@ namespace Toggl.Droid
         {
             base.OnCreate();
             ProcessLifecycleOwner.Get().Lifecycle.AddObserver(this);
+
+#if !DEBUG
             Firebase.FirebaseApp.InitializeApp(this);
+#endif
 
             AndroidDependencyContainer.EnsureInitialized(Context);
             var app = new AppStart(AndroidDependencyContainer.Instance);

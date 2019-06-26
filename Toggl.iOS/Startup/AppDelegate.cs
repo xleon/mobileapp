@@ -23,12 +23,15 @@ namespace Toggl.iOS
             System.Net.ServicePointManager.ServerCertificateValidationCallback
                 += (sender, certificate, chain, sslPolicyErrors) => true;
             #endif
-            
-            Firebase.Core.App.Configure();
+
+            #if !DEBUG
+                Firebase.Core.App.Configure();
+            #endif
+
             UNUserNotificationCenter.Current.Delegate = this;
             UIApplication.SharedApplication.RegisterForRemoteNotifications();
             Messaging.SharedInstance.Delegate = this;
-            
+
             initializeAnalytics();
 
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
