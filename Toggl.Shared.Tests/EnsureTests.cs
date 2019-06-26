@@ -1,5 +1,5 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
+using System;
 using Xunit;
 
 namespace Toggl.Shared.Tests
@@ -119,7 +119,7 @@ namespace Toggl.Shared.Tests
 
                 whenTheCalledArgumentIsNull
                     .Should().Throw<ArgumentException>()
-                    .WithMessage("Value cannot be null.\nParameter name: argument"); ;
+                    .WithMessage("Value cannot be null.\nParameter name: argument");
             }
         }
 

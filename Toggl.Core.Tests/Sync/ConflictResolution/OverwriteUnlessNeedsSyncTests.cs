@@ -1,8 +1,8 @@
-﻿using System;
-using Xunit;
-using FluentAssertions;
+﻿using FluentAssertions;
+using System;
 using Toggl.Core.Sync.ConflictResolution;
 using Toggl.Storage;
+using Xunit;
 
 namespace Toggl.Core.Tests.Sync.ConflictResolution
 {

@@ -1,8 +1,6 @@
-﻿using System;
-using Android.Graphics;
+﻿using Android.Graphics;
 using Android.Text;
 using Android.Text.Style;
-using Toggl.Core.UI.ViewModels;
 using static Toggl.Core.Helper.Colors;
 
 namespace Toggl.Droid.Extensions

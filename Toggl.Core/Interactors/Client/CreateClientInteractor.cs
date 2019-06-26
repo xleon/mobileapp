@@ -17,10 +17,10 @@ namespace Toggl.Core.Interactors
         private readonly IDataSource<IThreadSafeClient, IDatabaseClient> dataSource;
 
         public CreateClientInteractor(
-            IIdProvider idProvider, 
-            ITimeService timeService, 
-            IDataSource<IThreadSafeClient, IDatabaseClient> dataSource, 
-            string clientName, 
+            IIdProvider idProvider,
+            ITimeService timeService,
+            IDataSource<IThreadSafeClient, IDatabaseClient> dataSource,
+            string clientName,
             long workspaceId)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));

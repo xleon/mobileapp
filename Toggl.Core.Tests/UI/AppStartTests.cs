@@ -1,16 +1,16 @@
-﻿using System;
-using System.Reactive.Linq;
+﻿using FluentAssertions;
 using NSubstitute;
+using System;
+using System.Reactive.Linq;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
-using Toggl.Storage.Settings;
+using Toggl.Core.UI;
 using Toggl.Networking;
+using Toggl.Storage.Settings;
 using Xunit;
-using FluentAssertions;
 
 namespace Toggl.Core.Tests.UI
 {

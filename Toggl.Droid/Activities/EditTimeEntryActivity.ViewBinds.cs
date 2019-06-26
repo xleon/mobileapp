@@ -1,7 +1,7 @@
-﻿using Android.Views;
-using Android.Widget;
-using Android.Support.Constraints;
+﻿using Android.Support.Constraints;
 using Android.Support.V7.Widget;
+using Android.Views;
+using Android.Widget;
 using Toggl.Core.UI.ViewModels;
 using static Toggl.Droid.Resource.Id;
 

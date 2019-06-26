@@ -1,6 +1,6 @@
-using System;
 using Intents;
 using Toggl.iOS.Intents;
+using System;
 
 namespace Toggl.iOS.Models
 {

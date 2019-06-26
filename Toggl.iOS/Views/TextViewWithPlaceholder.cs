@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Foundation;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using UIKit;

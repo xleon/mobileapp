@@ -1,12 +1,11 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.UI.ViewModels;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

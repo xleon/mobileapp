@@ -1,9 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Collections;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Toggl.Core.Tests.TestExtensions
 {

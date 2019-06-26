@@ -1,16 +1,14 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
-using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Parameters;
-using Toggl.Shared;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Extensions;
 using Xunit;
 
@@ -102,16 +100,16 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : SelectWorkspaceViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : SelectWorkspaceViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.Initialize(new SelectWorkspaceParameters("Some workspace", 1));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -120,7 +118,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 const long expectedId = 10;
                 await ViewModel.Initialize(new SelectWorkspaceParameters(string.Empty, expectedId));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 (await ViewModel.Result).Should().Be(expectedId);
             }
@@ -128,25 +126,25 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheSelectWorkspaceAction : SelectWorkspaceViewModelTest
         {
-            private readonly IThreadSafeWorkspace Workspace = Substitute.For<IThreadSafeWorkspace>();
+            private readonly IThreadSafeWorkspace workspace = Substitute.For<IThreadSafeWorkspace>();
 
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
-                var selectableWorkspace = new SelectableWorkspaceViewModel(Workspace, true);
+                var selectableWorkspace = new SelectableWorkspaceViewModel(workspace, true);
 
                 ViewModel.SelectWorkspace.Execute(selectableWorkspace);
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
             public async Task ReturnsTheSelectedWorkspaceId()
             {
                 const long expectedId = 10;
-                Workspace.Id.Returns(expectedId);
-                Workspace.IsEligibleForProjectCreation().Returns(true);
-                var selectableWorkspace = new SelectableWorkspaceViewModel(Workspace, true);
+                workspace.Id.Returns(expectedId);
+                workspace.IsEligibleForProjectCreation().Returns(true);
+                var selectableWorkspace = new SelectableWorkspaceViewModel(workspace, true);
 
                 ViewModel.SelectWorkspace.Execute(selectableWorkspace);
 

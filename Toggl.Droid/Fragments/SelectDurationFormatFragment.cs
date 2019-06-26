@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
+using System.Linq;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
@@ -17,7 +17,7 @@ namespace Toggl.Droid.Fragments
         public SelectDurationFormatFragment() { }
 
         public SelectDurationFormatFragment(IntPtr javaReference, JniHandleOwnership transfer)
-            : base (javaReference, transfer) { }
+            : base(javaReference, transfer) { }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -32,7 +32,7 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-            
+
             recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
             selectDurationRecyclerAdapter = new SelectDurationFormatRecyclerAdapter();
             selectDurationRecyclerAdapter.Items = ViewModel.DurationFormats.ToList();
@@ -48,11 +48,6 @@ namespace Toggl.Droid.Fragments
             base.OnResume();
 
             Dialog.Window.SetDefaultDialogLayout(Activity, Context, heightDp: 268);
-        }
-
-        public override void OnCancel(IDialogInterface dialog)
-        {
-            ViewModel.Close.Execute();
         }
 
         protected override void Dispose(bool disposing)

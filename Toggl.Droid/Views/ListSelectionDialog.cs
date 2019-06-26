@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Linq;
+﻿using Android.Content;
 using Android.Support.V7.App;
-using Activity = Android.App.Activity;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using Android.Content;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Views;
+using Activity = Android.App.Activity;
 
 namespace Toggl.Droid.Views
 {

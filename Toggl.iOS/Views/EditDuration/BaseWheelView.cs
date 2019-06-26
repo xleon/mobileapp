@@ -1,8 +1,6 @@
-﻿using System;
+﻿using CoreGraphics;
+using System;
 using UIKit;
-using CoreGraphics;
-using CoreAnimation;
-using static Toggl.Shared.Math;
 
 namespace Toggl.iOS.Views.EditDuration
 {

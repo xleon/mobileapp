@@ -12,11 +12,11 @@ namespace Toggl.Droid.Fragments
         public IObservable<bool> Confirm(string title, string message, string confirmButtonText,
             string dismissButtonText)
         {
-            if (Activity == null) 
+            if (Activity == null)
                 return Observable.Return(false);
-            
-            return Activity.ShowConfirmationDialog(title, message, confirmButtonText, dismissButtonText);  
-        } 
+
+            return Activity.ShowConfirmationDialog(title, message, confirmButtonText, dismissButtonText);
+        }
 
         public IObservable<T> Select<T>(string title, IEnumerable<SelectOption<T>> options, int initialSelectionIndex = 0)
             => Activity.ShowSelectionDialog(title, options, initialSelectionIndex);
@@ -25,7 +25,7 @@ namespace Toggl.Droid.Fragments
         {
             if (Activity == null)
                 return Observable.Return(Unit.Default);
-            
+
             return Activity.ShowConfirmationDialog(title, message, buttonTitle, null).Select(_ => Unit.Default);
         }
 
@@ -34,7 +34,7 @@ namespace Toggl.Droid.Fragments
             if (Activity == null)
                 return Observable.Return(false);
 
-            return Activity.ShowDestructiveActionConfirmationDialog(type, formatArguments);  
-        } 
+            return Activity.ShowDestructiveActionConfirmationDialog(type, formatArguments);
+        }
     }
 }

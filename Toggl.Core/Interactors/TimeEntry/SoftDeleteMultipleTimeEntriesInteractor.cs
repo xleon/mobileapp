@@ -1,15 +1,14 @@
 ﻿using System;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Extensions;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Storage.Models;
-using System.Reactive;
 using Toggl.Core.Sync;
-using Toggl.Core.Interactors.Generic;
-using System.Reactive.Linq;
-using System.Linq;
 using Toggl.Shared.Extensions;
-using Toggl.Core.Extensions;
+using Toggl.Storage.Models;
 
 namespace Toggl.Core.Interactors
 {

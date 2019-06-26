@@ -1,18 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using Toggl.Core.Analytics;
-using Toggl.Core.Extensions;
 using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Networking.ApiClients;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;
-using Toggl.Networking.ApiClients;
 using static Toggl.Core.Sync.PushSyncOperation;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Toggl.Core.Sync.States.Push
 {

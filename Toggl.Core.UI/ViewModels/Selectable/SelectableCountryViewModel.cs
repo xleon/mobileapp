@@ -1,5 +1,4 @@
-﻿using System;
-using Toggl.Core.UI.Interfaces;
+﻿using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 

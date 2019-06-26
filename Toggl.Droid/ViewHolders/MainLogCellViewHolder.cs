@@ -1,7 +1,3 @@
-using System;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using Android.Animation;
 using Android.Graphics;
 using Android.Runtime;
@@ -9,13 +5,17 @@ using Android.Support.Constraints;
 using Android.Support.V4.Content;
 using Android.Views;
 using Android.Widget;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Shared.Extensions;
-using GroupingColor = Toggl.Core.UI.Helper.Colors.TimeEntriesLog.Grouping;
 using static Toggl.Droid.Resource.Id;
+using GroupingColor = Toggl.Core.UI.Helper.Colors.TimeEntriesLog.Grouping;
 
 namespace Toggl.Droid.ViewHolders
 {
@@ -54,7 +54,7 @@ namespace Toggl.Droid.ViewHolders
         private View durationFadeGradient;
         private TextView groupCountTextView;
         private View groupExpansionButton;
-        
+
         private ObjectAnimator animator;
 
         public bool IsAnimating => animator?.IsRunning ?? false;

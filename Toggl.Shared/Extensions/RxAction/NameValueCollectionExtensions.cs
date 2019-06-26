@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Xml;
 
 namespace Toggl.Shared.Extensions.RxAction
 {

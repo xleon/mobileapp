@@ -1,12 +1,8 @@
-﻿using System;
-
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.Core.UI.Helper;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Extensions;
-using Toggl.iOS.Models;
 using Toggl.iOS.ViewControllers.Settings;
 using UIKit;
 

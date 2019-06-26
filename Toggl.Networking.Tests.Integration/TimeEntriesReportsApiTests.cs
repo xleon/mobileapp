@@ -1,16 +1,16 @@
-﻿using System;
-using Toggl.Networking.Tests.Integration.BaseTests;
-using Toggl.Shared.Models.Reports;
+﻿using FluentAssertions;
+using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Networking.ApiClients;
-using Xunit;
-using Toggl.Shared.Models;
-using FluentAssertions;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Tests.Integration.BaseTests;
+using Toggl.Networking.Tests.Integration.Helper;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Networking.Tests.Integration.Helper;
-using Toggl.Networking.Helpers;
+using Toggl.Shared.Models;
+using Toggl.Shared.Models.Reports;
+using Xunit;
 
 namespace Toggl.Networking.Tests.Integration
 {

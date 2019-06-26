@@ -1,19 +1,19 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Extensions;
 using Toggl.Core.Sync;
 using Toggl.Core.Sync.States.Push;
 using Toggl.Core.Tests.Sync.States.Push.BaseStates;
-using Toggl.Storage;
 using Toggl.Networking.ApiClients;
 using Toggl.Shared;
+using Toggl.Storage;
 using Xunit;
 using static Toggl.Core.Sync.PushSyncOperation;
 using Math = System.Math;
@@ -51,10 +51,13 @@ namespace Toggl.Core.Tests.Sync.States.Push
             var withPositiveId = new TestModel(13, SyncStatus.InSync);
             api.Create(Arg.Any<ITestModel>())
                 .Returns(Observable.Return(withPositiveId));
-            dataSource.OverwriteIfOriginalDidNotChange(Arg.Any<IThreadSafeTestModel>(), Arg.Any<IThreadSafeTestModel>())
-                      .Returns(x => Observable.Return(new[] {
-                            new UpdateResult<IThreadSafeTestModel>(entity.Id, entityWithId((IThreadSafeTestModel)x[1], entity.Id))
-                      }));
+            dataSource.OverwriteIfOriginalDidNotChange(
+                Arg.Any<IThreadSafeTestModel>(),
+                Arg.Any<IThreadSafeTestModel>())
+                .Returns(x => Observable.Return(new[]
+                {
+                    new UpdateResult<IThreadSafeTestModel>(entity.Id, entityWithId((IThreadSafeTestModel)x[1], entity.Id))
+                }));
             dataSource.ChangeId(entity.Id, withPositiveId.Id).Returns(Observable.Return(withPositiveId));
 
             var transition = state.Start(entity).SingleAsync().Wait();

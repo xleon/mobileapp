@@ -1,12 +1,12 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
-using NSubstitute;
 using Toggl.Core.Services;
 using Toggl.Storage.Settings;
 using Xunit;
@@ -197,7 +197,7 @@ namespace Toggl.Storage.Tests.Settings
         public sealed class TheEnableCalendarsMethod : SettingsStorageTest
         {
             private SettingsStorage settingsStorage;
-            IKeyValueStorage keyValueStorage;
+            private IKeyValueStorage keyValueStorage;
 
             public TheEnableCalendarsMethod()
             {

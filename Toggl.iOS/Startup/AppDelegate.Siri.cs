@@ -1,15 +1,14 @@
-﻿using System;
-using System.Linq;
-using Foundation;
+﻿using Foundation;
 using Intents;
+using System;
+using System.Linq;
 using Toggl.Core;
+using Toggl.Core.Analytics;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Analytics;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Intents;
-using Toggl.iOS.ViewControllers;
 using UIKit;
 
 namespace Toggl.iOS

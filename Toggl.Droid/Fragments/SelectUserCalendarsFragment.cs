@@ -1,9 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using Android.OS;
+﻿using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions.Reactive;
@@ -33,14 +34,13 @@ namespace Toggl.Droid.Fragments
             base.OnViewCreated(view, savedInstanceState);
             setupRecyclerView();
 
-            cancelButton
-                .Rx()
-                .BindAction(ViewModel.Close)
+            cancelButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             doneButton
                 .Rx()
-                .BindAction(ViewModel.Done)
+                .BindAction(ViewModel.Save)
                 .DisposedBy(DisposeBag);
 
             ViewModel

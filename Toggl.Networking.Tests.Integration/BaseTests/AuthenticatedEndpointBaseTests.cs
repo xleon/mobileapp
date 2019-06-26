@@ -1,12 +1,12 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Toggl.Shared;
-using Toggl.Shared.Extensions;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
 using Toggl.Networking.Tests.Integration.Helper;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Xunit;
 
 namespace Toggl.Networking.Tests.Integration.BaseTests

@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using CoreGraphics;
 using CoreMotion;
 using Foundation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using UIKit;
@@ -129,7 +129,7 @@ namespace Toggl.iOS.Views
 
         private void reset()
         {
-            foreach(var subview in Subviews)
+            foreach (var subview in Subviews)
             {
                 subview.RemoveFromSuperview();
             }

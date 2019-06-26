@@ -1,5 +1,4 @@
-﻿using Microsoft.Reactive.Testing;
-using NSubstitute;
+﻿using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +9,8 @@ using Toggl.Core.DTOs;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.Sync;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
-using Toggl.Storage.Models;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.TimeEntry
@@ -68,7 +65,7 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
             };
         }
 
-      
+
 
         private class TimeEntriesCollectionComparer
         {

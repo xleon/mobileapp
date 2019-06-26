@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Toggl.Core.Services
+﻿namespace Toggl.Core.Services
 {
     public interface IPrivateSharedStorageService
     {

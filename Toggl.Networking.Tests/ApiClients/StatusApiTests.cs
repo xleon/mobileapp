@@ -1,13 +1,12 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Reactive;
 using System.Reactive.Linq;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Networking.ApiClients;
 using Toggl.Networking.Exceptions;
-using Toggl.Networking.Helpers;
 using Toggl.Networking.Network;
 using Xunit;
 using static System.Net.HttpStatusCode;
@@ -31,11 +30,11 @@ namespace Toggl.Networking.Tests.Clients
             public void DoesNotHideThrownExceptions()
             {
                 bool caughtException = false;
-                #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
                 apiClient
                     .Send(Arg.Any<IRequest>())
                     .Returns(async x => throw new WebException());
-                #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
                 statusApi.IsAvailable()
                     .Catch((WebException exception) =>

@@ -1,10 +1,10 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Storage;
-using Toggl.Storage.Models;
 using Toggl.Shared;
 using Toggl.Shared.Models;
+using Toggl.Storage;
+using Toggl.Storage.Models;
 
 namespace Toggl.Core.Models
 {

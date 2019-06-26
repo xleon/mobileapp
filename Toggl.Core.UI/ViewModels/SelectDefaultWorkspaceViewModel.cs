@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Reactive.Linq;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.DataSources;
+using Toggl.Core.Exceptions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using System.Linq;
-using System.Collections.Generic;
-using Toggl.Core.Exceptions;
-using System.Collections.Immutable;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.Services;
 using Toggl.Storage.Settings;
 
 namespace Toggl.Core.UI.ViewModels
@@ -23,7 +23,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly IInteractorFactory interactorFactory;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
-        private readonly IRxActionFactory rxActionFactory;
 
         public IImmutableList<SelectableWorkspaceViewModel> Workspaces { get; private set; }
 
@@ -45,9 +44,8 @@ namespace Toggl.Core.UI.ViewModels
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
             this.accessRestrictionStorage = accessRestrictionStorage;
-            this.rxActionFactory = rxActionFactory;
 
-            SelectWorkspace = rxActionFactory.FromObservable<SelectableWorkspaceViewModel>(selectWorkspace);
+            SelectWorkspace = rxActionFactory.FromAsync<SelectableWorkspaceViewModel>(selectWorkspace);
         }
 
         public override async Task Initialize()
@@ -66,14 +64,12 @@ namespace Toggl.Core.UI.ViewModels
         private SelectableWorkspaceViewModel toSelectable(IThreadSafeWorkspace workspace)
             => new SelectableWorkspaceViewModel(workspace, false);
 
-        private IObservable<Unit> selectWorkspace(SelectableWorkspaceViewModel workspace)
-            => Observable.DeferAsync(async _ =>
-            {
-                await interactorFactory.SetDefaultWorkspace(workspace.WorkspaceId).Execute();
-                accessRestrictionStorage.SetNoDefaultWorkspaceStateReached(false);
-                await Finish();
-                return Observable.Return(Unit.Default);
-            });
+        private async Task selectWorkspace(SelectableWorkspaceViewModel workspace)
+        {
+            await interactorFactory.SetDefaultWorkspace(workspace.WorkspaceId).Execute();
+            accessRestrictionStorage.SetNoDefaultWorkspaceStateReached(false);
+            Close();
+        }
 
         private void throwIfThereAreNoWorkspaces(IEnumerable<IThreadSafeWorkspace> workspaces)
         {

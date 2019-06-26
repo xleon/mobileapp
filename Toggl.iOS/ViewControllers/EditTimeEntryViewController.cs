@@ -1,19 +1,19 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Linq;
 using System.Threading.Tasks;
-using CoreGraphics;
-using Foundation;
-using Toggl.iOS.Extensions;
-using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Onboarding.EditView;
 using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Transformations;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -22,7 +22,7 @@ using Math = System.Math;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public partial class EditTimeEntryViewController : KeyboardAwareViewController<EditTimeEntryViewModel>, IDismissableViewController
+    public partial class EditTimeEntryViewController : KeyboardAwareViewController<EditTimeEntryViewModel>
     {
         private const float nonScrollableContentHeight = 116f;
         private const double preferredIpadHeight = 228;
@@ -66,8 +66,8 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(GroupDuration.Rx().Text())
                 .DisposedBy(DisposeBag);
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             ConfirmButton.Rx()
@@ -249,11 +249,6 @@ namespace Toggl.iOS.ViewControllers
             View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
         }
 
-        public async Task<bool> Dismiss()
-        {
-            return await ViewModel.Close.ExecuteWithCompletion(Unit.Default);
-        }
-
         private void prepareViews()
         {
             DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
@@ -428,7 +423,7 @@ namespace Toggl.iOS.ViewControllers
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
         {
-            keyboardHeight = (float) e.FrameEnd.Height;
+            keyboardHeight = (float)e.FrameEnd.Height;
             adjustDistanceFromTop();
         }
 

@@ -1,7 +1,7 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
+using System;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Span;
 using Toggl.Core.Autocomplete.Suggestions;
@@ -25,7 +25,7 @@ namespace Toggl.Core.Tests.Autocomplete
                     var parsed = QueryInfo.ParseFieldInfo(textFieldInfo);
 
                     parsed.SuggestionType.Should().Be(AutocompleteSuggestionType.None);
-                    parsed.Text.Should().Be(String.Empty);
+                    parsed.Text.Should().Be(string.Empty);
                 }
 
                 [Property]
@@ -40,15 +40,15 @@ namespace Toggl.Core.Tests.Autocomplete
                     var parsed = QueryInfo.ParseFieldInfo(textFieldInfo);
 
                     parsed.SuggestionType.Should().Be(AutocompleteSuggestionType.None);
-                    parsed.Text.Should().Be(String.Empty);
+                    parsed.Text.Should().Be(string.Empty);
                 }
             }
 
             public sealed class TimeEntries
             {
-                protected const long ProjectId = 10;
-                protected const string ProjectName = "Toggl";
-                protected const string ProjectColor = "#F41F19";
+                private const long projectId = 10;
+                private const string projectName = "Toggl";
+                private const string projectColor = "#F41F19";
 
                 [Property]
                 public void ExtractsTheProjectNameWhileTyping(NonEmptyString nonEmptyString)
@@ -75,7 +75,7 @@ namespace Toggl.Core.Tests.Autocomplete
 
                     var textFieldInfo = TextFieldInfo.Empty(1).ReplaceSpans(
                         new QueryTextSpan(text, text.Length),
-                        new ProjectSpan(ProjectId, ProjectName, ProjectColor)
+                        new ProjectSpan(projectId, projectName, projectColor)
                     );
 
                     var parsed = QueryInfo.ParseFieldInfo(textFieldInfo);

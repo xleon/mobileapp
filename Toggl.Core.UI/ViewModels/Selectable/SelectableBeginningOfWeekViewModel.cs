@@ -1,5 +1,4 @@
-﻿using System;
-using Toggl.Core.UI.Interfaces;
+﻿using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels
@@ -19,7 +18,7 @@ namespace Toggl.Core.UI.ViewModels
             Selected = selected;
         }
 
-        public bool Equals(SelectableBeginningOfWeekViewModel other) 
+        public bool Equals(SelectableBeginningOfWeekViewModel other)
             => BeginningOfWeek == other.BeginningOfWeek && Selected == other.Selected;
     }
 }

@@ -1,6 +1,6 @@
+using FluentAssertions;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
 using Toggl.Storage;
 
 namespace Toggl.Core.Tests.Sync.Extensions

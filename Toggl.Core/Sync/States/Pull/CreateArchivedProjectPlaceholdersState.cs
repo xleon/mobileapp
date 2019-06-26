@@ -2,19 +2,16 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.Analytics;
-using Toggl.Core.DataSources;
+using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Extensions;
-using Toggl.Core.Helper;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.Storage;
-using Toggl.Shared.Extensions;
-using Toggl.Networking.Exceptions;
-using static Toggl.Shared.Extensions.CommonFunctions;
-using Toggl.Core.DataSources.Interfaces;
 using Toggl.Storage.Models;
+using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.Core.Sync.States.Pull
 {

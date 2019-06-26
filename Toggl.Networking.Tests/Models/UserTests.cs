@@ -1,5 +1,5 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
+using System;
 using Toggl.Networking.Models;
 using Xunit;
 using static Toggl.Shared.Extensions.EmailExtensions;

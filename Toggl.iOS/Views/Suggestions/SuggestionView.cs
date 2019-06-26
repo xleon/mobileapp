@@ -1,11 +1,11 @@
-﻿using Foundation;
-using System;
-using UIKit;
+﻿using CoreGraphics;
+using Foundation;
 using ObjCRuntime;
-using CoreGraphics;
+using System;
 using Toggl.Core.Suggestions;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
+using UIKit;
 
 namespace Toggl.iOS
 {
@@ -14,7 +14,7 @@ namespace Toggl.iOS
         private const float noProjectDistance = 11;
         private const float hasProjectDistance = 0;
 
-        public SuggestionView (IntPtr handle) : base (handle)
+        public SuggestionView(IntPtr handle) : base(handle)
         {
         }
 

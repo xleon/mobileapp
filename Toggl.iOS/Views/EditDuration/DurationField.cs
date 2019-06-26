@@ -1,11 +1,11 @@
-﻿using System;
-using CoreGraphics;
+﻿using CoreGraphics;
 using CoreText;
 using Foundation;
 using ObjCRuntime;
-using Toggl.iOS.Extensions;
+using System;
 using Toggl.Core;
 using Toggl.Core.UI.Helper;
+using Toggl.iOS.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views.EditDuration

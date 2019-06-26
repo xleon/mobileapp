@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Firebase.RemoteConfig;
+using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Firebase.RemoteConfig;
 using Toggl.Core.Services;
 using Toggl.Shared;
 

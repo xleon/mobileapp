@@ -1,11 +1,10 @@
-﻿using System;
-using System.Reactive;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
-using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.UI.ViewModels.Calendar;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
@@ -60,7 +59,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact]
@@ -71,7 +70,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 TestScheduler.Start();
 
-                await View.DidNotReceive().Close();
+                View.DidNotReceive().Close();
             }
         }
     }

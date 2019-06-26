@@ -1,7 +1,7 @@
-﻿using System;
-using Foundation;
-using UIKit;
+﻿using Foundation;
+using System;
 using Toggl.Core.Models;
+using UIKit;
 using static Toggl.Storage.SyncStatus;
 
 namespace Toggl.iOS.Cells

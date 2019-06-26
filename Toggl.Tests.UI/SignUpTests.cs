@@ -1,9 +1,9 @@
-﻿using System;
-using NUnit.Framework;
-using Xamarin.UITest;
-using Toggl.Tests.UI.Extensions;
+﻿using NUnit.Framework;
+using System;
 using System.Threading.Tasks;
+using Toggl.Tests.UI.Extensions;
 using Toggl.Tests.UI.Helpers;
+using Xamarin.UITest;
 
 namespace Toggl.Tests.UI
 {

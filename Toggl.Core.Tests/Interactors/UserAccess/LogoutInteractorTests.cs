@@ -1,11 +1,11 @@
+using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Interactors.UserAccess;

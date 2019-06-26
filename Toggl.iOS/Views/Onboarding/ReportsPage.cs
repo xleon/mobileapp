@@ -1,8 +1,8 @@
-﻿using System;
-using CoreAnimation;
+﻿using CoreAnimation;
 using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
+using System;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using UIKit;
@@ -36,7 +36,7 @@ namespace Toggl.iOS
 
         private CAShapeLayer graySegment;
 
-        public ReportsPage (IntPtr handle) : base (handle)
+        public ReportsPage(IntPtr handle) : base(handle)
         {
         }
 

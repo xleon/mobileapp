@@ -1,6 +1,6 @@
-using System;
 using Android.Runtime;
 using Android.Views;
+using System;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.ViewHolders;
 

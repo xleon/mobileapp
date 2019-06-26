@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Android.Content;
+﻿using Android.Content;
 using Android.Content.PM;
 using Android.Graphics.Drawables;
 using Android.Net;
 using Android.Runtime;
 using Java.Lang;
+using System.Collections.Generic;
+using System.Linq;
 using Toggl.Core.Shortcuts;
 using Toggl.Droid.Helper;
 
@@ -56,7 +56,7 @@ namespace Toggl.Droid
 
         private ShortcutInfo androidShortcut(ApplicationShortcut shortcut)
         {
-            var droidShortcut = 
+            var droidShortcut =
                 new ShortcutInfo.Builder(context, shortcut.Title)
                     .SetLongLabel($"{shortcut.Title} {shortcut.Subtitle}")
                     .SetShortLabel(shortcut.Title)

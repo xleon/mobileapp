@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Core.DataSources;
 using Toggl.Shared;
-using Toggl.Storage;
 using Toggl.Storage.Models;
 
 namespace Toggl.Core.Interactors

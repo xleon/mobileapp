@@ -5,11 +5,10 @@ using Toggl.Core.DataSources;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
-using Toggl.Core.Services;
-using Toggl.Core.Sync;
 
 namespace Toggl.Core.Interactors
 {

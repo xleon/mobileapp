@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Support.V4.App;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Reactive;
 using System.Reactive.Linq;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Support.V4.App;
 using Toggl.Core.Services;
 using Toggl.Droid.BroadcastReceivers;
 using Toggl.Droid.Extensions;
@@ -64,14 +64,14 @@ namespace Toggl.Droid.Services
                 notificationManager.CancelAll();
 
                 var notificationIds = getSavedNotificationIds();
-                var alarmManager = (AlarmManager) Application.Context.GetSystemService(Context.AlarmService);
+                var alarmManager = (AlarmManager)Application.Context.GetSystemService(Context.AlarmService);
                 notificationIds.ForEach(notificationId => unScheduleNotification(notificationId, alarmManager));
                 clearSavedNotificationIds();
             });
 
         private static void scheduleNotification(int notificationId, Notification notification, DateTimeOffset scheduleAt)
         {
-            var alarmManager = (AlarmManager) Application.Context.GetSystemService(Context.AlarmService);
+            var alarmManager = (AlarmManager)Application.Context.GetSystemService(Context.AlarmService);
             var scheduledNotificationIntent = new Intent(Application.Context, typeof(SmartAlertCalendarEventBroadcastReceiver));
             scheduledNotificationIntent.SetData(getSmartAlertIdentifierUri(notificationId));
             scheduledNotificationIntent.PutExtra(SmartAlertCalendarEventBroadcastReceiver.NotificationId, notificationId);
@@ -80,7 +80,7 @@ namespace Toggl.Droid.Services
             cancelExistingPendingIntentIfNecessary(notificationId, scheduledNotificationIntent, alarmManager);
 
             var pendingIntent = PendingIntent.GetBroadcast(Application.Context, notificationId, scheduledNotificationIntent, PendingIntentFlags.CancelCurrent);
-            var futureInMillis = (long) (scheduleAt - DateTimeOffset.Now).TotalMilliseconds;
+            var futureInMillis = (long)(scheduleAt - DateTimeOffset.Now).TotalMilliseconds;
 
             alarmManager.SetExact(AlarmType.ElapsedRealtimeWakeup, SystemClock.ElapsedRealtime() + futureInMillis, pendingIntent);
         }

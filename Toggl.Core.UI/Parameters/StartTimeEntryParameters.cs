@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Shared;
 using static Toggl.Core.Helper.Constants;
@@ -22,7 +21,7 @@ namespace Toggl.Core.UI.Parameters
         public long? WorkspaceId { get; }
 
         public long? ProjectId { get; }
-        
+
         public IEnumerable<long> TagIds { get; }
 
         public TimeEntryStartOrigin? Origin { get; }
@@ -38,7 +37,7 @@ namespace Toggl.Core.UI.Parameters
             TimeEntryStartOrigin? origin = null)
         {
             StartTime = startTime;
-            PlaceholderText = placeholderText;        
+            PlaceholderText = placeholderText;
             Duration = duration;
             WorkspaceId = workspaceId;
             EntryDescription = entryDescription;
@@ -53,7 +52,7 @@ namespace Toggl.Core.UI.Parameters
                 Resources.ManualTimeEntryPlaceholder,
                 defaultManualModeDuration,
                 null);
-        
+
         public static StartTimeEntryParameters ForTimerMode(DateTimeOffset now)
             => new StartTimeEntryParameters(now, Resources.StartTimeEntryPlaceholder, null, null);
     }

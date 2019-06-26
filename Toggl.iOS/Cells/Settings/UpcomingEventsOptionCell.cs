@@ -1,8 +1,7 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.Core.Extensions;
 using Toggl.Core.UI.ViewModels.Selectable;
-using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS.Cells.Settings

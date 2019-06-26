@@ -1,10 +1,10 @@
+using FluentAssertions;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Interactors;
@@ -25,16 +25,16 @@ namespace Toggl.Core.Tests.Sync.States.Pull
     {
         public abstract class DetectGainingAccessToWorkspacesStateTestBase
         {
-            protected readonly IDataSource<IThreadSafeWorkspace, IDatabaseWorkspace> DataSource =
+            protected IDataSource<IThreadSafeWorkspace, IDatabaseWorkspace> DataSource { get; } =
                 Substitute.For<IDataSource<IThreadSafeWorkspace, IDatabaseWorkspace>>();
 
-            protected readonly IAnalyticsService AnalyticsService =
+            protected IAnalyticsService AnalyticsService { get; } =
                 Substitute.For<IAnalyticsService>();
 
-            protected readonly Func<IInteractor<IObservable<bool>>> HasFinsihedSyncBeforeInteractor =
+            protected Func<IInteractor<IObservable<bool>>> HasFinsihedSyncBeforeInteractor { get; } =
                 Substitute.For<Func<IInteractor<IObservable<bool>>>>();
 
-            protected readonly IFetchObservables FetchObservables = Substitute.For<IFetchObservables>();
+            protected IFetchObservables FetchObservables { get; } = Substitute.For<IFetchObservables>();
 
             protected void PrepareDatabase(IEnumerable<IThreadSafeWorkspace> workspaces)
             {

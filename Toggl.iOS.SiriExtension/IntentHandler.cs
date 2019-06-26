@@ -1,8 +1,7 @@
-﻿using System;
-using Toggl.Networking;
-using Toggl.iOS.Intents;
-using Foundation;
+﻿using Foundation;
 using Intents;
+using Toggl.iOS.Intents;
+using System;
 
 namespace SiriExtension
 {

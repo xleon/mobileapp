@@ -1,10 +1,9 @@
-﻿using System.Net;
-using System.Net.Http;
-using Toggl.Shared;
+﻿using System.Net.Http;
 using Toggl.Networking.ApiClients;
 using Toggl.Networking.ApiClients.Interfaces;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
+using Toggl.Shared;
 using static System.Net.DecompressionMethods;
 
 namespace Toggl.Networking

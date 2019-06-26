@@ -1,9 +1,9 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Linq;
-using Android.Graphics;
+﻿using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Views;
+using System;
+using System.Reactive;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Reactive;
 using Toggl.Shared.Extensions;
 using static Android.Views.View;

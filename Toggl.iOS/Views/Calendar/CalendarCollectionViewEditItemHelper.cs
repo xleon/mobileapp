@@ -1,19 +1,19 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using CoreGraphics;
-using Foundation;
-using Toggl.iOS.Extensions;
 using Toggl.Core;
 using Toggl.Core.Calendar;
 using Toggl.Core.Extensions;
 using Toggl.Core.Helper;
-using Toggl.Shared;
-using UIKit;
 using Toggl.Core.UI.Extensions;
 using Toggl.iOS.Cells.Calendar;
+using Toggl.iOS.Extensions;
 using Toggl.iOS.ViewSources;
+using Toggl.Shared;
+using UIKit;
 
 namespace Toggl.iOS.Views.Calendar
 {

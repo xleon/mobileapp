@@ -11,7 +11,6 @@ namespace Toggl.Core.UI.ViewModels.Settings.Siri
     {
         private readonly IOnboardingStorage onboardingStorage;
 
-        public UIAction Ok { get; }
         public UIAction DoNotShowAgain { get; }
 
         public PasteFromClipboardViewModel(
@@ -24,16 +23,13 @@ namespace Toggl.Core.UI.ViewModels.Settings.Siri
 
             this.onboardingStorage = onboardingStorage;
 
-            Ok = rxActionFactory.FromAsync(ok);
-            DoNotShowAgain = rxActionFactory.FromAsync(doNotShowAgain);
+            DoNotShowAgain = rxActionFactory.FromAction(doNotShowAgain);
         }
 
-        private Task ok() => Finish();
-
-        private Task doNotShowAgain()
+        private void doNotShowAgain()
         {
             onboardingStorage.SetDidShowSiriClipboardInstruction(true);
-            return Finish();
+            Close();
         }
     }
 }

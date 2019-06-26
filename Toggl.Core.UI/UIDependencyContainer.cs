@@ -1,7 +1,7 @@
 ﻿using System;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
-using Toggl.Core.Services;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 

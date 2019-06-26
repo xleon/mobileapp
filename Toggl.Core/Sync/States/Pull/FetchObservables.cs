@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using Toggl.Shared.Models;
 
 namespace Toggl.Core.Sync.States

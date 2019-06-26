@@ -1,23 +1,23 @@
-﻿using System;
-using Toggl.Droid.Services;
+﻿using Android.App;
+using Android.Content;
+using System;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
-using Toggl.Core.UI;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Suggestions;
+using Toggl.Core.UI;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
+using Toggl.Droid.Presentation;
+using Toggl.Droid.Services;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Realm;
 using Toggl.Storage.Settings;
-using Toggl.Networking;
-using Toggl.Networking.Network;
-using Android.Content;
-using Android.App;
-using Toggl.Core.UI.Navigation;
-using Toggl.Droid.Presentation;
 
 namespace Toggl.Droid
 {
@@ -98,7 +98,7 @@ namespace Toggl.Droid
             => new RemoteConfigServiceAndroid();
 
         protected override ISchedulerProvider CreateSchedulerProvider()
-            => new AndroidSchedulerProvider(AnalyticsService);
+            => new AndroidSchedulerProvider();
 
         protected override IApplicationShortcutCreator CreateShortcutCreator()
             => new ApplicationShortcutCreator(Application.Context);

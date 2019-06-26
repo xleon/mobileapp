@@ -1,9 +1,9 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
 using Toggl.Shared.Extensions;
 using Xunit;
 
@@ -17,7 +17,8 @@ namespace Toggl.Shared.Tests
             public void Connects()
             {
                 var connected = false;
-                var observable = Observable.Create<object>(observer => {
+                var observable = Observable.Create<object>(observer =>
+                {
                     connected = true;
                     return () => { };
                 });
@@ -174,7 +175,8 @@ namespace Toggl.Shared.Tests
                     xs.RetryWhen(v =>
                     {
                         int[] count = { 0 };
-                        return v.SelectMany(w => {
+                        return v.SelectMany(w =>
+                        {
                             int c = ++count[0];
                             if (c == 3)
                             {
@@ -223,7 +225,8 @@ namespace Toggl.Shared.Tests
                     xs.RetryWhen(v =>
                     {
                         int[] count = { 0 };
-                        return v.SelectMany(w => {
+                        return v.SelectMany(w =>
+                        {
                             int c = ++count[0];
                             if (c == 3)
                             {

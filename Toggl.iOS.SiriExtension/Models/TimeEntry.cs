@@ -33,7 +33,7 @@ namespace SiriExtension.Models
             UserId = userId;
             Id = id;
             ServerDeletedAt = serverDeletedAt;
-            At = at;                
+            At = at;
         }
 
         public static TimeEntry from(ITimeEntry entry)

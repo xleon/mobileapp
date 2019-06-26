@@ -1,11 +1,11 @@
-﻿using System;
+﻿using CoreGraphics;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
-using CoreGraphics;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
-using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Views;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;
@@ -53,8 +53,8 @@ namespace Toggl.iOS.ViewControllers
                 .BindAction(ViewModel.Save)
                 .DisposedBy(DisposeBag);
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             // Picker view

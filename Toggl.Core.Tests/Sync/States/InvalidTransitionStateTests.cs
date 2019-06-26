@@ -1,9 +1,9 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
 using FsCheck.Xunit;
+using System;
 using Toggl.Core.Sync.States;
 using Xunit;
-using FluentAssertions;
-using FsCheck;
 
 namespace Toggl.Core.Tests.Sync.States
 {

@@ -1,22 +1,20 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
+using System;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Services;
-using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Sync.States;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Xunit;
 using static Toggl.Core.Sync.SyncState;
+using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 
 namespace Toggl.Core.Tests.Sync
 {
@@ -24,13 +22,13 @@ namespace Toggl.Core.Tests.Sync
     {
         public abstract class BaseDeadlockTests
         {
-            protected ISyncManager SyncManager;
-            protected TransitionHandlerProvider Transitions;
-            protected IScheduler Scheduler;
-            protected IStateMachine StateMachine;
-            protected ISyncStateQueue Queue;
-            protected IStateMachineOrchestrator Orchestrator;
-            protected StateMachineEntryPoints EntryPoints;
+            protected ISyncManager SyncManager { get; set; }
+            protected TransitionHandlerProvider Transitions { get; set; }
+            protected IScheduler Scheduler { get; set; }
+            protected IStateMachine StateMachine { get; set; }
+            protected ISyncStateQueue Queue { get; set; }
+            protected IStateMachineOrchestrator Orchestrator { get; set; }
+            protected StateMachineEntryPoints EntryPoints { get; set; }
 
             protected BaseDeadlockTests(IScheduler scheduler)
             {

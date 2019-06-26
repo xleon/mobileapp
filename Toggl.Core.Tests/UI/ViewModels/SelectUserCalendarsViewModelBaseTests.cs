@@ -1,18 +1,18 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
-using System.Reactive;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Services;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Navigation;
-using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
@@ -110,7 +110,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : SelectUserCalendarsViewModelBaseTest
+        public sealed class TheCloseWithDefaultResultMethod : SelectUserCalendarsViewModelBaseTest
         {
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModelAndReturnsTheInitialCalendarIds()
@@ -137,9 +137,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Where(calendar => selectedIds.Contains(calendar.Id))
                     .Select(calendar => new SelectableUserCalendarViewModel(calendar, false));
 
-                ViewModel.SelectCalendar.ExecuteSequentally(calendars)
-                    .PrependAction(ViewModel.Close)
-                    .Subscribe();
+                ViewModel.SelectCalendar.ExecuteSequentally(calendars).Subscribe();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
 
@@ -173,7 +172,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Select(calendar => new SelectableUserCalendarViewModel(calendar, false));
 
                 ViewModel.SelectCalendar.ExecuteSequentally(calendars)
-                    .PrependAction(ViewModel.Done)
+                    .PrependAction(ViewModel.Save)
                     .Subscribe();
 
                 TestScheduler.Start();
@@ -196,7 +195,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     var observer = Substitute.For<IObserver<bool>>();
 
-                    ViewModel.Done.Enabled.Subscribe(observer);
+                    ViewModel.Save.Enabled.Subscribe(observer);
                     SchedulerProvider.TestScheduler.AdvanceBy(1);
 
                     observer.Received().OnNext(true);
@@ -215,7 +214,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     var observer = Substitute.For<IObserver<bool>>();
 
-                    ViewModel.Done.Enabled.Subscribe(observer);
+                    ViewModel.Save.Enabled.Subscribe(observer);
                     SchedulerProvider.TestScheduler.AdvanceBy(1);
 
                     observer.Received().OnNext(false);
@@ -225,7 +224,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 public async Task EmitsTrueAfterOneCalendarHasBeenSelected()
                 {
                     var observer = Substitute.For<IObserver<bool>>();
-                    ViewModel.Done.Enabled.Subscribe(observer);
+                    ViewModel.Save.Enabled.Subscribe(observer);
                     var selectableUserCalendar = new SelectableUserCalendarViewModel(
                         new UserCalendar(),
                         false
@@ -245,7 +244,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 public void DoesNotEmitAnythingWhenSelectingAdditionalCalendars()
                 {
                     var observer = Substitute.For<IObserver<bool>>();
-                    ViewModel.Done.Enabled.Subscribe(observer);
+                    ViewModel.Save.Enabled.Subscribe(observer);
                     var selectedableUserCalendars = Enumerable
                         .Range(0, 10)
                         .Select(id =>
@@ -271,7 +270,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 public void EmitsFalseAfterAllTheCalendarsHaveBeenDeselected()
                 {
                     var observer = Substitute.For<IObserver<bool>>();
-                    ViewModel.Done.Enabled.Subscribe(observer);
+                    ViewModel.Save.Enabled.Subscribe(observer);
 
                     var userCalendars = Enumerable
                         .Range(0, 3)

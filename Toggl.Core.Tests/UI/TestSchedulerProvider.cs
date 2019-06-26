@@ -1,12 +1,12 @@
-using System.Reactive.Concurrency;
 using Microsoft.Reactive.Testing;
+using System.Reactive.Concurrency;
 using Toggl.Shared;
 
 namespace Toggl.Core.Tests.UI
 {
     public sealed class TestSchedulerProvider : ISchedulerProvider
     {
-        public readonly TestScheduler TestScheduler;
+        public TestScheduler TestScheduler { get; }
 
         public TestSchedulerProvider()
         {

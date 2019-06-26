@@ -1,9 +1,9 @@
-using System;
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
+using System;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
@@ -228,7 +228,7 @@ namespace Toggl.Droid.Views
                     canvas.DrawText(dayOfWeekText, middleOfTheBar, dayLabelsY, othersPaint);
 
                     var dateText = horizontalLabels[barIndex].Date;
-                    setTextSizeFromWidth(dateText, othersPaint,  othersPaint.TextSize, actualBarWidth);
+                    setTextSizeFromWidth(dateText, othersPaint, othersPaint.TextSize, actualBarWidth);
                     othersPaint.GetTextBounds(dateText, 0, dateText.Length, bounds);
                     canvas.DrawText(dateText, middleOfTheBar, dayLabelsY + bounds.Height() + dateTopPadding, othersPaint);
                 }

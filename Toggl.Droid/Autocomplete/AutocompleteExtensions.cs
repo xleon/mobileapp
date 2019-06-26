@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using Android.Text;
+﻿using Android.Text;
 using Android.Text.Style;
 using Java.Lang;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Span;
 using Toggl.Droid.Autocomplete;

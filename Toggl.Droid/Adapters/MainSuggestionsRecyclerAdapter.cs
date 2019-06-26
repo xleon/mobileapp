@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Immutable;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
+using System.Collections.Immutable;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core.Suggestions;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHolders;
@@ -49,7 +49,7 @@ namespace Toggl.Droid.Adapters
         {
             if (position >= currentSuggestions.Count) return;
 
-            var suggestionsViewHolder = (MainLogSuggestionItemViewHolder) holder;
+            var suggestionsViewHolder = (MainLogSuggestionItemViewHolder)holder;
             suggestionsViewHolder.Item = currentSuggestions[position];
 
             suggestionsViewHolder.IsFirstItem = position == 0;

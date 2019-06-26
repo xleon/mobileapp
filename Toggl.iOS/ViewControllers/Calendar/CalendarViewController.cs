@@ -1,11 +1,11 @@
+using CoreGraphics;
 using System;
 using System.Reactive.Linq;
-using CoreGraphics;
-using Toggl.iOS.Extensions;
-using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Views.Calendar;
 using Toggl.iOS.ViewSources;
@@ -54,7 +54,7 @@ namespace Toggl.iOS.ViewControllers
                 .ShouldShowOnboarding
                 .FirstAsync()
                 .Subscribe(
-                    shouldShowOnboarding => OnboardingView.Alpha = shouldShowOnboarding ? 1: 0)
+                    shouldShowOnboarding => OnboardingView.Alpha = shouldShowOnboarding ? 1 : 0)
                 .DisposedBy(DisposeBag);
 
             ViewModel.ShouldShowOnboarding

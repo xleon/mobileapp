@@ -1,6 +1,6 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
+using System;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;

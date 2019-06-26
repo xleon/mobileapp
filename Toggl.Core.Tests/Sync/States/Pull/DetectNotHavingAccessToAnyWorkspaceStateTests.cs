@@ -1,19 +1,16 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
-using Toggl.Core.Sync.States;
-using Toggl.Core.Tests.Mocks;
-using Toggl.Shared.Models;
-using Xunit;
-using Toggl.Core.Exceptions;
-using Toggl.Core.Sync.States.Pull;
-using Toggl.Networking.Exceptions;
 using Toggl.Core.DataSources;
-using Toggl.Shared;
+using Toggl.Core.Exceptions;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync.States;
+using Toggl.Core.Sync.States.Pull;
+using Toggl.Core.Tests.Mocks;
+using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States.Pull
 {

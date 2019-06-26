@@ -1,19 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Collections.Generic;
 using Toggl.Core.Analytics;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Extensions;
 using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync.ConflictResolution;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Models;
-using Toggl.Core.Extensions;
-using Toggl.Core.Models.Interfaces;
-using Toggl.Core.Sync.ConflictResolution;
-using Toggl.Core.Exceptions;
 
 namespace Toggl.Core.DataSources
 {
@@ -86,9 +86,9 @@ namespace Toggl.Core.DataSources
 
         public override IObservable<IThreadSafeTimeEntry> Create(IThreadSafeTimeEntry entity)
             => checkForOutOfBoundsDate(entity, "Create")
-                .SelectMany(_ => repository.UpdateWithConflictResolution(entity.Id, entity, alwaysCreate, RivalsResolver)  
+                .SelectMany(_ => repository.UpdateWithConflictResolution(entity.Id, entity, alwaysCreate, RivalsResolver)
                     .ToThreadSafeResult(Convert)
-                    .SelectMany(CommonFunctions.Identity)
+                    .Flatten()
                     .Do(HandleConflictResolutionResult)
                     .OfType<CreateResult<IThreadSafeTimeEntry>>()
                     .FirstAsync()
@@ -194,7 +194,7 @@ namespace Toggl.Core.DataSources
         private IObservable<IThreadSafeTimeEntry> getCurrentlyRunningTimeEntry()
             => stopMultipleRunningTimeEntries()
                 .SelectMany(_ => getAllRunning())
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .SingleOrDefaultAsync();
 
         private IObservable<Unit> stopMultipleRunningTimeEntries()

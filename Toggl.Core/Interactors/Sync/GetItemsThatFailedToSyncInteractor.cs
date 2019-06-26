@@ -4,10 +4,10 @@ using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.DataSources;
 using Toggl.Core.DataSources.Interfaces;
-using Toggl.Shared;
-using Toggl.Storage;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Shared;
+using Toggl.Storage;
 
 namespace Toggl.Core.Interactors
 {
@@ -25,7 +25,7 @@ namespace Toggl.Core.Interactors
         public IObservable<IEnumerable<SyncFailureItem>> Execute()
         {
             return Observable
-                .Concat (
+                .Concat(
                     getUnsyncedItems(dataSource.Clients),
                     getUnsyncedItems(dataSource.Projects),
                     getUnsyncedItems(dataSource.Tags)
@@ -46,7 +46,7 @@ namespace Toggl.Core.Interactors
         private IEnumerable<SyncFailureItem> convertToSyncFailures<T>(IEnumerable<T> items)
             where T : IThreadSafeModel, IDatabaseSyncable
         {
-            return items.Select( i => new SyncFailureItem(i));
+            return items.Select(i => new SyncFailureItem(i));
         }
     }
 }

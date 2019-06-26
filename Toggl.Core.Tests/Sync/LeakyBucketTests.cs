@@ -1,18 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
-using Toggl.Core;
+using System;
+using System.Linq;
 using Toggl.Core.Analytics;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
-using Toggl.Networking.Exceptions;
-using Toggl.Networking.Network;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync

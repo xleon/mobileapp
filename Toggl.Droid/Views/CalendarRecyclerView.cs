@@ -1,15 +1,15 @@
-using System;
-using System.Collections.Immutable;
-using System.Globalization;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
+using System;
+using System.Collections.Immutable;
+using System.Globalization;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core;
 using Toggl.Core.Helper;
 using Toggl.Droid.Extensions;
@@ -144,7 +144,7 @@ namespace Toggl.Droid.Views
         {
             this.timeService = timeService;
         }
-        
+
         private DateTimeOffset pointToDateTimeOffset(PointF point)
         {
             var seconds = (point.Y + ComputeVerticalScrollOffset()) / hourHeight * secondsInOneHour;

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
+using System;
+using System.Threading.Tasks;
+using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Tests.Generators;
 using Xunit;
-using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -71,14 +70,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public class TheCloseCommand : SelectDateTimeDialogViewModelTest
+        public class TheCloseMethod : SelectDateTimeDialogViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
-                ViewModel.CloseCommand.Execute();
+                ViewModel.CloseWithDefaultResult();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Property]
@@ -90,7 +89,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var parameter = GenerateParameterForTime(now);
                 ViewModel.Initialize(parameter);
 
-                ViewModel.CloseCommand.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 ViewModel.Result.GetAwaiter().GetResult().Should().Be(now);
             }
@@ -99,11 +98,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public class TheSaveCommand : SelectDateTimeDialogViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
-                ViewModel.CloseCommand.Execute();
+                ViewModel.Initialize(GenerateParameterForTime(DateTimeOffset.Now));
+
+                ViewModel.Save.Execute();
                 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Property]
@@ -117,7 +118,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Initialize(parameter);
                 ViewModel.CurrentDateTime.Accept(dateTimeOffset);
 
-                ViewModel.SaveCommand.Execute();
+                ViewModel.Save.Execute();
 
                 ViewModel.Result.GetAwaiter().GetResult().Should().Be(dateTimeOffset);
             }

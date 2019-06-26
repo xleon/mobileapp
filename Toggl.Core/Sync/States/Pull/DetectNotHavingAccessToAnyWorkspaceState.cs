@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Core.Exceptions;
-using Toggl.Core.Interactors;
 using Toggl.Core.DataSources;
+using Toggl.Core.Exceptions;
 
 namespace Toggl.Core.Sync.States.Pull
 {

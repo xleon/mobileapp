@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Core.Services;
 using Xamarin.Essentials;
 
 namespace Toggl.Core.UI.ViewModels
@@ -20,7 +20,7 @@ namespace Toggl.Core.UI.ViewModels
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-            
+
             OpenLicensesView = rxActionFactory.FromAsync(openLicensesView);
             OpenPrivacyPolicyView = rxActionFactory.FromAsync(openPrivacyPolicyView);
             OpenTermsOfServiceView = rxActionFactory.FromAsync(openTermsOfServiceView);

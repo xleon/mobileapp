@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Shared;
 using Toggl.Networking.ApiClients;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
+using Toggl.Shared;
 
 namespace Toggl.Networking.Tests.ApiClients
 {

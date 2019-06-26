@@ -1,7 +1,6 @@
-﻿using System;
+﻿using CoreGraphics;
+using System;
 using System.Reactive.Disposables;
-using CoreGraphics;
-using Toggl.Core.UI.ViewModels;
 using UIKit;
 
 namespace Toggl.iOS.Views

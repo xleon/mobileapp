@@ -1,9 +1,8 @@
-﻿using System.Reactive;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
-using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
@@ -16,7 +15,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private readonly IRxActionFactory rxActionFactory;
 
         public UIAction EnableAccess { get; }
-        public UIAction Close { get; }
 
         public CalendarPermissionDeniedViewModel(INavigationService navigationService, IPermissionsChecker permissionsChecker, IRxActionFactory rxActionFactory)
             : base(navigationService)
@@ -27,7 +25,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             this.permissionsChecker = permissionsChecker;
 
             EnableAccess = rxActionFactory.FromAction(enableAccess);
-            Close = rxActionFactory.FromAsync(Finish);
         }
 
         public override void ViewAppeared()
@@ -45,7 +42,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         {
             var authorized = await permissionsChecker.CalendarPermissionGranted;
             if (authorized)
-                await Finish();
+                Close();
         }
     }
 }

@@ -4,13 +4,12 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.Models;
 using Toggl.Core.Services;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.Storage;
-using Toggl.Networking;
-using Toggl.Networking.Network;
-using Toggl.Storage.Models;
 
 namespace Toggl.Core.Login
 {

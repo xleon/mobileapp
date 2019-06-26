@@ -1,10 +1,10 @@
-﻿using System;
-using Android.Content;
+﻿using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Support.V4.Content;
 using Android.Util;
 using Android.Widget;
+using System;
 using Toggl.Droid.Extensions;
 using static Toggl.Core.UI.Helper.Colors;
 
@@ -84,8 +84,8 @@ namespace Toggl.Droid.Views
         public ReportsCalendarDayView(Context context, IAttributeSet attrs, int defStyle)
             : base(context, attrs, defStyle)
         {
-            cornerRadius = (int) 22.DpToPixels(context);
-            verticalPadding = (int) 6.DpToPixels(context);
+            cornerRadius = (int)22.DpToPixels(context);
+            verticalPadding = (int)6.DpToPixels(context);
             selectedPaint = new Paint
             {
                 Flags = PaintFlags.AntiAlias,

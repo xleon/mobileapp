@@ -1,17 +1,17 @@
 ﻿using NSubstitute;
+using System;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
+using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
+using Toggl.Core.Login;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
+using Toggl.Core.Sync;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Toggl.Networking.Network;
-using Toggl.Core.Sync;
-using Toggl.Core.Diagnostics;
-using Toggl.Networking;
-using Toggl.Core.Login;
-using System;
 
 namespace Toggl.Core.Tests
 {

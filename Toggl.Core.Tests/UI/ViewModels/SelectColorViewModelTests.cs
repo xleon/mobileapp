@@ -1,17 +1,16 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
+using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
-using Xunit;
-using System.Reactive.Linq;
-using Toggl.Core.Tests.Generators;
 using Toggl.Shared;
-using Toggl.Core.Tests.TestExtensions;
+using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -59,7 +58,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectColor.Execute(colorToSelect);
 
                 observer.Messages
-                    .Select( m => m.Value.Value)
+                    .Select(m => m.Value.Value)
                     .Last()
                     .Single(c => c.Selected).Color.Should().BeEquivalentTo(colorToSelect);
             }
@@ -95,7 +94,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectColor.Execute(colorToSelect);
 
-                await View.DidNotReceive().Close();
+                View.DidNotReceive().Close();
             }
         }
 
@@ -114,7 +113,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Initialize(parameters);
 
                 observer.Messages
-                    .Select( m => m.Value.Value)
+                    .Select(m => m.Value.Value)
                     .Last()
                     .Should().HaveCount(14);
             }
@@ -131,7 +130,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Initialize(parameters);
 
                 observer.Messages
-                    .Select( m => m.Value.Value)
+                    .Select(m => m.Value.Value)
                     .Last()
                     .Should().HaveCount(15);
             }
@@ -148,7 +147,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Initialize(parameters);
 
                 observer.Messages
-                    .Select( m => m.Value.Value)
+                    .Select(m => m.Value.Value)
                     .Last()
                     .Single(c => c.Selected).Color.Should().Be(passedColor);
             }
@@ -166,7 +165,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Initialize(parameters);
 
                 observer.Messages
-                    .Select( m => m.Value.Value)
+                    .Select(m => m.Value.Value)
                     .Last()
                     .Single(c => c.Selected).Color.Should().Be(expected);
             }
@@ -182,21 +181,21 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Initialize(parameters);
 
                 observer.Messages
-                    .Select( m => m.Value.Value)
+                    .Select(m => m.Value.Value)
                     .Last()
                     .Single(c => c.Selected).Color.Should().Be(someColor);
             }
         }
 
-        public class TheCloseCommand : SelectColorViewModelTest
+        public class TheCloseWithDefaultResultMethod : SelectColorViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -206,9 +205,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var parameters = ColorParameters.Create(color, true);
                 await ViewModel.Initialize(parameters);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
-                
+
                 (await ViewModel.Result).Should().Be(color);
             }
         }
@@ -218,10 +217,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
-                ViewModel.Close.Execute();
+                ViewModel.Save.Execute();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]

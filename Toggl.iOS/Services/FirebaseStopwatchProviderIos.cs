@@ -21,16 +21,16 @@ namespace Toggl.iOS.Services
 
             public void Start()
             {
-                #if USE_ANALYTICS
+#if USE_ANALYTICS
                 firebaseTrace = Performance.StartTrace(Operation.ToString());
-                #endif
+#endif
             }
 
             public void Stop()
             {
-                #if USE_ANALYTICS
+#if USE_ANALYTICS
                 firebaseTrace?.Stop();
-                #endif
+#endif
             }
         }
     }

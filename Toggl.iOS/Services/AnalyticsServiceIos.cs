@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Foundation;
+using Microsoft.AppCenter.Crashes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Foundation;
-using Microsoft.AppCenter.Crashes;
 using Toggl.Core.Analytics;
-using FirebaseAnalytics = Firebase.Analytics.Analytics;
 using AppCenterAnalytics = Microsoft.AppCenter.Analytics.Analytics;
+using FirebaseAnalytics = Firebase.Analytics.Analytics;
 
 namespace Toggl.iOS.Services
 {

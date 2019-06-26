@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Foundation;
 using Toggl.iOS.Autocomplete;
 using UIKit;
 using static Toggl.Shared.Extensions.EnumerableExtensions;

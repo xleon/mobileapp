@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
+using System.Linq;
 using Toggl.Core.Reports;
 using Xunit;
 

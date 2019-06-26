@@ -1,16 +1,16 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using Android.Content;
+﻿using Android.Content;
 using Android.Runtime;
 using Android.Support.Constraints;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Toggl.Droid.Views;
+using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Droid.ViewHolders;
+using Toggl.Droid.Views;
 
 namespace Toggl.Droid.Adapters
 {

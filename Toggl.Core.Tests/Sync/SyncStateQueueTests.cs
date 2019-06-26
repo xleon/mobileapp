@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
-using Toggl.Core.Tests.TestExtensions;
+﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Toggl.Core.Sync;
-using static Toggl.Core.Sync.SyncState;
+using Toggl.Core.Tests.TestExtensions;
 using Xunit;
+using static Toggl.Core.Sync.SyncState;
 
 namespace Toggl.Core.Tests.Sync
 {
@@ -22,6 +22,7 @@ namespace Toggl.Core.Tests.Sync
             protected void QueueSyncs(params SyncState[] states)
             {
                 foreach (var state in states)
+                {
                     switch (state)
                     {
                         case Pull:
@@ -39,6 +40,7 @@ namespace Toggl.Core.Tests.Sync
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
+                }
             }
 
             protected SyncState Dequeue()

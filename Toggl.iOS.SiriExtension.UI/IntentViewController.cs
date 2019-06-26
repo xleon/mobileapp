@@ -1,16 +1,14 @@
-using System;
-using System.Globalization;
-using System.Resources;
+using CoreAnimation;
 using CoreGraphics;
 using Foundation;
 using Intents;
 using IntentsUI;
-using UIKit;
-using CoreFoundation;
-using CoreAnimation;
-using Toggl.iOS.ExtensionKit.Extensions;
+using System;
+using System.Globalization;
 using Toggl.iOS.Intents;
+using Toggl.iOS.ExtensionKit.Extensions;
 using Toggl.Shared;
+using UIKit;
 
 namespace Toggl.iOS.SiriExtension.UI
 {
@@ -175,7 +173,8 @@ namespace Toggl.iOS.SiriExtension.UI
             entryInfoView.DescriptionLabel.AttributedText = attributedString;
 
             var start = DateTimeOffset.Now;
-            var displayLink = CADisplayLink.Create(() => {
+            var displayLink = CADisplayLink.Create(() =>
+            {
                 var passed = DateTimeOffset.Now - start;
                 entryInfoView.TimeLabel.Text = secondsToString(passed.Seconds);
             });

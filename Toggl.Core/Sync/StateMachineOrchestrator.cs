@@ -11,7 +11,7 @@ namespace Toggl.Core.Sync
         private readonly StateMachineEntryPoints entryPoints;
 
         private readonly BehaviorSubject<SyncState> stateEntered = new BehaviorSubject<SyncState>(SyncState.Sleep);
-        
+
         private readonly Subject<SyncResult> syncComplete = new Subject<SyncResult>();
         private bool syncing;
 
@@ -91,7 +91,7 @@ namespace Toggl.Core.Sync
 
             stateEntered.OnNext(SyncState.Sleep);
         }
-        
+
         private void ensureNotSyncing()
         {
             if (syncing)

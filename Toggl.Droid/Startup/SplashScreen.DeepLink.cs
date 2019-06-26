@@ -1,8 +1,8 @@
-using System;
-using System.Reactive;
 using Android.Content;
 using Android.OS;
 using Android.Support.V4.App;
+using System;
+using System.Reactive;
 using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
@@ -47,7 +47,7 @@ namespace Toggl.Droid
             StartActivity(createRootActivityIntent());
             Finish();
         }
-        
+
         private void showNewTimeEntry(DeeplinkNewTimeEntryParameters deeplinkNewTimeEntryParameters)
         {
             var timeService = AndroidDependencyContainer.Instance.TimeService;
@@ -61,10 +61,10 @@ namespace Toggl.Droid
                 .AddNextIntent(new Intent(this, typeof(StartTimeEntryActivity)))
                 .StartActivities();
         }
-        
+
         private void showEditTimeEntry(DeeplinkEditTimeEntryParameters deeplinkEditTimeEntryParameters)
         {
-            loadAndCacheViewModelWithParams<EditTimeEntryViewModel, long[]>(new[] {deeplinkEditTimeEntryParameters.TimeEntryId});
+            loadAndCacheViewModelWithParams<EditTimeEntryViewModel, long[]>(new[] { deeplinkEditTimeEntryParameters.TimeEntryId });
 
             var mainIntent = createRootActivityIntent();
 
@@ -73,7 +73,7 @@ namespace Toggl.Droid
                 .AddNextIntent(new Intent(this, typeof(EditTimeEntryActivity)))
                 .StartActivities();
         }
-        
+
         private void showReports(DeeplinkShowReportsParameters deeplinkShowReportsParameters)
         {
             var startDate = deeplinkShowReportsParameters.StartDate?.ToUnixTimeSeconds() ?? 0L;
@@ -84,7 +84,7 @@ namespace Toggl.Droid
             intentExtras.PutLong(MainTabBarActivity.StartDateExtra, startDate);
             intentExtras.PutLong(MainTabBarActivity.EndDateExtra, endDate);
             intentExtras.PutLong(MainTabBarActivity.StartDateExtra, workspaceId);
-            
+
             var intent = createRootActivityIntent(intentExtras);
             StartActivity(intent);
             Finish();
@@ -94,25 +94,25 @@ namespace Toggl.Droid
         {
             var intentExtras = new Bundle();
             intentExtras.PutInt(MainTabBarActivity.StartingTabExtra, Resource.Id.MainTabCalendarItem);
-            
+
             var intent = createRootActivityIntent(intentExtras);
             StartActivity(intent);
             Finish();
         }
 
         private void loadAndCacheViewModelWithParams<TViewModelType, TViewModelParams>(TViewModelParams viewModelParams)
+            where TViewModelType : ViewModel<TViewModelParams, Unit>
         {
             var dependencyContainer = AndroidDependencyContainer.Instance;
             var vmLoader = dependencyContainer.ViewModelLoader;
             var vmCache = dependencyContainer.ViewModelCache;
 
-            var viewModel = vmLoader.Load<TViewModelParams, Unit>(typeof(TViewModelType), viewModelParams)
-                .GetAwaiter()
-                .GetResult();
-            
+            var viewModel = vmLoader.Load<TViewModelType>();
             vmCache.Cache(viewModel);
+
+            viewModel.Initialize(viewModelParams);
         }
-        
+
         private Intent createRootActivityIntent(Bundle extras = null)
             => new Intent(this, typeof(MainTabBarActivity))
                 .PutExtras(extras ?? Bundle.Empty)

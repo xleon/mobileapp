@@ -1,8 +1,8 @@
-﻿using System;
-using System.Reactive.Linq;
-using Android.Text;
+﻿using Android.Text;
 using Android.Widget;
 using Java.Lang;
+using System;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Reactive;
 using static Android.Views.View;
 

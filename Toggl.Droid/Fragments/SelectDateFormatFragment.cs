@@ -1,9 +1,9 @@
-﻿using System;
-using Android.Content;
+﻿using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
@@ -16,8 +16,8 @@ namespace Toggl.Droid.Fragments
         public SelectDateFormatFragment() { }
 
         public SelectDateFormatFragment(IntPtr javaReference, JniHandleOwnership transfer)
-            : base (javaReference, transfer) { }
-        
+            : base(javaReference, transfer) { }
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
@@ -48,11 +48,6 @@ namespace Toggl.Droid.Fragments
             base.OnResume();
 
             Dialog.Window.SetDefaultDialogLayout(Activity, Context, heightDp: 400);
-        }
-
-        public override void OnCancel(IDialogInterface dialog)
-        {
-            ViewModel.Close.Execute();
         }
 
         protected override void Dispose(bool disposing)

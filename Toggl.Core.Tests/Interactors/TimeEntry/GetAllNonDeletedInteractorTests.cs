@@ -1,10 +1,10 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Storage.Models;
@@ -27,7 +27,7 @@ namespace Toggl.Core.Tests.Interactors
                 new MockTimeEntry { Id = -3, IsDeleted = false, Workspace = new MockWorkspace { IsInaccessible = true } },
                 new MockTimeEntry { Id = 6, IsDeleted = false, Workspace = new MockWorkspace { IsInaccessible = true } }
             };
-            
+
             [Fact]
             public async Task RemovesAllDeletedTimeEntries()
             {

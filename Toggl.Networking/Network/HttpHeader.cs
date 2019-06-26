@@ -9,7 +9,7 @@ namespace Toggl.Networking.Network
             Other
         }
 
-        public HeaderType Type { get; } 
+        public HeaderType Type { get; }
 
         public string Name { get; }
 

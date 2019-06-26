@@ -1,7 +1,6 @@
 ﻿using System;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
-using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
 {

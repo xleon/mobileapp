@@ -1,23 +1,23 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using CoreGraphics;
-using Foundation;
-using Toggl.iOS.Extensions;
-using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Reports;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Core.UI.Views;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Views.Reports;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.iOS.Extensions.AnimationExtensions;
-using Toggl.Core.UI.Views;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -227,7 +227,8 @@ namespace Toggl.iOS.ViewControllers
                 Animation.Timings.EnterTiming,
                 Animation.Curves.SharpCurve,
                 () => View.LayoutIfNeeded(),
-                () => {
+                () =>
+                {
                     calendarIsVisible = true;
                     ViewModel.CalendarViewModel.Reload();
                 });
@@ -272,7 +273,7 @@ namespace Toggl.iOS.ViewControllers
         public override void ViewWillLayoutSubviews()
         {
             base.ViewWillLayoutSubviews();
-            ContentWidthConstraint.Constant = (nfloat) Math.Min(View.Bounds.Width, maxWidth);
+            ContentWidthConstraint.Constant = (nfloat)Math.Min(View.Bounds.Width, maxWidth);
         }
 
         private void prepareViews()

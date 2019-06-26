@@ -1,9 +1,9 @@
-﻿using Toggl.Core.UI.Navigation;
+﻿using System.Threading.Tasks;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Xamarin.Essentials;
-using System.Threading.Tasks;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -15,7 +15,6 @@ namespace Toggl.Core.UI.ViewModels
 
         public UIAction ViewTermsOfService { get; }
         public UIAction ViewPrivacyPolicy { get; }
-        public InputAction<bool> Close { get; }
 
         public TermsOfServiceViewModel(IRxActionFactory rxActionFactory, INavigationService navigationService)
             : base(navigationService)
@@ -24,7 +23,6 @@ namespace Toggl.Core.UI.ViewModels
 
             ViewPrivacyPolicy = rxActionFactory.FromAsync(openPrivacyPolicy);
             ViewTermsOfService = rxActionFactory.FromAsync(openTermsOfService);
-            Close = rxActionFactory.FromAsync<bool>(result => Finish(result));
         }
 
         private Task openPrivacyPolicy()

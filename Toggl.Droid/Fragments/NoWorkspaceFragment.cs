@@ -1,8 +1,9 @@
-using System;
-using System.Reactive.Linq;
+using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
+using System;
+using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;

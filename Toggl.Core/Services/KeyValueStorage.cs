@@ -23,19 +23,22 @@ namespace Toggl.Core.Services
         {
             var serialized = GetString(key);
             if (string.IsNullOrEmpty(serialized))
-            {
                 return null;
-            }
+
+            if (long.TryParse(serialized, out var epoch))
+                return DateTimeOffset.FromUnixTimeMilliseconds(epoch);
 
             if (DateTimeOffset.TryParse(
                 serialized, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out var parsed))
             {
+                // the storage contains the date in an old format, update it to use unix time
+                SetDateTimeOffset(key, parsed);
                 return parsed;
             }
 
             if (DateTimeOffset.TryParse(serialized, out var nonInvariantParsed))
             {
-                // the storage contains the date in a  culture-specific format, update it to a standard format
+                // the storage contains the date in an old format, update it to use unix time
                 SetDateTimeOffset(key, nonInvariantParsed);
                 return nonInvariantParsed;
             }
@@ -47,8 +50,8 @@ namespace Toggl.Core.Services
 
         public void SetDateTimeOffset(string key, DateTimeOffset dateTime)
         {
-            var serialized = dateTime.ToString(DateTimeFormatInfo.InvariantInfo);
-            SetString(key, serialized);
+            var epoch = dateTime.ToUnixTimeMilliseconds();
+            SetString(key, epoch.ToString());
         }
 
         public TimeSpan? GetTimeSpan(string key)

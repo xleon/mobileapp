@@ -1,22 +1,21 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck.Xunit;
+using NSubstitute;
+using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using FluentAssertions;
-using FsCheck.Xunit;
-using NSubstitute;
 using Toggl.Core.Analytics;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Tests.TestExtensions;
-using Toggl.Core.Tests.Generators;
-using Xunit;
-using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
-using Task = System.Threading.Tasks.Task;
+using Xunit;
 using static Toggl.Shared.BeginningOfWeek;
-using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -131,7 +130,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var viewModel = CreateViewModel();
 
                 await viewModel.Initialize(new EditDurationParameters(parameter));
-                
+
                 TestScheduler.Start();
                 viewModel.BeginningOfWeek.Should().Be(beginningOfWeek);
             }
@@ -248,30 +247,30 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseCommand : EditDurationViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : EditDurationViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
                 var parameter = DurationParameter.WithStartAndDuration(DateTimeOffset.UtcNow, null);
                 ViewModel.Initialize(new EditDurationParameters(parameter));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
             public async Task ReturnsTheDefaultParameter()
             {
                 var parameter = DurationParameter.WithStartAndDuration(DateTimeOffset.UtcNow, null);
-                ViewModel.Initialize(new EditDurationParameters(parameter));
+                await ViewModel.Initialize(new EditDurationParameters(parameter));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                (await ViewModel.Result).Should().Be(parameter);
             }
         }
 
@@ -286,7 +285,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Save.Execute();
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Property]
@@ -543,7 +542,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var editingObserver = TestScheduler.CreateObserver<bool>();
                 var startObserver = TestScheduler.CreateObserver<bool>();
                 var stopObserver = TestScheduler.CreateObserver<bool>();
-                ViewModel.IsEditingTime.Subscribe(editingObserver );
+                ViewModel.IsEditingTime.Subscribe(editingObserver);
                 ViewModel.IsEditingStartTime.Subscribe(startObserver);
                 ViewModel.IsEditingStopTime.Subscribe(stopObserver);
 
@@ -563,7 +562,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var editingObserver = TestScheduler.CreateObserver<bool>();
                 var startObserver = TestScheduler.CreateObserver<bool>();
                 var stopObserver = TestScheduler.CreateObserver<bool>();
-                ViewModel.IsEditingTime.Subscribe(editingObserver );
+                ViewModel.IsEditingTime.Subscribe(editingObserver);
                 ViewModel.IsEditingStartTime.Subscribe(startObserver);
                 ViewModel.IsEditingStopTime.Subscribe(stopObserver);
 
@@ -756,7 +755,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.Initialize(new EditDurationParameters(parameter));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
                 AnalyticsService.Received().Track(
