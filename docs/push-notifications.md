@@ -5,6 +5,8 @@ Our app uses push notifications to trigger sync when a change occurs on the serv
 
 It is important to keep in mind that it is possible that a notification is not delivered to the app by the device (Apple Push Notification service or Firebase Cloud Messaging) or the operating system does not call our app when it is in background (to preserve battery life). It therefore isn't possible for us to guarantee that the app will always be in sync with the server even if the user is online all the time and the server sends push notifications to our app frequently.
 
+> __NOTE__: Firebase is only enabled for non-DEBUG builds, this means that silent remote notifications can only be tested through AppStore (including Test Flight) or AdHoc builds. If you need to test it on device you'll have to remove the preprocessor directives in AppDelegate (iOS) and TogglApplication (Android) and add the necessary keys to GoogleService-info.plist (iOS) and google-services.json (Android)
+
 This document covers several important parts of the whole implementation:
 
 1. What the apps do when a push notification is received
