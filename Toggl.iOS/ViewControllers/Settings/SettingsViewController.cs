@@ -108,14 +108,21 @@ namespace Toggl.iOS.ViewControllers
                 .BindAction(ViewModel.OpenAboutView)
                 .DisposedBy(DisposeBag);
 
-            ShortcutsSettingsView.Rx()
-                .BindAction(ViewModel.OpenSiriShortcuts)
-                .DisposedBy(DisposeBag);
+            if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+            {
+                ShortcutsSettingsView.Rx()
+                    .BindAction(ViewModel.OpenSiriShortcuts)
+                    .DisposedBy(DisposeBag);
 
-            WorkflowsSettingsView.Rx()
-                .BindAction(ViewModel.OpenSiriWorkflows)
-                .DisposedBy(DisposeBag);
-
+                WorkflowsSettingsView.Rx()
+                    .BindAction(ViewModel.OpenSiriWorkflows)
+                    .DisposedBy(DisposeBag);
+            }
+            else
+            {
+                hideSiriSection();
+            }
+            
             FeedbackView.Rx()
                 .BindAction(ViewModel.SubmitFeedback)
                 .DisposedBy(DisposeBag);
@@ -208,6 +215,13 @@ namespace Toggl.iOS.ViewControllers
             CalendarSettingsSection.Hidden = true;
             CalendarSectionTopConstraint.Constant = 0;
             CalendarSettingsSection.HeightAnchor.ConstraintEqualTo(0).Active = true;
+        }
+
+        private void hideSiriSection()
+        {
+            SiriSection.Hidden = true;
+            SiriSectionTopConstraint.Active = false;
+            MiscSection.TopAnchor.ConstraintEqualTo(CalendarSettingsSection.BottomAnchor).Active = true;
         }
 
         private void setIndicatorSyncColor(UIImageView imageView)
