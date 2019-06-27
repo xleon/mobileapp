@@ -64,6 +64,9 @@ namespace Toggl.Droid
         protected override IBackgroundSyncService CreateBackgroundSyncService()
             => new BackgroundSyncServiceAndroid();
 
+        protected override IFetchRemoteConfigService CreateFetchRemoteConfigService()
+            => new FetchRemoteConfigServiceAndroid();
+
         protected override IBrowserService CreateBrowserService()
             => new BrowserServiceAndroid();
 
@@ -96,9 +99,6 @@ namespace Toggl.Droid
 
         protected override IRatingService CreateRatingService()
             => new RatingServiceAndroid(Application.Context);
-
-        protected override IRemoteConfigService CreateRemoteConfigService()
-            => new RemoteConfigServiceAndroid();
 
         protected override ISchedulerProvider CreateSchedulerProvider()
             => new AndroidSchedulerProvider(AnalyticsService);
@@ -136,5 +136,6 @@ namespace Toggl.Droid
         protected override IAccessRestrictionStorage CreateAccessRestrictionStorage()
             => settingsStorage.Value;
 
+        
     }
 }
