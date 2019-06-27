@@ -282,5 +282,7 @@ namespace Toggl.Core.Analytics
             => Track(trackableEvent.EventName, trackableEvent.ToDictionary());
 
         protected abstract void TrackException(Exception exception);
+
+        public abstract void ReportAppCenterUserId(long id);
     }
 }

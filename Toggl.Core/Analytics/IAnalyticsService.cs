@@ -170,6 +170,8 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; }
 
+        void ReportAppCenterUserId(long id);
+
         void Track(string eventName, Dictionary<string, string> parameters = null);
 
         void TrackAnonymized(Exception exception);

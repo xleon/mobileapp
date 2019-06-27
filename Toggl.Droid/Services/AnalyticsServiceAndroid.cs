@@ -1,5 +1,6 @@
 ﻿using Android.OS;
 using Firebase.Analytics;
+using Microsoft.AppCenter;
 using Microsoft.AppCenter.Crashes;
 using System;
 using System.Collections.Generic;
@@ -74,5 +75,10 @@ namespace Toggl.Droid.Services
 
         private string trimForAppCenter(string text)
             => text.Length > maxAppCenterStringLength ? text.Substring(0, maxAppCenterStringLength) : text;
+
+        public override void ReportAppCenterUserId(long id)
+        {
+            AppCenter.SetUserId($"{id}");
+        }
     }
 }

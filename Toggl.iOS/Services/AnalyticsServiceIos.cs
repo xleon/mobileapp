@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Toggl.Core.Analytics;
 using AppCenterAnalytics = Microsoft.AppCenter.Analytics.Analytics;
+using AppCenter = Microsoft.AppCenter.AppCenter;
 using FirebaseAnalytics = Firebase.Analytics.Analytics;
 
 namespace Toggl.iOS.Services
@@ -63,6 +64,11 @@ namespace Toggl.iOS.Services
             }
 
             return validParameters;
+        }
+
+        public override void ReportAppCenterUserId(long id)
+        {
+            AppCenter.SetUserId($"{id}");
         }
 
         private string trimForAppCenter(string text)
