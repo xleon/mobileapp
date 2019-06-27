@@ -1,18 +1,14 @@
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Reactive.Linq;
-using FluentAssertions;
-using Toggl.Shared;
-using Toggl.Shared.Models;
 using Toggl.Networking.Exceptions;
-using Toggl.Networking.Extensions;
-using Toggl.Networking.Helpers;
 using Toggl.Networking.Models;
-using Toggl.Networking.Network;
 using Toggl.Networking.Tests.Integration.BaseTests;
 using Toggl.Networking.Tests.Integration.Helper;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 

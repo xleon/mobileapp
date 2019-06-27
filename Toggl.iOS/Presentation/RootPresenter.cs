@@ -115,8 +115,8 @@ namespace Toggl.iOS.Presentation
         private void detachViewModel<TViewModel>(TViewModel viewModel)
             where TViewModel : IViewModel
         {
-            viewModel?.Cancel();
             viewModel?.DetachView();
+            viewModel?.CloseWithDefaultResult();
             viewModel?.ViewDestroyed();
         }
     }

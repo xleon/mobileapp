@@ -1,16 +1,16 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
-using Toggl.Shared.Extensions;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Helpers;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
+using Toggl.Shared.Extensions;
 using Xunit;
 using static System.Net.HttpStatusCode;
 

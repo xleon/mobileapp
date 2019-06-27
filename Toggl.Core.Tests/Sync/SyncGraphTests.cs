@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Concurrency;
+﻿using System.Reactive.Concurrency;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Analytics;
@@ -8,9 +6,8 @@ using Toggl.Core.DataSources;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Core.UI;
-using Toggl.Storage;
 using Toggl.Networking;
-using Toggl.Networking.Network;
+using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Xunit;
 

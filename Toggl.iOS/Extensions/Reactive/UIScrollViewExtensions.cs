@@ -1,7 +1,5 @@
-using System;
-using System.Reactive.Linq;
 using CoreGraphics;
-using Toggl.Core.UI.Reactive;
+using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Core.UI.Reactive;
@@ -15,7 +13,7 @@ namespace Toggl.iOS.Extensions.Reactive
         public static IObservable<int> CurrentPage(this IReactive<UIScrollView> reactive)
             => Observable
                 .FromEventPattern(e => reactive.Base.DecelerationEnded += e, e => reactive.Base.DecelerationEnded -= e)
-                .Select(_ => (int) (reactive.Base.ContentOffset.X / reactive.Base.Frame.Width));
+                .Select(_ => (int)(reactive.Base.ContentOffset.X / reactive.Base.Frame.Width));
 
         public static Action<int> CurrentPageObserver(this IReactive<UIScrollView> reactive)
             => page =>

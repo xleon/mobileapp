@@ -4,13 +4,13 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -32,8 +32,7 @@ namespace Toggl.Core.UI.ViewModels
 
         public IObservable<IEnumerable<SelectableTagBaseViewModel>> Tags { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
-        public BehaviorSubject<string> FilterText { get; } = new BehaviorSubject<string>(String.Empty);
-        public UIAction Close { get; }
+        public BehaviorSubject<string> FilterText { get; } = new BehaviorSubject<string>(string.Empty);
         public UIAction Save { get; }
 
         public InputAction<SelectableTagBaseViewModel> SelectTag { get; }
@@ -55,8 +54,7 @@ namespace Toggl.Core.UI.ViewModels
             this.interactorFactory = interactorFactory;
             this.schedulerProvider = schedulerProvider;
 
-            Close = rxActionFactory.FromAsync(close);
-            Save = rxActionFactory.FromAsync(save);
+            Save = rxActionFactory.FromAction(save);
             SelectTag = rxActionFactory.FromAsync<SelectableTagBaseViewModel>(selectTag);
         }
 
@@ -121,6 +119,11 @@ namespace Toggl.Core.UI.ViewModels
             navigationFromEditTimeEntryStopwatch = null;
         }
 
+        public override void CloseWithDefaultResult()
+        {
+            Close(defaultResult);
+        }
+
         private SelectableTagBaseViewModel toSelectableTagViewModel(TagSuggestion tagSuggestion)
             => new SelectableTagViewModel(
                 tagSuggestion.TagId,
@@ -156,9 +159,9 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        private Task close()
-            => Finish(defaultResult);
-
-        private Task save() => Finish(selectedTagIds.ToArray());
+        private void save()
+        {
+            Close(selectedTagIds.ToArray());
+        }
     }
 }

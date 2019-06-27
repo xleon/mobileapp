@@ -1,6 +1,5 @@
-﻿using System;
-
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.Core.Models;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.iOS.Cells;

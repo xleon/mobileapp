@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Xamarin.UITest;
 
 namespace Toggl.Tests.UI.Extensions

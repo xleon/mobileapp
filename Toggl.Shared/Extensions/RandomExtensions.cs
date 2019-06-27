@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 
 namespace Toggl.Shared.Extensions
 {
     public static class RandomExtensions
     {
-        static int seed = Environment.TickCount;
+        private static int seed = Environment.TickCount;
 
-        static readonly ThreadLocal<Random> random = 
+        private static readonly ThreadLocal<Random> random =
             new ThreadLocal<Random>(() => new Random(Interlocked.Increment(ref seed)));
 
         public static T RandomElement<T>(this IList<T> collection)

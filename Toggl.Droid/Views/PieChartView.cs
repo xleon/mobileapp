@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Android.Content;
+﻿using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Text;
 using Android.Util;
 using Android.Views;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Toggl.Core.Reports;
 using Toggl.Droid.Extensions;
 

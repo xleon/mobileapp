@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Linq;
-using Foundation;
 using Toggl.Core.Services;
 
 namespace Toggl.iOS.Services

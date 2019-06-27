@@ -1,5 +1,4 @@
 using System;
-using Foundation;
 using Toggl.Core.Analytics;
 using Toggl.iOS.ExtensionKit.Analytics;
 

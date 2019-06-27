@@ -1,6 +1,5 @@
-﻿using System;
-using Foundation;
-using Toggl.Core;
+﻿using Foundation;
+using System;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;

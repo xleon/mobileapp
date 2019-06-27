@@ -1,6 +1,4 @@
-﻿using System;
-using Toggl.Core.DTOs;
-using Toggl.Core.Models.Interfaces;
+﻿using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.Storage;

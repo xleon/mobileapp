@@ -1,8 +1,7 @@
-using System;
-using Android.Graphics;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System;
 using Toggl.Core.UI.ViewModels;
 
 namespace Toggl.Droid.ViewHolders

@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
+using System;
 using UIKit;
 
 namespace Toggl.iOS.Views.StartTimeEntry

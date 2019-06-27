@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Serialization;
+using Toggl.Networking.Serialization.Attributes;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
-using Toggl.Networking.Serialization.Attributes;
 
 namespace Toggl.Networking.Serialization
 {

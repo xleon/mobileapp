@@ -58,7 +58,7 @@ namespace Toggl.Core.Autocomplete.Suggestions
             Tasks = project.Tasks?.Select(task => new TaskSuggestion(Task.From(task))).ToList() ?? new List<TaskSuggestion>();
         }
 
-        public override int GetHashCode() 
+        public override int GetHashCode()
             => HashCode.From(ProjectName, ProjectColor, ClientName);
     }
 

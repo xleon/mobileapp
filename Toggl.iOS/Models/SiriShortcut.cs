@@ -1,11 +1,10 @@
+using Intents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Intents;
 using Toggl.Core.Models;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Intents;
-using Toggl.iOS.Services;
 
 namespace Toggl.iOS.Models
 {

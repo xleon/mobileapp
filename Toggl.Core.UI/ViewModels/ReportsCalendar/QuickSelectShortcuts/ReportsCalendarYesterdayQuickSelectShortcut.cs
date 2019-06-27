@@ -1,7 +1,6 @@
 ﻿using Toggl.Core.Analytics;
 using Toggl.Core.Models;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
@@ -9,8 +8,8 @@ namespace Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts
 {
     public sealed class ReportsCalendarYesterdayQuickSelectShortcut : ReportsCalendarBaseQuickSelectShortcut
     {
-         public ReportsCalendarYesterdayQuickSelectShortcut(ITimeService timeService)
-            : base(timeService, Resources.Yesterday, ReportPeriod.Yesterday)
+        public ReportsCalendarYesterdayQuickSelectShortcut(ITimeService timeService)
+           : base(timeService, Resources.Yesterday, ReportPeriod.Yesterday)
         {
         }
 

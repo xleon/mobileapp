@@ -2,7 +2,7 @@
 
 namespace Toggl.Storage.Realm.Models
 {
-    interface IModifiableId : IIdentifiable
+    public interface IModifiableId : IIdentifiable
     {
         new long Id { get; set; }
 

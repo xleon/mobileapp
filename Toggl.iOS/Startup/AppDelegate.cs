@@ -1,11 +1,9 @@
-using System.Reactive;
 using Foundation;
 using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Presentation;
-using Toggl.Networking;
 using UIKit;
 using UserNotifications;
 using Firebase.CloudMessaging;
@@ -19,10 +17,10 @@ namespace Toggl.iOS
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
-            #if !USE_PRODUCTION_API
+#if !USE_PRODUCTION_API
             System.Net.ServicePointManager.ServerCertificateValidationCallback
                 += (sender, certificate, chain, sslPolicyErrors) => true;
-            #endif
+#endif
 
             #if !DEBUG
                 Firebase.Core.App.Configure();
@@ -50,9 +48,9 @@ namespace Toggl.iOS
             loginWithCredentialsIfNecessary(accessLevel);
             navigateAccordingToAccessLevel(accessLevel);
 
-            #if ENABLE_TEST_CLOUD
+#if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();
-            #endif
+#endif
 
             return true;
         }
@@ -75,10 +73,10 @@ namespace Toggl.iOS
                 return true;
             }
 
-            #if USE_ANALYTICS
+#if USE_ANALYTICS
             var openUrlOptions = new UIApplicationOpenUrlOptions(options);
             return Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
-            #endif
+#endif
 
             return false;
         }
@@ -109,8 +107,10 @@ namespace Toggl.iOS
                     navigationService.Navigate<TokenResetViewModel>(null);
                     return;
                 case AccessLevel.LoggedIn:
-                    var viewModel = IosDependencyContainer.Instance.ViewModelLoader
-                    .Load<Unit, Unit>(typeof(MainTabBarViewModel), Unit.Default).GetAwaiter().GetResult();
+                    var viewModel = IosDependencyContainer.Instance
+                        .ViewModelLoader
+                        .Load<MainTabBarViewModel>();
+                    viewModel.Initialize();
                     Window.RootViewController = ViewControllerLocator.GetViewController(viewModel);
                     return;
             }

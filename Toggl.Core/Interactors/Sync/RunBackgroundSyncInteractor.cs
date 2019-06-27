@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Reactive.Linq;
 using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;

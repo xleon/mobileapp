@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using FluentAssertions;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Xunit;
 
 namespace Toggl.Networking.Tests.Integration.BaseTests

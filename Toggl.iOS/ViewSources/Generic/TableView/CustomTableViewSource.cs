@@ -1,9 +1,9 @@
 ﻿using Foundation;
-using UIKit;
-using Toggl.Shared;
 using System;
 using System.Collections.Generic;
 using Toggl.Core.UI.Collections;
+using Toggl.Shared;
+using UIKit;
 
 namespace Toggl.iOS.ViewSources.Generic.TableView
 {

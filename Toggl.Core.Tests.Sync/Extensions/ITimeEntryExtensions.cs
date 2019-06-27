@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using Toggl.Networking.Models;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.Networking.Models;
 
 namespace Toggl.Core.Tests.Sync.Extensions
 {

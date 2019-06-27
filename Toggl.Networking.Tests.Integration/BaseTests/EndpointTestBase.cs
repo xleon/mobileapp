@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using Toggl.Shared.Models;
 using Toggl.Networking.Network;
+using Toggl.Shared.Models;
 
 namespace Toggl.Networking.Tests.Integration.BaseTests
 {

@@ -1,6 +1,6 @@
-using System;
 using Android.App;
 using Android.Widget;
+using System;
 
 namespace Toggl.Droid.ViewHelpers
 {

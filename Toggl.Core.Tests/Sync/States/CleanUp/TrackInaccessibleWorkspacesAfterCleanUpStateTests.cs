@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.Sync;
-using Toggl.Core.Sync.States;
 using Toggl.Core.Sync.States.CleanUp;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Shared.Models;
 using Toggl.Storage.Models;
 using Xunit;
 
@@ -49,7 +45,8 @@ namespace Toggl.Core.Tests.Sync.States.CleanUp
             [Fact]
             public async Task TracksInaccessibleWorkspaces()
             {
-                var workspaces = new[] {
+                var workspaces = new[]
+                {
                     inaccessibleWorkspace,
                     accessibleWorkspace
                 };

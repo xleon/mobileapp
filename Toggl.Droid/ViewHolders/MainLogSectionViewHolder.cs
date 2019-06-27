@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Android.Runtime;
+﻿using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Toggl.Core.Extensions;
-using Toggl.Core.UI.Transformations;
-using Toggl.Core.UI.ViewModels;
+using System;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Droid.ViewHelpers;
-using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.ViewHolders
 {

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Globalization;
 using System.Reactive.Linq;
-using Newtonsoft.Json;
-using Toggl.Shared;
-using Toggl.Shared.Models.Reports;
-using Toggl.Networking.Serialization;
 using Toggl.Networking.Models.Reports;
 using Toggl.Networking.Network;
+using Toggl.Networking.Serialization;
+using Toggl.Shared;
+using Toggl.Shared.Models.Reports;
 using Endpoints = Toggl.Networking.Network.Endpoints;
 using ProjectEndpoints = Toggl.Networking.Network.Reports.ProjectEndpoints;
 

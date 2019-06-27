@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Xml.Xsl;
-using FluentAssertions;
-using Xunit;
+﻿using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Collections.Changes;
+using Xunit;
 
 namespace Toggl.Core.Tests.UI.Collections
 {

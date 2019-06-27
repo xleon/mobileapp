@@ -1,5 +1,5 @@
-﻿using System;
-using Android.Views;
+﻿using Android.Views;
+using System;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Droid.ViewHolders;
 

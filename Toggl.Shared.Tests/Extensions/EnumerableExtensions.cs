@@ -1,5 +1,5 @@
-using System;
 using FluentAssertions;
+using System;
 using Toggl.Shared.Extensions;
 using Xunit;
 
@@ -12,14 +12,15 @@ namespace Toggl.Shared.Tests
             [Fact, LogIfTooSlow]
             public void CorrectlySumsTheTimeSpans()
             {
-                var timespans = new[] {
+                var timespans = new[]
+                {
                     TimeSpan.FromHours(2),
                     TimeSpan.FromMinutes(30),
                     TimeSpan.FromSeconds(30)
                 };
-                var expectedDuration = 
-                      TimeSpan.FromHours(2) 
-                    + TimeSpan.FromMinutes(30) 
+                var expectedDuration =
+                      TimeSpan.FromHours(2)
+                    + TimeSpan.FromMinutes(30)
                     + TimeSpan.FromSeconds(30);
 
                 timespans.Sum(ts => ts).Should().Be(expectedDuration);
@@ -28,7 +29,8 @@ namespace Toggl.Shared.Tests
             [Fact, LogIfTooSlow]
             public void CorrectlySumsTheNullableTimeSpansWithDefaultNullSelector()
             {
-                var timespans = new TimeSpan?[] {
+                var timespans = new TimeSpan?[]
+                {
                     TimeSpan.FromHours(3),
                     null,
                     null,
@@ -36,8 +38,8 @@ namespace Toggl.Shared.Tests
                     null,
                     TimeSpan.FromSeconds(24)
                 };
-                var expectedDuration = 
-                      TimeSpan.FromHours(3) 
+                var expectedDuration =
+                      TimeSpan.FromHours(3)
                     + TimeSpan.FromMinutes(11)
                     + TimeSpan.FromSeconds(24);
 

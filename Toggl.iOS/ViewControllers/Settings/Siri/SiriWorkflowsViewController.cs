@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Foundation;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading;
-using System.Collections.Generic;
-using Foundation;
-using Newtonsoft.Json;
 using Toggl.Core.Models;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
@@ -24,13 +24,13 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
 {
     public partial class SiriWorkflowsViewController : ReactiveViewController<SiriWorkflowsViewModel>
     {
-        #if USE_PRODUCTION_API
+#if USE_PRODUCTION_API
             private const string baseURL = "https://toggl-mobile.firebaseapp.com/";
-        #elif DEBUG
-            private const string baseURL = "https://toggl-mobile.firebaseapp.com/dev/";
-        #else
+#elif DEBUG
+        private const string baseURL = "https://toggl-mobile.firebaseapp.com/dev/";
+#else
             private const string baseURL = "https://toggl-mobile.firebaseapp.com/adhoc/";
-        #endif
+#endif
 
         public SiriWorkflowsViewController(SiriWorkflowsViewModel viewModel) : base(viewModel, nameof(SiriWorkflowsViewController))
         {
@@ -78,7 +78,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
         {
             var path = pathForWorkflow(workflow);
             var escapedPath =
-                ((NSString) path).CreateStringByAddingPercentEncoding(NSUrlUtilities_NSCharacterSet
+                ((NSString)path).CreateStringByAddingPercentEncoding(NSUrlUtilities_NSCharacterSet
                     .UrlQueryAllowedCharacterSet);
             var url = new NSUrl(escapedPath);
 
@@ -87,7 +87,8 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
 
                 var alert = UIAlertController.Create(Resources.CantOpenWorkflowTitle, Resources.CantOpenWorkflowDescription, UIAlertControllerStyle.Alert);
                 alert.AddAction(UIAlertAction.Create(Resources.Cancel, UIAlertActionStyle.Cancel, null));
-                alert.AddAction(UIAlertAction.Create(Resources.Download, UIAlertActionStyle.Default, (obj) => {
+                alert.AddAction(UIAlertAction.Create(Resources.Download, UIAlertActionStyle.Default, (obj) =>
+                {
                     UIApplication.SharedApplication.OpenUrl(new NSUrl("https://itunes.apple.com/app/shortcuts/id915249334"));
                 }));
                 PresentViewController(alert, true, null);

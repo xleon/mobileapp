@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Reactive.Linq;
 using Toggl.Networking.ApiClients.Interfaces;
 using Toggl.Networking.Models.Reports;
 using Toggl.Networking.Network;
-using Toggl.Networking.Serialization;
 using Toggl.Networking.Network.Reports;
+using Toggl.Networking.Serialization;
 using Toggl.Shared;
-using Newtonsoft.Json;
-using System.Reactive.Linq;
-using Toggl.Shared.Models.Reports;
-using System.Collections.Generic;
-using System.Globalization;
-using Newtonsoft.Json.Converters;
 using Toggl.Shared.Extensions;
+using Toggl.Shared.Models.Reports;
 
 namespace Toggl.Networking.ApiClients
 {

@@ -1,10 +1,10 @@
-using System;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using System;
 using Toggl.Core.Calendar;
 using Toggl.Droid.Adapters.Calendar;
 using Toggl.Droid.Extensions;
@@ -79,7 +79,7 @@ namespace Toggl.Droid.ViewHolders
         {
             var descriptionFontSize = calculateFontSizeForItemDuration();
             var verticalPaddingForItemDuration = calculateVerticalPaddingForItemDuration();
-            var verticalPadding = (int) Math.Min((lastAnchoredDataHeight - descriptionFontSize.DpToPixels(ItemView.Context)) / 2f, verticalPaddingForItemDuration);
+            var verticalPadding = (int)Math.Min((lastAnchoredDataHeight - descriptionFontSize.DpToPixels(ItemView.Context)) / 2f, verticalPaddingForItemDuration);
             var horizontalPaddingForItemDuration = calculateHorizontalPaddingForItemDuration();
             ItemView.SetPadding(horizontalPaddingForItemDuration, verticalPadding, horizontalPaddingForItemDuration, verticalPadding);
             label.SetTextSize(ComplexUnitType.Dip, descriptionFontSize);
@@ -89,7 +89,7 @@ namespace Toggl.Droid.ViewHolders
         {
             var color = Color.ParseColor(Item.Color);
             if (Item.Source == CalendarItemSource.Calendar)
-                color.A = (byte) (color.A * 0.25);
+                color.A = (byte)(color.A * 0.25);
 
             secondBackgroundLayer?.SetColor(color);
         }
@@ -104,10 +104,10 @@ namespace Toggl.Droid.ViewHolders
             isEntryShort() ? shortEntryTextSize : regularEntryTextSize;
 
         private int calculateVerticalPaddingForItemDuration()
-            => (int) (isEntryShort() ? shortEntryVerticalPadding : regularEntryVerticalPadding);
+            => (int)(isEntryShort() ? shortEntryVerticalPadding : regularEntryVerticalPadding);
 
         private int calculateHorizontalPaddingForItemDuration()
-            => (int) (isEntryShort() ? shortEntryHorizontalPadding : regularEntryHorizontalPadding);
+            => (int)(isEntryShort() ? shortEntryHorizontalPadding : regularEntryHorizontalPadding);
 
         private bool isEntryShort()
             => lastAnchoredDataHeight <= shortTimeEntryHeight;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using Foundation;
+﻿using Foundation;
 using Toggl.iOS.ExtensionKit.Analytics;
 
 namespace Toggl.iOS.ExtensionKit

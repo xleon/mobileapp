@@ -1,7 +1,7 @@
-using System;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
 
 namespace Toggl.Droid.ViewHolders
 {

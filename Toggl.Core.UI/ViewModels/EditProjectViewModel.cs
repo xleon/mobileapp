@@ -5,16 +5,16 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.DTOs;
 using Toggl.Core.Helper;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
@@ -46,7 +46,6 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<string> ClientName { get; }
         public IObservable<string> WorkspaceName { get; }
         public UIAction Save { get; }
-        public UIAction Close { get; }
         public OutputAction<Color> PickColor { get; }
         public OutputAction<IThreadSafeClient> PickClient { get; }
         public OutputAction<IThreadSafeWorkspace> PickWorkspace { get; }
@@ -74,7 +73,6 @@ namespace Toggl.Core.UI.ViewModels
             Name = new BehaviorRelay<string>("");
             IsPrivate = new BehaviorRelay<bool>(false, CommonFunctions.Invert);
 
-            Close = rxActionFactory.FromAsync(close);
             PickColor = rxActionFactory.FromObservable<Color>(pickColor);
             PickClient = rxActionFactory.FromObservable<IThreadSafeClient>(pickClient);
             PickWorkspace = rxActionFactory.FromObservable<IThreadSafeWorkspace>(pickWorkspace);
@@ -177,9 +175,6 @@ namespace Toggl.Core.UI.ViewModels
             navigationFromStartTimeEntryViewModelStopwatch = null;
         }
 
-        private Task close()
-            => Finish(null);
-
         private IObservable<IThreadSafeWorkspace> pickWorkspace()
         {
             return currentWorkspace.FirstAsync().SelectMany(workspaceFromViewModel);
@@ -249,8 +244,7 @@ namespace Toggl.Core.UI.ViewModels
                         ? Observable.Empty<Unit>()
                         : getDto(workspace)
                             .SelectMany(dto => interactorFactory.CreateProject(dto).Execute())
-                            .SelectMany(createdProject =>
-                                Finish(createdProject.Id).ToObservable())
+                            .Do(createdProject => Close(createdProject.Id))
                             .SelectUnit()
                     )
                 );

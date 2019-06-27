@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using NSubstitute;
+using System.Collections.Generic;
 using System.Linq;
-using NSubstitute;
 using Toggl.Core.Models.Interfaces;
 
 namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions

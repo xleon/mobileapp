@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 using Toggl.Shared;
 
 namespace Toggl.Networking.Serialization.Converters

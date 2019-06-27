@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Realms;
-using Toggl.Shared;
+﻿using Realms;
+using System.Collections.Generic;
 using Toggl.Shared.Models;
 using Toggl.Storage.Models;
 
@@ -19,11 +17,11 @@ namespace Toggl.Storage.Realm
                 RealmWorkspaceInternal = value;
             }
         }
-        
+
         public RealmWorkspace RealmWorkspaceInternal { get; set; }
 
         public long WorkspaceId { get; set; }
-        
+
         public IDatabaseWorkspace Workspace => RealmWorkspace;
 
         public IList<RealmWorkspaceFeature> RealmWorkspaceFeatures { get; }

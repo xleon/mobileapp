@@ -1,11 +1,7 @@
-﻿using System;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
-using Toggl.Core.UI.Services;
-using Toggl.Core.UI.ViewModels;
+﻿using FluentAssertions;
+using System;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.UI.ViewModels;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
@@ -15,7 +11,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class OutdatedAppViewModelTest : BaseViewModelTests<OutdatedAppViewModel>
         {
             protected override OutdatedAppViewModel CreateViewModel()
-                => new OutdatedAppViewModel(BrowserService, RxActionFactory, NavigationService);
+                => new OutdatedAppViewModel(PlatformInfo, RxActionFactory, NavigationService);
         }
 
         public sealed class TheConstructor : OutdatedAppViewModelTest
@@ -23,46 +19,20 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Theory, LogIfTooSlow]
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
-                bool useBrowserService,
+                bool usePlatformInfo,
                 bool useRxActionFactory,
                 bool useNavigationService)
             {
-                var browserService = useBrowserService ? BrowserService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var platformInfo = usePlatformInfo ? PlatformInfo : null;
                 var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new OutdatedAppViewModel(
-                        browserService, rxActionFactory, navigationService);
+                        platformInfo, rxActionFactory, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
-            }
-        }
-
-        public sealed class TheUpdateAppAction : OutdatedAppViewModelTest
-        {
-            [Fact, LogIfTooSlow]
-            public async Task CallsTheOpenStoreMethodOfTheBrowserService()
-            {
-                ViewModel.UpdateApp.Execute();
-                TestScheduler.Start();
-
-                BrowserService.Received().OpenStore();
-            }
-        }
-
-        public sealed class TheOpenWebsiteCommand : OutdatedAppViewModelTest
-        {
-            [Fact, LogIfTooSlow]
-            public async Task CallsTheOpenWebsiteMethodOfTheBrowserService()
-            {
-                const string togglWebsiteUrl = "https://toggl.com";
-
-                ViewModel.OpenWebsite.Execute();
-                TestScheduler.Start();
-
-                BrowserService.Received().OpenUrl(Arg.Is(togglWebsiteUrl));
             }
         }
     }

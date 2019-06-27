@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Android.App;
-using Android.OS;
+﻿using Android.OS;
 using Firebase.Analytics;
 using Microsoft.AppCenter.Crashes;
+using System;
+using System.Collections.Generic;
 using Toggl.Core.Analytics;
-using AppCenterAnalytics = Microsoft.AppCenter.Analytics.Analytics;
 
 namespace Toggl.Droid.Services
 {
@@ -17,18 +15,18 @@ namespace Toggl.Droid.Services
 
         public AnalyticsServiceAndroid()
         {
-            #if USE_ANALYTICS
+#if USE_ANALYTICS
             firebaseAnalytics = FirebaseAnalytics.GetInstance(Application.Context);
-            #endif
+#endif
         }
 
         public override void Track(string eventName, Dictionary<string, string> parameters)
         {
-            #if USE_ANALYTICS
+#if USE_ANALYTICS
             var bundle = bundleFromParameters(parameters);
             firebaseAnalytics.LogEvent(eventName, bundle);
             AppCenterAnalytics.TrackEvent(eventName, trimLongParameters(parameters));
-            #endif
+#endif
         }
 
         protected override void TrackException(Exception exception)
@@ -55,7 +53,7 @@ namespace Toggl.Droid.Services
         {
             var bundle = new Bundle();
 
-            foreach(var entry in parameters)
+            foreach (var entry in parameters)
             {
                 bundle.PutString(entry.Key, entry.Value);
             }

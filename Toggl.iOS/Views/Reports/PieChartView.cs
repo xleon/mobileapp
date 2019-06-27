@@ -1,12 +1,12 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using UIKit;
-using CoreGraphics;
-using Foundation;
 using Toggl.Core.Reports;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
+using UIKit;
 using static Toggl.Shared.Math;
 using Math = System.Math;
 

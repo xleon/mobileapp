@@ -1,16 +1,16 @@
+using FluentAssertions;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
-using Toggl.Core.Tests.Mocks;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
@@ -127,13 +127,15 @@ namespace Toggl.Core.Tests.UI.Transformations
                     DurationFormat.Classic,
                     new[] { day(now, groupA, singleItemGroup, groupB) },
                     withExpanded(),
-                    new[] { logOf(
-                        now.DateTime,
-                        "Today",
-                        "15 sec",
-                        collapsed(groupA, DurationFormat.Classic)
-                            .Concat(single(singleItemGroup.First(), DurationFormat.Classic))
-                            .Concat(collapsed(groupB, DurationFormat.Classic)))
+                    new[]
+                    {
+                        logOf(
+                            now.DateTime,
+                            "Today",
+                            "15 sec",
+                            collapsed(groupA, DurationFormat.Classic)
+                                .Concat(single(singleItemGroup.First(), DurationFormat.Classic))
+                                .Concat(collapsed(groupB, DurationFormat.Classic)))
                     }
                 },
                 new object[]
@@ -141,13 +143,15 @@ namespace Toggl.Core.Tests.UI.Transformations
                     DurationFormat.Classic,
                     new[] { day(now, groupA, singleItemGroup, groupB) },
                     withExpanded(groupA),
-                    new[] { logOf(
-                        now.DateTime,
-                        "Today",
-                        "15 sec",
-                        expanded(groupA, DurationFormat.Classic)
-                            .Concat(single(singleItemGroup.First(), DurationFormat.Classic))
-                            .Concat(collapsed(groupB, DurationFormat.Classic)))
+                    new[]
+                    {
+                        logOf(
+                            now.DateTime,
+                            "Today",
+                            "15 sec",
+                            expanded(groupA, DurationFormat.Classic)
+                                .Concat(single(singleItemGroup.First(), DurationFormat.Classic))
+                                .Concat(collapsed(groupB, DurationFormat.Classic)))
                     }
                 },
                 new object[]
@@ -155,13 +159,15 @@ namespace Toggl.Core.Tests.UI.Transformations
                     DurationFormat.Classic,
                     new[] { day(now, groupA, singleItemGroup, groupB) },
                     withExpanded(groupB),
-                    new[] { logOf(
-                        now.DateTime,
-                        "Today",
-                        "15 sec",
-                        collapsed(groupA, DurationFormat.Classic)
-                            .Concat(single(singleItemGroup.First(), DurationFormat.Classic))
-                            .Concat(expanded(groupB, DurationFormat.Classic)))
+                    new[]
+                    {
+                        logOf(
+                            now.DateTime,
+                            "Today",
+                            "15 sec",
+                            collapsed(groupA, DurationFormat.Classic)
+                                .Concat(single(singleItemGroup.First(), DurationFormat.Classic))
+                                .Concat(expanded(groupB, DurationFormat.Classic)))
                     }
                 },
                 new object[]
@@ -169,13 +175,15 @@ namespace Toggl.Core.Tests.UI.Transformations
                     DurationFormat.Improved,
                     new[] { day(now, groupA, singleItemGroup, groupB) },
                     withExpanded(groupA, groupB),
-                    new[] { logOf(
-                        now.DateTime,
-                        "Today",
-                        "0:00:15",
-                        expanded(groupA, DurationFormat.Improved)
-                            .Concat(single(singleItemGroup.First(), DurationFormat.Improved))
-                            .Concat(expanded(groupB, DurationFormat.Improved)))
+                    new[]
+                    {
+                        logOf(
+                            now.DateTime,
+                            "Today",
+                            "0:00:15",
+                            expanded(groupA, DurationFormat.Improved)
+                                .Concat(single(singleItemGroup.First(), DurationFormat.Improved))
+                                .Concat(expanded(groupB, DurationFormat.Improved)))
                     }
                 },
                 new object[]
@@ -183,7 +191,8 @@ namespace Toggl.Core.Tests.UI.Transformations
                     DurationFormat.Classic,
                     new[] { day(now, twoWorkspaces) },
                     withExpanded(),
-                    new[] {
+                    new[]
+                    {
                         logOf(
                             now.DateTime,
                             "Today",
@@ -268,7 +277,7 @@ namespace Toggl.Core.Tests.UI.Transformations
             DateTimeOffset date,
             params IThreadSafeTimeEntry[][] groups)
             => groups
-                .SelectMany(group => group)
+                .Flatten()
                 .GroupBy(_ => date.DateTime)
                 .First();
 

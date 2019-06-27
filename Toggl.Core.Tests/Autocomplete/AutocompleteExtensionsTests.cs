@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.Reactive.Testing;
+using System;
+using System.Linq;
 using Toggl.Core.Autocomplete.Span;
 using Toggl.Core.UI.Extensions;
 using Xunit;

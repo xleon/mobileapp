@@ -1,22 +1,21 @@
-using System;
 using Foundation;
-using Toggl.iOS.Extensions;
-using Toggl.Core.UI.ViewModels.Reports;
-using UIKit;
-using System.Reactive.Disposables;
-using Toggl.iOS.Extensions.Reactive;
-using System.Reactive.Linq;
-using Toggl.Shared.Extensions;
-using System.Linq;
-using Toggl.Shared;
+using ObjCRuntime;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Toggl.Core.Conversions;
-using System.Reactive.Subjects;
+using System.Linq;
 using System.Reactive;
-using Toggl.Core;
-using ObjCRuntime;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Toggl.Core.Conversions;
+using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using UIKit;
 
 namespace Toggl.iOS.Views.Reports
 {

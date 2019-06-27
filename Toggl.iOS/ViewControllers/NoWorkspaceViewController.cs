@@ -1,11 +1,10 @@
-﻿using System;
+﻿using CoreGraphics;
+using System;
 using System.Reactive.Linq;
-using CoreGraphics;
-using Toggl.iOS.Extensions;
-using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;

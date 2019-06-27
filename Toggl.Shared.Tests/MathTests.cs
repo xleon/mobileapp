@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
+using System;
+using System.Collections.Generic;
 using Xunit;
 using static Toggl.Shared.Math;
 

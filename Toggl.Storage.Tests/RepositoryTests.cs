@@ -1,11 +1,10 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Toggl.Storage.Exceptions;
-using Toggl.Shared.Extensions;
 using Xunit;
 
 namespace Toggl.Storage.Tests
@@ -27,7 +26,7 @@ namespace Toggl.Storage.Tests
         [Fact, LogIfTooSlow]
         public void TheGetByIdMethodThrowsIfThereIsNoEntityWithThatIdInTheRepository()
         {
-            Func<Task> callingGetByIdInAnEmptyRepository = 
+            Func<Task> callingGetByIdInAnEmptyRepository =
                 async () => await Repository.GetById(-1);
 
             callingGetByIdInAnEmptyRepository
@@ -61,7 +60,7 @@ namespace Toggl.Storage.Tests
                 var model = GetModelWith(i);
                 await Repository.Create(model);
             }
-            
+
             var entities = await Repository.GetAll(_ => true);
             entities.Count().Should().Be(numberOfItems);
         }

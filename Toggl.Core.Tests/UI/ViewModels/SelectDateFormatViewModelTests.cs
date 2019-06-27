@@ -1,15 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Selectable;
+using System;
+using System.Threading.Tasks;
 using Toggl.Core.Services;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Shared;
 using Xunit;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -50,7 +49,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseCommand : SelectDateFormatViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : SelectDateFormatViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModelPassingTheDefaultResult()
@@ -58,7 +57,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var defaultResult = DateFormat.FromLocalizedDateFormat("YYYY.MM.DD");
                 await ViewModel.Initialize(defaultResult);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 (await ViewModel.Result).Should().Be(defaultResult);
@@ -76,7 +75,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectDateFormat.Execute(selectableDateFormatViewModel);
                 TestScheduler.Start();
 
-                (await ViewModel.Result).Should().Be(selectedDateFormat);    
+                (await ViewModel.Result).Should().Be(selectedDateFormat);
             }
         }
     }

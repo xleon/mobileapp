@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck.Xunit;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace Toggl.Core.Tests
@@ -10,7 +10,7 @@ namespace Toggl.Core.Tests
     {
         public abstract class BaseDurationFieldInfoTest
         {
-            protected DurationFieldInfo Field;
+            protected DurationFieldInfo Field { get; set; }
 
             public BaseDurationFieldInfoTest()
             {

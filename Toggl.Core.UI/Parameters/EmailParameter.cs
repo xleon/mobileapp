@@ -1,5 +1,4 @@
-﻿using System;
-using Toggl.Shared;
+﻿using Toggl.Shared;
 
 namespace Toggl.Core.UI.Parameters
 {

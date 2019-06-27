@@ -1,6 +1,6 @@
 ﻿using System;
-using SystemMath = System.Math;
 using static Toggl.Shared.Math;
+using SystemMath = System.Math;
 
 namespace Toggl.Shared.Extensions
 {

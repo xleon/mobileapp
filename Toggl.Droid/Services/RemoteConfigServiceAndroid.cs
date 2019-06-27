@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Android.Gms.Tasks;
+using Firebase.RemoteConfig;
+using System;
 using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Android.Gms.Tasks;
-using Firebase.RemoteConfig;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using static Toggl.Core.Services.RemoteConfigKeys;
@@ -29,7 +29,7 @@ namespace Toggl.Droid.Services
 
         public IObservable<PushNotificationsConfiguration> PushNotificationsConfiguration
             => Observable.Return(new PushNotificationsConfiguration(false, false));
-        
+
         private RatingViewConfiguration extractRatingViewConfiguration(FirebaseRemoteConfig remoteConfig)
             => new RatingViewConfiguration(
                 (int)remoteConfig.GetValue(RatingViewDelayParameter).AsLong(),
@@ -39,8 +39,8 @@ namespace Toggl.Droid.Services
             => new PushNotificationsConfiguration(
                 remoteConfig.GetBoolean(RegisterPushNotificationsTokenWithServerParameter),
                 remoteConfig.GetBoolean(HandlePushNotificationsParameter));
-            
-        private IObservable<TConfiguration> FetchConfiguration<TConfiguration>(Func<FirebaseRemoteConfig, TConfiguration> remoteConfigExtractor) 
+
+        private IObservable<TConfiguration> FetchConfiguration<TConfiguration>(Func<FirebaseRemoteConfig, TConfiguration> remoteConfigExtractor)
             => Observable.Create<TConfiguration>(observer =>
             {
                 var remoteConfig = FirebaseRemoteConfig.Instance;
@@ -48,12 +48,12 @@ namespace Toggl.Droid.Services
                 enableDeveloperModeInDebugModel(remoteConfig);
 
                 remoteConfig.SetDefaults(Resource.Xml.RemoteConfigDefaults);
-                
+
                 remoteConfig.Fetch(error =>
                 {
                     if (error == null)
                         remoteConfig.ActivateFetched();
-                    
+
                     observer.OnNext(remoteConfigExtractor(remoteConfig));
                     observer.OnCompleted();
                 });

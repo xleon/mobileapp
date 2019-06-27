@@ -1,11 +1,11 @@
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using FluentAssertions;
+using Toggl.Core.Tests.UI.Collections.Extensions;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Collections.Diffing;
-using Toggl.Core.Tests.UI.Collections.Extensions;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.Collections
@@ -62,7 +62,7 @@ namespace Toggl.Core.Tests.UI.Collections
         {
         }
 
-        TestSectionModel(DiffableInt header, IEnumerable<TestItem> items) : base(header, items)
+        public TestSectionModel(DiffableInt header, IEnumerable<TestItem> items) : base(header, items)
         {
         }
 
@@ -636,7 +636,8 @@ namespace Toggl.Core.Tests.UI.Collections
         }
 
         [Fact, LogIfTooSlow]
-        public void TestPerformance() {
+        public void TestPerformance()
+        {
 
             List<TestSectionModel> initialValue()
             {

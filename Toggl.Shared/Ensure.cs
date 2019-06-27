@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Shared
@@ -10,9 +9,9 @@ namespace Toggl.Shared
         {
             public static void IsNotNull<T>(T value, string argumentName)
             {
-                #pragma warning disable RECS0017 // Possible compare of value type with 'null'
+#pragma warning disable RECS0017 // Possible compare of value type with 'null'
                 if (value != null) return;
-                #pragma warning restore RECS0017 // Possible compare of value type with 'null'
+#pragma warning restore RECS0017 // Possible compare of value type with 'null'
 
                 throw new ArgumentNullException(argumentName);
             }

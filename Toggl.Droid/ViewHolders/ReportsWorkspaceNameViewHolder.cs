@@ -1,7 +1,7 @@
-using System;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System;
 
 namespace Toggl.Droid.ViewHolders
 {
@@ -19,7 +19,7 @@ namespace Toggl.Droid.ViewHolders
 
         protected override void InitializeViews()
         {
-            workspaceName = (TextView) ItemView;
+            workspaceName = (TextView)ItemView;
         }
 
         protected override void UpdateView()

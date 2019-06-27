@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Text;
 using CoreGraphics;
-using Foundation;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;

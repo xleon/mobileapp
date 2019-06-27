@@ -1,12 +1,12 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Linq;
 using System.Reactive.Linq;
-using CoreGraphics;
-using Foundation;
-using Toggl.iOS.Extensions;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
+using Toggl.iOS.Extensions;
 using Toggl.iOS.Views;
 using Toggl.iOS.Views.EntityCreation;
 using Toggl.iOS.Views.StartTimeEntry;
@@ -51,65 +51,65 @@ namespace Toggl.iOS.ViewSources
             switch (model)
             {
                 case TagSuggestion tag:
-                {
-                    var cell = (TagSuggestionViewCell) tableView.DequeueReusableCell(TagSuggestionViewCell.Identifier,
-                        indexPath);
-                    cell.Item = tag;
-                    return cell;
-                }
+                    {
+                        var cell = (TagSuggestionViewCell)tableView.DequeueReusableCell(TagSuggestionViewCell.Identifier,
+                            indexPath);
+                        cell.Item = tag;
+                        return cell;
+                    }
                 case TaskSuggestion task:
-                {
-                    var cell = (TaskSuggestionViewCell) tableView.DequeueReusableCell(TaskSuggestionViewCell.Identifier,
-                        indexPath);
-                    cell.Item = task;
-                    return cell;
-                }
+                    {
+                        var cell = (TaskSuggestionViewCell)tableView.DequeueReusableCell(TaskSuggestionViewCell.Identifier,
+                            indexPath);
+                        cell.Item = task;
+                        return cell;
+                    }
                 case TimeEntrySuggestion timeEntry:
-                {
-                    var cell = (StartTimeEntryViewCell) tableView.DequeueReusableCell(StartTimeEntryViewCell.Identifier,
-                        indexPath);
-                    cell.Item = timeEntry;
-                    return cell;
-                }
+                    {
+                        var cell = (StartTimeEntryViewCell)tableView.DequeueReusableCell(StartTimeEntryViewCell.Identifier,
+                            indexPath);
+                        cell.Item = timeEntry;
+                        return cell;
+                    }
                 case ProjectSuggestion project:
-                {
-                    var cell = (ProjectSuggestionViewCell) tableView.DequeueReusableCell(
-                        ProjectSuggestionViewCell.Identifier,
-                        indexPath);
-                    cell.Item = project;
+                    {
+                        var cell = (ProjectSuggestionViewCell)tableView.DequeueReusableCell(
+                            ProjectSuggestionViewCell.Identifier,
+                            indexPath);
+                        cell.Item = project;
 
-                    cell.ToggleTasks
-                        .Subscribe(toggleTasks.Accept)
-                        .DisposedBy(cell.DisposeBag);
+                        cell.ToggleTasks
+                            .Subscribe(toggleTasks.Accept)
+                            .DisposedBy(cell.DisposeBag);
 
-                    cell.TopSeparatorHidden = true;
-                    cell.BottomSeparatorHidden = true;
-                    return cell;
-                }
+                        cell.TopSeparatorHidden = true;
+                        cell.BottomSeparatorHidden = true;
+                        return cell;
+                    }
                 case QuerySymbolSuggestion querySuggestion:
-                {
-                    var cell = (StartTimeEntryEmptyViewCell)tableView.DequeueReusableCell(
-                        StartTimeEntryEmptyViewCell.Identifier,
-                        indexPath);
-                    cell.Item = querySuggestion;
-                    return cell;
-                }
+                    {
+                        var cell = (StartTimeEntryEmptyViewCell)tableView.DequeueReusableCell(
+                            StartTimeEntryEmptyViewCell.Identifier,
+                            indexPath);
+                        cell.Item = querySuggestion;
+                        return cell;
+                    }
 
                 case CreateEntitySuggestion creteEntity:
-                {
-                    var cell = (CreateEntityViewCell) tableView.DequeueReusableCell(CreateEntityViewCell.Identifier,
-                        indexPath);
-                    cell.Item = creteEntity;
-                    return cell;
-                }
+                    {
+                        var cell = (CreateEntityViewCell)tableView.DequeueReusableCell(CreateEntityViewCell.Identifier,
+                            indexPath);
+                        cell.Item = creteEntity;
+                        return cell;
+                    }
 
                 case NoEntityInfoMessage noEntityInfoMessage:
-                {
-                    var cell = (NoEntityInfoViewCell) tableView.DequeueReusableCell(NoEntityInfoViewCell.Identifier,
-                        indexPath);
-                    cell.Item = noEntityInfoMessage;
-                    return cell;
-                }
+                    {
+                        var cell = (NoEntityInfoViewCell)tableView.DequeueReusableCell(NoEntityInfoViewCell.Identifier,
+                            indexPath);
+                        cell.Item = noEntityInfoMessage;
+                        return cell;
+                    }
 
                 default:
                     throw new InvalidOperationException("Wrong cell type");

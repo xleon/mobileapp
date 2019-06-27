@@ -1,12 +1,11 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
 using Toggl.Shared;
@@ -185,7 +184,7 @@ namespace Toggl.Core.Tests.Sync
                 );
             }
 
-            [Fact(Skip="there is currently no timeout"), LogIfTooSlow]
+            [Fact(Skip = "there is currently no timeout"), LogIfTooSlow]
             public void ReportsTransitionIfStateTakesLessThanOneMinute()
             {
                 var stateSubject = new Subject<ITransition>();
@@ -228,7 +227,7 @@ namespace Toggl.Core.Tests.Sync
                 );
             }
 
-            [Fact(Skip="there is currently no timeout"), LogIfTooSlow]
+            [Fact(Skip = "there is currently no timeout"), LogIfTooSlow]
             public void ReportsErrorIfStateTakesMoreThanOneMinute()
             {
                 var stateSubject = new Subject<ITransition>();

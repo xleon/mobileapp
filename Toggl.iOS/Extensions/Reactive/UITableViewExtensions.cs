@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
-using Foundation;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Collections.Diffing;
@@ -109,7 +109,7 @@ namespace Toggl.iOS.Extensions.Reactive
                 var indexSet = new NSMutableIndexSet();
                 foreach (var i in indexes)
                 {
-                    indexSet.Add((nuint) i);
+                    indexSet.Add((nuint)i);
                 }
 
                 return indexSet as NSIndexSet;

@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 using Toggl.Shared.Models;
 
 namespace Toggl.Networking.Models

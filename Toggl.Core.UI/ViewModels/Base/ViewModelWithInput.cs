@@ -1,5 +1,4 @@
 ﻿using System.Reactive;
-using System.Threading.Tasks;
 using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.UI.ViewModels
@@ -10,7 +9,12 @@ namespace Toggl.Core.UI.ViewModels
         {
         }
 
-        public Task Finish()
-            => Finish(Unit.Default);
+        public virtual void Close()
+            => base.Close(Unit.Default);
+
+        public sealed override void Close(Unit output)
+        {
+            Close();
+        }
     }
 }

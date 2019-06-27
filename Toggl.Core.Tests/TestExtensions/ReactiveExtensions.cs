@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.Reactive.Testing;
+using System;
 using System.Reactive;
 using System.Reactive.Disposables;
-using Microsoft.Reactive.Testing;
 
 namespace Toggl.Core.Tests.TestExtensions
 {

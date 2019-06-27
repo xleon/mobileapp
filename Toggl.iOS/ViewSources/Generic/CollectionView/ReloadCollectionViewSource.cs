@@ -1,6 +1,6 @@
+using Foundation;
 using System;
 using System.Collections.Immutable;
-using Foundation;
 using UIKit;
 
 namespace Toggl.iOS.ViewSources

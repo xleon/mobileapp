@@ -2,18 +2,18 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
-using Toggl.Core.UI.Services;
-using Toggl.Core.UI.ViewModels.Calendar;
-using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Services;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
+using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
@@ -99,7 +99,8 @@ namespace Toggl.Core.UI.ViewModels
                 accessRestrictionStorage,
                 schedulerProvider,
                 stopwatchProvider,
-                rxActionFactory);
+                rxActionFactory,
+                platformInfo);
 
             reportsViewModel = new ReportsViewModel(
                 dataSource,

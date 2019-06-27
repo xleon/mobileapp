@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
+using System;
+using System.Reactive.Linq;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Sync;
 using Toggl.Core.Sync.States.Push;

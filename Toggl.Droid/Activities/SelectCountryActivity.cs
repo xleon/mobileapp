@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
@@ -44,8 +44,8 @@ namespace Toggl.Droid.Activities
                 .Subscribe(replaceCountries)
                 .DisposedBy(DisposeBag);
 
-            backImageView.Rx()
-                .BindAction(ViewModel.Close)
+            backImageView.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             filterEditText.Rx().Text()
@@ -61,17 +61,6 @@ namespace Toggl.Droid.Activities
         {
             base.Finish();
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_right);
-        }
-
-        public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
-        {
-            if (keyCode == Keycode.Back)
-            {
-                ViewModel.Close.Execute();
-                return true;
-            }
-
-            return base.OnKeyDown(keyCode, e);
         }
 
         private void setupRecyclerView(SimpleAdapter<SelectableCountryViewModel> adapter)

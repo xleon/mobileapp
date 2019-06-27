@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 

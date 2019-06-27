@@ -254,9 +254,6 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("Origin")]
         public IAnalyticsEvent<EditTimeEntryOrigin> EditViewOpened { get; protected set; }
 
-        [AnalyticsEvent("Type", "Source", "ExceptionType", "StackTrace")]
-        public IAnalyticsEvent<string, string, string, string> DebugScheduleError { get; protected set; }
-
         [AnalyticsEvent("Platform")]
         public IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; protected set; }
 
@@ -271,6 +268,9 @@ namespace Toggl.Core.Analytics
 
         [AnalyticsEvent("Source", "Type", "Message", "StackTrace")]
         public IAnalyticsEvent<string, string, string, string> PushNotificationSyncFailed { get; protected set; }
+
+        [AnalyticsEvent("Location")]
+        public IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; protected set; }
 
         public void TrackAnonymized(Exception exception)
         {

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Android.Runtime;
+using Android.Views;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Android.Runtime;
-using Android.Views;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
@@ -101,7 +101,7 @@ namespace Toggl.Droid.Adapters
                         Resource.Id.TextView,
                         suggestion => ""
                     );
-                    
+
                 case TimeEntrySuggestion:
                     return new TimeEntrySuggestionViewHolder(
                         inflater.Inflate(Resource.Layout.StartTimeEntryActivityTimeEntryCell, parent, false)

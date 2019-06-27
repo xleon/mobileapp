@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using Toggl.Core.UI.Collections;
 using Xunit;
 
@@ -32,7 +32,7 @@ namespace Toggl.Core.Tests.UI.Collections
 
         public sealed class TheConstructor
         {
-            DateTimeOffset referenceDate = new DateTimeOffset(2018, 02, 13, 19, 00, 00, TimeSpan.Zero);
+            private DateTimeOffset referenceDate = new DateTimeOffset(2018, 02, 13, 19, 00, 00, TimeSpan.Zero);
             private GroupedOrderedCollection<int> intCollection;
             private GroupedOrderedCollection<MockItem> mockCollection;
 

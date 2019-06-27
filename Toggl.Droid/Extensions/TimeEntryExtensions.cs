@@ -1,4 +1,4 @@
-﻿using Android.Content;
+using Android.Content;
 using Android.Text;
 using Android.Text.Style;
 using Toggl.Droid.Views;
@@ -11,13 +11,13 @@ namespace Toggl.Droid.Extensions
     {
         private static string placeholderSeparator = " ";
         private static string taskSeparator = ": ";
-        
-        public static ISpannable ToProjectTaskClient(Context context, 
-            bool hasProject, 
-            string project, 
-            string projectColor, 
-            string task, 
-            string client, 
+
+        public static ISpannable ToProjectTaskClient(Context context,
+            bool hasProject,
+            string project,
+            string projectColor,
+            string task,
+            string client,
             bool projectIsPlaceholder,
             bool taskIsPlaceholder,
             bool displayPlaceholders = false)
@@ -30,7 +30,7 @@ namespace Toggl.Droid.Extensions
             appendProjectTextAndSpans(context, project, projectColor, projectIsPlaceholder, displayPlaceholders, spannableString);
             appendTaskTextAndSpans(context, task, projectIsPlaceholder, taskIsPlaceholder, displayPlaceholders, spannableString);
 
-            if (!string.IsNullOrEmpty(client)) 
+            if (!string.IsNullOrEmpty(client))
                 spannableString.Append($" {client}", new ForegroundColorSpan(Color.ParseColor(ClientNameColor)), SpanTypes.ExclusiveExclusive);
 
             return spannableString;

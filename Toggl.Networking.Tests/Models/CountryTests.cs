@@ -1,7 +1,5 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Toggl.Networking.Models;
-using Toggl.Networking.Serialization;
 using Xunit;
 
 namespace Toggl.Networking.Tests.Models

@@ -1,6 +1,6 @@
+using Foundation;
 using System;
 using UIKit;
-using Foundation;
 
 namespace Toggl.iOS.SiriExtension.UI
 {

@@ -5,12 +5,11 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Networking.ApiClients;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 using Toggl.Storage.Settings;
-using Toggl.Networking.ApiClients;
-using Toggl.Networking.Network;
 
 namespace Toggl.Core.Interactors.Settings
 {
@@ -30,6 +29,7 @@ namespace Toggl.Core.Interactors.Settings
         public const string NumberOfWorkspaces = "Number of workspaces available to the user";
         public const string NumberOfUnsyncableTimeEntries = "Number of unsyncable time entries";
         public const string NumberOfTimeEntries = "Number of time entries in our database in total";
+        public const string InstallLocation = "Install location";
 
         private const string unspecified = "[unspecified]";
 
@@ -118,7 +118,8 @@ namespace Toggl.Core.Interactors.Settings
             int unsyncedTimeEntries,
             int unsyncableTimeEntriesCount,
             string accountTimezone)
-            => new Dictionary<string, string>
+        {
+            var data = new Dictionary<string, string>
             {
                 [PhoneModel] = platformInfo.PhoneModel,
                 [OperatingSystem] = platformInfo.OperatingSystem,
@@ -135,5 +136,11 @@ namespace Toggl.Core.Interactors.Settings
                 [ManualModeIsOn] = userPreferences.IsManualModeEnabled ? "yes" : "no",
                 [LastLogin] = lastTimeUsageStorage.LastLogin?.ToString() ?? "never"
             };
+
+            if (platformInfo.Platform == Platform.Giskard)
+                data[InstallLocation] = platformInfo.InstallLocation.ToString();
+
+            return data;
+        }
     }
 }

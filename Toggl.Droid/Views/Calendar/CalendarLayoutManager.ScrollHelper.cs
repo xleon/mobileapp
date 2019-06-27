@@ -1,7 +1,6 @@
-using System;
 using Android.Support.V7.Widget;
-using Android.Util;
 using Android.Views;
+using System;
 
 namespace Toggl.Droid.Views.Calendar
 {

@@ -1,10 +1,10 @@
-using System;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Toggl.Core.UI.Transformations;
+using System;
 using Toggl.Core.Reports;
+using Toggl.Core.UI.Transformations;
 
 namespace Toggl.Droid.ViewHolders
 {

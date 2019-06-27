@@ -1,8 +1,8 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Newtonsoft.Json;
-using Toggl.Shared;
+using System;
 using Toggl.Networking.Serialization.Converters;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Networking.Tests.Serialization

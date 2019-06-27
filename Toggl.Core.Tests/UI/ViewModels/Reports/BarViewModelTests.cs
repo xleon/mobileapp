@@ -1,9 +1,8 @@
-using System;
 using FluentAssertions;
-using FsCheck.Xunit;
+using System;
+using System.Collections.Generic;
 using Toggl.Core.UI.ViewModels.Reports;
 using Xunit;
-using System.Collections.Generic;
 
 namespace Toggl.Core.Tests.UI.ViewModels.Reports
 {

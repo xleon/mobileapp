@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using CoreAnimation;
+﻿using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using Toggl.iOS.Extensions;
+using System;
+using System.Collections.Generic;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.Extensions;
+using Toggl.iOS.Extensions;
 using Toggl.iOS.Views;
 using Toggl.iOS.Views.Calendar;
 using Toggl.Shared;

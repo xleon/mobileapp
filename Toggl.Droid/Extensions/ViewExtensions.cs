@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Android.Content;
+﻿using Android.Content;
 using Android.Views;
 using Android.Views.InputMethods;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Toggl.Droid.Extensions
 {

@@ -1,18 +1,19 @@
 ﻿using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Toggl.Networking;
-using Toggl.Networking.Network;
-using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.UI
 {
@@ -43,10 +44,6 @@ namespace Toggl.Core.UI
         internal IBackgroundSyncService MockBackgroundSyncService { get; set; }
         protected override IBackgroundSyncService CreateBackgroundSyncService()
             => MockBackgroundSyncService;
-
-        internal IBrowserService MockBrowserService { get; set; }
-        protected override IBrowserService CreateBrowserService()
-            => MockBrowserService;
 
         internal ICalendarService MockCalendarService { get; set; }
         protected override ICalendarService CreateCalendarService()
@@ -135,5 +132,9 @@ namespace Toggl.Core.UI
         internal ISyncManager MockSyncManager { get; set; }
         protected override ISyncManager CreateSyncManager()
             => MockSyncManager;
+
+        internal ITogglDataSource MockDataSource { get; set; }
+        protected override ITogglDataSource CreateDataSource()
+            => MockDataSource;
     }
 }

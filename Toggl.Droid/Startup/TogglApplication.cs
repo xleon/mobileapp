@@ -3,7 +3,6 @@ using Android.App;
 using Android.Arch.Lifecycle;
 using Android.Content;
 using Android.Runtime;
-using Android.Util;
 using Java.Interop;
 using Toggl.Core;
 using Toggl.Core.UI;

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Reactive.Disposables;
-using Foundation;
-using Toggl.iOS.Extensions;
-using UIKit;
+﻿using Foundation;
+using System;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
+using UIKit;
 
 namespace Toggl.iOS.Views
 {

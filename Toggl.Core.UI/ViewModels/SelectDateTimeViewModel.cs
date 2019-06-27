@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
@@ -20,26 +20,31 @@ namespace Toggl.Core.UI.ViewModels
         public bool Is24HoursFormat { get; private set; } = true;
         public BehaviorRelay<DateTimeOffset> CurrentDateTime { get; private set; }
 
-        public UIAction CloseCommand { get; }
-        public UIAction SaveCommand { get; }
+        public UIAction Save { get; }
 
         public SelectDateTimeViewModel(IRxActionFactory rxActionFactory, INavigationService navigationService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            SaveCommand = rxActionFactory.FromAsync(save);
-            CloseCommand = rxActionFactory.FromAsync(close);
+            Save = rxActionFactory.FromAction(save);
         }
 
         public override Task Initialize(DateTimePickerParameters dateTimePicker)
         {
+            defaultResult = dateTimePicker.CurrentDate;
+
             Mode = dateTimePicker.Mode;
             MinDate = dateTimePicker.MinDate;
             MaxDate = dateTimePicker.MaxDate;
             CurrentDateTime = new BehaviorRelay<DateTimeOffset>(dateTimePicker.CurrentDate, sanitizeBasedOnMode);
 
             return base.Initialize(dateTimePicker);
+        }
+
+        public override void CloseWithDefaultResult()
+        {
+            Close(defaultResult);
         }
 
         private DateTimeOffset sanitizeBasedOnMode(DateTimeOffset dateTime)
@@ -67,8 +72,9 @@ namespace Toggl.Core.UI.ViewModels
             return result.Clamp(MinDate, MaxDate);
         }
 
-        private Task close() => Finish(defaultResult);
-
-        private Task save() => Finish(CurrentDateTime.Value);
+        private void save()
+        {
+            Close(CurrentDateTime.Value);
+        }
     }
 }

@@ -2,11 +2,11 @@ using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Sync;
-using Toggl.Core.Tests.Sync.Helpers;
 using Toggl.Core.Tests.Sync.Exceptions;
+using Toggl.Core.Tests.Sync.Helpers;
 using Toggl.Core.Tests.Sync.State;
-using Toggl.Shared.Extensions;
 using Toggl.Networking.Tests.Integration;
+using Toggl.Shared.Extensions;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync
