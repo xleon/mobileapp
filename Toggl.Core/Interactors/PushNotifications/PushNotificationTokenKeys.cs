@@ -1,8 +1,9 @@
 namespace Toggl.Core.Interactors
 {
-    public class PushNotificationTokenKeys
+    public static class PushNotificationTokenKeys
     {
-        public static string PreviouslyRegisteredTokenKey = "PreviouslyRegisteredTokenKey";
-        public static string DateOfRegisteringPreviousTokenKey = "DateOfRegisteringPreviousTokenKey";
+        public static string PreviouslyRegisteredTokenKey { get; } = "PreviouslyRegisteredTokenKey";
+        public static string DateOfRegisteringPreviousTokenKey { get; } = "DateOfRegisteringPreviousTokenKey";
     }
 }
+

@@ -1,4 +1,4 @@
-﻿namespace Toggl.iOS
+namespace Toggl.iOS
 {
     public partial class AppDelegate
     {
