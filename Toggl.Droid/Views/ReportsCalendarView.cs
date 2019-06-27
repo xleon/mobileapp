@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using Android.Content;
 using Android.Runtime;
 using Android.Support.V4.Content;
@@ -11,6 +5,12 @@ using Android.Support.V4.View;
 using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Widget;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
@@ -194,7 +194,7 @@ namespace Toggl.Droid.Views
 
         private bool hasScrolledDown()
         {
-            var calendarViewMargins = (MarginLayoutParams) LayoutParameters;
+            var calendarViewMargins = (MarginLayoutParams)LayoutParameters;
             return calendarViewMargins.TopMargin >= 0;
         }
 

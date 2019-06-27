@@ -1,6 +1,5 @@
-﻿using System.Reactive;
-using CoreGraphics;
-using Toggl.Core;
+﻿using CoreGraphics;
+using System.Reactive;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Cells;

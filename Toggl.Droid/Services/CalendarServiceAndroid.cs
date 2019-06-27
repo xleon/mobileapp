@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Android.App;
+﻿using Android.App;
 using Android.Database;
+using System;
+using System.Collections.Generic;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.Services;
 using Toggl.Shared;
@@ -92,7 +92,7 @@ namespace Toggl.Droid.Services
         {
             var appContext = Application.Context;
 
-            var cursor = appContext.ContentResolver.Query(Instances.ContentUri, eventsProjection, $"({Instances.InterfaceConsts.Id} = ?)", new [] { id }, null);
+            var cursor = appContext.ContentResolver.Query(Instances.ContentUri, eventsProjection, $"({Instances.InterfaceConsts.Id} = ?)", new[] { id }, null);
             if (cursor.Count <= 0)
                 throw new InvalidOperationException("An invalid calendar Id was provided");
 

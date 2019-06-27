@@ -6,7 +6,7 @@ namespace Toggl.Core.DataSources
         where TThreadsafe : IThreadSafeModel
     {
         public long Id { get; }
-        
+
         public TThreadsafe Entity { get; }
 
         public EntityUpdate(long id, TThreadsafe entity)

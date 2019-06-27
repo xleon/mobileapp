@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-using Realms;
-using Toggl.Storage.Models;
+﻿using Realms;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Toggl.Storage.Models;
 
 namespace Toggl.Storage.Realm
 {

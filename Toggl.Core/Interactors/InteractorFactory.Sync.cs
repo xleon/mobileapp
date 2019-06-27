@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive;
 using Toggl.Core.Models;
-using Toggl.Core.Sync;
 
 namespace Toggl.Core.Interactors
 {

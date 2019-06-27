@@ -18,8 +18,8 @@ namespace Toggl.Core.Interactors
         private readonly IDataSource<IThreadSafeProject, IDatabaseProject> dataSource;
 
         public CreateProjectInteractor(
-            IIdProvider idProvider, 
-            ITimeService timeService,  
+            IIdProvider idProvider,
+            ITimeService timeService,
             IDataSource<IThreadSafeProject, IDatabaseProject> dataSource,
             CreateProjectDTO dto)
         {

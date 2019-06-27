@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
+using System;
+using System.Collections.Generic;
 using Toggl.Core.Analytics;
 using Xunit;
 

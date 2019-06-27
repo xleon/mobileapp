@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Reactive.Linq;
-using Toggl.Core.DataSources;
 
 namespace Toggl.Core.Interactors
 {
@@ -14,7 +13,7 @@ namespace Toggl.Core.Interactors
             this.url = url;
         }
 
-        public IObservable<byte[]> Execute() => 
+        public IObservable<byte[]> Execute() =>
             Observable.Create<byte[]>(async observer =>
             {
                 try

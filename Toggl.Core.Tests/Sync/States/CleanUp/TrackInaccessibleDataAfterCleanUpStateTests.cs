@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.Sync;
-using Toggl.Core.Sync.States;
 using Toggl.Core.Sync.States.CleanUp;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Shared.Models;
 using Toggl.Storage.Models;
 using Xunit;
 
@@ -50,7 +46,8 @@ namespace Toggl.Core.Tests.Sync.States.CleanUp
             public async Task TracksInaccessibleDataThatAreRelatedToInaccessibleWorkspaces()
             {
                 //tags
-                var tags = new[] {
+                var tags = new[]
+                {
                     new MockTag { Id = 2, Workspace = inaccessibleWorkspace, WorkspaceId = inaccessibleWorkspace.Id },
                     new MockTag { Id = 5, Workspace = accessibleWorkspace, WorkspaceId = accessibleWorkspace.Id }
                 };
@@ -64,7 +61,8 @@ namespace Toggl.Core.Tests.Sync.States.CleanUp
                     });
 
                 //tasks
-                var tasks = new[] {
+                var tasks = new[]
+                {
                     new MockTask { Id = 2, Workspace = inaccessibleWorkspace, WorkspaceId = inaccessibleWorkspace.Id },
                     new MockTask { Id = 3, Workspace = inaccessibleWorkspace, WorkspaceId = inaccessibleWorkspace.Id },
                     new MockTask { Id = 5, Workspace = accessibleWorkspace, WorkspaceId = accessibleWorkspace.Id },
@@ -80,7 +78,8 @@ namespace Toggl.Core.Tests.Sync.States.CleanUp
                     });
 
                 //timeEntries
-                var timeEntries = new[] {
+                var timeEntries = new[]
+                {
                     new MockTimeEntry { Id = 2, Workspace = inaccessibleWorkspace, WorkspaceId = inaccessibleWorkspace.Id },
                     new MockTimeEntry { Id = 5, Workspace = accessibleWorkspace, WorkspaceId = accessibleWorkspace.Id },
                     new MockTimeEntry { Id = 6, Workspace = accessibleWorkspace, WorkspaceId = accessibleWorkspace.Id }
@@ -95,7 +94,8 @@ namespace Toggl.Core.Tests.Sync.States.CleanUp
                     });
 
                 //projects
-                var projects = new[] {
+                var projects = new[]
+                {
                     new MockProject { Id = 5, Workspace = accessibleWorkspace, WorkspaceId = accessibleWorkspace.Id },
                     new MockProject { Id = 6, Workspace = accessibleWorkspace, WorkspaceId = accessibleWorkspace.Id }
                 };
@@ -109,7 +109,8 @@ namespace Toggl.Core.Tests.Sync.States.CleanUp
                     });
 
                 //clients
-                var clients = new[] {
+                var clients = new[]
+                {
                     new MockClient { Id = 2, Workspace = inaccessibleWorkspace, WorkspaceId = inaccessibleWorkspace.Id },
                     new MockClient { Id = 3, Workspace = inaccessibleWorkspace, WorkspaceId = inaccessibleWorkspace.Id },
                     new MockClient { Id = 4, Workspace = inaccessibleWorkspace, WorkspaceId = inaccessibleWorkspace.Id },
@@ -126,7 +127,8 @@ namespace Toggl.Core.Tests.Sync.States.CleanUp
                     });
 
                 //workspaces
-                var workspaces = new[] {
+                var workspaces = new[]
+                {
                     inaccessibleWorkspace,
                     accessibleWorkspace
                 };

@@ -1,5 +1,4 @@
-﻿using System;
-using Toggl.Core.Analytics;
+﻿using Toggl.Core.Analytics;
 
 namespace Toggl.Core.Tests.Sync
 {

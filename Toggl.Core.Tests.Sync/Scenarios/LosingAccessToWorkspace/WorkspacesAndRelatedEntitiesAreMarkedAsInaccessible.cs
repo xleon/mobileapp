@@ -1,6 +1,6 @@
+using FluentAssertions;
 using System;
 using System.Linq;
-using FluentAssertions;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.Sync.Extensions;

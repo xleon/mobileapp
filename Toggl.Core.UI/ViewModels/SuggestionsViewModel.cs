@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Services;
 using Toggl.Core.Suggestions;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
@@ -30,7 +32,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly ITogglDataSource dataSource;
         private readonly IRxActionFactory rxActionFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly ITimeService timeService;
@@ -46,7 +47,6 @@ namespace Toggl.Core.UI.ViewModels
         public RxAction<Suggestion, IThreadSafeTimeEntry> StartTimeEntry { get; private set; }
 
         public SuggestionsViewModel(
-            ITogglDataSource dataSource,
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
             ISchedulerProvider schedulerProvider,
@@ -60,7 +60,6 @@ namespace Toggl.Core.UI.ViewModels
             ISyncManager syncManager)
             : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
@@ -75,7 +74,6 @@ namespace Toggl.Core.UI.ViewModels
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
             this.schedulerProvider = schedulerProvider;
-            this.dataSource = dataSource;
             this.rxActionFactory = rxActionFactory;
             this.analyticsService = analyticsService;
             this.timeService = timeService;

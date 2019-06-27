@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Toggl.Core.Tests.Mocks;
+using Toggl.Networking.Helpers;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.Networking.Helpers;
 
 namespace Toggl.Core.Tests.Sync.State
 {

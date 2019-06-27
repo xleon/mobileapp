@@ -1,14 +1,14 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Toggl.Shared.Models;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Tests.Integration.BaseTests;
+using Toggl.Shared.Models;
 using Xunit;
 using TimeEntry = Toggl.Networking.Models.TimeEntry;
 

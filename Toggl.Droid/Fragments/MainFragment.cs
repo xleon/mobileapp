@@ -1,8 +1,3 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Threading;
 using Android.App;
 using Android.Graphics;
 using Android.Graphics.Drawables;
@@ -14,14 +9,18 @@ using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
 using Android.Text;
 using Android.Views;
+using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Threading;
 using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync;
 using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Core.Sync;
-using Toggl.Core.UI.Helper;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
@@ -33,7 +32,6 @@ using Toggl.Shared.Extensions;
 using static Android.Content.Context;
 using static Toggl.Core.Sync.SyncProgress;
 using static Toggl.Droid.Extensions.CircularRevealAnimation.AnimationType;
-using static Toggl.Droid.Extensions.FloatingActionButtonExtensions;
 using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Fragments
@@ -62,9 +60,15 @@ namespace Toggl.Droid.Fragments
 
             InitializeViews(view);
             setupToolbar();
-
             runningEntryCardFrame.Visibility = ViewStates.Invisible;
 
+            onCreateStopwatch.Stop();
+            return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
             stopButton.Rx().BindAction(ViewModel.StopTimeEntry, _ => TimeEntryStopOrigin.Manual).DisposedBy(DisposeBag);
 
             playButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => true).DisposedBy(DisposeBag);
@@ -215,14 +219,11 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             setupOnboardingSteps();
-            onCreateStopwatch.Stop();
-
-            return view;
         }
 
         public void ScrollToTop()
         {
-            mainRecyclerView.SmoothScrollToPosition(0);
+            mainRecyclerView?.SmoothScrollToPosition(0);
         }
 
         public ISpannable CreateProjectClientTaskLabel(IThreadSafeTimeEntry te)
@@ -281,8 +282,10 @@ namespace Toggl.Droid.Fragments
         {
             switch (syncProgress)
             {
-                case Failed:
                 case Unknown:
+                    return;
+
+                case Failed:
                 case OfflineModeDetected:
 
                     var errorMessage = syncProgress == OfflineModeDetected

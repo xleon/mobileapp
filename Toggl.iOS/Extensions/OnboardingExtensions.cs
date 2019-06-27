@@ -1,16 +1,16 @@
-﻿using System;
+﻿using CoreFoundation;
 using CoreGraphics;
-using Toggl.Storage.Onboarding;
-using UIKit;
-using Toggl.Core.UI.Helper;
-using Toggl.Storage.Settings;
-using Toggl.Storage.Extensions;
-using System.Reactive.Linq;
-using static System.Math;
+using System;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading;
+using Toggl.Core.UI.Helper;
 using Toggl.iOS.Views;
-using CoreFoundation;
+using Toggl.Storage.Extensions;
+using Toggl.Storage.Onboarding;
+using Toggl.Storage.Settings;
+using UIKit;
+using static System.Math;
 
 namespace Toggl.iOS.Extensions
 {

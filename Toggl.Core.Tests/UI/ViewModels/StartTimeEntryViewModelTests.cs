@@ -1,4 +1,9 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -7,11 +12,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Span;
@@ -20,19 +20,19 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Interactors.AutocompleteSuggestions;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
-using Toggl.Core.Tests.Generators;
-using Toggl.Core.Tests.Mocks;
-using Toggl.Core.Tests.TestExtensions;
 using Toggl.Shared;
 using Xunit;
 using static Toggl.Core.Helper.Constants;
-using TextFieldInfo = Toggl.Core.Autocomplete.TextFieldInfo;
-using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 using CollectionSections = System.Collections.Generic.IEnumerable<Toggl.Core.UI.Collections.SectionModel<string, Toggl.Core.Autocomplete.Suggestions.AutocompleteSuggestion>>;
+using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
+using TextFieldInfo = Toggl.Core.Autocomplete.TextFieldInfo;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -698,21 +698,21 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheBackAction : StartTimeEntryViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : StartTimeEntryViewModelTest
         {
-            public TheBackAction()
+            public TheCloseWithDefaultResultMethod()
             {
                 var parameter = StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now);
                 ViewModel.Initialize(parameter);
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModelIfUserDoesNotChangeAnything()
+            public void ClosesTheViewModelIfUserDoesNotChangeAnything()
             {
-                ViewModel.Close.Execute(Unit.Default);
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -720,42 +720,42 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 makeDirty();
 
-                ViewModel.Close.Execute(Unit.Default);
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
                 await View.Received().ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
             }
 
             [Fact, LogIfTooSlow]
-            public async Task DoesNotCloseTheViewIfUserWantsToContinueEditing()
+            public void DoesNotCloseTheViewIfUserWantsToContinueEditing()
             {
                 makeDirty();
                 View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
                     .Returns(_ => Observable.Return(false));
 
-                ViewModel.Close.Execute(Unit.Default);
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                await View.DidNotReceive().Close();
+                View.DidNotReceive().Close();
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewIfUserWantsToDiscardTheEnteredInformation()
+            public void ClosesTheViewIfUserWantsToDiscardTheEnteredInformation()
             {
                 makeDirty();
                 View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry)
                     .Returns(_ => Observable.Return(true));
 
-                ViewModel.Close.Execute(Unit.Default);
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
-            public async Task DoesNotCallTheAnalyticsServiceSinceNoTimeEntryWasCreated()
+            public void DoesNotCallTheAnalyticsServiceSinceNoTimeEntryWasCreated()
             {
-                ViewModel.Close.Execute(Unit.Default);
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
                 AnalyticsService.DidNotReceive().Track(Arg.Any<StartTimeEntryEvent>());
@@ -971,7 +971,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Suggestions.Subscribe();
 
                 ViewModel.Initialize(DefaultParameter);
-                ViewModel.SetTextSpans.Execute( new List<ISpan> { new QueryTextSpan(description, description.Length) });
+                ViewModel.SetTextSpans.Execute(new List<ISpan> { new QueryTextSpan(description, description.Length) });
 
                 ViewModel.ToggleProjectSuggestions.Execute();
 
@@ -1358,7 +1358,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Done.Execute(Unit.Default);
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                View.Received().Close();
             }
         }
 
@@ -1472,10 +1472,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 public void SetsTheAppropriateBillableValue(bool billableValue)
                 {
                     var isBillableObserver = TestScheduler.CreateObserver<bool>();
-                    var IsBillableAvailableObserver = TestScheduler.CreateObserver<bool>();
+                    var isBillableAvailableObserver = TestScheduler.CreateObserver<bool>();
                     ViewModel.Suggestions.Subscribe();
                     ViewModel.IsBillable.Subscribe(isBillableObserver);
-                    ViewModel.IsBillableAvailable.Subscribe(IsBillableAvailableObserver);
+                    ViewModel.IsBillableAvailable.Subscribe(isBillableAvailableObserver);
 
                     InteractorFactory.GetWorkspaceById(WorkspaceId).Execute().Returns(Observable.Return(Workspace));
                     InteractorFactory.IsBillableAvailableForProject(ProjectId).Execute()
@@ -1487,7 +1487,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     TestScheduler.Start();
 
                     isBillableObserver.LastEmittedValue().Should().Be(billableValue);
-                    IsBillableAvailableObserver.LastEmittedValue().Should().BeTrue();
+                    isBillableAvailableObserver.LastEmittedValue().Should().BeTrue();
                 }
 
                 [Theory, LogIfTooSlow]
@@ -1497,9 +1497,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 public async Task DisablesBillableIfTheWorkspaceOfTheSelectedProjectDoesNotAllowIt(bool? billableValue)
                 {
                     var isBillableObserver = TestScheduler.CreateObserver<bool>();
-                    var IsBillableAvailableObserver = TestScheduler.CreateObserver<bool>();
+                    var isBillableAvailableObserver = TestScheduler.CreateObserver<bool>();
                     ViewModel.IsBillable.Subscribe(isBillableObserver);
-                    ViewModel.IsBillableAvailable.Subscribe(IsBillableAvailableObserver);
+                    ViewModel.IsBillableAvailable.Subscribe(isBillableAvailableObserver);
 
                     Project.Billable.Returns(billableValue);
                     InteractorFactory.GetProjectById(ProjectId).Execute().Returns(Observable.Return(Project));
@@ -1513,7 +1513,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     TestScheduler.Start();
                     isBillableObserver.LastEmittedValue().Should().BeFalse();
-                    IsBillableAvailableObserver.LastEmittedValue().Should().BeFalse();
+                    isBillableAvailableObserver.LastEmittedValue().Should().BeFalse();
                 }
             }
 
@@ -1697,10 +1697,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     var noProjectSuggestion = ProjectSuggestion.NoProject(WorkspaceId, Workspace.Name);
                     var isBillableObserver = TestScheduler.CreateObserver<bool>();
-                    var IsBillableAvailableObserver = TestScheduler.CreateObserver<bool>();
+                    var isBillableAvailableObserver = TestScheduler.CreateObserver<bool>();
                     ViewModel.Suggestions.Subscribe();
                     ViewModel.IsBillable.Subscribe(isBillableObserver);
-                    ViewModel.IsBillableAvailable.Subscribe(IsBillableAvailableObserver);
+                    ViewModel.IsBillableAvailable.Subscribe(isBillableAvailableObserver);
                     InteractorFactory
                         .IsBillableAvailableForWorkspace(WorkspaceId)
                         .Execute()
@@ -1710,7 +1710,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     TestScheduler.Start();
 
                     isBillableObserver.LastEmittedValue().Should().BeFalse();
-                    IsBillableAvailableObserver.LastEmittedValue().Should().Be(isBillableAvailable);
+                    isBillableAvailableObserver.LastEmittedValue().Should().Be(isBillableAvailable);
                 }
 
                 [Fact, LogIfTooSlow]

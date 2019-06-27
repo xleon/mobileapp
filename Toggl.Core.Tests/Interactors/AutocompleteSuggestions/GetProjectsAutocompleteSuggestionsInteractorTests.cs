@@ -1,11 +1,10 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Autocomplete.Suggestions;
-using Toggl.Core.DataSources;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Interactors.AutocompleteSuggestions;
 using Toggl.Core.Models.Interfaces;
@@ -17,7 +16,7 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
 {
     public sealed class GetProjectsAutocompleteSuggestionsInteractorTests : BaseAutocompleteSuggestionsInteractorTest
     {
-        private readonly IDataSource<IThreadSafeProject, IDatabaseProject> dataSource = 
+        private readonly IDataSource<IThreadSafeProject, IDatabaseProject> dataSource =
             Substitute.For<IDataSource<IThreadSafeProject, IDatabaseProject>>();
 
         public GetProjectsAutocompleteSuggestionsInteractorTests()
@@ -87,7 +86,7 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
         {
             var interactor = new GetProjectsAutocompleteSuggestions(dataSource, new string[0]);
 
-            var suggestions = await interactor.Execute().SelectMany(s => s).ToList();
+            var suggestions = await interactor.Execute().Flatten().ToList();
 
             suggestions
                 .Select(s => ((ProjectSuggestion)s).ProjectId)

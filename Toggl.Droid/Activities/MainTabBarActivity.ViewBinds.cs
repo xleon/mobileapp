@@ -1,5 +1,4 @@
-﻿using System;
-using Android.Support.Design.Widget;
+﻿using Android.Support.Design.Widget;
 
 namespace Toggl.Droid.Activities
 {

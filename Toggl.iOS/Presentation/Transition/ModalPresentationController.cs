@@ -1,12 +1,11 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CoreGraphics;
-using Foundation;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.ViewControllers;
-using Toggl.Shared;
 using UIKit;
 using static System.Math;
 
@@ -242,8 +241,9 @@ namespace Toggl.iOS.Presentation.Transition
                     break;
                 case UIGestureRecognizerState.Ended:
                 case UIGestureRecognizerState.Cancelled:
-                    if (percent > impactThreshold && await dismiss())
+                    if (percent > impactThreshold)
                     {
+                        dismiss();
                         feedbackGenerator.ImpactOccurred();
                     }
                     else
@@ -254,19 +254,15 @@ namespace Toggl.iOS.Presentation.Transition
             }
         }
 
-        private async Task<bool> dismiss()
+        private void dismiss()
         {
-            if (PresentedViewController is IDismissableViewController dismissableViewController)
+            if (PresentedViewController is IReactiveViewController reactiveViewController)
             {
-                if (await dismissableViewController.Dismiss() == false)
-                    return false;
-            }
-            else
-            {
-                PresentedViewController.DismissViewController(true, null);
+                reactiveViewController.DismissFromNavigationController();
+                return;
             }
 
-            return true;
+            PresentedViewController.DismissViewController(true, null);
         }
 
         private void resetPosition(UIGestureRecognizer recognizer)

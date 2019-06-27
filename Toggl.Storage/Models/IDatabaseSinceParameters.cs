@@ -1,5 +1,5 @@
-﻿﻿using System;
- using Toggl.Shared.Models;
+﻿using System;
+using Toggl.Shared.Models;
 
 namespace Toggl.Storage.Models
 {

@@ -5,8 +5,8 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Shared.Models;
 using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 using Toggl.Storage;
 
 namespace Toggl.Core.DataSources
@@ -22,11 +22,11 @@ namespace Toggl.Core.DataSources
 
         public IObservable<long> Deleted { get; }
 
-        protected readonly Subject<long> DeletedSubject = new Subject<long>();
+        protected Subject<long> DeletedSubject { get; } = new Subject<long>();
 
-        protected readonly Subject<TThreadsafe> CreatedSubject = new Subject<TThreadsafe>();
+        protected Subject<TThreadsafe> CreatedSubject { get; } = new Subject<TThreadsafe>();
 
-        protected readonly Subject<EntityUpdate<TThreadsafe>> UpdatedSubject = new Subject<EntityUpdate<TThreadsafe>>();
+        protected Subject<EntityUpdate<TThreadsafe>> UpdatedSubject { get; } = new Subject<EntityUpdate<TThreadsafe>>();
 
         protected ObservableDataSource(IRepository<TDatabase> repository)
             : base(repository)

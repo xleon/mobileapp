@@ -1,16 +1,16 @@
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.Sync.Extensions;
 using Toggl.Core.Tests.Sync.Helpers;
+using Toggl.Networking.Helpers;
+using Toggl.Networking.Tests.Integration;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
-using Toggl.Networking.Helpers;
-using Toggl.Networking.Tests.Integration;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync.Scenarios.ServerHelper

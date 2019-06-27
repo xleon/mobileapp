@@ -1,5 +1,4 @@
-﻿using Com.Google.Firebase.Perf;
-using Com.Google.Firebase.Perf.Metrics;
+﻿using Com.Google.Firebase.Perf.Metrics;
 using Toggl.Core.Diagnostics;
 
 namespace Toggl.Droid.Services
@@ -19,23 +18,23 @@ namespace Toggl.Droid.Services
             {
                 Operation = operation;
 
-                #if USE_ANALYTICS
+#if USE_ANALYTICS
                 firebaseTrace = FirebasePerformance.Instance.NewTrace(operation.ToString());
-                #endif
+#endif
             }
 
             public void Start()
             {
-                #if USE_ANALYTICS
+#if USE_ANALYTICS
                 firebaseTrace.Start();
-                #endif
+#endif
             }
 
             public void Stop()
             {
-                #if USE_ANALYTICS
+#if USE_ANALYTICS
                 firebaseTrace.Stop();
-                #endif
+#endif
             }
         }
     }

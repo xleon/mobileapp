@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Immutable;
-using System.Collections.Specialized;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using Android.Content.Res;
-using Android.Runtime;
+﻿using Android.Runtime;
+using Android.Support.Constraints;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Suggestions;
-using Toggl.Droid.Adapters;
-using Toggl.Droid.Extensions;
-using Toggl.Droid.Extensions.Reactive;
-using Toggl.Droid.ViewHelpers;
-using Toggl.Shared.Extensions;
+using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Extensions;
-using System.Reactive;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Droid.Extensions.Reactive;
+using Toggl.Shared.Extensions;
 using static Toggl.Shared.Extensions.CommonFunctions;
-using Android.Support.Constraints;
 
 namespace Toggl.Droid.ViewHolders
 {

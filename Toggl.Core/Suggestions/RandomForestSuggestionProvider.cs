@@ -153,7 +153,7 @@ namespace Toggl.Core.Suggestions
 
             for (int i = 0; i < rowLength; i++)
             {
-                var newRow = new List<Double>();
+                var newRow = new List<double>();
                 for (int j = 0; j < colLength; j++)
                 {
                     if (!indexesWithSameValues[j])

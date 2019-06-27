@@ -14,8 +14,6 @@
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.22</string>
 	<key>CFBundleVersion</key>
 	<string>IOS_BUNDLE_VERSION</string>
 	<key>MinimumOSVersion</key>
@@ -41,5 +39,7 @@
 		<key>NSExtensionPrincipalClass</key>
 		<string>IntentHandler</string>
 	</dict>
+	<key>CFBundleShortVersionString</key>
+	<string>2.0.1</string>
 </dict>
 </plist>

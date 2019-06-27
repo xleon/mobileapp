@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using FluentAssertions;
+using System.Linq;
 using System.Reflection;
-using FluentAssertions;
 using Toggl.Core.Analytics;
 using Toggl.Shared.Extensions;
 using Xunit;

@@ -5,10 +5,10 @@ using Toggl.Core.Analytics;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Networking.ApiClients.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.Storage;
-using Toggl.Networking.ApiClients.Interfaces;
 using static Toggl.Core.Sync.PushSyncOperation;
 
 namespace Toggl.Core.Sync.States.Push

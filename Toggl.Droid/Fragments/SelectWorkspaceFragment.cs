@@ -26,7 +26,7 @@ namespace Toggl.Droid.Fragments
                 Resource.Layout.SelectWorkspaceFragmentCell,
                 SelectWorkspaceViewHolder.Create
             );
-            
+
             adapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectWorkspace.Inputs)
                 .DisposedBy(DisposeBag);

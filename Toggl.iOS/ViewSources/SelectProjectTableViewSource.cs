@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Foundation;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.Helper;
 using Toggl.iOS.Views.EntityCreation;
 using Toggl.iOS.Views.StartTimeEntry;
 using Toggl.Shared.Extensions;

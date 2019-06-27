@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
+using System;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.Interactors;
 using Toggl.Core.Tests.Generators;
 using Xunit;
-using Notification = Toggl.Shared.Notification;
 using SyncOutcome = Toggl.Core.Models.SyncOutcome;
 using SyncState = Toggl.Core.Sync.SyncState;
 

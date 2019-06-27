@@ -1,4 +1,7 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,25 +10,21 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Shared.Models;
 using Toggl.Storage;
 using Xunit;
 using static Toggl.Core.Helper.Constants;
@@ -57,7 +56,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     StopwatchProvider,
                     RxActionFactory,
                     PermissionsChecker,
-                    BackgroundService);
+                    BackgroundService,
+                    PlatformInfo);
 
                 vm.Initialize();
 
@@ -107,7 +107,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useStopwatchProvider,
                 bool useRxActionFactory,
                 bool usePermissionsChecker,
-                bool useBackgroundService)
+                bool useBackgroundService,
+                bool usePlatformInfo)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
@@ -125,6 +126,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var permissionsChecker = usePermissionsChecker ? PermissionsChecker : null;
                 var backgroundService = useBackgroundService ? BackgroundService : null;
+                var platformInfo = usePlatformInfo ? PlatformInfo : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -143,7 +145,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         stopwatchProvider,
                         rxActionFactory,
                         permissionsChecker,
-                        backgroundService);
+                        backgroundService,
+                        platformInfo);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -224,6 +227,18 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await ThreadingTask.Delay(200);
 
                 await NavigationService.Received(1).Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask DoesNotNavigateToSelectDefaultWorkspaceViewModelWhenTheresNoWorkspaceAvaialable()
+            {
+                AccessRestrictionStorage.HasNoWorkspace().Returns(true);
+                AccessRestrictionStorage.HasNoDefaultWorkspace().Returns(true);
+
+                await ViewModel.ViewAppearingAsync();
+
+                await NavigationService.Received().Navigate<NoWorkspaceViewModel, Unit>(View);
+                await NavigationService.DidNotReceive().Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
         }
 
@@ -842,6 +857,27 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     TestScheduler.Start();
                     observer.LastEmittedValue().Should().BeFalse();
+                }
+
+                [Theory, LogIfTooSlow]
+                [InlineData(ApplicationInstallLocation.Internal, Platform.Giskard, true)]
+                [InlineData(ApplicationInstallLocation.External, Platform.Giskard, true)]
+                [InlineData(ApplicationInstallLocation.Unknown, Platform.Giskard, true)]
+                [InlineData(ApplicationInstallLocation.Internal, Platform.Daneel, false)]
+                [InlineData(ApplicationInstallLocation.External, Platform.Daneel, false)]
+                [InlineData(ApplicationInstallLocation.Unknown, Platform.Daneel, false)]
+                public async void TracksApplicationInstallLocation(ApplicationInstallLocation location, Platform platform, bool shouldTrack)
+                {
+                    PlatformInfo.InstallLocation.Returns(location);
+                    PlatformInfo.Platform.Returns(platform);
+
+                    await ViewModel.Initialize();
+                    TestScheduler.Start();
+
+                    if (shouldTrack)
+                        AnalyticsService.ApplicationInstallLocation.Received().Track(location);
+                    else
+                        AnalyticsService.ApplicationInstallLocation.DidNotReceive().Track(location);
                 }
             }
         }

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using Android.App;
+﻿using Android.App;
 using Android.App.Job;
 using Android.Content;
 using Android.Graphics;
 using Android.Support.V4.App;
 using Android.Util;
 using Android.Views;
-using Toggl.Core.UI.Services;
+using System;
+using System.Collections.Generic;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Helper;
 using Toggl.Droid.Services;
@@ -152,7 +151,7 @@ namespace Toggl.Droid.Extensions
                 return Disposable.Empty;
             });
         }
-        
+
         public static IObservable<T> ShowSelectionDialog<T>(this Activity activity, string title, IEnumerable<SelectOption<T>> options, int initialSelectionIndex = 0)
         {
             return Observable.Create<T>(observer =>

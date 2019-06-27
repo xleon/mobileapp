@@ -1,22 +1,20 @@
+using Android.Support.V7.Widget;
+using Android.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Android.Support.V7.Widget;
-using Android.Views;
+using Toggl.Core;
+using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
-using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Droid.Extensions;
+using Toggl.Droid.ViewHelpers;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
-using Toggl.Core;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Droid.ViewHelpers;
-using System.Reactive.Disposables;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
-using Toggl.Core.Analytics;
 
 namespace Toggl.Droid.Adapters
 {

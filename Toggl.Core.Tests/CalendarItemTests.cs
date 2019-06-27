@@ -1,10 +1,10 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck.Xunit;
+using System;
 using Toggl.Core.Calendar;
 using Toggl.Core.Helper;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.Tests.Mocks;
+using Toggl.Core.UI.Extensions;
 using Toggl.Shared;
 using Toggl.Storage;
 using Xunit;

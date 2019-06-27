@@ -7,25 +7,23 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Views;
 using Toggl.Core.Reports;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Views;
+using Toggl.Networking.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models.Reports;
-using Toggl.Networking.Exceptions;
-using CommonFunctions = Toggl.Shared.Extensions.CommonFunctions;
 using Colors = Toggl.Core.UI.Helper.Colors;
 
 namespace Toggl.Core.UI.ViewModels.Reports
@@ -207,10 +205,10 @@ namespace Toggl.Core.UI.ViewModels.Reports
             reportSubject
                 .AsObservable()
                 .Do(setLoadingState)
-                .SelectMany( _ =>
-                    startDate == default(DateTimeOffset) || endDate == default(DateTimeOffset)
-                        ? Observable.Empty<ProjectSummaryReport>()
-                        : interactorFactory.GetProjectSummary(workspaceId, startDate, endDate).Execute())
+                .SelectMany(_ =>
+                   startDate == default(DateTimeOffset) || endDate == default(DateTimeOffset)
+                       ? Observable.Empty<ProjectSummaryReport>()
+                       : interactorFactory.GetProjectSummary(workspaceId, startDate, endDate).Execute())
                 .Catch(Observable.Return<ProjectSummaryReport>(null))
                 .Subscribe(onReport)
                 .DisposedBy(disposeBag);
@@ -385,12 +383,12 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             var aboveStandAloneThresholdSegments = groupedData
                 .Where(group => group.Key)
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .ToList();
 
             var otherProjectsCandidates = groupedData
                 .Where(group => !group.Key)
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .ToList();
 
             var finalOtherProjects = otherProjectsCandidates

@@ -1,9 +1,9 @@
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
-using FluentAssertions;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.Tests.Mocks;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

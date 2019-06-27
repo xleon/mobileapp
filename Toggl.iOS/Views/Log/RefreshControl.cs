@@ -1,20 +1,19 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using CoreGraphics;
-using Foundation;
-using Toggl.Core;
-using Toggl.Core.UI.Helper;
 using Toggl.Core.Sync;
-using Toggl.Shared.Extensions;
-using UIKit;
-using static Toggl.iOS.Extensions.TextExtensions;
+using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Views;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using UIKit;
+using static Toggl.iOS.Extensions.TextExtensions;
 
 namespace Toggl.iOS.ViewSources
 {

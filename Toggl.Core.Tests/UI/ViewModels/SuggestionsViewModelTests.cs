@@ -1,29 +1,26 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Interactors;
-using Toggl.Core.UI.ViewModels;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Generators;
-using Xunit;
-using TimeEntry = Toggl.Core.Models.TimeEntry;
-using Toggl.Core.Models.Interfaces;
-using Toggl.Core.DataSources;
-using System.Reactive.Subjects;
-using Toggl.Core.UI.Extensions;
-using Toggl.Shared.Extensions;
 using Toggl.Core.Tests.TestExtensions;
+using Xunit;
 using System.Collections.Immutable;
 using Toggl.Core.Analytics;
 using System.Collections.Generic;
 using Toggl.Core.Sync;
+using Toggl.Core.UI.ViewModels;
 using static Toggl.Core.Analytics.CalendarSuggestionProviderState;
 using static Toggl.Core.Analytics.SuggestionsPresentedEvent;
+using TimeEntry = Toggl.Core.Models.TimeEntry;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -32,7 +29,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class SuggestionsViewModelTest : BaseViewModelTests<SuggestionsViewModel>
         {
             protected override SuggestionsViewModel CreateViewModel()
-                => new SuggestionsViewModel(DataSource, InteractorFactory, OnboardingStorage, SchedulerProvider, RxActionFactory, AnalyticsService, TimeService, PermissionsChecker, NavigationService, BackgroundService, UserPreferences, SyncManager);
+                => new SuggestionsViewModel(InteractorFactory, OnboardingStorage, SchedulerProvider, RxActionFactory, AnalyticsService, TimeService, PermissionsChecker, NavigationService, BackgroundService, UserPreferences, SyncManager);
 
             protected override void AdditionalViewModelSetup()
             {
@@ -48,7 +45,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Theory, LogIfTooSlow]
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
-                bool useDataSource,
                 bool useOnboardingStorage,
                 bool useInteractorFactory,
                 bool useSchedulerProvider,
@@ -61,7 +57,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useUserPreferences,
                 bool useSyncManager)
             {
-                var dataSource = useDataSource ? DataSource : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
@@ -75,7 +70,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var syncManager = useSyncManager ? SyncManager : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager);
+                    () => new SuggestionsViewModel(interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -242,7 +237,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 long workspaceA, long workspaceB, long workspaceC, int distinctWorkspacesCount)
             {
                 var sameDescription = "Description";
-                var suggestions = new[] {
+                var suggestions = new[]
+                {
                     createSuggestionWithWorkspace(workspaceA, sameDescription, 100, 1000),
                     createSuggestionWithWorkspace(workspaceB, sameDescription, 100, 1000),
                     createSuggestionWithWorkspace(workspaceC, sameDescription, 100, 1000),
@@ -261,7 +257,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             private Suggestion[] prepareSuggestionsForSuggestionsPresentedEvent(bool hasCalendarSuggestions = true)
             {
-                var suggestions = new[] {
+                var suggestions = new[]
+                {
                     createDefaultSuggestionFor(SuggestionProviderType.MostUsedTimeEntries),
                     createDefaultSuggestionFor(SuggestionProviderType.MostUsedTimeEntries),
                     createDefaultSuggestionFor(SuggestionProviderType.RandomForest),
@@ -269,7 +266,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 if (hasCalendarSuggestions)
                 {
-                    suggestions = suggestions.Concat(new[] {
+                    suggestions = suggestions.Concat(new[]
+                    {
                         createDefaultSuggestionFor(SuggestionProviderType.Calendar),
                         createDefaultSuggestionFor(SuggestionProviderType.Calendar),
                         createDefaultSuggestionFor(SuggestionProviderType.Calendar),

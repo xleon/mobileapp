@@ -1,10 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
+﻿using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.ViewHolders;
@@ -36,7 +38,7 @@ namespace Toggl.Droid.Fragments
                 Resource.Layout.SelectDefaultWorkspaceFragmentCell,
                 SelectDefaultWorkspaceViewHolder.Create
             );
-            adapter.Items = ViewModel.Workspaces.ToList();
+            adapter.Items = ViewModel.Workspaces?.ToList() ?? new List<SelectableWorkspaceViewModel>();
             adapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectWorkspace.Inputs)
                 .DisposedBy(DisposeBag);

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.Views;
@@ -12,9 +11,10 @@ namespace Toggl.iOS.Presentation
     {
         protected override HashSet<Type> AcceptedViewModels { get; } = new HashSet<Type>
         {
-            typeof(BrowserViewModel),
+            typeof(AboutViewModel),
             typeof(CalendarSettingsViewModel),
             typeof(ForgotPasswordViewModel),
+            typeof(LicensesViewModel),
             typeof(NotificationSettingsViewModel),
             typeof(SettingsViewModel),
             typeof(SiriShortcutsCustomTimeEntryViewModel),

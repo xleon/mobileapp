@@ -1,9 +1,9 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.Core.UI.ViewModels;
-using UIKit;
-using Toggl.iOS.Extensions;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
+using UIKit;
 
 namespace Toggl.iOS.Views
 {

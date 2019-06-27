@@ -1,9 +1,9 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
@@ -45,8 +45,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var licenseProvider = useLicenseProvider ? LicenseProvider : null;
                 var navigationService = useNavigationService ? NavigationService : null;
 
-               Action tryingToConstructWithEmptyParameters =
-                    () => new LicensesViewModel(licenseProvider, navigationService);
+                Action tryingToConstructWithEmptyParameters =
+                     () => new LicensesViewModel(licenseProvider, navigationService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();

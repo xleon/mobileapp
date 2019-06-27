@@ -1,5 +1,4 @@
-﻿using System;
-using Toggl.Core.UI.Interfaces;
+﻿using Toggl.Core.UI.Interfaces;
 
 namespace Toggl.Core.UI.ViewModels.Calendar
 {

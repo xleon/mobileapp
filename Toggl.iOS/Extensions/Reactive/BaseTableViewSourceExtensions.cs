@@ -1,6 +1,6 @@
+using CoreGraphics;
 using System;
 using System.Reactive.Linq;
-using CoreGraphics;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Reactive;
 using Toggl.iOS.ViewSources;

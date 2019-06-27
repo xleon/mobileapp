@@ -1,17 +1,16 @@
 using Microsoft.Reactive.Testing;
 using NSubstitute;
+using System.Reactive;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Login;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
-using Toggl.Storage;
-using Toggl.Storage.Settings;
-using Toggl.Networking;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
-using System.Reactive;
+using Toggl.Networking;
+using Toggl.Storage;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -24,7 +23,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
         protected ISyncManager SyncManager { get; } = Substitute.For<ISyncManager>();
         protected IUserAccessManager UserAccessManager { get; } = Substitute.For<IUserAccessManager>();
         protected IRatingService RatingService { get; } = Substitute.For<IRatingService>();
-        protected IBrowserService BrowserService { get; } = Substitute.For<IBrowserService>();
         protected ILicenseProvider LicenseProvider { get; } = Substitute.For<ILicenseProvider>();
         protected IBackgroundService BackgroundService { get; } = Substitute.For<IBackgroundService>();
         protected IPlatformInfo PlatformInfo { get; } = Substitute.For<IPlatformInfo>();

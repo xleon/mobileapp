@@ -1,11 +1,11 @@
-﻿using System;
-using System.Globalization;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck;
-using Toggl.Core.UI.Transformations;
-using Xunit;
 using FsCheck.Xunit;
+using System;
+using System.Globalization;
+using Toggl.Core.UI.Transformations;
 using Toggl.Shared;
+using Xunit;
 
 namespace Toggl.Core.Tests.UI.Transformations
 {

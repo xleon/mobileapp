@@ -2,7 +2,6 @@
 using System.Reactive.Linq;
 using Toggl.Shared;
 using Toggl.Storage.Onboarding;
-using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.Onboarding.MainView
 {

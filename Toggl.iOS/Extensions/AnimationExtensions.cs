@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading;
-using CoreAnimation;
+﻿using CoreAnimation;
 using CoreGraphics;
+using System;
+using System.Threading;
 using UIKit;
 using static Toggl.Core.UI.Helper.Animation;
 

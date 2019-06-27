@@ -15,7 +15,7 @@ namespace Toggl.Core.Autocomplete
         private const int minimumQueryLength = 2;
 
         private static QueryInfo emptyQueryInfo
-            => new QueryInfo(String.Empty, AutocompleteSuggestionType.None);
+            => new QueryInfo(string.Empty, AutocompleteSuggestionType.None);
 
         public QueryInfo(string text, AutocompleteSuggestionType suggestionType)
         {
@@ -38,7 +38,7 @@ namespace Toggl.Core.Autocomplete
             var validQuerySymbols = info.ValidQuerySymbols();
             var text = span.Text;
 
-            var possibleIndexOfQuerySymbol = 
+            var possibleIndexOfQuerySymbol =
                 text.Substring(0, span.CursorPosition)
                     .Select((character, index) => ((int?)index, character))
                     .Where(tuple => validQuerySymbols.Contains(tuple.Item2))
@@ -46,7 +46,7 @@ namespace Toggl.Core.Autocomplete
                     .FirstOrDefault(querySymbolIndex =>
                     {
                         var previousIndex = querySymbolIndex.Value - 1;
-                        var isValidSymbolIndex = previousIndex < 0 || Char.IsWhiteSpace(text[previousIndex]);
+                        var isValidSymbolIndex = previousIndex < 0 || char.IsWhiteSpace(text[previousIndex]);
 
                         return isValidSymbolIndex;
                     });

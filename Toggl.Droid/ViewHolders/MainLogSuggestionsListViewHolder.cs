@@ -6,8 +6,12 @@ using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using Toggl.Core.UI.ViewModels;
+using System;
+using System.Collections.Immutable;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Toggl.Core.Suggestions;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
@@ -47,7 +51,7 @@ namespace Toggl.Droid.ViewHolders
             adapter.ItemTapObservable
                 .Subscribe(suggestionsViewModel.StartTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
-         
+
             suggestionsViewModel.Suggestions
                 .Select(Enumerable.ToList)
                 .Subscribe(adapter.Rx().Items())

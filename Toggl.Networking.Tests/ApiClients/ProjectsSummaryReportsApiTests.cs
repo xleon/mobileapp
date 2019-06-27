@@ -1,11 +1,11 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
-using Toggl.Networking.Network;
 using Toggl.Networking.ApiClients;
+using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
 using Xunit;
 

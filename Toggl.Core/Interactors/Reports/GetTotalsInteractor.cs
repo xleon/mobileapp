@@ -1,7 +1,7 @@
 using System;
+using Toggl.Networking.ApiClients.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Models.Reports;
-using Toggl.Networking.ApiClients.Interfaces;
 
 namespace Toggl.Core.Interactors.Reports
 {

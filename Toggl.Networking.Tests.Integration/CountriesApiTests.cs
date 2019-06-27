@@ -1,7 +1,7 @@
-﻿using System.Reactive.Linq;
-using FluentAssertions;
-using Toggl.Networking.Network;
+﻿using FluentAssertions;
+using System.Reactive.Linq;
 using Toggl.Networking.Models;
+using Toggl.Networking.Network;
 using Toggl.Networking.Tests.Integration.BaseTests;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;

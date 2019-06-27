@@ -1,18 +1,18 @@
-using System;
-using System.Reactive.Linq;
 using Android.OS;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using System;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using Toggl.Core.Calendar;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Droid.Adapters.Calendar;
+using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Presentation;
 using Toggl.Droid.Views.Calendar;
-using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
-using System.Linq;
-using Toggl.Core.Calendar;
-using System.Reactive;
 
 namespace Toggl.Droid.Fragments
 {
@@ -24,6 +24,12 @@ namespace Toggl.Droid.Fragments
         {
             var view = inflater.Inflate(Resource.Layout.CalendarFragment, container, false);
             InitializeViews(view);
+            return view;
+        }
+
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
 
             var timeService = AndroidDependencyContainer.Instance.TimeService;
             var schedulerProvider = AndroidDependencyContainer.Instance.SchedulerProvider;
@@ -90,13 +96,11 @@ namespace Toggl.Droid.Fragments
             ViewModel.ShouldShowOnboarding
                 .Subscribe(onboardingVisibilityChanged)
                 .DisposedBy(DisposeBag);
-
-            return view;
         }
 
         public void ScrollToTop()
         {
-            calendarRecyclerView.SmoothScrollToPosition(0);
+            calendarRecyclerView?.SmoothScrollToPosition(0);
         }
 
         private void onboardingVisibilityChanged(bool visible)

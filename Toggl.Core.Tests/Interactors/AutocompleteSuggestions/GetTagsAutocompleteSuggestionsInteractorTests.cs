@@ -1,8 +1,8 @@
-﻿using System.Linq;
+﻿using FluentAssertions;
+using NSubstitute;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Interactors.AutocompleteSuggestions;
@@ -14,7 +14,7 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
 {
     public sealed class GetTagsAutocompleteSuggestionsInteractorTests : BaseAutocompleteSuggestionsInteractorTest
     {
-        private readonly IDataSource<IThreadSafeTag, IDatabaseTag> dataSource = 
+        private readonly IDataSource<IThreadSafeTag, IDatabaseTag> dataSource =
             Substitute.For<IDataSource<IThreadSafeTag, IDatabaseTag>>();
 
         public GetTagsAutocompleteSuggestionsInteractorTests()

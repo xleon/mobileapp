@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using Toggl.Core.Autocomplete;
+using Toggl.Core.Autocomplete.Span;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Collections;
-using Toggl.Core.Autocomplete;
-using System.Collections.Immutable;
-using Toggl.Core.Autocomplete.Span;
 
 namespace Toggl.Core.UI.Extensions
 {

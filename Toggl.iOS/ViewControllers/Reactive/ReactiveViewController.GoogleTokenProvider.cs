@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Foundation;
+using Google.SignIn;
+using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Foundation;
-using Google.SignIn;
 using Toggl.Core.Exceptions;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -23,7 +23,7 @@ namespace Toggl.iOS.ViewControllers
 
             if (SignIn.SharedInstance.CurrentUser != null)
                 SignIn.SharedInstance.SignOutUser();
-            
+
             SignIn.SharedInstance.Delegate = this;
             SignIn.SharedInstance.UIDelegate = this;
             SignIn.SharedInstance.SignInUser();

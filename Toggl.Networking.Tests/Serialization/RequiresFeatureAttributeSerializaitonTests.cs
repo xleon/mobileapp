@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Toggl.Shared.Models;
+using System.Collections.Generic;
 using Toggl.Networking.Models;
 using Toggl.Networking.Serialization;
 using Toggl.Networking.Serialization.Attributes;
+using Toggl.Shared.Models;
 using Xunit;
 using static Toggl.Shared.WorkspaceFeatureId;
 

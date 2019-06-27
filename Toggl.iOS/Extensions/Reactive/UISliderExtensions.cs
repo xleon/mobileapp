@@ -10,6 +10,6 @@ namespace Toggl.iOS.Extensions.Reactive
         public static IObservable<float> Value(this IReactive<UISlider> reactive)
             => Observable
                 .FromEventPattern(e => reactive.Base.ValueChanged += e, e => reactive.Base.ValueChanged -= e)
-                .Select(e => ((UISlider) e.Sender).Value);
+                .Select(e => ((UISlider)e.Sender).Value);
     }
 }

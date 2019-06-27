@@ -6,7 +6,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
@@ -14,8 +13,13 @@ using Toggl.Core.Experiments;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Services;
+using Toggl.Core.Suggestions;
+using Toggl.Core.Sync;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
@@ -57,6 +61,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IRxActionFactory rxActionFactory;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly IPlatformInfo platformInfo;
 
         private readonly RatingViewExperiment ratingViewExperiment;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
@@ -115,7 +120,8 @@ namespace Toggl.Core.UI.ViewModels
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory,
             IPermissionsChecker permissionsChecker,
-            IBackgroundService backgroundService)
+            IBackgroundService backgroundService,
+            IPlatformInfo platformInfo)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -133,6 +139,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
+            Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
 
             this.dataSource = dataSource;
             this.syncManager = syncManager;
@@ -144,12 +151,13 @@ namespace Toggl.Core.UI.ViewModels
             this.accessRestrictionStorage = accessRestrictionStorage;
             this.stopwatchProvider = stopwatchProvider;
             this.rxActionFactory = rxActionFactory;
+            this.platformInfo = platformInfo;
 
             TimeService = timeService;
 
-            SuggestionsViewModel = new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager);
-            RatingViewModel = new RatingViewModel(timeService, dataSource, ratingService, analyticsService, onboardingStorage, navigationService, schedulerProvider, rxActionFactory);
-            TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, syncManager, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
+            SuggestionsViewModel = new SuggestionsViewModel(interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager);
+            RatingViewModel = new RatingViewModel(timeService, ratingService, analyticsService, onboardingStorage, navigationService, schedulerProvider, rxActionFactory);
+            TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 
             LogEmpty = TimeEntriesViewModel.Empty.AsDriver(schedulerProvider);
             TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(schedulerProvider);
@@ -250,6 +258,9 @@ namespace Toggl.Core.UI.ViewModels
             onboardingStorage.StopButtonWasTappedBefore
                              .Subscribe(hasBeen => hasStopButtonEverBeenUsed = hasBeen)
                              .DisposedBy(disposeBag);
+
+            if (platformInfo.Platform == Platform.Giskard)
+                analyticsService.ApplicationInstallLocation.Track(platformInfo.InstallLocation);
         }
 
         public void Track(ITrackableEvent e)
@@ -353,7 +364,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task handleNoDefaultWorkspaceState()
         {
-            if (accessRestrictionStorage.HasNoDefaultWorkspace() && !noDefaultWorkspaceViewPresented)
+            if (!accessRestrictionStorage.HasNoWorkspace() && accessRestrictionStorage.HasNoDefaultWorkspace() && !noDefaultWorkspaceViewPresented)
             {
                 noDefaultWorkspaceViewPresented = true;
                 await Navigate<SelectDefaultWorkspaceViewModel, Unit>();

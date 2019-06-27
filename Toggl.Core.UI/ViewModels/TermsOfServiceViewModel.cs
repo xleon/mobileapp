@@ -1,42 +1,34 @@
-﻿using Toggl.Core.UI.Navigation;
-using Toggl.Core.UI.Services;
+﻿using System.Threading.Tasks;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
+using Xamarin.Essentials;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class TermsOfServiceViewModel : ViewModelWithOutput<bool>
     {
-        private readonly IRxActionFactory rxActionFactory;
-
         private const string privacyPolicyUrl = "https://toggl.com/legal/privacy/";
         private const string termsOfServiceUrl = "https://toggl.com/legal/terms/";
 
-        private readonly IBrowserService browserService;
-
         public UIAction ViewTermsOfService { get; }
         public UIAction ViewPrivacyPolicy { get; }
-        public InputAction<bool> Close { get; }
 
-        public TermsOfServiceViewModel(IBrowserService browserService, IRxActionFactory rxActionFactory, INavigationService navigationService)
+        public TermsOfServiceViewModel(IRxActionFactory rxActionFactory, INavigationService navigationService)
             : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(browserService, nameof(browserService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            this.browserService = browserService;
-            this.rxActionFactory = rxActionFactory;
-
-            ViewPrivacyPolicy = rxActionFactory.FromAction(() => openUrl(privacyPolicyUrl));
-            ViewTermsOfService = rxActionFactory.FromAction(() => openUrl(termsOfServiceUrl));
-            Close = rxActionFactory.FromAsync<bool>(result => Finish(result));
+            ViewPrivacyPolicy = rxActionFactory.FromAsync(openPrivacyPolicy);
+            ViewTermsOfService = rxActionFactory.FromAsync(openTermsOfService);
         }
 
-        private void openUrl(string url)
-        {
-            browserService.OpenUrl(url);
-        }
+        private Task openPrivacyPolicy()
+            => Browser.OpenAsync(privacyPolicyUrl, BrowserLaunchMode.External);
+
+        private Task openTermsOfService()
+            => Browser.OpenAsync(termsOfServiceUrl, BrowserLaunchMode.External);
     }
 }

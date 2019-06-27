@@ -1,12 +1,12 @@
-using System;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using Android;
 using Android.Content;
 using Android.Content.PM;
 using Android.Provider;
 using Android.Support.V4.Content;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Droid.Helper;
 
 namespace Toggl.Droid.Extensions
@@ -14,7 +14,7 @@ namespace Toggl.Droid.Extensions
     public static class PermissionRequesterComponentExtensions
     {
         private const int calendarAuthCode = 500;
-        
+
         public static void ProcessRequestPermissionsResult(this IPermissionRequesterComponent permissionRequester, int requestCode, string[] permissions, Permission[] grantResults)
         {
             if (requestCode != calendarAuthCode)
@@ -38,7 +38,7 @@ namespace Toggl.Droid.Extensions
 
                 if (permissionRequester.CalendarAuthorizationSubject != null)
                     return permissionRequester.CalendarAuthorizationSubject.AsObservable();
-                
+
                 permissionRequester.CalendarAuthorizationSubject = new Subject<bool>();
                 permissionRequester.RequestPermissions(new[] { Manifest.Permission.ReadCalendar }, calendarAuthCode);
 
@@ -54,10 +54,10 @@ namespace Toggl.Droid.Extensions
             settingsIntent.AddFlags(ActivityFlags.NewTask);
             settingsIntent.AddFlags(ActivityFlags.NoHistory);
             settingsIntent.AddFlags(ActivityFlags.ExcludeFromRecents);
-         
+
             permissionRequester.StartActivityIntent(settingsIntent);
         }
-        
+
         private static bool checkPermissions(this IPermissionRequesterComponent permissionRequester, params string[] permissionsToCheck)
         {
             foreach (var permission in permissionsToCheck)

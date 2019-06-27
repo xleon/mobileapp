@@ -1,5 +1,5 @@
-﻿using System;
-using Android.Views;
+﻿using Android.Views;
+using System;
 using Toggl.Core.UI.Reactive;
 
 namespace Toggl.Droid.Extensions.Reactive

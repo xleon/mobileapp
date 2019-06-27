@@ -139,7 +139,7 @@ namespace Toggl.Core.Tests.Suggestions
                         id.ToString(),
                         CalendarIconKind.None));
 
-                var expectedSuggestionIds = new List<String>
+                var expectedSuggestionIds = new List<string>
                 {
                     "1",
                     "2",

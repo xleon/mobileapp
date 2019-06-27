@@ -1,5 +1,4 @@
 using Toggl.Core.Models;
-using Toggl.Core.Services;
 using Toggl.iOS.Intents;
 
 namespace Toggl.iOS.Extensions

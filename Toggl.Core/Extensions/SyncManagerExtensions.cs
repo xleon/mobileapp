@@ -6,7 +6,7 @@ namespace Toggl.Core.Extensions
     {
         public static void InitiatePushSync(this ISyncManager syncManager)
         {
-            var _ = syncManager.PushSync();
+            syncManager.PushSync();
         }
     }
 }

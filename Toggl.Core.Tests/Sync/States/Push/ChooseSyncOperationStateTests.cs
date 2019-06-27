@@ -1,9 +1,9 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Reactive.Linq;
-using FluentAssertions;
-using Xunit;
 using Toggl.Core.Sync;
 using Toggl.Core.Sync.States.Push;
+using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States
 {

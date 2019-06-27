@@ -1,6 +1,6 @@
+using CoreGraphics;
 using System;
 using System.Linq;
-using CoreGraphics;
 using UIKit;
 
 namespace Toggl.iOS.Views.EditDuration.Shapes.Caps

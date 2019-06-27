@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Core.DataSources;
 using static Toggl.Shared.WorkspaceFeatureId;
 
 namespace Toggl.Core.Interactors
@@ -10,7 +9,7 @@ namespace Toggl.Core.Interactors
         private readonly long projectId;
 
         public IsBillableAvailableForProjectInteractor(IInteractorFactory interactorFactory, long projectId)
-            : base (interactorFactory)
+            : base(interactorFactory)
         {
             this.projectId = projectId;
         }

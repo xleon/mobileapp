@@ -1,6 +1,6 @@
-using System;
 using CoreAnimation;
 using CoreGraphics;
+using System;
 using Toggl.iOS.Extensions;
 using UIKit;
 using Math = Toggl.Shared.Math;

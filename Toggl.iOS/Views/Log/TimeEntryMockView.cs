@@ -1,6 +1,4 @@
-using CoreGraphics;
 using Foundation;
-using ObjCRuntime;
 using System;
 using UIKit;
 
@@ -23,7 +21,7 @@ namespace Toggl.iOS.Views
             UIColor.FromRGB(198f / 255f, 237f / 255f, 245f / 255f)
         };
 
-        public TimeEntryMockView(IntPtr handle) : base (handle)
+        public TimeEntryMockView(IntPtr handle) : base(handle)
         {
         }
 

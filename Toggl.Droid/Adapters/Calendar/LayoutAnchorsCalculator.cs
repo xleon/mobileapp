@@ -1,9 +1,9 @@
+using Android.Content;
+using Android.Util;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Android.Content;
-using Android.Util;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.Calendar;
 using Toggl.Droid.Extensions;
@@ -60,8 +60,8 @@ namespace Toggl.Droid.Adapters.Calendar
 
             if (hasCalendarsLinked || calendarEvents.Count > 0)
             {
-                calculateAttributes(calendarEvents,  halfAvailableWidth, leftMargin, originalIndexes, newAnchors);
-                calculateAttributes(timeEntries,  halfAvailableWidth,leftMargin + halfAvailableWidth, originalIndexes, newAnchors);
+                calculateAttributes(calendarEvents, halfAvailableWidth, leftMargin, originalIndexes, newAnchors);
+                calculateAttributes(timeEntries, halfAvailableWidth, leftMargin + halfAvailableWidth, originalIndexes, newAnchors);
             }
             else
             {
@@ -69,7 +69,7 @@ namespace Toggl.Droid.Adapters.Calendar
             }
 
             return Enumerable.Range(0, anchorCount)
-                .Select(anchor => new Anchor((int) hourHeight, newAnchors.Get(anchor, emptyAnchorData).ToArray()))
+                .Select(anchor => new Anchor((int)hourHeight, newAnchors.Get(anchor, emptyAnchorData).ToArray()))
                 .ToList();
         }
 
@@ -92,8 +92,8 @@ namespace Toggl.Droid.Adapters.Calendar
                 {
                     var anchorAbsoluteTop = anchorIndex * hourHeight;
                     var anchoredData = anchors.Get(anchorIndex, new List<AnchorData>());
-                    var leftOffset = (int) (groupLeftMargin + leftPadding + eventWidth * calendarItem.ColumnIndex + calendarItem.ColumnIndex * itemSpacing);
-                    anchoredData.Add(new AnchorData(adapterPosition, (int) (eventAbsolutePosition - anchorAbsoluteTop), leftOffset, (int) eventHeight, (int) eventWidth));
+                    var leftOffset = (int)(groupLeftMargin + leftPadding + eventWidth * calendarItem.ColumnIndex + calendarItem.ColumnIndex * itemSpacing);
+                    anchoredData.Add(new AnchorData(adapterPosition, (int)(eventAbsolutePosition - anchorAbsoluteTop), leftOffset, (int)eventHeight, (int)eventWidth));
                     anchors.Put(anchorIndex, anchoredData);
                 }
             }

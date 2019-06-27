@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Interactors.Location;
+using Toggl.Core.Interactors.Timezones;
 using Toggl.Core.Login;
-using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
+using Toggl.Networking.Exceptions;
+using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.Storage.Settings;
-using Toggl.Networking.Exceptions;
-using Toggl.Networking.Network;
-using System.Reactive;
-using System.Reactive.Disposables;
-using Toggl.Core.Interactors.Timezones;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -206,7 +206,7 @@ namespace Toggl.Core.UI.ViewModels
             var api = apiFactory.CreateApiWith(Credentials.None);
             getCountrySubscription = new GetCurrentLocationInteractor(api)
                 .Execute()
-                .Select(location => allCountries.Single(country => country.CountryCode == location.CountryCode))
+                .Select(location => allCountries.First(country => country.CountryCode == location.CountryCode))
                 .Subscribe(
                     setCountryIfNeeded,
                     _ => setCountryErrorIfNeeded(),

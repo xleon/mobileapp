@@ -1,19 +1,18 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
+using System;
+using System.Reactive;
+using System.Reactive.Linq;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Extensions;
 using Toggl.Core.Sync;
 using Toggl.Core.Sync.States.Push;
 using Toggl.Core.Tests.Sync.States.Push.BaseStates;
-using Toggl.Storage;
 using Toggl.Networking.ApiClients.Interfaces;
 using Toggl.Shared;
+using Toggl.Storage;
 using Xunit;
 using static Toggl.Core.Sync.PushSyncOperation;
 

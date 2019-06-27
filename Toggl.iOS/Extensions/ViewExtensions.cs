@@ -1,7 +1,7 @@
-﻿using CoreGraphics;
+﻿using CoreAnimation;
+using CoreGraphics;
 using Foundation;
 using UIKit;
-using CoreAnimation;
 
 namespace Toggl.iOS.Extensions
 {

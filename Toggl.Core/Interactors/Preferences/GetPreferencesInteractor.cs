@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Reactive.Linq;
 using Toggl.Core.DataSources;
 using Toggl.Core.Models.Interfaces;
-using static Toggl.Shared.WorkspaceFeatureId;
 
 namespace Toggl.Core.Interactors
 {
@@ -15,7 +13,7 @@ namespace Toggl.Core.Interactors
             this.dataSource = dataSource;
         }
 
-        public IObservable<IThreadSafePreferences> Execute() 
+        public IObservable<IThreadSafePreferences> Execute()
             => dataSource.Preferences.Current;
     }
 }

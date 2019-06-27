@@ -1,22 +1,22 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
-using NSubstitute;
 using Toggl.Core.Interactors.Settings;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
+using Toggl.Networking.ApiClients;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 using Toggl.Storage.Settings;
-using Toggl.Networking.ApiClients;
 using Xunit;
 using static Toggl.Core.Interactors.Settings.SendFeedbackInteractor;
 
@@ -164,6 +164,30 @@ namespace Toggl.Core.Tests.Interactors.Settings
 
                 feedbackApi.Received().Send(Arg.Any<Email>(), Arg.Any<string>(), Arg.Is<Dictionary<string, string>>(
                     data => data[ManualModeIsOn] == (isManualModeEnabled ? "yes" : "no"))).Wait();
+            }
+
+            [Property]
+            public void SendsApplicationInstallLocation(ApplicationInstallLocation installLocation)
+            {
+                PlatformInfo.InstallLocation.Returns(installLocation);
+                PlatformInfo.Platform.Returns(Platform.Giskard);
+
+                executeInteractor().Wait();
+
+                feedbackApi.Received().Send(Arg.Any<Email>(), Arg.Any<string>(), Arg.Is<Dictionary<string, string>>(
+                    data => data[InstallLocation] == installLocation.ToString())).Wait();
+            }
+
+            [Property]
+            public void DoesNotSendApplicationInstallLocationOnIOs(ApplicationInstallLocation installLocation)
+            {
+                PlatformInfo.InstallLocation.Returns(installLocation);
+                PlatformInfo.Platform.Returns(Platform.Daneel);
+
+                executeInteractor().Wait();
+
+                feedbackApi.DidNotReceive().Send(Arg.Any<Email>(), Arg.Any<string>(), Arg.Is<Dictionary<string, string>>(
+                    data => data[InstallLocation] == installLocation.ToString())).Wait();
             }
 
             [Fact, LogIfTooSlow]

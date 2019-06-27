@@ -7,16 +7,16 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Xunit;
 using static Toggl.Shared.Extensions.EmailExtensions;
 using static Toggl.Shared.Extensions.PasswordExtensions;
-using Toggl.Core.UI.Parameters;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {

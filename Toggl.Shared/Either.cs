@@ -6,7 +6,7 @@ namespace Toggl.Shared
     {
         private readonly bool useLeft;
         private readonly TLeft left;
-        private readonly TRight right;  
+        private readonly TRight right;
 
         public bool IsLeft => useLeft;
 

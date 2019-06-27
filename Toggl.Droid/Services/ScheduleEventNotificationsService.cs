@@ -1,13 +1,13 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Support.V4.App;
+using System;
 
 namespace Toggl.Droid.Services
 {
     [Service(
         Exported = true,
-        Permission = "android.permission.BIND_JOB_SERVICE", 
+        Permission = "android.permission.BIND_JOB_SERVICE",
         Name = "com.toggl.giskard.ScheduleEventNotificationsService")]
     public class ScheduleEventNotificationsService : JobIntentService
     {

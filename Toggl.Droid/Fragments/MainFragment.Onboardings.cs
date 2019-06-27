@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Android.Support.V7.Widget;
+using Android.Widget;
+using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
-using Android.Support.V7.Widget;
-using Android.Widget;
+using Toggl.Core.Sync;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Onboarding.MainView;
-using Toggl.Core.Sync;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;

@@ -1,10 +1,10 @@
 ﻿using System;
-using Toggl.Shared;
-using Toggl.Shared.Models;
 using Toggl.Networking.ApiClients.Interfaces;
 using Toggl.Networking.Models;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 
 namespace Toggl.Networking.ApiClients
 {

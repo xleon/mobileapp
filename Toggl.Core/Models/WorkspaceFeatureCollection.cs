@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using Toggl.Shared;
-using Toggl.Shared.Models;
-using Toggl.Storage;
+﻿using Toggl.Shared.Models;
 
 namespace Toggl.Core.Models
 {

@@ -1,9 +1,9 @@
 ﻿using CoreGraphics;
+using System;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using UIKit;
 using static System.Math;
-using System;
 
 namespace Toggl.iOS.Presentation.Transition
 {

@@ -22,8 +22,6 @@ namespace Toggl.iOS.Presentation
             {
                 case AboutViewModel vm:
                     return new AboutViewController(vm);
-                case BrowserViewModel vm:
-                    return new BrowserViewController(vm);
                 case CalendarViewModel vm:
                     return new CalendarViewController(vm);
                 case CalendarPermissionDeniedViewModel vm:
@@ -118,6 +116,6 @@ namespace Toggl.iOS.Presentation
             => GetViewController(viewModel).Apply(wrapInNavigationController);
 
         private static UIViewController wrapInNavigationController(UIViewController viewController)
-            => new UINavigationController(viewController);
+            => new ReactiveNavigationController(viewController);
     }
 }

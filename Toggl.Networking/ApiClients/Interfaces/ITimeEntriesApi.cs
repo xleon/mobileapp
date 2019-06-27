@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Shared.Models;
 using Toggl.Networking.ApiClients.Interfaces;
+using Toggl.Shared.Models;
 
 namespace Toggl.Networking.ApiClients
 {

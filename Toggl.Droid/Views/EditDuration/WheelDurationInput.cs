@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using System.Globalization;
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
@@ -11,13 +8,13 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Lang;
+using System;
+using System.Globalization;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core;
 using Toggl.Droid.Extensions;
-using Toggl.Droid.Views.EditDuration.Shapes;
-using System.Reactive.Subjects;
-using System.Reactive.Linq;
-using System.Reactive;
-using Android.Content.Res;
 
 namespace Toggl.Droid.Views.EditDuration
 {

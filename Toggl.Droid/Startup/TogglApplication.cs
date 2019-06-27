@@ -1,6 +1,6 @@
-using System;
 using Android.App;
 using Android.Runtime;
+using System;
 using Toggl.Core.UI;
 using Toggl.Droid.BroadcastReceivers;
 
@@ -10,9 +10,9 @@ namespace Toggl.Droid
     public class TogglApplication : Application
     {
         public TimezoneChangedBroadcastReceiver TimezoneChangedBroadcastReceiver { get; set; }
-        
+
         public ApplicationLifecycleObserver ApplicationLifecycleObserver { get; set; }
-        
+
         public TogglApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
