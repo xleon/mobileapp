@@ -3,6 +3,7 @@ using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
 using System;
+using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Services;
 using Toggl.Core.Tests.Generators;
