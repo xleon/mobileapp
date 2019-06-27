@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Android.Widget;
+using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using Android.Widget;
 using Toggl.Core.UI.Reactive;
 using Toggl.Shared.Extensions;
 

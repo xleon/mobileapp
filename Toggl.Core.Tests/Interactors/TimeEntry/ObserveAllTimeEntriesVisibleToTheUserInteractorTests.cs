@@ -1,11 +1,10 @@
-using System.Collections.Generic;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
+using System.Collections.Generic;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core.DataSources;
-using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
 using Xunit;

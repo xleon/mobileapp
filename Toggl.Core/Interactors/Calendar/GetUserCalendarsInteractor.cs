@@ -27,7 +27,7 @@ namespace Toggl.Core.Interactors.Calendar
         public IObservable<IEnumerable<UserCalendar>> Execute()
         {
             var enabledIds = userPreferences.EnabledCalendarIds().ToHashSet();
-            
+
             return calendarService
                 .GetUserCalendars()
                 .Select(calendarsWithTheSelectedProperty(enabledIds))

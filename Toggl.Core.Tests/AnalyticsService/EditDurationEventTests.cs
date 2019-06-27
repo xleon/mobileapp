@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+﻿using FluentAssertions;
 using Toggl.Core.Analytics;
 using Xunit;
 

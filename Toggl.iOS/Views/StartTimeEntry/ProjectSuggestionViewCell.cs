@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Reactive.Disposables;
-using Foundation;
-using Toggl.iOS.Extensions;
-using Toggl.iOS.Extensions.Reactive;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;

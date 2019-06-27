@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Toggl.Core.Tests.Mocks;
 using Xunit;
 
 namespace Toggl.Core.Tests

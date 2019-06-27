@@ -1,12 +1,12 @@
-using System;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System;
 using Toggl.Core.UI.ViewModels;
 
 namespace Toggl.Droid.ViewHolders.Country
 {
-    public class CountrySelectionViewHolder: BaseRecyclerViewHolder<SelectableCountryViewModel>
+    public class CountrySelectionViewHolder : BaseRecyclerViewHolder<SelectableCountryViewModel>
     {
         private ImageView selectedImageView;
         private TextView nameTextView;

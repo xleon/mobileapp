@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
-using Newtonsoft.Json;
-using Toggl.Shared;
-using Toggl.Shared.Extensions;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
 using Toggl.Networking.Serialization.Converters;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Networking.ApiClients
 {

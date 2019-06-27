@@ -1,26 +1,26 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DTOs;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Shared;
 using Xunit;
 
@@ -30,9 +30,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
     {
         public abstract class SettingsViewModelTest : BaseViewModelTests<SettingsViewModel>
         {
-            protected ISubject<IThreadSafeUser> UserSubject;
-            protected ISubject<SyncProgress> ProgressSubject;
-            protected ISubject<IThreadSafePreferences> PreferencesSubject;
+            protected ISubject<IThreadSafeUser> UserSubject { get; set; }
+            protected ISubject<SyncProgress> ProgressSubject { get; set; }
+            protected ISubject<IThreadSafePreferences> PreferencesSubject { get; set; }
 
             protected override SettingsViewModel CreateViewModel()
             {
@@ -473,32 +473,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.ToggleManualMode();
 
                 UserPreferences.Received().EnableManualMode();
-            }
-        }
-
-        public sealed class TheOpenHelpViewMethod : SettingsViewModelTest
-        {
-            [Property]
-            public void NavigatesToBrowserViewModelWithUrlFromplatformInfo(
-                NonEmptyString nonEmptyString)
-            {
-                var helpUrl = nonEmptyString.Get;
-                PlatformInfo.HelpUrl.Returns(helpUrl);
-
-                ViewModel.OpenHelpView.Execute();
-                TestScheduler.Start();
-
-                NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
-                    Arg.Is<BrowserParameters>(parameter => parameter.Url == helpUrl), ViewModel.View);
-            }
-
-            [Fact, LogIfTooSlow]
-            public void NavigatesToBrowserViewModelWithHelpTitle()
-            {
-                ViewModel.OpenHelpView.Execute();
-
-                NavigationService.Received().Navigate<BrowserViewModel, BrowserParameters>(
-                    Arg.Is<BrowserParameters>(parameter => parameter.Title == Resources.Help), ViewModel.View);
             }
         }
 

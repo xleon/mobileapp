@@ -1,6 +1,6 @@
 ﻿using System;
-using Toggl.Shared.Models;
 using Toggl.Networking.Serialization;
+using Toggl.Shared.Models;
 
 namespace Toggl.Networking.Models
 {
@@ -27,7 +27,7 @@ namespace Toggl.Networking.Models
         public string Color
         {
             get => color;
-            set => color = value.ToLower(); 
+            set => color = value.ToLower();
         }
 
         [IgnoreWhenPosting]

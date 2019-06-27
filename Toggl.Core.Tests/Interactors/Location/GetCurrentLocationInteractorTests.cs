@@ -1,11 +1,11 @@
-﻿using System.Threading.Tasks;
-using System.Reactive.Linq;
+﻿using FluentAssertions;
 using NSubstitute;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.Interactors.Location;
 using Toggl.Networking;
-using Xunit;
 using Toggl.Shared.Models;
-using FluentAssertions;
+using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.Location
 {

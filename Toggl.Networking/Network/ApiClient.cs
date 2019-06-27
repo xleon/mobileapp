@@ -1,8 +1,8 @@
 ﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Toggl.Shared;
 using Toggl.Networking.Extensions;
+using Toggl.Shared;
 
 namespace Toggl.Networking.Network
 {
@@ -11,7 +11,7 @@ namespace Toggl.Networking.Network
         private const string defaultContentType = "text/plain";
 
         private readonly HttpClient httpClient;
-        
+
         public ApiClient(HttpClient httpClient, UserAgent userAgent)
         {
             Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));

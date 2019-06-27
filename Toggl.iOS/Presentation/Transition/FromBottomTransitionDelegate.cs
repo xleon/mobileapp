@@ -1,6 +1,4 @@
-﻿using System;
-using Foundation;
-using Toggl.Shared;
+﻿using Foundation;
 using UIKit;
 
 namespace Toggl.iOS.Presentation.Transition

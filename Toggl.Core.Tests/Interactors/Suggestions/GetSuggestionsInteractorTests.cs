@@ -52,7 +52,8 @@ namespace Toggl.Core.Tests.Interactors.Suggestions
             [Fact, LogIfTooSlow]
             public async Task ReturnsSuggestionsWithoutDuplicates()
             {
-                var randomProvider = makeProvider(new List<Suggestion> {
+                var randomProvider = makeProvider(new List<Suggestion>
+                {
                     makeSuggestion("same description", 12, SuggestionProviderType.MostUsedTimeEntries)
                 });
 
@@ -76,15 +77,18 @@ namespace Toggl.Core.Tests.Interactors.Suggestions
             [Fact, LogIfTooSlow]
             public async Task ReturnsSuggestionsWithoutRemoveingNonDuplicates()
             {
-                var randomProvider1 = makeProvider(new List<Suggestion> {
+                var randomProvider1 = makeProvider(new List<Suggestion>
+                {
                     makeSuggestion("1 description", 11, SuggestionProviderType.RandomForest)
                 });
 
-                var randomProvider2 = makeProvider(new List<Suggestion> {
+                var randomProvider2 = makeProvider(new List<Suggestion>
+                {
                     makeSuggestion("2 description", 12, SuggestionProviderType.MostUsedTimeEntries)
                 });
 
-                var randomProvider3 = makeProvider(new List<Suggestion> {
+                var randomProvider3 = makeProvider(new List<Suggestion>
+                {
                     makeSuggestion("3 description", 13, SuggestionProviderType.Calendar)
                 });
 

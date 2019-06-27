@@ -1,7 +1,5 @@
-﻿
-
+﻿using FluentAssertions;
 using System.Collections.ObjectModel;
-using FluentAssertions;
 using Xunit;
 using static Toggl.Shared.Extensions.ObservableCollectionExtensions;
 

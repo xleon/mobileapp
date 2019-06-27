@@ -1,10 +1,10 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.App.Job;
+using System;
 
 namespace Toggl.Droid.Services
 {
-    [Service(Exported = true, 
+    [Service(Exported = true,
              Permission = "android.permission.BIND_JOB_SERVICE",
              Name = "com.toggl.giskard.BackgroundSyncJobSchedulerService")]
     public class BackgroundSyncJobSchedulerService : JobService

@@ -1,19 +1,19 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Models;
 using Toggl.Core.Services;
+using Toggl.Core.Shortcuts;
 using Toggl.Core.Sync;
 using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
-using Toggl.Core.Shortcuts;
 
 namespace Toggl.Core.Tests.DataSources
 {
@@ -26,7 +26,7 @@ namespace Toggl.Core.Tests.DataSources
             protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
             protected ISyncManager SyncManager { get; } = Substitute.For<ISyncManager>();
             protected INotificationService NotificationService { get; } = Substitute.For<INotificationService>();
-            protected ISubject<SyncProgress> ProgressSubject = new Subject<SyncProgress>();
+            protected ISubject<SyncProgress> ProgressSubject { get; } = new Subject<SyncProgress>();
             protected IApplicationShortcutCreator ApplicationShortcutCreator { get; } = Substitute.For<IApplicationShortcutCreator>();
             protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
 

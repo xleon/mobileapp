@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
 using UIKit;

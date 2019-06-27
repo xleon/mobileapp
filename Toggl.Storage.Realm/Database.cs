@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Realms;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using Realms;
-using Remotion.Linq.Clauses;
-using Toggl.Shared.Extensions;
 using Toggl.Storage.Models;
 using Toggl.Storage.Realm.Models;
 

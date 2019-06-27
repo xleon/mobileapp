@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Toggl.Core;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Cells.Settings;
@@ -31,7 +30,7 @@ namespace Toggl.iOS.ViewControllers
                 LicensesHeaderViewCell.Identifier);
 
             var sectionedLicenses = ViewModel.Licenses
-                .Select(license => new SectionModel<License, License>(license, new [] {license}));
+                .Select(license => new SectionModel<License, License>(license, new[] { license }));
 
             var source = new CustomTableViewSource<SectionModel<License, License>, License, License>(
                 LicensesViewCell.CellConfiguration(LicensesViewCell.Identifier),

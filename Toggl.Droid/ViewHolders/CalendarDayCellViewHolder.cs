@@ -1,12 +1,12 @@
-using System;
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Views;
+using System;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
-using Toggl.Droid.Views;
 using Toggl.Droid.Extensions;
+using Toggl.Droid.Views;
 using static Toggl.Core.UI.Helper.Colors.Reports;
 
 namespace Toggl.Droid.ViewHolders

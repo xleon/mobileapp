@@ -1,19 +1,19 @@
-﻿using System;
-using System.Reactive.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels;
+using System;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.Shared;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
+using Toggl.Shared;
 using Xunit;
-using System.Threading.Tasks;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -346,7 +346,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseCommand : ForgotPasswordViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : ForgotPasswordViewModelTest
         {
             [Property]
             public void ClosesTheViewModelReturningTheEmail(NonEmptyString emailString)
@@ -356,7 +356,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var email = Email.From(emailString.Get);
                 viewModel.Email.OnNext(email);
 
-                viewModel.Close.Execute();
+                viewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
 

@@ -1,4 +1,3 @@
-using Android.Support.Constraints;
 using Android.Views;
 using Android.Widget;
 using Toggl.Droid.Views.EditDuration;

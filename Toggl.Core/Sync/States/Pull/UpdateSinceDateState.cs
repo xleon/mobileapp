@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Core.Extensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.Storage;
-using Toggl.Networking.Exceptions;
 
 namespace Toggl.Core.Sync.States.Pull
 {

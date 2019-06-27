@@ -1,6 +1,6 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
+using System;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Storage;

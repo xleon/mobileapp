@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Settings.Siri;

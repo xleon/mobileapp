@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Text;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
-using Toggl.Shared.Models;
 using Toggl.Storage;
 using static Toggl.Core.Helper.Constants;
 using static Toggl.Shared.Extensions.StringExtensions;

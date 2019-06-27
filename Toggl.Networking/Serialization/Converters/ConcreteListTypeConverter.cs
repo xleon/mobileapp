@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using Toggl.Shared;
 
 namespace Toggl.Networking.Serialization.Converters
 {
-    [Preserve(AllMembers=true)]
-    class ConcreteListTypeConverter<TConcrete, TInterface> : JsonConverter
+    [Preserve(AllMembers = true)]
+    public class ConcreteListTypeConverter<TConcrete, TInterface> : JsonConverter
         where TConcrete : TInterface
     {
         public override void WriteJson(JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)

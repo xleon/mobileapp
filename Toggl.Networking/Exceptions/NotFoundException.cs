@@ -3,7 +3,7 @@ using Toggl.Networking.Network;
 
 namespace Toggl.Networking.Exceptions
 {
-    sealed class NotFoundException : ClientErrorException
+    public sealed class NotFoundException : ClientErrorException
     {
         public const HttpStatusCode CorrespondingHttpCode = HttpStatusCode.NotFound;
 

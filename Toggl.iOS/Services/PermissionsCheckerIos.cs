@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.Core.UI.Services;
 using Toggl.iOS.Helper;
 using UserNotifications;

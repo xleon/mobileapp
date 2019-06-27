@@ -1,6 +1,6 @@
+using FluentAssertions;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Toggl.Core.Interactors.Timezones;
 using Xunit;
 

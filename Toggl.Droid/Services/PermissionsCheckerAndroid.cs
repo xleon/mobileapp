@@ -1,10 +1,10 @@
-﻿using System;
-using System.Reactive.Linq;
-using Android;
+﻿using Android;
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.Support.V4.Content;
+using System;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Services;
 using Toggl.Droid.Helper;
 

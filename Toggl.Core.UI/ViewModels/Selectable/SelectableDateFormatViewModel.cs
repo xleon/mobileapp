@@ -6,7 +6,7 @@ namespace Toggl.Core.UI.ViewModels.Selectable
     [Preserve]
     public sealed class SelectableDateFormatViewModel : IDiffableByIdentifier<SelectableDateFormatViewModel>
     {
-        public long Identifier => DateFormat.GetHashCode(); 
+        public long Identifier => DateFormat.GetHashCode();
 
         public DateFormat DateFormat { get; }
 

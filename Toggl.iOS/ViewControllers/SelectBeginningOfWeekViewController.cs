@@ -1,10 +1,10 @@
 ﻿using System.Reactive;
 using System.Threading.Tasks;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
-using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Views.Settings;
 using Toggl.iOS.ViewSources.Generic.TableView;
 using Toggl.Shared;
@@ -12,17 +12,11 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public partial class SelectBeginningOfWeekViewController : ReactiveViewController<SelectBeginningOfWeekViewModel>, IDismissableViewController
+    public partial class SelectBeginningOfWeekViewController : ReactiveViewController<SelectBeginningOfWeekViewModel>
     {
         public SelectBeginningOfWeekViewController(SelectBeginningOfWeekViewModel viewModel)
             : base(viewModel, nameof(SelectBeginningOfWeekViewController))
         {
-        }
-
-        public async Task<bool> Dismiss()
-        {
-            ViewModel.Close.Execute();
-            return true;
         }
 
         public override void ViewDidLoad()
@@ -44,8 +38,8 @@ namespace Toggl.iOS.ViewControllers
 
             DaysTableView.Source = source;
 
-            BackButton.Rx()
-                .BindAction(ViewModel.Close)
+            BackButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
         }
     }

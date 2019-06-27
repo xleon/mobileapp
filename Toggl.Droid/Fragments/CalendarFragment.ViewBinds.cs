@@ -1,6 +1,6 @@
 using Android.Views;
-using Toggl.Droid.Views;
 using Android.Widget;
+using Toggl.Droid.Views;
 
 namespace Toggl.Droid.Fragments
 {

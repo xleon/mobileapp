@@ -4,15 +4,16 @@ namespace Toggl.Core
 {
     public abstract class BasePlatformInfo : IPlatformInfo
     {
-        protected BasePlatformInfo(string helpUrl, Platform platform)
+        protected BasePlatformInfo(string helpUrl, string storeUrl, Platform platform)
         {
             HelpUrl = helpUrl;
             Platform = platform;
+            StoreUrl = storeUrl;
         }
 
         public Platform Platform { get; }
-
         public string HelpUrl { get; }
+        public string StoreUrl { get; }
 
         public virtual string TimezoneIdentifier { get; }
 
@@ -23,5 +24,7 @@ namespace Toggl.Core
         public virtual string PhoneModel { get; } = DeviceInfo.Model;
 
         public virtual string OperatingSystem { get; } = $"{DeviceInfo.Platform} {DeviceInfo.VersionString}";
+
+        public virtual ApplicationInstallLocation InstallLocation => ApplicationInstallLocation.Internal;
     }
 }

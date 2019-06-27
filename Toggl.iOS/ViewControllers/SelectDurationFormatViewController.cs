@@ -1,11 +1,10 @@
 ﻿using System.Reactive;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
-using Toggl.iOS.Extensions;
-using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Views.Settings;
 using Toggl.iOS.ViewSources.Generic.TableView;
 using Toggl.Shared;
@@ -13,7 +12,7 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public partial class SelectDurationFormatViewController : ReactiveViewController<SelectDurationFormatViewModel>, IDismissableViewController
+    public partial class SelectDurationFormatViewController : ReactiveViewController<SelectDurationFormatViewModel>
     {
         private const int rowHeight = 48;
 
@@ -22,12 +21,6 @@ namespace Toggl.iOS.ViewControllers
         public SelectDurationFormatViewController(SelectDurationFormatViewModel viewModel)
             : base(viewModel, nameof(SelectDurationFormatViewController))
         {
-        }
-
-        public async Task<bool> Dismiss()
-        {
-            ViewModel.Close.Execute();
-            return true;
         }
 
         public override void ViewDidLoad()
@@ -50,8 +43,8 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(ViewModel.SelectDurationFormat.Inputs)
                 .DisposedBy(disposeBag);
 
-            BackButton.Rx()
-                .BindAction(ViewModel.Close)
+            BackButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(disposeBag);
         }
 

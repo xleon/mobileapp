@@ -1,5 +1,4 @@
-﻿using System;
-using Android.Support.Design.Widget;
+﻿using Android.Support.Design.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
-using Xunit;
 using Toggl.Storage;
 using Toggl.Storage.Models;
+using Xunit;
 
 namespace Toggl.Core.Tests.Interactors
 {
@@ -20,7 +19,8 @@ namespace Toggl.Core.Tests.Interactors
             [Fact, LogIfTooSlow]
             public async Task ReturnsOnlyItemsThatFailedToSync()
             {
-                MockClient[] clients = {
+                MockClient[] clients =
+                {
                     new MockClient { Id = 0, SyncStatus = SyncStatus.SyncFailed },
                     new MockClient { Id = 1, SyncStatus = SyncStatus.InSync },
                     new MockClient { Id = 2, SyncStatus = SyncStatus.SyncFailed },
@@ -37,7 +37,8 @@ namespace Toggl.Core.Tests.Interactors
                         return Observable.Return(filteredClients.Cast<IThreadSafeClient>());
                     });
 
-                MockProject[] projects = {
+                MockProject[] projects =
+                {
                     new MockProject { Id = 0, SyncStatus = SyncStatus.SyncFailed },
                     new MockProject { Id = 1, SyncStatus = SyncStatus.InSync },
                     new MockProject { Id = 2, SyncStatus = SyncStatus.SyncFailed },
@@ -51,8 +52,7 @@ namespace Toggl.Core.Tests.Interactors
                         return Observable.Return(filteredProjects.Cast<IThreadSafeProject>());
                     });
 
-                MockTag[] tags = {
-                };
+                MockTag[] tags = { };
 
                 DataSource.Tags
                     .GetAll(Arg.Any<Func<IDatabaseTag, bool>>())

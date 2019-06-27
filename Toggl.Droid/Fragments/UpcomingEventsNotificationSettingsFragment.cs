@@ -1,12 +1,8 @@
-﻿using System.Reactive.Linq;
-using Android.OS;
+﻿using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Droid.Adapters;
-using Toggl.Droid.Extensions.Reactive;
-using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
@@ -22,7 +18,7 @@ namespace Toggl.Droid.Fragments
 
             var view = wrappedInflater.Inflate(Resource.Layout.UpcomingEventsNotificationSettingsFragment, container, false);
             InitializeViews(view);
-            
+
             return view;
         }
 

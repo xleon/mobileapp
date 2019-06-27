@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
+using System;
+using System.Reactive.Linq;
+using System.Linq;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions.Reactive;
@@ -36,11 +37,12 @@ namespace Toggl.Droid.Activities
             setupLayoutManager(selectClientRecyclerAdapter);
 
             ViewModel.Clients
-                .Subscribe(replaceClients)
+                .Select(clients => clients.ToList())
+                .Subscribe(selectClientRecyclerAdapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 
-            backImageView.Rx()
-                .BindAction(ViewModel.Close)
+            backImageView.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             filterEditText.Rx().Text()
@@ -54,9 +56,11 @@ namespace Toggl.Droid.Activities
 
         private void setupLayoutManager(SelectClientRecyclerAdapter adapter)
         {
-            var layoutManager = new LinearLayoutManager(this);
-            layoutManager.ItemPrefetchEnabled = true;
-            layoutManager.InitialPrefetchItemCount = 4;
+            var layoutManager = new LinearLayoutManager(this)
+            {
+                ItemPrefetchEnabled = true,
+                InitialPrefetchItemCount = 4
+            };
             selectClientRecyclerView.SetLayoutManager(layoutManager);
             selectClientRecyclerView.SetAdapter(adapter);
         }
@@ -65,11 +69,6 @@ namespace Toggl.Droid.Activities
         {
             base.Finish();
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
-        }
-
-        private void replaceClients(IEnumerable<SelectableClientBaseViewModel> clients)
-        {
-            selectClientRecyclerAdapter.Items = clients.ToList();
         }
     }
 }

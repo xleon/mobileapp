@@ -1,6 +1,6 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck.Xunit;
+using System;
 using Xunit;
 
 namespace Toggl.Shared.Tests

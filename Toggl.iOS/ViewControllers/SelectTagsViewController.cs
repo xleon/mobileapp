@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
-using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.ViewSources;
@@ -12,7 +12,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed partial class SelectTagsViewController : KeyboardAwareViewController<SelectTagsViewModel>, IDismissableViewController
+    public sealed partial class SelectTagsViewController : KeyboardAwareViewController<SelectTagsViewModel>
     {
         private const double headerHeight = 100;
         private const double placeholderHeight = 250;
@@ -67,8 +67,8 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(TextField.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             SaveButton.Rx()
@@ -86,12 +86,6 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewWillAppear(animated);
             TextField.BecomeFirstResponder();
-        }
-
-        public async Task<bool> Dismiss()
-        {
-            await ViewModel.Close.ExecuteWithCompletion();
-            return true;
         }
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)

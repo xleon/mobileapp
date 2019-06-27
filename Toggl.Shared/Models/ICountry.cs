@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Toggl.Shared.Models
+﻿namespace Toggl.Shared.Models
 {
     public interface ICountry : IIdentifiable
     {

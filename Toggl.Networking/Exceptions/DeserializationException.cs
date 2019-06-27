@@ -1,5 +1,4 @@
-﻿using System;
-using Toggl.Networking.Network;
+﻿using Toggl.Networking.Network;
 
 namespace Toggl.Networking.Exceptions
 {

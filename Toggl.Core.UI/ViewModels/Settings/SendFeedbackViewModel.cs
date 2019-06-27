@@ -3,12 +3,12 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.Interactors;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.Services;
-using Toggl.Shared;
-using Toggl.Shared.Extensions;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Views;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -22,7 +22,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ISubject<Exception> currentErrorSubject = new BehaviorSubject<Exception>(null);
 
         // Actions
-        public UIAction Close { get; }
         public UIAction DismissError { get; }
         public UIAction Send { get; }
 
@@ -57,7 +56,6 @@ namespace Toggl.Core.UI.ViewModels
             IsFeedbackEmpty = isEmptyObservable.DistinctUntilChanged().AsDriver(schedulerProvider);
             SendEnabled = sendingIsEnabledObservable.DistinctUntilChanged().AsDriver(schedulerProvider);
 
-            Close = rxActionFactory.FromObservable(cancel);
             DismissError = rxActionFactory.FromAction(dismissError);
             Send = rxActionFactory.FromObservable(sendFeedback, sendingIsEnabledObservable);
 
@@ -70,14 +68,18 @@ namespace Toggl.Core.UI.ViewModels
             currentErrorSubject.OnNext(null);
         }
 
-        private IObservable<Unit> cancel()
-            => FeedbackText.FirstAsync()
-                .Select(string.IsNullOrEmpty)
-                .SelectMany(isEmpty => isEmpty
-                    ? Observable.Return(true)
-                    : View.ConfirmDestructiveAction(ActionType.DiscardFeedback))
-                .DoIf(shouldBeClosed => shouldBeClosed, _ => Finish(false))
-                .SelectUnit();
+        public override async void CloseWithDefaultResult()
+        {
+            var feedbackText = await FeedbackText.FirstAsync();
+            if (!string.IsNullOrEmpty(feedbackText))
+            {
+                var shouldDiscard = await View.ConfirmDestructiveAction(ActionType.DiscardFeedback);
+                if (!shouldDiscard)
+                    return;
+            }
+
+            base.CloseWithDefaultResult();
+        }
 
         private IObservable<Unit> sendFeedback()
             => FeedbackText.FirstAsync()
@@ -100,7 +102,7 @@ namespace Toggl.Core.UI.ViewModels
                             break;
 
                         default:
-                            Finish(true);
+                            Close(true);
                             break;
                     }
                 })

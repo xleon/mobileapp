@@ -1,16 +1,16 @@
-﻿using System;
-using System.Reactive.Linq;
-using System.Collections.Generic;
-using System.Reactive;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.Analytics;
+using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Tests.Generators;
 using Toggl.Shared;
 using Toggl.Storage;
 using Xunit;
@@ -34,7 +34,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             protected override RatingViewModel CreateViewModel()
                 => new RatingViewModel(
                     TimeService,
-                    DataSource,
                     RatingService,
                     AnalyticsService,
                     OnboardingStorage,
@@ -48,7 +47,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Xunit.Theory, LogIfTooSlow]
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
-                bool useDataSource,
                 bool useTimeService,
                 bool useRatingService,
                 bool useAnalyticsService,
@@ -57,7 +55,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useSchedulerProvider,
                 bool useRxActionFactory)
             {
-                var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
                 var ratingService = useRatingService ? RatingService : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
@@ -69,7 +66,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 Action tryingToConstructWithEmptyParameters =
                     () => new RatingViewModel(
                         timeService,
-                        dataSource,
                         ratingService,
                         analyticsService,
                         onboardingStorage,

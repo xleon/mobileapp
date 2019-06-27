@@ -55,7 +55,7 @@ namespace Toggl.Core
             var digitsString = (hoursPart * 100 + minutesPart).ToString();
             digitsString.ToCharArray()
                 .Select(digit => digit - '0')
-                .ForEach( d => stack = stack.Push(d));
+                .ForEach(d => stack = stack.Push(d));
             return new DurationFieldInfo(stack);
         }
 

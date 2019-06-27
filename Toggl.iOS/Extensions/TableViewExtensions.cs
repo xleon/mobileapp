@@ -1,5 +1,5 @@
-﻿using System;
-using CoreGraphics;
+﻿using CoreGraphics;
+using System;
 using UIKit;
 
 namespace Toggl.iOS.Extensions

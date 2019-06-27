@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck.Xunit;
 using NSubstitute;
-using NSubstitute.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Toggl.Core.Analytics;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
@@ -96,7 +95,7 @@ namespace Toggl.Core.Tests.AnalyticsService
                 TimeEntry.TaskId.Returns(default(int));
                 TimeEntry.TagIds.Returns(new long[0].AsEnumerable());
                 TimeEntry.Billable.Returns(false);
-                TimeEntry.Duration.Returns(new Nullable<long>());
+                TimeEntry.Duration.Returns(new long?());
             }
 
             [Theory, LogIfTooSlow]

@@ -1,6 +1,5 @@
 using System;
 using System.Reactive.Linq;
-using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
@@ -153,8 +152,8 @@ namespace Toggl.iOS.ViewControllers
             backButton.SetTitle(Resources.Back, UIControlState.Normal);
             backButton.TitleLabel.Font = UIFont.SystemFontOfSize(backButtonFontSize, UIFontWeight.Medium);
 
-            backButton.Rx()
-                .BindAction(ViewModel.Close)
+            backButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             //Spacing between button image and title

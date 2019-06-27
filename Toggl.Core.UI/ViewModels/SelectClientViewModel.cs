@@ -4,11 +4,11 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Core.Helper.Constants;
@@ -26,10 +26,9 @@ namespace Toggl.Core.UI.ViewModels
         private long selectedClientId;
         private SelectableClientViewModel noClient;
 
-        public IObservable<IEnumerable<SelectableClientBaseViewModel>> Clients { get; private set; }
-        public ISubject<string> FilterText { get; } = new BehaviorSubject<string>(string.Empty);
-        public UIAction Close { get; }
         public InputAction<SelectableClientBaseViewModel> SelectClient { get; }
+        public ISubject<string> FilterText { get; } = new BehaviorSubject<string>(string.Empty);
+        public IObservable<IEnumerable<SelectableClientBaseViewModel>> Clients { get; private set; }
 
         public SelectClientViewModel(
             IInteractorFactory interactorFactory,
@@ -46,7 +45,6 @@ namespace Toggl.Core.UI.ViewModels
             this.rxActionFactory = rxActionFactory;
             this.schedulerProvider = schedulerProvider;
 
-            Close = rxActionFactory.FromAsync(close);
             SelectClient = rxActionFactory.FromAsync<SelectableClientBaseViewModel>(selectClient);
         }
 
@@ -97,19 +95,16 @@ namespace Toggl.Core.UI.ViewModels
         private SelectableClientBaseViewModel toSelectableViewModel(IThreadSafeClient client)
             => new SelectableClientViewModel(client.Id, client.Name, client.Id == selectedClientId);
 
-        private Task close()
-            => Finish(null);
-
         private async Task selectClient(SelectableClientBaseViewModel client)
         {
             switch (client)
             {
                 case SelectableClientCreationViewModel c:
                     var newClient = await interactorFactory.CreateClient(c.Name.Trim(), workspaceId).Execute();
-                    await Finish(newClient.Id);
+                    Close(newClient.Id);
                     break;
                 case SelectableClientViewModel c:
-                    await Finish(c.Id);
+                    Close(c.Id);
                     break;
             }
         }

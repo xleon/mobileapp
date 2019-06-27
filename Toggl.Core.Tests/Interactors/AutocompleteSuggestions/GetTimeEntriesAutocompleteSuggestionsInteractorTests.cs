@@ -1,11 +1,12 @@
-﻿using System.Linq;
+﻿using FluentAssertions;
+using NSubstitute;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors.AutocompleteSuggestions;
+using Toggl.Shared.Extensions;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
@@ -58,7 +59,7 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
         {
             var interactor = new GetTimeEntriesAutocompleteSuggestions(dataSource, new[] { "25" });
 
-            var suggestions = await interactor.Execute().SelectMany(s => s).ToList();
+            var suggestions = await interactor.Execute().Flatten().ToList();
 
             suggestions.Should().HaveCount(1)
                 .And.AllBeOfType<TimeEntrySuggestion>();

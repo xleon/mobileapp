@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Realms;
+using System;
 using System.Linq;
-using Realms;
 using Toggl.Shared;
 
 namespace Toggl.Storage.Realm

@@ -1,5 +1,5 @@
-using System;
 using CoreGraphics;
+using System;
 using Toggl.Core.UI.Reactive;
 using UIKit;
 

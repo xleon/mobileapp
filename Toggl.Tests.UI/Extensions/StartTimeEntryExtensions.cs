@@ -13,7 +13,7 @@ namespace Toggl.Tests.UI.Extensions
         }
 
         public static void AddTagInStartView(this IApp app, string tag, bool shouldCreateTag = true)
-        { 
+        {
             app.EnterText($"#{tag}");
 
             if (shouldCreateTag)

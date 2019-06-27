@@ -1,11 +1,11 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Linq;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
-using Android.Views;
+using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions.Reactive;
@@ -59,8 +59,8 @@ namespace Toggl.Droid.Activities
                 .Subscribe(ViewModel.FilterText)
                 .DisposedBy(DisposeBag);
 
-            closeButton.Rx()
-                .BindAction(ViewModel.Close)
+            closeButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
         }
 
@@ -73,17 +73,6 @@ namespace Toggl.Droid.Activities
         {
             base.Finish();
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
-        }
-
-        public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
-        {
-            if (keyCode == Keycode.Back)
-            {
-                ViewModel.Close.Execute();
-                return true;
-            }
-
-            return base.OnKeyDown(keyCode, e);
         }
     }
 }

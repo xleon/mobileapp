@@ -1,6 +1,6 @@
+using NSubstitute;
 using System;
 using System.Reactive.Linq;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
@@ -14,55 +14,55 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
 {
     public sealed class ContinueTimeEntryFromMainLogInteractorTests
     {
-        protected IInteractorFactory InteractorFactory = Substitute.For<IInteractorFactory>();
+        protected IInteractorFactory InteractorFactory { get; } = Substitute.For<IInteractorFactory>();
 
-        protected IAnalyticsService AnalyticsService = Substitute.For<IAnalyticsService>();
+        protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
 
-        protected const long ProjectId = 10;
+        private const long ProjectId = 10;
 
-        protected const long WorkspaceId = 11;
+        private const long WorkspaceId = 11;
 
-        protected const long UserId = 12;
+        private const long UserId = 12;
 
-        protected const long TaskId = 14;
+        private const long TaskId = 14;
 
-        protected long[] TagIds = { 15 };
+        private long[] tagIds = { 15 };
 
-        protected const string ValidDescription = "Some random time entry";
+        private const string validDescription = "Some random time entry";
 
-        protected DateTimeOffset startTime = new DateTimeOffset(2019, 6, 5, 14, 0, 0, TimeSpan.Zero);
+        private DateTimeOffset startTime = new DateTimeOffset(2019, 6, 5, 14, 0, 0, TimeSpan.Zero);
 
-        protected IThreadSafeTimeEntry TimeEntryToContinue => new MockTimeEntry
+        private IThreadSafeTimeEntry timeEntryToContinue => new MockTimeEntry
         {
             Id = 42,
             ProjectId = ProjectId,
             WorkspaceId = WorkspaceId,
             UserId = UserId,
             TaskId = TaskId,
-            TagIds = TagIds,
-            Description = ValidDescription,
+            TagIds = tagIds,
+            Description = validDescription,
             Start = startTime,
         };
 
-        protected IThreadSafeTimeEntry CreatedTimeEntry => new MockTimeEntry
+        private IThreadSafeTimeEntry createdTimeEntry => new MockTimeEntry
         {
             Id = 43,
             ProjectId = ProjectId,
             WorkspaceId = WorkspaceId,
             UserId = UserId,
             TaskId = TaskId,
-            TagIds = TagIds,
-            Description = ValidDescription,
+            TagIds = tagIds,
+            Description = validDescription,
             Start = startTime,
         };
 
-        protected ITimeEntryPrototype TimeEntryPrototype => TimeEntryToContinue.AsTimeEntryPrototype();
+        private ITimeEntryPrototype timeEntryPrototype => timeEntryToContinue.AsTimeEntryPrototype();
 
-        protected const int IndexInLog = 5;
+        private const int IndexInLog = 5;
 
-        protected const int DayInLog = 1;
+        private const int DayInLog = 1;
 
-        protected const int DaysInPast = 0;
+        private const int DaysInPast = 0;
 
         [Fact, LogIfTooSlow]
         public void CallsTheContinueTimeEntryInteractor()
@@ -70,13 +70,13 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
             var interactor = new ContinueTimeEntryFromMainLogInteractor(
                 InteractorFactory,
                 AnalyticsService,
-                TimeEntryPrototype,
+                timeEntryPrototype,
                 ContinueTimeEntryMode.TimeEntriesGroupSwipe,
                 IndexInLog,
                 DayInLog,
                 DaysInPast);
 
-            var _ = interactor.Execute();
+            interactor.Execute();
 
             InteractorFactory
                 .Received()
@@ -94,18 +94,18 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
             InteractorFactory
                 .ContinueTimeEntry(Arg.Any<ITimeEntryPrototype>(), Arg.Any<ContinueTimeEntryMode>())
                 .Execute()
-                .Returns(Observable.Return(CreatedTimeEntry));
+                .Returns(Observable.Return(createdTimeEntry));
 
             var interactor = new ContinueTimeEntryFromMainLogInteractor(
                 InteractorFactory,
                 AnalyticsService,
-                TimeEntryPrototype,
+                timeEntryPrototype,
                 continueMode,
                 IndexInLog,
                 DayInLog,
                 DaysInPast);
 
-            var _ = await interactor.Execute();
+            await interactor.Execute();
 
             AnalyticsService
                 .Received()

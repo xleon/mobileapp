@@ -1,14 +1,14 @@
-﻿using System;
+﻿using CoreAnimation;
+using CoreGraphics;
+using Foundation;
+using System;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using CoreAnimation;
-using CoreGraphics;
-using Foundation;
 using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.iOS.Cells;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.iOS.Cells;
 using Toggl.Shared.Extensions;
 using UIKit;
 

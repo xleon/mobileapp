@@ -1,8 +1,6 @@
-using System;
-using System.Reactive;
-using System.Reactive.Linq;
 using Android.Support.V4.View;
-using Android.Views;
+using System;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Reactive;
 using Toggl.Shared.Extensions;
 

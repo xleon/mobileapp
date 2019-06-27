@@ -5,16 +5,16 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
-using Math = System.Math;
 using Colors = Toggl.Core.UI.Helper.Colors;
-using Toggl.Core.UI.Parameters;
+using Math = System.Math;
 
 namespace Toggl.Core.UI.ViewModels
 {

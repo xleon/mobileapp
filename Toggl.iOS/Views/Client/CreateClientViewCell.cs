@@ -1,6 +1,5 @@
-﻿using System;
-using Foundation;
-using Toggl.Core;
+﻿using Foundation;
+using System;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Cells;
 using Toggl.Shared;

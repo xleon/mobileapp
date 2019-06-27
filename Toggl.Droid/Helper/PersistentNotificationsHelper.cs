@@ -1,13 +1,10 @@
-using System;
-using System.Reactive.Linq;
 using Android.App;
 using Android.Content;
 using Java.Lang;
-using Java.Net;
+using System;
+using System.Reactive.Linq;
 using Toggl.Core;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Droid.Activities;
 using Toggl.Droid.Extensions;
 using Toggl.Shared;
 using Uri = Android.Net.Uri;

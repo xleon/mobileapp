@@ -1,7 +1,7 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
-using Newtonsoft.Json;
 using Toggl.Shared;
 
 namespace Toggl.Core.Interactors.Timezones

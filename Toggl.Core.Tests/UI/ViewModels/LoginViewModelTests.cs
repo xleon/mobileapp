@@ -1,25 +1,25 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FsCheck;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
-using NUnit.Framework;
 using Toggl.Core.Analytics;
 using Toggl.Core.Exceptions;
+using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Tests.Generators;
-using Toggl.Shared;
-using Toggl.Storage.Settings;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
+using Toggl.Shared;
+using Toggl.Storage.Settings;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
@@ -541,7 +541,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var email = Email.Empty;
                 var password = Password.From(passwordString.Get);
                 var parameter = CredentialsParameter.With(email, password);
-                var expectedValues = new[] { Password.Empty.ToString(),  password.ToString() };
+                var expectedValues = new[] { Password.Empty.ToString(), password.ToString() };
                 var actualValues = new List<string>();
                 viewModel.Password.Subscribe(actualValues.Add);
 

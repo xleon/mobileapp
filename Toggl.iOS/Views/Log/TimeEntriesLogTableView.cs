@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.iOS.ViewSources;
 using UIKit;
 
@@ -9,7 +9,8 @@ namespace Toggl.iOS.Views
     public class TimeEntriesLogTableView : UITableView
     {
         private RefreshControl customRefreshControl;
-        public RefreshControl CustomRefreshControl {
+        public RefreshControl CustomRefreshControl
+        {
             get => customRefreshControl;
             set
             {

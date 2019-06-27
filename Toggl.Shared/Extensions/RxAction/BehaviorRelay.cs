@@ -34,7 +34,7 @@ namespace Toggl.Shared.Extensions.Reactive
             subject.OnNext(changedValue);
         }
 
-        public IDisposable Subscribe(IObserver<T> observer) 
+        public IDisposable Subscribe(IObserver<T> observer)
             => subject.Subscribe(observer);
     }
 }
