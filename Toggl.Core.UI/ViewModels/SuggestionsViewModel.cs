@@ -27,8 +27,6 @@ namespace Toggl.Core.UI.ViewModels
         private const int suggestionCount = 3;
         private static readonly TimeSpan recalculationThrottleDuration = TimeSpan.FromMilliseconds(500);
 
-        private readonly TimeSpan recalculatePeriod = TimeSpan.FromMinutes(10);
-
         private readonly IInteractorFactory interactorFactory;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly ISchedulerProvider schedulerProvider;
@@ -41,7 +39,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IUserPreferences userPreferences;
         private readonly ISyncManager syncManager;
 
-        private DateTimeOffset nextRecalculationTimestamp;
         private Subject<Unit> recalculationRequested = new Subject<Unit>();
 
         public IObservable<IImmutableList<Suggestion>> Suggestions { get; private set; }
@@ -94,14 +91,6 @@ namespace Toggl.Core.UI.ViewModels
 
             StartTimeEntry = rxActionFactory.FromObservable<Suggestion, IThreadSafeTimeEntry>(startTimeEntry);
 
-            nextRecalculationTimestamp = timeService.CurrentDateTime + recalculatePeriod;
-
-            var recalculateSuggestionsPeriodicTrigger = timeService.CurrentDateTimeObservable
-                .Where(time => time >= nextRecalculationTimestamp)
-                .Do(_ => nextRecalculationTimestamp += recalculatePeriod)
-                .Track(analyticsService.SuggestionsRecalculatedPeriodically)
-                .SelectUnit();
-
             var appResumedFromBackground = backgroundService
                 .AppResumedFromBackground
                 .SelectUnit()
@@ -117,7 +106,6 @@ namespace Toggl.Core.UI.ViewModels
                 .Throttle(recalculationThrottleDuration, schedulerProvider.DefaultScheduler)
                 .SelectUnit()
                 .StartWith(Unit.Default)
-                .Merge(recalculateSuggestionsPeriodicTrigger)
                 .Merge(recalculationRequested)
                 .Merge(appResumedFromBackground)
                 .Merge(userCalendarPreferencesChanged)
