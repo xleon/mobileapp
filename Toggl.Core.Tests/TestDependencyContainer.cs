@@ -33,9 +33,17 @@ namespace Toggl.Core.UI
         public override IUserAccessManager UserAccessManager
             => MockUserAccessManager ?? base.UserAccessManager;
 
+        internal IFetchRemoteConfigService MockFetchRemoteConfigService { get; set; }
+        protected override IFetchRemoteConfigService CreateFetchRemoteConfigService()
+            => MockFetchRemoteConfigService;
+
         internal IAccessRestrictionStorage MockAccessRestrictionStorage { get; set; }
         protected override IAccessRestrictionStorage CreateAccessRestrictionStorage()
             => MockAccessRestrictionStorage;
+
+        internal IUpdateRemoteConfigCacheService MockUpdateRemoteConfigCacheService { get; set; }
+        protected override IUpdateRemoteConfigCacheService CreateUpdateRemoteConfigCacheService()
+            => MockUpdateRemoteConfigCacheService;
 
         internal IAnalyticsService MockAnalyticsService { get; set; }
         protected override IAnalyticsService CreateAnalyticsService()

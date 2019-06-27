@@ -56,6 +56,8 @@ namespace Toggl.Core
         private readonly Lazy<IAutomaticSyncingService> automaticSyncingService;
         private readonly Lazy<IAccessRestrictionStorage> accessRestrictionStorage;
         private readonly Lazy<ISyncErrorHandlingService> syncErrorHandlingService;
+        private readonly Lazy<IFetchRemoteConfigService> fetchRemoteConfigService;
+        private readonly Lazy<IUpdateRemoteConfigCacheService> remoteConfigUpdateService;
         private readonly Lazy<IPrivateSharedStorageService> privateSharedStorageService;
         private readonly Lazy<ISuggestionProviderContainer> suggestionProviderContainer;
         private readonly Lazy<IPushNotificationsTokenService> pushNotificationsTokenService;
@@ -89,6 +91,8 @@ namespace Toggl.Core
         public IAutomaticSyncingService AutomaticSyncingService => automaticSyncingService.Value;
         public IAccessRestrictionStorage AccessRestrictionStorage => accessRestrictionStorage.Value;
         public ISyncErrorHandlingService SyncErrorHandlingService => syncErrorHandlingService.Value;
+        public IFetchRemoteConfigService FetchRemoteConfigService => fetchRemoteConfigService.Value;
+        public IUpdateRemoteConfigCacheService UpdateRemoteConfigCacheService => remoteConfigUpdateService.Value;
         public IPrivateSharedStorageService PrivateSharedStorageService => privateSharedStorageService.Value;
         public ISuggestionProviderContainer SuggestionProviderContainer => suggestionProviderContainer.Value;
         public IPushNotificationsTokenService PushNotificationsTokenService => pushNotificationsTokenService.Value;
@@ -126,10 +130,11 @@ namespace Toggl.Core
             automaticSyncingService = new Lazy<IAutomaticSyncingService>(CreateAutomaticSyncingService);
             accessRestrictionStorage = new Lazy<IAccessRestrictionStorage>(CreateAccessRestrictionStorage);
             syncErrorHandlingService = new Lazy<ISyncErrorHandlingService>(CreateSyncErrorHandlingService);
+            fetchRemoteConfigService = new Lazy<IFetchRemoteConfigService>(CreateFetchRemoteConfigService);
+            remoteConfigUpdateService = new Lazy<IUpdateRemoteConfigCacheService>(CreateUpdateRemoteConfigCacheService);
             privateSharedStorageService = new Lazy<IPrivateSharedStorageService>(CreatePrivateSharedStorageService);
             suggestionProviderContainer = new Lazy<ISuggestionProviderContainer>(CreateSuggestionProviderContainer);
             pushNotificationsTokenService = new Lazy<IPushNotificationsTokenService>(CreatePushNotificationsTokenService);
-
 
             api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
             UserAccessManager = new UserAccessManager(
@@ -165,6 +170,7 @@ namespace Toggl.Core
         protected abstract ILastTimeUsageStorage CreateLastTimeUsageStorage();
         protected abstract IApplicationShortcutCreator CreateShortcutCreator();
         protected abstract IBackgroundSyncService CreateBackgroundSyncService();
+        protected abstract IFetchRemoteConfigService CreateFetchRemoteConfigService();
         protected abstract IAccessRestrictionStorage CreateAccessRestrictionStorage();
         protected abstract IPrivateSharedStorageService CreatePrivateSharedStorageService();
         protected abstract ISuggestionProviderContainer CreateSuggestionProviderContainer();
@@ -174,7 +180,7 @@ namespace Toggl.Core
             => new TimeService(SchedulerProvider.DefaultScheduler);
 
         protected virtual IBackgroundService CreateBackgroundService()
-            => new BackgroundService(TimeService, AnalyticsService);
+            => new BackgroundService(TimeService, AnalyticsService, UpdateRemoteConfigCacheService);
 
         protected virtual IAutomaticSyncingService CreateAutomaticSyncingService()
             => new AutomaticSyncingService(BackgroundService, TimeService, LastTimeUsageStorage);
@@ -190,6 +196,9 @@ namespace Toggl.Core
 
         protected virtual IApiFactory CreateApiFactory()
             => new ApiFactory(ApiEnvironment, userAgent);
+
+        protected virtual IUpdateRemoteConfigCacheService CreateUpdateRemoteConfigCacheService()
+            => new UpdateRemoteConfigCacheService(TimeService, KeyValueStorage, FetchRemoteConfigService);
 
         protected virtual ISyncManager CreateSyncManager()
         {

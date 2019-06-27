@@ -23,8 +23,8 @@ namespace Toggl.iOS.Services
 
         public IObservable<PushNotificationsConfiguration> PushNotificationsConfiguration
             => Observable.Return(new PushNotificationsConfiguration(false, false));
-        
-        private RatingViewConfiguration extractRatingViewConfiguration(RemoteConfig remoteConfig) 
+
+        private RatingViewConfiguration extractRatingViewConfiguration(RemoteConfig remoteConfig)
             => new RatingViewConfiguration(
                 remoteConfig[RatingViewDelayParameter].NumberValue.Int32Value,
                 remoteConfig[RatingViewTriggerParameter].StringValue.ToRatingViewCriterion());
@@ -32,8 +32,8 @@ namespace Toggl.iOS.Services
         private PushNotificationsConfiguration extractPushNotificationsConfiguration(RemoteConfig remoteConfig)
             => new PushNotificationsConfiguration(
                 remoteConfig[RegisterPushNotificationsTokenWithServerParameter].BoolValue,
-                remoteConfig[HandlePushNotificationsParameter].BoolValue); 
-            
+                remoteConfig[HandlePushNotificationsParameter].BoolValue);
+
         private IObservable<TConfiguration> FetchConfiguration<TConfiguration>(Func<RemoteConfig, TConfiguration> remoteConfigExtractor)
             => Observable.Create<TConfiguration>(observer =>
             {
@@ -42,7 +42,7 @@ namespace Toggl.iOS.Services
                 {
                     if (error == null)
                         remoteConfig.ActivateFetched();
-                    
+
                     observer.OnNext(remoteConfigExtractor(remoteConfig));
                     observer.OnCompleted();
                 });
