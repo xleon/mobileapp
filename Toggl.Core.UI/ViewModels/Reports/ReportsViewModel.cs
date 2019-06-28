@@ -92,7 +92,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public IObservable<bool> ShowEmptyStateObservable { get; private set; }
 
-        public IObservable<string> CurrentDateRangeStringObservable { get; }
+        public IObservable<string> CurrentDateRange { get; }
 
         public IObservable<string> WorkspaceNameObservable { get; }
         public ICollection<SelectOption<IThreadSafeWorkspace>> Workspaces { get; private set; }
@@ -155,7 +155,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
-            CurrentDateRangeStringObservable = currentDateRangeStringSubject
+            CurrentDateRange = currentDateRangeStringSubject
                 .Select(text => !string.IsNullOrEmpty(text) ? $"{text} ▾" : "")
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
