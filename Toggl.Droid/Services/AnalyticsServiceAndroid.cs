@@ -76,11 +76,11 @@ namespace Toggl.Droid.Services
         private string trimForAppCenter(string text)
             => text.Length > maxAppCenterStringLength ? text.Substring(0, maxAppCenterStringLength) : text;
 
-        public override void ReportAppCenterUserId(long id)
+        public override void SetAppCenterUserId(long id)
         {
             try
             {
-                AppCenter.SetUserId($"{id}");
+                AppCenter.SetUserId(id.ToString());
             }
             catch
             {

@@ -786,7 +786,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetCurrentUser().Execute().Returns(Observable.Return(user));
                 await ViewModel.Initialize();
 
-                AnalyticsService.Received().ReportAppCenterUserId(userId);
+                AnalyticsService.Received().SetAppCenterUserId(userId);
             }
 
             public sealed class WhenShowingTheRatingsView : MainViewModelTest

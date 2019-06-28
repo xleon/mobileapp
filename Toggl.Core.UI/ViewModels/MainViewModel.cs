@@ -163,8 +163,9 @@ namespace Toggl.Core.UI.ViewModels
         {
             await base.Initialize();
 
-            var user = await interactorFactory.GetCurrentUser().Execute();
-            analyticsService.ReportAppCenterUserId(user.Id);
+            interactorFactory.GetCurrentUser().Execute()
+                .Select(u => u.Id)
+                .Subscribe(analyticsService.SetAppCenterUserId);
 
             await SuggestionsViewModel.Initialize();
             await RatingViewModel.Initialize();

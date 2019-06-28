@@ -283,6 +283,6 @@ namespace Toggl.Core.Analytics
 
         protected abstract void TrackException(Exception exception);
 
-        public abstract void ReportAppCenterUserId(long id);
+        public abstract void SetAppCenterUserId(long id);
     }
 }

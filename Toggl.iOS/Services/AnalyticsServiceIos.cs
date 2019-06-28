@@ -66,11 +66,11 @@ namespace Toggl.iOS.Services
             return validParameters;
         }
 
-        public override void ReportAppCenterUserId(long id)
+        public override void SetAppCenterUserId(long id)
         {
             try
             {
-                AppCenter.SetUserId($"{id}");
+                AppCenter.SetUserId(id.ToString());
             }
             catch
             {

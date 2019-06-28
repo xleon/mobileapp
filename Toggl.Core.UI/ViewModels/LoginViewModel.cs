@@ -225,17 +225,13 @@ namespace Toggl.Core.UI.ViewModels
 
             onboardingStorage.SetIsNewUser(false);
 
-            await reportAppCenterUserId();
+            interactorFactory.GetCurrentUser().Execute()
+                .Select(u => u.Id)
+                .Subscribe(analyticsService.SetAppCenterUserId);
 
             await UIDependencyContainer.Instance.SyncManager.ForceFullSync();
 
             await Navigate<MainTabBarViewModel>();
-        }
-
-        private async Task reportAppCenterUserId()
-        {
-            var user = await interactorFactory.GetCurrentUser().Execute();
-            analyticsService.ReportAppCenterUserId(user.Id);
         }
 
         private void onError(Exception exception)

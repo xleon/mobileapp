@@ -216,7 +216,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     ViewModel.Login();
 
-                    AnalyticsService.Received().ReportAppCenterUserId(id);
+                    AnalyticsService.Received().SetAppCenterUserId(id);
                 }
 
                 [FsCheck.Xunit.Property]
