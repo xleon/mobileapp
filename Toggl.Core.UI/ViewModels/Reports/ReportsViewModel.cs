@@ -53,6 +53,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private readonly ISubject<TimeSpan> totalTimeSubject = new BehaviorSubject<TimeSpan>(TimeSpan.Zero);
         private readonly ISubject<float?> billablePercentageSubject = new Subject<float?>();
         private readonly ISubject<IReadOnlyList<ChartSegment>> segmentsSubject = new Subject<IReadOnlyList<ChartSegment>>();
+        private readonly TimeSpan reloadInterval = TimeSpan.FromSeconds(5);
 
         private DateTimeOffset startDate;
         private DateTimeOffset endDate;
@@ -69,6 +70,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private DateFormat dateFormat;
         private ReportParameter parameter;
         private BeginningOfWeek beginningOfWeek;
+        private DateTimeOffset viewDisappearedAtTime;
 
         public IObservable<bool> IsLoadingObservable { get; }
 
@@ -234,8 +236,14 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             if (viewAppearedForTheFirstTime())
                 CalendarViewModel.ViewAppeared();
-            else
+            else if (timeService.CurrentDateTime - viewDisappearedAtTime >= reloadInterval)
                 reportSubject.OnNext(Unit.Default);
+        }
+
+        public override void ViewDisappeared()
+        {
+            base.ViewDisappeared();
+            viewDisappearedAtTime = timeService.CurrentDateTime;
         }
 
         public void StopNavigationFromMainLogStopwatch()
