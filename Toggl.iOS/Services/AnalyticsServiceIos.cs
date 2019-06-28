@@ -68,7 +68,17 @@ namespace Toggl.iOS.Services
 
         public override void ReportAppCenterUserId(long id)
         {
-            AppCenter.SetUserId($"{id}");
+            try
+            {
+                AppCenter.SetUserId($"{id}");
+            }
+            catch
+            {
+                /* This catch intentionally left blank.
+                 * Failure to set the user id for analytics is not a reason to crash the app.
+                 * And there are no reasonable ways to gracefuly recover from this.
+                 */
+            }
         }
 
         private string trimForAppCenter(string text)

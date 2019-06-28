@@ -234,12 +234,8 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task reportAppCenterUserId()
         {
-            try
-            {
-                var user = await interactorFactory.GetCurrentUser().Execute();
-                analyticsService.ReportAppCenterUserId(user.Id);
-            }
-            catch { }
+            var user = await interactorFactory.GetCurrentUser().Execute();
+            analyticsService.ReportAppCenterUserId(user.Id);
         }
 
         private void onError(Exception exception)
