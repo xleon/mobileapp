@@ -75,9 +75,6 @@ namespace Toggl.iOS
         protected override IFetchRemoteConfigService CreateFetchRemoteConfigService()
             => new FetchRemoteConfigServiceIos();
 
-        protected override IBrowserService CreateBrowserService()
-            => new BrowserServiceIos();
-
         protected override ICalendarService CreateCalendarService()
             => new CalendarServiceIos(PermissionsChecker);
 

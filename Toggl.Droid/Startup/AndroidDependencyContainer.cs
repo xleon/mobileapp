@@ -67,9 +67,6 @@ namespace Toggl.Droid
         protected override IFetchRemoteConfigService CreateFetchRemoteConfigService()
             => new FetchRemoteConfigServiceAndroid();
 
-        protected override IBrowserService CreateBrowserService()
-            => new BrowserServiceAndroid();
-
         protected override ICalendarService CreateCalendarService()
             => new CalendarServiceAndroid(PermissionsChecker);
 
