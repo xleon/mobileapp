@@ -1,8 +1,8 @@
-﻿using Toggl.Storage;
+﻿using System;
 using Toggl.Shared;
-using static Toggl.Storage.ConflictResolutionMode;
-using System;
 using Toggl.Shared.Models;
+using Toggl.Storage;
+using static Toggl.Storage.ConflictResolutionMode;
 
 namespace Toggl.Core.Sync.ConflictResolution
 {

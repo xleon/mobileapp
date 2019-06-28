@@ -11,7 +11,7 @@ namespace Toggl.Shared.Extensions
         {
             return HttpUtility
                 .ParseQueryString(uri.Query)
-                .ToDictionary(CommonFunctions.Identity, CommonFunctions.Identity);;
+                .ToDictionary(CommonFunctions.Identity, CommonFunctions.Identity);
         }
     }
 }

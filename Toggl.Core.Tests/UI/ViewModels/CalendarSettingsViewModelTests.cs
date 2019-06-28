@@ -1,17 +1,17 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
-using NSubstitute;
-using Toggl.Core.UI.ViewModels.Selectable;
-using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.ViewModels.Selectable;
+using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Shared;
 using Xunit;
 
@@ -165,7 +165,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : CalendarSettingsViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : CalendarSettingsViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task SavesThePreviouslySelectedCalendarIds()
@@ -193,9 +193,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Where(calendar => selectedIds.Contains(calendar.Id))
                     .Select(calendar => new SelectableUserCalendarViewModel(calendar, false));
 
-                ViewModel.SelectCalendar.ExecuteSequentally(calendars)
-                    .PrependAction(ViewModel.Close)
-                    .Subscribe();
+                ViewModel.SelectCalendar.ExecuteSequentally(calendars).Subscribe();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
 
@@ -233,7 +232,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Select(calendar => new SelectableUserCalendarViewModel(calendar, false));
 
                 ViewModel.SelectCalendar.ExecuteSequentally(calendars)
-                    .PrependAction(ViewModel.Done)
+                    .PrependAction(ViewModel.Save)
                     .Subscribe();
 
                 TestScheduler.Start();
@@ -276,7 +275,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.SelectCalendar.ExecuteSequentally(calendars)
                     .PrependAction(ViewModel.TogglCalendarIntegration)
-                    .PrependAction(ViewModel.Done)
+                    .PrependAction(ViewModel.Save)
                     .Subscribe();
 
                 TestScheduler.Start();

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using NSubstitute;
+﻿using NSubstitute;
+using System.Collections.Generic;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
 

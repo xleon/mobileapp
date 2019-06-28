@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Android.Content;
+using System;
 using System.Linq;
-using Android.Content;
 using Toggl.Core.Services;
-using Toggl.Storage.Settings;
 
 namespace Toggl.Droid.Services
 {

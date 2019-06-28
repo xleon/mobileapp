@@ -26,7 +26,7 @@ namespace Toggl.Core.Autocomplete.Suggestions
             ProjectColor = task.Project?.DisplayColor() ?? "";
         }
 
-        public override int GetHashCode() 
+        public override int GetHashCode()
             => HashCode.From(TaskId, ProjectId, Name);
     }
 }

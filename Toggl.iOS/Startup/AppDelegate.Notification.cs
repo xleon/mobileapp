@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Foundation;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;

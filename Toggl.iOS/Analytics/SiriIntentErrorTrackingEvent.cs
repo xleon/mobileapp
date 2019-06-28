@@ -3,7 +3,7 @@ using Toggl.Core.Analytics;
 
 namespace Toggl.iOS
 {
-    public class SiriIntentErrorTrackingEvent: ITrackableEvent
+    public class SiriIntentErrorTrackingEvent : ITrackableEvent
     {
         public string EventName => "SiriIntentError";
         private readonly string Message;

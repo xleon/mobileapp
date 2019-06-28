@@ -42,8 +42,6 @@
 	</array>
 	<key>CFBundleName</key>
 	<string>Toggl for Devs</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.22</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -82,5 +80,7 @@
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
+	<key>CFBundleShortVersionString</key>
+	<string>2.0.1</string>
 </dict>
 </plist>

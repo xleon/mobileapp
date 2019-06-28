@@ -1,5 +1,4 @@
 using System;
-using Toggl.Core.Helper;
 using Toggl.Core.Models;
 using Toggl.Shared;
 using Toggl.Storage.Models;

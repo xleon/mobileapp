@@ -7,10 +7,10 @@ using Toggl.Core.Reports;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Sync;
+using Toggl.Networking;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Toggl.Networking;
 
 namespace Toggl.Core.Interactors
 {

@@ -1,10 +1,10 @@
-﻿using System;
-using Android.Content;
+﻿using Android.Content;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Views.Animations;
 using Android.Widget;
+using System;
 using Toggl.Shared.Extensions;
 using static Android.Views.MotionEventActions;
 
@@ -204,7 +204,7 @@ namespace Toggl.Droid.Views
             {
                 if (!isHidding)
                 {
-                    ((ReportsCalendarView) CalendarContainer).ExecutePendingPageUpdate();
+                    ((ReportsCalendarView)CalendarContainer).ExecutePendingPageUpdate();
                 }
             }
 

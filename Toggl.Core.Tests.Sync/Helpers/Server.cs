@@ -7,14 +7,14 @@ using Toggl.Core.Exceptions;
 using Toggl.Core.Tests.Sync.Exceptions;
 using Toggl.Core.Tests.Sync.Extensions;
 using Toggl.Core.Tests.Sync.State;
-using Toggl.Shared;
-using Toggl.Shared.Extensions;
-using Toggl.Shared.Models;
 using Toggl.Networking;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Helpers;
 using Toggl.Networking.Network;
 using Toggl.Networking.Tests.Integration.Helper;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 
 namespace Toggl.Core.Tests.Sync.Helpers
 {
@@ -245,7 +245,8 @@ namespace Toggl.Core.Tests.Sync.Helpers
                 {
                     if (user != null) await Task.Delay(TimeSpan.FromSeconds(1));
                     user = await Networking.Tests.Integration.User.Create();
-                } while (user.DefaultWorkspaceId.HasValue == false && ++numberOfTries < 3);
+                }
+                while (user.DefaultWorkspaceId.HasValue == false && ++numberOfTries < 3);
 
                 if (!user.DefaultWorkspaceId.HasValue)
                     throw new NoDefaultWorkspaceException($"Failed to create a new user account for testing even after {numberOfTries} tries.");

@@ -7,11 +7,11 @@ namespace SiriExtension
 {
     public class APIHelper
     {
-        #if USE_PRODUCTION_API
+#if USE_PRODUCTION_API
         private const ApiEnvironment environment = ApiEnvironment.Production;
-        #else
+#else
         private const ApiEnvironment environment = ApiEnvironment.Staging;
-        #endif
+#endif
 
         public static ITogglApi GetTogglAPI()
         {

@@ -3,12 +3,12 @@ using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.Tests.UI
 {

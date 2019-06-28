@@ -1,17 +1,17 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
+using System;
 using Toggl.Core.Exceptions;
-using Toggl.Core.UI.Services;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Services;
 using Toggl.Core.Tests.Generators;
-using Toggl.Storage.Models;
-using Toggl.Storage.Settings;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
+using Toggl.Storage.Models;
+using Toggl.Storage.Settings;
 using Xunit;
-using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.Tests.UI.Services
 {
@@ -19,10 +19,10 @@ namespace Toggl.Core.Tests.UI.Services
     {
         public abstract class BaseErrorHandlingServiceTests
         {
-            protected readonly INavigationService NavigationService;
-            protected readonly IAccessRestrictionStorage AccessRestrictionStorage;
-            protected readonly IErrorHandlingService ErrorHandlingService;
-            protected readonly IDatabaseUser User;
+            protected INavigationService NavigationService { get; }
+            protected IAccessRestrictionStorage AccessRestrictionStorage { get; }
+            protected IErrorHandlingService ErrorHandlingService { get; }
+            protected IDatabaseUser User { get; }
 
             public BaseErrorHandlingServiceTests()
             {

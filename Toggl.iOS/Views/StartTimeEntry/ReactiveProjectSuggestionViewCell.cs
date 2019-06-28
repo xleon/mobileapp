@@ -1,13 +1,13 @@
-﻿using System;
-using Foundation;
-using Toggl.iOS.Extensions;
+﻿using Foundation;
+using System;
+using System.Reactive.Disposables;
 using Toggl.Core.Autocomplete.Suggestions;
-using Toggl.Shared;
+using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
-using System.Reactive.Disposables;
-using Toggl.iOS.Cells;
 
 namespace Toggl.iOS.Views.StartTimeEntry
 {

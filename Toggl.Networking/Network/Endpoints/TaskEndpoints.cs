@@ -1,5 +1,4 @@
 ﻿using System;
-using Toggl.Shared.Extensions;
 
 namespace Toggl.Networking.Network
 {

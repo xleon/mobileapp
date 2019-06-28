@@ -1,5 +1,5 @@
-﻿using Toggl.Shared;
-using Toggl.Networking.Network;
+﻿using Toggl.Networking.Network;
+using Toggl.Shared;
 
 namespace Toggl.Networking
 {

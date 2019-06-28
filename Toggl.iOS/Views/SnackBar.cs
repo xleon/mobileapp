@@ -1,8 +1,7 @@
-using System;
 using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
-using Toggl.Core;
+using System;
 using Toggl.Shared;
 using UIKit;
 
@@ -39,7 +38,7 @@ namespace Toggl.iOS
         private bool showing = false;
         private string text;
 
-        public SnackBar (IntPtr handle) : base (handle)
+        public SnackBar(IntPtr handle) : base(handle)
         {
         }
 
@@ -48,12 +47,14 @@ namespace Toggl.iOS
             var arr = NSBundle.MainBundle.LoadNib("SnackBar", null, null);
             var snackBar = Runtime.GetNSObject<SnackBar>(arr.ValueAt(0));
 
-            snackBar.TextAttributes = new UIStringAttributes{
+            snackBar.TextAttributes = new UIStringAttributes
+            {
                 ForegroundColor = snackBar.label.TextColor,
                 Font = snackBar.label.Font
             };
 
-            snackBar.ButtonAttributes = new UIStringAttributes{
+            snackBar.ButtonAttributes = new UIStringAttributes
+            {
                 ForegroundColor = snackBar.label.TextColor,
                 Font = UIFont.SystemFontOfSize(14, UIFontWeight.Semibold)
             };

@@ -1,5 +1,4 @@
-﻿using System;
-using Toggl.Shared;
+﻿using Toggl.Shared;
 
 namespace Toggl.Core.Autocomplete.Suggestions
 {
@@ -21,13 +20,13 @@ namespace Toggl.Core.Autocomplete.Suggestions
             Description = $"Search {suggestionName}";
         }
 
-        public override int GetHashCode() 
+        public override int GetHashCode()
             => HashCode.From(Symbol, Description);
     }
 
     public static class QuerySymbolSuggestionExtensions
     {
         public static string FormattedDescription(this QuerySymbolSuggestion querySymbolSuggestion)
-            => $"{querySymbolSuggestion.Symbol} {querySymbolSuggestion.Description}"; 
+            => $"{querySymbolSuggestion.Symbol} {querySymbolSuggestion.Description}";
     }
 }

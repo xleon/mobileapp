@@ -1,13 +1,14 @@
-using System;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using System;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using Toggl.Core.Autocomplete;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Onboarding.StartTimeEntryView;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
@@ -106,7 +107,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             closeButton.Rx().Tap()
-                .Subscribe(ViewModel.Close.Inputs)
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             // Description text field
@@ -161,17 +162,6 @@ namespace Toggl.Droid.Activities
         {
             base.Finish();
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
-        }
-
-        public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
-        {
-            if (keyCode == Keycode.Back)
-            {
-                ViewModel.Close.Execute();
-                return true;
-            }
-
-            return base.OnKeyDown(keyCode, e);
         }
 
         private void setupStartTimeEntryOnboardingStep()

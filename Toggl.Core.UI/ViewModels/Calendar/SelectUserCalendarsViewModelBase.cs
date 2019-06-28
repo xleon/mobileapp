@@ -6,12 +6,12 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Interactors;
-using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
@@ -23,22 +23,18 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
     public abstract class SelectUserCalendarsViewModelBase : ViewModel<bool, string[]>
     {
-        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+        protected IUserPreferences UserPreferences { get; }
 
-        protected readonly IUserPreferences UserPreferences;
         private readonly IInteractorFactory interactorFactory;
-        private readonly IRxActionFactory rxActionFactory;
-
-        private ISubject<bool> doneEnabledSubject = new BehaviorSubject<bool>(false);
-
-        private ISubject<ImmutableCalendarSectionModel> calendarsSubject =
+        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+        private readonly ISubject<bool> doneEnabledSubject = new BehaviorSubject<bool>(false);
+        private readonly ISubject<ImmutableCalendarSectionModel> calendarsSubject =
             new BehaviorSubject<ImmutableCalendarSectionModel>(ImmutableList.Create<CalendarSectionModel>());
 
         public IObservable<ImmutableCalendarSectionModel> Calendars { get; }
 
+        public UIAction Save { get; private set; }
         public InputAction<SelectableUserCalendarViewModel> SelectCalendar { get; }
-        public UIAction Close { get; private set; }
-        public UIAction Done { get; private set; }
 
         protected bool ForceItemSelection { get; private set; }
 
@@ -57,11 +53,9 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
             UserPreferences = userPreferences;
             this.interactorFactory = interactorFactory;
-            this.rxActionFactory = rxActionFactory;
 
+            Save = rxActionFactory.FromAction(Done, doneEnabledSubject.AsObservable());
             SelectCalendar = rxActionFactory.FromAction<SelectableUserCalendarViewModel>(toggleCalendarSelection);
-            Close = rxActionFactory.FromAsync(OnClose);
-            Done = rxActionFactory.FromAsync(OnDone, doneEnabledSubject.AsObservable());
 
             Calendars = calendarsSubject.AsObservable().DistinctUntilChanged();
         }
@@ -121,10 +115,14 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             calendar.Selected = !calendar.Selected;
         }
 
-        protected virtual Task OnClose()
-            => Finish(InitialSelectedCalendarIds.ToArray());
+        public override void CloseWithDefaultResult()
+        {
+            Close(InitialSelectedCalendarIds.ToArray());
+        }
 
-        protected virtual Task OnDone()
-            => Finish(SelectedCalendarIds.ToArray());
+        protected virtual void Done()
+        {
+            Close(SelectedCalendarIds.ToArray());
+        }
     }
 }

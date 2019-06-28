@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 
 namespace Toggl.Shared
 {
@@ -18,12 +17,10 @@ namespace Toggl.Shared
         public CalendarMonth(int year, int month)
         {
             if (year < 0)
-                throw new ArgumentOutOfRangeException(
-                    $"{nameof(year)} can't be negative");
+                throw new ArgumentOutOfRangeException($"{nameof(year)} can't be negative");
 
             if (month < 1 || month > 12)
-                throw new ArgumentOutOfRangeException(
-                    $"{nameof(month)} must be in range [1 - 12]");
+                throw new ArgumentOutOfRangeException($"{nameof(month)} must be in range [1 - 12]");
 
             Year = year;
             Month = month;
@@ -52,7 +49,7 @@ namespace Toggl.Shared
                 newMonth += 12;
                 yearsToAdd--;
             }
-            
+
             return new CalendarMonth(Year + yearsToAdd, newMonth);
         }
 

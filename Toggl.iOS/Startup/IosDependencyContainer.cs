@@ -1,23 +1,23 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
-using Toggl.Core.UI;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Suggestions;
+using Toggl.Core.UI;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
+using Toggl.iOS.Presentation;
+using Toggl.iOS.Services;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Realm;
 using Toggl.Storage.Settings;
-using Toggl.Networking;
-using Toggl.Networking.Network;
-using Toggl.Core.UI.Navigation;
-using Toggl.iOS.Services;
-using Foundation;
 using UIKit;
-using Toggl.iOS.Presentation;
 
 namespace Toggl.iOS
 {
@@ -74,9 +74,6 @@ namespace Toggl.iOS
 
         protected override IFetchRemoteConfigService CreateFetchRemoteConfigService()
             => new FetchRemoteConfigServiceIos();
-
-        protected override IBrowserService CreateBrowserService()
-            => new BrowserServiceIos();
 
         protected override ICalendarService CreateCalendarService()
             => new CalendarServiceIos(PermissionsChecker);

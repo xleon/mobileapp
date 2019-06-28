@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using Toggl.Shared;
 using Toggl.Networking.Extensions;
 using Toggl.Networking.Models;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
+using Toggl.Shared;
 
 namespace Toggl.Networking.Exceptions
 {
@@ -29,11 +29,11 @@ namespace Toggl.Networking.Exceptions
         }
 
         public override string ToString()
-        #if DEBUG
+#if DEBUG
             => detailedMessage;
-        #else
+#else
             => anonymizedMessage;
-        #endif
+#endif
 
         private string detailedMessage
             => $"{GetType().Name} ({message}) for request {Request.HttpMethod} {Request.Endpoint} "

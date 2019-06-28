@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using Toggl.Core.DataSources.Interfaces;
+using Toggl.Core.Extensions;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Networking.ApiClients;
+using Toggl.Networking.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
-using Toggl.Networking.ApiClients;
-using System.Collections.Generic;
-using Toggl.Core.Extensions;
-using Toggl.Networking.Exceptions;
-using Toggl.Core.DataSources.Interfaces;
 using Toggl.Storage.Models;
 
 namespace Toggl.Core.Sync.States.Pull
@@ -64,7 +64,7 @@ namespace Toggl.Core.Sync.States.Pull
             => projectsApi.Search(
                     workspaceId: projectsToFetch.Key,
                     projectIds: projectsToFetch.Select(p => p.Id).ToArray())
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .Select(Project.Clean)
                 .SelectMany(dataSource.Update)
                 .ToList()

@@ -60,7 +60,7 @@ namespace Toggl.Core.Autocomplete
                 return addSpanToRelevantPosition(WorkspaceId, new QueryTextSpan(querySymbol, 1));
 
             var indexBeforeCursor = querySpan.CursorPosition - 1;
-            var needsSpace = indexBeforeCursor >= 0 && !Char.IsWhiteSpace(querySpan.Text[indexBeforeCursor]);
+            var needsSpace = indexBeforeCursor >= 0 && !char.IsWhiteSpace(querySpan.Text[indexBeforeCursor]);
 
             var padding = needsSpace ? " " : "";
             var textToAppend = $"{padding}{querySymbol}";
@@ -79,7 +79,7 @@ namespace Toggl.Core.Autocomplete
                     return tagSpan.TagId != idOfTagTobeAdded;
 
                 return true;
-            };  
+            };
         }
 
         public TextFieldInfo WithProject(long workspaceId, long projectId, string projectName, string projectColor, long? taskId, string taskName)
@@ -123,7 +123,7 @@ namespace Toggl.Core.Autocomplete
             var querySpan = GetSpanWithCurrentTextCursor();
             if (querySpan == null)
                 return appendSpan(workspaceId, spanToAdd, spansToReuse);
-            
+
             return addRelativeToQuerySpan(querySpan, workspaceId, spanToAdd, spansToReuse);
         }
 

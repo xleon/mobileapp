@@ -1,14 +1,14 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
-using Toggl.Shared;
-using Toggl.Shared.Extensions;
 using Toggl.Networking.ApiClients;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Xunit;
 
 namespace Toggl.Networking.Tests.ApiClients

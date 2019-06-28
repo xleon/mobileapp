@@ -1,5 +1,4 @@
-﻿using System;
-using Android.Content;
+﻿using Android.Content;
 using Android.Content.Res;
 using Android.Graphics;
 using Android.Runtime;
@@ -14,6 +13,7 @@ using Android.Views;
 using Android.Views.Accessibility;
 using Android.Widget;
 using Java.Lang;
+using System;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Helper;
 using Exception = Java.Lang.Exception;

@@ -71,7 +71,7 @@ namespace Toggl.Core.Experiments
                         .TimeEntries
                         .TimeEntryStarted
                         .Select(_ => (true, configuration));
-                    
+
                 case RatingViewCriterion.Continue:
                     return dataSource
                         .TimeEntries

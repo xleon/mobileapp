@@ -1,6 +1,3 @@
-using System;
-using System.Reactive;
-using System.Reactive.Subjects;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Runtime;
@@ -9,13 +6,16 @@ using Android.Text;
 using Android.Text.Style;
 using Android.Views;
 using Android.Widget;
+using System;
+using System.Reactive;
+using System.Reactive.Subjects;
 using Toggl.Core.Extensions;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Droid.Views;
 using Toggl.Shared;
-using Color = Android.Graphics.Color;
 using static Toggl.Core.UI.Helper.Colors.Reports;
+using Color = Android.Graphics.Color;
 
 namespace Toggl.Droid.ViewHolders
 {
@@ -82,11 +82,11 @@ namespace Toggl.Droid.ViewHolders
                 if (billablePercentageView.Parent == null) return;
 
                 var percentage = Item.BillablePercentage;
-                var availableWidth = ((View) billablePercentageView.Parent).Width;
+                var availableWidth = ((View)billablePercentageView.Parent).Width;
                 var targetWidth = (availableWidth / 100.0f) * percentage;
 
                 var layoutParams = billablePercentageView.LayoutParameters;
-                layoutParams.Width = (int) targetWidth;
+                layoutParams.Width = (int)targetWidth;
                 billablePercentageView.LayoutParameters = layoutParams;
             });
         }
@@ -95,7 +95,7 @@ namespace Toggl.Droid.ViewHolders
         {
             var timeString = timeSpan.ToFormattedString(durationFormat);
 
-            var emphasizedPartLength = durationFormat == DurationFormat.Improved 
+            var emphasizedPartLength = durationFormat == DurationFormat.Improved
                 ? timeString.Length - 3
                 : timeString.Length;
 

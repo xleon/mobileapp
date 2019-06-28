@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions.Reactive;
@@ -72,10 +72,10 @@ namespace Toggl.Droid.Activities
             switch (item.ItemId)
             {
                 case Resource.Id.Done:
-                    ViewModel.Done.Execute();
+                    ViewModel.Save.Execute();
                     return true;
                 case Android.Resource.Id.Home:
-                    ViewModel.Close.Execute();
+                    ViewModel.CloseWithDefaultResult();
                     return true;
             }
 

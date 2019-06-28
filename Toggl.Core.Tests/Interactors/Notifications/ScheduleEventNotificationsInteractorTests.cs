@@ -1,12 +1,12 @@
-﻿using System;
+﻿using FsCheck;
+using FsCheck.Xunit;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FsCheck;
-using FsCheck.Xunit;
-using NSubstitute;
 using Toggl.Core.Calendar;
 using Toggl.Core.Interactors.Notifications;
 using Toggl.Shared;

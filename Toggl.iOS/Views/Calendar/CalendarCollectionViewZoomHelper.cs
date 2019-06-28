@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using CoreGraphics;
-using Foundation;
-using Toggl.iOS.ViewSources;
-using Toggl.Core.Helper;
+﻿using Foundation;
 using Toggl.Shared;
-using Toggl.Shared.Extensions;
 using UIKit;
-using Math = System.Math;
 
 namespace Toggl.iOS.Views.Calendar
 {

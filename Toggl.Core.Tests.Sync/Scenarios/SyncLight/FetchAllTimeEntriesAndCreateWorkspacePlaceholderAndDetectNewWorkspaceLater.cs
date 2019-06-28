@@ -1,8 +1,8 @@
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.Sync.Extensions;

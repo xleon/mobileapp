@@ -1,23 +1,21 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Interactors;
-using Toggl.Core.UI.ViewModels;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Shared.Extensions;
 using Xunit;
 using TimeEntry = Toggl.Core.Models.TimeEntry;
-using Toggl.Core.Models.Interfaces;
-using Toggl.Core.DataSources;
-using System.Reactive.Subjects;
-using Toggl.Core.UI.Extensions;
-using Toggl.Shared.Extensions;
-using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -26,7 +24,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class SuggestionsViewModelTest : BaseViewModelTests<SuggestionsViewModel>
         {
             protected override SuggestionsViewModel CreateViewModel()
-                => new SuggestionsViewModel(DataSource, InteractorFactory, OnboardingStorage, SuggestionProviderContainer, SchedulerProvider, RxActionFactory, NavigationService);
+                => new SuggestionsViewModel(InteractorFactory, OnboardingStorage, SuggestionProviderContainer, SchedulerProvider, RxActionFactory, NavigationService);
 
             protected override void AdditionalViewModelSetup()
             {
@@ -48,7 +46,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Theory, LogIfTooSlow]
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
-                bool useDataSource,
                 bool useContainer,
                 bool useOnboardingStorage,
                 bool useInteractorFactory,
@@ -57,7 +54,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useNavigationService)
             {
                 var container = useContainer ? SuggestionProviderContainer : null;
-                var dataSource = useDataSource ? DataSource : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
@@ -65,7 +61,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SuggestionsViewModel(dataSource, interactorFactory, onboardingStorage, container,
+                    () => new SuggestionsViewModel(interactorFactory, onboardingStorage, container,
                         schedulerProvider, rxActionFactory, navigationService);
 
                 tryingToConstructWithEmptyParameters

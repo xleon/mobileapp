@@ -62,7 +62,7 @@ namespace Toggl.Core.Sync.States.Pull
         private IObservable<IEnumerable<IWorkspace>> persistedWorkspaces()
             => dataSource
                 .GetAll(workspace => workspace.SyncStatus != SyncStatus.RefetchingNeeded)
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .ToList();
     }
 }

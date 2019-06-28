@@ -1,15 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Core.Tests.Mocks;
 using Toggl.Shared;
 using Xunit;
 
@@ -21,10 +21,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public abstract class LogItemViewModelTest : BaseTest
         {
-            protected MockProject Project = new MockProject { Id = 1, Name = "Project1", Color = "#123456" };
-            protected IThreadSafeTimeEntry MockTimeEntry = Substitute.For<IThreadSafeTimeEntry>();
+            protected MockProject Project { get; } = new MockProject { Id = 1, Name = "Project1", Color = "#123456" };
+            protected IThreadSafeTimeEntry MockTimeEntry { get; } = Substitute.For<IThreadSafeTimeEntry>();
 
-            protected Subject<DateTimeOffset> TickSubject = new Subject<DateTimeOffset>();
+            protected Subject<DateTimeOffset> TickSubject { get; } = new Subject<DateTimeOffset>();
 
             protected LogItemViewModelTest()
             {

@@ -1,6 +1,6 @@
-﻿using Toggl.Core.UI.Navigation;
-using Toggl.Core.Interactors;
+﻿using Toggl.Core.Interactors;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Storage.Settings;
 

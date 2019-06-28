@@ -1,6 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿using FluentAssertions;
+using System.Collections.Immutable;
 using System.Linq;
-using FluentAssertions;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Span;
 using Xunit;
@@ -38,9 +38,9 @@ namespace Toggl.Core.Tests.Autocomplete
         {
             private const long newWorkspaceId = 100;
 
-            const long newProjectId = 200;
-            const string newProjectName = "Some other project";
-            const string newProjectColor = "Some other project";
+            private const long newProjectId = 200;
+            private const string newProjectName = "Some other project";
+            private const string newProjectColor = "Some other project";
 
             private const long newTaskId = 300;
             private const string newTaskName = "New task";

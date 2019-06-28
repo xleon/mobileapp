@@ -1,10 +1,10 @@
+using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.Sync;
 using Toggl.Core.Sync.States;

@@ -1,10 +1,10 @@
-﻿using System;
-using Android.Content;
+﻿using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Support.V4.Graphics;
 using Android.Util;
 using Android.Views;
+using System;
 using Toggl.Droid.Extensions;
 using Toggl.Shared.Extensions;
 using static System.Math;
@@ -115,7 +115,7 @@ namespace Toggl.Droid.Views
 
             Hue = pointX / width;
             Saturation = complement(pointY / height);
-            
+
             HueChanged?.Invoke(this, new EventArgs());
             SaturationChanged?.Invoke(this, new EventArgs());
 

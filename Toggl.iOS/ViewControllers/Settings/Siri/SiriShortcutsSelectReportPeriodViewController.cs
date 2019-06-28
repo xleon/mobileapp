@@ -1,9 +1,9 @@
-using System;
-using System.Reactive;
-using System.Reactive.Linq;
 using Foundation;
 using Intents;
 using IntentsUI;
+using System;
+using System.Reactive;
+using System.Reactive.Linq;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
@@ -86,7 +86,7 @@ namespace Toggl.iOS.ViewControllers.Settings
             AddToSiriWrapperView.AddSubview(button);
             AddToSiriWrapperView.AddSubview(descriptionLabel);
 
-            NSLayoutConstraint.ActivateConstraints(new []
+            NSLayoutConstraint.ActivateConstraints(new[]
             {
                 descriptionLabel.CenterXAnchor.ConstraintEqualTo(AddToSiriWrapperView.CenterXAnchor),
                 descriptionLabel.TopAnchor.ConstraintEqualTo(AddToSiriWrapperView.TopAnchor, 16),
@@ -122,7 +122,7 @@ namespace Toggl.iOS.ViewControllers.Settings
         public void DidFinish(INUIAddVoiceShortcutViewController controller, INVoiceShortcut voiceShortcut, NSError error)
         {
             controller.DismissViewController(true, null);
-            ViewModel.Close.Execute();
+            ViewModel.CloseWithDefaultResult();
         }
 
         public void DidCancel(INUIAddVoiceShortcutViewController controller)

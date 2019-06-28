@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Realms;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
-using Realms;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Storage.Models;
 using Toggl.Storage.Realm.Models;
 
 namespace Toggl.Storage.Realm

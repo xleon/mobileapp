@@ -1,10 +1,9 @@
-using System;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.App;
-using System.Reactive;
+using System;
 using Toggl.Core;
 using Toggl.Core.Services;
 using Toggl.Core.UI;
@@ -61,9 +60,11 @@ namespace Toggl.Droid
                 Finish();
                 return;
             }
-            
-            clearAllViewModelsAndSetupRootViewModel(dependencyContainer.ViewModelCache, dependencyContainer.ViewModelLoader); 
-            
+
+            clearAllViewModelsAndSetupRootViewModel(
+                dependencyContainer.ViewModelCache,
+                dependencyContainer.ViewModelLoader);
+
             var navigationUrl = Intent.Data?.ToString() ?? getTrackUrlFromProcessedText();
             if (string.IsNullOrEmpty(navigationUrl))
             {
@@ -79,10 +80,10 @@ namespace Toggl.Droid
         private void clearAllViewModelsAndSetupRootViewModel(ViewModelCache viewModelCache, ViewModelLoader viewModelLoader)
         {
             viewModelCache.ClearAll();
-            var viewModel = (MainTabBarViewModel)viewModelLoader.Load<Unit, Unit>(typeof(MainTabBarViewModel), Unit.Default)
-                .GetAwaiter()
-                .GetResult();
-            viewModelCache.Cache(viewModel);  
+            var viewModel = viewModelLoader.Load<MainTabBarViewModel>();
+            viewModelCache.Cache(viewModel);
+
+            viewModel.Initialize();
         }
 
         private void registerTimezoneChangedBroadcastReceiver(ITimeService timeService)
@@ -95,7 +96,7 @@ namespace Toggl.Droid
             }
 
             togglApplication.TimezoneChangedBroadcastReceiver = new TimezoneChangedBroadcastReceiver(timeService);
-            ApplicationContext.RegisterReceiver(togglApplication.TimezoneChangedBroadcastReceiver, new IntentFilter(ActionTimezoneChanged));    
+            ApplicationContext.RegisterReceiver(togglApplication.TimezoneChangedBroadcastReceiver, new IntentFilter(ActionTimezoneChanged));
         }
 
         private TogglApplication getTogglApplication()

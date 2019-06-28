@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Realms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Realms;
 using Toggl.Shared.Models;
 using Toggl.Storage.Realm.Models;
 
@@ -24,7 +24,7 @@ namespace Toggl.Storage.Realm
 
         public static Repository<TModel> For<TRealmEntity>(
             Func<Realms.Realm> getRealmInstance, Func<TModel, Realms.Realm, TRealmEntity> convertToRealm)
-            where TRealmEntity : RealmObject, IIdentifiable,  IModifiableId, TModel, IUpdatesFrom<TModel>
+            where TRealmEntity : RealmObject, IIdentifiable, IModifiableId, TModel, IUpdatesFrom<TModel>
             => For(getRealmInstance, convertToRealm, matchById<TRealmEntity>, matchByIds<TRealmEntity>, getId<TRealmEntity>);
 
         public static Repository<TModel> For<TRealmEntity>(

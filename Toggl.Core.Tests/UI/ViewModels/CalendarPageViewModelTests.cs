@@ -1,10 +1,10 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Shared;
 using Xunit;
@@ -61,13 +61,17 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 prepare(year, month, beginningOfWeek);
 
                 if (expectedDayCount == 0)
+                {
                     viewModel.Days.First().IsInCurrentMonth.Should().BeTrue();
+                }
                 else
+                {
                     viewModel
                         .Days
                         .Take(expectedDayCount)
                         .Should()
                         .OnlyContain(day => !day.IsInCurrentMonth);
+                }
             }
 
             [Theory, LogIfTooSlow]
@@ -106,9 +110,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 if (expectedDayCount == 0)
                     daysFromNextMonth.Should().BeEmpty();
                 else
-                    daysFromNextMonth
-                        .Should()
-                        .OnlyContain(day => !day.IsInCurrentMonth);
+                    daysFromNextMonth.Should().OnlyContain(day => !day.IsInCurrentMonth);
             }
 
             [Property]

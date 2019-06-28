@@ -1,7 +1,7 @@
-﻿using Toggl.iOS.Extensions;
+﻿using CoreGraphics;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Calendar;
-using CoreGraphics;
-using Toggl.Core;
+using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -38,8 +38,8 @@ namespace Toggl.iOS.ViewControllers.Calendar
                 .BindAction(ViewModel.EnableAccess)
                 .DisposedBy(DisposeBag);
 
-            ContinueWithoutAccessButton.Rx()
-                .BindAction(ViewModel.Close)
+            ContinueWithoutAccessButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
         }
     }

@@ -1,5 +1,5 @@
-﻿using System;
-using Realms;
+﻿using Realms;
+using System;
 using Toggl.Storage.Models;
 
 namespace Toggl.Storage.Realm.Models

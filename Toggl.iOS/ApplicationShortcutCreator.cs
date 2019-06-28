@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using CoreFoundation;
+﻿using CoreFoundation;
 using Foundation;
+using System.Collections.Generic;
+using System.Linq;
 using Toggl.Core.Shortcuts;
 using UIKit;
 

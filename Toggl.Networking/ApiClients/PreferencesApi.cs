@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Toggl.Shared.Models;
 using Toggl.Networking.Models;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
+using Toggl.Shared.Models;
 
 namespace Toggl.Networking.ApiClients
 {

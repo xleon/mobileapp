@@ -1,9 +1,9 @@
-using System;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 

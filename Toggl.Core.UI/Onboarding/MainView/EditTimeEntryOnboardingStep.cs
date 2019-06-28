@@ -30,10 +30,10 @@ namespace Toggl.Core.UI.Onboarding.MainView
             bool hasTimeEntryBeenContinued,
             bool isEmpty)
         {
-            return signedUpUsingTheApp 
-                && !navigatedAwayFromMainViewAfterTappingStopButton 
-                && !hasTimeEntryBeenContinued 
-                && !hasTappedTimeEntry 
+            return signedUpUsingTheApp
+                && !navigatedAwayFromMainViewAfterTappingStopButton
+                && !hasTimeEntryBeenContinued
+                && !hasTappedTimeEntry
                 && !isEmpty;
         }
     }

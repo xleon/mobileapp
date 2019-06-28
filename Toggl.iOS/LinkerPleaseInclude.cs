@@ -1,6 +1,6 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
 using Newtonsoft.Json.Converters;
+using System;
 using Toggl.iOS.Views;
 
 namespace Toggl.iOS

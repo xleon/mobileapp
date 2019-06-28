@@ -1,21 +1,21 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.DTOs;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Xunit;
 using ProjectPredicate = System.Func<Toggl.Storage.Models.IDatabaseProject, bool>;
-using Toggl.Shared;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -322,15 +322,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : EditProjectViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : EditProjectViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -338,7 +338,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.Initialize("Some name");
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 (await ViewModel.Result)
@@ -350,7 +350,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.Initialize("Some name");
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 InteractorFactory.CreateProject(Arg.Any<CreateProjectDTO>()).DidNotReceive().Execute();

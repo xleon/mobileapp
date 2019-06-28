@@ -1,8 +1,8 @@
+using FluentAssertions;
+using NSubstitute;
 using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;

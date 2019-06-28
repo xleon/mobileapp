@@ -1,9 +1,9 @@
+using FluentAssertions;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Subjects;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Helpers;

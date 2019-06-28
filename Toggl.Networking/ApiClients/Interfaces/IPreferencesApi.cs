@@ -1,5 +1,4 @@
-﻿using System;
-using Toggl.Shared.Models;
+﻿using Toggl.Shared.Models;
 
 namespace Toggl.Networking.ApiClients
 {

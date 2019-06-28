@@ -125,6 +125,9 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UIView ManualModeView { get; set; }
 
 		[Outlet]
+		UIKit.UIView MiscSection { get; set; }
+
+		[Outlet]
 		UIKit.UIView NotificationSettingsView { get; set; }
 
 		[Outlet]
@@ -135,6 +138,12 @@ namespace Toggl.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UIView ShortcutsSettingsView { get; set; }
+
+		[Outlet]
+		UIKit.UIView SiriSection { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint SiriSectionTopConstraint { get; set; }
 
 		[Outlet]
 		UIKit.UILabel SmartAlertCellLabel { get; set; }
@@ -380,6 +389,11 @@ namespace Toggl.iOS.ViewControllers
 				ManualModeView = null;
 			}
 
+			if (MiscSection != null) {
+				MiscSection.Dispose ();
+				MiscSection = null;
+			}
+
 			if (NotificationSettingsView != null) {
 				NotificationSettingsView.Dispose ();
 				NotificationSettingsView = null;
@@ -393,6 +407,21 @@ namespace Toggl.iOS.ViewControllers
 			if (SendFeedbackSuccessView != null) {
 				SendFeedbackSuccessView.Dispose ();
 				SendFeedbackSuccessView = null;
+			}
+
+			if (ShortcutsSettingsView != null) {
+				ShortcutsSettingsView.Dispose ();
+				ShortcutsSettingsView = null;
+			}
+
+			if (SiriSection != null) {
+				SiriSection.Dispose ();
+				SiriSection = null;
+			}
+
+			if (SiriSectionTopConstraint != null) {
+				SiriSectionTopConstraint.Dispose ();
+				SiriSectionTopConstraint = null;
 			}
 
 			if (SmartAlertCellLabel != null) {
@@ -465,6 +494,11 @@ namespace Toggl.iOS.ViewControllers
 				VersionLabel = null;
 			}
 
+			if (WorkflowsSettingsView != null) {
+				WorkflowsSettingsView.Dispose ();
+				WorkflowsSettingsView = null;
+			}
+
 			if (WorkspaceCellLabel != null) {
 				WorkspaceCellLabel.Dispose ();
 				WorkspaceCellLabel = null;
@@ -483,16 +517,6 @@ namespace Toggl.iOS.ViewControllers
 			if (YourProfileCellLabel != null) {
 				YourProfileCellLabel.Dispose ();
 				YourProfileCellLabel = null;
-			}
-
-			if (ShortcutsSettingsView != null) {
-				ShortcutsSettingsView.Dispose ();
-				ShortcutsSettingsView = null;
-			}
-
-			if (WorkflowsSettingsView != null) {
-				WorkflowsSettingsView.Dispose ();
-				WorkflowsSettingsView = null;
 			}
 		}
 	}

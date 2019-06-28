@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CoreAnimation;
+﻿using CoreAnimation;
 using CoreGraphics;
 using Foundation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
-using UIKit;
-using Math = System.Math;
 using Toggl.Shared.Extensions;
+using UIKit;
 
 namespace Toggl.iOS.Views.Calendar
 {

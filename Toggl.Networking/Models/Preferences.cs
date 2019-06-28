@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Toggl.Networking.Serialization.Converters;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.Networking.Serialization.Converters;
 
 namespace Toggl.Networking.Models
 {

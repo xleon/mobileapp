@@ -1,10 +1,9 @@
-﻿using System;
+﻿using CoreGraphics;
+using System;
 using System.Reactive.Linq;
-using CoreGraphics;
+using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
-using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -40,18 +39,18 @@ namespace Toggl.iOS.ViewControllers.Calendar
             TableView.Source = source;
 
             DoneButton.Rx()
-                .BindAction(ViewModel.Done)
+                .BindAction(ViewModel.Save)
                 .DisposedBy(DisposeBag);
 
             source.Rx().ModelSelected()
                 .Subscribe(ViewModel.SelectCalendar.Inputs)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.Done.Enabled
+            ViewModel.Save.Enabled
                 .Subscribe(DoneButton.Rx().Enabled())
                 .DisposedBy(DisposeBag);
 
-            ViewModel.Done.Enabled
+            ViewModel.Save.Enabled
                 .Select(alphaForEnabled)
                 .Subscribe(DoneButton.Rx().AnimatedAlpha())
                 .DisposedBy(DisposeBag);

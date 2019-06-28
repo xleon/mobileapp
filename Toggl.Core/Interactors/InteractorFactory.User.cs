@@ -1,7 +1,6 @@
 ﻿using System;
 using Toggl.Core.DTOs;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Shared;
 
 namespace Toggl.Core.Interactors
 {

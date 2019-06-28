@@ -1,13 +1,11 @@
-﻿using System;
+﻿using NSubstitute;
+using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using NSubstitute;
 using Toggl.Core.DTOs;
-using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.Sync;
 using Toggl.Storage;
 using Xunit;
 

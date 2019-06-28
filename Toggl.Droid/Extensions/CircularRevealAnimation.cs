@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading;
-using Android.Animation;
-using Android.Speech.Tts;
+﻿using Android.Animation;
 using Android.Views;
+using System;
+using System.Threading;
 
 namespace Toggl.Droid.Extensions
 {
@@ -91,7 +90,7 @@ namespace Toggl.Droid.Extensions
 
         public CircularRevealAnimation SetDuration(TimeSpan span)
         {
-            duration = (int) span.TotalMilliseconds;
+            duration = (int)span.TotalMilliseconds;
 
             return this;
         }

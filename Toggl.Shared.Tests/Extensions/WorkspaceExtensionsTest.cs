@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
+using System.Threading.Tasks;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Xunit;

@@ -1,22 +1,22 @@
+using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using FluentAssertions;
-using NSubstitute;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Reports;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Core.UI.Views;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Xunit;
-using Microsoft.Reactive.Testing;
-using Toggl.Core.UI.ViewModels.Reports;
-using Toggl.Core.Tests.TestExtensions;
-using Toggl.Core.Interactors;
-using Toggl.Core.UI.Views;
-using Toggl.Core.Models;
 using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels

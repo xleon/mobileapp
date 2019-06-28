@@ -1,8 +1,8 @@
-﻿using System;
+﻿using CoreFoundation;
+using Foundation;
+using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using CoreFoundation;
-using Foundation;
 
 namespace Toggl.iOS
 {

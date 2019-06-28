@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -6,11 +8,9 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
-using CoreGraphics;
-using Foundation;
 using Toggl.Core;
-using Toggl.Core.Extensions;
 using Toggl.Core.Calendar;
+using Toggl.Core.Extensions;
 using Toggl.Core.UI.Calendar;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
@@ -258,7 +258,7 @@ namespace Toggl.iOS.ViewSources
             long? originalId = null;
             if (IsEditing)
             {
-                var editingIndex = (int) editingItemIndexPath.Item;
+                var editingIndex = (int)editingItemIndexPath.Item;
                 originalId = calendarItems[editingIndex].TimeEntryId;
             }
 

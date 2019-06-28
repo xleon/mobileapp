@@ -1,6 +1,6 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
+using System;
 using Toggl.Core.Analytics;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;

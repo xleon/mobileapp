@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
+using System;
+using System.Collections.Generic;
 using Toggl.Core.Helper;
 using Toggl.Droid.Adapters.Calendar;
 
@@ -344,13 +344,13 @@ namespace Toggl.Droid.Views.Calendar
 
         private int getChildStart(View view)
         {
-            var layoutParams = (RecyclerView.LayoutParams) view.LayoutParameters;
+            var layoutParams = (RecyclerView.LayoutParams)view.LayoutParameters;
             return GetDecoratedTop(view) - layoutParams.TopMargin;
         }
 
         private int getChildEnd(View view)
         {
-            var layoutParams = (RecyclerView.LayoutParams) view.LayoutParameters;
+            var layoutParams = (RecyclerView.LayoutParams)view.LayoutParameters;
             return GetDecoratedBottom(view) + layoutParams.BottomMargin;
         }
 

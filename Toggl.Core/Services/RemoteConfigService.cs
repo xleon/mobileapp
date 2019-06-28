@@ -14,7 +14,7 @@ namespace Toggl.Core.Services
             this.keyValueStorage = keyValueStorage;
         }
 
-        public RatingViewConfiguration GetRatingViewConfiguration() 
+        public RatingViewConfiguration GetRatingViewConfiguration()
             => keyValueStorage.ReadStoredRatingViewConfiguration();
 
         public PushNotificationsConfiguration GetPushNotificationsConfiguration()

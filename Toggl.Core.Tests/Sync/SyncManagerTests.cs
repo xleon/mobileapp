@@ -1,25 +1,24 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck.Xunit;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
-using Toggl.Core.Sync;
-using Xunit;
-using FsCheck.Xunit;
 using Toggl.Core.Analytics;
+using Toggl.Core.Diagnostics;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Services;
+using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
-using Toggl.Storage.Settings;
-using static Toggl.Core.Sync.SyncState;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
-using Toggl.Core.Exceptions;
-using Toggl.Core.Diagnostics;
-using Toggl.Core.Services;
+using Toggl.Storage.Settings;
+using Xunit;
+using static Toggl.Core.Sync.SyncState;
 
 namespace Toggl.Core.Tests.Sync
 {
@@ -34,7 +33,7 @@ namespace Toggl.Core.Tests.Sync
             protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
             protected ILastTimeUsageStorage LastTimeUsageStorage { get; } = Substitute.For<ILastTimeUsageStorage>();
             protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
-            protected IStopwatchProvider StopwatchProvider = Substitute.For<IStopwatchProvider>();
+            protected IStopwatchProvider StopwatchProvider { get; } = Substitute.For<IStopwatchProvider>();
             protected ISyncManager SyncManager { get; }
 
             protected IAutomaticSyncingService AutomaticSyncingService { get; } =

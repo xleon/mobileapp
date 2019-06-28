@@ -1,11 +1,11 @@
-﻿using System;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using Android.Graphics;
+﻿using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Support.V4.Graphics;
 using Android.Views;
 using Android.Widget;
+using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
@@ -25,7 +25,7 @@ namespace Toggl.Droid.ViewHolders
         private TextView clientNameLabel;
         private IDisposable toggleTasksDisposable;
         private readonly ISubject<ProjectSuggestion> toggleTasksSubject;
-        
+
         public ProjectSuggestionViewHolder(View itemView, ISubject<ProjectSuggestion> toggleTasksSubject)
             : base(itemView)
         {
@@ -66,7 +66,7 @@ namespace Toggl.Droid.ViewHolders
 
             if (selectedProjectToken == null)
                 return;
-            
+
             selectedProjectToken.Visibility = Suggestion.Selected.ToVisibility(useGone: false);
             if (Suggestion.Selected && selectedProjectToken.Background is GradientDrawable drawable)
             {

@@ -1,5 +1,5 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
+using System;
 using Xunit;
 
 namespace Toggl.Shared.Tests
@@ -86,12 +86,12 @@ namespace Toggl.Shared.Tests
 
                 either.IsRight.Should().BeTrue();
             }
-            
+
             [Fact, LogIfTooSlow]
             public void ShouldBeFalseForAnObjectCreatedWithLeft()
             {
                 var either = Either<string, bool>.WithLeft("");
-                
+
                 either.IsRight.Should().BeFalse();
             }
         }

@@ -1,6 +1,6 @@
-﻿using System;
-using CoreGraphics;
+﻿using CoreGraphics;
 using Foundation;
+using System;
 using Toggl.iOS.Views;
 
 namespace Toggl.Daneel.Views

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using FluentAssertions;
 using Toggl.Shared.Models;
 using Toggl.Storage.Models;
 using Toggl.Storage.Realm;

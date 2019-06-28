@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Cells;
@@ -10,7 +10,7 @@ namespace Toggl.iOS.Views.Tag
 {
     public partial class NewTagViewCell : BaseTableViewCell<SelectableTagBaseViewModel>
     {
-        public static readonly string Identifier  = nameof(NewTagViewCell);
+        public static readonly string Identifier = nameof(NewTagViewCell);
         public static readonly UINib Nib;
 
         private static readonly UIColor selectedBackgroundColor

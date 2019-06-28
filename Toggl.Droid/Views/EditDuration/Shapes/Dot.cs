@@ -1,4 +1,3 @@
-using System;
 using Android.Graphics;
 using Toggl.Droid.Extensions;
 using static Toggl.Shared.Math;
@@ -34,10 +33,10 @@ namespace Toggl.Droid.Views.EditDuration.Shapes
 
         public void Update(double startTimeAngle, double endTimeAngle)
         {
-            var startAngle = (float) startTimeAngle;
-            var endAngle = (float) endTimeAngle;
+            var startAngle = (float)startTimeAngle;
+            var endAngle = (float)endTimeAngle;
             var diffAngle = endAngle - startAngle + (endAngle < startAngle ? FullCircle : 0);
-            var diffInDegrees = (float) Math.ToDegrees(diffAngle);
+            var diffInDegrees = (float)Math.ToDegrees(diffAngle);
             hidden = diffInDegrees < visibilityThresholdInDegrees;
             position.UpdateWith(PointOnCircumference(pivotCenter, startAngle + diffAngle / 2f, distanceToPivot));
         }

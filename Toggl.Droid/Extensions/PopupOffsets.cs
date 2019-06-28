@@ -13,7 +13,7 @@ namespace Toggl.Droid.Extensions
             VerticalOffset = verticalOffset;
         }
 
-        public static PopupOffsets FromDp(int width, int height, Context context) 
+        public static PopupOffsets FromDp(int width, int height, Context context)
             => new PopupOffsets(width.DpToPixels(context), height.DpToPixels(context));
     }
 }

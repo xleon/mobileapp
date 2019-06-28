@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Text;
-using Foundation;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;

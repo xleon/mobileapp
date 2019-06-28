@@ -5,7 +5,7 @@ namespace Toggl.Core.Reports
     public sealed class ProjectSummaryReport
     {
         private const float textDrawingThreshold = 0.1f;
-        
+
         public float TotalSeconds { get; }
 
         public float BillablePercentage { get; }

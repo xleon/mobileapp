@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Reactive;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Services;
-using Toggl.Core.Services;
 using Notification = Toggl.Shared.Notification;
 
 namespace Toggl.Core.Calendar

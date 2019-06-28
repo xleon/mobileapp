@@ -38,7 +38,7 @@ namespace Toggl.Droid.Views.EditDuration.Shapes
             startAngle = (float)startTimeAngle;
             endAngle = (float)endTimeAngle;
             var diffAngle = endAngle - startAngle + (endAngle < startAngle ? FullCircle : 0);
-            endStroke = (float) diffAngle;
+            endStroke = (float)diffAngle;
         }
     }
 }

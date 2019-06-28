@@ -1,5 +1,5 @@
-using System;
 using Android.Support.V7.Widget;
+using System;
 
 namespace Toggl.Droid.Views.Calendar
 {
@@ -111,7 +111,7 @@ namespace Toggl.Droid.Views.Calendar
 
         private void removeAndRecycleAnchoredView(int position, RecyclerView.Recycler recycler)
         {
-            var adapterPosition = ((RecyclerView.LayoutParams) anchoredViews[position].LayoutParameters).ViewAdapterPosition;
+            var adapterPosition = ((RecyclerView.LayoutParams)anchoredViews[position].LayoutParameters).ViewAdapterPosition;
             RemoveAndRecycleView(anchoredViews[position], recycler);
             anchoredViews[position] = null;
             anchoredViewsPositions.Remove(adapterPosition);

@@ -1,18 +1,17 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Sync;
-using Toggl.Core.Sync.States;
 using Toggl.Core.Sync.States.Push;
-using Xunit;
 using Toggl.Core.Tests.Helpers;
-using Toggl.Storage;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
+using Toggl.Storage;
+using Xunit;
 
 namespace Toggl.Core.Tests.Sync.States.Push
 {

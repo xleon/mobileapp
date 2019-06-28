@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Collections.Immutable;
-using Foundation;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Selectable;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Runtime.InteropServices;
 using Toggl.Core.Analytics;
 using Toggl.Shared;
 
@@ -13,21 +12,21 @@ namespace Toggl.Core.Interactors
 
     public abstract class TrackableInteractor
     {
-        internal IAnalyticsService analyticsService;
+        internal IAnalyticsService AnalyticsService { get; }
 
         public TrackableInteractor(IAnalyticsService analyticsService)
         {
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
 
-            this.analyticsService = analyticsService;
+            AnalyticsService = analyticsService;
         }
     }
 
     public class TrackedInteractor<TException, TType> : IInteractor<IObservable<TType>>
     where TException : Exception
     {
-        internal IInteractor<IObservable<TType>> innerInteractor;
-        private string message;
+        private readonly string message;
+        private readonly IInteractor<IObservable<TType>> innerInteractor;
 
         public TrackedInteractor(IInteractor<IObservable<TType>> innerInteractor, string message)
         {
@@ -40,7 +39,7 @@ namespace Toggl.Core.Interactors
             return innerInteractor.Execute()
                 .Catch<TType, TException>(e =>
                 {
-                    ((TrackableInteractor)innerInteractor).analyticsService.Track(e, message);
+                    ((TrackableInteractor)innerInteractor).AnalyticsService.Track(e, message);
                     return Observable.Throw<TType>(e);
                 });
         }

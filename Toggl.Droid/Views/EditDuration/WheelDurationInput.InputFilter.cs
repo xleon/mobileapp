@@ -1,4 +1,3 @@
-using System;
 using Android.Text;
 using Android.Widget;
 using Java.Lang;

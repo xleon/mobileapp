@@ -4,10 +4,10 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Colors = Toggl.Core.UI.Helper.Colors;
@@ -35,7 +35,6 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<float> Value { get; }
 
         public UIAction Save { get; }
-        public UIAction Close { get; }
         public InputAction<float> SetHue { get; }
         public InputAction<float> SetSaturation { get; }
         public InputAction<float> SetValue { get; }
@@ -53,8 +52,7 @@ namespace Toggl.Core.UI.ViewModels
             Saturation = saturation.AsObservable();
             Value = value.AsObservable();
 
-            Save = rxActionFactory.FromAsync(save);
-            Close = rxActionFactory.FromAsync(close);
+            Save = rxActionFactory.FromAction(save);
             SetHue = rxActionFactory.FromAction<float>(hue.OnNext);
             SetSaturation = rxActionFactory.FromAction<float>(saturation.OnNext);
             SetValue = rxActionFactory.FromAction<float>(value.OnNext);
@@ -99,6 +97,10 @@ namespace Toggl.Core.UI.ViewModels
 
             return base.Initialize(parameter);
         }
+        public override void CloseWithDefaultResult()
+        {
+            Close(defaultColor);
+        }
 
         private IEnumerable<Color> combineAllColors(Color[] defaultColors, Color custom)
         {
@@ -120,11 +122,10 @@ namespace Toggl.Core.UI.ViewModels
 
         private IEnumerable<SelectableColorViewModel> updateSelectableColors(IEnumerable<Color> availableColors, Color selectedColor)
             => availableColors.Select(color => new SelectableColorViewModel(color, color == selectedColor));
-
-        private Task close()
-            => Finish(defaultColor);
-
-        private Task save()
-            => Finish(selectedColor.Value);
+        
+        private void save()
+        {
+            Close(selectedColor.Value);
+        }
     }
 }

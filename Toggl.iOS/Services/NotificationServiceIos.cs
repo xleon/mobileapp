@@ -1,19 +1,19 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Foundation;
-using Toggl.iOS.Extensions;
 using Toggl.Core;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.Services;
+using Toggl.iOS.Extensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UserNotifications;
-using Notification = Toggl.Shared.Notification;
 using FoundationResources = Toggl.Shared.Resources;
+using Notification = Toggl.Shared.Notification;
 
 namespace Toggl.iOS.Services
 {

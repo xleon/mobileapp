@@ -24,7 +24,7 @@ namespace Toggl.Droid.ViewHelpers
         public TimeEntryViewData(Context context, LogItemViewModel viewModel)
         {
             ViewModel = viewModel;
-            ProjectTaskClientText = TimeEntryExtensions.ToProjectTaskClient(context, 
+            ProjectTaskClientText = TimeEntryExtensions.ToProjectTaskClient(context,
                 ViewModel.HasProject,
                 ViewModel.ProjectName,
                 ViewModel.ProjectColor,

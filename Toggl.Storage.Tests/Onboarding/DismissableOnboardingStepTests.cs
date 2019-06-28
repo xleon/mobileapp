@@ -1,7 +1,4 @@
-﻿using System;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
 using Toggl.Storage.Onboarding;
@@ -17,7 +14,7 @@ namespace Toggl.Storage.Tests.Onboarding
             protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
             protected IOnboardingStep OnboardingStep { get; } = Substitute.For<IOnboardingStep>();
             protected TestScheduler Scheduler { get; } = new TestScheduler();
-            protected string Key = nameof(OnboardingStep);
+            protected string Key { get; } = nameof(OnboardingStep);
 
             protected DismissableOnboardingStep DismissableStep { get; set; }
 
@@ -105,7 +102,7 @@ namespace Toggl.Storage.Tests.Onboarding
                 observer.Messages.Should().BeEquivalentTo(expectedMessages);
             }
         }
-        
+
         public sealed class TheDismissMethod : DismissableOnboardingStepTest
         {
             [Fact, LogIfTooSlow]

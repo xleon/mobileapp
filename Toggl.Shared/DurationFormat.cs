@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Toggl.Shared
+﻿namespace Toggl.Shared
 {
     public enum DurationFormat
     {

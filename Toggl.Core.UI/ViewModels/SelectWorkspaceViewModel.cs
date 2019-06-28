@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Interactors;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -21,7 +21,6 @@ namespace Toggl.Core.UI.ViewModels
         public string Title { get; private set; }
         public ReadOnlyCollection<SelectableWorkspaceViewModel> Workspaces { get; private set; }
 
-        public UIAction Close { get; }
         public InputAction<SelectableWorkspaceViewModel> SelectWorkspace { get; }
 
         public SelectWorkspaceViewModel(
@@ -35,13 +34,12 @@ namespace Toggl.Core.UI.ViewModels
 
             this.interactorFactory = interactorFactory;
 
-            Close = rxActionFactory.FromAsync(close);
-            SelectWorkspace = rxActionFactory.FromAsync<SelectableWorkspaceViewModel>(selectWorkspace);
+            SelectWorkspace = rxActionFactory.FromAction<SelectableWorkspaceViewModel>(selectWorkspace);
         }
 
         public override async Task Initialize(SelectWorkspaceParameters parameter)
         {
-            base.Initialize(parameter);
+            await base.Initialize(parameter);
 
             Title = parameter.Title;
             currentWorkspaceId = parameter.CurrentWorkspaceId;
@@ -55,10 +53,14 @@ namespace Toggl.Core.UI.ViewModels
                 .AsReadOnly();
         }
 
-        private Task close()
-            => Finish(currentWorkspaceId);
+        public override void CloseWithDefaultResult()
+        {
+            Close(currentWorkspaceId);
+        }
 
-        private Task selectWorkspace(SelectableWorkspaceViewModel workspace)
-            => Finish(workspace.WorkspaceId);
+        private void selectWorkspace(SelectableWorkspaceViewModel workspace)
+        {
+            Close(workspace.WorkspaceId);
+        }
     }
 }

@@ -2,10 +2,10 @@
 using System.Reactive.Linq;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Networking.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
-using Toggl.Networking.Exceptions;
 
 namespace Toggl.Core.Sync.States.Push
 {
@@ -48,7 +48,7 @@ namespace Toggl.Core.Sync.States.Push
         private IObservable<ITransition> markAsUnsyncable(T entity, string reason)
             => dataSource
                 .OverwriteIfOriginalDidNotChange(entity, createUnsyncableFrom(entity, reason))
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .OfType<UpdateResult<T>>()
                 .Select(result => result.Entity)
                 .DefaultIfEmpty(entity)

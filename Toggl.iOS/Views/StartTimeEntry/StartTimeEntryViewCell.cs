@@ -1,9 +1,9 @@
-﻿using System;
-using Foundation;
-using Toggl.iOS.Extensions;
+﻿using Foundation;
+using System;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
 using Toggl.iOS.Transformations;
 using Toggl.Shared;
 using UIKit;

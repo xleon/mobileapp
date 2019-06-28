@@ -62,7 +62,7 @@ namespace Toggl.Core.DataSources
             TThreadsafe entity)
             => storage.UpdateWithConflictResolution(entity.Id, entity, ResolveConflicts, RivalsResolver)
                 .ToThreadSafeResult(Convert)
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .SingleAsync()
                 .Do(handleConflictResolutionResult);
 

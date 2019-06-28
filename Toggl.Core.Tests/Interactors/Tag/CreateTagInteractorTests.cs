@@ -1,9 +1,9 @@
-﻿using System;
-using System.Reactive.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
+using System;
+using System.Reactive.Linq;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
@@ -19,7 +19,7 @@ namespace Toggl.Core.Tests.Interactors
             [Theory, LogIfTooSlow]
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
-                bool useIdProvider, 
+                bool useIdProvider,
                 bool useTimeService,
                 bool useDataSource,
                 bool useTagName,

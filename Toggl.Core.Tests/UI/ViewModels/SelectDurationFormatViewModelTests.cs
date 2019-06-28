@@ -1,12 +1,10 @@
+using FluentAssertions;
 using System;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using Xunit;
-using Toggl.Core.Tests.TestExtensions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -59,16 +57,16 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : SelectDurationFormatViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : SelectDurationFormatViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ReturnsTheDefaultDurationFormat()
             {
                 var durationFormat = DurationFormat.Improved;
-                
+
                 await ViewModel.Initialize(durationFormat);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 (await ViewModel.Result).Should().Be(durationFormat);
@@ -81,7 +79,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ReturnsTheDefaultDurationFormat()
             {
                 var defaultDuration = DurationFormat.Classic;
-                
+
                 await ViewModel.Initialize(defaultDuration);
 
                 var selectedDuration = ViewModel.DurationFormats[1];

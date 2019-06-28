@@ -1,6 +1,6 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Linq;
-using FluentAssertions;
 using Toggl.Networking.Helpers;
 using Toggl.Networking.Tests.Integration.BaseTests;
 using Toggl.Networking.Tests.Integration.Helper;
