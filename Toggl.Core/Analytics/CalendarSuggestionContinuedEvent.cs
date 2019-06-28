@@ -8,7 +8,7 @@ namespace Toggl.Core.Analytics
     {
         public string EventName => "CalendarSuggestionContinued";
 
-        private string offsetCategory;
+        private readonly string offsetCategory;
 
         public CalendarSuggestionContinuedEvent(TimeSpan offset)
         {

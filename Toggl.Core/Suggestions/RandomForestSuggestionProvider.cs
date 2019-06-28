@@ -55,18 +55,14 @@ namespace Toggl.Core.Suggestions
                 .ToList();
 
             if (timeEntries.Count >= minNumberOfTimeEntriesForTraining)
-            {
                 return predictUsing2Steps(timeEntries);
-            }
 
             timeEntries = timeEntriesForPrediction
                 .Take(maxNumberOfTimeEntriesForTraining)
                 .ToList();
 
             if (timeEntries.Count >= minNumberOfTimeEntriesForTraining)
-            {
                 return predictUsing1Step(timeEntries);
-            }
 
             return new List<IDatabaseTimeEntry>();
         }
@@ -124,14 +120,10 @@ namespace Toggl.Core.Suggestions
         {
             var features = input;
             if (features.Length == 0)
-            {
                 return features;
-            }
 
             if (features[0].Length == 0)
-            {
                 return features;
-            }
 
             int rowLength = features.Length;
             int colLength = features[0].Length;

@@ -12,10 +12,10 @@ namespace Toggl.Core.Analytics
         public const string SuggestionsCountName = "SuggestionsCount";
         public const string CalendarProviderStateName = "CalendarProviderState";
         public const string DistinctWorkspaceCountName = "DistinctWorkspaceCount";
-        
+
         public string EventName => "SuggestionsPresented";
 
-        private Dictionary<string, string> parameters;
+        private readonly Dictionary<string, string> parameters;
 
         public SuggestionsPresentedEvent(IEnumerable<(SuggestionProviderType Type, int Count)> suggestions, bool isCalendarAuthorized, int workspaceCount)
         {

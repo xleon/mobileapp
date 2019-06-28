@@ -27,18 +27,34 @@ namespace Toggl.Core.Interactors.Suggestions
         public IObservable<IEnumerable<Suggestion>> Execute()
             => getsuggestionProvidersInteractor
                 .Execute()
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .Select(provider => provider.GetSuggestions())
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .ToList()
-                .SelectMany(removingDuplicates)
-                .Take(suggestionCount)
-                .ToList();
+                .Select(removingDuplicates)
+                .Select(suggestions => suggestions.Take(suggestionCount));
 
         private IList<Suggestion> removingDuplicates(IList<Suggestion> suggestions)
             => suggestions
-                .GroupBy(s => new { s.Description, s.ProjectId, s.TaskId, s.WorkspaceId })
-                .Select(group => group.First())
+                .Distinct(new SuggestionsComparer())
                 .ToList();
+
+        private sealed class SuggestionsComparer : IEqualityComparer<Suggestion>
+        {
+            public bool Equals(Suggestion s1, Suggestion s2)
+                => s1 != null
+                   && s2 != null
+                   && s1.WorkspaceId == s2.WorkspaceId
+                   && s1.Description == s2.Description
+                   && s1.ProjectId == s2.ProjectId
+                   && s1.TaskId == s2.TaskId;
+
+            public int GetHashCode(Suggestion suggestion)
+                => HashCode.From(
+                    suggestion.WorkspaceId,
+                    suggestion.Description,
+                    suggestion.ProjectId,
+                    suggestion.TaskId);
+        }
     }
 }

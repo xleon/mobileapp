@@ -123,7 +123,6 @@ namespace Toggl.iOS
                 = true;
         }
 
-        [Conditional("ADHOC")]
         [Conditional("DEBUG")]
         private void prefixWithProviderNameInDebug()
         {
