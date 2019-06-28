@@ -1909,6 +1909,8 @@
     </Compile>
     <Compile Include="ViewControllers\Reactive\IReactiveViewController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveNavigationController.cs" />
+    <Compile Include="DebugHelpers\ErrorTriggeringViewController.cs" />
+    <Compile Include="DebugHelpers\ErrorTriggeringViewControllerShortcuts.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">
