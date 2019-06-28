@@ -206,9 +206,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public void ReportsTheAppCenterId()
+                public void ReportsUserIdToAppCenter()
                 {
-                    var id = 1234567890l;
+                    var id = 1234567890L;
                     var user = Substitute.For<IThreadSafeUser>();
                     user.Id.Returns(id);
                     var observable = Observable.Return(user);
