@@ -19,7 +19,7 @@ This document covers several important parts of the whole implementation:
 
 The app reacts differently when a push notification is received depending on the state of the app:
 - when the app is in the foreground and it is being used by the user, we pull just the time entries first to be able to update the currently running time entry as soon as possible, but then we also immediately execute a full sync
-- when the app is in the background, we fetch just the time entries using.
+- when the app is in the background, we fetch just the time entries using "sync light" (see below).
 
 We use Firebase Remote Config to control the rollout of the feature to the users. The config key is `handle_push_notifications`.
 
@@ -48,12 +48,30 @@ The API V9 endpoints we use are `POST|DELETE api/v9/me/push_services`. The docum
 
 ## iOS Specific Documentation
 
-_This section will be added in the future._
+### Configuration
+
+In order for remote push notifications to work we need to add the `remote-notification` value to the `UIBackgroundModes` key in the `info.plist`. This allows the app to be launched or resumed in background when a push notification arrives and gives it a small amount of time to download the new content.
+
+We also need to add the `aps-environment` key to the `Entitlements.plist` file with a value of `development`. This will be replaced by `production` by the build script for production builds.
+
+> NOTE: The system will launch the app (or wake it from the suspended state) and put it in the background state. However, it will not automatically launch the app if the user has force-quit it. In that situation, the user must relaunch your app or restart the device before the system attempts to launch the app automatically again.
+
+### Code
+
+When the app starts we need to set the `AppDelegate` as a delegate for the FCM instance.
+
+The implementation of that delegate and the rest of the platform specific code is in `AppDelegate.Notifications.cs`.
+
+When `RegisteredForRemoteNotifications` is called, we set the APNs token to the FCM (Firebase Cloud Messaging) shared instance.
+
+`IMessagingDelegate` has a method `DidReceiveRegistrationToken` that's called everytime the token changes. In that method we subscribe to the push notifications (which also sends the token to the server) via the appropriate interactor, only if the user is logged in.
+
+The remaining method in that file is `DidReceiveRemoteNotification` which gets called when the app is launched into background (or waked) from a remote notification or when a notification is received while the app is in foreground. We check if the user is logged in and then call the appropriate syncing interactor depending on the state of the app (foreground or background)
 
 ## Android Specific Documentation
 
 The push notifications handling is done by the book, following Firebase and Xamarin guidelines; except that we are using an outdated version of the Firebase libraries, because of currently available Xamarin libraries and the incompatibility issues with our app. Basically there's some missing methods in `Firebase.Perf`, we have a custom built library and updating to use more recent Firebase libraries is problematic. Please check https://github.com/toggl/mobileapp/issues/3542, https://github.com/toggl/mobileapp/pull/5303 and https://github.com/xamarin/GooglePlayServicesComponents/issues/151 for more information.
- 
+
 There are three important classes involved in droid specifics:
 - `TogglFirebaseIIDService`:
 
@@ -67,5 +85,5 @@ There are three important classes involved in droid specifics:
 
   One of these jobs is scheduled when a push notification arrives. A simple lock based on shared preferences is used to prevent multiple sync jobs to be scheduled at the same time.
   When the job runs, it will check whether or not the application is in background or foreground, running the appropriate sync strategy described in [one of the sections above](#app-response-to-push-notifications).
-  
+
   This job is common android `JobService`, scheduled using the `JobScheduler` and it's up to the system to decided when it runs. Ideally, it should run as soon as the device has internet access, but it can take more time or run only when the app comes to foreground (e.g on lower end devices; when the device is on power saving mode; when the user has blacklisted the app). On android devices with API levels > Pie, an extra job build option is put to make sure the job runs as soon as possible when the app is in foreground.

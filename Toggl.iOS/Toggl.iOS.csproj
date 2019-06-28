@@ -852,42 +852,6 @@
     <ImageAsset Include="Resources\Images.xcassets\playIcon.imageset\play%403x.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\bgNoiseBlue.imageset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\bgNoiseBlue.imageset\bgNoiseBlue.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\bgNoiseBlue.imageset\bgNoiseBlue%402x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\bgNoiseBlue.imageset\bgNoiseBlue%403x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\bgNoisePurple.imageset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\bgNoisePurple.imageset\bgNoisePurple.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\bgNoisePurple.imageset\bgNoisePurple%402x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\bgNoisePurple.imageset\bgNoisePurple%403x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\bgNoiseYellow.imageset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\bgNoiseYellow.imageset\bgNoiseYellow.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\bgNoiseYellow.imageset\bgNoiseYellow%402x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\bgNoiseYellow.imageset\bgNoiseYellow%403x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Resources\Images.xcassets\doneGreen.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -1991,7 +1955,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\Images.xcassets\.imageset\" />
     <Folder Include="Resources\Images.xcassets\bike.imageset\" />
     <Folder Include="Resources\Images.xcassets\confirmation.imageset\" />
     <Folder Include="Resources\Images.xcassets\icAdd.imageset\" />
@@ -2023,7 +1986,6 @@
     <Folder Include="Resources\Images.xcassets\thumbsdown.imageset\" />
     <Folder Include="Resources\Images.xcassets\thumbsup.imageset\" />
     <Folder Include="Resources\Images.xcassets\togglLogoBig.imageset\" />
-    <Folder Include="Resources\Images.xcassets\icGears.imageset\" />
     <Folder Include="Resources\Images.xcassets\icStop.imageset\" />
     <Folder Include="Resources\Images.xcassets\icTimer.imageset\" />
     <Folder Include="Resources\Images.xcassets\icMic.imageset\" />

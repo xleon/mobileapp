@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad9_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OnboardingView">
             <connections>
-                <outlet property="BackgroundImage" destination="uQ9-8C-BGz" id="5UG-H9-p72"/>
                 <outlet property="FirstPageLabel" destination="0bW-s1-SME" id="name-outlet-0bW-s1-SME"/>
                 <outlet property="Next" destination="crr-oI-9sA" id="name-outlet-crr-oI-9sA"/>
                 <outlet property="PageControl" destination="KBd-Lu-7wr" id="name-outlet-KBd-Lu-7wr"/>
@@ -31,9 +30,6 @@
             <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bgNoiseBlue" translatesAutoresizingMaskIntoConstraints="NO" id="uQ9-8C-BGz">
-                    <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hCB-nj-krh">
                     <rect key="frame" x="139.5" y="147.5" width="489" height="653"/>
                     <color key="backgroundColor" red="0.054901960784313725" green="0.58823529411764708" blue="0.83529411764705885" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -158,11 +154,8 @@
                     <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
                 </constraint>
                 <constraint firstItem="1ic-Bm-3e0" firstAttribute="top" secondItem="dSK-f7-Uvp" secondAttribute="top" id="1No-up-h7o"/>
-                <constraint firstAttribute="bottom" secondItem="uQ9-8C-BGz" secondAttribute="bottom" id="3F8-uh-mRB"/>
                 <constraint firstItem="hCB-nj-krh" firstAttribute="height" relation="lessThanOrEqual" secondItem="dSK-f7-Uvp" secondAttribute="width" multiplier="1.48:1" id="68w-3f-UL8"/>
                 <constraint firstItem="KBd-Lu-7wr" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="8at-kn-IWJ"/>
-                <constraint firstItem="dSK-f7-Uvp" firstAttribute="trailing" secondItem="uQ9-8C-BGz" secondAttribute="trailing" id="Cxo-jg-U6F"/>
-                <constraint firstItem="uQ9-8C-BGz" firstAttribute="leading" secondItem="dSK-f7-Uvp" secondAttribute="leading" id="IVH-uq-cle"/>
                 <constraint firstItem="cBN-Dd-JYx" firstAttribute="trailing" secondItem="hCB-nj-krh" secondAttribute="trailing" constant="-13" id="Jny-ou-xWA"/>
                 <constraint firstItem="hCB-nj-krh" firstAttribute="height" secondItem="dSK-f7-Uvp" secondAttribute="height" multiplier="0.65" priority="750" id="Oiw-jK-Yaw"/>
                 <constraint firstItem="3BO-Ic-74A" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="PUe-xm-GKw"/>
@@ -187,7 +180,6 @@
                 <constraint firstItem="cBN-Dd-JYx" firstAttribute="top" secondItem="hCB-nj-krh" secondAttribute="top" constant="22" id="r4b-51-ugG"/>
                 <constraint firstItem="cBN-Dd-JYx" firstAttribute="centerX" secondItem="hCB-nj-krh" secondAttribute="centerX" id="rlh-YM-CTY"/>
                 <constraint firstItem="KBd-Lu-7wr" firstAttribute="centerY" secondItem="crr-oI-9sA" secondAttribute="centerY" id="rnk-Pw-fds"/>
-                <constraint firstItem="uQ9-8C-BGz" firstAttribute="top" secondItem="2" secondAttribute="top" id="ulR-Jh-Eag"/>
                 <constraint firstItem="hCB-nj-krh" firstAttribute="height" secondItem="dSK-f7-Uvp" secondAttribute="height" priority="750" constant="-205" id="v0k-gi-qUD"/>
                 <constraint firstAttribute="trailing" secondItem="3BO-Ic-74A" secondAttribute="trailing" id="vKM-LW-ljA"/>
                 <constraint firstAttribute="trailing" secondItem="1ic-Bm-3e0" secondAttribute="trailing" id="wNz-bj-mls"/>
@@ -214,7 +206,4 @@
             <point key="canvasLocation" x="137.5" y="53.5"/>
         </view>
     </objects>
-    <resources>
-        <image name="bgNoiseBlue" width="320" height="568"/>
-    </resources>
 </document>
