@@ -70,6 +70,14 @@ namespace Toggl.Core.Tests.Interactors.UserAccess
         }
 
         [Fact, LogIfTooSlow]
+        public async Task ResetsTheAppCenterId()
+        {
+            await interactor.Execute();
+
+            AnalyticsService.Received().ResetAppCenterUserId();
+        }
+
+        [Fact, LogIfTooSlow]
         public void ClearTheDatabaseOnlyOnceTheSyncManagerFreezeEmitsAValueEvenThoughItDoesNotComplete()
         {
             var freezingSubject = new Subject<SyncState>();

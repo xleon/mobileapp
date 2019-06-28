@@ -68,9 +68,19 @@ namespace Toggl.iOS.Services
 
         public override void SetAppCenterUserId(long id)
         {
+            setAppCenterUserId(id.ToString());
+        }
+
+        public override void ResetAppCenterUserId()
+        {
+            setAppCenterUserId("");
+        }
+
+        private void setAppCenterUserId(string id)
+        {
             try
             {
-                AppCenter.SetUserId(id.ToString());
+                AppCenter.SetUserId(id);
             }
             catch
             {
