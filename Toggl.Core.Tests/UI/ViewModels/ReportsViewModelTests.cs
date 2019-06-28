@@ -740,7 +740,54 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData(5)]
             [InlineData(8)]
             [InlineData(13)]
-            public async Task ShouldTriggerReloadForEveryAppearance(int numberOfAppearances)
+            public async Task ShouldTriggerReloadForEveryAppearanceAfterSignificantTimePassed(int numberOfAppearances)
+            {
+                var timeService = new TimeService(TestScheduler);
+                TestScheduler.AdvanceTo(DateTimeOffset.Now.Ticks);
+
+                InteractorFactory
+                    .GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset?>())
+                    .Returns(Interactor);
+
+                var viewModel = new ReportsViewModel(
+                    DataSource,
+                    timeService,
+                    NavigationService,
+                    InteractorFactory,
+                    AnalyticsService,
+                    SchedulerProvider,
+                    StopwatchProvider,
+                    RxActionFactory
+                );
+
+                Interactor.Execute()
+                    .ReturnsForAnyArgs(Observable.Empty<ProjectSummaryReport>(SchedulerProvider.TestScheduler));
+                await viewModel.Initialize();
+                viewModel.CalendarViewModel.ViewAppeared();
+                InteractorFactory.ClearReceivedCalls();
+
+                for (int i = 0; i < numberOfAppearances; ++i)
+                {
+                    viewModel.ViewDisappeared();
+                    TestScheduler.AdvanceBy(TimeSpan.FromSeconds(5).Ticks);
+                    viewModel.ViewAppeared();
+                }
+
+                TestScheduler.Start();
+
+                InteractorFactory
+                    .Received(numberOfAppearances)
+                    .GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>());
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData(1)]
+            [InlineData(2)]
+            [InlineData(3)]
+            [InlineData(5)]
+            [InlineData(8)]
+            [InlineData(13)]
+            public async Task ShouldNotTriggerReloadAfterDisappearingAndAppearingImmediately(int numberOfAppearances)
             {
                 TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
                 Interactor.Execute()
@@ -751,12 +798,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 for (int i = 0; i < numberOfAppearances; ++i)
                 {
+                    ViewModel.ViewDisappeared();
                     ViewModel.ViewAppeared();
                 }
+
                 TestScheduler.Start();
 
                 InteractorFactory
-                    .Received(numberOfAppearances)
+                    .DidNotReceive()
                     .GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>());
             }
         }
