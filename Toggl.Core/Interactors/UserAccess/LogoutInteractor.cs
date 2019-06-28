@@ -70,6 +70,7 @@ namespace Toggl.Core.Interactors.UserAccess
                         .UnscheduleAllNotifications()
                         .Catch(Observable.Return(Unit.Default)))
                 .Do(userAccessManager.OnUserLoggedOut)
+                .Do(analyticsService.ResetAppCenterUserId)
                 .FirstAsync();
     }
 }
