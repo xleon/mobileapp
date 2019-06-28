@@ -21,7 +21,7 @@ namespace Toggl.Core.Tests.Sync.Scenarios.PushNotificationsTokens
         protected override void ArrangeServices(AppServices services)
         {
             services.PushNotificationsTokenService.Token.Returns(token);
-            services.KeyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns(string.Empty);
+            services.PushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns((PushNotificationsToken?)null);
         }
 
         protected override ServerState ArrangeServerState(ServerState initialServerState)

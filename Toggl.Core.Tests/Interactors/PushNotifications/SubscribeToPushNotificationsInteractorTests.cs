@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -9,8 +8,8 @@ using Toggl.Core.Interactors.PushNotifications;
 using Toggl.Core.Tests.Generators;
 using Toggl.Networking.ApiClients;
 using Toggl.Shared;
+using Toggl.Storage;
 using Xunit;
-using static Toggl.Core.Interactors.PushNotificationTokenKeys;
 
 namespace Toggl.Core.Tests.Interactors.PushNotifications
 {
@@ -20,12 +19,14 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
 
         public sealed class TheConstructor : BaseInteractorTests
         {
+            private IPushNotificationsTokenStorage pushNotificationsTokenStorage = Substitute.For<IPushNotificationsTokenStorage>();
+
             [Theory, LogIfTooSlow]
             [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useKeyValueStorage, bool usePushServicesApi, bool usePushNotificationTokenService, bool useTimeService)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool usePushNotificationsTokenStorage, bool usePushServicesApi, bool usePushNotificationTokenService, bool useTimeService)
             {
                 Action tryingToConstructWithNull = () => new SubscribeToPushNotificationsInteractor(
-                    useKeyValueStorage ? KeyValueStorage : null,
+                    usePushNotificationsTokenStorage ? pushNotificationsTokenStorage : null,
                     usePushServicesApi ? Api : null,
                     usePushNotificationTokenService ? PushNotificationsTokenService : null,
                     useTimeService ? TimeService : null);
@@ -38,12 +39,13 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
         {
             private SubscribeToPushNotificationsInteractor interactor;
             private IPushServicesApi pushServicesApi = Substitute.For<IPushServicesApi>();
+            private IPushNotificationsTokenStorage pushNotificationsTokenStorage = Substitute.For<IPushNotificationsTokenStorage>();
 
             public TheExecuteMethod()
             {
                 Api.PushServices.Returns(pushServicesApi);
                 TimeService.CurrentDateTime.Returns(now);
-                interactor = new SubscribeToPushNotificationsInteractor(KeyValueStorage, Api, PushNotificationsTokenService, TimeService);
+                interactor = new SubscribeToPushNotificationsInteractor(pushNotificationsTokenStorage, Api, PushNotificationsTokenService, TimeService);
             }
 
             [Fact]
@@ -69,8 +71,8 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
             [Fact]
             public async Task DoesNothingWhenTheTokenHasAlreadyBeenRegisteredRecently()
             {
-                KeyValueStorage.GetString(PreviouslyRegisteredTokenKey).Returns("tokenA");
-                KeyValueStorage.GetDateTimeOffset(DateOfRegisteringPreviousTokenKey).Returns(now - TimeSpan.FromDays(2));
+                pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(new PushNotificationsToken("tokenA"));
+                pushNotificationsTokenStorage.DateOfRegisteringTheToken.Returns(now - TimeSpan.FromDays(2));
                 PushNotificationsTokenService.Token.Returns(new PushNotificationsToken("tokenA"));
 
                 (await interactor.Execute().SingleAsync()).Should().Be(Unit.Default);
@@ -81,7 +83,7 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
             [Fact]
             public async Task CallsTheApiToSubscribeForPushNotificationsWhenNoOtherTokenHasBeenStored()
             {
-                KeyValueStorage.GetString(PreviouslyRegisteredTokenKey).Returns(default(string));
+                pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(default(PushNotificationsToken));
                 var expectedPushNotificationToken = new PushNotificationsToken("tokenA");
                 PushNotificationsTokenService.Token.Returns(expectedPushNotificationToken);
                 pushServicesApi.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(Observable.Return(Unit.Default));
@@ -94,8 +96,8 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
             public async Task CallsTheApiToSubscribeForPushNotificationsAfterATimePeriod()
             {
                 var token = new PushNotificationsToken("tokenA");
-                KeyValueStorage.GetString(PreviouslyRegisteredTokenKey).Returns(token.ToString());
-                KeyValueStorage.GetDateTimeOffset(DateOfRegisteringPreviousTokenKey).Returns(now - TimeSpan.FromDays(10));
+                pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(token);
+                pushNotificationsTokenStorage.DateOfRegisteringTheToken.Returns(now - TimeSpan.FromDays(10));
                 PushNotificationsTokenService.Token.Returns(token);
                 pushServicesApi.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(Observable.Return(Unit.Default));
 
@@ -106,28 +108,26 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
             [Fact]
             public async Task StoresTheTokenWhenSucceedsToRegisterIt()
             {
-                KeyValueStorage.GetString(PreviouslyRegisteredTokenKey).Returns(default(string));
+                pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(default(PushNotificationsToken));
                 var expectedPushNotificationToken = new PushNotificationsToken("tokenA");
                 PushNotificationsTokenService.Token.Returns(expectedPushNotificationToken);
                 pushServicesApi.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(Observable.Return(Unit.Default));
 
                 (await interactor.Execute().SingleAsync()).Should().Be(Unit.Default);
-                KeyValueStorage.Received().SetString(PreviouslyRegisteredTokenKey, expectedPushNotificationToken.ToString());
-                KeyValueStorage.Received().SetDateTimeOffset(DateOfRegisteringPreviousTokenKey, now);
+                pushNotificationsTokenStorage.Received().StoreRegisteredToken(expectedPushNotificationToken, now);
             }
 
             [Fact]
             public async Task DoesNotStoreTheTokenWhenItFailsToRegisterIt()
             {
-                KeyValueStorage.GetString(PreviouslyRegisteredTokenKey).Returns(default(string));
+                pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(default(PushNotificationsToken));
                 var expectedPushNotificationToken = new PushNotificationsToken("tokenA");
                 PushNotificationsTokenService.Token.Returns(expectedPushNotificationToken);
                 pushServicesApi.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(Observable.Throw<Unit>(new Exception()));
 
                 (await interactor.Execute().SingleAsync()).Should().Be(Unit.Default);
                 pushServicesApi.Received().Subscribe(expectedPushNotificationToken);
-                KeyValueStorage.DidNotReceive().SetString(PreviouslyRegisteredTokenKey, expectedPushNotificationToken.ToString());
-                KeyValueStorage.DidNotReceive().SetDateTimeOffset(DateOfRegisteringPreviousTokenKey, Arg.Any<DateTimeOffset>());
+                pushNotificationsTokenStorage.DidNotReceive().StoreRegisteredToken(expectedPushNotificationToken, Arg.Any<DateTimeOffset>());
             }
         }
     }

@@ -9,7 +9,7 @@ using UIKit;
 
 namespace Toggl.iOS
 {
-    public partial class AppDelegate
+    public partial class AppDelegate : IMessagingDelegate
     {
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {

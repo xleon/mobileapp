@@ -7,9 +7,9 @@ namespace Toggl.Core.Interactors
     public partial class InteractorFactory
     {
         public IInteractor<IObservable<Unit>> UnsubscribeFromPushNotifications()
-            => new UnsubscribeFromPushNotificationsInteractor(pushNotificationsTokenService, keyValueStorage, api);
+            => new UnsubscribeFromPushNotificationsInteractor(pushNotificationsTokenService, lazyPushNotificationsTokenStorage.Value, api);
 
         public IInteractor<IObservable<Unit>> SubscribeToPushNotifications()
-            => new SubscribeToPushNotificationsInteractor(keyValueStorage, api, pushNotificationsTokenService, timeService);
+            => new SubscribeToPushNotificationsInteractor(lazyPushNotificationsTokenStorage.Value, api, pushNotificationsTokenService, timeService);
     }
 }

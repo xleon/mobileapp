@@ -1,7 +1,7 @@
-using System;
 using Firebase.InstanceID;
 using Toggl.Core.Services;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.iOS.Services
 {
@@ -11,10 +11,7 @@ namespace Toggl.iOS.Services
 
         public void InvalidateCurrentToken()
         {
-            InstanceId.SharedInstance.DeleteId(error =>
-            {
-                Console.WriteLine("Error deleting instance");
-            });
+            InstanceId.SharedInstance.DeleteId(CommonFunctions.DoNothing);
         }
 
         private PushNotificationsToken? getToken()

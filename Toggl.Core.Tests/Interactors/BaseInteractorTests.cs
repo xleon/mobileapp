@@ -40,6 +40,9 @@ namespace Toggl.Core.Tests
             Substitute.For<IPushNotificationsTokenService>();
         protected IUserAccessManager UserAccessManager { get; } = Substitute.For<IUserAccessManager>();
 
+        protected IPushNotificationsTokenStorage PushNotificationsTokenStorage { get; } =
+            Substitute.For<IPushNotificationsTokenStorage>();
+
         protected IInteractorFactory InteractorFactory { get; }
 
         protected BaseInteractorTests()
@@ -62,7 +65,8 @@ namespace Toggl.Core.Tests
                 new Lazy<IApplicationShortcutCreator>(() => ApplicationShortcutCreator),
                 new Lazy<IPrivateSharedStorageService>(() => PrivateSharedStorageService),
                 new Lazy<IKeyValueStorage>(() => KeyValueStorage),
-                new Lazy<IPushNotificationsTokenService>(() => PushNotificationsTokenService)
+                new Lazy<IPushNotificationsTokenService>(() => PushNotificationsTokenService),
+                new Lazy<IPushNotificationsTokenStorage>(() => PushNotificationsTokenStorage)
             );
         }
     }

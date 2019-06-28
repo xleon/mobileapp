@@ -1,20 +1,18 @@
 using System;
 using System.Reactive;
-using System.Reactive.Linq;
 using Toggl.Core.Interactors;
 using Toggl.Core.Interactors.PushNotifications;
 using Toggl.Core.Services;
 using Toggl.Networking;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Storage.Settings;
-using Toggl.Core.Extensions;
+using Toggl.Storage;
 
 namespace Toggl.Core.Sync.States.Push
 {
     public sealed class SyncPushNotificationsTokenState : ISyncState
     {
-        private readonly IKeyValueStorage keyValueStorage;
+        private readonly IPushNotificationsTokenStorage pushNotificationsTokenStorage;
         private readonly ITogglApi togglApi;
         private readonly IPushNotificationsTokenService pushNotificationsTokenService;
         private readonly ITimeService timeService;
@@ -23,19 +21,19 @@ namespace Toggl.Core.Sync.States.Push
         public StateResult Done { get; } = new StateResult();
 
         public SyncPushNotificationsTokenState(
-            IKeyValueStorage keyValueStorage,
+            IPushNotificationsTokenStorage pushNotificationsTokenStorage,
             ITogglApi togglApi,
             IPushNotificationsTokenService pushNotificationsTokenService,
             ITimeService timeService,
             IRemoteConfigService remoteConfigService)
         {
-            Ensure.Argument.IsNotNull(keyValueStorage, nameof(keyValueStorage));
+            Ensure.Argument.IsNotNull(pushNotificationsTokenStorage, nameof(pushNotificationsTokenStorage));
             Ensure.Argument.IsNotNull(togglApi, nameof(togglApi));
             Ensure.Argument.IsNotNull(pushNotificationsTokenService, nameof(pushNotificationsTokenService));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
 
-            this.keyValueStorage = keyValueStorage;
+            this.pushNotificationsTokenStorage = pushNotificationsTokenStorage;
             this.togglApi = togglApi;
             this.pushNotificationsTokenService = pushNotificationsTokenService;
             this.timeService = timeService;
@@ -51,9 +49,9 @@ namespace Toggl.Core.Sync.States.Push
                 : createUnsubscriptionInteractor().Execute();
 
         private IInteractor<IObservable<Unit>> createSubscriptionInteractor()
-            => new SubscribeToPushNotificationsInteractor(keyValueStorage, togglApi, pushNotificationsTokenService, timeService);
+            => new SubscribeToPushNotificationsInteractor(pushNotificationsTokenStorage, togglApi, pushNotificationsTokenService, timeService);
 
         private IInteractor<IObservable<Unit>> createUnsubscriptionInteractor()
-            => new UnsubscribeFromPushNotificationsInteractor(pushNotificationsTokenService, keyValueStorage, togglApi);
+            => new UnsubscribeFromPushNotificationsInteractor(pushNotificationsTokenService, pushNotificationsTokenStorage, togglApi);
     }
 }

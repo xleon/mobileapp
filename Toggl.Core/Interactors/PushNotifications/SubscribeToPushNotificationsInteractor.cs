@@ -5,8 +5,7 @@ using Toggl.Core.Services;
 using Toggl.Networking;
 using Toggl.Networking.ApiClients;
 using Toggl.Shared;
-using Toggl.Storage.Settings;
-using static Toggl.Core.Interactors.PushNotificationTokenKeys;
+using Toggl.Storage;
 
 namespace Toggl.Core.Interactors.PushNotifications
 {
@@ -14,23 +13,23 @@ namespace Toggl.Core.Interactors.PushNotifications
     {
         private readonly TimeSpan tokenReSubmissionPeriod = TimeSpan.FromDays(5);
 
-        private readonly IKeyValueStorage keyValueStorage;
+        private readonly IPushNotificationsTokenStorage pushNotificationsTokenStorage;
         private readonly IPushServicesApi pushServicesApi;
         private readonly IPushNotificationsTokenService pushNotificationsTokenService;
         private readonly ITimeService timeService;
 
         public SubscribeToPushNotificationsInteractor(
-            IKeyValueStorage keyValueStorage,
+            IPushNotificationsTokenStorage pushNotificationsTokenStorage,
             ITogglApi togglApi,
             IPushNotificationsTokenService pushNotificationsTokenService,
             ITimeService timeService)
         {
             Ensure.Argument.IsNotNull(togglApi, nameof(togglApi));
-            Ensure.Argument.IsNotNull(keyValueStorage, nameof(keyValueStorage));
+            Ensure.Argument.IsNotNull(pushNotificationsTokenStorage, nameof(pushNotificationsTokenStorage));
             Ensure.Argument.IsNotNull(pushNotificationsTokenService, nameof(pushNotificationsTokenService));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
 
-            this.keyValueStorage = keyValueStorage;
+            this.pushNotificationsTokenStorage = pushNotificationsTokenStorage;
             this.pushNotificationsTokenService = pushNotificationsTokenService;
             this.timeService = timeService;
             pushServicesApi = togglApi.PushServices;
@@ -43,30 +42,30 @@ namespace Toggl.Core.Interactors.PushNotifications
             if (!token.HasValue || token == defaultToken)
                 return Observable.Return(Unit.Default);
 
-            var previouslyRegisteredToken = keyValueStorage.GetString(PreviouslyRegisteredTokenKey);
-            var dateOfRegisteringTheToken = keyValueStorage.GetDateTimeOffset(DateOfRegisteringPreviousTokenKey);
-
-            if (!string.IsNullOrEmpty(previouslyRegisteredToken)
-                && previouslyRegisteredToken == token.ToString()
-                && dateOfRegisteringTheToken.HasValue
-                && !shouldReSubmitToken(dateOfRegisteringTheToken.Value))
+            if (currentTokenWasAlreadySubmittedToTheServer(token.Value)
+                && tokenWasSubmittedRecently())
             {
                 return Observable.Return(Unit.Default);
             }
 
             return pushServicesApi
                 .Subscribe(token.Value)
-                .Do(_ => storeRegisteredToken(token.Value))
+                .Do(_ => pushNotificationsTokenStorage.StoreRegisteredToken(token.Value, timeService.CurrentDateTime))
                 .Catch((Exception ex) => Observable.Return(Unit.Default));
         }
 
-        private bool shouldReSubmitToken(DateTimeOffset dateOfRegisteringTheToken)
-            => timeService.CurrentDateTime - dateOfRegisteringTheToken >= tokenReSubmissionPeriod;
-
-        private void storeRegisteredToken(PushNotificationsToken token)
+        private bool currentTokenWasAlreadySubmittedToTheServer(PushNotificationsToken currentToken)
         {
-            keyValueStorage.SetString(PreviouslyRegisteredTokenKey, token.ToString());
-            keyValueStorage.SetDateTimeOffset(DateOfRegisteringPreviousTokenKey, timeService.CurrentDateTime);
+            var previouslyRegisteredToken = pushNotificationsTokenStorage.PreviouslyRegisteredToken?.ToString();
+            return !string.IsNullOrEmpty(previouslyRegisteredToken) &&
+                   previouslyRegisteredToken == currentToken.ToString();
+        }
+
+        private bool tokenWasSubmittedRecently()
+        {
+            var timeSinceLastSubmission =
+                timeService.CurrentDateTime - pushNotificationsTokenStorage.DateOfRegisteringTheToken;
+            return timeSinceLastSubmission < tokenReSubmissionPeriod;
         }
     }
 }

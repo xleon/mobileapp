@@ -8,6 +8,7 @@ using NSubstitute;
 using Toggl.Core.Interactors;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Shared;
+using Toggl.Storage;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.PushNotifications
@@ -15,31 +16,32 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
     public class UnsubscribeFromPushNotificationsInteractorTests : BaseInteractorTests
     {
         private readonly IInteractor<IObservable<Unit>> interactor;
+        private readonly IPushNotificationsTokenStorage pushNotificationsTokenStorage = Substitute.For<IPushNotificationsTokenStorage>();
 
         public UnsubscribeFromPushNotificationsInteractorTests()
         {
             interactor = new UnsubscribeFromPushNotificationsInteractor(
                 PushNotificationsTokenService,
-                KeyValueStorage,
+                pushNotificationsTokenStorage,
                 Api);
         }
 
         [Fact, LogIfTooSlow]
-        public async Task ClearsTheKeyValueStorage()
+        public async Task ClearsThepushNotificationsTokenStorage()
         {
             PushNotificationsTokenService.Token.Returns(new PushNotificationsToken("token"));
-            KeyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+            pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(new PushNotificationsToken("token"));
 
             await interactor.Execute();
 
-            KeyValueStorage.Received().Remove(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey);
+            pushNotificationsTokenStorage.Received().Clear();
         }
 
         [Fact, LogIfTooSlow]
         public async Task InvalidatesTheToken()
         {
             PushNotificationsTokenService.Token.Returns(new PushNotificationsToken("token"));
-            KeyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+            pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(new PushNotificationsToken("token"));
 
             await interactor.Execute();
 
@@ -51,7 +53,7 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
         {
             var token = new PushNotificationsToken("token");
             PushNotificationsTokenService.Token.Returns(token);
-            KeyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+            pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(new PushNotificationsToken("token"));
 
             await interactor.Execute();
 

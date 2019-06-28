@@ -10,6 +10,7 @@ using Toggl.Core.Sync.States.Push;
 using Toggl.Core.Tests.Generators;
 using Toggl.Networking;
 using Toggl.Shared;
+using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Xunit;
 
@@ -21,9 +22,9 @@ namespace Toggl.Core.Tests.Sync.States.Push
         {
             [Theory]
             [ConstructorData]
-            public void ThrowsWhenArgumentIsNull(bool useKeyValueStorage, bool useTogglApi, bool usePushNotificationsTokenService, bool useTimeService, bool useRemoteConfig)
+            public void ThrowsWhenArgumentIsNull(bool usePushNotificationsTokenStorage, bool useTogglApi, bool usePushNotificationsTokenService, bool useTimeService, bool useRemoteConfig)
             {
-                var keyValueStorage = useKeyValueStorage ? Substitute.For<IKeyValueStorage>() : null;
+                var pushNotificationsTokenStorage = usePushNotificationsTokenStorage ? Substitute.For<IPushNotificationsTokenStorage>() : null;
                 var togglApi = useTogglApi ? Substitute.For<ITogglApi>() : null;
                 var pushNotificationsTokenService = usePushNotificationsTokenService
                     ? Substitute.For<IPushNotificationsTokenService>()
@@ -31,7 +32,7 @@ namespace Toggl.Core.Tests.Sync.States.Push
                 var timeService = useTimeService ? Substitute.For<ITimeService>() : null;
                 var remoteConfig = useRemoteConfig ? Substitute.For<IRemoteConfigService>() : null;
 
-                Action constructor = () => new SyncPushNotificationsTokenState(keyValueStorage, togglApi, pushNotificationsTokenService, timeService, remoteConfig);
+                Action constructor = () => new SyncPushNotificationsTokenState(pushNotificationsTokenStorage, togglApi, pushNotificationsTokenService, timeService, remoteConfig);
 
                 constructor.Should().Throw<ArgumentNullException>();
             }
@@ -39,7 +40,7 @@ namespace Toggl.Core.Tests.Sync.States.Push
 
         public sealed class TheStartMehtod
         {
-            private readonly IKeyValueStorage keyValueStorage = Substitute.For<IKeyValueStorage>();
+            private readonly IPushNotificationsTokenStorage pushNotificationsTokenStorage = Substitute.For<IPushNotificationsTokenStorage>();
             private readonly ITogglApi togglApi = Substitute.For<ITogglApi>();
             private readonly IPushNotificationsTokenService pushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>();
             private readonly ITimeService timeService = Substitute.For<ITimeService>();
@@ -49,7 +50,7 @@ namespace Toggl.Core.Tests.Sync.States.Push
 
             public TheStartMehtod()
             {
-                state = new SyncPushNotificationsTokenState(keyValueStorage, togglApi, pushNotificationsTokenService, timeService, remoteConfigService);
+                state = new SyncPushNotificationsTokenState(pushNotificationsTokenStorage, togglApi, pushNotificationsTokenService, timeService, remoteConfigService);
             }
 
             [Fact]
@@ -57,7 +58,7 @@ namespace Toggl.Core.Tests.Sync.States.Push
             {
                 var unit = Observable.Return(Unit.Default);
                 togglApi.PushServices.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(unit);
-                keyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+                pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(new PushNotificationsToken("token"));
                 configureRemoteConfig(shouldSubscribeToPushes: true);
 
                 var transition = await state.Start();
@@ -76,12 +77,10 @@ namespace Toggl.Core.Tests.Sync.States.Push
                 await togglApi.PushServices.DidNotReceive().Subscribe(Arg.Any<PushNotificationsToken>());
             }
 
-            [Theory]
-            [InlineData("")]
-            [InlineData(null)]
-            public async Task DoesNotMakeAnApiRequestIfTheTokenIsEmpty(string token)
+            [Fact]
+            public async Task DoesNotMakeAnApiRequestIfTheTokenIsEmpty()
             {
-                keyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns(token);
+                pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns((PushNotificationsToken?)null);
 
                 await state.Start();
 
@@ -95,7 +94,7 @@ namespace Toggl.Core.Tests.Sync.States.Push
                 togglApi.PushServices.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(unit);
                 togglApi.PushServices.Unsubscribe(Arg.Any<PushNotificationsToken>()).Returns(unit);
                 pushNotificationsTokenService.Token.Returns(new PushNotificationsToken("token"));
-                keyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+                pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(new PushNotificationsToken("token"));
                 configureRemoteConfig(shouldSubscribeToPushes: false);
 
                 await state.Start();
@@ -111,7 +110,7 @@ namespace Toggl.Core.Tests.Sync.States.Push
                 togglApi.PushServices.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(unit);
                 togglApi.PushServices.Unsubscribe(Arg.Any<PushNotificationsToken>()).Returns(unit);
                 pushNotificationsTokenService.Token.Returns(new PushNotificationsToken("token"));
-                keyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+                pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(new PushNotificationsToken("token"));
                 configureRemoteConfig(shouldSubscribeToPushes: true);
 
                 await state.Start();
@@ -125,7 +124,7 @@ namespace Toggl.Core.Tests.Sync.States.Push
             {
                 var throwingObservable = Observable.Throw<Unit>(new Exception());
                 togglApi.PushServices.Subscribe(Arg.Any<PushNotificationsToken>()).Returns(throwingObservable);
-                keyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+                pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(new PushNotificationsToken("token"));
                 configureRemoteConfig(shouldSubscribeToPushes: true);
 
                 var transition = await state.Start();

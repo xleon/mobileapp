@@ -1405,7 +1405,7 @@
     <Compile Include="Startup\AppDelegate.Deeplink.cs">
       <DependentUpon>AppDelegate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Startup\AppDelegate.Notifications.cs">
+    <Compile Include="Startup\AppDelegate.PushNotifications.cs">
       <DependentUpon>AppDelegate.cs</DependentUpon>
     </Compile>
     <Compile Include="Startup\IosDependencyContainer.cs" />

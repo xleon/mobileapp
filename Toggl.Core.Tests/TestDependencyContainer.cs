@@ -144,5 +144,9 @@ namespace Toggl.Core.UI
         internal ITogglDataSource MockDataSource { get; set; }
         protected override ITogglDataSource CreateDataSource()
             => MockDataSource;
+
+        internal IPushNotificationsTokenStorage MockPushNotificationsTokenStorage { get; set; }
+        protected override IPushNotificationsTokenStorage CreatePushNotificationsTokenStorage()
+            => MockPushNotificationsTokenStorage;
     }
 }

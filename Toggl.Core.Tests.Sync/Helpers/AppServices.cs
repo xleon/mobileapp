@@ -45,6 +45,9 @@ namespace Toggl.Core.Tests.Sync.Helpers
         public IPushNotificationsTokenService PushNotificationsTokenService { get; } =
             Substitute.For<IPushNotificationsTokenService>();
 
+        public IPushNotificationsTokenStorage PushNotificationsTokenStorage { get; } =
+            Substitute.For<IPushNotificationsTokenStorage>();
+
         public AppServices(ITogglApi api, ITogglDatabase database)
         {
             TogglApi = api;
@@ -63,6 +66,7 @@ namespace Toggl.Core.Tests.Sync.Helpers
             dependencyContainer.MockKeyValueStorage = KeyValueStorage;
             dependencyContainer.MockPushNotificationsTokenService = PushNotificationsTokenService;
             dependencyContainer.MockTimeService = TimeService;
+            dependencyContainer.MockPushNotificationsTokenStorage = PushNotificationsTokenStorage;
 
             SyncManager = TogglSyncManager.CreateSyncManager(
                 database,

@@ -142,12 +142,12 @@ namespace Toggl.Core.Tests.Interactors.UserAccess
         public async Task ClearsPushNotificationsToken()
         {
             PushNotificationsTokenService.Token.Returns(new PushNotificationsToken("token"));
-            KeyValueStorage.GetString(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey).Returns("token");
+            PushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(new PushNotificationsToken("token"));
 
             await interactor.Execute();
 
             PushNotificationsTokenService.Received().InvalidateCurrentToken();
-            KeyValueStorage.Received().Remove(PushNotificationTokenKeys.PreviouslyRegisteredTokenKey);
+            PushNotificationsTokenStorage.Received().Clear();
         }
     }
 }

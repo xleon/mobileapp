@@ -11,7 +11,7 @@ using Firebase.CloudMessaging;
 namespace Toggl.iOS
 {
     [Register(nameof(AppDelegate))]
-    public sealed partial class AppDelegate : UIApplicationDelegate, IUNUserNotificationCenterDelegate, IMessagingDelegate
+    public sealed partial class AppDelegate : UIApplicationDelegate, IUNUserNotificationCenterDelegate
     {
         public override UIWindow Window { get; set; }
 

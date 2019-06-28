@@ -35,6 +35,7 @@ namespace Toggl.Core.Interactors
         private readonly Lazy<IPrivateSharedStorageService> lazyPrivateSharedStorageService;
         private readonly Lazy<IKeyValueStorage> lazyKeyValueStorage;
         private readonly Lazy<IPushNotificationsTokenService> lazyPushNotificationsTokenService;
+        private readonly Lazy<IPushNotificationsTokenStorage> lazyPushNotificationsTokenStorage;
         private readonly ReportsMemoryCache reportsMemoryCache = new ReportsMemoryCache();
 
         private ITogglDatabase database => lazyDatabase.Value;
@@ -72,7 +73,8 @@ namespace Toggl.Core.Interactors
             Lazy<IApplicationShortcutCreator> shortcutCreator,
             Lazy<IPrivateSharedStorageService> privateSharedStorageService,
             Lazy<IKeyValueStorage> keyValueStorage,
-            Lazy<IPushNotificationsTokenService> pushNotificationsTokenService)
+            Lazy<IPushNotificationsTokenService> pushNotificationsTokenService,
+            Lazy<IPushNotificationsTokenStorage> pushNotificationsTokenStorage)
         {
             Ensure.Argument.IsNotNull(api, nameof(api));
             Ensure.Argument.IsNotNull(database, nameof(database));
@@ -92,6 +94,7 @@ namespace Toggl.Core.Interactors
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
             Ensure.Argument.IsNotNull(keyValueStorage, nameof(keyValueStorage));
             Ensure.Argument.IsNotNull(pushNotificationsTokenService, nameof(pushNotificationsTokenService));
+            Ensure.Argument.IsNotNull(pushNotificationsTokenStorage, nameof(pushNotificationsTokenStorage));
 
             this.api = api;
             this.userAccessManager = userAccessManager;
@@ -112,6 +115,7 @@ namespace Toggl.Core.Interactors
             lazyPrivateSharedStorageService = privateSharedStorageService;
             lazyKeyValueStorage = keyValueStorage;
             lazyPushNotificationsTokenService = pushNotificationsTokenService;
+            lazyPushNotificationsTokenStorage = pushNotificationsTokenStorage;
         }
     }
 }

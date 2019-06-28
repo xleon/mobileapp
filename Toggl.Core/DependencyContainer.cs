@@ -61,6 +61,7 @@ namespace Toggl.Core
         private readonly Lazy<IPrivateSharedStorageService> privateSharedStorageService;
         private readonly Lazy<ISuggestionProviderContainer> suggestionProviderContainer;
         private readonly Lazy<IPushNotificationsTokenService> pushNotificationsTokenService;
+        private readonly Lazy<IPushNotificationsTokenStorage> pushNotificationsTokenStorage;
 
         // Non lazy
         public virtual IUserAccessManager UserAccessManager { get; }
@@ -96,6 +97,7 @@ namespace Toggl.Core
         public IPrivateSharedStorageService PrivateSharedStorageService => privateSharedStorageService.Value;
         public ISuggestionProviderContainer SuggestionProviderContainer => suggestionProviderContainer.Value;
         public IPushNotificationsTokenService PushNotificationsTokenService => pushNotificationsTokenService.Value;
+        public IPushNotificationsTokenStorage PushNotificationsTokenStorage => pushNotificationsTokenStorage.Value;
 
         protected DependencyContainer(ApiEnvironment apiEnvironment, UserAgent userAgent)
         {
@@ -135,6 +137,8 @@ namespace Toggl.Core
             privateSharedStorageService = new Lazy<IPrivateSharedStorageService>(CreatePrivateSharedStorageService);
             suggestionProviderContainer = new Lazy<ISuggestionProviderContainer>(CreateSuggestionProviderContainer);
             pushNotificationsTokenService = new Lazy<IPushNotificationsTokenService>(CreatePushNotificationsTokenService);
+            pushNotificationsTokenStorage =
+                new Lazy<IPushNotificationsTokenStorage>(CreatePushNotificationsTokenStorage);
 
             api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
             UserAccessManager = new UserAccessManager(
@@ -200,6 +204,9 @@ namespace Toggl.Core
         protected virtual IUpdateRemoteConfigCacheService CreateUpdateRemoteConfigCacheService()
             => new UpdateRemoteConfigCacheService(TimeService, KeyValueStorage, FetchRemoteConfigService);
 
+        protected virtual IPushNotificationsTokenStorage CreatePushNotificationsTokenStorage()
+            => new PushNotificationsTokenStorage(KeyValueStorage);
+
         protected virtual ISyncManager CreateSyncManager()
         {
             var syncManager = TogglSyncManager.CreateSyncManager(
@@ -237,7 +244,8 @@ namespace Toggl.Core
             shortcutCreator,
             privateSharedStorageService,
             keyValueStorage,
-            pushNotificationsTokenService
+            pushNotificationsTokenService,
+            pushNotificationsTokenStorage
         );
 
         private void recreateLazyDependenciesForLogin(ITogglApi api)
