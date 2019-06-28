@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using Toggl.Core.Analytics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
@@ -229,7 +230,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<string>();
                 var now = DateTimeOffset.Now;
                 TimeService.CurrentDateTime.Returns(now);
-                ViewModel.CurrentDateRangeStringObservable.Subscribe(observer);
+                ViewModel.CurrentDateRange.Subscribe(observer);
                 await ViewModel.Initialize();
 
                 TestScheduler.Start();
@@ -237,29 +238,124 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 currentDateRangeString.Should().BeNullOrEmpty();
             }
 
-            public sealed class WhenThisWeekShortcutIsSelected : ReportsViewModelTest
+            public sealed class WhenAShortcutIsSelected : ReportsViewModelTest
             {
+                public static IEnumerable<object[]> allCombinations
+                {
+                    get
+                    {
+                        foreach (var beginning in Enum.GetValues(typeof(BeginningOfWeek)))
+                        {
+                            yield return new object[] { beginning, ReportPeriod.Today, Resources.Today };
+                            yield return new object[] { beginning, ReportPeriod.Yesterday, Resources.Yesterday };
+                            yield return new object[] { beginning, ReportPeriod.LastMonth, Resources.LastMonth };
+                            yield return new object[] { beginning, ReportPeriod.LastWeek, Resources.LastWeek };
+                            yield return new object[] { beginning, ReportPeriod.LastYear, Resources.LastYear };
+                            yield return new object[] { beginning, ReportPeriod.ThisMonth, Resources.ThisMonth };
+                            yield return new object[] { beginning, ReportPeriod.ThisWeek, Resources.ThisWeek };
+                            yield return new object[] { beginning, ReportPeriod.ThisYear, Resources.ThisYear };
+                        }
+                    }
+                }
+
                 [Theory, LogIfTooSlow]
-                [InlineData(BeginningOfWeek.Monday)]
-                [InlineData(BeginningOfWeek.Tuesday)]
-                [InlineData(BeginningOfWeek.Wednesday)]
-                [InlineData(BeginningOfWeek.Thursday)]
-                [InlineData(BeginningOfWeek.Friday)]
-                [InlineData(BeginningOfWeek.Saturday)]
-                [InlineData(BeginningOfWeek.Sunday)]
-                public async Task EmitsThisWeekWhenCurrentWeekIsSelected(BeginningOfWeek beginningOfWeek)
+                [MemberData(nameof(allCombinations))]
+                public async Task EmitsCorrectStringWhenShortcutIsSelected(BeginningOfWeek beginningOfWeek, ReportPeriod period, string result)
                 {
                     var user = new MockUser { BeginningOfWeek = beginningOfWeek };
                     DataSource.User.Current.Returns(Observable.Return(user));
                     var observer = TestScheduler.CreateObserver<string>();
                     var now = DateTimeOffset.Now;
                     TimeService.CurrentDateTime.Returns(now);
-                    ViewModel.CurrentDateRangeStringObservable.Subscribe(observer);
+                    ViewModel.CurrentDateRange.Subscribe(observer);
                     await ViewModel.Initialize();
-                    ViewModel.CalendarViewModel.SelectPeriod(ReportPeriod.ThisWeek);
+
+                    ViewModel.CalendarViewModel.SelectPeriod(period);
 
                     TestScheduler.Start();
-                    observer.LastEmittedValue().Should().Be($"{Resources.ThisWeek} ▾");
+                    observer.LastEmittedValue().Should().Be($"{result} ▾");
+                }
+            }
+
+            public sealed class WhenADateRangeMatchingAShortcutIsSelected : ReportsViewModelTest
+            {
+                public static IEnumerable<object[]> allCombinations
+                {
+                    get
+                    {
+                        var now = DateTimeOffset.Now.RoundDownToLocalDate();
+                        var beginningOfMonth = now.RoundDownToLocalMonth();
+                        var beginningOfYear = now.RoundDownToLocalYear();
+
+                        foreach (var beginning in Enum.GetValues(typeof(BeginningOfWeek)))
+                        {
+                            int diff = (7 + ((int)now.DayOfWeek - (int)beginning)) % 7;
+                            var beginningOfWeek = now.AddDays(-1 * diff).Date;
+
+                            yield return new object[] { beginning, now, now, Resources.Today };
+                            yield return new object[] { beginning, now.AddDays(-1), now.AddDays(-1), Resources.Yesterday };
+                            yield return new object[] { beginning, beginningOfMonth.AddMonths(-1), beginningOfMonth.AddDays(-1), Resources.LastMonth };
+                            yield return new object[] { beginning, beginningOfWeek.AddDays(-7), beginningOfWeek.AddDays(-1), Resources.LastWeek };
+                            yield return new object[] { beginning, beginningOfYear.AddMonths(-12), beginningOfYear.AddDays(-1), Resources.LastYear };
+                            yield return new object[] { beginning, beginningOfMonth, beginningOfMonth.AddMonths(1).AddDays(-1), Resources.ThisMonth };
+                            yield return new object[] { beginning, beginningOfWeek, beginningOfWeek.AddDays(6), Resources.ThisWeek };
+                            yield return new object[] { beginning, beginningOfYear, beginningOfYear.AddMonths(12).AddDays(-1), Resources.ThisYear };
+                        }
+                    }
+                }
+
+                [Theory, LogIfTooSlow]
+                [MemberData(nameof(allCombinations))]
+                public async Task EmitsCorrectStringWhenDateRangeIsSelected(BeginningOfWeek beginningOfWeek, DateTimeOffset startDate, DateTimeOffset endDate, string result)
+                {
+                    var user = new MockUser { BeginningOfWeek = beginningOfWeek };
+                    DataSource.User.Current.Returns(Observable.Return(user));
+                    var observer = TestScheduler.CreateObserver<string>();
+                    var now = DateTimeOffset.Now;
+                    TimeService.CurrentDateTime.Returns(now);
+                    ViewModel.CurrentDateRange.Subscribe(observer);
+                    await ViewModel.Initialize();
+
+                    await ViewModel.LoadReport(0, startDate, endDate, ReportsSource.Calendar);
+
+                    TestScheduler.Start();
+                    observer.LastEmittedValue().Should().Be($"{result} ▾");
+                }
+            }
+
+            public sealed class WhenARandomDateRangeIsSelected : ReportsViewModelTest
+            {
+                public static IEnumerable<object[]> randomCombinations
+                {
+                    get
+                    {
+                        yield return new object[] { new DateTime(2019, 5, 23), new DateTime(2019, 5, 29), "05/23 - 05/29" };
+                        yield return new object[] { new DateTime(2017, 5, 23), new DateTime(2019, 5, 29), "05/23 - 05/29" };
+                        yield return new object[] { new DateTime(2019, 5, 23), new DateTime(2019, 5, 30), "05/23 - 05/30" };
+                        yield return new object[] { new DateTime(2019, 3, 3), new DateTime(2019, 5, 29), "03/03 - 05/29" };
+                    }
+                }
+
+                [Theory, LogIfTooSlow]
+                [MemberData(nameof(randomCombinations))]
+                public async Task EmitsCorrectStringWhenDateRangeIsSelected(DateTime startDate, DateTime endDate, string result)
+                {
+                    var mockPreferences = new MockPreferences
+                    {
+                        DateFormat = DateFormat.FromLocalizedDateFormat("MM/DD")
+                    };
+                    DataSource.Preferences.Current.Returns(Observable.Return(mockPreferences));
+
+                    var observer = TestScheduler.CreateObserver<string>();
+                    var now = DateTimeOffset.Now;
+                    TimeService.CurrentDateTime.Returns(now);
+                    ViewModel.CurrentDateRange.Subscribe(observer);
+                    await ViewModel.Initialize();
+
+                    await ViewModel.LoadReport(0, startDate, endDate, ReportsSource.Calendar);
+
+                    TestScheduler.Start();
+                    observer.LastEmittedValue().Should().Be($"{result} ▾");
                 }
             }
         }
@@ -644,7 +740,54 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData(5)]
             [InlineData(8)]
             [InlineData(13)]
-            public async Task ShouldTriggerReloadForEveryAppearance(int numberOfAppearances)
+            public async Task ShouldTriggerReloadForEveryAppearanceAfterSignificantTimePassed(int numberOfAppearances)
+            {
+                var timeService = new TimeService(TestScheduler);
+                TestScheduler.AdvanceTo(DateTimeOffset.Now.Ticks);
+
+                InteractorFactory
+                    .GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset?>())
+                    .Returns(Interactor);
+
+                var viewModel = new ReportsViewModel(
+                    DataSource,
+                    timeService,
+                    NavigationService,
+                    InteractorFactory,
+                    AnalyticsService,
+                    SchedulerProvider,
+                    StopwatchProvider,
+                    RxActionFactory
+                );
+
+                Interactor.Execute()
+                    .ReturnsForAnyArgs(Observable.Empty<ProjectSummaryReport>(SchedulerProvider.TestScheduler));
+                await viewModel.Initialize();
+                viewModel.CalendarViewModel.ViewAppeared();
+                InteractorFactory.ClearReceivedCalls();
+
+                for (int i = 0; i < numberOfAppearances; ++i)
+                {
+                    viewModel.ViewDisappeared();
+                    TestScheduler.AdvanceBy(TimeSpan.FromSeconds(5).Ticks);
+                    viewModel.ViewAppeared();
+                }
+
+                TestScheduler.Start();
+
+                InteractorFactory
+                    .Received(numberOfAppearances)
+                    .GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>());
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData(1)]
+            [InlineData(2)]
+            [InlineData(3)]
+            [InlineData(5)]
+            [InlineData(8)]
+            [InlineData(13)]
+            public async Task ShouldNotTriggerReloadAfterDisappearingAndAppearingImmediately(int numberOfAppearances)
             {
                 TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
                 Interactor.Execute()
@@ -655,12 +798,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 for (int i = 0; i < numberOfAppearances; ++i)
                 {
+                    ViewModel.ViewDisappeared();
                     ViewModel.ViewAppeared();
                 }
+
                 TestScheduler.Start();
 
                 InteractorFactory
-                    .Received(numberOfAppearances)
+                    .DidNotReceive()
                     .GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset>());
             }
         }
