@@ -2,7 +2,6 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core;
@@ -15,6 +14,7 @@ using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
+using Android.Content;
 
 namespace Toggl.Droid.Adapters
 {
@@ -23,6 +23,7 @@ namespace Toggl.Droid.Adapters
         public const int SuggestionViewType = 2;
         public const int UserFeedbackViewType = 3;
 
+        private readonly Context context;
         private readonly ITimeService timeService;
 
         private bool isRatingViewVisible = false;
@@ -49,8 +50,9 @@ namespace Toggl.Droid.Adapters
         private readonly Subject<(LogItemViewModel, ContinueTimeEntryMode)> continueTimeEntrySubject = new Subject<(LogItemViewModel, ContinueTimeEntryMode)>();
         private readonly Subject<LogItemViewModel> deleteTimeEntrySubject = new Subject<LogItemViewModel>();
 
-        public MainRecyclerAdapter(ITimeService timeService)
+        public MainRecyclerAdapter(Context context, ITimeService timeService)
         {
+            this.context = context;
             this.timeService = timeService;
         }
 
@@ -181,7 +183,7 @@ namespace Toggl.Droid.Adapters
             => section.Identity;
 
         protected override TimeEntryViewData Wrap(LogItemViewModel item)
-            => new TimeEntryViewData(item);
+            => new TimeEntryViewData(context, item);
 
         protected override DaySummaryViewModel Wrap(DaySummaryViewModel section)
             => section;

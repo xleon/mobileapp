@@ -33,9 +33,17 @@ namespace Toggl.Core.UI
         public override IUserAccessManager UserAccessManager
             => MockUserAccessManager ?? base.UserAccessManager;
 
+        internal IFetchRemoteConfigService MockFetchRemoteConfigService { get; set; }
+        protected override IFetchRemoteConfigService CreateFetchRemoteConfigService()
+            => MockFetchRemoteConfigService;
+
         internal IAccessRestrictionStorage MockAccessRestrictionStorage { get; set; }
         protected override IAccessRestrictionStorage CreateAccessRestrictionStorage()
             => MockAccessRestrictionStorage;
+
+        internal IUpdateRemoteConfigCacheService MockUpdateRemoteConfigCacheService { get; set; }
+        protected override IUpdateRemoteConfigCacheService CreateUpdateRemoteConfigCacheService()
+            => MockUpdateRemoteConfigCacheService;
 
         internal IAnalyticsService MockAnalyticsService { get; set; }
         protected override IAnalyticsService CreateAnalyticsService()
@@ -113,6 +121,10 @@ namespace Toggl.Core.UI
         protected override ISuggestionProviderContainer CreateSuggestionProviderContainer()
             => MockSuggestionProviderContainer;
 
+        internal IPushNotificationsTokenService MockPushNotificationsTokenService { get; set; }
+        protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
+            => MockPushNotificationsTokenService;
+
         internal IUserPreferences MockUserPreferences { get; set; }
         protected override IUserPreferences CreateUserPreferences()
             => MockUserPreferences;
@@ -132,5 +144,9 @@ namespace Toggl.Core.UI
         internal ITogglDataSource MockDataSource { get; set; }
         protected override ITogglDataSource CreateDataSource()
             => MockDataSource;
+
+        internal IPushNotificationsTokenStorage MockPushNotificationsTokenStorage { get; set; }
+        protected override IPushNotificationsTokenStorage CreatePushNotificationsTokenStorage()
+            => MockPushNotificationsTokenStorage;
     }
 }
