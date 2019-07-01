@@ -1107,33 +1107,87 @@
     <ImageAsset Include="Resources\Images.xcassets\stripes.imageset\stripes%403x.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboard.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboard.imageset\pasteFromClipboard.pdf" />
-    <ImageAsset Include="Resources\Images.xcassets\clipboardInstruction.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\clipboardInstruction.imageset\clipboardInstruction.pdf" />
-    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboardEnabled.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboardEnabled.imageset\pasteFromClipboardEnabled.pdf" />
-    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-20x20.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-40x40.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-76x76.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-152x152.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-167x167.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icTimer.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\icTimer.imageset\timer.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icTimer.imageset\timer%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icTimer.imageset\timer%403x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icMic.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\icMic.imageset\microphone.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icMic.imageset\microphone%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icMic.imageset\microphone%403x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icMagnifier.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\icMagnifier.imageset\search.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icMagnifier.imageset\search%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icMagnifier.imageset\search%403x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\circled_stop.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\circled_stop%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\circled_stop%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboard.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboard.imageset\pasteFromClipboard.pdf">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\clipboardInstruction.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\clipboardInstruction.imageset\clipboardInstruction.pdf">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboardEnabled.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboardEnabled.imageset\pasteFromClipboardEnabled.pdf">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-20x20.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-40x40.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-76x76.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-152x152.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-167x167.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icTimer.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icTimer.imageset\timer.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icTimer.imageset\timer%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icTimer.imageset\timer%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icMic.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icMic.imageset\microphone.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icMic.imageset\microphone%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icMic.imageset\microphone%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icMagnifier.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icMagnifier.imageset\search.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icMagnifier.imageset\search%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icMagnifier.imageset\search%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\circled_stop.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\circled_stop%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\circled_stop%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon-debug.appiconset\icon_20pt%402x.png">
       <Visible>false</Visible>
     </ImageAsset>
@@ -1376,10 +1430,6 @@
     <Compile Include="Startup\IOSSchedulerProvider.cs" />
     <Compile Include="Extensions\AnimationExtensions.cs" />
     <Compile Include="Transformations\ProjectTaskClientToAttributedString.cs" />
-    <Compile Include="ViewControllers\OnboardingViewController.cs" />
-    <Compile Include="ViewControllers\OnboardingViewController.designer.cs">
-      <DependentUpon>OnboardingViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.DialogProvider.cs">
@@ -1979,6 +2029,7 @@
     <Folder Include="Resources\Images.xcassets\icIllustrationTagsSmall.imageset\" />
     <Folder Include="Resources\Images.xcassets\icLoader.imageset\" />
     <Folder Include="Resources\Images.xcassets\icProjectDot.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icRoundStop.imageset\" />
     <Folder Include="Resources\Images.xcassets\icSearch.imageset\" />
     <Folder Include="Resources\Images.xcassets\icTime.imageset\" />
     <Folder Include="Resources\Images.xcassets\icWarning.imageset\" />
@@ -1989,11 +2040,6 @@
     <Folder Include="Resources\Images.xcassets\thumbsdown.imageset\" />
     <Folder Include="Resources\Images.xcassets\thumbsup.imageset\" />
     <Folder Include="Resources\Images.xcassets\togglLogoBig.imageset\" />
-    <Folder Include="Resources\Images.xcassets\icStop.imageset\" />
-    <Folder Include="Resources\Images.xcassets\icTimer.imageset\" />
-    <Folder Include="Resources\Images.xcassets\icMic.imageset\" />
-    <Folder Include="Resources\Images.xcassets\icMagnifier.imageset\" />
-    <Folder Include="Resources\Images.xcassets\icRoundStop.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

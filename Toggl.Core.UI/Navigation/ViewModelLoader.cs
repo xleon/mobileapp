@@ -143,16 +143,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory);
             }
 
-            if (viewModelType == typeof(OnboardingViewModel))
-            {
-                return new OnboardingViewModel(
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.OnboardingStorage,
-                    dependencyContainer.AnalyticsService,
-                    dependencyContainer.RxActionFactory,
-                    dependencyContainer.SchedulerProvider);
-            }
-
             if (viewModelType == typeof(OutdatedAppViewModel))
             {
                 return new OutdatedAppViewModel(
