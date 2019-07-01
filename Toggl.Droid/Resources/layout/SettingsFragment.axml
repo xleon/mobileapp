@@ -17,20 +17,6 @@
             android:animateLayoutChanges="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <LinearLayout
-                android:id="@+id/SettingsViewAvatarImageContainer"
-                android:gravity="center"
-                android:visibility="gone"
-                android:orientation="vertical"
-                android:background="@android:color/transparent"
-                android:layout_height="72dp"
-                android:layout_marginBottom="12dp"
-                android:layout_width="match_parent">
-                <ImageView
-                    android:id="@+id/SettingsViewAvatarImage"
-                    android:layout_width="72dp"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
             <TextView
                 android:id="@+id/SettingsNameTextView"
                 tools:text="Heidi"

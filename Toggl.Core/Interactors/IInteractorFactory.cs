@@ -145,8 +145,6 @@ namespace Toggl.Core.Interactors
 
         IInteractor<IObservable<IThreadSafeUser>> GetCurrentUser();
 
-        IInteractor<IObservable<byte[]>> GetUserAvatar(string url);
-
         IInteractor<IObservable<IThreadSafeUser>> UpdateUser(EditUserDTO dto);
 
         IInteractor<IObservable<IThreadSafeUser>> UpdateDefaultWorkspace(long selectedWorkspaceId);

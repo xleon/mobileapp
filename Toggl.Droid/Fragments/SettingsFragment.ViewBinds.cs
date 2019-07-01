@@ -16,7 +16,6 @@ namespace Toggl.Droid.Fragments
         private View is24hoursModeView;
         private View runningTimerNotificationsView;
         private View stoppedTimerNotificationsView;
-        private View avatarContainer;
         private View dateFormatView;
         private View beginningOfWeekView;
         private View durationFormatView;
@@ -32,8 +31,6 @@ namespace Toggl.Droid.Fragments
         private TextView beginningOfWeekTextView;
         private TextView durationFormatTextView;
         private TextView smartRemindersTextView;
-
-        private ImageView avatarView;
 
         private Switch is24hoursModeSwitch;
         private Switch manualModeSwitch;
@@ -53,7 +50,6 @@ namespace Toggl.Droid.Fragments
             feedbackView = fragmentView.FindViewById(Resource.Id.SettingsSubmitFeedbackButton);
             manualModeView = fragmentView.FindViewById(Resource.Id.SettingsToggleManualModeView);
             is24hoursModeView = fragmentView.FindViewById(Resource.Id.SettingsIs24HourModeView);
-            avatarContainer = fragmentView.FindViewById(Resource.Id.SettingsViewAvatarImageContainer);
             dateFormatView = fragmentView.FindViewById(Resource.Id.SettingsDateFormatView);
             beginningOfWeekView = fragmentView.FindViewById(Resource.Id.SettingsSelectBeginningOfWeekView);
             durationFormatView = fragmentView.FindViewById(Resource.Id.SettingsDurationFormatView);
@@ -72,7 +68,6 @@ namespace Toggl.Droid.Fragments
             durationFormatTextView = fragmentView.FindViewById<TextView>(Resource.Id.SettingsDurationFormatTextView);
             smartRemindersTextView = fragmentView.FindViewById<TextView>(Resource.Id.SmartRemindersTextView);
 
-            avatarView = fragmentView.FindViewById<ImageView>(Resource.Id.SettingsViewAvatarImage);
             manualModeSwitch = fragmentView.FindViewById<Switch>(Resource.Id.SettingsIsManualModeEnabledSwitch);
             is24hoursModeSwitch = fragmentView.FindViewById<Switch>(Resource.Id.SettingsIs24HourModeSwitch);
             runningTimerNotificationsSwitch = fragmentView.FindViewById<Switch>(Resource.Id.SettingsAreRunningTimerNotificationsEnabledSwitch);
