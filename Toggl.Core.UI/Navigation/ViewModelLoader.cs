@@ -80,7 +80,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.LastTimeUsageStorage,
                     dependencyContainer.TimeService,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.InteractorFactory);
             }
 
             if (viewModelType == typeof(MainTabBarViewModel))

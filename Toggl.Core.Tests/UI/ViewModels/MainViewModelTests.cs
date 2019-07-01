@@ -779,8 +779,20 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheInitializeMethod
+        public sealed class TheInitializeMethod : MainViewModelTest
         {
+            [Fact, LogIfTooSlow]
+            public async void ReportsUserIdToAppCenter()
+            {
+                var userId = 1234567890L;
+                var user = Substitute.For<IThreadSafeUser>();
+                user.Id.Returns(userId);
+                InteractorFactory.GetCurrentUser().Execute().Returns(Observable.Return(user));
+                await ViewModel.Initialize();
+
+                AnalyticsService.Received().SetAppCenterUserId(userId);
+            }
+
             public sealed class WhenShowingTheRatingsView : MainViewModelTest
             {
                 [Fact, LogIfTooSlow]
