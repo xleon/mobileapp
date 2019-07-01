@@ -106,7 +106,7 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(WorkspaceLabel.Rx().Text())
                 .DisposedBy(DisposeBag);
 
-            ViewModel.CurrentDateRangeStringObservable
+            ViewModel.CurrentDateRange
                 .Subscribe(titleButton.Rx().Title())
                 .DisposedBy(DisposeBag);
 

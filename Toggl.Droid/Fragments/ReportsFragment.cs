@@ -73,7 +73,7 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(toggleCalendar)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.CurrentDateRangeStringObservable
+            ViewModel.CurrentDateRange
                 .Subscribe(toolbarCurrentDateRangeText.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
         }

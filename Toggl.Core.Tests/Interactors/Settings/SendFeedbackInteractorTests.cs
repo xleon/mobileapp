@@ -37,6 +37,7 @@ namespace Toggl.Core.Tests.Interactors.Settings
                 bool useUserPreferences,
                 bool useLastTimeUsageStorage,
                 bool useTimeService,
+                bool useInteractorFactory,
                 bool useMessage)
             {
                 // ReSharper disable once ObjectCreationAsStatement
@@ -49,6 +50,7 @@ namespace Toggl.Core.Tests.Interactors.Settings
                     useUserPreferences ? UserPreferences : null,
                     useLastTimeUsageStorage ? Substitute.For<ILastTimeUsageStorage>() : null,
                     useTimeService ? TimeService : null,
+                    useInteractorFactory ? InteractorFactory : null,
                     useMessage ? "some message" : null);
 
                 createInstance.Should().Throw<ArgumentException>();
@@ -167,6 +169,19 @@ namespace Toggl.Core.Tests.Interactors.Settings
             }
 
             [Property]
+            public void SendsTheUserId(int userId)
+            {
+                var user = Substitute.For<IThreadSafeUser>();
+                user.Id.Returns(userId);
+                InteractorFactory.GetCurrentUser().Execute().Returns(Observable.Return(user));
+
+                executeInteractor().Wait();
+
+                feedbackApi.Received().Send(Arg.Any<Email>(), Arg.Any<string>(), Arg.Is<Dictionary<string, string>>(
+                    data => data[UserId] == userId.ToString())).Wait();
+            }
+
+            [Property]
             public void SendsApplicationInstallLocation(ApplicationInstallLocation installLocation)
             {
                 PlatformInfo.InstallLocation.Returns(installLocation);
@@ -221,6 +236,7 @@ namespace Toggl.Core.Tests.Interactors.Settings
                     UserPreferences,
                     LastTimeUsageStorage,
                     TimeService,
+                    InteractorFactory,
                     message);
 
                 await interactor.Execute();

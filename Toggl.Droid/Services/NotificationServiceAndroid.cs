@@ -18,13 +18,13 @@ namespace Toggl.Droid.Services
 {
     public sealed class NotificationServiceAndroid : INotificationService
     {
-        private const string scheduledNotificationsSharedPreferencesName = "TogglNotifications";
-        private const string scheduledNotificationsStorageKey = "TogglNotificationIds";
+        public static string ScheduledNotificationsSharedPreferencesName = "TogglNotifications";
+        public static string ScheduledNotificationsStorageKey = "TogglNotificationIds";
         private readonly ISharedPreferences sharedPreferences;
 
         public NotificationServiceAndroid()
         {
-            sharedPreferences = Application.Context.GetSharedPreferences(scheduledNotificationsSharedPreferencesName, FileCreationMode.Private);
+            sharedPreferences = Application.Context.GetSharedPreferences(ScheduledNotificationsSharedPreferencesName, FileCreationMode.Private);
         }
 
         public IObservable<Unit> Schedule(IImmutableList<Shared.Notification> notifications)
@@ -61,11 +61,10 @@ namespace Toggl.Droid.Services
             {
                 var context = Application.Context;
                 var notificationManager = NotificationManagerCompat.From(context);
-                notificationManager.CancelAll();
-
                 var notificationIds = getSavedNotificationIds();
+                
                 var alarmManager = (AlarmManager)Application.Context.GetSystemService(Context.AlarmService);
-                notificationIds.ForEach(notificationId => unScheduleNotification(notificationId, alarmManager));
+                notificationIds.ForEach(notificationId => unScheduleNotification(notificationId, alarmManager, notificationManager));
                 clearSavedNotificationIds();
             });
 
@@ -85,10 +84,11 @@ namespace Toggl.Droid.Services
             alarmManager.SetExact(AlarmType.ElapsedRealtimeWakeup, SystemClock.ElapsedRealtime() + futureInMillis, pendingIntent);
         }
 
-        private void unScheduleNotification(string notificationId, AlarmManager alarmManager)
+        private void unScheduleNotification(string notificationId, AlarmManager alarmManager, NotificationManagerCompat notificationManager)
         {
             var scheduledNotificationIntent = new Intent(Application.Context, typeof(SmartAlertCalendarEventBroadcastReceiver));
             scheduledNotificationIntent.SetData(getSmartAlertIdentifierUri(notificationId.GetHashCode()));
+            notificationManager.Cancel(notificationId.GetHashCode());
             cancelExistingPendingIntentIfNecessary(notificationId.GetHashCode(), scheduledNotificationIntent, alarmManager);
         }
 
@@ -105,20 +105,20 @@ namespace Toggl.Droid.Services
             => Uri.Parse($"toggl-notifications://smartAlerts/{notificationId}");
 
         private IEnumerable<string> getSavedNotificationIds()
-            => sharedPreferences.GetStringSet(scheduledNotificationsStorageKey, new List<string>())
+            => sharedPreferences.GetStringSet(ScheduledNotificationsStorageKey, new List<string>())
                 .ToImmutableList();
 
         private void clearSavedNotificationIds()
         {
             sharedPreferences.Edit()
-                .Remove(scheduledNotificationsStorageKey)
+                .Remove(ScheduledNotificationsStorageKey)
                 .Commit();
         }
 
         private void saveScheduledNotificationIds(ICollection<string> notificationIds)
         {
             sharedPreferences.Edit()
-                .PutStringSet(scheduledNotificationsStorageKey, notificationIds)
+                .PutStringSet(ScheduledNotificationsStorageKey, notificationIds)
                 .Commit();
         }
     }

@@ -1,4 +1,6 @@
-﻿using CoreGraphics;
+﻿using CoreAnimation;
+using CoreGraphics;
+using Foundation;
 using System;
 using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels;
@@ -15,6 +17,7 @@ namespace Toggl.iOS.ViewControllers
         private readonly TrackPage trackPagePlaceholder = TrackPage.Create();
         private readonly MostUsedPage mostUsedPagePlaceholder = MostUsedPage.Create();
         private readonly ReportsPage reportsPagePlaceholder = ReportsPage.Create();
+        private readonly CAGradientLayer gradientLayer = new CAGradientLayer();
 
         public OnboardingViewController(OnboardingViewModel viewModel)
             : base(viewModel, nameof(OnboardingViewController))
@@ -36,6 +39,11 @@ namespace Toggl.iOS.ViewControllers
                 var navigationBarHeight = NavigationController.NavigationBar.Frame.Height;
                 AdditionalSafeAreaInsets = new UIEdgeInsets(-navigationBarHeight, 0, 0, 0);
             }
+
+            gradientLayer.StartPoint = new CGPoint(0, 0);
+            gradientLayer.EndPoint = new CGPoint(0, 1);
+            gradientLayer.Locations = new NSNumber[] { 0, 1.0 };
+            View.Layer.InsertSublayer(gradientLayer, 0);
 
             PageControl.Pages = ViewModel.NumberOfPages;
             FirstPageLabel.Text = Resources.OnboardingTrackPageCopy;
@@ -71,8 +79,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.CurrentPage
-                .Select(backgroundImageForPage)
-                .Subscribe(image => BackgroundImage.Image = image)
+                .Subscribe(setBackgroundForPage)
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsLastPage
@@ -137,6 +144,8 @@ namespace Toggl.iOS.ViewControllers
                 mostUsedPagePlaceholder.Frame = PhoneContents.Bounds;
             if (reportsPagePlaceholder != null)
                 reportsPagePlaceholder.Frame = PhoneContents.Bounds;
+
+            gradientLayer.Frame = View.Bounds;
         }
 
         public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
@@ -150,20 +159,32 @@ namespace Toggl.iOS.ViewControllers
             ScrollView.SetContentOffset(scrollPoint, true);
         }
 
-        private UIImage backgroundImageForPage(int page)
+        private void setBackgroundForPage(int page)
         {
+            UIColor startColor;
+            var endColor = UIColor.FromRGBA(1.000f, 1.000f, 1.000f, 0.000f);
+
             switch (page)
             {
                 case OnboardingViewModel.TrackPage:
-                    return UIImage.FromBundle("bgNoiseBlue");
+                    startColor = UIColor.FromRGBA(0.108f, 0.681f, 0.963f, 1.000f);
+                    break;
                 case OnboardingViewModel.MostUsedPage:
-                    return UIImage.FromBundle("bgNoisePurple");
+                    startColor = UIColor.FromRGBA(0.735f, 0.403f, 0.945f, 1.000f);
+                    break;
                 case OnboardingViewModel.ReportsPage:
-                    return UIImage.FromBundle("bgNoiseYellow");
+                    startColor = UIColor.FromRGBA(0.943f, 0.764f, 0.252f, 1.000f);
+                    break;
                 default:
-                    return UIImage.FromBundle("bgNoiseYellow");
+                    startColor = UIColor.FromRGBA(0.108f, 0.681f, 0.963f, 1.000f);
+                    break;
             }
-        }
 
+            gradientLayer.Colors = new[]
+            {
+                startColor.CGColor,
+                endColor.CGColor
+            };
+        }
     }
 }

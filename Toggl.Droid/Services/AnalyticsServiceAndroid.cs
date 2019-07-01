@@ -1,5 +1,6 @@
 ﻿using Android.OS;
 using Firebase.Analytics;
+using Microsoft.AppCenter;
 using Microsoft.AppCenter.Crashes;
 using System;
 using System.Collections.Generic;
@@ -74,5 +75,30 @@ namespace Toggl.Droid.Services
 
         private string trimForAppCenter(string text)
             => text.Length > maxAppCenterStringLength ? text.Substring(0, maxAppCenterStringLength) : text;
+
+        public override void SetAppCenterUserId(long id)
+        {
+            setAppCenterUserId(id.ToString());
+        }
+
+        public override void ResetAppCenterUserId()
+        {
+            setAppCenterUserId("");
+        }
+
+        private void setAppCenterUserId(string id)
+        {
+            try
+            {
+                AppCenter.SetUserId(id);
+            }
+            catch
+            {
+                /* This catch intentionally left blank.
+                 * Failure to set the user id for analytics is not a reason to crash the app.
+                 * And there are no reasonable ways to gracefuly recover from this.
+                 */
+            }
+        }
     }
 }
