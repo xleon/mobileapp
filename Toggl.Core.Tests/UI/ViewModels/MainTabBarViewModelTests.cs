@@ -29,6 +29,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     PermissionsChecker,
                     NavigationService,
                     RemoteConfigService,
+                    UpdateRemoteConfigCacheService,
                     AccessRestrictionStorage,
                     StopwatchProvider,
                     RxActionFactory,
@@ -56,13 +57,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool usePermissionsChecker,
                     bool useNavigationService,
                     bool useRemoteConfigService,
+                    bool useRemoteConfigUpdateService,
                     bool useAccessRestrictionStorage,
                     bool useStopwatchProvider,
                     bool useRxActionFactory,
                     bool useUserAccessManager,
                     bool usePrivateSharedStorageService,
                     bool usePlatformInfo)
-
             {
                 var timeService = useTimeService ? TimeService : null;
                 var dataSource = useDataSource ? DataSource : null;
@@ -77,6 +78,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var permissionsService = usePermissionsChecker ? PermissionsChecker : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
+                var remoteConfigUpdateService = useRemoteConfigUpdateService ? UpdateRemoteConfigCacheService : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
@@ -99,6 +101,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         permissionsService,
                         navigationService,
                         remoteConfigService,
+                        remoteConfigUpdateService,
                         accessRestrictionStorage,
                         stopwatchProvider,
                         rxActionFactory,

@@ -261,6 +261,18 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("SuggestionProvider")]
         public IAnalyticsEvent<SuggestionProviderType> SuggestionStarted { get; protected set; }
 
+        [AnalyticsEvent("NumberOfEntitiesFetched")]
+        public IAnalyticsEvent<string> PushInitiatedSyncFetch { get; protected set; }
+
+        [AnalyticsEvent("Source")]
+        public IAnalyticsEvent<string> PushNotificationSyncStarted { get; protected set; }
+
+        [AnalyticsEvent("Source")]
+        public IAnalyticsEvent<string> PushNotificationSyncFinished { get; protected set; }
+
+        [AnalyticsEvent("Source", "Type", "Message", "StackTrace")]
+        public IAnalyticsEvent<string, string, string, string> PushNotificationSyncFailed { get; protected set; }
+
         [AnalyticsEvent("Location")]
         public IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; protected set; }
 
@@ -286,5 +298,8 @@ namespace Toggl.Core.Analytics
             => Track(trackableEvent.EventName, trackableEvent.ToDictionary());
 
         protected abstract void TrackException(Exception exception);
+
+        public abstract void SetAppCenterUserId(long id);
+        public abstract void ResetAppCenterUserId();
     }
 }

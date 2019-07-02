@@ -68,7 +68,6 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<string> Email { get; }
         public IObservable<bool> IsSynced { get; }
         public IObservable<Unit> LoggingOut { get; }
-        public IObservable<byte[]> UserAvatar { get; }
         public IObservable<string> DateFormat { get; }
         public IObservable<bool> IsRunningSync { get; }
         public IObservable<string> WorkspaceName { get; }
@@ -226,14 +225,6 @@ namespace Toggl.Core.UI.ViewModels
             CalendarSmartReminders = userPreferences.CalendarNotificationsSettings()
                 .Select(s => s.Title())
                 .DistinctUntilChanged();
-
-            UserAvatar =
-                dataSource.User.Current
-                    .Select(user => user.ImageUrl)
-                    .DistinctUntilChanged()
-                    .SelectMany(url => interactorFactory.GetUserAvatar(url).Execute())
-                    .AsDriver(schedulerProvider)
-                    .Where(avatar => avatar != null);
 
             Workspaces =
                 dataSource.User.Current

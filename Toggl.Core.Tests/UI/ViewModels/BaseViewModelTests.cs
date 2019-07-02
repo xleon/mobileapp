@@ -4,7 +4,6 @@ using System.Reactive;
 using Toggl.Core.Diagnostics;
 using Toggl.Core.Login;
 using Toggl.Core.Services;
-using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
@@ -28,6 +27,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         protected IPlatformInfo PlatformInfo { get; } = Substitute.For<IPlatformInfo>();
         protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
         protected IRemoteConfigService RemoteConfigService { get; } = Substitute.For<IRemoteConfigService>();
+        protected IUpdateRemoteConfigCacheService UpdateRemoteConfigCacheService { get; } = Substitute.For<IUpdateRemoteConfigCacheService>();
         protected IErrorHandlingService ErrorHandlingService { get; } = Substitute.For<IErrorHandlingService>();
         protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
         protected IStopwatchProvider StopwatchProvider { get; } = Substitute.For<IStopwatchProvider>();

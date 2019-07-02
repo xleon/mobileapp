@@ -115,6 +115,7 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
+            IUpdateRemoteConfigCacheService updateRemoteConfigCacheService,
             IAccessRestrictionStorage accessRestrictionStorage,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
@@ -135,6 +136,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
+            Ensure.Argument.IsNotNull(updateRemoteConfigCacheService, nameof(updateRemoteConfigCacheService));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
@@ -162,12 +164,16 @@ namespace Toggl.Core.UI.ViewModels
             LogEmpty = TimeEntriesViewModel.Empty.AsDriver(schedulerProvider);
             TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(schedulerProvider);
 
-            ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService);
+            ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService, updateRemoteConfigCacheService);
         }
 
         public override async Task Initialize()
         {
             await base.Initialize();
+
+            interactorFactory.GetCurrentUser().Execute()
+                .Select(u => u.Id)
+                .Subscribe(analyticsService.SetAppCenterUserId);
 
             await SuggestionsViewModel.Initialize();
             await RatingViewModel.Initialize();

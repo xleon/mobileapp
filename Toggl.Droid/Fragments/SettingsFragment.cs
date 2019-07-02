@@ -103,15 +103,6 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(smartRemindersTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
-            ViewModel.UserAvatar
-                .Select(userImageFromBytes)
-                .Subscribe(bitmap =>
-                {
-                    avatarView.SetImageBitmap(bitmap);
-                    avatarContainer.Visibility = ViewStates.Visible;
-                })
-                .DisposedBy(DisposeBag);
-
             ViewModel.LoggingOut
                 .Subscribe(Context.CancelAllNotifications)
                 .DisposedBy(DisposeBag);

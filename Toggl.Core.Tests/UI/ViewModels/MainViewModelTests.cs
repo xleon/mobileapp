@@ -51,6 +51,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     InteractorFactory,
                     NavigationService,
                     RemoteConfigService,
+                    UpdateRemoteConfigCacheService,
                     AccessRestrictionStorage,
                     SchedulerProvider,
                     StopwatchProvider,
@@ -73,8 +74,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.None);
                 RemoteConfigService
-                    .RatingViewConfiguration
-                    .Returns(Observable.Return(defaultRemoteConfiguration));
+                    .GetRatingViewConfiguration()
+                    .Returns(defaultRemoteConfiguration);
 
                 DataSource.Preferences.Current.Returns(Observable.Create<IThreadSafePreferences>(observer =>
                 {
@@ -102,6 +103,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useInteractorFactory,
                 bool useNavigationService,
                 bool useRemoteConfigService,
+                bool useRemoteConfigUpdateService,
                 bool useAccessRestrictionStorage,
                 bool useSchedulerProvider,
                 bool useStopwatchProvider,
@@ -120,6 +122,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
+                var remoteConfigUpdateService = useRemoteConfigUpdateService ? UpdateRemoteConfigCacheService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
@@ -140,6 +143,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         interactorFactory,
                         navigationService,
                         remoteConfigService,
+                        remoteConfigUpdateService,
                         accessRestrictionStorage,
                         schedulerProvider,
                         stopwatchProvider,
@@ -771,8 +775,20 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheInitializeMethod
+        public sealed class TheInitializeMethod : MainViewModelTest
         {
+            [Fact, LogIfTooSlow]
+            public async void ReportsUserIdToAppCenter()
+            {
+                var userId = 1234567890L;
+                var user = Substitute.For<IThreadSafeUser>();
+                user.Id.Returns(userId);
+                InteractorFactory.GetCurrentUser().Execute().Returns(Observable.Return(user));
+                await ViewModel.Initialize();
+
+                AnalyticsService.Received().SetAppCenterUserId(userId);
+            }
+
             public sealed class WhenShowingTheRatingsView : MainViewModelTest
             {
                 [Fact, LogIfTooSlow]
@@ -792,8 +808,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.Start);
                     RemoteConfigService
-                        .RatingViewConfiguration
-                        .Returns(Observable.Return(defaultRemoteConfiguration));
+                        .GetRatingViewConfiguration()
+                        .Returns(defaultRemoteConfiguration);
 
                     var now = DateTimeOffset.Now;
                     var firstOpened = now - TimeSpan.FromDays(5);
@@ -814,8 +830,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.Start);
                     RemoteConfigService
-                        .RatingViewConfiguration
-                        .Returns(Observable.Return(defaultRemoteConfiguration));
+                        .GetRatingViewConfiguration()
+                        .Returns(defaultRemoteConfiguration);
 
                     var now = DateTimeOffset.Now;
                     var firstOpened = now - TimeSpan.FromDays(6);
@@ -838,8 +854,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.Start);
                     RemoteConfigService
-                        .RatingViewConfiguration
-                        .Returns(Observable.Return(defaultRemoteConfiguration));
+                        .GetRatingViewConfiguration()
+                        .Returns(defaultRemoteConfiguration);
 
                     var now = DateTimeOffset.Now;
                     var firstOpened = now - TimeSpan.FromDays(6);

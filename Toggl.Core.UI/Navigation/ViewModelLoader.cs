@@ -80,7 +80,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.LastTimeUsageStorage,
                     dependencyContainer.TimeService,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.InteractorFactory);
             }
 
             if (viewModelType == typeof(MainTabBarViewModel))
@@ -99,6 +100,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RemoteConfigService,
+                    dependencyContainer.UpdateRemoteConfigCacheService,
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory,
@@ -120,6 +122,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RemoteConfigService,
+                    dependencyContainer.UpdateRemoteConfigCacheService,
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.StopwatchProvider,
@@ -138,16 +141,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.RxActionFactory);
-            }
-
-            if (viewModelType == typeof(OnboardingViewModel))
-            {
-                return new OnboardingViewModel(
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.OnboardingStorage,
-                    dependencyContainer.AnalyticsService,
-                    dependencyContainer.RxActionFactory,
-                    dependencyContainer.SchedulerProvider);
             }
 
             if (viewModelType == typeof(OutdatedAppViewModel))

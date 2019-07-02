@@ -6,5 +6,9 @@
     <integer>5</integer>
     <key>criterion</key>
     <string>none</string>
+    <key>register_push_notifications_token_with_server</key>
+    <false/>
+    <key>handle_push_notifications</key>
+    <false/>
 </dict>
 </plist>

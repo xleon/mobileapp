@@ -30,6 +30,7 @@ namespace Toggl.Core.Interactors.Settings
         public const string NumberOfUnsyncableTimeEntries = "Number of unsyncable time entries";
         public const string NumberOfTimeEntries = "Number of time entries in our database in total";
         public const string InstallLocation = "Install location";
+        public const string UserId = "User Id";
 
         private const string unspecified = "[unspecified]";
 
@@ -42,6 +43,7 @@ namespace Toggl.Core.Interactors.Settings
         private readonly ISingletonDataSource<IThreadSafeUser> userDataSource;
         private readonly IDataSource<IThreadSafeWorkspace, IDatabaseWorkspace> workspacesDataSource;
         private readonly IDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry> timeEntriesDataSource;
+        private readonly IInteractorFactory interactorFactory;
 
         public SendFeedbackInteractor(
             IFeedbackApi feedbackApi,
@@ -52,6 +54,7 @@ namespace Toggl.Core.Interactors.Settings
             IUserPreferences userPreferences,
             ILastTimeUsageStorage lastTimeUsageStorage,
             ITimeService timeService,
+            IInteractorFactory interactorFactory,
             string message)
         {
             Ensure.Argument.IsNotNull(message, nameof(message));
@@ -63,6 +66,7 @@ namespace Toggl.Core.Interactors.Settings
             Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
             Ensure.Argument.IsNotNull(workspacesDataSource, nameof(workspacesDataSource));
             Ensure.Argument.IsNotNull(timeEntriesDataSource, nameof(timeEntriesDataSource));
+            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
 
             this.message = message;
             this.feedbackApi = feedbackApi;
@@ -73,6 +77,7 @@ namespace Toggl.Core.Interactors.Settings
             this.workspacesDataSource = workspacesDataSource;
             this.timeEntriesDataSource = timeEntriesDataSource;
             this.lastTimeUsageStorage = lastTimeUsageStorage;
+            this.interactorFactory = interactorFactory;
         }
 
         private IObservable<string> accountTimezone
@@ -107,6 +112,7 @@ namespace Toggl.Core.Interactors.Settings
                 unsyncedTimeEntriesCount,
                 unsyncabeTimeEntriesCount,
                 accountTimezone,
+                interactorFactory.GetCurrentUser().Execute(),
                 combineData)
                 .SelectMany(data =>
                     userDataSource.Get().SelectMany(user =>
@@ -117,7 +123,8 @@ namespace Toggl.Core.Interactors.Settings
             int timeEntries,
             int unsyncedTimeEntries,
             int unsyncableTimeEntriesCount,
-            string accountTimezone)
+            string accountTimezone,
+            IThreadSafeUser user)
         {
             var data = new Dictionary<string, string>
             {
@@ -134,7 +141,8 @@ namespace Toggl.Core.Interactors.Settings
                 [LastSuccessfulSync] = lastTimeUsageStorage.LastSuccessfulSync?.ToString() ?? "never",
                 [DeviceTime] = timeService.CurrentDateTime.ToString(),
                 [ManualModeIsOn] = userPreferences.IsManualModeEnabled ? "yes" : "no",
-                [LastLogin] = lastTimeUsageStorage.LastLogin?.ToString() ?? "never"
+                [LastLogin] = lastTimeUsageStorage.LastLogin?.ToString() ?? "never",
+                [UserId] = user.Id.ToString()
             };
 
             if (platformInfo.Platform == Platform.Giskard)
