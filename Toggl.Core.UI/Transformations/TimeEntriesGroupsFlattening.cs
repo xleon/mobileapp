@@ -155,7 +155,9 @@ namespace Toggl.Core.UI.Transformations
                 isInaccessible: sample.IsInaccessible,
                 indexInLog: indexInLog,
                 dayInLog: dayInLog,
-                daysInThePast: daysInThePast);
+                daysInThePast: daysInThePast,
+                projectIsPlaceholder: sample.Project?.IsPlaceholder() ?? false,
+                taskIsPlaceholder: sample.Task?.IsPlaceholder() ?? false);
         }
 
         private static IEnumerable<IThreadSafeTimeEntry[]> bySimilarTimeEntries(

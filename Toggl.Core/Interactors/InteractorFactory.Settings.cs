@@ -16,6 +16,7 @@ namespace Toggl.Core.Interactors
                 userPreferences,
                 lastTimeUsageStorage,
                 timeService,
+                this,
                 message);
     }
 }

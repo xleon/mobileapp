@@ -11,6 +11,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Exceptions;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
@@ -46,7 +47,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     LastTimeUsageStorage,
                     TimeService,
                     SchedulerProvider,
-                    RxActionFactory);
+                    RxActionFactory,
+                    InteractorFactory);
 
             protected override void AdditionalSetup()
             {
@@ -68,7 +70,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useLastTimeUsageStorage,
                 bool useTimeService,
                 bool useSchedulerProvider,
-                bool useRxActionFactory)
+                bool useRxActionFactory,
+                bool useInteractorFactory)
             {
                 var userAccessManager = useUserAccessManager ? UserAccessManager : null;
                 var analyticsSerivce = useAnalyticsService ? AnalyticsService : null;
@@ -79,6 +82,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var timeService = useTimeService ? TimeService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var interactorFactory = useInteractorFactory ? InteractorFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new LoginViewModel(userAccessManager,
@@ -89,7 +93,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                                              lastTimeUsageStorage,
                                              timeService,
                                              schedulerProvider,
-                                             rxActionFactory);
+                                             rxActionFactory,
+                                             interactorFactory);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -198,6 +203,20 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.Login();
 
                     AnalyticsService.Received().Login.Track(AuthenticationMethod.EmailAndPassword);
+                }
+
+                [Fact, LogIfTooSlow]
+                public void ReportsUserIdToAppCenter()
+                {
+                    var id = 1234567890L;
+                    var user = Substitute.For<IThreadSafeUser>();
+                    user.Id.Returns(id);
+                    var observable = Observable.Return(user);
+                    InteractorFactory.GetCurrentUser().Execute().Returns(observable);
+
+                    ViewModel.Login();
+
+                    AnalyticsService.Received().SetAppCenterUserId(id);
                 }
 
                 [FsCheck.Xunit.Property]

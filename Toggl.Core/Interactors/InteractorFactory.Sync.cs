@@ -17,5 +17,19 @@ namespace Toggl.Core.Interactors
 
         public IInteractor<IObservable<bool>> ContainsPlaceholders()
             => new ContainsPlaceholdersInteractor(dataSource);
+
+        public IInteractor<IObservable<SyncOutcome>> RunPushNotificationInitiatedSyncInForeground()
+            => new RunSyncInteractor(
+                syncManager,
+                stopwatchProvider,
+                analyticsService,
+                PushNotificationSyncSourceState.Foreground);
+
+        public IInteractor<IObservable<SyncOutcome>> RunPushNotificationInitiatedSyncInBackground()
+            => new RunSyncInteractor(
+                syncManager,
+                stopwatchProvider,
+                analyticsService,
+                PushNotificationSyncSourceState.Background);
     }
 }

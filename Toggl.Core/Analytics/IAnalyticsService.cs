@@ -171,7 +171,18 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<SuggestionProviderType> SuggestionStarted { get; }
         
+        IAnalyticsEvent<string> PushInitiatedSyncFetch { get; }
+
+        IAnalyticsEvent<string> PushNotificationSyncStarted { get; }
+
+        IAnalyticsEvent<string> PushNotificationSyncFinished { get; }
+
+        IAnalyticsEvent<string, string, string, string> PushNotificationSyncFailed { get; }
+
         IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; }
+
+        void SetAppCenterUserId(long id);
+        void ResetAppCenterUserId();
 
         void Track(string eventName, Dictionary<string, string> parameters = null);
 

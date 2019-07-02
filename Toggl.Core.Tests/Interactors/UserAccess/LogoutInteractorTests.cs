@@ -10,6 +10,7 @@ using Toggl.Core.Analytics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Interactors.UserAccess;
 using Toggl.Core.Sync;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors.UserAccess
@@ -29,6 +30,7 @@ namespace Toggl.Core.Tests.Interactors.UserAccess
                 UserPreferences,
                 PrivateSharedStorageService,
                 UserAccessManager,
+                InteractorFactory,
                 LogoutSource.Settings);
         }
 
@@ -67,6 +69,14 @@ namespace Toggl.Core.Tests.Interactors.UserAccess
             await interactor.Execute();
 
             await NotificationService.Received().UnscheduleAllNotifications();
+        }
+
+        [Fact, LogIfTooSlow]
+        public async Task ResetsTheAppCenterId()
+        {
+            await interactor.Execute();
+
+            AnalyticsService.Received().ResetAppCenterUserId();
         }
 
         [Fact, LogIfTooSlow]
@@ -134,6 +144,18 @@ namespace Toggl.Core.Tests.Interactors.UserAccess
             await interactor.Execute();
 
             PrivateSharedStorageService.Received().ClearAll();
+        }
+
+        [Fact, LogIfTooSlow]
+        public async Task ClearsPushNotificationsToken()
+        {
+            PushNotificationsTokenService.Token.Returns(new PushNotificationsToken("token"));
+            PushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(new PushNotificationsToken("token"));
+
+            await interactor.Execute();
+
+            PushNotificationsTokenService.Received().InvalidateCurrentToken();
+            PushNotificationsTokenStorage.Received().Clear();
         }
     }
 }

@@ -9,7 +9,6 @@ using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
-using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI;
@@ -69,6 +68,8 @@ namespace Toggl.Core.Tests.UI
                 MockInteractorFactory = Substitute.For<IInteractorFactory>(),
                 MockTimeService = Substitute.For<ITimeService>(),
                 MockSyncManager = Substitute.For<ISyncManager>(),
+                MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>(),
+                MockUpdateRemoteConfigCacheService = Substitute.For<IUpdateRemoteConfigCacheService>()
             };
 
             container.MockLicenseProvider.GetAppLicenses().Returns(new Dictionary<string, string>());
