@@ -2,7 +2,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
@@ -30,7 +29,6 @@
                 android:singleLine="true"
                 android:lineSpacingExtra="5sp"
                 android:textColor="@android:color/black"
-                android:background="@android:color/white"
                 tools:text="Some client with a ridiculously big name to help us test fading totally"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="56dp"
@@ -38,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="40dp" />
             <TextView
-				android:id="@+id/ErrorText"
+                android:id="@+id/ErrorText"
                 android:textSize="12sp"
                 android:lineSpacingExtra="4sp"
                 android:textColor="@color/errorText"
