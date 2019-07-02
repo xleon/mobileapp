@@ -50,7 +50,7 @@ namespace Toggl.Core.Suggestions
         private IEnumerable<IDatabaseTimeEntry> predictUsingRandomForestClassifier(IEnumerable<IDatabaseTimeEntry> timeEntriesForPrediction)
         {
             var timeEntries = timeEntriesForPrediction
-                .Where(te => te.ProjectId.HasValue)
+                .Where(te => te.ProjectId.HasValue && !string.IsNullOrWhiteSpace(te.Project.Name))
                 .Take(maxNumberOfTimeEntriesForTraining)
                 .ToList();
 

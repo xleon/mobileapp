@@ -47,7 +47,7 @@ namespace Toggl.Core.Suggestions
         private bool isSuitableForSuggestion(IDatabaseTimeEntry timeEntry)
         {
             var hasDescription = !string.IsNullOrWhiteSpace(timeEntry.Description);
-            var hasProject = timeEntry.ProjectId.HasValue;
+            var hasProject = timeEntry.ProjectId.HasValue && !string.IsNullOrWhiteSpace(timeEntry.Project.Name);
             var isRecent = calculateDelta(timeEntry) <= thresholdPeriod;
             var isActive = isTimeEntryActive(timeEntry);
             var isSynced = timeEntry.SyncStatus == SyncStatus.InSync;

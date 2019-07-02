@@ -11,7 +11,7 @@ namespace Toggl.Core.Interactors.Suggestions
     public sealed class GetSuggestionsInteractor : IInteractor<IObservable<IEnumerable<Suggestion>>>
     {
         private readonly int suggestionCount;
-        private readonly IInteractor<IObservable<IReadOnlyList<ISuggestionProvider>>> getsuggestionProvidersInteractor;
+        private readonly IInteractor<IObservable<IReadOnlyList<ISuggestionProvider>>> getSuggestionProvidersInteractor;
 
         public GetSuggestionsInteractor(
             int suggestionCount,
@@ -20,12 +20,12 @@ namespace Toggl.Core.Interactors.Suggestions
             Ensure.Argument.IsInClosedRange(suggestionCount, 1, 9, nameof(suggestionCount));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
 
-            this.getsuggestionProvidersInteractor = interactorFactory.GetSuggestionProviders(suggestionCount);
+            this.getSuggestionProvidersInteractor = interactorFactory.GetSuggestionProviders(suggestionCount);
             this.suggestionCount = suggestionCount;
         }
 
         public IObservable<IEnumerable<Suggestion>> Execute()
-            => getsuggestionProvidersInteractor
+            => getSuggestionProvidersInteractor
                 .Execute()
                 .Flatten()
                 .Select(provider => provider.GetSuggestions())

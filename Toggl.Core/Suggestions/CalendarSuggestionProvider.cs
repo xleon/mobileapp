@@ -75,7 +75,7 @@ namespace Toggl.Core.Suggestions
             => new Suggestion(calendarItem, workspaceId, SuggestionProviderType.Calendar);
 
         private bool eventHasDescription(CalendarItem calendarItem)
-            => !string.IsNullOrEmpty(calendarItem.Description);
+            => !string.IsNullOrWhiteSpace(calendarItem.Description);
 
         private TimeSpan absOffset(CalendarItem item)
         {

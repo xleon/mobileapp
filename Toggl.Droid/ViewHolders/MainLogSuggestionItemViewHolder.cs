@@ -4,7 +4,6 @@ using Android.Graphics;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using System;
 using Toggl.Core.Suggestions;
 using Toggl.Droid.Extensions;
 
@@ -32,12 +31,6 @@ namespace Toggl.Droid.ViewHolders
             descriptionLabel = ItemView.FindViewById<TextView>(Resource.Id.DescriptionLabel);
             projectLabel = ItemView.FindViewById<TextView>(Resource.Id.ProjectLabel);
             clientLabel = ItemView.FindViewById<TextView>(Resource.Id.ClientLabel);
-
-            var horizontalMargin = 16.DpToPixels(ItemView.Context);
-            var marginLayoutParams = ItemView.LayoutParameters as ViewGroup.MarginLayoutParams;
-            var newLayoutParams = marginLayoutParams.WithMargins(horizontalMargin, null, horizontalMargin, null);
-            newLayoutParams.Width = ViewGroup.LayoutParams.MatchParent;
-            ItemView.LayoutParameters = newLayoutParams;
         }
 
         protected override void UpdateView()
@@ -54,7 +47,6 @@ namespace Toggl.Droid.ViewHolders
             clientLabel.Visibility = Item.HasProject.ToVisibility();
         }
 
-        [Conditional("ADHOC")]
         [Conditional("DEBUG")]
         private void prefixWithProviderNameInDebug()
         {
