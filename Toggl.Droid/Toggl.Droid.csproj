@@ -564,7 +564,6 @@
     </Compile>
     <Compile Include="Adapters\BaseRecyclerAdapter.cs" />
     <Compile Include="ViewHolders\BaseRecyclerViewHolder.cs" />
-    <Compile Include="ViewHolders\WorkspaceSelectionViewHolder.cs" />
     <Compile Include="Adapters\SimpleAdapter.cs" />
     <Compile Include="Activities\AboutActivity.cs" />
     <Compile Include="Services\RatingServiceAndroid.cs" />
@@ -697,7 +696,6 @@
     <AndroidResource Include="Resources\layout\SelectProjectActivityWorkspaceHeader.axml" />
     <AndroidResource Include="Resources\layout\SelectDateFormatFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDateFormatFragmentCell.axml" />
-    <AndroidResource Include="Resources\layout\SettingsFragmentWorkspaceCell.axml" />
     <AndroidResource Include="Resources\drawable\TransparentToLightGrayGradient.xml" />
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragment.axml" />
