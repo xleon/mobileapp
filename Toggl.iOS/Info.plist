@@ -81,6 +81,6 @@
 		<string>remote-notification</string>
 	</array>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0.1</string>
+	<string>2.1</string>
 </dict>
 </plist>
