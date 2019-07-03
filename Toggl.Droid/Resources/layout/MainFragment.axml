@@ -30,8 +30,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
-    <include
-        layout="@layout/MainRunningTimeEntry" />
+    <android.support.design.circularreveal.CircularRevealFrameLayout
+      android:id="@+id/MainRunningTimeEntrySheet"
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:visibility="invisible"
+      android:elevation="8dp"
+      android:background="@android:color/white"
+      android:layout_gravity="bottom|center_horizontal"
+      local:layout_behavior="toggl.droid.presentation.RunningTimeEntrySheetBehavior">
+        <include layout="@layout/MainRunningTimeEntry" />
+    </android.support.design.circularreveal.CircularRevealFrameLayout>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/MainPlayButton"
         local:elevation="4dp"
