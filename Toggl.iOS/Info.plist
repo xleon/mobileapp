@@ -82,5 +82,7 @@
 	</array>
 	<key>CFBundleShortVersionString</key>
 	<string>2.1</string>
+	<key>CFBundleDisplayName</key>
+	<string>Toggl for Devs</string>
 </dict>
 </plist>
