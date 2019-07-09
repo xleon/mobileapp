@@ -58,6 +58,7 @@ namespace Toggl.Core.Suggestions
                 return predictUsing2Steps(timeEntries);
 
             timeEntries = timeEntriesForPrediction
+                .Where(te => !string.IsNullOrWhiteSpace(te.Description) || (te.ProjectId.HasValue && !string.IsNullOrWhiteSpace(te.Project.Name)))
                 .Take(maxNumberOfTimeEntriesForTraining)
                 .ToList();
 
