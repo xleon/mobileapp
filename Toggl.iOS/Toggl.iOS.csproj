@@ -2024,6 +2024,11 @@
       <Project>{BC329A24-95D6-4D02-95B5-2AA699D8873A}</Project>
       <Name>Toggl.iOS.SiriExtension.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Toggl.iOS.TimerWidgetExtension\Toggl.iOS.TimerWidgetExtension.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Project>{0C219958-CAD1-4B1B-BBCB-D12CC6E11F49}</Project>
+      <Name>Toggl.iOS.TimerWidgetExtension</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Images.xcassets\bike.imageset\" />
