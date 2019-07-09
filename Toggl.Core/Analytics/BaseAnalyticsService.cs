@@ -276,6 +276,9 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("Location")]
         public IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; protected set; }
 
+        [AnalyticsEvent("Installed")]
+        public IAnalyticsEvent<bool> TimerWidgetInstallStateChange { get; protected set; }
+
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())
