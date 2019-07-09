@@ -30,7 +30,7 @@ namespace Toggl.Droid.Fragments
         protected override void InitializeViews(View fragmentView)
         {
             mainRecyclerView = fragmentView.FindViewById<RecyclerView>(Resource.Id.MainRecyclerView);
-            runningEntryCardFrame = fragmentView.FindViewById(Resource.Id.MainRunningTimeEntryFrame);
+            runningEntryCardFrame = fragmentView.FindViewById(Resource.Id.MainRunningTimeEntrySheet);
             playButton = fragmentView.FindViewById<FloatingActionButton>(Resource.Id.MainPlayButton);
             stopButton = fragmentView.FindViewById<FloatingActionButton>(Resource.Id.MainStopButton);
             coordinatorLayout = fragmentView.FindViewById<CoordinatorLayout>(Resource.Id.MainCoordinatorLayout);

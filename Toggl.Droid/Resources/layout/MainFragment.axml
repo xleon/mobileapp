@@ -34,10 +34,13 @@
       android:id="@+id/MainRunningTimeEntrySheet"
       android:layout_height="wrap_content"
       android:layout_width="match_parent"
-      android:visibility="invisible"
+      android:visibility="invisible"    
+      android:clickable="true"
+      android:focusable="true"
       android:elevation="8dp"
-      android:background="@android:color/white"
       android:layout_gravity="bottom|center_horizontal"
+      android:background="@android:color/white"
+      android:foreground="?android:attr/selectableItemBackground"
       local:layout_behavior="toggl.droid.presentation.RunningTimeEntrySheetBehavior">
         <include layout="@layout/MainRunningTimeEntry" />
     </android.support.design.circularreveal.CircularRevealFrameLayout>
