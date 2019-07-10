@@ -88,6 +88,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Resources\Images.xcassets\icStop.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icStart.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -101,6 +103,17 @@
     <Compile Include="TodayViewController.designer.cs">
       <DependentUpon>TodayViewController.cs</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Resources\Images.xcassets\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icStart.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icStart.imageset\play%402x-1.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icStart.imageset\play.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icStart.imageset\play%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\stop.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\stop%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\stop%403x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />
 </Project>
