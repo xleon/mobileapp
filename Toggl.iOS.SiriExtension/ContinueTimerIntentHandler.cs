@@ -55,21 +55,21 @@ namespace SiriExtension
                 .Subscribe(
                     te =>
                     {
-                        SharedStorage.instance.SetNeedsSync(true);
+                        SharedStorage.Instance.SetNeedsSync(true);
                         var response = string.IsNullOrEmpty(te.Description)
                             ? new ContinueTimerIntentResponse(ContinueTimerIntentResponseCode.Success, null)
                             : ContinueTimerIntentResponse.SuccessWithEntryDescriptionIntentResponseWithEntryDescription(
                                 te.Description
                             );
 
-                        SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.StartTimer(te));
+                        SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.StartTimer(te));
 
                         completion(response);
                     },
                     exception =>
                     {
 
-                        SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
+                        SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
                         completion(new ContinueTimerIntentResponse(ContinueTimerIntentResponseCode.Failure, null));
                     });
         }

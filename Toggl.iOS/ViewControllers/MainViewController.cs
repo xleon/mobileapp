@@ -377,7 +377,7 @@ namespace Toggl.iOS.ViewControllers
 
         private void trackSiriEvents()
         {
-            var events = SharedStorage.instance.PopTrackableEvents();
+            var events = SharedStorage.Instance.PopTrackableEvents();
 
             events?
                 .Select(e => e?.ToTrackableEvent())
@@ -387,9 +387,9 @@ namespace Toggl.iOS.ViewControllers
 
         private void onApplicationDidBecomeActive(NSNotification notification)
         {
-            if (SharedStorage.instance.GetNeedsSync())
+            if (SharedStorage.Instance.GetNeedsSync())
             {
-                SharedStorage.instance.SetNeedsSync(false);
+                SharedStorage.Instance.SetNeedsSync(false);
                 ViewModel.Refresh.Execute();
             }
             trackSiriEvents();

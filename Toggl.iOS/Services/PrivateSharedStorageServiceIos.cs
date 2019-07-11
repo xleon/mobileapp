@@ -7,28 +7,28 @@ namespace Toggl.iOS.Services
     {
         public void SaveApiToken(string apiToken)
         {
-            SharedStorage.instance.SetApiToken(apiToken);
+            SharedStorage.Instance.SetApiToken(apiToken);
         }
 
         public void SaveUserId(long userId)
         {
-            SharedStorage.instance.SetUserId(userId);
+            SharedStorage.Instance.SetUserId(userId);
         }
 
         public void SaveDefaultWorkspaceId(long workspaceId)
         {
-            SharedStorage.instance.SetDefaultWorkspaceId(workspaceId);
+            SharedStorage.Instance.SetDefaultWorkspaceId(workspaceId);
         }
 
         public void ClearAll()
         {
-            SharedStorage.instance.DeleteEverything();
+            SharedStorage.Instance.DeleteEverything();
         }
 
         public bool HasUserDataStored()
-            => !string.IsNullOrEmpty(SharedStorage.instance.GetApiToken());
+            => !string.IsNullOrEmpty(SharedStorage.Instance.GetApiToken());
 
         public string GetApiToken()
-            => SharedStorage.instance.GetApiToken();
+            => SharedStorage.Instance.GetApiToken();
     }
 }

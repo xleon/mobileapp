@@ -15,7 +15,7 @@ namespace SiriExtension
 
         public static ITogglApi GetTogglAPI()
         {
-            var apiToken = SharedStorage.instance.GetApiToken();
+            var apiToken = SharedStorage.Instance.GetApiToken();
             if (apiToken == null)
             {
                 return null;

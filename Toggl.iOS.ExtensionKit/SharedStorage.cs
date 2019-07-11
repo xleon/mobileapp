@@ -1,51 +1,55 @@
-﻿using Foundation;
+﻿using System;
+using Foundation;
 using Toggl.iOS.ExtensionKit.Analytics;
+using Toggl.iOS.ExtensionKit.Extensions;
 
 namespace Toggl.iOS.ExtensionKit
 {
     public class SharedStorage
     {
-        private const string ApiTokenKey = "APITokenKey";
-        private const string NeedsSyncKey = "NeedsSyncKey";
-        private const string UserIdKey = "UserId";
-        private const string SiriTrackingEventsKey = "SiriTrackingEventsKey";
-        private const string DefaultWorkspaceId = "DefaultWorkspaceId";
+        private const string apiTokenKey = "APITokenKey";
+        private const string needsSyncKey = "NeedsSyncKey";
+        private const string userIdKey = "UserId";
+        private const string siriTrackingEventsKey = "SiriTrackingEventsKey";
+        private const string defaultWorkspaceId = "DefaultWorkspaceId";
+        private const string widgetUpdatedDateKey = "WidgetUpdatedDate";
+        private const string widgetInstalledKey = "WidgetInstalled";
 
         private NSUserDefaults userDefaults;
 
         private SharedStorage()
         {
             var bundleId = NSBundle.MainBundle.BundleIdentifier;
-            if (bundleId.Contains("SiriExtension"))
+            if (bundleId.Contains("SiriExtension") || bundleId.Contains("TimerWidgetExtension"))
             {
                 bundleId = bundleId.Substring(0, bundleId.LastIndexOf("."));
             }
             userDefaults = new NSUserDefaults($"group.{bundleId}.extensions", NSUserDefaultsType.SuiteName);
         }
 
-        public static SharedStorage instance => new SharedStorage();
+        public static SharedStorage Instance => new SharedStorage();
 
         public void SetApiToken(string apiToken)
         {
-            userDefaults.SetString(apiToken, ApiTokenKey);
+            userDefaults.SetString(apiToken, apiTokenKey);
             userDefaults.Synchronize();
         }
 
         public void SetNeedsSync(bool value)
         {
-            userDefaults.SetBool(value, NeedsSyncKey);
+            userDefaults.SetBool(value, needsSyncKey);
             userDefaults.Synchronize();
         }
 
         public void SetUserId(double userId)
         {
-            userDefaults.SetDouble(userId, UserIdKey);
+            userDefaults.SetDouble(userId, userIdKey);
             userDefaults.Synchronize();
         }
 
         public void SetDefaultWorkspaceId(long workspaceId)
         {
-            userDefaults.SetDouble(workspaceId, DefaultWorkspaceId);
+            userDefaults.SetDouble(workspaceId, defaultWorkspaceId);
             userDefaults.Synchronize();
         }
 
@@ -54,37 +58,71 @@ namespace Toggl.iOS.ExtensionKit
             var currentEvents = (NSMutableArray)getTrackableEvents().MutableCopy();
             currentEvents.Add(e);
 
-            userDefaults[SiriTrackingEventsKey] = NSKeyedArchiver.ArchivedDataWithRootObject(currentEvents);
+            userDefaults[siriTrackingEventsKey] = NSKeyedArchiver.ArchivedDataWithRootObject(currentEvents);
             userDefaults.Synchronize();
         }
 
         public SiriTrackingEvent[] PopTrackableEvents()
         {
             var eventArrays = getTrackableEvents();
-            userDefaults.RemoveObject(SiriTrackingEventsKey);
+            userDefaults.RemoveObject(siriTrackingEventsKey);
             return NSArray.FromArrayNative<SiriTrackingEvent>(eventArrays);
         }
 
-        public double GetUserId() => userDefaults.DoubleForKey(UserIdKey);
+        public double GetUserId() => userDefaults.DoubleForKey(userIdKey);
 
-        public string GetApiToken() => userDefaults.StringForKey(ApiTokenKey);
+        public string GetApiToken() => userDefaults.StringForKey(apiTokenKey);
 
-        public bool GetNeedsSync() => userDefaults.BoolForKey(NeedsSyncKey);
+        public bool GetNeedsSync() => userDefaults.BoolForKey(needsSyncKey);
 
-        public long GetDefaultWorkspaceId() => (long)userDefaults.DoubleForKey(DefaultWorkspaceId);
+        public long GetDefaultWorkspaceId() => (long)userDefaults.DoubleForKey(defaultWorkspaceId);
 
         public void DeleteEverything()
         {
-            userDefaults.RemoveObject(ApiTokenKey);
-            userDefaults.RemoveObject(NeedsSyncKey);
-            userDefaults.RemoveObject(UserIdKey);
-            userDefaults.RemoveObject(SiriTrackingEventsKey);
+            userDefaults.RemoveObject(apiTokenKey);
+            userDefaults.RemoveObject(needsSyncKey);
+            userDefaults.RemoveObject(userIdKey);
+            userDefaults.RemoveObject(siriTrackingEventsKey);
+            userDefaults.RemoveObject(widgetUpdatedDateKey);
+            userDefaults.RemoveObject(widgetInstalledKey);
             userDefaults.Synchronize();
         }
 
+        public void SetWidgetUpdatedDate(DateTimeOffset? date)
+        {
+            if (date.HasValue)
+            {
+                userDefaults[widgetUpdatedDateKey] = date.Value.ToNSDate();
+            }
+            else
+            {
+                userDefaults.RemoveObject(widgetUpdatedDateKey);
+            }
+
+            userDefaults.Synchronize();
+        }
+
+        public DateTimeOffset? GetWidgetUpdatedDate()
+        {
+            var date = userDefaults[widgetUpdatedDateKey] as NSDate;
+
+            if (date == null)
+                return null;
+
+            return date.ToDateTimeOffset();
+        }
+
+        public void SetWidgetInstalled(bool installed)
+        {
+            userDefaults.SetBool(installed, widgetInstalledKey);
+            userDefaults.Synchronize();
+        }
+
+        public bool GetWidgetInstalled() => userDefaults.BoolForKey(widgetInstalledKey);
+
         private NSArray getTrackableEvents()
         {
-            var eventArrayData = userDefaults.ValueForKey(new NSString(SiriTrackingEventsKey)) as NSData;
+            var eventArrayData = userDefaults.ValueForKey(new NSString(siriTrackingEventsKey)) as NSData;
 
             if (eventArrayData == null)
             {

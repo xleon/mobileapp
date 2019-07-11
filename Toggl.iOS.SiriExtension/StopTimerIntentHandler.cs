@@ -48,14 +48,14 @@ namespace SiriExtension
                     },
                     exception =>
                     {
-                        SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
+                        SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
                         completion(responseFromException(exception));
                     });
         }
 
         public override void HandleStopTimer(StopTimerIntent intent, Action<StopTimerIntentResponse> completion)
         {
-            SharedStorage.instance.SetNeedsSync(true);
+            SharedStorage.Instance.SetNeedsSync(true);
 
             stopTimeEntry(runningEntry)
                 .Subscribe(
@@ -72,13 +72,13 @@ namespace SiriExtension
                         response.EntryStart = stoppedTimeEntry.Start.ToUnixTimeSeconds();
                         response.EntryDuration = stoppedTimeEntry.Duration;
 
-                        SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.StopTimer());
+                        SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.StopTimer());
 
                         completion(response);
                     },
                     exception =>
                     {
-                        SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
+                        SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
                         completion(responseFromException(exception));
                     }
                 );
