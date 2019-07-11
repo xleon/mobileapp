@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SiriExtension.Exceptions
+namespace Toggl.iOS.ExtensionKit.Exceptions
 {
     public class NoRunningEntryException : Exception
     {

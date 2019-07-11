@@ -3,7 +3,7 @@ using Toggl.iOS.ExtensionKit;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 
-namespace SiriExtension
+namespace Toggl.iOS.ExtensionKit
 {
     public class APIHelper
     {

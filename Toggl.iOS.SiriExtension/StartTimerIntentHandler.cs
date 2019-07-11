@@ -1,5 +1,4 @@
 using Foundation;
-using SiriExtension.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +6,7 @@ using System.Reactive.Linq;
 using Toggl.iOS.ExtensionKit;
 using Toggl.iOS.ExtensionKit.Analytics;
 using Toggl.iOS.ExtensionKit.Extensions;
+using Toggl.iOS.ExtensionKit.Models;
 using Toggl.iOS.Intents;
 using Toggl.Networking;
 using Toggl.Shared;
