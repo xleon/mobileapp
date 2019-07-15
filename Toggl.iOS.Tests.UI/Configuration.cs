@@ -29,7 +29,12 @@ namespace Toggl.Tests.UI
         private static void resetSimulator(string deviceId)
         {
             if (deviceId == null)
+            {
+                var preDeleteCmdLine = string.Format("simctl uninstall booted com.toggl.daneel.debug", deviceId);
+                var preDeleteProcess = Process.Start("xcrun", preDeleteCmdLine);
+                preDeleteProcess.WaitForExit();
                 return;
+            }
 
             var shutdownCmdLine = "simctl shutdown all";
             var shutdownProcess = Process.Start("xcrun", shutdownCmdLine);
@@ -38,6 +43,10 @@ namespace Toggl.Tests.UI
             var startCmdLine = string.Format("simctl boot {0}", deviceId);
             var startProcess = Process.Start("xcrun", startCmdLine);
             startProcess.WaitForExit();
+
+            var deleteCmdLine = string.Format("simctl uninstall {0} com.toggl.daneel.debug", deviceId);
+            var deleteProcess = Process.Start("xcrun", deleteCmdLine);
+            deleteProcess.WaitForExit();
         }
     }
 }
