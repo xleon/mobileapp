@@ -56,5 +56,10 @@ namespace Toggl.Core.UI
 
             dependencyContainer.OnboardingStorage.SetIsNewUser(false);
         }
+
+        public void ForceFullSync()
+        {
+            dependencyContainer.SyncManager.ForceFullSync().Subscribe();
+        }
     }
 }

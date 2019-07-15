@@ -47,7 +47,7 @@ namespace Toggl.iOS
 
             var accessLevel = app.GetAccessLevel();
             loginWithCredentialsIfNecessary(accessLevel);
-            navigateAccordingToAccessLevel(accessLevel);
+            navigateAccordingToAccessLevel(accessLevel, app);
 
 #if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();
@@ -92,7 +92,7 @@ namespace Toggl.iOS
             IosDependencyContainer.Instance.TimeService.SignificantTimeChanged();
         }
 
-        private void navigateAccordingToAccessLevel(AccessLevel accessLevel)
+        private void navigateAccordingToAccessLevel(AccessLevel accessLevel, AppStart app)
         {
             var navigationService = IosDependencyContainer.Instance.NavigationService;
 
@@ -108,6 +108,7 @@ namespace Toggl.iOS
                     navigationService.Navigate<TokenResetViewModel>(null);
                     return;
                 case AccessLevel.LoggedIn:
+                    app.ForceFullSync();
                     var viewModel = IosDependencyContainer.Instance
                         .ViewModelLoader
                         .Load<MainTabBarViewModel>();
