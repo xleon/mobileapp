@@ -11,7 +11,7 @@ using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.iOS.Extensions.LoginSignupViewExtensions;
 using static Toggl.iOS.Extensions.ViewExtensions;
-
+using AdjustBindingsiOS;
 
 namespace Toggl.iOS.ViewControllers
 {
