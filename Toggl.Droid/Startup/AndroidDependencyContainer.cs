@@ -64,9 +64,6 @@ namespace Toggl.Droid
         protected override IBackgroundSyncService CreateBackgroundSyncService()
             => new BackgroundSyncServiceAndroid();
 
-        protected override IFetchRemoteConfigService CreateFetchRemoteConfigService()
-            => new FetchRemoteConfigServiceAndroid();
-
         protected override ICalendarService CreateCalendarService()
             => new CalendarServiceAndroid(PermissionsChecker);
 
@@ -97,6 +94,9 @@ namespace Toggl.Droid
         protected override IRatingService CreateRatingService()
             => new RatingServiceAndroid(Application.Context);
 
+        protected override IRemoteConfigService CreateRemoteConfigService()
+            => new RemoteConfigServiceAndroid();
+
         protected override ISchedulerProvider CreateSchedulerProvider()
             => new AndroidSchedulerProvider();
 
@@ -110,9 +110,6 @@ namespace Toggl.Droid
             => new SuggestionProviderContainer(
                 new MostUsedTimeEntrySuggestionProvider(Database, TimeService, numberOfSuggestions)
             );
-
-        protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
-            => new PushNotificationsTokenServiceAndroid();
 
         protected override INavigationService CreateNavigationService()
             => new NavigationService(

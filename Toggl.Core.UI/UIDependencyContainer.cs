@@ -39,8 +39,5 @@ namespace Toggl.Core.UI
         protected virtual ViewModelLoader CreateViewModelLoader() => new ViewModelLoader(this);
         protected override IErrorHandlingService CreateErrorHandlingService()
             => new ErrorHandlingService(NavigationService, AccessRestrictionStorage);
-
-        protected override IRemoteConfigService CreateRemoteConfigService()
-            => new RemoteConfigService(KeyValueStorage);
     }
 }

@@ -43,5 +43,4 @@
     <color name="grayBorder">#CECECE</color>
     <color name="mainLogCellPaddingWhite">#FFFFFF</color>
     <color name="mainLogCellPaddingLightGray">#FAFBFC</color>
-    <color name="placeholderSpanColor">#E8E8E8</color>
 </resources>

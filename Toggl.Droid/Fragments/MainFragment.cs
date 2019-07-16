@@ -15,7 +15,6 @@ using System.Reactive.Subjects;
 using System.Threading;
 using Toggl.Core.Analytics;
 using Toggl.Core.Diagnostics;
-using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Sync;
 using Toggl.Core.UI.Extensions;
@@ -30,7 +29,6 @@ using Toggl.Droid.Presentation;
 using Toggl.Droid.Services;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Shared.Extensions;
-using Toggl.Storage;
 using static Android.Content.Context;
 using static Toggl.Core.Sync.SyncProgress;
 using static Toggl.Droid.Extensions.CircularRevealAnimation.AnimationType;
@@ -142,7 +140,7 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(onSyncChanged)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter = new MainRecyclerAdapter(Context, ViewModel.TimeService)
+            mainRecyclerAdapter = new MainRecyclerAdapter(ViewModel.TimeService)
             {
                 SuggestionsViewModel = ViewModel.SuggestionsViewModel,
                 RatingViewModel = ViewModel.RatingViewModel,
@@ -234,18 +232,7 @@ namespace Toggl.Droid.Fragments
                 return new SpannableString(string.Empty);
 
             var hasProject = te.ProjectId != null;
-            var projectIsPlaceholder = te.Project?.IsPlaceholder() ?? false;
-            var taskIsPlaceholder = te.Task?.IsPlaceholder() ?? false;
-            return Extensions.TimeEntryExtensions.ToProjectTaskClient(
-                Context, 
-                hasProject, 
-                te.Project?.Name, 
-                te.Project?.Color, 
-                te.Task?.Name, 
-                te.Project?.Client?.Name,
-                projectIsPlaceholder,
-                taskIsPlaceholder,
-                displayPlaceholders: true);
+            return Extensions.TimeEntryExtensions.ToProjectTaskClient(hasProject, te.Project?.Name, te.Project?.Color, te.Task?.Name, te.Project?.Client?.Name);
         }
 
         private void setupRatingViewVisibility(bool isVisible)

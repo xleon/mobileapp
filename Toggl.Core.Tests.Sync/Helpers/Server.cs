@@ -21,6 +21,7 @@ namespace Toggl.Core.Tests.Sync.Helpers
     public sealed class Server
     {
         public ITogglApi Api { get; }
+
         public ServerState InitialServerState { get; }
 
         private Server(ITogglApi api, ServerState initialServerState)
@@ -39,10 +40,9 @@ namespace Toggl.Core.Tests.Sync.Helpers
             var tasks = await Api.Tasks.GetAll();
             var timeEntries = await Api.TimeEntries.GetAll();
             var workspaces = await Api.Workspaces.GetAll();
-            var tokens = await Api.PushServices.GetAll();
 
             return new ServerState(
-                user, clients, projects, preferences, tags, tasks, timeEntries, workspaces, pushNotificationsTokens: tokens);
+                user, clients, projects, preferences, tags, tasks, timeEntries, workspaces);
         }
 
         public async Task Push(ServerState state)
@@ -215,11 +215,6 @@ namespace Toggl.Core.Tests.Sync.Helpers
             }
 
             await timeEntries.Select(Api.TimeEntries.Create).Merge().ToList();
-
-            if (state.PushNotificationsTokens.Any())
-            {
-                await state.PushNotificationsTokens.Select(Api.PushServices.Subscribe).Merge();
-            }
         }
 
         public static class Factory

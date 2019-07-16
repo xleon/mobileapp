@@ -3,7 +3,6 @@ using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.UI.Collections;
@@ -341,9 +340,7 @@ namespace Toggl.Core.Tests.UI.Transformations
                 isInaccessible: sample.IsInaccessible,
                 indexInLog: 0,
                 dayInLog: 0,
-                daysInThePast: 0,
-                projectIsPlaceholder: sample.Project?.IsPlaceholder() ?? false,
-                taskIsPlaceholder: sample.Task?.IsPlaceholder() ?? false);
+                daysInThePast: 0);
         }
 
         private static LogItemViewModel groupItem(IThreadSafeTimeEntry timeEntry, DurationFormat durationFormat)

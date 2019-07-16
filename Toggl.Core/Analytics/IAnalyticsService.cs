@@ -168,14 +168,6 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; }
 
-        IAnalyticsEvent<string> PushInitiatedSyncFetch { get; }
-
-        IAnalyticsEvent<string> PushNotificationSyncStarted { get; }
-
-        IAnalyticsEvent<string> PushNotificationSyncFinished { get; }
-
-        IAnalyticsEvent<string, string, string, string> PushNotificationSyncFailed { get; }
-
         IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; }
 
         void SetAppCenterUserId(long id);

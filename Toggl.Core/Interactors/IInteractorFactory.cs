@@ -111,10 +111,6 @@ namespace Toggl.Core.Interactors
 
         IInteractor<IObservable<bool>> ContainsPlaceholders();
 
-        IInteractor<IObservable<SyncOutcome>> RunPushNotificationInitiatedSyncInForeground();
-
-        IInteractor<IObservable<SyncOutcome>> RunPushNotificationInitiatedSyncInBackground();
-
         #endregion
 
         #region Autocomplete Suggestions
@@ -228,14 +224,6 @@ namespace Toggl.Core.Interactors
 
         IInteractor<IObservable<ProjectSummaryReport>> GetProjectSummary(
             long workspaceId, DateTimeOffset startDate, DateTimeOffset? endDate);
-
-        #endregion
-
-        #region PushNotifications
-
-        IInteractor<IObservable<Unit>> UnsubscribeFromPushNotifications();
-
-        IInteractor<IObservable<Unit>> SubscribeToPushNotifications();
 
         #endregion
     }
