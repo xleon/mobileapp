@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Toggl.Core.Extensions;
-using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 using Toggl.Shared;
 
@@ -257,9 +256,6 @@ namespace Toggl.Core.Analytics
 
         [AnalyticsEvent("Platform")]
         public IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; protected set; }
-
-        [AnalyticsEvent("SuggestionProvider")]
-        public IAnalyticsEvent<SuggestionProviderType> SuggestionStarted { get; protected set; }
 
         [AnalyticsEvent("NumberOfEntitiesFetched")]
         public IAnalyticsEvent<string> PushInitiatedSyncFetch { get; protected set; }

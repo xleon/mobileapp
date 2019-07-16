@@ -52,12 +52,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     NavigationService,
                     RemoteConfigService,
                     UpdateRemoteConfigCacheService,
+                    SuggestionProviderContainer,
                     AccessRestrictionStorage,
                     SchedulerProvider,
                     StopwatchProvider,
                     RxActionFactory,
-                    PermissionsChecker,
-                    BackgroundService,
                     PlatformInfo);
 
                 vm.Initialize();
@@ -76,6 +75,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 RemoteConfigService
                     .GetRatingViewConfiguration()
                     .Returns(defaultRemoteConfiguration);
+
+                var provider = Substitute.For<ISuggestionProvider>();
+                provider.GetSuggestions().Returns(Observable.Empty<Suggestion>());
+                SuggestionProviderContainer.Providers.Returns(new[] { provider }.ToList().AsReadOnly());
 
                 DataSource.Preferences.Current.Returns(Observable.Create<IThreadSafePreferences>(observer =>
                 {
@@ -104,12 +107,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useNavigationService,
                 bool useRemoteConfigService,
                 bool useRemoteConfigUpdateService,
+                bool useSuggestionProviderContainer,
                 bool useAccessRestrictionStorage,
                 bool useSchedulerProvider,
                 bool useStopwatchProvider,
                 bool useRxActionFactory,
-                bool usePermissionsChecker,
-                bool useBackgroundService,
                 bool usePlatformInfo)
             {
                 var dataSource = useDataSource ? DataSource : null;
@@ -123,12 +125,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
                 var remoteConfigUpdateService = useRemoteConfigUpdateService ? UpdateRemoteConfigCacheService : null;
+                var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
-                var permissionsChecker = usePermissionsChecker ? PermissionsChecker : null;
-                var backgroundService = useBackgroundService ? BackgroundService : null;
                 var platformInfo = usePlatformInfo ? PlatformInfo : null;
 
                 Action tryingToConstructWithEmptyParameters =
@@ -144,12 +145,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         navigationService,
                         remoteConfigService,
                         remoteConfigUpdateService,
+                        suggestionProviderContainer,
                         accessRestrictionStorage,
                         schedulerProvider,
                         stopwatchProvider,
                         rxActionFactory,
-                        permissionsChecker,
-                        backgroundService,
                         platformInfo);
 
                 tryingToConstructWithEmptyParameters
@@ -630,8 +630,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 timeEntry.Start.Returns(DateTimeOffset.Now);
                 timeEntry.Duration.Returns((long?)null);
                 timeEntry.Description.Returns("something");
-                var suggestion = new Suggestion(timeEntry, SuggestionProviderType.MostUsedTimeEntries);
-                InteractorFactory.GetSuggestions(Arg.Any<int>()).Execute().Returns(Observable.Return(new[] { suggestion }));
+                var suggestion = new Suggestion(timeEntry);
+                suggestionProvider.GetSuggestions().Returns(Observable.Return(suggestion));
+                var providers = new ReadOnlyCollection<ISuggestionProvider>(
+                    new List<ISuggestionProvider> { suggestionProvider }
+                );
+                SuggestionProviderContainer.Providers.Returns(providers);
             }
 
             protected void PrepareTimeEntry()

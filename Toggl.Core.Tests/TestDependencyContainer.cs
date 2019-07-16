@@ -117,6 +117,10 @@ namespace Toggl.Core.UI
         protected override IStopwatchProvider CreateStopwatchProvider()
             => MockStopwatchProvider;
 
+        internal ISuggestionProviderContainer MockSuggestionProviderContainer { get; set; }
+        protected override ISuggestionProviderContainer CreateSuggestionProviderContainer()
+            => MockSuggestionProviderContainer;
+
         internal IPushNotificationsTokenService MockPushNotificationsTokenService { get; set; }
         protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
             => MockPushNotificationsTokenService;
