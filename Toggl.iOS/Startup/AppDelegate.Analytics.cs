@@ -14,6 +14,7 @@ namespace Toggl.iOS
 #endif
 
 #if USE_ANALYTICS
+            Firebase.Core.App.Configure();
             Google.SignIn.SignIn.SharedInstance.ClientID =
                 Firebase.Core.App.DefaultInstance.Options.ClientId;
             Adjust.AppDidLaunch(ADJConfig.ConfigWithAppToken("{TOGGL_ADJUST_APP_TOKEN}", AdjustConfig.EnvironmentProduction));

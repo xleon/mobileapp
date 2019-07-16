@@ -18,7 +18,6 @@ namespace Toggl.Networking
         ITimeEntriesApi TimeEntries { get; }
         ITimeEntriesReportsApi TimeEntriesReports { get; }
         IProjectsSummaryApi ProjectsSummary { get; }
-        IPushServicesApi PushServices { get; }
         IWorkspaceFeaturesApi WorkspaceFeatures { get; }
         IFeedbackApi Feedback { get; }
         ITimeZonesApi Timezones { get; }

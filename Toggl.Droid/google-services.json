@@ -45,11 +45,7 @@
         }
       },
       "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "{TOGGL_DROID_GOOGLE_SERVICES_API_KEY}"
-        }
-      ],
+      "api_key": [],
       "services": {
         "analytics_service": {
           "status": 1
@@ -71,11 +67,7 @@
         }
       },
       "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "{TOGGL_DROID_GOOGLE_SERVICES_API_KEY}"
-        }
-      ],
+      "api_key": [],
       "services": {
         "analytics_service": {
           "status": 1

@@ -23,9 +23,7 @@
         CreateMainLogSuggestionsViewHolder,
         MainActivityOnCreate,
         BackgroundSync,
-        FullSync,
         Sync,
-        Diffing,
-        PullTimeEntriesSync
+        Diffing
     }
 }

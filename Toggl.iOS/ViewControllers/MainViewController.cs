@@ -21,7 +21,6 @@ using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Suggestions;
-using Toggl.iOS.Transformations;
 using Toggl.iOS.Views;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;
@@ -229,19 +228,9 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             var capHeight = CurrentTimeEntryProjectTaskClientLabel.Font.CapHeight;
-
+            var clientColor = Colors.Main.CurrentTimeEntryClientColor.ToNativeColor();
             ViewModel.CurrentRunningTimeEntry
-                .Where(x => x != null)
-                .Select(te =>
-                {
-                    var projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
-                        capHeight,
-                        Colors.TimeEntriesLog.ClientColor.ToNativeColor(),
-                        true
-                    );
-
-                    return projectTaskClientToAttributedString.Convert(te);
-                })
+                .Select(te => te?.ToFormattedTimeEntryString(capHeight, clientColor, shouldColorProject: true))
                 .Subscribe(CurrentTimeEntryProjectTaskClientLabel.Rx().AttributedText())
                 .DisposedBy(DisposeBag);
 
