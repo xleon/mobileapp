@@ -28,7 +28,6 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Toggl.Core.UI.Services;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -111,12 +110,11 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
             IUpdateRemoteConfigCacheService updateRemoteConfigCacheService,
+            ISuggestionProviderContainer suggestionProviders,
             IAccessRestrictionStorage accessRestrictionStorage,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory,
-            IPermissionsChecker permissionsChecker,
-            IBackgroundService backgroundService,
             IPlatformInfo platformInfo)
             : base(navigationService)
         {
@@ -132,10 +130,9 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
             Ensure.Argument.IsNotNull(updateRemoteConfigCacheService, nameof(updateRemoteConfigCacheService));
+            Ensure.Argument.IsNotNull(suggestionProviders, nameof(suggestionProviders));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
-            Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
 
             this.dataSource = dataSource;
@@ -152,7 +149,7 @@ namespace Toggl.Core.UI.ViewModels
 
             TimeService = timeService;
 
-            SuggestionsViewModel = new SuggestionsViewModel(interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager);
+            SuggestionsViewModel = new SuggestionsViewModel(interactorFactory, onboardingStorage, suggestionProviders, schedulerProvider, rxActionFactory, navigationService);
             RatingViewModel = new RatingViewModel(timeService, ratingService, analyticsService, onboardingStorage, navigationService, schedulerProvider, rxActionFactory);
             TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 
@@ -322,12 +319,6 @@ namespace Toggl.Core.UI.ViewModels
         {
             base.ViewDisappeared();
             viewDisappearedAsync();
-        }
-
-        public override void ViewAppeared()
-        {
-            base.ViewAppeared();
-            SuggestionsViewModel.ViewAppeared();
         }
 
         private async Task viewDisappearedAsync()
