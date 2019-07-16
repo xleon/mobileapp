@@ -91,9 +91,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     false,
                     0,
                     0,
-                    0,
-                    false,
-                    false);
+                    0);
 
                 viewModel.RepresentedTimeEntriesIds.Should().BeInAscendingOrder();
             }
@@ -120,9 +118,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     false,
                     0,
                     0,
-                    0,
-                    false,
-                    false);
+                    0);
 
                 viewModel.RepresentedTimeEntriesIds.Should().BeEquivalentTo(ids.Get);
             }

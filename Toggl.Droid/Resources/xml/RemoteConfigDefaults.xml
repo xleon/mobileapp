@@ -16,12 +16,4 @@
         <key>criterion</key> 
         <value>none</value> 
     </entry> 
-    <entry>
-        <key>register_push_notifications_token_with_server</key>
-        <value>false</value>
-    </entry>
-    <entry>
-        <key>handle_push_notifications</key>
-        <value>false</value>
-    </entry>
 </defaultsMap> 

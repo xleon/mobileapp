@@ -1,14 +1,11 @@
-﻿using Foundation;
-using System;
-using System.Diagnostics;
-using UIKit;
+﻿using CoreGraphics;
+using Foundation;
 using ObjCRuntime;
 using System;
 using Toggl.Core.Suggestions;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
 using UIKit;
-using CoreGraphics;
 
 namespace Toggl.iOS
 {
@@ -59,9 +56,7 @@ namespace Toggl.iOS
             if (Suggestion == null) return;
 
             Hidden = false;
-
             DescriptionLabel.Text = Suggestion.Description;
-            prefixWithProviderNameInDebug();
 
             var hasProject = Suggestion.ProjectId != null;
             ProjectFadeView.Hidden = !hasProject;
@@ -121,13 +116,6 @@ namespace Toggl.iOS
                 = ProjectLabel.Hidden
                 = ClientLabel.Hidden
                 = true;
-        }
-
-        [Conditional("DEBUG")]
-        private void prefixWithProviderNameInDebug()
-        {
-            var prefix = Suggestion.ProviderType.ToString().Substring(0, 4);
-            DescriptionLabel.Text = $"{prefix} {Suggestion.Description}";
         }
     }
 }
