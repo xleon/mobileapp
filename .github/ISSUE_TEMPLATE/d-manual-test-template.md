@@ -169,6 +169,7 @@ These tests still need to be done the old fashion way.
 - [ ] Be removed from a workspace with an active entry running
 
 ### Testing Interactions/Sync between this app and others
+- [ ] App correctly syncs on startup (log in, kill app, open app again)
 - [ ] Edit client on web whilst mobile online
 - [ ] Delete client on web whilst mobile online and tracking a task
 - [ ] Edit client on web whilst mobile online and tracking a task
