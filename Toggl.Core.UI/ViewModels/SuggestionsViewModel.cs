@@ -100,7 +100,7 @@ namespace Toggl.Core.UI.ViewModels
                 .Skip(1);
 
             Suggestions = syncManager.ProgressObservable
-                .Where(progress => progress != SyncProgress.Syncing && progress != SyncProgress.Unknown)
+                .Where(progress => progress != SyncProgress.Syncing && progress != SyncProgress.Unknown && !backgroundService.AppIsInBackground)
                 .Throttle(recalculationThrottleDuration, schedulerProvider.DefaultScheduler)
                 .SelectUnit()
                 .StartWith(Unit.Default)

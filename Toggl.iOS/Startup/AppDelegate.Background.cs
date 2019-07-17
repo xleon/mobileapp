@@ -13,6 +13,7 @@ namespace Toggl.iOS
 
         public override void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
         {
+            IosDependencyContainer.Instance.BackgroundService.EnterBackgroundFetch();
             var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
             interactorFactory?.RunBackgroundSync()
                 .Execute()
