@@ -8,20 +8,12 @@
         <key>UserRatingDialogTrigger</key> 
         <value>none</value> 
     </entry> 
-    <entry> 
-        <key>day_count</key> 
-        <value>5</value> 
-    </entry> 
-    <entry> 
-        <key>criterion</key> 
-        <value>none</value> 
-    </entry> 
     <entry>
-        <key>register_push_notifications_token_with_server</key>
+        <key>PushNotificationsRegisterTokenWithServer</key>
         <value>false</value>
     </entry>
     <entry>
-        <key>handle_push_notifications</key>
+        <key>PushNotificationsHandle</key>
         <value>false</value>
     </entry>
 </defaultsMap> 
