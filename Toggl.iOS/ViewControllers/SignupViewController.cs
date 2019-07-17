@@ -276,9 +276,10 @@ namespace Toggl.iOS.ViewControllers
 
         private void logAdjustSignupEvent()
         {
+
 #if USE_ANALYTICS
-            var adjustEvent = ADJEvent.EventWithEventToken(adjustSignupEventToken);
-            Adjust.TrackEvent(adjustEvent);
+            var adjustEvent = AdjustBindingsiOS.ADJEvent.EventWithEventToken(adjustSignupEventToken);
+            AdjustBindingsiOS.Adjust.TrackEvent(adjustEvent);
 #endif
         }
     }

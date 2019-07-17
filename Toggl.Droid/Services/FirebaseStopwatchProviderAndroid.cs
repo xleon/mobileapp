@@ -20,7 +20,7 @@ namespace Toggl.Droid.Services
                 Operation = operation;
 
 #if USE_ANALYTICS
-                firebaseTrace = FirebasePerformance.Instance.NewTrace(operation.ToString());
+                firebaseTrace = Com.Google.Firebase.Perf.FirebasePerformance.Instance.NewTrace(operation.ToString());
 #endif
             }
 

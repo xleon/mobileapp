@@ -75,7 +75,7 @@ namespace Toggl.iOS
             }
 
 #if USE_ANALYTICS
-            var openUrlOptions = new UIApplicationOpenUrlOptions(options);
+            var openUrlOptions = new UIKit.UIApplicationOpenUrlOptions(options);
             return Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
 #endif
 

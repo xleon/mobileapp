@@ -363,7 +363,7 @@ namespace Toggl.iOS.ViewControllers
 #if DEBUG
             NavigationItem.LeftBarButtonItems = new[]
             {
-                new UIBarButtonItem(syncFailuresButton)
+                new UIKit.UIBarButtonItem(syncFailuresButton)
             };
 #endif
         }
