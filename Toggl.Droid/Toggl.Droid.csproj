@@ -679,6 +679,7 @@
     <Compile Include="BroadcastReceivers\BootCompletedBroadcastReceiver.cs" />
     <Compile Include="Services\ScheduleEventNotificationsService.cs" />
     <Compile Include="Views\VerticallyCenteredImageSpan.cs" />
+    <Compile Include="Widgets\Services\InstallationStateReportService.cs" />
     <Compile Include="Widgets\TimeEntryWidget.cs" />
   </ItemGroup>
   <ItemGroup>
