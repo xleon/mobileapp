@@ -44,7 +44,7 @@ private Action UITest(string[] dllPaths)
     {
         foreach(var dllPath in dllPaths)
         {
-            var args = $"tools/nunit.runners.2.6.3/NUnit.Runners/tools/nunit-console.exe {dllPath} -stoponerror";
+            var args = $"tools/nunit.runners.2.6.3/NUnit.Runners/tools/nunit-console.exe {dllPath}";
 
             var result = StartProcess("mono", new ProcessSettings { Arguments = args });
             if (result == 0) continue;
