@@ -10,11 +10,7 @@ namespace Toggl.Tests.UI
 
         public static iOSApp GetApp()
         {
-            // FIXME:
-            // For some unknown reason, UI tests in iOS are flaky.
-            // Resetting the simulator solves this problem, but takes a lot of time.
-            // A Xamarin.UITest update might fix this in the future.
-            resetSimulator(bootedDeviceId);
+            reinstallApp(bootedDeviceId);
 
             var app = ConfigureApp.iOS
                 .InstalledApp("com.toggl.daneel.debug")
@@ -26,23 +22,15 @@ namespace Toggl.Tests.UI
             return app;
         }
 
-        private static void resetSimulator(string deviceId)
+        private static void reinstallApp(string deviceId)
         {
             if (deviceId == null)
             {
-                var preDeleteCmdLine = string.Format("simctl uninstall booted com.toggl.daneel.debug", deviceId);
-                var preDeleteProcess = Process.Start("xcrun", preDeleteCmdLine);
-                preDeleteProcess.WaitForExit();
+                var uninstallAppFromBootedSimulatorCmdLine = "simctl uninstall booted com.toggl.daneel.debug";
+                var uninstallAppFromBootedSimulatorProcess = Process.Start("xcrun", uninstallAppFromBootedSimulatorCmdLine);
+                uninstallAppFromBootedSimulatorProcess.WaitForExit();
                 return;
             }
-
-            var shutdownCmdLine = "simctl shutdown all";
-            var shutdownProcess = Process.Start("xcrun", shutdownCmdLine);
-            shutdownProcess.WaitForExit();
-
-            var startCmdLine = string.Format("simctl boot {0}", deviceId);
-            var startProcess = Process.Start("xcrun", startCmdLine);
-            startProcess.WaitForExit();
 
             var deleteCmdLine = string.Format("simctl uninstall {0} com.toggl.daneel.debug", deviceId);
             var deleteProcess = Process.Start("xcrun", deleteCmdLine);
