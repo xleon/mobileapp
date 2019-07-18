@@ -51,6 +51,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     InteractorFactory,
                     NavigationService,
                     RemoteConfigService,
+                    AccessibilityService,
                     UpdateRemoteConfigCacheService,
                     AccessRestrictionStorage,
                     SchedulerProvider,
@@ -103,6 +104,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useInteractorFactory,
                 bool useNavigationService,
                 bool useRemoteConfigService,
+                bool useAccessibilityService,
                 bool useRemoteConfigUpdateService,
                 bool useAccessRestrictionStorage,
                 bool useSchedulerProvider,
@@ -122,6 +124,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
+                var accessibilityService = useAccessibilityService ? AccessibilityService : null;
                 var remoteConfigUpdateService = useRemoteConfigUpdateService ? UpdateRemoteConfigCacheService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
@@ -143,6 +146,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         interactorFactory,
                         navigationService,
                         remoteConfigService,
+                        accessibilityService,
                         remoteConfigUpdateService,
                         accessRestrictionStorage,
                         schedulerProvider,

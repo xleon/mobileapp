@@ -131,5 +131,8 @@ namespace Toggl.iOS.Extensions.Reactive
                 )
                 .Subscribe(action.Inputs);
         }
+
+        public static Action<string> AccessibilityLabel(this IReactive<UIView> reactive)
+            => accessibilityLabel => reactive.Base.AccessibilityLabel = accessibilityLabel;
     }
 }

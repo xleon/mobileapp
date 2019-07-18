@@ -9,6 +9,7 @@ using System.Reactive.Subjects;
 using System.Threading;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
@@ -52,7 +53,11 @@ namespace Toggl.iOS.ViewControllers
         private readonly SpiderOnARopeView spiderBroView = new SpiderOnARopeView();
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 50));
         private readonly UIButton syncFailuresButton = new UIButton(new CGRect(0, 0, 30, 40));
-        private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
+        private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"))
+        {
+            AccessibilityLabel = Resources.AppTitle,
+            AccessibilityTraits = UIAccessibilityTrait.Header
+        };
         private readonly TimeEntriesEmptyLogView emptyStateView = TimeEntriesEmptyLogView.Create();
 
         private TimeEntriesLogViewCell firstTimeEntryCell;
@@ -93,6 +98,9 @@ namespace Toggl.iOS.ViewControllers
             TapToStopTimerLabel.Text = Resources.TapToStopTimer;
             FeedbackSentSuccessTitleLabel.Text = Resources.DoneWithExclamationMark.ToUpper();
             FeedbackSentDescriptionLabel.Text = Resources.ThankYouForTheFeedback;
+
+            StartTimeEntryButton.AccessibilityLabel = Resources.StartTimeEntry;
+            StopTimeEntryButton.AccessibilityLabel = Resources.StopCurrentlyRunningTimeEntry;
 
             prepareViews();
             prepareOnboarding();
@@ -227,6 +235,13 @@ namespace Toggl.iOS.ViewControllers
                 })
                 .Subscribe(CurrentTimeEntryProjectTaskClientLabel.Rx().AttributedText())
                 .DisposedBy(DisposeBag);
+            
+            //Accessibility
+            CurrentTimeEntryCard.IsAccessibilityElementFocused
+                .CombineLatest(ViewModel.CurrentRunningTimeEntry,
+                    (_, runningEntry) => createAccessibilityLabelForRunningEntryCard(runningEntry))
+                .Subscribe(CurrentTimeEntryCard.Rx().AccessibilityLabel())
+                .DisposedBy(disposeBag);
 
             //The start button
             var trackModeImage = UIImage.FromBundle("playIcon");
@@ -298,6 +313,34 @@ namespace Toggl.iOS.ViewControllers
             }
         }
 
+        private string createAccessibilityLabelForRunningEntryCard(IThreadSafeTimeEntry timeEntry)
+        {
+            if (timeEntry == null)
+                return null;
+
+            var accessibilityLabel = Resources.CurrentlyRunningTimeEntry;
+
+            var duration = IosDependencyContainer.Instance.TimeService.CurrentDateTime - timeEntry.Start;
+            accessibilityLabel += $", {duration}";
+
+            if (!string.IsNullOrEmpty(timeEntry.Description))
+                accessibilityLabel += $", {timeEntry.Description}";
+
+            var projectName = timeEntry.Project?.Name ?? "";
+            if (!string.IsNullOrEmpty(projectName))
+                accessibilityLabel += $", {Resources.Project}: {projectName}";
+
+            var taskName = timeEntry.Task?.Name ?? "";
+            if (!string.IsNullOrEmpty(taskName))
+                accessibilityLabel += $", {Resources.Task}: {taskName}";
+
+            var clientName = timeEntry.Project?.Client?.Name ?? "";
+            if (!string.IsNullOrEmpty(clientName))
+                accessibilityLabel += $", {Resources.Client}: {clientName}";
+
+            return accessibilityLabel;
+        }
+
         private void setupTableViewHeader()
         {
             TimeEntriesLogTableView.TableHeaderView = tableHeader;
@@ -358,6 +401,9 @@ namespace Toggl.iOS.ViewControllers
             NavigationItem.RightBarButtonItems = new[]
             {
                 new UIBarButtonItem(settingsButton)
+                {
+                    AccessibilityLabel = Resources.Settings
+                }
             };
 
 #if DEBUG
@@ -421,7 +467,6 @@ namespace Toggl.iOS.ViewControllers
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-
             if (!disposing) return;
 
             spiderBroView.Dispose();

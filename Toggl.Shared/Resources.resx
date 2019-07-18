@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
     <!--
       Microsoft ResX Schema
@@ -834,8 +834,11 @@ Please update your app to continue.</value>
     <data name="DurationFormat" xml:space="preserve">
     <value>Duration format</value>
   </data>
-    <data name="Projects" xml:space="preserve">
+  <data name="Projects" xml:space="preserve">
     <value>Projects</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Project</value>
   </data>
     <data name="EmptyProjectText" xml:space="preserve">
     <value>Your projects will show up here.
@@ -1027,5 +1030,71 @@ Use them to add keywords to your time entries.</value>
   </data>
   <data name="SiriNoCurrentEntryRunning" xml:space="preserve">
     <value>There's no entry currently running.</value>
+  </data>
+  <data name="Heading" xml:space="preserve">
+    <value>Heading</value>
+  </data>
+  <data name="SuggestionAccessibilityHint" xml:space="preserve">
+    <value>Starts a time entry</value>
+  </data>
+  <data name="TimeEntryRowAccessibilityHint" xml:space="preserve">
+    <value>Edits the time entry</value>
+  </data>
+  <data name="Suggestion" xml:space="preserve">
+    <value>Suggestion</value>
+  </data>
+  <data name="TrackedTime" xml:space="preserve">
+    <value>tracked time</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="HasTags" xml:space="preserve">
+    <value>Has tags</value>
+  </data>
+  <data name="Task" xml:space="preserve">
+    <value>Task</value>
+  </data>
+  <data name="Client" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="TimeEntries" xml:space="preserve">
+    <value>Time entries</value>
+  </data>
+  <data name="TimeEntry" xml:space="preserve">
+    <value>Time entry</value>
+  </data>
+  <data name="ExpandTimeEntryGroup" xml:space="preserve">
+    <value>Expand time entry group</value>
+  </data>
+  <data name="CollapseTimeEntryGroup" xml:space="preserve">
+    <value>Collapse time entry group</value>
+  </data>
+  <data name="Timer" xml:space="preserve">
+    <value>Timer</value>
+  </data>
+  <data name="StartTimeEntry" xml:space="preserve">
+    <value>StartTimeEntry</value>
+  </data>
+  <data name="CurrentlyRunningTimeEntry" xml:space="preserve">
+    <value>Currently Running Time Entry</value>
+  </data>
+  <data name="StopCurrentlyRunningTimeEntry" xml:space="preserve">
+    <value>Stop currently running time entry</value>
+  </data>
+  <data name="IsBillable" xml:space="preserve">
+    <value>Is billable</value>
+  </data>
+  <data name="SyncFailed" xml:space="preserve">
+    <value>Syncing failed</value>
+  </data>
+  <data name="SyncFailedOffline" xml:space="preserve">
+    <value>Syncing failed, you are offline</value>
+  </data>
+  <data name="SuccessfullySyncedData" xml:space="preserve">
+    <value>Successfully synced data</value>
+  </data>
+  <data name="UndoDeletedTimeEntry" xml:space="preserve">
+    <value>Undo deleted time entry</value>
   </data>
 </root>

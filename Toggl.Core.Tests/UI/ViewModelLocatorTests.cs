@@ -55,6 +55,7 @@ namespace Toggl.Core.Tests.UI
                 MockLicenseProvider = Substitute.For<ILicenseProvider>(),
                 MockNavigationService = Substitute.For<INavigationService>(),
                 MockNotificationService = Substitute.For<INotificationService>(),
+                MockAccessibilityService = Substitute.For<IAccessibilityService>(),
                 MockOnboardingStorage = Substitute.For<IOnboardingStorage>(),
                 MockPermissionsChecker = Substitute.For<IPermissionsChecker>(),
                 MockPlatformInfo = Substitute.For<IPlatformInfo>(),

@@ -128,5 +128,8 @@ namespace Toggl.iOS
 
         protected override IAccessRestrictionStorage CreateAccessRestrictionStorage()
             => settingsStorage.Value;
+
+        protected override IAccessibilityService CreateAccessibilityService()
+            => new AccessibilityServiceIos();
     }
 }

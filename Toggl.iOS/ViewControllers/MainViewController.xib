@@ -13,7 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainViewController">
             <connections>
                 <outlet property="CreatedFirstTimeEntryLabel" destination="qfP-Yh-vW3" id="SBk-CR-F34"/>
-                <outlet property="CurrentTimeEntryCard" destination="vou-B4-go4" id="name-outlet-vou-B4-go4"/>
+                <outlet property="CurrentTimeEntryCard" destination="vou-B4-go4" id="NGn-VX-S1X"/>
                 <outlet property="CurrentTimeEntryDescriptionLabel" destination="eE0-Ob-Ngt" id="hdk-b7-5VN"/>
                 <outlet property="CurrentTimeEntryElapsedTimeLabel" destination="0J7-Pj-geT" id="name-outlet-0J7-Pj-geT"/>
                 <outlet property="CurrentTimeEntryProjectTaskClientLabel" destination="cnc-9d-fgu" id="Qlo-zJ-0bI"/>
@@ -186,7 +186,7 @@ time entries will appear here.</string>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Kk-Hz-RBS">
                     <rect key="frame" x="295" y="538" width="80" height="80"/>
-                    <accessibility key="accessibilityConfiguration" label="MainStartTimeEntry"/>
+                    <accessibility key="accessibilityConfiguration" identifier="MainStartTimeEntry"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="80" id="ZPS-gP-0Ab"/>
                         <constraint firstAttribute="width" constant="80" id="eb6-9a-GbS"/>
@@ -231,7 +231,7 @@ time entries will appear here.</string>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vou-B4-go4">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vou-B4-go4" customClass="AccessibilityAwareView">
                     <rect key="frame" x="0.0" y="546" width="375" height="121"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:15:25" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0J7-Pj-geT">
@@ -290,7 +290,7 @@ time entries will appear here.</string>
                         </view>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <accessibility key="accessibilityConfiguration" label="CurrentTimeEntryCard">
+                    <accessibility key="accessibilityConfiguration" identifier="CurrentTimeEntryCard">
                         <bool key="isElement" value="YES"/>
                     </accessibility>
                     <constraints>
@@ -305,7 +305,7 @@ time entries will appear here.</string>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ddo-IW-xE3">
                     <rect key="frame" x="319" y="554" width="56" height="56"/>
-                    <accessibility key="accessibilityConfiguration" label="MainStopTimeEntry"/>
+                    <accessibility key="accessibilityConfiguration" identifier="MainStopTimeEntry"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="56" id="cJZ-zk-6qM"/>
                         <constraint firstAttribute="height" constant="56" id="urN-jP-06M"/>

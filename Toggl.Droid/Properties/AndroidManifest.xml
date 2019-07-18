@@ -5,7 +5,6 @@
     android:versionName="2.1.1"
     package="com.toggl.giskard.debug"
     android:installLocation="auto">
-    
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="27" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.VIBRATE" />

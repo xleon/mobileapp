@@ -144,5 +144,9 @@ namespace Toggl.Core.UI
         internal IPushNotificationsTokenStorage MockPushNotificationsTokenStorage { get; set; }
         protected override IPushNotificationsTokenStorage CreatePushNotificationsTokenStorage()
             => MockPushNotificationsTokenStorage;
+
+        internal IAccessibilityService MockAccessibilityService { get; set; }
+        protected override IAccessibilityService CreateAccessibilityService()
+            => MockAccessibilityService;
     }
 }
