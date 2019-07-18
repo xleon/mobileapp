@@ -540,9 +540,14 @@ private string[] GetUnitTestProjects() => new []
     "./Toggl.Core.Tests/Toggl.Core.Tests.csproj",
 };
 
-private string[] GetUITestFiles() => new []
+private string[] GetIosUITestFiles() => new []
 {
     "./bin/Release/Toggl.iOS.Tests.UI.dll"
+};
+
+private string[] GetAndroidUITestFiles() => new []
+{
+	".bin/Release/Toggl.Giskard.Tests.UI.dll"
 };
 
 private string[] GetIntegrationTestProjects()
@@ -662,15 +667,20 @@ Task("Tests.Sync")
     .Does(Test(GetSyncTestProjects()));
 
 //UI Tests
-Task("Tests.UI")
+Task("Tests.UI.iOS")
     .IsDependentOn("Build.Tests.UI")
-    .Does(UITest(GetUITestFiles()));
+    .Does(UITest(GetIosUITestFiles()));
+
+Task("Tests.UI.Android")
+    .IsDependentOn("Build.Tests.UI")
+    .Does(UITest(GetAndroidUITestFiles()));
 
 // All Tests
 Task("Tests")
     .IsDependentOn("Tests.Unit")
     .IsDependentOn("Tests.Integration")
-    .IsDependentOn("Tests.UI");
+    .IsDependentOn("Tests.UI.iOS")
+	.IsDependentOn("Tests.UI.Android");
 
 //Default Operation
 Task("Default")
