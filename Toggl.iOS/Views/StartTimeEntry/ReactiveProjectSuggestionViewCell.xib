@@ -128,6 +128,9 @@
                     <constraint firstAttribute="trailing" secondItem="yh0-y9-L1C" secondAttribute="trailing" id="zXm-Ry-uFf"/>
                 </constraints>
             </tableViewCellContentView>
+            <accessibility key="accessibilityConfiguration" identifier="ProjectSuggestionRow">
+                <bool key="isElement" value="YES"/>
+            </accessibility>
             <connections>
                 <outlet property="AmountOfTasksLabel" destination="kVr-Fp-aXt" id="CWG-Z3-pVi"/>
                 <outlet property="BottomSeparatorView" destination="h6L-H2-1XH" id="kw9-av-b21"/>

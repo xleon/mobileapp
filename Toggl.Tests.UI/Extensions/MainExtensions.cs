@@ -141,6 +141,7 @@ namespace Toggl.Tests.UI.Extensions
 
         public static AppRect RectForTimeEntryCell(this IApp app, string timeEntryDescription)
         {
+            app.WaitForElement(queryForTimeEntryCell(timeEntryDescription));
             var timeEntryViews = app.Query(queryForTimeEntryCell(timeEntryDescription));
             if (timeEntryViews.Length == 0)
                 return null;
@@ -168,6 +169,7 @@ namespace Toggl.Tests.UI.Extensions
         public static void AssertTimeEntryInTheLog(this IApp app, string description, string projectName = null)
         {
             app.WaitForElement(Main.TimeEntriesCollection);
+            app.WaitForElement(queryForTimeEntryCell(description, projectName));
             var timeEntryExists = app.Query(queryForTimeEntryCell(description, projectName)).Any();
 
             var projectInsert = string.IsNullOrEmpty(projectName)
