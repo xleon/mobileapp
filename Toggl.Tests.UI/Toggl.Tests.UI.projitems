@@ -13,7 +13,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)LoginTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StartManualTimeEntryTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StartTimeEntryTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)OnboardingTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\User.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LoginExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\MainExtensions.cs" />
