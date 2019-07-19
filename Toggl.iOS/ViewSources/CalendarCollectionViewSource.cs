@@ -200,7 +200,6 @@ namespace Toggl.iOS.ViewSources
         public void StopEditing()
         {
             IsEditing = false;
-            editingItemIndexPath = null;
             layout.IsEditing = false;
             layoutAttributes = calculateLayoutAttributes();
             layout.InvalidateLayoutForVisibleItems();

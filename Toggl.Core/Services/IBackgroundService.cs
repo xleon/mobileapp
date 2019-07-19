@@ -6,7 +6,9 @@ namespace Toggl.Core.Services
     {
         void EnterBackground();
         void EnterForeground();
+        void EnterBackgroundFetch();
 
+        bool AppIsInBackground { get; }
         IObservable<TimeSpan> AppResumedFromBackground { get; }
     }
 }

@@ -111,11 +111,6 @@ namespace Toggl.iOS
         protected override IStopwatchProvider CreateStopwatchProvider()
             => new FirebaseStopwatchProviderIos();
 
-        protected override ISuggestionProviderContainer CreateSuggestionProviderContainer()
-            => new SuggestionProviderContainer(
-                new MostUsedTimeEntrySuggestionProvider(Database, TimeService, numberOfSuggestions)
-            );
-
         protected override INavigationService CreateNavigationService()
             => new NavigationService(ViewPresenter, ViewModelLoader, AnalyticsService);
 

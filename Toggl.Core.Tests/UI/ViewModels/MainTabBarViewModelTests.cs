@@ -29,7 +29,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     PermissionsChecker,
                     NavigationService,
                     RemoteConfigService,
-                    SuggestionProviderContainer,
                     AccessRestrictionStorage,
                     StopwatchProvider,
                     RxActionFactory,
@@ -37,14 +36,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     PrivateSharedStorageService,
                     PlatformInfo
                 );
-
-            protected override void AdditionalViewModelSetup()
-            {
-                base.AdditionalViewModelSetup();
-                var provider = Substitute.For<ISuggestionProvider>();
-                provider.GetSuggestions().Returns(Observable.Empty<Suggestion>());
-                SuggestionProviderContainer.Providers.Returns(new[] { provider }.ToList().AsReadOnly());
-            }
         }
 
         public sealed class TheConstructor : MainTabViewModelTest
@@ -66,13 +57,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool useNavigationService,
                     bool useRemoteConfigService,
                     bool useAccessRestrictionStorage,
-                    bool useSuggestionProviderContainer,
                     bool useStopwatchProvider,
                     bool useRxActionFactory,
                     bool useUserAccessManager,
                     bool usePrivateSharedStorageService,
                     bool usePlatformInfo)
-
             {
                 var timeService = useTimeService ? TimeService : null;
                 var dataSource = useDataSource ? DataSource : null;
@@ -88,7 +77,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var navigationService = useNavigationService ? NavigationService : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
-                var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var userAccessManager = useUserAccessManager ? UserAccessManager : null;
@@ -110,7 +98,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         permissionsService,
                         navigationService,
                         remoteConfigService,
-                        suggestionProviderContainer,
                         accessRestrictionStorage,
                         stopwatchProvider,
                         rxActionFactory,

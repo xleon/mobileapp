@@ -16,6 +16,8 @@ namespace Toggl.Core.Services
 
         public IObservable<TimeSpan> AppResumedFromBackground { get; }
 
+        public bool AppIsInBackground { get; private set; }
+
         public BackgroundService(ITimeService timeService, IAnalyticsService analyticsService)
         {
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
@@ -28,12 +30,19 @@ namespace Toggl.Core.Services
             lastEnteredBackground = null;
 
             AppResumedFromBackground = appBecameActiveSubject.AsObservable();
+            AppIsInBackground = false;
+        }
+
+        public void EnterBackgroundFetch()
+        {
+            AppIsInBackground = true;
         }
 
         public void EnterBackground()
         {
             analyticsService.AppSentToBackground.Track();
             lastEnteredBackground = timeService.CurrentDateTime;
+            AppIsInBackground = true;
         }
 
         public void EnterForeground()
@@ -41,6 +50,7 @@ namespace Toggl.Core.Services
             if (lastEnteredBackground.HasValue == false)
                 return;
 
+            AppIsInBackground = false;
             var timeInBackground = timeService.CurrentDateTime - lastEnteredBackground.Value;
             lastEnteredBackground = null;
             appBecameActiveSubject.OnNext(timeInBackground);
