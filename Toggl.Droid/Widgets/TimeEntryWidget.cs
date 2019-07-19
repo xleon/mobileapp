@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using System.Threading;
 using Android.App;
 using Android.Appwidget;
 using Android.Content;
-using Android.Util;
-using Toggl.Core.Analytics;
+using Android.OS;
+using Android.Widget;
 using Toggl.Droid.Widgets.Services;
 
 namespace Toggl.Droid.Widgets
@@ -31,11 +29,23 @@ namespace Toggl.Droid.Widgets
             base.OnUpdate(context, appWidgetManager, appWidgetIds);
         }
 
+        public override void OnAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions)
+        {
+            base.OnAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+            var minWidth = newOptions.GetInt(AppWidgetManager.OptionAppwidgetMinWidth);
+            appWidgetManager.UpdateAppWidget(appWidgetId, getRemoteViews(context, minWidth));
+        }
+
         private void reportInstallationState(Context context, bool installed)
         {
             var intent = new Intent(context, typeof(InstallationStateReportService));
             intent.PutExtra(InstallationStateReportService.StateParameterName, installed);
             InstallationStateReportService.EnqueueWork(context, intent);
         }
+
+        private RemoteViews getRemoteViews(Context context, int minWidth)
+            => minWidth < 110
+                ? new RemoteViews(context.PackageName, Resource.Layout.TimeEntryWidgetSmall)
+                : new RemoteViews(context.PackageName, Resource.Layout.TimeEntryWidget);
     }
 }

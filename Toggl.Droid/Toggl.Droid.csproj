@@ -688,6 +688,7 @@
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\color\BlueTextColor.xml" />
     <AndroidResource Include="Resources\drawable\Dot.xml" />
+    <AndroidResource Include="Resources\drawable\RoundedButton.xml" />
     <AndroidResource Include="Resources\drawable\Splash.xml" />
     <AndroidResource Include="Resources\drawable\text_placeholder.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
@@ -711,6 +712,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\logo.png" />
+    <AndroidResource Include="Resources\layout\TimeEntryWidgetSmall.axml" />
     <AndroidResource Include="Resources\menu\GenericSaveMenu.xml" />
     <AndroidResource Include="Resources\values\Strings.xml" />
     <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
