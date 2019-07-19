@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using Accord.Math.Optimization.Losses;
 using Accord.MachineLearning.DecisionTrees;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
@@ -41,7 +40,7 @@ namespace Toggl.Core.Suggestions
         public IObservable<Suggestion> GetSuggestions()
             => dataSource.TimeEntries
                 .GetAll()
-                .Select(timeEntries => timeEntries.Where(te => te.SyncStatus == SyncStatus.InSync))
+                .Select(timeEntries => timeEntries.Where(te => te.SyncStatus == SyncStatus.InSync && isTimeEntryActive(te)))
                 .Select(predictUsingRandomForestClassifier)
                 .SelectMany(toSuggestions)
                 .OnErrorResumeEmpty();
@@ -230,5 +229,10 @@ namespace Toggl.Core.Suggestions
 
             return uniqueOutputs[prediction];
         }
+
+        private bool isTimeEntryActive(IDatabaseTimeEntry timeEntry)
+            => timeEntry.IsDeleted == false
+               && timeEntry.IsInaccessible == false
+               && (timeEntry.Project?.Active ?? true);
     }
 }

@@ -58,7 +58,9 @@ namespace Toggl.Core.Tests.Suggestions
             private IEnumerable<IThreadSafeTimeEntry> getTimeEntries(
                 int numberOfTimeEntries,
                 bool withProject,
-                int initalId = 0)
+                int initalId = 0,
+                bool activeProject = true,
+                long projectId = 4)
             {
                 if (numberOfTimeEntries == 0)
                 {
@@ -66,7 +68,7 @@ namespace Toggl.Core.Tests.Suggestions
                 }
 
                 var workspace = new MockWorkspace { Id = 12 };
-                var project = new MockProject { Id = 4, Name = "4" };
+                var project = new MockProject { Id = projectId, Name = $"{projectId}", Active = activeProject };
 
                 return Enumerable.Range(initalId, numberOfTimeEntries)
                     .Select(index =>
@@ -81,7 +83,6 @@ namespace Toggl.Core.Tests.Suggestions
                             Start = Now.AddHours(index % 23),
                             Description = $"te{index}"
                         };
-
 
                         if (withProject)
                         {
@@ -143,6 +144,34 @@ namespace Toggl.Core.Tests.Suggestions
                     suggestions.First().ProjectId.Should().Be(null);
                     suggestions.First().ProjectName.Should().Be("");
                 }
+            }
+
+            [Theory]
+            [InlineData(120, 120, 1)]
+            [InlineData(0, 120, 0)]
+            public async Task DoesNotReturnSuggestionsWithArchivedProjects(
+                int numberOfTimeEntrieWithActiveProject,
+                int numberOfTimeEntrieWithoutActiveProject,
+                int numberOfExpectedResults)
+            {
+                var provider = new RandomForestSuggestionProvider(StopwatchProvider, DataSource, TimeService);
+
+                var timeEntries = getTimeEntries(numberOfTimeEntrieWithActiveProject, true, projectId: 2)
+                    .Concat(getTimeEntries(numberOfTimeEntrieWithoutActiveProject, true, numberOfTimeEntrieWithActiveProject + 1, false, projectId: 5));
+
+                DataSource.TimeEntries
+                    .GetAll()
+                    .Returns(Observable.Return(timeEntries));
+
+                var suggestions = await provider.GetSuggestions().ToList();
+
+                suggestions.Should().HaveCount(numberOfExpectedResults);
+
+                if (numberOfExpectedResults == 0)
+                    return;
+
+                suggestions.First().ProjectId.Should().Be(2);
+                suggestions.First().ProjectName.Should().Be("2");
             }
 
             [Fact]
