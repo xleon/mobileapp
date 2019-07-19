@@ -19,7 +19,7 @@ using Toggl.Storage.Models;
 using Xunit;
 using TimeEntry = Toggl.Core.Models.TimeEntry;
 
-namespace Toggl.Core.Tests.Intereactors.Suggestions
+namespace Toggl.Core.Tests.Suggestions
 {
     public sealed class MostUsedTimeEntrySuggestionProviderTests
     {
@@ -178,6 +178,25 @@ namespace Toggl.Core.Tests.Intereactors.Suggestions
                     && !string.IsNullOrWhiteSpace(suggestion.Description)
                     || suggestion.ProjectId.HasValue
                 );
+            }
+
+            [Fact]
+            public void NeverThrows()
+            {
+                var exception = new Exception();
+                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(Observable.Throw<IEnumerable<IThreadSafeTimeEntry>>(exception));
+
+                Action getSuggestions = () => Provider.GetSuggestions().Subscribe();
+                getSuggestions.Should().NotThrow();
+            }
+
+            [Fact]
+            public void ReturnsNoSuggestionsInCaseOfError()
+            {
+                var exception = new Exception();
+                DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>()).Returns(Observable.Throw<IEnumerable<IThreadSafeTimeEntry>>(exception));
+
+                Provider.GetSuggestions().Count().Wait().Should().Be(0);
             }
         }
     }

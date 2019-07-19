@@ -144,6 +144,27 @@ namespace Toggl.Core.Tests.Suggestions
                     suggestions.First().ProjectName.Should().Be("");
                 }
             }
+
+            [Fact]
+            public void NeverThrows()
+            {
+                var exception = new Exception();
+                DataSource.TimeEntries.GetAll().Returns(Observable.Throw<IEnumerable<IThreadSafeTimeEntry>>(exception));
+                var provider = new RandomForestSuggestionProvider(StopwatchProvider, DataSource, TimeService);
+
+                Action getSuggestions = () => provider.GetSuggestions().Subscribe();
+                getSuggestions.Should().NotThrow();
+            }
+
+            [Fact]
+            public void ReturnsNoSuggestionsInCaseOfError()
+            {
+                var exception = new Exception();
+                DataSource.TimeEntries.GetAll().Returns(Observable.Throw<IEnumerable<IThreadSafeTimeEntry>>(exception));
+                var provider = new RandomForestSuggestionProvider(StopwatchProvider, DataSource, TimeService);
+
+                provider.GetSuggestions().Count().Wait().Should().Be(0);
+            }
         }
     }
 }

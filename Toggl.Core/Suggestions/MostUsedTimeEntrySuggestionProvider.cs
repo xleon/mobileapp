@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using Toggl.Core.DataSources;
 using Toggl.Core.Diagnostics;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 
@@ -42,7 +43,8 @@ namespace Toggl.Core.Suggestions
                 .GetAll(isSuitableForSuggestion)
                 .Do(_ => startStopwatch())
                 .SelectMany(mostUsedTimeEntry)
-                .Take(maxNumberOfSuggestions);
+                .Take(maxNumberOfSuggestions)
+                .OnErrorResumeEmpty();
 
         private bool isSuitableForSuggestion(IDatabaseTimeEntry timeEntry)
         {
