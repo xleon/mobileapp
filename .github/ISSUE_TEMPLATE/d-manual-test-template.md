@@ -203,6 +203,20 @@ These tests still need to be done the old fashion way.
 - [ ] Check that hint to swipe continue entry is shown
 - [ ] Check that hint to swipe delete is shown
 
+### Testing app restriction UI
+
+- [ ] Check that all the non-permanent error screens are showing correctly (use the long-press on About) 
+  - [ ] Token reset error
+  - [ ] No workspace error
+  - [ ] No default workspace error
+  - [ ] Outdated client error
+  - [ ] Outdated API error
+- [ ] Check that all the permanent error screens are showing correctly 
+  - [ ] Permanent outdated client error
+    - [ ] Make sure that after this choice, the app requires reinstall/update
+  - [ ] Permanent outdated API error
+    - [ ] Make sure that after this choice, the app requires reinstall/update
+
 ### Test that the UI is appearing as intended and report any issues
 
 - [ ] All of the UI tests are passing
