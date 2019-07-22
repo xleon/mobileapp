@@ -92,9 +92,29 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
         }
 
         [Fact, LogIfTooSlow]
-        public async Task DoNotSuggestTimeEntriesWhichReferenceArchivedProjects()
+        public async Task SuggestsTimeEntriesWithoutProjects()
+        {
+            var interactor = new GetTimeEntriesAutocompleteSuggestions(dataSource, new[] { "45" });
+
+            var suggestions = await interactor.Execute();
+
+            suggestions.Should().HaveCount(1);
+        }
+
+        [Fact, LogIfTooSlow]
+        public async Task DoNotSuggestTimeEntriesWithArchivedProjectsWhenSearchingByProjectName()
         {
             var interactor = new GetTimeEntriesAutocompleteSuggestions(dataSource, new[] { "38" });
+
+            var suggestions = await interactor.Execute();
+
+            suggestions.Should().HaveCount(0);
+        }
+
+        [Fact, LogIfTooSlow]
+        public async Task DoNotSuggestTimeEntriesWithArchivedProjectsWhenSearchingByDescription()
+        {
+            var interactor = new GetTimeEntriesAutocompleteSuggestions(dataSource, new[] { "48" });
 
             var suggestions = await interactor.Execute();
 
