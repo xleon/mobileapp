@@ -54,5 +54,10 @@ namespace Toggl.Tests.UI.Extensions
 
             app.Tap(EditDuration.SaveButton);
         }
+
+        public static void EnterTextInStartTimeEntryView(this IApp app, string text)
+        {
+            app.EnterText(text);
+        }
     }
 }

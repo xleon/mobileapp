@@ -40,5 +40,17 @@ namespace Toggl.Tests.UI.Extensions
             app.Tap(StartTimeEntry.DurationLabel);
             app.EnterText(duration);
         }
+
+        public static void EnterTextInStartTimeEntryView(this IApp app, string text)
+        {
+            // FIXME: This is needed bc of the poor autcomplete performance in
+            // the start TE view causing the text entry to miss chars.
+            // See issue for details:
+            // https://github.com/toggl/mobileapp/issues/5473
+            foreach (var c in text)
+            {
+                app.EnterText(c.ToString());
+            }
+        }
     }
 }

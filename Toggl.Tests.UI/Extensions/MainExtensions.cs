@@ -26,7 +26,7 @@ namespace Toggl.Tests.UI.Extensions
             app.Tap(Main.StartTimeEntryButton);
             app.WaitForElement(StartTimeEntry.DoneButton);
 
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
             app.Tap(StartTimeEntry.DoneButton);
 
             app.WaitForElement(Main.StopTimeEntryButton);
@@ -42,11 +42,11 @@ namespace Toggl.Tests.UI.Extensions
         {
             app.Tap(Main.StartTimeEntryButton);
             app.WaitForElement(StartTimeEntry.DoneButton);
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
 
             if (!string.IsNullOrEmpty(projectName))
             {
-                app.EnterText($" @{projectName}");
+                app.EnterTextInStartTimeEntryView($" @{projectName}");
                 if (projectExists(projectName))
                     app.Tap(x => x.Text(projectName));
                 else
@@ -75,7 +75,7 @@ namespace Toggl.Tests.UI.Extensions
             app.WaitForElement(Main.StartTimeEntryButton);
             app.Tap(Main.StartTimeEntryButton);
             app.WaitForElement(StartTimeEntry.DoneButton);
-            app.EnterText($"@{projectName}");
+            app.EnterTextInStartTimeEntryView($"@{projectName}");
             app.TapCreateProject(projectName);
             app.Tap(EditProject.CreateButton);
             app.Tap(StartTimeEntry.CloseButton);
