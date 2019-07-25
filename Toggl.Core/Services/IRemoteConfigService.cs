@@ -5,7 +5,6 @@ namespace Toggl.Core.Services
 {
     public interface IRemoteConfigService
     {
-        RatingViewConfiguration GetRatingViewConfiguration();
-        PushNotificationsConfiguration GetPushNotificationsConfiguration();
+        IObservable<RatingViewConfiguration> RatingViewConfiguration { get; }
     }
 }

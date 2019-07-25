@@ -112,7 +112,6 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
             IAccessibilityService accessibilityService,
-            IUpdateRemoteConfigCacheService updateRemoteConfigCacheService,
             IAccessRestrictionStorage accessRestrictionStorage,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
@@ -134,7 +133,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
             Ensure.Argument.IsNotNull(accessibilityService, nameof(accessibilityService));
-            Ensure.Argument.IsNotNull(updateRemoteConfigCacheService, nameof(updateRemoteConfigCacheService));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
@@ -167,7 +165,7 @@ namespace Toggl.Core.UI.ViewModels
             LogEmpty = TimeEntriesViewModel.Empty.AsDriver(schedulerProvider);
             TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(schedulerProvider);
 
-            ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService, updateRemoteConfigCacheService);
+            ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService);
         }
 
         public override async Task Initialize()

@@ -53,7 +53,7 @@ namespace Toggl.Core.Tests.Sync.Scenarios.SyncLight
                 preferences: serverState.Preferences.ToSyncable(),
                 workspaces: new[] { serverState.DefaultWorkspace.ToSyncable() });
 
-        protected override async Task Act(ISyncManager syncManager, AppServices appServices)
+        protected override async Task Act(ISyncManager syncManager)
         {
             await syncManager.PullTimeEntries();
         }

@@ -40,10 +40,6 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
         public bool BelongsToGroup =>
             VisualizationIntent == LogItemVisualizationIntent.GroupItem;
 
-        public bool ProjectIsPlaceholder { get; }
-
-        public bool TaskIsPlaceholder { get; }
-
         public LogItemViewModel(
             GroupId groupId,
             long[] representedTimeEntriesIds,
@@ -61,9 +57,7 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
             bool isInaccessible,
             int indexInLog,
             int dayInLog,
-            int daysInThePast,
-            bool projectIsPlaceholder,
-            bool taskIsPlaceholder)
+            int daysInThePast)
         {
             GroupId = groupId;
             RepresentedTimeEntriesIds = representedTimeEntriesIds.OrderBy(id => id).ToArray();
@@ -86,8 +80,6 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
             IndexInLog = indexInLog;
             DayInLog = dayInLog;
             DaysInThePast = daysInThePast;
-            ProjectIsPlaceholder = projectIsPlaceholder;
-            TaskIsPlaceholder = taskIsPlaceholder;
         }
 
         public bool Equals(LogItemViewModel other)

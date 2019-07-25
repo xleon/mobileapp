@@ -258,9 +258,7 @@ namespace Toggl.Core.UI.ViewModels
                 timeEntry.Project?.DisplayName(),
                 timeEntry.Project?.DisplayColor(),
                 timeEntry.Project?.Client?.Name,
-                timeEntry.Task?.Name,
-                timeEntry.Project?.IsPlaceholder() ?? false,
-                timeEntry.Task?.IsPlaceholder() ?? false));
+                timeEntry.Task?.Name));
 
             isBillableSubject.OnNext(timeEntry.Billable);
 
@@ -369,19 +367,15 @@ namespace Toggl.Core.UI.ViewModels
             var project = await interactorFactory.GetProjectById(projectId.Value).Execute();
             clearTagsIfNeeded(workspaceId, project.WorkspaceId);
 
-            var task = chosenProject.TaskId.HasValue
-                ? await interactorFactory.GetTaskById(taskId.Value).Execute()
-                : null;
-
-            var taskName = task?.Name ?? string.Empty;
+            var taskName = chosenProject.TaskId.HasValue
+                ? (await interactorFactory.GetTaskById(taskId.Value).Execute())?.Name
+                : string.Empty;
 
             projectClientTaskSubject.OnNext(new ProjectClientTaskInfo(
                 project.DisplayName(),
                 project.DisplayColor(),
                 project.Client?.Name,
-                taskName,
-                project.IsPlaceholder(),
-                task?.IsPlaceholder() ?? false));
+                taskName));
 
             workspaceIdSubject.OnNext(chosenProject.WorkspaceId);
 
@@ -571,27 +565,23 @@ namespace Toggl.Core.UI.ViewModels
 
         public struct ProjectClientTaskInfo
         {
-            public ProjectClientTaskInfo(string project, string projectColor, string client, string task, bool projectIsPlaceholder, bool taskIsPlaceholder)
+            public ProjectClientTaskInfo(string project, string projectColor, string client, string task)
             {
                 Project = string.IsNullOrEmpty(project) ? null : project;
                 ProjectColor = string.IsNullOrEmpty(projectColor) ? null : projectColor;
                 Client = string.IsNullOrEmpty(client) ? null : client;
                 Task = string.IsNullOrEmpty(task) ? null : task;
-                ProjectIsPlaceholder = projectIsPlaceholder;
-                TaskIsPlaceholder = taskIsPlaceholder;
             }
 
             public string Project { get; private set; }
             public string ProjectColor { get; private set; }
             public string Client { get; private set; }
             public string Task { get; private set; }
-            public bool ProjectIsPlaceholder { get; private set; }
-            public bool TaskIsPlaceholder { get; private set; }
 
             public bool HasProject => !string.IsNullOrEmpty(Project);
 
             public static ProjectClientTaskInfo Empty
-                => new ProjectClientTaskInfo(null, null, null, null, false, false);
+                => new ProjectClientTaskInfo(null, null, null, null);
         }
     }
 }

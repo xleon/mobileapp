@@ -6,9 +6,5 @@
     <integer>5</integer>
     <key>UserRatingDialogTrigger</key>
     <string>none</string>
-    <key>PushNotificationsRegisterTokenWithServer</key>
-    <false/>
-    <key>PushNotificationsHandle</key>
-    <false/>
 </dict>
 </plist>

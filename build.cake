@@ -196,7 +196,6 @@ private TemporaryFileTransformation GetAndroidGoogleServicesTransformation()
     var projectId = EnvironmentVariable("TOGGL_PROJECT_ID");
     var storageBucket = EnvironmentVariable("TOGGL_STORAGE_BUCKET");
     var mobileSdkAppId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_MOBILE_SDK_APP_ID");
-    var mobileSdkAdhocAppId = EnvironmentVariable("TOGGL_DROID_ADHOC_GOOGLE_SERVICES_MOBILE_SDK_APP_ID");
     var clientId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID");
     var apiKey = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_API_KEY");
 
@@ -212,7 +211,6 @@ private TemporaryFileTransformation GetAndroidGoogleServicesTransformation()
                         .Replace("{TOGGL_PROJECT_ID}", projectId)
                         .Replace("{TOGGL_STORAGE_BUCKET}", storageBucket)
                         .Replace("{TOGGL_DROID_GOOGLE_SERVICES_MOBILE_SDK_APP_ID}", mobileSdkAppId)
-                        .Replace("{TOGGL_DROID_ADHOC_GOOGLE_SERVICES_MOBILE_SDK_APP_ID}", mobileSdkAdhocAppId)
                         .Replace("{TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID}", clientId)
                         .Replace("{TOGGL_DROID_GOOGLE_SERVICES_API_KEY}", apiKey)
     };
@@ -350,20 +348,16 @@ private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformatio
 {
     const string path = "Toggl.iOS/Entitlements.plist";
     const string groupIdToReplace = "group.com.toggl.daneel.debug.extensions";
-    const string defaultApsEnvironment = "<string>development</string>";
 
     var groupId = groupIdToReplace;
-    var apsEnvironment = defaultApsEnvironment;
 
     if (target == "Build.Release.iOS.AdHoc")
     {
         groupId = "group.com.toggl.daneel.adhoc.extensions";
-        apsEnvironment = "<string>production</string>";
     }
     else if (target == "Build.Release.iOS.AppStore")
     {
         groupId = "group.com.toggl.daneel.extensions";
-        apsEnvironment = "<string>production</string>";
     }
 
     var filePath = GetFiles(path).Single();
@@ -373,7 +367,7 @@ private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformatio
     {
         Path = path,
         Original = file,
-        Temporary = file.Replace(groupIdToReplace, groupId).Replace(defaultApsEnvironment, apsEnvironment)
+        Temporary = file.Replace(groupIdToReplace, groupId)
     };
 }
 

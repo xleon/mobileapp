@@ -7,7 +7,6 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Presentation;
 using UIKit;
 using UserNotifications;
-using Firebase.CloudMessaging;
 
 namespace Toggl.iOS
 {
@@ -20,18 +19,11 @@ namespace Toggl.iOS
         {
 #if !USE_PRODUCTION_API
             System.Net.ServicePointManager.ServerCertificateValidationCallback
-                += (sender, certificate, chain, sslPolicyErrors) => true;
+                  += (sender, certificate, chain, sslPolicyErrors) => true;
 #endif
 
-            #if !DEBUG
-                Firebase.Core.App.Configure();
-            #endif
-
-            UNUserNotificationCenter.Current.Delegate = this;
-            UIApplication.SharedApplication.RegisterForRemoteNotifications();
-            Messaging.SharedInstance.Delegate = this;
-
             initializeAnalytics();
+
 
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
             Window.MakeKeyAndVisible();
@@ -48,6 +40,8 @@ namespace Toggl.iOS
             var accessLevel = app.GetAccessLevel();
             loginWithCredentialsIfNecessary(accessLevel);
             navigateAccordingToAccessLevel(accessLevel, app);
+
+            UNUserNotificationCenter.Current.Delegate = this;
 
 #if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();

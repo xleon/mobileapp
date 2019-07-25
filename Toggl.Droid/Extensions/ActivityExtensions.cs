@@ -64,7 +64,7 @@ namespace Toggl.Droid.Extensions
             var javaClass = Java.Lang.Class.FromType(typeof(BackgroundSyncJobSchedulerService));
             var component = new ComponentName(context, javaClass);
 
-            var builder = new JobInfo.Builder(JobServicesConstants.BackgroundSyncJobServiceJobId, component)
+            var builder = new JobInfo.Builder(BackgroundSyncJobSchedulerService.JobId, component)
                 .SetRequiredNetworkType(NetworkType.Any)
                 .SetPeriodic(periodicity)
                 .SetPersisted(true);
