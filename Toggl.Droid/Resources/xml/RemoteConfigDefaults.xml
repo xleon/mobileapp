@@ -1,19 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<defaultsMap> 
-    <entry> 
-        <key>UserRatingDialogDelayInDays</key> 
-        <value>5</value> 
+<defaultsMap>
+    <entry>
+        <key>UserRatingDialogDelayInDays</key>
+        <value>5</value>
+    </entry>
+    <entry>
+        <key>UserRatingDialogTrigger</key>
+        <value>none</value>
     </entry> 
-    <entry> 
-        <key>UserRatingDialogTrigger</key> 
-        <value>none</value> 
-    </entry> 
-    <entry> 
-        <key>day_count</key> 
-        <value>5</value> 
-    </entry> 
-    <entry> 
-        <key>criterion</key> 
-        <value>none</value> 
-    </entry> 
-</defaultsMap> 
+</defaultsMap>

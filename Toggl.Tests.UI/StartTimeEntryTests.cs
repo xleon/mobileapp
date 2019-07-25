@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Xamarin.UITest;
+using static Toggl.Tests.UI.Extensions.AppQueryExtensions;
 using static Toggl.Tests.UI.Extensions.MainExtensions;
 using static Toggl.Tests.UI.Extensions.StartTimeEntryExtensions;
 
@@ -33,7 +34,7 @@ namespace Toggl.Tests.UI
         {
             var description = "UI testing the Toggl App";
 
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
             app.Tap(StartTimeEntry.DoneButton);
 
             app.WaitForElement(query => query.Marked(description));
@@ -44,7 +45,7 @@ namespace Toggl.Tests.UI
         {
             var description = "UI testing the Toggl App";
 
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
             app.Tap(StartTimeEntry.CloseButton);
 
             app.WaitForElement(StartTimeEntry.DialogDiscard);
@@ -55,7 +56,7 @@ namespace Toggl.Tests.UI
         {
             var description = "UI testing the Toggl App";
 
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
             app.Tap(StartTimeEntry.CloseButton);
             app.Tap(StartTimeEntry.DialogDiscard);
 
@@ -68,11 +69,11 @@ namespace Toggl.Tests.UI
             var description = "UI testing the Toggl App";
             var edit = " - edit";
 
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
             app.Tap(StartTimeEntry.CloseButton);
             app.Tap(StartTimeEntry.DialogCancel);
 
-            app.EnterText(edit);
+            app.EnterTextInStartTimeEntryView(edit);
             app.Tap(StartTimeEntry.DoneButton);
 
             app.WaitForElement(query => query.Marked(description + edit));
@@ -82,7 +83,7 @@ namespace Toggl.Tests.UI
         public void AddingAProjectBeforeSavingPersistsTheProject()
         {
             const string description = "Field Research ";
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
 
             var projectName = "Meme Production";
             app.CreateProjectInStartView(projectName);
@@ -99,7 +100,7 @@ namespace Toggl.Tests.UI
         public void AddingAClientBeforeSavingPersistsTheClient()
         {
             const string description = "Field Research ";
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
 
             var projectName = "Meme Production";
             var clientName = "The World Wide Web";
@@ -121,12 +122,12 @@ namespace Toggl.Tests.UI
             var projectName = "Meme Production";
             var clientName = "The World Wide Web";
             app.WaitForElement(StartTimeEntry.DescriptionTextField);
-            app.EnterText(description);
-            app.EnterText($"@{projectName}");
+            app.EnterTextInStartTimeEntryView(description);
+            app.EnterTextInStartTimeEntryView($"@{projectName}");
             app.TapCreateProject(projectName);
             app.Tap(EditProject.ChangeClient);
             app.Tap(Client.AddFilterTextField);
-            app.EnterText(clientName);
+            app.EnterTextInStartTimeEntryView(clientName);
             app.TapCreateClient(clientName);
             app.WaitForElement(EditProject.CreateButton);
             app.Tap(EditProject.CreateButton);
@@ -138,11 +139,11 @@ namespace Toggl.Tests.UI
             const string anotherProject = "garden makeover";
             app.Tap(Main.StartTimeEntryButton);
             app.WaitForElement(StartTimeEntry.DescriptionTextField);
-            app.EnterText($"{secondDescription} @{anotherProject}");
+            app.EnterTextInStartTimeEntryView($"{secondDescription} @{anotherProject}");
             app.TapCreateProject(anotherProject);
             app.Tap(EditProject.ChangeClient);
             app.Tap(Client.AddFilterTextField);
-            app.EnterText(clientName);
+            app.EnterTextInStartTimeEntryView(clientName);
             app.TapSelectClient(clientName);
             app.WaitForElement(EditProject.CreateButton);
             app.Tap(EditProject.CreateButton);
@@ -159,7 +160,7 @@ namespace Toggl.Tests.UI
         public void CreatingATimeEntryWithASingleTagWorks()
         {
             const string description = "Working from home ";
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
 
             const string tag = "Tests";
             app.AddTagInStartView(tag);
@@ -186,7 +187,7 @@ namespace Toggl.Tests.UI
             const string tag = "Tests";
 
             // Create the time entry so the tag already exists when we select it
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
             app.AddTagInStartView(tag);
             app.Tap(StartTimeEntry.DoneButton);
             app.Tap(Main.StopTimeEntryButton);
@@ -194,7 +195,7 @@ namespace Toggl.Tests.UI
             //Actual test starts here
             app.Tap(Main.StartTimeEntryButton);
             app.WaitForElement(StartTimeEntry.DoneButton);
-            app.EnterText(secondDescription);
+            app.EnterTextInStartTimeEntryView(secondDescription);
             app.AddTagInStartView(tag, shouldCreateTag: false);
             app.Tap(StartTimeEntry.DoneButton);
             app.Tap(Main.StopTimeEntryButton);
@@ -214,7 +215,7 @@ namespace Toggl.Tests.UI
         public void AddingMultipleTagsBeforeSavingPersistsTheTags()
         {
             const string description = "Delicious meal ";
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
 
             var tags = new[] { "Tomato", "Kale", "Carrot", "Broccoli" };
             foreach (var tag in tags)
@@ -259,7 +260,7 @@ namespace Toggl.Tests.UI
 
             // Create a new entry to with the project from before
             app.Tap(Main.StartTimeEntryButton);
-            app.EnterText($"@");
+            app.EnterTextInStartTimeEntryView($"@");
             app.Tap(projectName);
             app.Tap(StartTimeEntry.DoneButton);
             app.Tap(Main.StopTimeEntryButton);
@@ -287,7 +288,7 @@ namespace Toggl.Tests.UI
 
             // Create a time entrty by selecting no project
             app.Tap(Main.StartTimeEntryButton);
-            app.EnterText($"@");
+            app.EnterTextInStartTimeEntryView($"@");
             app.Tap(q => q.Class("StartTimeEntryProjectsViewCell").Child(0));
             app.Tap(StartTimeEntry.DoneButton);
             app.Tap(Main.StopTimeEntryButton);

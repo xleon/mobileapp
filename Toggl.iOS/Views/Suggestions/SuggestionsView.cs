@@ -91,6 +91,7 @@ namespace Toggl.iOS.Suggestions
             AddSubview(titleLabel);
             titleLabel.TranslatesAutoresizingMaskIntoConstraints = false;
             titleLabel.Text = Resources.SuggestionsHeader;
+            titleLabel.IsAccessibilityElement = false;
             titleLabel.Font = UIFont.SystemFontOfSize(titleSize, UIFontWeight.Medium);
             titleLabel.TextColor = Colors.Main.SuggestionsTitle.ToNativeColor();
             titleLabel.TopAnchor.ConstraintEqualTo(Superview.TopAnchor, distanceAboveTitleLabel).Active = true;

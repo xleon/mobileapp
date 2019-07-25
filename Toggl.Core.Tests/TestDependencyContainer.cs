@@ -128,5 +128,9 @@ namespace Toggl.Core.UI
         internal ITogglDataSource MockDataSource { get; set; }
         protected override ITogglDataSource CreateDataSource()
             => MockDataSource;
+
+        internal IAccessibilityService MockAccessibilityService { get; set; }
+        protected override IAccessibilityService CreateAccessibilityService()
+            => MockAccessibilityService;
     }
 }

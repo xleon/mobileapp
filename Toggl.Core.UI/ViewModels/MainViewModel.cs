@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
@@ -55,6 +55,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly IStopwatchProvider stopwatchProvider;
         private readonly INavigationService navigationService;
+        private readonly IAccessibilityService accessibilityService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IRxActionFactory rxActionFactory;
         private readonly ISchedulerProvider schedulerProvider;
@@ -110,6 +111,7 @@ namespace Toggl.Core.UI.ViewModels
             IInteractorFactory interactorFactory,
             INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
+            IAccessibilityService accessibilityService,
             IAccessRestrictionStorage accessRestrictionStorage,
             ISchedulerProvider schedulerProvider,
             IStopwatchProvider stopwatchProvider,
@@ -130,6 +132,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
+            Ensure.Argument.IsNotNull(accessibilityService, nameof(accessibilityService));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
@@ -143,6 +146,7 @@ namespace Toggl.Core.UI.ViewModels
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
             this.schedulerProvider = schedulerProvider;
+            this.accessibilityService = accessibilityService;
             this.accessRestrictionStorage = accessRestrictionStorage;
             this.stopwatchProvider = stopwatchProvider;
             this.rxActionFactory = rxActionFactory;
@@ -264,6 +268,10 @@ namespace Toggl.Core.UI.ViewModels
 
             if (platformInfo.Platform == Platform.Giskard)
                 analyticsService.ApplicationInstallLocation.Track(platformInfo.InstallLocation);
+
+            SyncProgressState
+                .Subscribe(postAccessibilityAnnouncementAboutSync)
+                .DisposedBy(disposeBag);
         }
 
         public void Track(ITrackableEvent e)
@@ -484,6 +492,31 @@ namespace Toggl.Core.UI.ViewModels
                 onboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();
 
             return Navigate<TModel>();
+        }
+
+        private void postAccessibilityAnnouncementAboutSync(SyncProgress syncProgress)
+        {
+            string message = "";
+            switch (syncProgress)
+            {
+                case SyncProgress.Failed:
+                    message = Resources.SyncFailed;
+                    break;
+                case SyncProgress.OfflineModeDetected:
+                    message = Resources.SyncFailedOffline;
+                    break;
+                case SyncProgress.Synced:
+                    message = Resources.SuccessfullySyncedData;
+                    break;
+
+                //These 2 are not announced
+                case SyncProgress.Syncing:
+                    return;
+                case SyncProgress.Unknown:
+                    return;
+            }
+
+            accessibilityService.PostAnnouncement(message);
         }
     }
 }

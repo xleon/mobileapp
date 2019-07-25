@@ -1,10 +1,12 @@
 ﻿using Android.OS;
+using Android.App;
 using Firebase.Analytics;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Crashes;
 using System;
 using System.Collections.Generic;
 using Toggl.Core.Analytics;
+using AppCenterAnalytics = Microsoft.AppCenter.Analytics.Analytics;
 
 namespace Toggl.Droid.Services
 {
@@ -17,7 +19,7 @@ namespace Toggl.Droid.Services
         public AnalyticsServiceAndroid()
         {
 #if USE_ANALYTICS
-            firebaseAnalytics = FirebaseAnalytics.GetInstance(Application.Context);
+            firebaseAnalytics = Firebase.Analytics.FirebaseAnalytics.GetInstance(Android.App.Application.Context);
 #endif
         }
 
@@ -26,7 +28,7 @@ namespace Toggl.Droid.Services
 #if USE_ANALYTICS
             var bundle = bundleFromParameters(parameters);
             firebaseAnalytics.LogEvent(eventName, bundle);
-            AppCenterAnalytics.TrackEvent(eventName, trimLongParameters(parameters));
+            Microsoft.AppCenter.Analytics.Analytics.TrackEvent(eventName, trimLongParameters(parameters));
 #endif
         }
 

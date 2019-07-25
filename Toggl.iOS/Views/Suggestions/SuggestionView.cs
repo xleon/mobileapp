@@ -3,11 +3,9 @@ using System;
 using System.Diagnostics;
 using UIKit;
 using ObjCRuntime;
-using System;
 using Toggl.Core.Suggestions;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
-using UIKit;
 using CoreGraphics;
 
 namespace Toggl.iOS
@@ -39,24 +37,11 @@ namespace Toggl.iOS
             }
         }
 
-        public override string AccessibilityLabel
-        {
-            get
-            {
-                var accessibilityLabel = "Suggestion, ";
-                if (!string.IsNullOrEmpty(suggestion.Description))
-                    accessibilityLabel += $"Description: {suggestion.Description}, ";
-                if (suggestion.HasProject)
-                    accessibilityLabel += $"Project: {suggestion.ProjectName }, ";
-                accessibilityLabel += "tap to start a time entry";
-                return accessibilityLabel;
-            }
-            set => base.AccessibilityLabel = value;
-        }
-
         private void onSuggestionChanged()
         {
             if (Suggestion == null) return;
+
+            updateAccessibilityProperties();
 
             Hidden = false;
 
@@ -87,6 +72,8 @@ namespace Toggl.iOS
             base.AwakeFromNib();
 
             IsAccessibilityElement = true;
+            AccessibilityHint = Resources.SuggestionAccessibilityHint;
+            AccessibilityTraits = UIAccessibilityTrait.Button;
 
             ProjectDot.Image = ProjectDot
                 .Image
@@ -121,6 +108,19 @@ namespace Toggl.iOS
                 = ProjectLabel.Hidden
                 = ClientLabel.Hidden
                 = true;
+        }
+
+        private void updateAccessibilityProperties()
+        {
+            AccessibilityLabel = $"{Resources.Suggestion}, ";
+            if (!string.IsNullOrEmpty(suggestion.Description))
+                AccessibilityLabel += $"{suggestion.Description}, ";
+            if (suggestion.HasProject)
+                AccessibilityLabel += $"{Resources.Project}: {suggestion.ProjectName }, ";
+            if (suggestion.HasTask)
+                AccessibilityLabel += $"{Resources.Task}: {suggestion.TaskName}, ";
+            if (suggestion.HasClient)
+                AccessibilityLabel += $"{Resources.Client}: {suggestion.ClientName}";
         }
 
         [Conditional("DEBUG")]

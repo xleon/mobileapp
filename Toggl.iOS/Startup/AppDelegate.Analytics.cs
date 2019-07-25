@@ -12,7 +12,6 @@ namespace Toggl.iOS
                 typeof(Microsoft.AppCenter.Crashes.Crashes),
                 typeof(Microsoft.AppCenter.Analytics.Analytics));
 #endif
-
 #if USE_ANALYTICS
             Firebase.Core.App.Configure();
             Google.SignIn.SignIn.SharedInstance.ClientID =

@@ -29,6 +29,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     PermissionsChecker,
                     NavigationService,
                     RemoteConfigService,
+                    AccessibilityService,
                     AccessRestrictionStorage,
                     StopwatchProvider,
                     RxActionFactory,
@@ -56,6 +57,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool usePermissionsChecker,
                     bool useNavigationService,
                     bool useRemoteConfigService,
+                    bool useAccessibilityService,
                     bool useAccessRestrictionStorage,
                     bool useStopwatchProvider,
                     bool useRxActionFactory,
@@ -76,6 +78,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var permissionsService = usePermissionsChecker ? PermissionsChecker : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
+                var accessibilityService = useAccessibilityService ? AccessibilityService : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
                 var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
@@ -98,6 +101,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         permissionsService,
                         navigationService,
                         remoteConfigService,
+                        accessibilityService,
                         accessRestrictionStorage,
                         stopwatchProvider,
                         rxActionFactory,

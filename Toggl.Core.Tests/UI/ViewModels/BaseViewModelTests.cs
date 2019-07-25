@@ -1,4 +1,4 @@
-using Microsoft.Reactive.Testing;
+﻿using Microsoft.Reactive.Testing;
 using NSubstitute;
 using System.Reactive;
 using Toggl.Core.Diagnostics;
@@ -27,6 +27,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         protected IPlatformInfo PlatformInfo { get; } = Substitute.For<IPlatformInfo>();
         protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
         protected IRemoteConfigService RemoteConfigService { get; } = Substitute.For<IRemoteConfigService>();
+        protected IAccessibilityService AccessibilityService { get; } = Substitute.For<IAccessibilityService>();
         protected IErrorHandlingService ErrorHandlingService { get; } = Substitute.For<IErrorHandlingService>();
         protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
         protected IStopwatchProvider StopwatchProvider { get; } = Substitute.For<IStopwatchProvider>();
