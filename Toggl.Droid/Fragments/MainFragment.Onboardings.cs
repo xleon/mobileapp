@@ -52,7 +52,7 @@ namespace Toggl.Droid.Fragments
             mainRecyclerViewScrollChangesDisposable = mainRecyclerView
                 .Rx()
                 .OnScrolled()
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(mainRecyclerViewScrollChanges.OnNext);
         }
 
@@ -149,7 +149,7 @@ namespace Toggl.Droid.Fragments
             showTapToEditOnboardingStepObservable
                 .Where(shouldShowStep => shouldShowStep)
                 .Select(_ => findOldestTimeEntryView())
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(updateTapToEditOnboardingStep)
                 .DisposedBy(DisposeBag);
         }

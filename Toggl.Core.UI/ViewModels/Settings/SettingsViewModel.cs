@@ -275,7 +275,7 @@ namespace Toggl.Core.UI.ViewModels
         public override async Task Initialize()
         {
             await base.Initialize();
-            await checkCalendarPermissions();
+            checkCalendarPermissions();
             navigationFromMainViewModelStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenSettingsView);
             stopwatchProvider.Remove(MeasuredOperation.OpenStartView);
         }
@@ -482,10 +482,10 @@ namespace Toggl.Core.UI.ViewModels
             syncManager.InitiatePushSync();
         }
 
-        private async Task checkCalendarPermissions()
+        private void checkCalendarPermissions()
         {
-            var authorized = permissionsChecker.CalendarPermissionGranted.FirstAsync().GetAwaiter().GetResult();
-            calendarPermissionGranted.OnNext(authorized);
+            permissionsChecker.CalendarPermissionGranted.FirstAsync()
+                .Subscribe(calendarPermissionGranted.OnNext);
         }
     }
 }

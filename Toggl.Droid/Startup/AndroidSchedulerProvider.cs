@@ -14,7 +14,7 @@ namespace Toggl.Droid
 
         public AndroidSchedulerProvider()
         {
-            MainScheduler = new HandlerScheduler(new Handler(Looper.MainLooper), Looper.MainLooper.Thread.Id);
+            MainScheduler = new HandlerScheduler(new Handler(Looper.MainLooper));
             DefaultScheduler = Scheduler.Default;
             BackgroundScheduler = NewThreadScheduler.Default;
         }

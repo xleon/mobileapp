@@ -2,30 +2,31 @@
 using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using Toggl.Core.Analytics;
 
 namespace Toggl.Droid
 {
+    /// <summary>
+    /// Custom handler scheduler
+    /// </summary>
+    /// <remarks>
+    /// Roughly based on reactiveui/ReactiveUI HandlerScheduler class
+    /// See https://github.com/reactiveui/ReactiveUI/blob/master/src/ReactiveUI/Platforms/android/HandlerScheduler.cs
+    /// </remarks>
     public sealed class HandlerScheduler : IScheduler
     {
-        private readonly long looperId;
         private readonly Handler handler;
 
         public DateTimeOffset Now => DateTimeOffset.Now;
 
-        public HandlerScheduler(Handler handler, long? threadIdAssociatedWithHandler)
+        public HandlerScheduler(Handler handler)
         {
             this.handler = handler;
-            looperId = threadIdAssociatedWithHandler ?? -1;
         }
 
         public IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             bool isCancelled = false;
             var innerDisp = new SerialDisposable { Disposable = Disposable.Empty };
-
-            if (looperId > 0 && looperId == Java.Lang.Thread.CurrentThread().Id)
-                return action(this, state);
 
             handler.Post(() => 
             {
