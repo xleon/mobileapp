@@ -10,11 +10,11 @@ namespace Toggl.Tests.UI
 
         public static iOSApp GetApp()
         {
-            reinstallApp(bootedDeviceId);
+            //reinstallApp(bootedDeviceId);
 
             var app = ConfigureApp.iOS
                 .InstalledApp("com.toggl.daneel.debug")
-                .PreferIdeSettings()
+                .DeviceIdentifier(System.Environment.GetEnvironmentVariable("SIMULATOR_UDID"))
                 .StartApp();
 
             bootedDeviceId = app.Device.DeviceIdentifier;
