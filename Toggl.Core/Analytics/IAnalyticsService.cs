@@ -172,6 +172,8 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<string, string, string, string> DebugSchedulerError { get; }
 
+        IAnalyticsEvent<string, string> DebugNavigationError { get; }
+
         void SetAppCenterUserId(long id);
         void ResetAppCenterUserId();
 

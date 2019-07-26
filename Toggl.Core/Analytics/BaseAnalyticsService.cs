@@ -263,6 +263,9 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("Type", "Source", "ExceptionType", "StackTrace")]
         public IAnalyticsEvent<string, string, string, string> DebugSchedulerError { get; protected set; }
 
+        [AnalyticsEvent("Action", "Type")]
+        public IAnalyticsEvent<string, string> DebugNavigationError { get; protected set; }
+
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())
