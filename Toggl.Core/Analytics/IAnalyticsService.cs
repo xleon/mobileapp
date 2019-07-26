@@ -170,6 +170,8 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; }
 
+        IAnalyticsEvent<string, string, string, string> DebugSchedulerError { get; }
+
         void SetAppCenterUserId(long id);
         void ResetAppCenterUserId();
 

@@ -259,7 +259,10 @@ namespace Toggl.Core.Analytics
 
         [AnalyticsEvent("Location")]
         public IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; protected set; }
-        
+
+        [AnalyticsEvent("Type", "Source", "ExceptionType", "StackTrace")]
+        public IAnalyticsEvent<string, string, string, string> DebugSchedulerError { get; protected set; }
+
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())
