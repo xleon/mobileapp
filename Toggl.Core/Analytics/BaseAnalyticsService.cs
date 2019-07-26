@@ -264,6 +264,9 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("Location")]
         public IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; protected set; }
 
+        [AnalyticsEvent("Installed")]
+        public IAnalyticsEvent<bool> WatchPaired { get; protected set; }
+
         public void TrackAnonymized(Exception exception)
         {
             if (exception.IsAnonymized())

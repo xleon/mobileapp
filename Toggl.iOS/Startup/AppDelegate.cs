@@ -5,6 +5,7 @@ using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Presentation;
+using Toggl.iOS.Services;
 using UIKit;
 using UserNotifications;
 
@@ -24,7 +25,6 @@ namespace Toggl.iOS
 
             initializeAnalytics();
 
-
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
             Window.MakeKeyAndVisible();
 
@@ -42,6 +42,9 @@ namespace Toggl.iOS
             navigateAccordingToAccessLevel(accessLevel, app);
 
             UNUserNotificationCenter.Current.Delegate = this;
+
+            var watchservice = new WatchService();
+            watchservice.TryLogWatchConnectivity();
 
 #if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();

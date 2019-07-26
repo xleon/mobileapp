@@ -173,6 +173,8 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; }
 
+        IAnalyticsEvent<bool> WatchPaired { get; }
+
         void SetAppCenterUserId(long id);
         void ResetAppCenterUserId();
 
