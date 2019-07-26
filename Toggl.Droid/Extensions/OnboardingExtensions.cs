@@ -81,7 +81,7 @@ namespace Toggl.Droid.Extensions
             }
 
             var subscriptionDisposable = step.ShouldBeVisible
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(toggleVisibilityOnMainThread);
 
             return Disposable.Create(() =>

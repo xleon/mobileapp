@@ -217,7 +217,7 @@ namespace Toggl.Droid.Fragments
                 .Where(shouldShowStep => shouldShowStep)
                 .Select(_ => findEarliestTimeEntryView())
                 .DistinctUntilChanged()
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(updateSwipeRightOnboardingStep)
                 .DisposedBy(DisposeBag);
         }
@@ -296,7 +296,7 @@ namespace Toggl.Droid.Fragments
                 .Where(shouldShowStep => shouldShowStep)
                 .Select(_ => findEarliestTimeEntryView())
                 .DistinctUntilChanged()
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(updateSwipeLeftOnboardingStep)
                 .DisposedBy(DisposeBag);
         }

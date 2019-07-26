@@ -129,7 +129,7 @@ namespace Toggl.iOS.Extensions
             IDisposable visibilityDisposable = null;
             visibilityDisposable = step.ShouldBeVisible
                 .Where(visible => visible == false)
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(_ =>
                 {
                     cell.RemoveGestureRecognizer(panGestureRecognizer);

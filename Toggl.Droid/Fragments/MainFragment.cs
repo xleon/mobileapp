@@ -182,12 +182,12 @@ namespace Toggl.Droid.Fragments
                  .DisposedBy(DisposeBag);
 
             ViewModel.TimeEntries
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(mainRecyclerAdapter.UpdateCollection)
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsTimeEntryRunning
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(updateRecyclerViewPadding)
                 .DisposedBy(DisposeBag);
 
