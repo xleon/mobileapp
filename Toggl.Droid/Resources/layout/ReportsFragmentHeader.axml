@@ -55,9 +55,11 @@
                 android:layout_height="22dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_width="0dp"
                 local:layout_constraintTop_toBottomOf="@id/ReportsSummaryTotal"
                 local:layout_constraintLeft_toLeftOf="@id/ReportsSummaryTotal"
+                local:layout_constraintRight_toLeftOf="@+id/BillablePercentageViewContainer"
                 local:layout_constraintBottom_toBottomOf="parent" />
             <TextView
                 android:id="@+id/ReportsSummaryBillableLabel"
@@ -84,14 +86,14 @@
                 local:layout_constraintTop_toBottomOf="@id/ReportsSummaryBillableLabel"
                 local:layout_constraintLeft_toLeftOf="@id/ReportsSummaryBillableLabel" />
             <FrameLayout
+                android:id="@+id/BillablePercentageViewContainer"
                 android:background="#1E328FFF"
                 android:layout_height="6dp"
                 android:layout_marginRight="12dp"
-                android:layout_marginBottom="16dp"
                 android:layout_width="0dp"
                 local:layout_constraintLeft_toLeftOf="@id/ReportsSummaryBillable"
                 local:layout_constraintRight_toRightOf="parent"
-                local:layout_constraintBottom_toBottomOf="parent">
+                local:layout_constraintBottom_toBottomOf="@id/ReportsTotalChartImageView">
                 <View
                     android:id="@+id/BillablePercentageView"
                     android:background="#328FFF"
