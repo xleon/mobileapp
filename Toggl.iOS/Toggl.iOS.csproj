@@ -1666,7 +1666,6 @@
     <Compile Include="Views\RoundedView.cs" />
     <Compile Include="Views\Reports\PieChartView.cs" />
     <Compile Include="Views\Reports\PercentageView.cs" />
-    <Compile Include="Services\ITopViewControllerProvider.cs" />
     <Compile Include="Views\Reports\ReportsLegendViewCell.cs" />
     <Compile Include="Views\Reports\ReportsLegendViewCell.designer.cs">
       <DependentUpon>ReportsLegendViewCell.cs</DependentUpon>
