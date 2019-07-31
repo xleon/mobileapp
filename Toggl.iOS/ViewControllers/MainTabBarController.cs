@@ -71,12 +71,6 @@ namespace Toggl.iOS.ViewControllers
         {
             var targetViewController = ViewControllers.Single(vc => vc.TabBarItem == item);
 
-            if (targetViewController is UINavigationController navigationController
-                && navigationController.TopViewController is ReportsViewController)
-            {
-                ViewModel.StartReportsStopwatch();
-            }
-
             if (targetViewController == SelectedViewController
                 && tryGetScrollableController() is IScrollableToTop scrollable)
             {

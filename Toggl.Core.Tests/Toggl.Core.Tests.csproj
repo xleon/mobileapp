@@ -32,4 +32,7 @@
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Diagnostics\" />
+  </ItemGroup>
 </Project>

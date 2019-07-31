@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Calendar;
 using Toggl.Core.DataSources;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
@@ -40,7 +39,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private readonly IOnboardingStorage onboardingStorage;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IPermissionsChecker permissionsChecker;
-        private readonly IStopwatchProvider stopwatchProvider;
         private readonly IRxActionFactory rxActionFactory;
 
         private readonly ISubject<bool> shouldShowOnboardingSubject;
@@ -91,7 +89,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             ISchedulerProvider schedulerProvider,
             IPermissionsChecker permissionsChecker,
             INavigationService navigationService,
-            IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory)
             : base(navigationService)
         {
@@ -104,7 +101,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
-            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.dataSource = dataSource;
@@ -116,7 +112,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             this.onboardingStorage = onboardingStorage;
             this.schedulerProvider = schedulerProvider;
             this.permissionsChecker = permissionsChecker;
-            this.stopwatchProvider = stopwatchProvider;
             this.rxActionFactory = rxActionFactory;
 
             var isCompleted = onboardingStorage.CompletedCalendarOnboarding();
@@ -318,8 +313,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             {
                 case CalendarItemSource.TimeEntry when calendarItem.TimeEntryId.HasValue:
                     analyticsService.EditViewOpenedFromCalendar.Track();
-                    var stopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.EditTimeEntryFromCalendar);
-                    stopwatch.Start();
                     await Navigate<EditTimeEntryViewModel, long[]>(new[] { calendarItem.TimeEntryId.Value });
                     break;
 

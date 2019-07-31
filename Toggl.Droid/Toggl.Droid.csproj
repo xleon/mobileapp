@@ -204,9 +204,6 @@
     <Reference Include="System.Collections.Immutable">
       <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin.Firebase.Perf">
-      <HintPath>Xamarin.Firebase.Perf.dll</HintPath>
-    </Reference>
     <Reference Include="Java.Interop" />
     <Reference Include="Xamarin.Firebase.Config">
       <HintPath>..\packages\Xamarin.Firebase.Config.60.1142.1\lib\MonoAndroid80\Xamarin.Firebase.Config.dll</HintPath>
@@ -396,7 +393,6 @@
     <Compile Include="Extensions\Reactive\HueSaturationPickerViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\LayoutParamsExtensions.cs" />
     <Compile Include="Extensions\Reactive\PagerExtensions.cs" />
-    <Compile Include="Extensions\TracingExtensions.cs" />
     <Compile Include="Extensions\Reactive\RecyclerViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\ValueSliderViewExtensions.cs" />
     <Compile Include="Fragments\CalendarFragment.cs" />
@@ -587,7 +583,6 @@
     <Compile Include="Activities\TokenResetActivity.ViewBinds.cs">
       <DependentUpon>TokenResetActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\FirebaseStopwatchProviderAndroid.cs" />
     <Compile Include="ViewHolders\SelectDefaultWorkspaceViewHolder.cs" />
     <Compile Include="Fragments\SelectDefaultWorkspaceFragment.cs" />
     <Compile Include="Fragments\SelectDefaultWorkspaceFragment.ViewBinds.cs">
@@ -1162,7 +1157,6 @@
   <Import Project="..\packages\Xamarin.Firebase.Iid.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Iid.targets" Condition="Exists('..\packages\Xamarin.Firebase.Iid.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Iid.targets')" />
   <Import Project="..\packages\Xamarin.Firebase.Analytics.Impl.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Analytics.Impl.targets" Condition="Exists('..\packages\Xamarin.Firebase.Analytics.Impl.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Analytics.Impl.targets')" />
   <Import Project="..\packages\Xamarin.Firebase.Analytics.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Analytics.targets" Condition="Exists('..\packages\Xamarin.Firebase.Analytics.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Analytics.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.Perf.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Perf.targets" Condition="Exists('..\packages\Xamarin.Firebase.Perf.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Perf.targets')" />
   <Import Project="..\packages\Xamarin.GooglePlayServices.Base.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Base.targets" Condition="Exists('..\packages\Xamarin.GooglePlayServices.Base.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Base.targets')" />
   <Import Project="..\packages\Xamarin.GooglePlayServices.Auth.Api.Phone.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Auth.Api.Phone.targets" Condition="Exists('..\packages\Xamarin.GooglePlayServices.Auth.Api.Phone.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Auth.Api.Phone.targets')" />
   <Import Project="..\packages\Xamarin.GooglePlayServices.Auth.Base.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Auth.Base.targets" Condition="Exists('..\packages\Xamarin.GooglePlayServices.Auth.Base.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Auth.Base.targets')" />

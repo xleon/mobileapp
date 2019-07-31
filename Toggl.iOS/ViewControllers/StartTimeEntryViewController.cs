@@ -200,11 +200,6 @@ namespace Toggl.iOS.ViewControllers
                 .ObserveOn(SynchronizationContext.Current)
                 .Subscribe(ViewModel.SetTextSpans.Inputs)
                 .DisposedBy(DisposeBag);
-
-            source.TableRenderCallback = () =>
-            {
-                ViewModel.StopSuggestionsRenderingStopwatch();
-            };
         }
 
         private void onTextFieldInfo(TextFieldInfo textFieldInfo)

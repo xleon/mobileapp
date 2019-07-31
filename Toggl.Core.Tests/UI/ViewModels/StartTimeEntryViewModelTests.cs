@@ -82,7 +82,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     NavigationService,
                     AnalyticsService,
                     SchedulerProvider,
-                    StopwatchProvider,
                     RxActionFactory
                 );
         }
@@ -100,7 +99,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useNavigationService,
                 bool useAnalyticsService,
                 bool useSchedulerProvider,
-                bool useStopwatchProvider,
                 bool useRxActionFactory)
             {
                 var dataSource = useDataSource ? DataSource : null;
@@ -111,7 +109,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var navigationService = useNavigationService ? NavigationService : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
-                var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
@@ -124,7 +121,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         navigationService,
                         analyticsService,
                         schedulerProvider,
-                        stopwatchProvider,
                         rxActionFactory);
 
                 tryingToConstructWithEmptyParameters

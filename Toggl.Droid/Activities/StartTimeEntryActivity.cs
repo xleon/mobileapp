@@ -29,7 +29,6 @@ namespace Toggl.Droid.Activities
 
         private PopupWindow onboardingPopupWindow;
         private IDisposable onboardingDisposable;
-        private EventHandler onLayoutFinished;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -127,9 +126,6 @@ namespace Toggl.Droid.Activities
                 .Select(text => text.AsImmutableSpans(descriptionField.SelectionStart))
                 .Subscribe(ViewModel.SetTextSpans.Inputs)
                 .DisposedBy(DisposeBag);
-
-            onLayoutFinished = (s, e) => ViewModel.StopSuggestionsRenderingStopwatch();
-            recyclerView.ViewTreeObserver.GlobalLayout += onLayoutFinished;
         }
 
         protected override void OnResume()
@@ -137,18 +133,11 @@ namespace Toggl.Droid.Activities
             base.OnResume();
             descriptionField.RequestFocus();
             selectProjectToolbarButton.LayoutChange += onSelectProjectToolbarButtonLayoutChanged;
-            recyclerView.ViewTreeObserver.GlobalLayout += onLayoutFinished;
         }
 
         private void onSelectProjectToolbarButtonLayoutChanged(object sender, View.LayoutChangeEventArgs changeEventArgs)
         {
             selectProjectToolbarButton.Post(setupStartTimeEntryOnboardingStep);
-        }
-
-        protected override void OnPause()
-        {
-            base.OnPause();
-            recyclerView.ViewTreeObserver.GlobalLayout -= onLayoutFinished;
         }
 
         protected override void OnStop()

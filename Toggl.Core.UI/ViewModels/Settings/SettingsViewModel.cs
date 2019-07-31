@@ -8,7 +8,6 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.DTOs;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
@@ -49,7 +48,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IInteractorFactory interactorFactory;
         private readonly IPrivateSharedStorageService privateSharedStorageService;
-        private readonly IStopwatchProvider stopwatchProvider;
         private readonly IRxActionFactory rxActionFactory;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IPermissionsChecker permissionsChecker;
@@ -58,7 +56,6 @@ namespace Toggl.Core.UI.ViewModels
         private bool isLoggingOut;
         private IThreadSafeUser currentUser;
         private IThreadSafePreferences currentPreferences;
-        private IStopwatch navigationFromMainViewModelStopwatch;
 
         public string Title { get; private set; } = Resources.Settings;
         public bool CalendarSettingsEnabled => onboardingStorage.CompletedCalendarOnboarding();
@@ -109,7 +106,6 @@ namespace Toggl.Core.UI.ViewModels
             IOnboardingStorage onboardingStorage,
             INavigationService navigationService,
             IPrivateSharedStorageService privateSharedStorageService,
-            IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory,
             IPermissionsChecker permissionsChecker,
             ISchedulerProvider schedulerProvider)
@@ -124,7 +120,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
-            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
@@ -138,7 +133,6 @@ namespace Toggl.Core.UI.ViewModels
             this.interactorFactory = interactorFactory;
             this.userAccessManager = userAccessManager;
             this.onboardingStorage = onboardingStorage;
-            this.stopwatchProvider = stopwatchProvider;
             this.schedulerProvider = schedulerProvider;
             this.permissionsChecker = permissionsChecker;
             this.privateSharedStorageService = privateSharedStorageService;
@@ -262,15 +256,11 @@ namespace Toggl.Core.UI.ViewModels
         {
             await base.Initialize();
             await checkCalendarPermissions();
-            navigationFromMainViewModelStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenSettingsView);
-            stopwatchProvider.Remove(MeasuredOperation.OpenStartView);
         }
 
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            navigationFromMainViewModelStopwatch?.Stop();
-            navigationFromMainViewModelStopwatch = null;
             checkCalendarPermissions();
         }
 
