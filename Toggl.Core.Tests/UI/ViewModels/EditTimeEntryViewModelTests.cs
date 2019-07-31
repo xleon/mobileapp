@@ -1045,6 +1045,38 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
+            public async Task TracksTheCloseReasonForSingleTimeEntry()
+            {
+                View
+                    .ConfirmDestructiveAction(ActionType.DiscardEditingChanges)
+                    .Returns(Observable.Return(true));
+
+                await ViewModel.Initialize(new[] { 123L });
+                TestScheduler.Start();
+                ViewModel.Description.Accept("This changes the description.");
+                ViewModel.CloseWithDefaultResult();
+                TestScheduler.Start();
+
+                AnalyticsService.EditViewClosed.Received().Track(EditViewCloseReason.Close);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksTheCloseReasonForGroupedTimeEntries()
+            {
+                View
+                    .ConfirmDestructiveAction(ActionType.DiscardEditingChanges)
+                    .Returns(Observable.Return(true));
+
+                await ViewModel.Initialize(TimeEntriesGroupIds);
+                TestScheduler.Start();
+                ViewModel.Description.Accept("This changes the description.");
+                ViewModel.CloseWithDefaultResult();
+                TestScheduler.Start();
+
+                AnalyticsService.EditViewClosed.Received().Track(EditViewCloseReason.GroupClose);
+            }
+
+            [Fact, LogIfTooSlow]
             public async Task DoesNotCloseTheViewIfUserClicksOnTheContinueEditingButton()
             {
                 View
@@ -1794,6 +1826,26 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
+            public async Task TracksTheCloseReasonForSingleTimeEntry()
+            {
+                await ViewModel.Initialize(new[] { 123L });
+                ViewModel.Delete.Execute();
+                TestScheduler.Start();
+
+                AnalyticsService.EditViewClosed.Received().Track(EditViewCloseReason.Delete);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksTheCloseReasonForGroupedTimeEntries()
+            {
+                await ViewModel.Initialize(TimeEntriesGroupIds);
+                ViewModel.Delete.Execute();
+                TestScheduler.Start();
+
+                AnalyticsService.EditViewClosed.Received().Track(EditViewCloseReason.GroupDelete);
+            }
+
+            [Fact, LogIfTooSlow]
             public async Task ClosesViewModelAfterDeletionForTimeEntriesGroup()
             {
                 AdjustTimeEntries(TimeEntriesGroupIds, te => te);
@@ -1854,6 +1906,27 @@ namespace Toggl.Core.Tests.UI.ViewModels
                    .Received()
                    .UpdateMultipleTimeEntries(Arg.Is<EditTimeEntryDto[]>(dtos => DtosEqualTimeEntries(dtos, Entries)));
                 await interactor.Received().Execute();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksTheCloseReasonWhenSomethingChanged()
+            {
+                await ViewModel.Initialize(ids);
+                ViewModel.Description.Accept("Hello there");
+                ViewModel.Save.Execute();
+                TestScheduler.Start();
+
+                AnalyticsService.EditViewClosed.Received().Track(EditViewCloseReason.GroupSave);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksTheCloseReasonWhenNothingChanged()
+            {
+                await ViewModel.Initialize(ids);
+                ViewModel.Save.Execute();
+                TestScheduler.Start();
+
+                AnalyticsService.EditViewClosed.Received().Track(EditViewCloseReason.GroupSaveWithoutChange);
             }
         }
 
@@ -1941,6 +2014,27 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 View.Received().Close();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksTheCloseReasonWhenSomethingChanged()
+            {
+                await ViewModel.Initialize(new[] { 123L });
+                ViewModel.Description.Accept("Hello there");
+                ViewModel.Save.Execute();
+                TestScheduler.Start();
+
+                AnalyticsService.EditViewClosed.Received().Track(EditViewCloseReason.Save);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksTheCloseReasonWhenNothingChanged()
+            {
+                await ViewModel.Initialize(new[] { 123L });
+                ViewModel.Save.Execute();
+                TestScheduler.Start();
+
+                AnalyticsService.EditViewClosed.Received().Track(EditViewCloseReason.SaveWithoutChange);
             }
         }
     }

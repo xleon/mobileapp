@@ -469,6 +469,7 @@ namespace Toggl.Core.UI.ViewModels
                     return;
             }
 
+            analyticsService.EditViewClosed.Track(closeReason(EditViewCloseReason.Close));
             base.CloseWithDefaultResult();
         }
 
@@ -488,6 +489,10 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task save()
         {
+            var reason = await isDirty()
+                ? EditViewCloseReason.Save
+                : EditViewCloseReason.SaveWithoutChange;
+
             OnboardingStorage.EditedTimeEntry();
 
             var timeEntries = await interactorFactory.GetMultipleTimeEntriesById(TimeEntryIds).Execute();
@@ -514,7 +519,7 @@ namespace Toggl.Core.UI.ViewModels
                 .UpdateMultipleTimeEntries(timeEntriesDtos)
                 .Execute()
                 .ObserveOn(schedulerProvider.MainScheduler)
-                .SubscribeToErrorsAndCompletion((Exception ex) => Close(), () => Close())
+                .SubscribeToErrorsAndCompletion((Exception ex) => close(reason), () => close(reason))
                 .DisposedBy(disposeBag);
         }
 
@@ -545,7 +550,7 @@ namespace Toggl.Core.UI.ViewModels
             var isDeletionConfirmed = await delete(actionType, TimeEntryIds.Length, interactor);
 
             if (isDeletionConfirmed)
-                Close();
+                close(EditViewCloseReason.Delete);
         }
 
         private async Task<bool> delete(ActionType actionType, int entriesCount, IInteractor<IObservable<Unit>> deletionInteractor)
@@ -587,6 +592,29 @@ namespace Toggl.Core.UI.ViewModels
 
             public static ProjectClientTaskInfo Empty
                 => new ProjectClientTaskInfo(null, null, null, null);
+        }
+
+        private void close(EditViewCloseReason reason)
+        {
+            analyticsService.EditViewClosed.Track(closeReason(reason));
+            Close();
+        }
+
+        private EditViewCloseReason closeReason(EditViewCloseReason reason)
+        {
+            switch (reason)
+            {
+                case EditViewCloseReason.Close when IsEditingGroup:
+                    return EditViewCloseReason.GroupClose;
+                case EditViewCloseReason.Delete when IsEditingGroup:
+                    return EditViewCloseReason.GroupDelete;
+                case EditViewCloseReason.Save when IsEditingGroup:
+                    return EditViewCloseReason.GroupSave;
+                case EditViewCloseReason.SaveWithoutChange when IsEditingGroup:
+                    return EditViewCloseReason.GroupSaveWithoutChange;
+                default:
+                    return reason;
+            }
         }
     }
 }

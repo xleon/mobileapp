@@ -83,6 +83,8 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<EditViewTapSource> EditViewTapped { get; }
 
+        IAnalyticsEvent<EditViewCloseReason> EditViewClosed { get; }
+
         IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; }
 
         IAnalyticsEvent LostWorkspaceAccess { get; }

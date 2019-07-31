@@ -108,6 +108,9 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("TapSource")]
         public IAnalyticsEvent<EditViewTapSource> EditViewTapped { get; set; }
 
+        [AnalyticsEvent("Reason")]
+        public IAnalyticsEvent<EditViewCloseReason> EditViewClosed { get; protected set; }
+
         [AnalyticsEvent("NumberOfCreatedPlaceholders")]
         public IAnalyticsEvent<int> WorkspacePlaceholdersCreated { get; protected set; }
 
