@@ -1808,11 +1808,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task TracksDeletionOfSingleTimeEntryUsingTheAnaltyticsService()
             {
-                await ViewModel.Initialize(TimeEntriesGroupIds);
+                await ViewModel.Initialize(new[] { 123L });
                 ViewModel.Delete.Execute();
                 TestScheduler.Start();
 
-                AnalyticsService.DeleteTimeEntry.Received().Track();
+                AnalyticsService.DeleteTimeEntry.Received().Track(DeleteTimeEntryOrigin.EditView);
             }
 
             [Fact, LogIfTooSlow]
@@ -1824,7 +1824,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Delete.Execute();
                 TestScheduler.Start();
 
-                AnalyticsService.DeleteTimeEntry.Received().Track();
+                AnalyticsService.DeleteTimeEntry.Received().Track(DeleteTimeEntryOrigin.GroupedEditView);
             }
         }
 

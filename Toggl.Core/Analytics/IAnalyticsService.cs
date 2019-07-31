@@ -55,7 +55,7 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent RatingViewSecondStepDontSendFeedback { get; }
 
-        IAnalyticsEvent DeleteTimeEntry { get; }
+        IAnalyticsEvent<DeleteTimeEntryOrigin> DeleteTimeEntry { get; }
 
         IAnalyticsEvent<string> ApplicationShortcut { get; }
 

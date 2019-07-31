@@ -51,8 +51,8 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("CurrentPage")]
         public IAnalyticsEvent<Type> CurrentPage { get; protected set; }
 
-        [AnalyticsEvent]
-        public IAnalyticsEvent DeleteTimeEntry { get; protected set; }
+        [AnalyticsEvent("Source")]
+        public IAnalyticsEvent<DeleteTimeEntryOrigin> DeleteTimeEntry { get; protected set; }
 
         [AnalyticsEvent("ApplicationShortcutType")]
         public IAnalyticsEvent<string> ApplicationShortcut { get; protected set; }

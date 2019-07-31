@@ -558,7 +558,12 @@ namespace Toggl.Core.UI.ViewModels
             await deletionInteractor.Execute();
 
             syncManager.InitiatePushSync();
-            analyticsService.DeleteTimeEntry.Track();
+
+            var deleteMode = entriesCount > 1
+                ? DeleteTimeEntryOrigin.GroupedEditView
+                : DeleteTimeEntryOrigin.EditView;
+
+            analyticsService.DeleteTimeEntry.Track(deleteMode);
 
             return true;
         }
