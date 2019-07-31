@@ -174,7 +174,7 @@ namespace Toggl.iOS.ViewControllers
             StopTimeEntryButton.Rx().BindAction(ViewModel.StopTimeEntry, _ => TimeEntryStopOrigin.Manual).DisposedBy(DisposeBag);
 
             StartTimeEntryButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => true).DisposedBy(DisposeBag);
-            StartTimeEntryButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => false, ButtonEventType.LongPress).DisposedBy(DisposeBag);
+            StartTimeEntryButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => false, ButtonEventType.LongPress, useFeedback: true).DisposedBy(DisposeBag);
 
             CurrentTimeEntryCard.Rx().Tap()
                 .WithLatestFrom(ViewModel.CurrentRunningTimeEntry, (_, te) => te)

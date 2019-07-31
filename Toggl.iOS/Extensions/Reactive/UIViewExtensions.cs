@@ -28,10 +28,31 @@ namespace Toggl.iOS.Extensions.Reactive
                 });
             });
 
-        public static IObservable<Unit> LongPress(this IReactive<UIView> reactive)
+        public static IObservable<Unit> LongPress(this IReactive<UIView> reactive, bool useFeedback = false)
             => Observable.Create<Unit>(observer =>
             {
-                var gestureRecognizer = new UILongPressGestureRecognizer(() => observer.OnNext(Unit.Default));
+                var feedbackGenerator = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Medium);
+                var gestureRecognizer = new UILongPressGestureRecognizer(longPress =>
+                {
+                    var state = longPress.State;
+                    if (useFeedback)
+                    {
+                        switch (longPress.State)
+                        {
+                            case UIGestureRecognizerState.Began:
+                                feedbackGenerator.Prepare();
+                                break;
+                            case UIGestureRecognizerState.Recognized:
+                                feedbackGenerator.ImpactOccurred();
+                                break;
+                        }
+                    }
+
+                    if (state == UIGestureRecognizerState.Recognized)
+                    {
+                        observer.OnNext(Unit.Default);
+                    }
+                });
                 gestureRecognizer.ShouldRecognizeSimultaneously = (recognizer, otherRecognizer) => true;
                 reactive.Base.AddGestureRecognizer(gestureRecognizer);
 
