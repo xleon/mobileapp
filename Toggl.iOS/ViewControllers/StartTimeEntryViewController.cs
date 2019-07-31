@@ -2,12 +2,10 @@
 using Foundation;
 using System;
 using System.Collections.Generic;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
-using System.Threading.Tasks;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Extensions;
@@ -366,11 +364,12 @@ namespace Toggl.iOS.ViewControllers
             disabledConfirmationButtonOnboardingDisposable
                 = disabledConfirmationButtonOnboardingStep
                     .ShouldBeVisible
-                    .Subscribe(visible => InvokeOnMainThread(() =>
+                    .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler)
+                    .Subscribe(visible =>
                     {
                         var image = visible ? greyCheckmarkButtonImage : greenCheckmarkButtonImage;
                         DoneButton.SetImage(image, UIControlState.Normal);
-                    }));
+                    });
         }
     }
 }

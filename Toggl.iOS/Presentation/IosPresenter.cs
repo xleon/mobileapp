@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CoreFoundation;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
@@ -29,7 +30,7 @@ namespace Toggl.iOS.Presentation
         public Task Present<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView)
         {
             var tcs = new TaskCompletionSource<object>();
-            UIApplication.SharedApplication.InvokeOnMainThread(() =>
+            DispatchQueue.MainQueue.DispatchAsync(() =>
             {
                 PresentOnMainThread(viewModel, sourceView);
                 tcs.SetResult(true);
