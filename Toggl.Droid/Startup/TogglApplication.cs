@@ -1,6 +1,7 @@
+using System;
 using Android.App;
 using Android.Runtime;
-using System;
+using Android.Views.Accessibility;
 using Toggl.Core.UI;
 using Toggl.Droid.BroadcastReceivers;
 
@@ -34,6 +35,14 @@ namespace Toggl.Droid
                     .UserAccessManager
                     .LoginWithSavedCredentials();
             }
+
+            var accessibilityManager = GetSystemService(AccessibilityService) as AccessibilityManager;
+            if (accessibilityManager != null)
+            {
+                var accessibilityEnabled = accessibilityManager.IsTouchExplorationEnabled;
+                AndroidDependencyContainer.Instance.AnalyticsService.AccessibilityEnabled.Track(accessibilityEnabled);
+            }
+
 #if USE_APPCENTER
             Microsoft.AppCenter.AppCenter.Start(
                 "{TOGGL_APP_CENTER_ID_DROID}",

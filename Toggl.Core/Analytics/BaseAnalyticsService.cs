@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Toggl.Core.Extensions;
 using Toggl.Core.Suggestions;
@@ -263,6 +263,9 @@ namespace Toggl.Core.Analytics
 
         [AnalyticsEvent("Location")]
         public IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; protected set; }
+
+        [AnalyticsEvent("Enabled")]
+        public IAnalyticsEvent<bool> AccessibilityEnabled { get; protected set; }
 
         [AnalyticsEvent("Installed")]
         public IAnalyticsEvent<bool> WatchPaired { get; protected set; }

@@ -1,4 +1,4 @@
-using Foundation;
+﻿using Foundation;
 using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
@@ -41,7 +41,10 @@ namespace Toggl.iOS
             loginWithCredentialsIfNecessary(accessLevel);
             navigateAccordingToAccessLevel(accessLevel, app);
 
-            UNUserNotificationCenter.Current.Delegate = this;
+            var accessibilityEnabled = UIAccessibility.IsVoiceOverRunning;
+            IosDependencyContainer.Instance.AnalyticsService.AccessibilityEnabled.Track(accessibilityEnabled);
+
+                UNUserNotificationCenter.Current.Delegate = this;
 
             var watchservice = new WatchService();
             watchservice.TryLogWatchConnectivity();
