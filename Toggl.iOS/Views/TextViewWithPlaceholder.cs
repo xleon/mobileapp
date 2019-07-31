@@ -1,9 +1,12 @@
 ﻿using Foundation;
 using System;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using CoreGraphics;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views
@@ -14,12 +17,14 @@ namespace Toggl.iOS.Views
         private readonly int defaultPlaceholderSize = 14;
         private readonly UIColor defaultPlaceholderColor = Colors.Common.PlaceholderText.ToNativeColor();
         private readonly ISubject<String> textSubject = new Subject<string>();
+        private readonly BehaviorSubject<CGSize> sizeSubject = new BehaviorSubject<CGSize>(CGSize.Empty);
 
         private bool isFocused;
         private UIStringAttributes placeholderAttributes;
         protected UIStringAttributes DefaultTextAttributes { get; private set; }
 
         public IObservable<string> TextObservable { get; }
+        public IObservable<Unit> SizeChangedObservable { get; }
 
         public event EventHandler TextChanged;
         public event EventHandler DidBecomeFirstResponder;
@@ -97,6 +102,7 @@ namespace Toggl.iOS.Views
         public TextViewWithPlaceholder(IntPtr handle) : base(handle)
         {
             TextObservable = textSubject.AsObservable();
+            SizeChangedObservable = sizeSubject.SelectUnit().AsObservable();
         }
 
         private void updateAttributedText(string text)
@@ -171,6 +177,16 @@ namespace Toggl.iOS.Views
             }
 
             return becomeFirstResponder;
+        }
+
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
+
+            if (sizeSubject.Value != Frame.Size)
+            {
+                sizeSubject.OnNext(Frame.Size);
+            }
         }
     }
 }
