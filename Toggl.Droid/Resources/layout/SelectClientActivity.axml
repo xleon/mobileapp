@@ -11,6 +11,7 @@
         android:orientation="horizontal"
         android:minHeight="?attr/actionBarSize"
         android:background="@color/blueToolbarBackground"
+        android:paddingRight="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -24,8 +25,10 @@
             android:layout_height="56dp" />
         <EditText
             android:id="@+id/FilterEditText"
-            android:textSize="19sp"
+            android:lines="1"
             android:gravity="left"
+            android:textSize="19sp"
+            android:singleLine="true"
             android:letterSpacing="-0.01"
             android:lineSpacingExtra="5sp"
             android:textCursorDrawable="@null"
