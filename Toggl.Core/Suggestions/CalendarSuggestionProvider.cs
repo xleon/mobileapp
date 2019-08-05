@@ -11,6 +11,7 @@ using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Math = System.Math;
 
@@ -68,7 +69,7 @@ namespace Toggl.Core.Suggestions
                     eventsFromSelectedUserCalendars,
                     (workspace, calendarItem) => suggestionFromEvent(calendarItem, workspace.Id))
                 .Take(maxCalendarSuggestionCount)
-                .Catch((NotAuthorizedException _) => Observable.Empty<Suggestion>());
+                .OnErrorResumeEmpty();
         }
 
         private Suggestion suggestionFromEvent(CalendarItem calendarItem, long workspaceId)

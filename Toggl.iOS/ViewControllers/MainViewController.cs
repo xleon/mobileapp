@@ -9,6 +9,7 @@ using System.Reactive.Subjects;
 using System.Threading;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
@@ -51,7 +52,11 @@ namespace Toggl.iOS.ViewControllers
         private readonly SpiderOnARopeView spiderBroView = new SpiderOnARopeView();
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 50));
         private readonly UIButton syncFailuresButton = new UIButton(new CGRect(0, 0, 30, 40));
-        private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
+        private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"))
+        {
+            AccessibilityLabel = Resources.AppTitle,
+            AccessibilityTraits = UIAccessibilityTrait.Header
+        };
         private readonly TimeEntriesEmptyLogView emptyStateView = TimeEntriesEmptyLogView.Create();
 
         private TimeEntriesLogViewCell firstTimeEntryCell;
@@ -60,15 +65,8 @@ namespace Toggl.iOS.ViewControllers
         private CancellationTokenSource cardAnimationCancellation;
 
         private DismissableOnboardingStep tapToEditStep;
-        private DismissableOnboardingStep swipeLeftStep;
-        private DismissableOnboardingStep swipeRightStep;
-
-        private UIGestureRecognizer swipeLeftGestureRecognizer;
 
         private CompositeDisposable disposeBag = new CompositeDisposable();
-
-        private IDisposable swipeLeftAnimationDisposable;
-        private IDisposable swipeRightAnimationDisposable;
 
         private Subject<Unit> traitCollectionSubject = new Subject<Unit>();
 
@@ -91,8 +89,6 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
-            SwipeRightBubbleLabel.Text = Resources.SwipeRightToContinue;
-            SwipeLeftBubbleLabel.Text = Resources.SwipeLeftToDelete;
             WelcomeBackLabel.Text = Resources.LogEmptyStateTitle;
             WelcomeBackDescriptionLabel.Text = Resources.LogEmptyStateText;
             CreatedFirstTimeEntryLabel.Text = Resources.YouHaveCreatedYourFirstTimeEntry;
@@ -101,6 +97,9 @@ namespace Toggl.iOS.ViewControllers
             TapToStopTimerLabel.Text = Resources.TapToStopTimer;
             FeedbackSentSuccessTitleLabel.Text = Resources.DoneWithExclamationMark.ToUpper();
             FeedbackSentDescriptionLabel.Text = Resources.ThankYouForTheFeedback;
+
+            StartTimeEntryButton.AccessibilityLabel = Resources.StartTimeEntry;
+            StopTimeEntryButton.AccessibilityLabel = Resources.StopCurrentlyRunningTimeEntry;
 
             prepareViews();
             prepareOnboarding();
@@ -159,14 +158,6 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(toggleUndoDeletion)
                 .DisposedBy(DisposeBag);
 
-            tableViewSource.SwipeToContinue
-                .Subscribe(_ => swipeRightStep.Dismiss())
-                .DisposedBy(disposeBag);
-
-            tableViewSource.SwipeToDelete
-                .Subscribe(_ => swipeLeftStep.Dismiss())
-                .DisposedBy(disposeBag);
-
             // Refresh Control
             var refreshControl = new RefreshControl(
                 ViewModel.SyncProgressState,
@@ -183,7 +174,7 @@ namespace Toggl.iOS.ViewControllers
             StopTimeEntryButton.Rx().BindAction(ViewModel.StopTimeEntry, _ => TimeEntryStopOrigin.Manual).DisposedBy(DisposeBag);
 
             StartTimeEntryButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => true).DisposedBy(DisposeBag);
-            StartTimeEntryButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => false, ButtonEventType.LongPress).DisposedBy(DisposeBag);
+            StartTimeEntryButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => false, ButtonEventType.LongPress, useFeedback: true).DisposedBy(DisposeBag);
 
             CurrentTimeEntryCard.Rx().Tap()
                 .WithLatestFrom(ViewModel.CurrentRunningTimeEntry, (_, te) => te)
@@ -233,6 +224,13 @@ namespace Toggl.iOS.ViewControllers
                 .Select(te => te?.ToFormattedTimeEntryString(capHeight, clientColor, shouldColorProject: true))
                 .Subscribe(CurrentTimeEntryProjectTaskClientLabel.Rx().AttributedText())
                 .DisposedBy(DisposeBag);
+            
+            //Accessibility
+            CurrentTimeEntryCard.IsAccessibilityElementFocused
+                .CombineLatest(ViewModel.CurrentRunningTimeEntry,
+                    (_, runningEntry) => createAccessibilityLabelForRunningEntryCard(runningEntry))
+                .Subscribe(CurrentTimeEntryCard.Rx().AccessibilityLabel())
+                .DisposedBy(disposeBag);
 
             //The start button
             var trackModeImage = UIImage.FromBundle("playIcon");
@@ -304,6 +302,34 @@ namespace Toggl.iOS.ViewControllers
             }
         }
 
+        private string createAccessibilityLabelForRunningEntryCard(IThreadSafeTimeEntry timeEntry)
+        {
+            if (timeEntry == null)
+                return null;
+
+            var accessibilityLabel = Resources.CurrentlyRunningTimeEntry;
+
+            var duration = IosDependencyContainer.Instance.TimeService.CurrentDateTime - timeEntry.Start;
+            accessibilityLabel += $", {duration}";
+
+            if (!string.IsNullOrEmpty(timeEntry.Description))
+                accessibilityLabel += $", {timeEntry.Description}";
+
+            var projectName = timeEntry.Project?.Name ?? "";
+            if (!string.IsNullOrEmpty(projectName))
+                accessibilityLabel += $", {Resources.Project}: {projectName}";
+
+            var taskName = timeEntry.Task?.Name ?? "";
+            if (!string.IsNullOrEmpty(taskName))
+                accessibilityLabel += $", {Resources.Task}: {taskName}";
+
+            var clientName = timeEntry.Project?.Client?.Name ?? "";
+            if (!string.IsNullOrEmpty(clientName))
+                accessibilityLabel += $", {Resources.Client}: {clientName}";
+
+            return accessibilityLabel;
+        }
+
         private void setupTableViewHeader()
         {
             TimeEntriesLogTableView.TableHeaderView = tableHeader;
@@ -364,12 +390,15 @@ namespace Toggl.iOS.ViewControllers
             NavigationItem.RightBarButtonItems = new[]
             {
                 new UIBarButtonItem(settingsButton)
+                {
+                    AccessibilityLabel = Resources.Settings
+                }
             };
 
 #if DEBUG
             NavigationItem.LeftBarButtonItems = new[]
             {
-                new UIBarButtonItem(syncFailuresButton)
+                new UIKit.UIBarButtonItem(syncFailuresButton)
             };
 #endif
         }
@@ -427,7 +456,6 @@ namespace Toggl.iOS.ViewControllers
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-
             if (!disposing) return;
 
             spiderBroView.Dispose();
@@ -693,38 +721,6 @@ namespace Toggl.iOS.ViewControllers
 
             tapToEditStep.DismissByTapping(TapToEditBubbleView);
             tapToEditStep.ManageVisibilityOf(TapToEditBubbleView).DisposedBy(disposeBag);
-
-            prepareSwipeGesturesOnboarding(storage, tapToEditStep.ShouldBeVisible);
-        }
-
-        private void prepareSwipeGesturesOnboarding(IOnboardingStorage storage, IObservable<bool> tapToEditStepIsVisible)
-        {
-            var timeEntriesCount = ViewModel.TimeEntriesCount;
-
-            var swipeRightCanBeShown =
-                UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
-                    ? tapToEditStepIsVisible.Select(isVisible => !isVisible)
-                    : Observable.Return(false);
-
-            swipeRightStep = new SwipeRightOnboardingStep(swipeRightCanBeShown, timeEntriesCount)
-                .ToDismissable(nameof(SwipeRightOnboardingStep), storage);
-
-            var swipeLeftCanBeShown = Observable.CombineLatest(
-                tapToEditStepIsVisible,
-                swipeRightStep.ShouldBeVisible,
-                (tapToEditIsVisible, swipeRightIsVisble) => !tapToEditIsVisible && !swipeRightIsVisble);
-            swipeLeftStep = new SwipeLeftOnboardingStep(swipeLeftCanBeShown, timeEntriesCount)
-                .ToDismissable(nameof(SwipeLeftOnboardingStep), storage);
-
-            swipeLeftStep.DismissByTapping(SwipeLeftBubbleView);
-            swipeLeftStep.ManageVisibilityOf(SwipeLeftBubbleView).DisposedBy(disposeBag);
-            swipeLeftAnimationDisposable = swipeLeftStep.ManageSwipeActionAnimationOf(firstTimeEntryCell, Direction.Left);
-
-            swipeRightStep.DismissByTapping(SwipeRightBubbleView);
-            swipeRightStep.ManageVisibilityOf(SwipeRightBubbleView).DisposedBy(disposeBag);
-            swipeRightAnimationDisposable = swipeRightStep.ManageSwipeActionAnimationOf(firstTimeEntryCell, Direction.Right);
-
-            updateSwipeDismissGestures(firstTimeEntryCell);
         }
 
         private void onTableScroll(CGPoint offset)
@@ -734,40 +730,19 @@ namespace Toggl.iOS.ViewControllers
 
         private void onFirstTimeEntryChanged(TimeEntriesLogViewCell nextFirstTimeEntry)
         {
-            updateSwipeDismissGestures(nextFirstTimeEntry);
             firstTimeEntryCell = nextFirstTimeEntry;
             updateTooltipPositions();
         }
 
         private void updateTooltipPositions()
         {
-            if (TapToEditBubbleView.Hidden && SwipeLeftBubbleView.Hidden && SwipeRightBubbleView.Hidden) return;
+            if (TapToEditBubbleView.Hidden) return;
             if (firstTimeEntryCell == null) return;
 
             var position = TimeEntriesLogTableView.ConvertRectToView(
                 firstTimeEntryCell.Frame, TimeEntriesLogTableView.Superview);
 
             TapToEditBubbleViewTopConstraint.Constant = position.Bottom + tooltipOffset;
-            SwipeLeftTopConstraint.Constant = position.Y - SwipeLeftBubbleView.Frame.Height - tooltipOffset;
-            SwipeRightTopConstraint.Constant = position.Y - SwipeRightBubbleView.Frame.Height - tooltipOffset;
-        }
-
-        private void updateSwipeDismissGestures(TimeEntriesLogViewCell nextFirstTimeEntry)
-        {
-            if (swipeLeftGestureRecognizer != null)
-            {
-                firstTimeEntryCell?.RemoveGestureRecognizer(swipeLeftGestureRecognizer);
-            }
-
-            swipeLeftAnimationDisposable?.Dispose();
-            swipeRightAnimationDisposable?.Dispose();
-
-            if (nextFirstTimeEntry == null) return;
-
-            swipeLeftAnimationDisposable = swipeLeftStep.ManageSwipeActionAnimationOf(nextFirstTimeEntry, Direction.Left);
-            swipeRightAnimationDisposable = swipeRightStep.ManageSwipeActionAnimationOf(nextFirstTimeEntry, Direction.Right);
-
-            swipeLeftGestureRecognizer = swipeLeftStep.DismissBySwiping(nextFirstTimeEntry, Direction.Left);
         }
     }
 }

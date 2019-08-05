@@ -1,4 +1,5 @@
-﻿using CoreGraphics;
+﻿using CoreFoundation;
+using CoreGraphics;
 using System;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -21,23 +22,44 @@ namespace Toggl.iOS.Extensions.Reactive
 
                 return Disposable.Create(() =>
                 {
-                    UIApplication.SharedApplication.InvokeOnMainThread(() =>
+                    DispatchQueue.MainQueue.DispatchAsync(() =>
                     {
                         reactive.Base.RemoveGestureRecognizer(gestureRecognizer);
                     });
                 });
             });
 
-        public static IObservable<Unit> LongPress(this IReactive<UIView> reactive)
+        public static IObservable<Unit> LongPress(this IReactive<UIView> reactive, bool useFeedback = false)
             => Observable.Create<Unit>(observer =>
             {
-                var gestureRecognizer = new UILongPressGestureRecognizer(() => observer.OnNext(Unit.Default));
+                var feedbackGenerator = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Medium);
+                var gestureRecognizer = new UILongPressGestureRecognizer(longPress =>
+                {
+                    var state = longPress.State;
+                    if (useFeedback)
+                    {
+                        switch (longPress.State)
+                        {
+                            case UIGestureRecognizerState.Began:
+                                feedbackGenerator.Prepare();
+                                break;
+                            case UIGestureRecognizerState.Recognized:
+                                feedbackGenerator.ImpactOccurred();
+                                break;
+                        }
+                    }
+
+                    if (state == UIGestureRecognizerState.Recognized)
+                    {
+                        observer.OnNext(Unit.Default);
+                    }
+                });
                 gestureRecognizer.ShouldRecognizeSimultaneously = (recognizer, otherRecognizer) => true;
                 reactive.Base.AddGestureRecognizer(gestureRecognizer);
 
                 return Disposable.Create(() =>
                 {
-                    UIApplication.SharedApplication.InvokeOnMainThread(() =>
+                    DispatchQueue.MainQueue.DispatchAsync(() =>
                     {
                         reactive.Base.RemoveGestureRecognizer(gestureRecognizer);
                     });
@@ -131,5 +153,8 @@ namespace Toggl.iOS.Extensions.Reactive
                 )
                 .Subscribe(action.Inputs);
         }
+
+        public static Action<string> AccessibilityLabel(this IReactive<UIView> reactive)
+            => accessibilityLabel => reactive.Base.AccessibilityLabel = accessibilityLabel;
     }
 }

@@ -145,7 +145,7 @@ namespace Toggl.Core.UI.Transformations
                 duration: DurationAndFormatToString.Convert(
                     TimeSpan.FromSeconds(group.Sum(timeEntry => timeEntry.Duration ?? 0)),
                     durationFormat),
-                projectName: sample.Project?.Name,
+                projectName: sample.Project?.DisplayName(),
                 projectColor: sample.Project?.Color,
                 clientName: sample.Project?.Client?.Name,
                 taskName: sample.Task?.Name,

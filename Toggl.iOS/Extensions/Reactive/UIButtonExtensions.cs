@@ -52,7 +52,7 @@ namespace Toggl.iOS.Extensions.Reactive
             reactive.BindAction(action, _ => Unit.Default, eventType);
 
         public static IDisposable BindAction<TInput, TElement>(this IReactive<UIButton> reactive,
-            RxAction<TInput, TElement> action, Func<UIButton, TInput> inputTransform, ButtonEventType eventType = ButtonEventType.Tap)
+            RxAction<TInput, TElement> action, Func<UIButton, TInput> inputTransform, ButtonEventType eventType = ButtonEventType.Tap, bool useFeedback = false)
         {
             IObservable<Unit> eventObservable = Observable.Empty<Unit>();
             switch (eventType)
@@ -61,7 +61,7 @@ namespace Toggl.iOS.Extensions.Reactive
                     eventObservable = reactive.Base.Rx().Tap();
                     break;
                 case ButtonEventType.LongPress:
-                    eventObservable = reactive.Base.Rx().LongPress();
+                    eventObservable = reactive.Base.Rx().LongPress(useFeedback);
                     break;
             }
 

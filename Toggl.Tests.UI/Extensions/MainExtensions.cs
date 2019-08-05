@@ -26,7 +26,7 @@ namespace Toggl.Tests.UI.Extensions
             app.Tap(Main.StartTimeEntryButton);
             app.WaitForElement(StartTimeEntry.DoneButton);
 
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
             app.Tap(StartTimeEntry.DoneButton);
 
             app.WaitForElement(Main.StopTimeEntryButton);
@@ -42,11 +42,11 @@ namespace Toggl.Tests.UI.Extensions
         {
             app.Tap(Main.StartTimeEntryButton);
             app.WaitForElement(StartTimeEntry.DoneButton);
-            app.EnterText(description);
+            app.EnterTextInStartTimeEntryView(description);
 
             if (!string.IsNullOrEmpty(projectName))
             {
-                app.EnterText($" @{projectName}");
+                app.EnterTextInStartTimeEntryView($" @{projectName}");
                 if (projectExists(projectName))
                     app.Tap(x => x.Text(projectName));
                 else
@@ -75,7 +75,7 @@ namespace Toggl.Tests.UI.Extensions
             app.WaitForElement(Main.StartTimeEntryButton);
             app.Tap(Main.StartTimeEntryButton);
             app.WaitForElement(StartTimeEntry.DoneButton);
-            app.EnterText($"@{projectName}");
+            app.EnterTextInStartTimeEntryView($"@{projectName}");
             app.TapCreateProject(projectName);
             app.Tap(EditProject.CreateButton);
             app.Tap(StartTimeEntry.CloseButton);
@@ -141,6 +141,7 @@ namespace Toggl.Tests.UI.Extensions
 
         public static AppRect RectForTimeEntryCell(this IApp app, string timeEntryDescription)
         {
+            app.WaitForElement(queryForTimeEntryCell(timeEntryDescription));
             var timeEntryViews = app.Query(queryForTimeEntryCell(timeEntryDescription));
             if (timeEntryViews.Length == 0)
                 return null;
@@ -168,6 +169,7 @@ namespace Toggl.Tests.UI.Extensions
         public static void AssertTimeEntryInTheLog(this IApp app, string description, string projectName = null)
         {
             app.WaitForElement(Main.TimeEntriesCollection);
+            app.WaitForElement(queryForTimeEntryCell(description, projectName));
             var timeEntryExists = app.Query(queryForTimeEntryCell(description, projectName)).Any();
 
             var projectInsert = string.IsNullOrEmpty(projectName)

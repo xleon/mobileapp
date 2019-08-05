@@ -18,8 +18,6 @@ namespace Toggl.Tests.UI
         public void BeforeEachTest()
         {
             app = Configuration.GetApp();
-
-            app.WaitForLoginScreen();
         }
 
         [Test]
@@ -32,12 +30,12 @@ namespace Toggl.Tests.UI
             app.EnterText(email);
             app.Tap(Login.PasswordText);
             app.EnterText($"{password}123456");
-            app.TryLoginAndFail();
+            app.Tap(Login.LoginButton);
 
-            app.Screenshot("Login email page.");
+            app.AssertLoginFailed();
         }
 
-        [Test]
+        [Test, IgnoreOnIos]
         public void TheLoginButtonIsDisabledWhenEnteringMalformattedEmail()
         {
             var email = "asdasd@asdasd";
@@ -47,11 +45,12 @@ namespace Toggl.Tests.UI
             app.EnterText(email);
             app.Tap(Login.PasswordText);
             app.EnterText($"{password}123456");
-            app.CheckThatLoginButtonIsDisabled();
+
+            app.AssertLoginButtonDisabled();
         }
 
         [Test]
-        public async Task TheLoginButtonAfterInputtingAValidCredentialsShowTheMainScreen()
+        public async Task TheLoginButtonAfterInputtingValidCredentialsShowTheMainScreen()
         {
             var email = randomEmail();
             var password = await User.Create(email);
@@ -60,9 +59,9 @@ namespace Toggl.Tests.UI
             app.EnterText(email);
             app.Tap(Login.PasswordText);
             app.EnterText(password);
-            app.LoginSuccesfully();
+            app.Tap(Login.LoginButton);
 
-            app.Screenshot("Login email page.");
+            app.AssertLoggedInSuccesfully();
         }
 
         private string randomEmail()

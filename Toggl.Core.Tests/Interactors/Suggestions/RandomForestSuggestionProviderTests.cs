@@ -7,7 +7,6 @@ using FluentAssertions;
 using FsCheck;
 using NSubstitute;
 using Toggl.Core.DataSources;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Generators;
@@ -21,7 +20,6 @@ namespace Toggl.Core.Tests.Suggestions
         public abstract class RandomForestSuggestionProviderTest
         {
             protected RandomForestSuggestionProvider Provider { get; }
-            protected IStopwatchProvider StopwatchProvider { get; } = Substitute.For<IStopwatchProvider>();
             protected ITimeService TimeService { get; } = Substitute.For<ITimeService>();
             protected ITogglDataSource DataSource { get; } = Substitute.For<ITogglDataSource>();
 
@@ -29,7 +27,7 @@ namespace Toggl.Core.Tests.Suggestions
 
             protected RandomForestSuggestionProviderTest()
             {
-                Provider = new RandomForestSuggestionProvider(StopwatchProvider, DataSource, TimeService);
+                Provider = new RandomForestSuggestionProvider(DataSource, TimeService);
 
                 TimeService.CurrentDateTime.Returns(_ => Now);
             }
@@ -39,14 +37,13 @@ namespace Toggl.Core.Tests.Suggestions
         {
             [Theory, LogIfTooSlow]
             [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useStopwatchProvider, bool useDataSource, bool useTimeService)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useDataSource, bool useTimeService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var timeService = useTimeService ? TimeService : null;
-                var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new RandomForestSuggestionProvider(stopwatchProvider, dataSource, timeService);
+                    () => new RandomForestSuggestionProvider(dataSource, timeService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -58,7 +55,9 @@ namespace Toggl.Core.Tests.Suggestions
             private IEnumerable<IThreadSafeTimeEntry> getTimeEntries(
                 int numberOfTimeEntries,
                 bool withProject,
-                int initalId = 0)
+                int initalId = 0,
+                bool activeProject = true,
+                long projectId = 4)
             {
                 if (numberOfTimeEntries == 0)
                 {
@@ -66,7 +65,7 @@ namespace Toggl.Core.Tests.Suggestions
                 }
 
                 var workspace = new MockWorkspace { Id = 12 };
-                var project = new MockProject { Id = 4, Name = "4" };
+                var project = new MockProject { Id = projectId, Name = $"{projectId}", Active = activeProject };
 
                 return Enumerable.Range(initalId, numberOfTimeEntries)
                     .Select(index =>
@@ -81,7 +80,6 @@ namespace Toggl.Core.Tests.Suggestions
                             Start = Now.AddHours(index % 23),
                             Description = $"te{index}"
                         };
-
 
                         if (withProject)
                         {
@@ -117,7 +115,7 @@ namespace Toggl.Core.Tests.Suggestions
                 int numberOfExpectedResults,
                 bool expectedToHaveProject)
             {
-                var provider = new RandomForestSuggestionProvider(StopwatchProvider, DataSource, TimeService);
+                var provider = new RandomForestSuggestionProvider(DataSource, TimeService);
 
                 var timeEntries = getTimeEntries(numberOfTimeEntrieWithProject, true)
                     .Concat(getTimeEntries(numberOfTimeEntrieWithoutProject, false, numberOfTimeEntrieWithProject + 1));
@@ -143,6 +141,55 @@ namespace Toggl.Core.Tests.Suggestions
                     suggestions.First().ProjectId.Should().Be(null);
                     suggestions.First().ProjectName.Should().Be("");
                 }
+            }
+
+            [Theory]
+            [InlineData(120, 120, 1)]
+            [InlineData(0, 120, 0)]
+            public async Task DoesNotReturnSuggestionsWithArchivedProjects(
+                int numberOfTimeEntrieWithActiveProject,
+                int numberOfTimeEntrieWithoutActiveProject,
+                int numberOfExpectedResults)
+            {
+                var provider = new RandomForestSuggestionProvider(DataSource, TimeService);
+
+                var timeEntries = getTimeEntries(numberOfTimeEntrieWithActiveProject, true, projectId: 2)
+                    .Concat(getTimeEntries(numberOfTimeEntrieWithoutActiveProject, true, numberOfTimeEntrieWithActiveProject + 1, false, projectId: 5));
+
+                DataSource.TimeEntries
+                    .GetAll()
+                    .Returns(Observable.Return(timeEntries));
+
+                var suggestions = await provider.GetSuggestions().ToList();
+
+                suggestions.Should().HaveCount(numberOfExpectedResults);
+
+                if (numberOfExpectedResults == 0)
+                    return;
+
+                suggestions.First().ProjectId.Should().Be(2);
+                suggestions.First().ProjectName.Should().Be("2");
+            }
+
+            [Fact]
+            public void NeverThrows()
+            {
+                var exception = new Exception();
+                DataSource.TimeEntries.GetAll().Returns(Observable.Throw<IEnumerable<IThreadSafeTimeEntry>>(exception));
+                var provider = new RandomForestSuggestionProvider(DataSource, TimeService);
+
+                Action getSuggestions = () => provider.GetSuggestions().Subscribe();
+                getSuggestions.Should().NotThrow();
+            }
+
+            [Fact]
+            public void ReturnsNoSuggestionsInCaseOfError()
+            {
+                var exception = new Exception();
+                DataSource.TimeEntries.GetAll().Returns(Observable.Throw<IEnumerable<IThreadSafeTimeEntry>>(exception));
+                var provider = new RandomForestSuggestionProvider(DataSource, TimeService);
+
+                provider.GetSuggestions().Count().Wait().Should().Be(0);
             }
         }
     }

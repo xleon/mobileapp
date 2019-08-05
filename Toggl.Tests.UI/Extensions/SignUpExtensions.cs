@@ -6,8 +6,6 @@ namespace Toggl.Tests.UI.Extensions
     {
         public static void WaitForSignUpScreen(this IApp app)
         {
-            app.WaitForLoginScreen();
-
             app.Tap(Login.SwitchToSignUpLabel);
             app.WaitForElement(SignUp.SignUpButton);
         }

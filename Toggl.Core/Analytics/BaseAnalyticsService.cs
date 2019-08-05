@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Toggl.Core.Extensions;
 using Toggl.Core.Suggestions;
@@ -51,8 +51,8 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("CurrentPage")]
         public IAnalyticsEvent<Type> CurrentPage { get; protected set; }
 
-        [AnalyticsEvent]
-        public IAnalyticsEvent DeleteTimeEntry { get; protected set; }
+        [AnalyticsEvent("Source")]
+        public IAnalyticsEvent<DeleteTimeEntryOrigin> DeleteTimeEntry { get; protected set; }
 
         [AnalyticsEvent("ApplicationShortcutType")]
         public IAnalyticsEvent<string> ApplicationShortcut { get; protected set; }
@@ -107,6 +107,9 @@ namespace Toggl.Core.Analytics
 
         [AnalyticsEvent("TapSource")]
         public IAnalyticsEvent<EditViewTapSource> EditViewTapped { get; set; }
+
+        [AnalyticsEvent("Reason")]
+        public IAnalyticsEvent<EditViewCloseReason> EditViewClosed { get; protected set; }
 
         [AnalyticsEvent("NumberOfCreatedPlaceholders")]
         public IAnalyticsEvent<int> WorkspacePlaceholdersCreated { get; protected set; }
@@ -269,6 +272,12 @@ namespace Toggl.Core.Analytics
 
         [AnalyticsEvent("Action", "Type")]
         public IAnalyticsEvent<string, string> DebugNavigationError { get; protected set; }
+
+        [AnalyticsEvent("Enabled")]
+        public IAnalyticsEvent<bool> AccessibilityEnabled { get; protected set; }
+
+        [AnalyticsEvent("Installed")]
+        public IAnalyticsEvent<bool> WatchPaired { get; protected set; }
 
         public void TrackAnonymized(Exception exception)
         {

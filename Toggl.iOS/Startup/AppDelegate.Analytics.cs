@@ -1,4 +1,6 @@
-﻿namespace Toggl.iOS
+using AdjustBindingsiOS;
+
+namespace Toggl.iOS
 {
     public partial class AppDelegate
     {

@@ -19,8 +19,6 @@ namespace Toggl.Tests.UI
         public void BeforeEachTest()
         {
             app = Configuration.GetApp();
-
-            app.WaitForLoginScreen();
             app.Tap(Login.ForgotPasswordButton);
         }
 

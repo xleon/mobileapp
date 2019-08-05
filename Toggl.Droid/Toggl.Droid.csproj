@@ -1,4 +1,4 @@
-﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.props" Condition="Exists('..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -15,7 +15,6 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidLinkMode>Full</AndroidLinkMode>
     <AndroidLinkSkip>Toggl.Giskard</AndroidLinkSkip>
     <EnableProguard>true</EnableProguard>
     <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
@@ -56,7 +55,6 @@
     <WarningLevel>4</WarningLevel>
     <AndroidLinkSkip>
     </AndroidLinkSkip>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
@@ -203,9 +201,6 @@
     </Reference>
     <Reference Include="System.Collections.Immutable">
       <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Firebase.Perf">
-      <HintPath>Xamarin.Firebase.Perf.dll</HintPath>
     </Reference>
     <Reference Include="Java.Interop" />
     <Reference Include="Xamarin.Firebase.Config">
@@ -371,6 +366,7 @@
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
+    <Compile Include="Presentation\RunningTimeEntrySheetBehavior.cs" />
     <Compile Include="Extensions\PermissionRequesterComponentExtensions.cs" />
     <Compile Include="Helper\IPermissionRequesterComponent.cs" />
     <Compile Include="Presentation\ActivityPresenter.cs" />
@@ -395,7 +391,6 @@
     <Compile Include="Extensions\Reactive\HueSaturationPickerViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\LayoutParamsExtensions.cs" />
     <Compile Include="Extensions\Reactive\PagerExtensions.cs" />
-    <Compile Include="Extensions\TracingExtensions.cs" />
     <Compile Include="Extensions\Reactive\RecyclerViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\ValueSliderViewExtensions.cs" />
     <Compile Include="Fragments\CalendarFragment.cs" />
@@ -486,7 +481,6 @@
     <Compile Include="Extensions\NumberExtensions.cs" />
     <Compile Include="Activities\StartTimeEntryActivity.cs" />
     <Compile Include="Extensions\VisibilityExtensions.cs" />
-    <Compile Include="Extensions\CircularRevealAnimation.cs" />
     <Compile Include="Activities\EditTimeEntryActivity.cs" />
     <Compile Include="ApplicationShortcutCreator.cs" />
     <Compile Include="Adapters\StartTimeEntryRecyclerAdapter.cs" />
@@ -504,7 +498,6 @@
     <Compile Include="Views\CircleView.cs" />
     <Compile Include="Views\HueSaturationPickerView.cs" />
     <Compile Include="Fragments\SelectColorFragment.cs" />
-    <Compile Include="Views\TextInputLayoutWithHelperText.cs" />
     <Compile Include="Views\ValueSlider.cs" />
     <Compile Include="Activities\SelectClientActivity.cs" />
     <Compile Include="Adapters\SelectClientRecyclerAdapter.cs" />
@@ -551,7 +544,6 @@
     </Compile>
     <Compile Include="Adapters\BaseRecyclerAdapter.cs" />
     <Compile Include="ViewHolders\BaseRecyclerViewHolder.cs" />
-    <Compile Include="ViewHolders\WorkspaceSelectionViewHolder.cs" />
     <Compile Include="Adapters\SimpleAdapter.cs" />
     <Compile Include="Activities\AboutActivity.cs" />
     <Compile Include="Services\RatingServiceAndroid.cs" />
@@ -588,7 +580,6 @@
     <Compile Include="Activities\TokenResetActivity.ViewBinds.cs">
       <DependentUpon>TokenResetActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\FirebaseStopwatchProviderAndroid.cs" />
     <Compile Include="ViewHolders\SelectDefaultWorkspaceViewHolder.cs" />
     <Compile Include="Fragments\SelectDefaultWorkspaceFragment.cs" />
     <Compile Include="Fragments\SelectDefaultWorkspaceFragment.ViewBinds.cs">
@@ -668,6 +659,7 @@
     </Compile>
     <Compile Include="BroadcastReceivers\BootCompletedBroadcastReceiver.cs" />
     <Compile Include="Services\ScheduleEventNotificationsService.cs" />
+    <Compile Include="Services\AccessibilityServiceAndroid.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -684,7 +676,6 @@
     <AndroidResource Include="Resources\layout\SelectProjectActivityWorkspaceHeader.axml" />
     <AndroidResource Include="Resources\layout\SelectDateFormatFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDateFormatFragmentCell.axml" />
-    <AndroidResource Include="Resources\layout\SettingsFragmentWorkspaceCell.axml" />
     <AndroidResource Include="Resources\drawable\TransparentToLightGrayGradient.xml" />
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragment.axml" />
@@ -1143,6 +1134,18 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\ic_launcher.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\animator\Collapse.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\animator\Expand.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
   <Import Project="..\packages\Xamarin.GooglePlayServices.Basement.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Basement.targets" Condition="Exists('..\packages\Xamarin.GooglePlayServices.Basement.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Basement.targets')" />
@@ -1151,7 +1154,6 @@
   <Import Project="..\packages\Xamarin.Firebase.Iid.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Iid.targets" Condition="Exists('..\packages\Xamarin.Firebase.Iid.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Iid.targets')" />
   <Import Project="..\packages\Xamarin.Firebase.Analytics.Impl.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Analytics.Impl.targets" Condition="Exists('..\packages\Xamarin.Firebase.Analytics.Impl.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Analytics.Impl.targets')" />
   <Import Project="..\packages\Xamarin.Firebase.Analytics.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Analytics.targets" Condition="Exists('..\packages\Xamarin.Firebase.Analytics.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Analytics.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.Perf.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Perf.targets" Condition="Exists('..\packages\Xamarin.Firebase.Perf.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Perf.targets')" />
   <Import Project="..\packages\Xamarin.GooglePlayServices.Base.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Base.targets" Condition="Exists('..\packages\Xamarin.GooglePlayServices.Base.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Base.targets')" />
   <Import Project="..\packages\Xamarin.GooglePlayServices.Auth.Api.Phone.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Auth.Api.Phone.targets" Condition="Exists('..\packages\Xamarin.GooglePlayServices.Auth.Api.Phone.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Auth.Api.Phone.targets')" />
   <Import Project="..\packages\Xamarin.GooglePlayServices.Auth.Base.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Auth.Base.targets" Condition="Exists('..\packages\Xamarin.GooglePlayServices.Auth.Base.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Auth.Base.targets')" />

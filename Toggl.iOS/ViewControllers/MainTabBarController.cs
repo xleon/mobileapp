@@ -5,6 +5,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.iOS.Presentation;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
@@ -21,6 +22,14 @@ namespace Toggl.iOS.ViewControllers
             { typeof(SettingsViewModel), "icSettings" }
         };
 
+        private static readonly Dictionary<Type, string> accessibilityLabels = new Dictionary<Type, string>
+        {
+            { typeof(MainViewModel), Resources.Timer },
+            { typeof(ReportsViewModel), Resources.Reports },
+            { typeof(CalendarViewModel), Resources.Calendar },
+            { typeof(SettingsViewModel), Resources.Settings }
+        };
+
         public MainTabBarController(MainTabBarViewModel viewModel)
         {
             ViewModel = viewModel;
@@ -29,9 +38,11 @@ namespace Toggl.iOS.ViewControllers
             UIViewController createTabFor(ViewModel childViewModel)
             {
                 var viewController = ViewControllerLocator.GetNavigationViewController(childViewModel);
+                var childViewModelType = childViewModel.GetType();
                 var item = new UITabBarItem();
                 item.Title = "";
-                item.Image = UIImage.FromBundle(imageNameForType[childViewModel.GetType()]);
+                item.Image = UIImage.FromBundle(imageNameForType[childViewModelType]);
+                item.AccessibilityLabel = accessibilityLabels[childViewModelType];
                 viewController.TabBarItem = item;
                 return viewController;
             }
@@ -59,12 +70,6 @@ namespace Toggl.iOS.ViewControllers
         public override void ItemSelected(UITabBar tabbar, UITabBarItem item)
         {
             var targetViewController = ViewControllers.Single(vc => vc.TabBarItem == item);
-
-            if (targetViewController is UINavigationController navigationController
-                && navigationController.TopViewController is ReportsViewController)
-            {
-                ViewModel.StartReportsStopwatch();
-            }
 
             if (targetViewController == SelectedViewController
                 && tryGetScrollableController() is IScrollableToTop scrollable)

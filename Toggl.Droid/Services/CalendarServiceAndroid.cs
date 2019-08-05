@@ -57,16 +57,23 @@ namespace Toggl.Droid.Services
             var appContext = Application.Context;
 
             var cursor = appContext.ContentResolver.Query(Calendars.ContentUri, calendarProjection, null, null, null);
-            if (cursor.Count <= 0)
-                yield break;
-
-            while (cursor.MoveToNext())
+            try
             {
-                var id = cursor.GetString(calendarIdIndex);
-                var displayName = cursor.GetString(calendarDisplayNameIndex);
-                var accountName = cursor.GetString(calendarAccountNameIndex);
+                if (cursor.Count <= 0)
+                    yield break;
 
-                yield return new UserCalendar(id, displayName, accountName);
+                while (cursor.MoveToNext())
+                {
+                    var id = cursor.GetString(calendarIdIndex);
+                    var displayName = cursor.GetString(calendarDisplayNameIndex);
+                    var accountName = cursor.GetString(calendarAccountNameIndex);
+
+                    yield return new UserCalendar(id, displayName, accountName);
+                }
+            }
+            finally
+            {
+                cursor.Close();
             }
         }
 
@@ -75,16 +82,24 @@ namespace Toggl.Droid.Services
             var appContext = Application.Context;
 
             var cursor = Instances.Query(appContext.ContentResolver, eventsProjection, start.ToUnixTimeMilliseconds(), end.ToUnixTimeMilliseconds());
-            if (cursor.Count <= 0)
-                yield break;
-
-            while (cursor.MoveToNext())
+            try
             {
-                var isAllDay = cursor.GetInt(eventIsAllDayIndex) == 1;
-                if (isAllDay)
-                    continue;
+                if (cursor.Count <= 0)
+                    yield break;
 
-                yield return calendarItemFromCursor(cursor);
+                while (cursor.MoveToNext())
+                {
+                    var isAllDay = cursor.GetInt(eventIsAllDayIndex) == 1;
+                    if (isAllDay)
+                        continue;
+
+                    yield return calendarItemFromCursor(cursor);
+                }
+
+            }
+            finally
+            {
+                cursor.Close();
             }
         }
 
@@ -94,10 +109,16 @@ namespace Toggl.Droid.Services
 
             var cursor = appContext.ContentResolver.Query(Instances.ContentUri, eventsProjection, $"({Instances.InterfaceConsts.Id} = ?)", new[] { id }, null);
             if (cursor.Count <= 0)
+            {
+                cursor.Close();
                 throw new InvalidOperationException("An invalid calendar Id was provided");
+            }
 
             cursor.MoveToNext();
-            return calendarItemFromCursor(cursor);
+            var calendarItem = calendarItemFromCursor(cursor);
+            cursor.Close();
+            
+            return calendarItem;
         }
 
         private static CalendarItem calendarItemFromCursor(ICursor cursor)

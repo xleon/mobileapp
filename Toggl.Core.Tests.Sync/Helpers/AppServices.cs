@@ -9,7 +9,6 @@ using Toggl.Core.UI.Services;
 using Toggl.Networking;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 
 namespace Toggl.Core.Tests.Sync.Helpers
 {
@@ -30,8 +29,6 @@ namespace Toggl.Core.Tests.Sync.Helpers
         public IAnalyticsService AnalyticsServiceSubstitute { get; } = Substitute.For<IAnalyticsService>();
 
         public ILastTimeUsageStorage LastTimeUsageStorageSubstitute { get; } = Substitute.For<ILastTimeUsageStorage>();
-
-        public IStopwatchProvider StopwatchProvider { get; } = Substitute.For<IStopwatchProvider>();
 
         public ISyncManager SyncManager { get; }
 
@@ -58,7 +55,6 @@ namespace Toggl.Core.Tests.Sync.Helpers
                 AnalyticsServiceSubstitute,
                 LastTimeUsageStorageSubstitute,
                 Scheduler,
-                StopwatchProvider,
                 AutomaticSyncingService);
 
             syncErrorHandlingService.HandleErrorsOf(SyncManager);

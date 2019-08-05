@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toggl.Core", "Toggl.Core\To
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toggl.Core.UI", "Toggl.Core.UI\Toggl.Core.UI.csproj", "{CB2B0786-217F-455A-9349-0FC69468D3B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toggl.Core.Tests", "Toggl.Core.Tests\Toggl.Core.Tests.csproj", "{8E366E3C-7BE5-4962-9E0C-9094AE1FE2F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.Core.Tests", "Toggl.Core.Tests\Toggl.Core.Tests.csproj", "{8E366E3C-7BE5-4962-9E0C-9094AE1FE2F4}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Toggl.Tests.UI", "Toggl.Tests.UI\Toggl.Tests.UI.shproj", "{9DC2721A-9A49-46FA-99A4-B004360A2008}"
 EndProject
