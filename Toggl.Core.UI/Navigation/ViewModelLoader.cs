@@ -100,7 +100,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RemoteConfigService,
-                    dependencyContainer.SuggestionProviderContainer,
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory,
@@ -122,11 +121,12 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RemoteConfigService,
-                    dependencyContainer.SuggestionProviderContainer,
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory,
+                    dependencyContainer.PermissionsChecker,
+                    dependencyContainer.BackgroundService,
                     dependencyContainer.PlatformInfo);
             }
 
@@ -296,10 +296,15 @@ namespace Toggl.Core.UI.Navigation
                 return new SuggestionsViewModel(
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.OnboardingStorage,
-                    dependencyContainer.SuggestionProviderContainer,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.RxActionFactory,
-                    dependencyContainer.NavigationService);
+                    dependencyContainer.AnalyticsService,
+                    dependencyContainer.TimeService,
+                    dependencyContainer.PermissionsChecker,
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.BackgroundService,
+                    dependencyContainer.UserPreferences,
+                    dependencyContainer.SyncManager);
             }
 
             if (viewModelType == typeof(SyncFailuresViewModel))

@@ -24,6 +24,11 @@
         MainActivityOnCreate,
         BackgroundSync,
         Sync,
-        Diffing
+        Diffing,
+        RandomForest2StepsProjectPrediction,
+        RandomForest2StepsTimeEntryPrediction,
+        RandomForest1StepTimeEntryPrediction,
+        MostUsedTimeEntriesPrediction,
+        PullTimeEntriesSync
     }
 }
