@@ -9,7 +9,7 @@
         android:id="@+id/ScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
+        local:layout_behavior="@string/appbar_scrolling_view_behavior">
         <LinearLayout
             android:orientation="vertical"
             android:animateLayoutChanges="true"
@@ -591,12 +591,20 @@
                 android:layout_width="match_parent" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/Toolbar"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/toolbarBlack"
-        local:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+  <android.support.design.widget.AppBarLayout
+      android:id="@+id/AppBarLayout"
+      android:elevation="0dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+      <android.support.v7.widget.Toolbar
+          android:id="@+id/Toolbar"
+          android:minHeight="?attr/actionBarSize"
+          android:background="@color/defaultBackground"
+          local:titleTextColor="@android:color/black"
+          local:layout_scrollFlags="scroll|enterAlways"
+          local:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+          android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+  </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -359,6 +359,7 @@ namespace Toggl.Droid.Fragments
         {
             var activity = Activity as AppCompatActivity;
             toolbar.Title = "";
+            mainRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
             activity.SetSupportActionBar(toolbar);
         }
     }
