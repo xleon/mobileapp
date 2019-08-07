@@ -180,5 +180,8 @@ namespace Toggl.Shared.Extensions
 
         public static IObservable<T> Flatten<T>(this IObservable<IEnumerable<T>> observable)
             => observable.SelectMany(CommonFunctions.Identity);
+
+        public static IObservable<T> OnErrorResumeEmpty<T>(this IObservable<T> observable)
+            => observable.OnErrorResumeNext(Observable.Empty<T>());
     }
 }

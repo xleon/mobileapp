@@ -157,11 +157,12 @@ namespace Toggl.Core.UI.ViewModels
 
         private IObservable<long[]> deleteTimeEntries(long[] timeEntries)
         {
-            var observables =
-                interactorFactory.SoftDeleteMultipleTimeEntries(timeEntries)
-                    .Execute()
-                    .Track(analyticsService.DeleteTimeEntry);
+            var observables = interactorFactory.SoftDeleteMultipleTimeEntries(timeEntries).Execute();
 
+            var deleteMode = timeEntries.Length > 1
+                ? DeleteTimeEntryOrigin.GroupedLogSwipe
+                : DeleteTimeEntryOrigin.LogSwipe;
+            analyticsService.DeleteTimeEntry.Track(deleteMode);
             return observables.SelectValue(timeEntries);
         }
 

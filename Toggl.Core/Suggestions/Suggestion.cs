@@ -1,3 +1,4 @@
+﻿﻿using System;
 using System;
 using Toggl.Core.Calendar;
 using System.Linq;
@@ -27,6 +28,10 @@ namespace Toggl.Core.Suggestions
         public string ClientName { get; } = "";
 
         public bool HasProject { get; } = false;
+
+        public bool HasClient { get; } = false;
+
+        public bool HasTask { get; } = false;
 
         public long WorkspaceId { get; }
 
@@ -58,11 +63,13 @@ namespace Toggl.Core.Suggestions
             ProjectColor = timeEntry.Project.Color;
 
             ClientName = timeEntry.Project.Client?.Name ?? "";
+            HasClient = !string.IsNullOrEmpty(ClientName);
 
             if (timeEntry.Task == null)
                 return;
 
             TaskName = timeEntry.Task.Name;
+            HasTask = true;
         }
 
         internal Suggestion(CalendarItem calendarItem, long workspaceId, SuggestionProviderType providerType)

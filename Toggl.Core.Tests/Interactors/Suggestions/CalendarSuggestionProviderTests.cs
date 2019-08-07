@@ -7,6 +7,7 @@ using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Calendar;
 using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Generators;
@@ -126,7 +127,6 @@ namespace Toggl.Core.Tests.Suggestions
             [Fact, LogIfTooSlow]
             public async Task ReturnsSuggestionsSortedByABSOffsetFromNow()
             {
-
                 var now = new DateTimeOffset(2020, 1, 2, 3, 4, 5, TimeSpan.Zero);
                 TimeService.CurrentDateTime.Returns(now);
                 var tenMinutes = TimeSpan.FromMinutes(10);
@@ -201,6 +201,31 @@ namespace Toggl.Core.Tests.Suggestions
                 await CalendarService.Received().GetEventsInRange(now.AddHours(-1), now.AddHours(1));
                 suggestions.Should().HaveCount(1)
                     .And.OnlyContain(suggestion => events.Any(@event => userCalendars.Select(c => c.Id).Contains(@event.CalendarId)));
+            }
+
+            [Fact]
+            public void NeverThrows()
+            {
+                var now = new DateTimeOffset(2020, 1, 5, 3, 55, 0, TimeSpan.Zero);
+                TimeService.CurrentDateTime.Returns(now);
+                var exception = new Exception();
+                InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Throw<IThreadSafeWorkspace>(exception));
+                var provider = new CalendarSuggestionProvider(TimeService, CalendarService, InteractorFactory);
+
+                Action getSuggestions = () => provider.GetSuggestions().Subscribe();
+                getSuggestions.Should().NotThrow();
+            }
+
+            [Fact]
+            public void ReturnsNoSuggestionsInCaseOfError()
+            {
+                var now = new DateTimeOffset(2020, 1, 5, 3, 55, 0, TimeSpan.Zero);
+                TimeService.CurrentDateTime.Returns(now);
+                var exception = new Exception();
+                InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Throw<IThreadSafeWorkspace>(exception));
+                var provider = new CalendarSuggestionProvider(TimeService, CalendarService, InteractorFactory);
+
+                provider.GetSuggestions().Count().Wait().Should().Be(0);
             }
         }
     }

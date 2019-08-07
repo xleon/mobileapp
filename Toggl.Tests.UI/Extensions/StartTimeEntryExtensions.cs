@@ -14,7 +14,7 @@ namespace Toggl.Tests.UI.Extensions
 
         public static void AddTagInStartView(this IApp app, string tag, bool shouldCreateTag = true)
         {
-            app.EnterText($"#{tag}");
+            app.EnterTextInStartTimeEntryView($"#{tag}");
 
             if (shouldCreateTag)
             {
@@ -27,13 +27,13 @@ namespace Toggl.Tests.UI.Extensions
 
         public static void CreateProjectInStartView(this IApp app, string projectName, string clientName = null)
         {
-            app.EnterText($"@{projectName}");
+            app.EnterTextInStartTimeEntryView($"@{projectName}");
             app.TapCreateProject(projectName);
 
             if (!string.IsNullOrEmpty(clientName))
             {
                 app.Tap(EditProject.ChangeClient);
-                app.EnterText(clientName);
+                app.EnterTextInStartTimeEntryView(clientName);
                 app.TapCreateClient(clientName);
             }
 

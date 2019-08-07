@@ -4,17 +4,13 @@ namespace Toggl.Tests.UI.Extensions
 {
     public static partial class LoginExtensions
     {
-        public static void TryLoginAndFail(this IApp app)
+        public static void AssertLoginFailed(this IApp app)
         {
-            app.Tap(Login.LoginButton);
-
             app.WaitForElement(Login.ErrorLabel);
         }
 
-        public static void LoginSuccesfully(this IApp app)
+        public static void AssertLoggedInSuccesfully(this IApp app)
         {
-            app.Tap(Login.LoginButton);
-
             app.WaitForElement(Main.StartTimeEntryButton);
         }
     }

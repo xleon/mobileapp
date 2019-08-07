@@ -10,6 +10,7 @@
 
 namespace Toggl.Shared {
     using System;
+    using System.Reflection;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
@@ -1480,6 +1481,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string Project {
+            get {
+                return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
         public static string EmptyProjectText {
             get {
                 return ResourceManager.GetString("EmptyProjectText", resourceCulture);
@@ -1507,18 +1514,6 @@ namespace Toggl.Shared {
         public static string EditingTimeEntryGroup {
             get {
                 return ResourceManager.GetString("EditingTimeEntryGroup", resourceCulture);
-            }
-        }
-        
-        public static string NumberOfTasksPlural {
-            get {
-                return ResourceManager.GetString("NumberOfTasksPlural", resourceCulture);
-            }
-        }
-        
-        public static string NumberOfTasksSingular {
-            get {
-                return ResourceManager.GetString("NumberOfTasksSingular", resourceCulture);
             }
         }
         
@@ -1681,6 +1676,18 @@ namespace Toggl.Shared {
         public static string ContinueTimerInvocationPhrase {
             get {
                 return ResourceManager.GetString("ContinueTimerInvocationPhrase", resourceCulture);
+            }
+        }
+        
+        public static string NumberOfTasksPlural {
+            get {
+                return ResourceManager.GetString("NumberOfTasksPlural", resourceCulture);
+            }
+        }
+        
+        public static string NumberOfTasksSingular {
+            get {
+                return ResourceManager.GetString("NumberOfTasksSingular", resourceCulture);
             }
         }
         
@@ -1855,6 +1862,126 @@ namespace Toggl.Shared {
         public static string SiriNoCurrentEntryRunning {
             get {
                 return ResourceManager.GetString("SiriNoCurrentEntryRunning", resourceCulture);
+            }
+        }
+        
+        public static string Heading {
+            get {
+                return ResourceManager.GetString("Heading", resourceCulture);
+            }
+        }
+        
+        public static string SuggestionAccessibilityHint {
+            get {
+                return ResourceManager.GetString("SuggestionAccessibilityHint", resourceCulture);
+            }
+        }
+        
+        public static string TimeEntryRowAccessibilityHint {
+            get {
+                return ResourceManager.GetString("TimeEntryRowAccessibilityHint", resourceCulture);
+            }
+        }
+        
+        public static string Suggestion {
+            get {
+                return ResourceManager.GetString("Suggestion", resourceCulture);
+            }
+        }
+        
+        public static string TrackedTime {
+            get {
+                return ResourceManager.GetString("TrackedTime", resourceCulture);
+            }
+        }
+        
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        public static string HasTags {
+            get {
+                return ResourceManager.GetString("HasTags", resourceCulture);
+            }
+        }
+        
+        public static string Task {
+            get {
+                return ResourceManager.GetString("Task", resourceCulture);
+            }
+        }
+        
+        public static string Client {
+            get {
+                return ResourceManager.GetString("Client", resourceCulture);
+            }
+        }
+        
+        public static string TimeEntries {
+            get {
+                return ResourceManager.GetString("TimeEntries", resourceCulture);
+            }
+        }
+        
+        public static string TimeEntry {
+            get {
+                return ResourceManager.GetString("TimeEntry", resourceCulture);
+            }
+        }
+        
+        public static string ExpandTimeEntryGroup {
+            get {
+                return ResourceManager.GetString("ExpandTimeEntryGroup", resourceCulture);
+            }
+        }
+        
+        public static string CollapseTimeEntryGroup {
+            get {
+                return ResourceManager.GetString("CollapseTimeEntryGroup", resourceCulture);
+            }
+        }
+        
+        public static string Timer {
+            get {
+                return ResourceManager.GetString("Timer", resourceCulture);
+            }
+        }
+        
+        public static string CurrentlyRunningTimeEntry {
+            get {
+                return ResourceManager.GetString("CurrentlyRunningTimeEntry", resourceCulture);
+            }
+        }
+        
+        public static string StopCurrentlyRunningTimeEntry {
+            get {
+                return ResourceManager.GetString("StopCurrentlyRunningTimeEntry", resourceCulture);
+            }
+        }
+        
+        public static string IsBillable {
+            get {
+                return ResourceManager.GetString("IsBillable", resourceCulture);
+            }
+        }
+        
+        public static string SyncFailedOffline {
+            get {
+                return ResourceManager.GetString("SyncFailedOffline", resourceCulture);
+            }
+        }
+        
+        public static string SuccessfullySyncedData {
+            get {
+                return ResourceManager.GetString("SuccessfullySyncedData", resourceCulture);
+            }
+        }
+        
+        public static string UndoDeletedTimeEntry {
+            get {
+                return ResourceManager.GetString("UndoDeletedTimeEntry", resourceCulture);
             }
         }
     }

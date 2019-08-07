@@ -12,9 +12,7 @@ using Android.Views;
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
 using Toggl.Core.Analytics;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Sync;
 using Toggl.Core.UI.Extensions;
@@ -26,12 +24,10 @@ using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Helper;
 using Toggl.Droid.Presentation;
-using Toggl.Droid.Services;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Shared.Extensions;
 using static Android.Content.Context;
 using static Toggl.Core.Sync.SyncProgress;
-using static Toggl.Droid.Extensions.CircularRevealAnimation.AnimationType;
 using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Fragments
@@ -42,8 +38,6 @@ namespace Toggl.Droid.Fragments
         private NotificationManager notificationManager;
         private MainRecyclerAdapter mainRecyclerAdapter;
         private LinearLayoutManager layoutManager;
-        private FirebaseStopwatchProviderAndroid localStopwatchProvider = new FirebaseStopwatchProviderAndroid();
-        private CancellationTokenSource cardAnimationCancellation;
         private bool shouldShowRatingViewOnResume;
         private ISubject<bool> visibilityChangedSubject = new BehaviorSubject<bool>(false);
         private IObservable<bool> visibilityChanged => visibilityChangedSubject.AsObservable();
@@ -53,16 +47,11 @@ namespace Toggl.Droid.Fragments
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            var onCreateStopwatch = localStopwatchProvider.Create(MeasuredOperation.MainActivityOnCreate);
-            onCreateStopwatch.Start();
-
             var view = inflater.Inflate(Resource.Layout.MainFragment, container, false);
 
             InitializeViews(view);
             setupToolbar();
-            runningEntryCardFrame.Visibility = ViewStates.Invisible;
 
-            onCreateStopwatch.Stop();
             return view;
         }
 
@@ -74,7 +63,7 @@ namespace Toggl.Droid.Fragments
             playButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => true).DisposedBy(DisposeBag);
             playButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => false, ButtonEventType.LongPress).DisposedBy(DisposeBag);
 
-            timeEntryCard.Rx().Tap()
+            runningEntryCardFrame.Rx().Tap()
                 .WithLatestFrom(ViewModel.CurrentRunningTimeEntry,
                     (_, te) => (new[] { te.Id }, EditTimeEntryOrigin.RunningTimeEntryCard))
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
@@ -144,7 +133,6 @@ namespace Toggl.Droid.Fragments
             {
                 SuggestionsViewModel = ViewModel.SuggestionsViewModel,
                 RatingViewModel = ViewModel.RatingViewModel,
-                StopwatchProvider = localStopwatchProvider
             };
             mainRecyclerAdapter.SetupRatingViewVisibility(shouldShowRatingViewOnResume);
 
@@ -182,12 +170,10 @@ namespace Toggl.Droid.Fragments
                  .DisposedBy(DisposeBag);
 
             ViewModel.TimeEntries
-                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(mainRecyclerAdapter.UpdateCollection)
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsTimeEntryRunning
-                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(updateRecyclerViewPadding)
                 .DisposedBy(DisposeBag);
 
@@ -318,34 +304,7 @@ namespace Toggl.Droid.Fragments
 
         private void onTimeEntryCardVisibilityChanged(bool visible)
         {
-            cardAnimationCancellation?.Cancel();
-            if (runningEntryCardFrame == null) return;
-
-            var isCardVisible = runningEntryCardFrame.Visibility == ViewStates.Visible;
-            if (isCardVisible == visible) return;
-
-            cardAnimationCancellation = new CancellationTokenSource();
-
-            var buttonToHide = visible ? playButton : stopButton;
-            var buttonToShow = visible ? stopButton : playButton;
-
-            var radialAnimation =
-                runningEntryCardFrame
-                    .AnimateWithCircularReveal()
-                    .WithCancellationToken(cardAnimationCancellation.Token)
-                    .SetDuration(TimeSpan.FromSeconds(0.5))
-                    .SetBehaviour((x, y, w, h) => (x, y + h, 0, w))
-                    .SetType(() => visible ? Appear : Disappear);
-
-            buttonToHide.Hide(((Action)onFabHidden).ToFabVisibilityListener());
-
-            void onFabHidden()
-            {
-                radialAnimation
-                    .OnAnimationEnd(_ => buttonToShow.Show())
-                    .OnAnimationCancel(buttonToHide.Show)
-                    .Start();
-            }
+            playButton.SetExpanded(visible);
         }
 
         private void onEmptyStateVisibilityChanged(bool shouldShowEmptyState)

@@ -48,7 +48,6 @@
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchFastDev>true</MtouchFastDev>
     <MtouchFloat32>true</MtouchFloat32>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
@@ -230,9 +229,6 @@
     </Reference>
     <Reference Include="System.Collections.Immutable">
       <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-    <Reference Include="Firebase.PerformanceMonitoring">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\lib\Xamarin.iOS10\Firebase.PerformanceMonitoring.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Essentials">
       <HintPath>..\packages\Xamarin.Essentials.1.0.0\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
@@ -1304,7 +1300,6 @@
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
-    <InterfaceDefinition Include="ViewControllers\OnboardingViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\MainViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\EditTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriShortcutsSelectReportPeriodViewController.xib" />
@@ -1405,6 +1400,7 @@
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
+    <BundleResource Include="RemoteConfigDefaults.plist" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analytics\SiriIntentErrorTrackingEvent.cs" />
@@ -1441,6 +1437,7 @@
     <Compile Include="Extensions\Reactive\UIViewExtensions.cs" />
     <Compile Include="Services\IntentDonationService.cs" />
     <Compile Include="Services\UserDefaultsStorageIos.cs" />
+    <Compile Include="Services\WatchService.cs" />
     <Compile Include="Startup\AppDelegate.Deeplink.cs">
       <DependentUpon>AppDelegate.cs</DependentUpon>
     </Compile>
@@ -1667,7 +1664,6 @@
     <Compile Include="Views\RoundedView.cs" />
     <Compile Include="Views\Reports\PieChartView.cs" />
     <Compile Include="Views\Reports\PercentageView.cs" />
-    <Compile Include="Services\ITopViewControllerProvider.cs" />
     <Compile Include="Views\Reports\ReportsLegendViewCell.cs" />
     <Compile Include="Views\Reports\ReportsLegendViewCell.designer.cs">
       <DependentUpon>ReportsLegendViewCell.cs</DependentUpon>
@@ -1743,7 +1739,6 @@
     <Compile Include="ViewControllers\Settings\AboutViewController.designer.cs">
       <DependentUpon>AboutViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\TimeEntriesLogViewCellExtensions.cs" />
     <Compile Include="ViewControllers\SelectCountryViewController.cs" />
     <Compile Include="ViewControllers\SelectCountryViewController.designer.cs">
       <DependentUpon>SelectCountryViewController.cs</DependentUpon>
@@ -1771,7 +1766,6 @@
       <DependentUpon>TermsOfServiceViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\RangeExtensions.cs" />
-    <Compile Include="Services\RemoteConfigServiceIos.cs" />
     <Compile Include="Extensions\ImageExtension.cs" />
     <Compile Include="Services\RatingServiceIos.cs" />
     <Compile Include="Cells\BaseTableViewCell.cs" />
@@ -1884,7 +1878,6 @@
     <Compile Include="Views\Reports\BarLegendLabel.cs" />
     <Compile Include="Views\Reports\EmptyBarView.cs" />
     <Compile Include="Extensions\Reactive\UIBarButtonItemExtensions.cs" />
-    <Compile Include="Services\FirebaseStopwatchProviderIos.cs" />
     <Compile Include="ViewControllers\SelectDefaultWorkspaceViewController.cs" />
     <Compile Include="ViewControllers\SelectDefaultWorkspaceViewController.designer.cs">
       <DependentUpon>SelectDefaultWorkspaceViewController.cs</DependentUpon>
@@ -1981,6 +1974,9 @@
     <Compile Include="ViewControllers\Reactive\ReactiveNavigationController.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringViewController.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringViewControllerShortcuts.cs" />
+    <Compile Include="Views\AccessibilityAwareView.cs" />
+    <Compile Include="Services\AccessibilityServiceIos.cs" />
+    <Compile Include="Services\RemoteConfigServiceIos.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">
@@ -2074,7 +2070,6 @@
   <Import Project="..\packages\Xamarin.Firebase.iOS.Analytics.4.0.5.1\build\Xamarin.Firebase.iOS.Analytics.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.Analytics.4.0.5.1\build\Xamarin.Firebase.iOS.Analytics.targets')" />
   <Import Project="..\packages\Xamarin.Google.iOS.Core.3.1.0.1\build\Xamarin.Google.iOS.Core.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.Core.3.1.0.1\build\Xamarin.Google.iOS.Core.targets')" />
   <Import Project="..\packages\Xamarin.Google.iOS.SignIn.4.1.1.1\build\Xamarin.Google.iOS.SignIn.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.SignIn.4.1.1.1\build\Xamarin.Google.iOS.SignIn.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\build\Xamarin.Firebase.iOS.PerformanceMonitoring.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\build\Xamarin.Firebase.iOS.PerformanceMonitoring.targets')" />
   <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

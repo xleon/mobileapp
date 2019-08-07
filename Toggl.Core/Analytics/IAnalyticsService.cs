@@ -55,7 +55,7 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent RatingViewSecondStepDontSendFeedback { get; }
 
-        IAnalyticsEvent DeleteTimeEntry { get; }
+        IAnalyticsEvent<DeleteTimeEntryOrigin> DeleteTimeEntry { get; }
 
         IAnalyticsEvent<string> ApplicationShortcut { get; }
 
@@ -82,6 +82,8 @@ namespace Toggl.Core.Analytics
         IAnalyticsEvent<int> TagPlaceholdersCreated { get; }
 
         IAnalyticsEvent<EditViewTapSource> EditViewTapped { get; }
+
+        IAnalyticsEvent<EditViewCloseReason> EditViewClosed { get; }
 
         IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; }
 
@@ -176,6 +178,10 @@ namespace Toggl.Core.Analytics
         IAnalyticsEvent<string, string, string, string> DebugSchedulerError { get; }
 
         IAnalyticsEvent<string, string> DebugNavigationError { get; }
+
+        IAnalyticsEvent<bool> AccessibilityEnabled { get; }
+
+        IAnalyticsEvent<bool> WatchPaired { get; }
 
         void SetAppCenterUserId(long id);
         void ResetAppCenterUserId();

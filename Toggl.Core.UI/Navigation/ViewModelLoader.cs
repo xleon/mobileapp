@@ -40,7 +40,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.StopwatchProvider,
                     dependencyContainer.NavigationService);
             }
 
@@ -54,7 +53,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.OnboardingStorage,
                     dependencyContainer.AnalyticsService,
-                    dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.SchedulerProvider);
             }
@@ -100,8 +98,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RemoteConfigService,
+                    dependencyContainer.AccessibilityService,
                     dependencyContainer.AccessRestrictionStorage,
-                    dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.UserAccessManager,
                     dependencyContainer.PrivateSharedStorageService,
@@ -121,9 +119,9 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RemoteConfigService,
+                    dependencyContainer.AccessibilityService,
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.BackgroundService,
@@ -238,15 +236,13 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.NavigationService,
-                    dependencyContainer.SchedulerProvider,
-                    dependencyContainer.StopwatchProvider);
+                    dependencyContainer.SchedulerProvider);
             }
 
             if (viewModelType == typeof(SelectTagsViewModel))
             {
                 return new SelectTagsViewModel(
                     dependencyContainer.NavigationService,
-                    dependencyContainer.StopwatchProvider,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.RxActionFactory);
@@ -287,7 +283,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory);
             }
 
@@ -355,7 +350,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.NavigationService,
-                    dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory);
             }
 
@@ -377,7 +371,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory);
             }
 
@@ -438,7 +431,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.OnboardingStorage,
                     dependencyContainer.NavigationService,
                     dependencyContainer.PrivateSharedStorageService,
-                    dependencyContainer.StopwatchProvider,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.SchedulerProvider);
