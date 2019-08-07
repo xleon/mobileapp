@@ -33,8 +33,15 @@ namespace Toggl.Droid.Activities
 
             InitializeViews();
 
-            emailEditText.Text = ViewModel.Email.FirstAsync().GetAwaiter().GetResult();
-            passwordEditText.Text = ViewModel.Password.FirstAsync().GetAwaiter().GetResult();
+            ViewModel.Email.FirstAsync()
+                .SubscribeOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
+                .Subscribe(emailEditText.Rx().TextObserver())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.Password.FirstAsync()
+                .SubscribeOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
+                .Subscribe(passwordEditText.Rx().TextObserver())
+                .DisposedBy(DisposeBag);
 
             //Text
             ViewModel.ErrorMessage
