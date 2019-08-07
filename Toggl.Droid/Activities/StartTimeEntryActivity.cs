@@ -146,6 +146,7 @@ namespace Toggl.Droid.Activities
             base.OnStop();
             selectProjectToolbarButton.LayoutChange -= onSelectProjectToolbarButtonLayoutChanged;
             onboardingPopupWindow?.Dismiss();
+            onboardingPopupWindow = null;
         }
 
         public override void Finish()
