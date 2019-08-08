@@ -101,7 +101,7 @@
             android:scrollHorizontally="true"
             android:textColor="@android:color/black"
             android:background="@null"
-            android:textCursorDrawable="@drawable/EditTextWhiteCursor"
+            android:textCursorDrawable="@drawable/EditTextCursor"
             android:textColorHint="@color/placeholderText"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
