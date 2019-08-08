@@ -372,7 +372,9 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         private async Task createTimeEntryAtOffset(DateTimeOffset startTime)
         {
-            var startParams = StartTimeEntryParameters.ForManualMode(startTime);
+            var startParams = StartTimeEntryParameters
+                .ForCalendarTapAndDrag(startTime);
+
             await Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(startParams);
         }
 

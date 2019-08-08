@@ -398,9 +398,10 @@ namespace Toggl.Core.UI.ViewModels
             if (hasStopButtonEverBeenUsed)
                 OnboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();
 
+            var requestCameFromLongPress = !useDefaultMode;
             var parameter = initializeInManualMode
-                ? StartTimeEntryParameters.ForManualMode(TimeService.CurrentDateTime)
-                : StartTimeEntryParameters.ForTimerMode(TimeService.CurrentDateTime);
+                ? StartTimeEntryParameters.ForManualMode(TimeService.CurrentDateTime, requestCameFromLongPress)
+                : StartTimeEntryParameters.ForTimerMode(TimeService.CurrentDateTime, requestCameFromLongPress);
 
             return navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(parameter);
         }
