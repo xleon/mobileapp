@@ -40,9 +40,9 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
         {
             base.ViewDidLoad();
 
-            Title = Resources.Siri_Workflows;
+            Title = Resources.SiriWorkflows;
 
-            HeaderLabel.Text = Resources.Siri_Workflows_Description;
+            HeaderLabel.Text = Resources.SiriWorkflowsDescription;
             HeaderView.RemoveFromSuperview();
             HeaderView.BackgroundColor = Colors.Siri.HeaderBackground.ToNativeColor();
             TableView.TableHeaderView = HeaderView;

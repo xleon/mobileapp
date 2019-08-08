@@ -362,6 +362,11 @@ namespace Toggl.Core.UI.Helper
             public static readonly Color Border = new Color(232, 232, 232);
         }
 
+        public static class Calendar
+        {
+            public static readonly Color EnableCalendarAction = lightishGreen;
+        }
+
         public static readonly Color[] DefaultProjectColors =
             Toggl.Core.Helper.Colors.DefaultProjectColors.Select(hex => new Color(hex)).ToArray();
     }

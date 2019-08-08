@@ -35,9 +35,9 @@ namespace Toggl.iOS.ViewControllers.Settings
         {
             base.ViewDidLoad();
 
-            Title = Resources.Siri_Shortcuts;
+            Title = Resources.SiriShortcuts;
 
-            DescriptionLabel.Text = Resources.Siri_Shortcuts_Description;
+            DescriptionLabel.Text = Resources.SiriShortcutsDescription;
             HeaderView.RemoveFromSuperview();
             HeaderView.BackgroundColor = Colors.Siri.HeaderBackground.ToNativeColor();
             TableView.TableHeaderView = HeaderView;
@@ -180,11 +180,11 @@ namespace Toggl.iOS.ViewControllers.Settings
             return new[]
             {
                 new ShortcutSection(
-                    "Timer shortcuts",
+                    Resources.SiriShortcutsTimerShortcuts,
                     allShortcuts.Where(s => s.IsTimerShortcut())
                 ),
                 new ShortcutSection(
-                    "Reports shortcuts",
+                    Resources.SiriShortcutsReportsShortcuts,
                     allShortcuts.Where(s => s.IsReportsShortcut())
                 )
             };

@@ -46,6 +46,9 @@ namespace Toggl.iOS.ViewControllers
             FeedbackToastTitleLabel.Text = Resources.DoneWithExclamationMark.ToUpper();
             FeedbackToastTextLabel.Text = Resources.ThankYouForTheFeedback;
             LogoutButton.SetTitle(Resources.SignOutOfToggl, UIControlState.Normal);
+            CalendarSettingsHeaderLabel.Text = Resources.Calendar;
+            SiriSettingsHeaderLabel.Text = Resources.SiriSettings;
+            TimerSettingsHeaderLabel.Text = Resources.TimerSettings;
 
             prepareViews();
 

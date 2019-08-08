@@ -2,16 +2,16 @@
 <root>
     <!--
       Microsoft ResX Schema
-  
+
       Version 2.0
-  
+
       The primary goals of this format is to allow a simple XML format
       that is mostly human readable. The generation and parsing of the
       various data types are done through the TypeConverter classes
       associated with the data types.
-  
+
       Example:
-  
+
       ... ado.net/XML headers & schema ...
       <resheader name="resmimetype">text/microsoft-resx</resheader>
       <resheader name="version">2.0</resheader>
@@ -26,34 +26,34 @@
           <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
           <comment>This is a comment</comment>
       </data>
-  
+
       There are any number of "resheader" rows that contain simple
       name/value pairs.
-  
+
       Each data row contains a name, and value. The row also contains a
       type or mimetype. Type corresponds to a .NET class that support
       text/value conversion through the TypeConverter architecture.
       Classes that don't support this are serialized and stored with the
       mimetype set.
-  
+
       The mimetype is used for serialized objects, and tells the
       ResXResourceReader how to depersist the object. This is currently not
       extensible. For a given mimetype the value must be set accordingly:
-  
+
       Note - application/x-microsoft.net.object.binary.base64 is the format
       that the ResXResourceWriter will generate, however the reader can
       read any of the formats listed below.
-  
+
       mimetype: application/x-microsoft.net.object.binary.base64
       value   : The object must be serialized with
               : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
               : and then encoded with base64 encoding.
-  
+
       mimetype: application/x-microsoft.net.object.soap.base64
       value   : The object must be serialized with
               : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
               : and then encoded with base64 encoding.
-  
+
       mimetype: application/x-microsoft.net.object.bytearray.base64
       value   : The object must be serialized into a byte array
               : using a System.ComponentModel.TypeConverter
@@ -271,7 +271,7 @@ Start the timer and your most used time entries will appear here.</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Download</value>
-  </data>    
+  </data>
   <data name="ConfirmDeleteNewTETitle" xml:space="preserve">
     <value>Would you like to discard this time entry?</value>
   </data>
@@ -298,6 +298,9 @@ Start the timer and your most used time entries will appear here.</value>
   </data>
     <data name="NewProject" xml:space="preserve">
     <value>New Project</value>
+  </data>
+    <data name="PrivateProject" xml:space="preserve">
+    <value>Private Project</value>
   </data>
     <data name="Create" xml:space="preserve">
     <value>Create</value>
@@ -328,6 +331,9 @@ Start the timer and your most used time entries will appear here.</value>
   </data>
     <data name="Workspaces" xml:space="preserve">
     <value>Workspaces</value>
+  </data>
+  <data name="WorkspacePossesive" xml:space="preserve">
+    <value>{0}'s Workspace</value>
   </data>
     <data name="SetDefaultWorkspace" xml:space="preserve">
     <value>Set default workspace</value>
@@ -680,9 +686,6 @@ Start the timer and your most used time entries will appear here.</value>
     <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>
   </data>
-    <data name="CalendarFeatureDescription" xml:space="preserve">
-    <value>Calendar feature links to calendars on your device so that you can see events and turn these to time entries.</value>
-  </data>
     <data name="GetStarted" xml:space="preserve">
     <value>Get started</value>
   </data>
@@ -860,14 +863,20 @@ Use them to add keywords to your time entries.</value>
     <data name="SelectCalendars" xml:space="preserve">
     <value>Select calendars</value>
   </data>
-    <data name="SelectCalendarsDescription" xml:space="preserve">
-    <value>Events are visible to you only and won’t appear in Reports.</value>
-  </data>
     <data name="FilterWorkspaces" xml:space="preserve">
     <value>Filter workspaces</value>
   </data>
     <data name="ContactUs" xml:space="preserve">
     <value>Contact us</value>
+  </data>
+  <data name="ContactUsOops" xml:space="preserve">
+    <value>Oops!</value>
+  </data>
+  <data name="ContactUsSomethingWentWrongTryAgain" xml:space="preserve">
+    <value>Something went wrong. Please try again</value>
+  </data>
+  <data name="ContactUsSend" xml:space="preserve">
+    <value>Send</value>
   </data>
     <data name="FeedbackFieldPlaceholder" xml:space="preserve">
     <value>Let us know what you think. Send us your feedback and questions.</value>
@@ -886,6 +895,12 @@ Use them to add keywords to your time entries.</value>
   </data>
     <data name="Use24HourClock" xml:space="preserve">
     <value>Use 24-hour clock</value>
+  </data>
+  <data name="TimerSettings" xml:space="preserve">
+    <value>Timer defaults</value>
+  </data>
+  <data name="SiriSettings" xml:space="preserve">
+    <value>Siri</value>
   </data>
     <data name="ManualMode" xml:space="preserve">
     <value>Manual mode</value>
@@ -956,13 +971,13 @@ Use them to add keywords to your time entries.</value>
   <data name="EditingTwentyFourHoursFormat">
     <value>HH:mm</value>
   </data>
-  <data name="Siri Shortcuts" xml:space="preserve">
+  <data name="SiriShortcuts" xml:space="preserve">
     <value>Siri Shortcuts</value>
   </data>
-  <data name="Siri Shortcuts Description" xml:space="preserve">
+  <data name="SiriShortcutsDescription" xml:space="preserve">
     <value>Add shortcuts to control Toggl with Siri and the Shortcuts app</value>
   </data>
-  <data name="Siri Workflows Description" xml:space="preserve">
+  <data name="SiriWorkflowsDescription" xml:space="preserve">
     <value>Chain your Toggl shortcuts with those from other apps</value>
   </data>
   <data name="SiriShortcutCustomTimeEntryTitle" xml:space="preserve">
@@ -977,13 +992,16 @@ Use them to add keywords to your time entries.</value>
   <data name="SiriClipboardInstructionDescription" xml:space="preserve">
     <value>When you choose this option, whatever text has been copied to the system’s clipboard will be used as the description for the time entry.</value>
   </data>
+  <data name="SiriClipboardInstructionConfirm" xml:space="preserve">
+    <value>Ok</value>
+  </data>
   <data name="SiriClipboardInstructionDoNotShowAgain" xml:space="preserve">
     <value>Don’t show this again</value>
   </data>
   <data name="SiriClipboardHintLabel" xml:space="preserve">
     <value>When you run this shortcut, the Description will be pasted from Clipboard</value>
   </data>
-  <data name="Siri Workflows" xml:space="preserve">
+  <data name="SiriWorkflows" xml:space="preserve">
     <value>Siri Workflows</value>
   </data>
   <data name="CantOpenWorkflowTitle" xml:space="preserve">
@@ -1096,5 +1114,78 @@ Use them to add keywords to your time entries.</value>
   </data>
   <data name="UndoDeletedTimeEntry" xml:space="preserve">
     <value>Undo deleted time entry</value>
+  </data>
+  <data name="CalendarFeatureDescription" xml:space="preserve">
+    <value>Calendar feature links to calendars on your device so that you can see events and turn these to time entries.</value>
+  </data>
+  <data name="CalendarPermissionDeniedOr" xml:space="preserve">
+    <value>or {0}</value>
+  </data>
+  <data name="CalendarPermissionDeniedEnableButton" xml:space="preserve">
+    <value>enable access to see events</value>
+  </data>
+  <data name="SelectCalendarsDescription" xml:space="preserve">
+    <value>Events are visible to you only and won’t appear in Reports.</value>
+  </data>
+  <data name="NoWorkspaceOr" xml:space="preserve">
+    <value>Or {0}</value>
+  </data>
+  <data name="NoWorkspaceTryAgain" xml:space="preserve">
+    <value>Try again</value>
+  </data>
+  <data name="OutdatedAppTryTogglCom" xml:space="preserve">
+    <value>try toggl.com</value>
+  </data>
+  <data name="RatingTitle" xml:space="preserve">
+    <value>Enjoying Toggl?</value>
+  </data>
+  <data name="RatingYes" xml:space="preserve">
+    <value>Yes!</value>
+  </data>
+  <data name="RatingNotReally" xml:space="preserve">
+    <value>Not really</value>
+  </data>
+  <data name="ReportsEmptyStateTitle" xml:space="preserve">
+    <value>Nothing here</value>
+  </data>
+  <data name="ReportsEmptyStateDescription" xml:space="preserve">
+    <value>You have no time entries for
+the selected time period.</value>
+  </data>
+  <data name="SiriShortcutCellAdd" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="CustomSiriShortcutCellIn" xml:space="preserve">
+    <value>in {0}</value>
+  </data>
+  <data name="SiriShortcutsStartTimer" xml:space="preserve">
+    <value>Start timer</value>
+  </data>
+  <data name="SiriShortcutsStartTimerWithName" xml:space="preserve">
+    <value>Start timer: {0}</value>
+  </data>
+  <data name="SiriShortcutsStartFromClipboard" xml:space="preserve">
+    <value>Start from clipboard</value>
+  </data>
+  <data name="SiriShortcutsContinueTracking" xml:space="preserve">
+    <value>Continue tracking</value>
+  </data>
+  <data name="SiriShortcutsStopRunningEntry" xml:space="preserve">
+    <value>Stop running entry</value>
+  </data>
+  <data name="SiriShortcutsStartTimerWithCustomDetails" xml:space="preserve">
+    <value>Start timer with custom details</value>
+  </data>
+  <data name="SiriShortcutsShowReport" xml:space="preserve">
+    <value>Show report</value>
+  </data>
+  <data name="SiriShortcutsShowCustomReport" xml:space="preserve">
+    <value>Show custom report</value>
+  </data>
+  <data name="SiriShortcutsTimerShortcuts" xml:space="preserve">
+    <value>Timer shortcuts</value>
+  </data>
+  <data name="SiriShortcutsReportsShortcuts" xml:space="preserve">
+    <value>Reports shortcuts</value>
   </data>
 </root>

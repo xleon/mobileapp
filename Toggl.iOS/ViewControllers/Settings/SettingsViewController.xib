@@ -18,6 +18,7 @@
                 <outlet property="BeginningOfWeekView" destination="kdM-dN-ITR" id="m5n-6w-mNR"/>
                 <outlet property="CalendarSectionTopConstraint" destination="Ip0-hv-Fad" id="CBJ-Qz-7Wk"/>
                 <outlet property="CalendarSettingsCellLabel" destination="TQi-7l-nWd" id="d3x-5u-g5a"/>
+                <outlet property="CalendarSettingsHeaderLabel" destination="eVF-K2-5bP" id="mcq-70-QL7"/>
                 <outlet property="CalendarSettingsSection" destination="oNB-p4-T5l" id="Ytt-6z-9iM"/>
                 <outlet property="CalendarSettingsView" destination="DTp-wG-K74" id="tGk-ja-zEL"/>
                 <outlet property="DateFormatCellLabel" destination="n7s-OS-TkS" id="PQM-rn-CrL"/>
@@ -56,6 +57,7 @@
                 <outlet property="ShortcutsSettingsView" destination="9un-IH-5NU" id="rGg-xG-tJs"/>
                 <outlet property="SiriSection" destination="UYV-Xu-uHs" id="Exg-ca-bEk"/>
                 <outlet property="SiriSectionTopConstraint" destination="8WJ-Gr-KMT" id="BV6-b9-9CJ"/>
+                <outlet property="SiriSettingsHeaderLabel" destination="9o4-tU-MhF" id="Tus-sL-iUK"/>
                 <outlet property="SmartAlertCellLabel" destination="vZb-rZ-97C" id="rEn-ka-ebD"/>
                 <outlet property="SubmitFeedbackCellLabel" destination="7KY-Cw-c2h" id="ZRg-UQ-hX7"/>
                 <outlet property="SyncedIcon" destination="2Xf-GA-0Ym" id="BfG-Gy-Dva"/>
@@ -65,6 +67,7 @@
                 <outlet property="SyncingIndicator" destination="05J-Mj-sE1" id="Pw9-T1-qdo"/>
                 <outlet property="SyncingLabel" destination="FaX-g8-EOP" id="0n2-5c-AcE"/>
                 <outlet property="SyncingView" destination="305" id="HUL-5W-ZWG"/>
+                <outlet property="TimerSettingsHeaderLabel" destination="iZL-PO-ChW" id="NcH-4L-yXY"/>
                 <outlet property="TopConstraint" destination="9A2-rU-Dgd" id="qOq-Ja-AVY"/>
                 <outlet property="TwentyFourHourClockSwitch" destination="dDv-0e-Fkg" id="5TU-Z6-8gG"/>
                 <outlet property="TwentyFourHourClockView" destination="Ul3-j2-RlO" id="ZpY-2q-dnX"/>

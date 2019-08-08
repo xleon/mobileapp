@@ -71,12 +71,12 @@ namespace Toggl.iOS.Views.Reports
                 .DisposedBy(disposeBag);
 
             Item.BarChartViewModel.MaximumHoursPerBar
-                .Select(hours => $"{hours} h")
+                .Select(hours => $"{hours} {Resources.UnitHour}")
                 .Subscribe(MaximumHoursLabel.Rx().Text())
                 .DisposedBy(disposeBag);
 
             Item.BarChartViewModel.MaximumHoursPerBar
-                .Select(hours => $"{hours / 2} h")
+                .Select(hours => $"{hours / 2} {Resources.UnitHour}")
                 .Subscribe(HalfHoursLabel.Rx().Text())
                 .DisposedBy(disposeBag);
 

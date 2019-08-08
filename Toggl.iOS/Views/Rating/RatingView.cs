@@ -116,6 +116,10 @@ namespace Toggl.iOS
         {
             base.LayoutSubviews();
 
+            TitleLabel.Text = Resources.RatingTitle;
+            YesLabel.Text = Resources.RatingYes;
+            NotReallyLabel.Text = Resources.RatingNotReally;
+
             CtaButton.SetTitle(Resources.RatingCallToActionTitle, UIControlState.Normal);
             DismissButton.SetTitle(Resources.NoThanks, UIControlState.Normal);
 

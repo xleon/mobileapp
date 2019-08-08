@@ -31,6 +31,9 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UILabel CalendarSettingsCellLabel { get; set; }
 
 		[Outlet]
+		UIKit.UILabel CalendarSettingsHeaderLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIView CalendarSettingsSection { get; set; }
 
 		[Outlet]
@@ -146,6 +149,9 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.NSLayoutConstraint SiriSectionTopConstraint { get; set; }
 
 		[Outlet]
+		UIKit.UILabel SiriSettingsHeaderLabel { get; set; }
+
+		[Outlet]
 		UIKit.UILabel SmartAlertCellLabel { get; set; }
 
 		[Outlet]
@@ -171,6 +177,9 @@ namespace Toggl.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UIView SyncingView { get; set; }
+
+		[Outlet]
+		UIKit.UILabel TimerSettingsHeaderLabel { get; set; }
 
 		[Outlet]
 		UIKit.NSLayoutConstraint TopConstraint { get; set; }
@@ -517,6 +526,21 @@ namespace Toggl.iOS.ViewControllers
 			if (YourProfileCellLabel != null) {
 				YourProfileCellLabel.Dispose ();
 				YourProfileCellLabel = null;
+			}
+
+			if (TimerSettingsHeaderLabel != null) {
+				TimerSettingsHeaderLabel.Dispose ();
+				TimerSettingsHeaderLabel = null;
+			}
+
+			if (CalendarSettingsHeaderLabel != null) {
+				CalendarSettingsHeaderLabel.Dispose ();
+				CalendarSettingsHeaderLabel = null;
+			}
+
+			if (SiriSettingsHeaderLabel != null) {
+				SiriSettingsHeaderLabel.Dispose ();
+				SiriSettingsHeaderLabel = null;
 			}
 		}
 	}

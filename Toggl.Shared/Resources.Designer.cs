@@ -407,6 +407,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string PrivateProject {
+            get {
+                return ResourceManager.GetString("PrivateProject", resourceCulture);
+            }
+        }
+        
         public static string Create {
             get {
                 return ResourceManager.GetString("Create", resourceCulture);
@@ -464,6 +470,12 @@ namespace Toggl.Shared {
         public static string Workspaces {
             get {
                 return ResourceManager.GetString("Workspaces", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePossesive {
+            get {
+                return ResourceManager.GetString("WorkspacePossesive", resourceCulture);
             }
         }
         
@@ -1169,12 +1181,6 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string CalendarFeatureDescription {
-            get {
-                return ResourceManager.GetString("CalendarFeatureDescription", resourceCulture);
-            }
-        }
-        
         public static string GetStarted {
             get {
                 return ResourceManager.GetString("GetStarted", resourceCulture);
@@ -1523,12 +1529,6 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string SelectCalendarsDescription {
-            get {
-                return ResourceManager.GetString("SelectCalendarsDescription", resourceCulture);
-            }
-        }
-        
         public static string FilterWorkspaces {
             get {
                 return ResourceManager.GetString("FilterWorkspaces", resourceCulture);
@@ -1538,6 +1538,24 @@ namespace Toggl.Shared {
         public static string ContactUs {
             get {
                 return ResourceManager.GetString("ContactUs", resourceCulture);
+            }
+        }
+        
+        public static string ContactUsOops {
+            get {
+                return ResourceManager.GetString("ContactUsOops", resourceCulture);
+            }
+        }
+        
+        public static string ContactUsSomethingWentWrongTryAgain {
+            get {
+                return ResourceManager.GetString("ContactUsSomethingWentWrongTryAgain", resourceCulture);
+            }
+        }
+        
+        public static string ContactUsSend {
+            get {
+                return ResourceManager.GetString("ContactUsSend", resourceCulture);
             }
         }
         
@@ -1574,6 +1592,18 @@ namespace Toggl.Shared {
         public static string Use24HourClock {
             get {
                 return ResourceManager.GetString("Use24HourClock", resourceCulture);
+            }
+        }
+        
+        public static string TimerSettings {
+            get {
+                return ResourceManager.GetString("TimerSettings", resourceCulture);
+            }
+        }
+        
+        public static string SiriSettings {
+            get {
+                return ResourceManager.GetString("SiriSettings", resourceCulture);
             }
         }
         
@@ -1715,21 +1745,21 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string Siri_Shortcuts {
+        public static string SiriShortcuts {
             get {
-                return ResourceManager.GetString("Siri Shortcuts", resourceCulture);
+                return ResourceManager.GetString("SiriShortcuts", resourceCulture);
             }
         }
         
-        public static string Siri_Shortcuts_Description {
+        public static string SiriShortcutsDescription {
             get {
-                return ResourceManager.GetString("Siri Shortcuts Description", resourceCulture);
+                return ResourceManager.GetString("SiriShortcutsDescription", resourceCulture);
             }
         }
         
-        public static string Siri_Workflows_Description {
+        public static string SiriWorkflowsDescription {
             get {
-                return ResourceManager.GetString("Siri Workflows Description", resourceCulture);
+                return ResourceManager.GetString("SiriWorkflowsDescription", resourceCulture);
             }
         }
         
@@ -1757,6 +1787,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string SiriClipboardInstructionConfirm {
+            get {
+                return ResourceManager.GetString("SiriClipboardInstructionConfirm", resourceCulture);
+            }
+        }
+        
         public static string SiriClipboardInstructionDoNotShowAgain {
             get {
                 return ResourceManager.GetString("SiriClipboardInstructionDoNotShowAgain", resourceCulture);
@@ -1769,9 +1805,9 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string Siri_Workflows {
+        public static string SiriWorkflows {
             get {
-                return ResourceManager.GetString("Siri Workflows", resourceCulture);
+                return ResourceManager.GetString("SiriWorkflows", resourceCulture);
             }
         }
         
@@ -1982,6 +2018,150 @@ namespace Toggl.Shared {
         public static string UndoDeletedTimeEntry {
             get {
                 return ResourceManager.GetString("UndoDeletedTimeEntry", resourceCulture);
+            }
+        }
+        
+        public static string CalendarFeatureDescription {
+            get {
+                return ResourceManager.GetString("CalendarFeatureDescription", resourceCulture);
+            }
+        }
+        
+        public static string CalendarPermissionDeniedOr {
+            get {
+                return ResourceManager.GetString("CalendarPermissionDeniedOr", resourceCulture);
+            }
+        }
+        
+        public static string CalendarPermissionDeniedEnableButton {
+            get {
+                return ResourceManager.GetString("CalendarPermissionDeniedEnableButton", resourceCulture);
+            }
+        }
+        
+        public static string SelectCalendarsDescription {
+            get {
+                return ResourceManager.GetString("SelectCalendarsDescription", resourceCulture);
+            }
+        }
+        
+        public static string NoWorkspaceOr {
+            get {
+                return ResourceManager.GetString("NoWorkspaceOr", resourceCulture);
+            }
+        }
+        
+        public static string NoWorkspaceTryAgain {
+            get {
+                return ResourceManager.GetString("NoWorkspaceTryAgain", resourceCulture);
+            }
+        }
+        
+        public static string OutdatedAppTryTogglCom {
+            get {
+                return ResourceManager.GetString("OutdatedAppTryTogglCom", resourceCulture);
+            }
+        }
+        
+        public static string RatingTitle {
+            get {
+                return ResourceManager.GetString("RatingTitle", resourceCulture);
+            }
+        }
+        
+        public static string RatingYes {
+            get {
+                return ResourceManager.GetString("RatingYes", resourceCulture);
+            }
+        }
+        
+        public static string RatingNotReally {
+            get {
+                return ResourceManager.GetString("RatingNotReally", resourceCulture);
+            }
+        }
+        
+        public static string ReportsEmptyStateTitle {
+            get {
+                return ResourceManager.GetString("ReportsEmptyStateTitle", resourceCulture);
+            }
+        }
+        
+        public static string ReportsEmptyStateDescription {
+            get {
+                return ResourceManager.GetString("ReportsEmptyStateDescription", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutCellAdd {
+            get {
+                return ResourceManager.GetString("SiriShortcutCellAdd", resourceCulture);
+            }
+        }
+        
+        public static string CustomSiriShortcutCellIn {
+            get {
+                return ResourceManager.GetString("CustomSiriShortcutCellIn", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutsStartTimer {
+            get {
+                return ResourceManager.GetString("SiriShortcutsStartTimer", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutsStartTimerWithName {
+            get {
+                return ResourceManager.GetString("SiriShortcutsStartTimerWithName", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutsStartFromClipboard {
+            get {
+                return ResourceManager.GetString("SiriShortcutsStartFromClipboard", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutsContinueTracking {
+            get {
+                return ResourceManager.GetString("SiriShortcutsContinueTracking", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutsStopRunningEntry {
+            get {
+                return ResourceManager.GetString("SiriShortcutsStopRunningEntry", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutsStartTimerWithCustomDetails {
+            get {
+                return ResourceManager.GetString("SiriShortcutsStartTimerWithCustomDetails", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutsShowReport {
+            get {
+                return ResourceManager.GetString("SiriShortcutsShowReport", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutsShowCustomReport {
+            get {
+                return ResourceManager.GetString("SiriShortcutsShowCustomReport", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutsTimerShortcuts {
+            get {
+                return ResourceManager.GetString("SiriShortcutsTimerShortcuts", resourceCulture);
+            }
+        }
+        
+        public static string SiriShortcutsReportsShortcuts {
+            get {
+                return ResourceManager.GetString("SiriShortcutsReportsShortcuts", resourceCulture);
             }
         }
     }
