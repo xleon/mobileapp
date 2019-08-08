@@ -59,7 +59,7 @@ namespace Toggl.Droid.Activities
                 .Select(color => color.ToNativeColor())
                 .Subscribe(colorCircle.SetCircleColor)
                 .DisposedBy(DisposeBag);
-                
+
             // Error
             ViewModel.Error
                 .Subscribe(errorText.Rx().TextObserver())
@@ -117,8 +117,8 @@ namespace Toggl.Droid.Activities
                 .BindAction(ViewModel.Save)
                 .DisposedBy(DisposeBag);
 
-            var enabledColor = AndroidColor.White;
-            var disabledColor = new AndroidColor(ColorUtils.SetAlphaComponent(AndroidColor.White, 127));
+            var enabledColor = AndroidColor.Black;
+            var disabledColor = AndroidColor.LightGray;
             ViewModel.Save.Enabled
                 .Select(createProjectTextColor)
                 .Subscribe(createProjectButton.SetTextColor)
