@@ -951,7 +951,7 @@
     <AndroidResource Include="Resources\layout\OutdatedAppActivity.axml" />
     <AndroidResource Include="Resources\layout\TokenResetActivity.axml" />
     <AndroidResource Include="Resources\layout\EditTimeEntryTagCell.axml" />
-    <AndroidResource Include="Resources\drawable\EditTextWhiteCursor.xml" />
+    <AndroidResource Include="Resources\drawable\EditTextCursor.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\date_light.png" />
     <AndroidResource Include="Resources\drawable-mdpi\date_light.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\date_light.png" />
