@@ -365,6 +365,9 @@ namespace Toggl.Storage.Settings
         public bool AreStoppedTimerNotificationsEnabled
             => keyValueStorage.GetBool(stoppedTimerNotificationsKey);
 
+        public bool AreSwipeActionsEnabled
+            => !keyValueStorage.GetBool(swipeActionsDisabledKey);
+
         public void EnableManualMode()
         {
             keyValueStorage.SetBool(preferManualModeKey, true);

@@ -74,6 +74,7 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> IsFeedbackSuccessViewShowing { get; }
         public IObservable<bool> IsCalendarSmartRemindersVisible { get; }
         public IObservable<string> CalendarSmartReminders { get; }
+        public IObservable<bool> SwipeActionsEnabled { get; }
 
         public UIAction OpenCalendarSettings { get; }
         public UIAction OpenCalendarSmartReminders { get; }
@@ -91,6 +92,7 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction ToggleTimeEntriesGrouping { get; }
         public UIAction SelectBeginningOfWeek { get; }
         public UIAction ToggleManualMode { get; }
+        public UIAction ToggleSwipeActions { get; }
 
         public SettingsViewModel(
             ITogglDataSource dataSource,
@@ -224,6 +226,9 @@ namespace Toggl.Core.UI.ViewModels
             IsFeedbackSuccessViewShowing = isFeedbackSuccessViewShowing.AsObservable()
                 .AsDriver(schedulerProvider);
 
+            SwipeActionsEnabled = userPreferences.SwipeActionsEnabled
+                .AsDriver(schedulerProvider);
+
             OpenCalendarSettings = rxActionFactory.FromAsync(openCalendarSettings);
             OpenCalendarSmartReminders = rxActionFactory.FromAsync(openCalendarSmartReminders);
             OpenNotificationSettings = rxActionFactory.FromAsync(openNotificationSettings);
@@ -240,6 +245,7 @@ namespace Toggl.Core.UI.ViewModels
             SelectBeginningOfWeek = rxActionFactory.FromAsync(selectBeginningOfWeek);
             ToggleTimeEntriesGrouping = rxActionFactory.FromAsync(toggleTimeEntriesGrouping);
             ToggleManualMode = rxActionFactory.FromAction(toggleManualMode);
+            ToggleSwipeActions = rxActionFactory.FromAction(toggleSwipeActions);
         }
 
         public override async Task Initialize()
@@ -439,6 +445,11 @@ namespace Toggl.Core.UI.ViewModels
         {
             permissionsChecker.CalendarPermissionGranted.FirstAsync()
                 .Subscribe(calendarPermissionGranted.OnNext);
+        }
+
+        private void toggleSwipeActions()
+        {
+            userPreferences.SetSwipeActionsEnabled(!userPreferences.AreSwipeActionsEnabled);
         }
     }
 }

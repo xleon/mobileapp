@@ -1588,6 +1588,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string SwipeActions {
+            get {
+                return ResourceManager.GetString("SwipeActions", resourceCulture);
+            }
+        }
+        
         public static string ManualMode {
             get {
                 return ResourceManager.GetString("ManualMode", resourceCulture);

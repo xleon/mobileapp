@@ -405,6 +405,36 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
+        public sealed class TheSwipeActionsToggle : SettingsViewModelTest
+        {
+            public TheSwipeActionsToggle()
+            {
+                PreferencesSubject.OnNext(new MockPreferences());
+            }
+
+            [Fact, LogIfTooSlow]
+            public void TurnsOffSwipeActionsWhenTheyAreOn()
+            {
+                UserPreferences.AreSwipeActionsEnabled.Returns(true);
+
+                ViewModel.ToggleSwipeActions.Execute();
+                TestScheduler.Start();
+
+                UserPreferences.Received().SetSwipeActionsEnabled(false);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void TurnsOnSwipeActionsWhenTheyAreOff()
+            {
+                UserPreferences.AreSwipeActionsEnabled.Returns(false);
+
+                ViewModel.ToggleSwipeActions.Execute();
+                TestScheduler.Start();
+
+                UserPreferences.Received().SetSwipeActionsEnabled(true);
+            }
+        }
+
         public sealed class TheToggleManualModeMethod : SettingsViewModelTest
         {
             public TheToggleManualModeMethod()

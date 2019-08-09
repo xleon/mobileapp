@@ -101,10 +101,11 @@ namespace Toggl.iOS.ViewControllers
 
             sections.Add(dateTimeSection);
 
-            var timerDefaultsSection = ViewModel.IsManualModeEnabled
-                .Select(isManualModeEnabled
+            var timerDefaultsSection = Observable.CombineLatest(ViewModel.IsManualModeEnabled, ViewModel.SwipeActionsEnabled,
+                (isManualModeEnabled, areSwipeActionsEnabled)
                     => new SettingSection(Resources.TimerDefaults, new ISettingRow[]
                     {
+                        new ToggleRow(Resources.SwipeActions, areSwipeActionsEnabled, ViewModel.ToggleSwipeActions),
                         new ToggleRow(Resources.ManualMode, isManualModeEnabled, ViewModel.ToggleManualMode),
                         new AnnotationRow(Resources.ManualModeDescription)
                     }));

@@ -26,6 +26,8 @@ namespace Toggl.Storage.Settings
 
         bool AreStoppedTimerNotificationsEnabled { get; }
 
+        bool AreSwipeActionsEnabled { get; }
+
         void EnableManualMode();
 
         void EnableTimerMode();

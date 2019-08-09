@@ -893,6 +893,9 @@ Use them to add keywords to your time entries.</value>
     <data name="Use24HourClock" xml:space="preserve">
     <value>Use 24-hour clock</value>
   </data>
+  <data name="SwipeActions" xml:space="preserve">
+    <value>Cell Swipe Actions</value>
+  </data>
     <data name="ManualMode" xml:space="preserve">
     <value>Manual mode</value>
   </data>
