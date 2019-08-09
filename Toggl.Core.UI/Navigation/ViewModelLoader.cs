@@ -427,11 +427,9 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PlatformInfo,
                     dependencyContainer.UserPreferences,
                     dependencyContainer.AnalyticsService,
-                    dependencyContainer.UserAccessManager,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.OnboardingStorage,
                     dependencyContainer.NavigationService,
-                    dependencyContainer.PrivateSharedStorageService,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.SchedulerProvider);

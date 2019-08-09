@@ -116,8 +116,8 @@ namespace Toggl.Droid.Fragments
                 .BindAction(ViewModel.SubmitFeedback)
                 .DisposedBy(DisposeBag);
 
-            manualModeView.Rx().Tap()
-                .Subscribe(ViewModel.ToggleManualMode)
+            manualModeView.Rx()
+                .BindAction(ViewModel.ToggleManualMode)
                 .DisposedBy(DisposeBag);
 
             groupTimeEntriesView.Rx()

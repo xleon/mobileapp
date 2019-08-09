@@ -1394,13 +1394,18 @@
     <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\Siri\PasteFromClipboardViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriWorkflowsViewController.xib" />
+    <InterfaceDefinition Include="Cells\Settings\SettingCell.xib" />
+    <InterfaceDefinition Include="Cells\Settings\SettingsSectionHeader.xib" />
+    <InterfaceDefinition Include="Cells\Settings\SettingsSyncCell.xib" />
+    <InterfaceDefinition Include="Cells\Settings\SettingsAnnotationCell.xib" />
+    <InterfaceDefinition Include="Cells\Settings\SettingsButtonCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
-    <BundleResource Include="RemoteConfigDefaults.plist" />
+    <BundleResource Include="RemoteConfigDefaults.plist" />    
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analytics\SiriIntentErrorTrackingEvent.cs" />
@@ -1463,6 +1468,13 @@
     <Compile Include="ViewControllers\Reactive\ReactiveViewController.PermissionsHandler.cs">
       <DependentUpon>ReactiveViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\Settings\Models\AnnotationRow.cs" />
+    <Compile Include="ViewControllers\Settings\Models\ButtonRow.cs" />
+    <Compile Include="ViewControllers\Settings\Models\CustomRow.cs" />
+    <Compile Include="ViewControllers\Settings\Models\InfoRow.cs" />
+    <Compile Include="ViewControllers\Settings\Models\ISettingRow.cs" />
+    <Compile Include="ViewControllers\Settings\Models\NavigationRow.cs" />
+    <Compile Include="ViewControllers\Settings\Models\ToggleRow.cs" />
     <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsSelectReportPeriodViewController.cs" />
     <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsSelectReportPeriodViewController.designer.cs">
       <DependentUpon>SiriShortcutsSelectReportPeriodViewController.cs</DependentUpon>
@@ -1475,6 +1487,7 @@
     <Compile Include="ViewControllers\SyncFailuresViewController.cs" />
     <Compile Include="ViewSources\Generic\CollectionView\ReloadCollectionViewSource.cs" />
     <Compile Include="ViewSources\Generic\TableView\BaseTableViewSource.cs" />
+    <Compile Include="ViewSources\SettingsTableViewSource.cs" />
     <Compile Include="ViewSources\SiriShortcutsTableViewSource.cs" />
     <Compile Include="ViewSources\TimeEntriesLogViewSource.cs" />
     <Compile Include="ViewControllers\MainViewController.cs" />
@@ -1973,10 +1986,29 @@
     <Compile Include="ViewControllers\Reactive\IReactiveViewController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveNavigationController.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringViewController.cs" />
-    <Compile Include="DebugHelpers\ErrorTriggeringViewControllerShortcuts.cs" />
     <Compile Include="Views\AccessibilityAwareView.cs" />
     <Compile Include="Services\AccessibilityServiceIos.cs" />
     <Compile Include="Services\RemoteConfigServiceIos.cs" />
+    <Compile Include="Cells\Settings\SettingCell.cs" />
+    <Compile Include="Cells\Settings\SettingCell.designer.cs">
+      <DependentUpon>SettingCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Settings\SettingsSectionHeader.cs" />
+    <Compile Include="Cells\Settings\SettingsSectionHeader.designer.cs">
+      <DependentUpon>SettingsSectionHeader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Settings\SettingsSyncCell.cs" />
+    <Compile Include="Cells\Settings\SettingsSyncCell.designer.cs">
+      <DependentUpon>SettingsSyncCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Settings\SettingsAnnotationCell.cs" />
+    <Compile Include="Cells\Settings\SettingsAnnotationCell.designer.cs">
+      <DependentUpon>SettingsAnnotationCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Settings\SettingsButtonCell.cs" />
+    <Compile Include="Cells\Settings\SettingsButtonCell.designer.cs">
+      <DependentUpon>SettingsButtonCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">

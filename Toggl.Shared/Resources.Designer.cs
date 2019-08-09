@@ -10,7 +10,6 @@
 
 namespace Toggl.Shared {
     using System;
-    using System.Reflection;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
@@ -1565,6 +1564,18 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        public static string DateAndTime {
+            get {
+                return ResourceManager.GetString("DateAndTime", resourceCulture);
+            }
+        }
+        
         public static string FormatSettings {
             get {
                 return ResourceManager.GetString("FormatSettings", resourceCulture);
@@ -1583,6 +1594,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string TimerDefaults {
+            get {
+                return ResourceManager.GetString("TimerDefaults", resourceCulture);
+            }
+        }
+        
         public static string ManualModeDescription {
             get {
                 return ResourceManager.GetString("ManualModeDescription", resourceCulture);
@@ -1598,6 +1615,12 @@ namespace Toggl.Shared {
         public static string SubmitFeedback {
             get {
                 return ResourceManager.GetString("SubmitFeedback", resourceCulture);
+            }
+        }
+        
+        public static string General {
+            get {
+                return ResourceManager.GetString("General", resourceCulture);
             }
         }
         

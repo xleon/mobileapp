@@ -125,11 +125,9 @@ namespace Toggl.Core.UI.ViewModels
                 platformInfo,
                 userPreferences,
                 analyticsService,
-                userAccessManager,
                 interactorFactory,
                 onboardingStorage,
                 navigationService,
-                privateSharedStorageService,
                 rxActionFactory,
                 permissionsChecker,
                 schedulerProvider);
