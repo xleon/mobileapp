@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Toggl.Shared.Models;
 
 namespace Toggl.Storage.Settings
 {
@@ -16,6 +17,8 @@ namespace Toggl.Storage.Settings
         IObservable<bool> AreRunningTimerNotificationsEnabledObservable { get; }
 
         IObservable<bool> AreStoppedTimerNotificationsEnabledObservable { get; }
+
+        IObservable<bool> SwipeActionsEnabled { get; }
 
         bool IsManualModeEnabled { get; }
 
@@ -40,5 +43,7 @@ namespace Toggl.Storage.Settings
         void SetCalendarNotificationsEnabled(bool enabled);
 
         void SetTimeSpanBeforeCalendarNotifications(TimeSpan timeSpan);
+
+        void SetSwipeActionsEnabled(bool enabled);
     }
 }

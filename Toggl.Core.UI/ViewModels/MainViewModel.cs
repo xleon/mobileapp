@@ -27,6 +27,7 @@ using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Services;
+using Toggl.Shared.Models;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -76,6 +77,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> ShouldShowStoppedTimeEntryNotification { get; private set; }
         public IObservable<IThreadSafeTimeEntry> CurrentRunningTimeEntry { get; private set; }
         public IObservable<bool> ShouldShowRatingView { get; private set; }
+
+        public IObservable<bool> SwipeActionsEnabled { get; }
 
         public IObservable<IEnumerable<MainLogSection>> TimeEntries { get; }
 
@@ -159,6 +162,8 @@ namespace Toggl.Core.UI.ViewModels
             TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(schedulerProvider);
 
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, OnboardingStorage, remoteConfigService);
+
+            SwipeActionsEnabled = userPreferences.SwipeActionsEnabled.AsDriver(schedulerProvider);
         }
 
         public override async Task Initialize()
