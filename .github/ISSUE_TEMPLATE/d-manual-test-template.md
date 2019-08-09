@@ -61,6 +61,9 @@ These tests still need to be done the old fashion way.
 - [ ] Delete an entry
 
 ### Right to left language at random (Arabic, Aramaic, Azeri, Dhivehi/Maldivian, Hebrew, Kurdish (Sorani), Persian/Farsi, Urdu) Though not strictly RTL this could also apply to Chinese, Korean, Japanese and some other languages.
+
+> ℹ Note: This were not working in iOS 1.22, so we might want to skip this tests until they are fixed.
+
 - [ ] Start a timer and enter a description (Is it appearing from the right direction)?
 - [ ] Start a timer and enter a description and create a project (Is it appearing from the right direction)?
 - [ ] Start a timer and enter a description and create a tag (Is it appearing from the right direction)?
@@ -203,6 +206,12 @@ These tests still need to be done the old fashion way.
 - [ ] Check that hint to swipe continue entry is shown
 - [ ] Check that hint to swipe delete is shown
 
+### Testing Siri
+- [ ] Test adding simple shortcuts from Siri Shortcuts section (like start, stop or show reports)
+- [ ] Test adding start custom entry shortcuts or/and custom report shortcut
+- [ ] Test importing and using Siri Workflows from Settings into the Shortcuts app
+- [ ] Test Siri with all those shortcuts and workflows ☝️
+
 ### Testing app restriction UI
 
 - [ ] Check that all the non-permanent error screens are showing correctly (use the long-press on About) 
@@ -216,9 +225,8 @@ These tests still need to be done the old fashion way.
     - [ ] Make sure that after this choice, the app requires reinstall/update
   - [ ] Permanent outdated API error
     - [ ] Make sure that after this choice, the app requires reinstall/update
-
-### Test that the UI is appearing as intended and report any issues
+    
+    ### Test that the UI is appearing as intended and report any issues
 
 - [ ] All of the UI tests are passing
 - [ ] Check this after testing the app if no UI errors/glitches have occurred
-

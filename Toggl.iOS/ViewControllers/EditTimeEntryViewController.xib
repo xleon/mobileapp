@@ -146,7 +146,7 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tmZ-oe-hre">
                                     <rect key="frame" x="0.0" y="128" width="320" height="71.666666666666686"/>
                                     <subviews>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EBA-rV-Dfi" customClass="TextViewWithPlaceholder">
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="EBA-rV-Dfi" customClass="TextViewWithPlaceholder">
                                             <rect key="frame" x="16" y="7.9999999999999964" width="288" height="55.666666666666657"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <accessibility key="accessibilityConfiguration" label="EditTimeEntryDescription"/>
