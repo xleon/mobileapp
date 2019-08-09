@@ -60,7 +60,7 @@
     <CodesignKey>iPhone Distribution: Toggl OU (B227VTMZ94)</CodesignKey>
     <MtouchExtraArgs>--linkskip Toggl.iOS</MtouchExtraArgs>
     <MtouchFloat32>true</MtouchFloat32>
-    <MtouchLink>Full</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <CodesignProvision>Daneel AppStore</CodesignProvision>

@@ -76,6 +76,11 @@ namespace Toggl.iOS.ViewControllers
             {
                 scrollable.ScrollToTop();
             }
+            else if (targetViewController is ReactiveNavigationController navigationController)
+            {
+                if (navigationController.TopViewController is IReactiveViewController reactiveViewController)
+                    reactiveViewController.DismissFromNavigationController();
+            }
 
             UIViewController tryGetScrollableController()
             {

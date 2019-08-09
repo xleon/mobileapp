@@ -50,8 +50,12 @@ namespace Toggl.Droid.Fragments
         public override void OnStop()
         {
             base.OnStop();
-            playButtonTooltipPopupWindow.Dismiss();
-            stopButtonTooltipPopupWindow.Dismiss();
+            playButtonTooltipPopupWindow?.Dismiss();
+            stopButtonTooltipPopupWindow?.Dismiss();
+            tapToEditPopup?.Dismiss();
+            playButtonTooltipPopupWindow = null;
+            stopButtonTooltipPopupWindow = null;
+            tapToEditPopup = null;
         }
 
         private void setupOnboardingSteps()
