@@ -315,6 +315,7 @@ namespace Toggl.Droid.Activities
                 {
                     datePickerDialog.DatePicker.MinDate = minDateTime.ToUnixTimeMilliseconds();
                     datePickerDialog.DatePicker.MaxDate = maxDateTime.ToUnixTimeMilliseconds();
+                    datePickerDialog.SetTitle("");
                 }
 
                 updateDateBounds();
