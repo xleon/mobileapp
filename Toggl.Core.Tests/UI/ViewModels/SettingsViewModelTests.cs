@@ -60,7 +60,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     OnboardingStorage,
                     NavigationService,
                     PrivateSharedStorageService,
-                    StopwatchProvider,
                     RxActionFactory,
                     PermissionsChecker,
                     SchedulerProvider);
@@ -86,7 +85,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useOnboardingStorage,
                 bool useNavigationService,
                 bool usePrivateSharedStorageService,
-                bool useStopwatchProvider,
                 bool useRxActionFactory,
                 bool usePermissionsChecker,
                 bool useSchedulerProvider)
@@ -100,7 +98,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
-                var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var permissionsService = usePermissionsChecker ? PermissionsChecker : null;
@@ -118,7 +115,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         onboardingStorage,
                         navigationService,
                         privateSharedStorageService,
-                        stopwatchProvider,
                         rxActionFactory,
                         permissionsService,
                         schedulerProvider);

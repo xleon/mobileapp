@@ -108,6 +108,9 @@ namespace Toggl.Core.Analytics
         [AnalyticsEvent("TapSource")]
         public IAnalyticsEvent<EditViewTapSource> EditViewTapped { get; set; }
 
+        [AnalyticsEvent("Reason")]
+        public IAnalyticsEvent<EditViewCloseReason> EditViewClosed { get; protected set; }
+
         [AnalyticsEvent("NumberOfCreatedPlaceholders")]
         public IAnalyticsEvent<int> WorkspacePlaceholdersCreated { get; protected set; }
 
@@ -263,6 +266,12 @@ namespace Toggl.Core.Analytics
 
         [AnalyticsEvent("Location")]
         public IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; protected set; }
+
+        [AnalyticsEvent("Type", "Source", "ExceptionType", "StackTrace")]
+        public IAnalyticsEvent<string, string, string, string> DebugSchedulerError { get; protected set; }
+
+        [AnalyticsEvent("Action", "Type")]
+        public IAnalyticsEvent<string, string> DebugNavigationError { get; protected set; }
 
         [AnalyticsEvent("Enabled")]
         public IAnalyticsEvent<bool> AccessibilityEnabled { get; protected set; }
