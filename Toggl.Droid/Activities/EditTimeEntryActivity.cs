@@ -190,11 +190,6 @@ namespace Toggl.Droid.Activities
                 .Subscribe(ViewModel.ToggleBillable.Inputs)
                 .DisposedBy(DisposeBag);
 
-            billableSwitch.Rx().Checked()
-                .SelectUnit()
-                .Subscribe(ViewModel.ToggleBillable.Inputs)
-                .DisposedBy(DisposeBag);
-
             ViewModel.StartTime
                 .WithLatestFrom(ViewModel.Preferences,
                     (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.TimeOfDayFormat.Format, AndroidDependencyContainer.Instance.AnalyticsService))
