@@ -192,13 +192,13 @@ namespace Toggl.Droid.Activities
 
             ViewModel.StartTime
                 .WithLatestFrom(ViewModel.Preferences,
-                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.TimeOfDayFormat.Format, AndroidDependencyContainer.Instance.AnalyticsService))
+                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.TimeOfDayFormat.Format))
                 .Subscribe(startTimeTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
             ViewModel.StartTime
                 .WithLatestFrom(ViewModel.Preferences,
-                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.DateFormat.Short, AndroidDependencyContainer.Instance.AnalyticsService))
+                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.DateFormat.Short))
                 .Subscribe(startDateTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
@@ -213,13 +213,13 @@ namespace Toggl.Droid.Activities
 
             stopTimeObservable
                 .WithLatestFrom(ViewModel.Preferences,
-                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.TimeOfDayFormat.Format, AndroidDependencyContainer.Instance.AnalyticsService))
+                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.TimeOfDayFormat.Format))
                 .Subscribe(stopTimeTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
             stopTimeObservable
                 .WithLatestFrom(ViewModel.Preferences,
-                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.DateFormat.Short, AndroidDependencyContainer.Instance.AnalyticsService))
+                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.DateFormat.Short))
                 .Subscribe(stopDateTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 

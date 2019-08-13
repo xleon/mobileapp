@@ -156,8 +156,7 @@ namespace Toggl.iOS.ViewControllers
                 .WithLatestFrom(ViewModel.Preferences,
                     (startTime, preferences) => DateTimeToFormattedString.Convert(
                         startTime,
-                        preferences.TimeOfDayFormat.Format,
-                        IosDependencyContainer.Instance.AnalyticsService))
+                        preferences.TimeOfDayFormat.Format))
                 .Subscribe(StartTimeLabel.Rx().Text())
                 .DisposedBy(DisposeBag);
 
@@ -165,8 +164,7 @@ namespace Toggl.iOS.ViewControllers
                 .WithLatestFrom(ViewModel.Preferences,
                     (startTime, preferences) => DateTimeToFormattedString.Convert(
                         startTime,
-                        preferences.DateFormat.Short,
-                        IosDependencyContainer.Instance.AnalyticsService))
+                        preferences.DateFormat.Short))
                 .Subscribe(StartDateLabel.Rx().Text())
                 .DisposedBy(DisposeBag);
 
@@ -194,8 +192,7 @@ namespace Toggl.iOS.ViewControllers
                 .WithLatestFrom(ViewModel.Preferences,
                     (stopTime, preferences) => DateTimeToFormattedString.Convert(
                         stopTime,
-                        preferences.TimeOfDayFormat.Format,
-                        IosDependencyContainer.Instance.AnalyticsService))
+                        preferences.TimeOfDayFormat.Format))
                 .Subscribe(EndTimeLabel.Rx().Text())
                 .DisposedBy(DisposeBag);
 
