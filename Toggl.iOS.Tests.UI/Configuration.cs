@@ -7,13 +7,14 @@ namespace Toggl.Tests.UI
     public static class Configuration
     {
         private static string bootedDeviceId = null;
+        private static string appPath = "../iPhoneSimulator/Debug/Toggl.iOS.app";
 
         public static iOSApp GetApp()
         {
             reinstallApp(bootedDeviceId);
 
             var app = ConfigureApp.iOS
-                .InstalledApp("com.toggl.daneel.debug")
+                .AppBundle(appPath)
                 .PreferIdeSettings()
                 .StartApp();
 
