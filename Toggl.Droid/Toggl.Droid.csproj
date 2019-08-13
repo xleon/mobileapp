@@ -667,6 +667,7 @@
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\color\BlueTextColor.xml" />
     <AndroidResource Include="Resources\drawable\Dot.xml" />
+    <AndroidResource Include="Resources\drawable\ic_archived.xml" />
     <AndroidResource Include="Resources\drawable\Splash.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />

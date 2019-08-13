@@ -125,7 +125,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
             this.analyticsService = analyticsService;
             this.interactorFactory = interactorFactory;
 
-            CalendarViewModel = new ReportsCalendarViewModel(timeService, dataSource, rxActionFactory, navigationService);
+            CalendarViewModel = new ReportsCalendarViewModel(timeService, dataSource, rxActionFactory, navigationService, schedulerProvider);
 
             var totalsObservable = reportSubject
                 .SelectMany(_ => interactorFactory.GetReportsTotals(userId, workspaceId, startDate, endDate).Execute())
