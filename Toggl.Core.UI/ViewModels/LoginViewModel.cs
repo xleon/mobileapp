@@ -42,10 +42,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private CancellationTokenSource loginCancellationTokenSource;
         private CancellationToken loginCancellationToken;
-<<<<<<< HEAD
         private bool shouldCancelAfterSync = false;
-=======
->>>>>>> 🐛 Cancel login process when back pressed
 
         private readonly Subject<ShakeTargets> shakeSubject = new Subject<ShakeTargets>();
         private readonly Subject<bool> isShowPasswordButtonVisibleSubject = new Subject<bool>();
@@ -183,10 +180,7 @@ namespace Toggl.Core.UI.ViewModels
             isLoadingSubject.OnNext(true);
             errorMessageSubject.OnNext("");
 
-<<<<<<< HEAD
             shouldCancelAfterSync = false;
-=======
->>>>>>> 🐛 Cancel login process when back pressed
             setupLoginCancellationTokenSource();
 
             userAccessManager
