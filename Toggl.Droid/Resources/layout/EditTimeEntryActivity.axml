@@ -346,7 +346,8 @@
                 android:layout_height="48dp"
                 android:layout_marginRight="18dp"
                 local:layout_constraintRight_toRightOf="parent"
-                local:layout_constraintTop_toBottomOf="@id/TagsBottomBorder"/>
+                local:layout_constraintTop_toBottomOf="@id/TagsBottomBorder"
+                android:clickable="false"/>
 
             <View
                 android:id="@+id/BillableBottomBorder"
