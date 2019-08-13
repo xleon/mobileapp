@@ -66,7 +66,7 @@ namespace Toggl.Core.Tests.UI
                 MockUserPreferences = Substitute.For<IUserPreferences>(),
                 MockInteractorFactory = Substitute.For<IInteractorFactory>(),
                 MockTimeService = Substitute.For<ITimeService>(),
-                MockSyncManager = Substitute.For<ISyncManager>(),
+                MockSyncManager = Substitute.For<ISyncManager>()
             };
 
             container.MockLicenseProvider.GetAppLicenses().Returns(new Dictionary<string, string>());

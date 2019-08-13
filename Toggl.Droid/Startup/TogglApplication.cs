@@ -26,6 +26,7 @@ namespace Toggl.Droid
 
             AndroidDependencyContainer.EnsureInitialized(Context);
             var app = new AppStart(AndroidDependencyContainer.Instance);
+            app.LoadLocalizationConfiguration();
             var accessLevel = app.GetAccessLevel();
             app.SetupBackgroundSync();
             app.SetFirstOpened();
