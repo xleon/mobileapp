@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System;
+using System.IO;
 using Xamarin.UITest;
 using Xamarin.UITest.iOS;
 
@@ -6,36 +8,25 @@ namespace Toggl.Tests.UI
 {
     public static class Configuration
     {
-        private static string bootedDeviceId = null;
-        private static string appPath = "../iPhoneSimulator/Debug/Toggl.iOS.app";
+        private static string deviceID = Environment.GetEnvironmentVariable("SIMULATOR_UDID");
 
         public static iOSApp GetApp()
         {
-            reinstallApp(bootedDeviceId);
+            uninstallApp();
+
+            var directoryInfo = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent;
+            var appBundle = new DirectoryInfo(directoryInfo.FullName + "/iPhoneSimulator/Debug/Toggl.iOS.app");
 
             var app = ConfigureApp.iOS
-                .AppBundle(appPath)
-                .PreferIdeSettings()
+                .AppBundle(appBundle.FullName)
+                .DeviceIdentifier(deviceID)
                 .StartApp();
-
-            bootedDeviceId = app.Device.DeviceIdentifier;
 
             return app;
         }
 
-        private static void reinstallApp(string deviceId)
-        {
-            if (deviceId == null)
-            {
-                var uninstallAppFromBootedSimulatorCmdLine = "simctl uninstall booted com.toggl.daneel.debug";
-                var uninstallAppFromBootedSimulatorProcess = Process.Start("xcrun", uninstallAppFromBootedSimulatorCmdLine);
-                uninstallAppFromBootedSimulatorProcess.WaitForExit();
-                return;
-            }
-
-            var deleteCmdLine = string.Format("simctl uninstall {0} com.toggl.daneel.debug", deviceId);
-            var deleteProcess = Process.Start("xcrun", deleteCmdLine);
-            deleteProcess.WaitForExit();
-        }
+        private static void uninstallApp()
+            => Process.Start("xcrun", $"simctl uninstall {deviceID} com.toggl.daneel.debug")
+                .WaitForExit();
     }
 }
