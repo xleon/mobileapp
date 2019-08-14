@@ -17,11 +17,10 @@
           android:layout_height="wrap_content" />
     </android.support.design.widget.AppBarLayout>
     <TextView
-        android:id="@+id/AboutLicensesButton"
+        android:id="@+id/LicensesButton"
         android:textSize="15sp"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="gone"
         android:paddingLeft="16dp"
         android:textAllCaps="false"
         android:gravity="center_vertical"
@@ -32,12 +31,11 @@
         android:layout_marginTop="12dp"
         android:layout_width="match_parent" />
     <View
-        android:visibility="gone"
         android:background="@color/separator"
         android:layout_height="0.5dp"
         android:layout_width="match_parent" />
     <TextView
-        android:id="@+id/AboutPrivacyPolicyButton"
+        android:id="@+id/PrivacyPolicyButton"
         android:textSize="15sp"
         android:clickable="true"
         android:focusable="true"
@@ -48,14 +46,13 @@
         android:text="@string/AboutPrivacyPolicy"
         android:background="?attr/selectableItemBackground"
         android:layout_height="48dp"
-        android:layout_marginTop="12dp"
         android:layout_width="match_parent" />
     <View
         android:background="@color/separator"
         android:layout_height="0.5dp"
         android:layout_width="match_parent" />
     <TextView
-        android:id="@+id/AboutTermsOfServiceButton"
+        android:id="@+id/TermsOfServiceButton"
         android:textSize="15sp"
         android:clickable="true"
         android:focusable="true"
@@ -71,5 +68,4 @@
         android:background="@color/separator"
         android:layout_height="0.5dp"
         android:layout_width="match_parent" />
-
 </LinearLayout>
