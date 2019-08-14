@@ -33,10 +33,9 @@ namespace Toggl.Droid.Activities
                 return;
             }
             SetContentView(Resource.Layout.ForgotPasswordActivity);
-            OverridePendingTransition(Resource.Animation.abc_slide_in_right, Resource.Animation.abc_fade_out);
-
-            setupToolbar();
+            OverridePendingTransition(Resource.Animation.abc_slide_in_right, Resource.Animation.abc_fade_out);            
             InitializeViews();
+            SetupToolbar(GetString(Resource.String.ForgotPasswordTitle));
             setupInputField();
 
             ViewModel.ErrorMessage
@@ -86,27 +85,6 @@ namespace Toggl.Droid.Activities
         {
             loginEmailEditText.RemoveFocus();
             Toast.MakeText(this, Resource.String.ResetPasswordEmailSentMessage, ToastLength.Long).Show();
-        }
-
-        private void setupToolbar()
-        {
-            var toolbar = FindViewById<Toolbar>(Resource.Id.ForgotPasswordToolbar);
-
-            SetSupportActionBar(toolbar);
-            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            SupportActionBar.SetDisplayShowHomeEnabled(true);
-            SupportActionBar.Title = GetString(Resource.String.ForgotPasswordTitle);
-        }
-
-        public override bool OnOptionsItemSelected(IMenuItem item)
-        {
-            if (item.ItemId == Android.Resource.Id.Home)
-            {
-                ViewModel.CloseWithDefaultResult();
-                return true;
-            }
-
-            return base.OnOptionsItemSelected(item);
         }
     }
 }

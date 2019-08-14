@@ -24,7 +24,8 @@ namespace Toggl.Droid.Fragments
         {
             var view = inflater.Inflate(Resource.Layout.ReportsFragment, container, false);
             InitializeViews(view);
-            setupToolbar();
+            SetupToolbar(view);
+            reportsRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
 
             return view;
         }
@@ -34,7 +35,7 @@ namespace Toggl.Droid.Fragments
             base.OnViewCreated(view, savedInstanceState);
             ViewModel?.CalendarViewModel.AttachView(this);
 
-            selectWorkspaceFAB.Rx().Tap()
+            selectWorkspaceFab.Rx().Tap()
                 .Subscribe(ViewModel.SelectWorkspace.Inputs)
                 .DisposedBy(DisposeBag);
 
@@ -125,14 +126,6 @@ namespace Toggl.Droid.Fragments
             reportsRecyclerAdapter = new ReportsRecyclerAdapter(Context);
             reportsRecyclerView.SetLayoutManager(new LinearLayoutManager(Context));
             reportsRecyclerView.SetAdapter(reportsRecyclerAdapter);
-        }
-
-        private void setupToolbar()
-        {
-            var activity = Activity as AppCompatActivity;
-            toolbar.Title = "";
-            reportsRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
-            activity.SetSupportActionBar(toolbar);
         }
 
         private void toggleCalendar()

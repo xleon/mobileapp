@@ -21,8 +21,8 @@ namespace Toggl.Droid.Fragments
             var view = inflater.Inflate(Resource.Layout.SettingsFragment, container, false);
 
             InitializeViews(view);
-            setupToolbar();
-
+            SetupToolbar(view, title: FoundationResources.Settings);
+            scrollView.AttachMaterialScrollBehaviour(appBarLayout);
             return view;
         }
 
@@ -169,14 +169,6 @@ namespace Toggl.Droid.Fragments
             var toast = Toast.MakeText(Context, Resource.String.SendFeedbackSuccessMessage, ToastLength.Long);
             toast.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.Bottom, 0, 0);
             toast.Show();
-        }
-
-        private void setupToolbar()
-        {
-            var activity = Activity as AppCompatActivity;
-            toolbar.Title = FoundationResources.Settings;
-            scrollView.AttachMaterialScrollBehaviour(appBarLayout);
-            activity.SetSupportActionBar(toolbar);
         }
     }
 }

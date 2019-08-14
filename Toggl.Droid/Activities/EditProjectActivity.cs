@@ -33,7 +33,8 @@ namespace Toggl.Droid.Activities
             SetContentView(Resource.Layout.EditProjectActivity);
             InitializeViews();
             OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
-            setupToolbar();
+            SetupToolbar(ViewModel.Title);
+
             errorText.Visibility = ViewStates.Gone;
 
             // Name
@@ -139,27 +140,6 @@ namespace Toggl.Droid.Activities
         {
             base.Finish();
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
-        }
-
-        public override bool OnOptionsItemSelected(IMenuItem item)
-        {
-            if (item.ItemId == Android.Resource.Id.Home)
-            {
-                ViewModel.CloseWithDefaultResult();
-                return true;
-            }
-
-            return base.OnOptionsItemSelected(item);
-        }
-
-        private void setupToolbar()
-        {
-            toolbar.Title = ViewModel.Title;
-
-            SetSupportActionBar(toolbar);
-
-            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            SupportActionBar.SetDisplayShowHomeEnabled(true);
         }
     }
 }

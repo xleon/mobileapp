@@ -28,11 +28,7 @@ namespace Toggl.Droid.Activities
             SetContentView(Resource.Layout.TokenResetActivity);
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
             InitializeViews();
-
-            toolbar.Title = LoginTitle;
-            SetSupportActionBar(toolbar);
-            SupportActionBar.SetDisplayHomeAsUpEnabled(false);
-            SupportActionBar.SetDisplayShowHomeEnabled(false);
+            SetupToolbar(LoginTitle, showHomeAsUp: false);
             this.CancelAllNotifications();
 
             emailLabel.Text = ViewModel.Email.ToString();

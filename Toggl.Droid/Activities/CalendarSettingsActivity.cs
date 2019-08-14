@@ -10,6 +10,7 @@ using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
+using TogglResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Activities
 {
@@ -34,7 +35,7 @@ namespace Toggl.Droid.Activities
             OverridePendingTransition(Resource.Animation.abc_slide_in_right, Resource.Animation.abc_fade_out);
 
             InitializeViews();
-            setupToolbar();
+            SetupToolbar(title: TogglResources.CalendarSettingsTitle);
 
             setupRecyclerView();
 
@@ -75,9 +76,6 @@ namespace Toggl.Droid.Activities
                 case Resource.Id.Done:
                     ViewModel.Save.Execute();
                     return true;
-                case Android.Resource.Id.Home:
-                    ViewModel.CloseWithDefaultResult();
-                    return true;
             }
 
             return base.OnOptionsItemSelected(item);
@@ -87,13 +85,6 @@ namespace Toggl.Droid.Activities
         {
             base.Finish();
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_right);
-        }
-
-        private void setupToolbar()
-        {
-            SetSupportActionBar(toolbar);
-            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            SupportActionBar.SetDisplayShowHomeEnabled(true);
         }
 
         private void setupRecyclerView()

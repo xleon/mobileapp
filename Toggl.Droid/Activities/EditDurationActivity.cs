@@ -57,7 +57,7 @@ namespace Toggl.Droid.Activities
             }
             SetContentView(Resource.Layout.EditDurationActivity);
             InitializeViews();
-            setupToolbar();
+            SetupToolbar(title: Shared.Resources.StartAndStopTime);
 
             ViewModel.TimeFormat
                 .Subscribe(v => is24HoursFormat = v.IsTwentyFourHoursFormat)
@@ -219,22 +219,8 @@ namespace Toggl.Droid.Activities
                     wheelNumericInput.ApplyDurationIfBeingEdited();
                     ViewModel.Save.Execute();
                     return true;
-
-                case Android.Resource.Id.Home:
-                    ViewModel.CloseWithDefaultResult();
-                    return true;
             }
             return base.OnOptionsItemSelected(item);
-        }
-
-        private void setupToolbar()
-        {
-            toolbar.Title = Shared.Resources.StartAndStopTime;
-
-            SetSupportActionBar(toolbar);
-
-            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            SupportActionBar.SetDisplayShowHomeEnabled(true);
         }
 
         private void updateStopTimeUIVisibility(bool isRunning)

@@ -3,11 +3,14 @@ using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.App;
+using Android.Support.V7.Widget;
+using Android.Views;
 using System;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
+using Toggl.Droid.Extensions.Reactive;
 
 namespace Toggl.Droid.Activities
 {
@@ -108,6 +111,27 @@ namespace Toggl.Droid.Activities
                     onGoogleSignInResult(data);
                     break;
             }
+        }
+
+        protected void SetupToolbar(string title = "", bool showHomeAsUp = true)
+        {
+            var toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
+            toolbar.Title = title;
+            SetSupportActionBar(toolbar);
+
+            SupportActionBar.SetDisplayHomeAsUpEnabled(showHomeAsUp);
+            SupportActionBar.SetDisplayShowHomeEnabled(showHomeAsUp);
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (item.ItemId == Android.Resource.Id.Home)
+            {
+                ViewModel.CloseWithDefaultResult();
+                return true;
+            }
+
+            return base.OnOptionsItemSelected(item);
         }
 
         public void Close()

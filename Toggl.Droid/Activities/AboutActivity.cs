@@ -39,35 +39,13 @@ namespace Toggl.Droid.Activities
                 .BindAction(ViewModel.OpenTermsOfServiceView)
                 .DisposedBy(DisposeBag);
 
-            setupToolbar();
+            SetupToolbar(title: GetString(Resource.String.About));
         }
 
         public override void Finish()
         {
             base.Finish();
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_right);
-        }
-
-        private void setupToolbar()
-        {
-            var toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
-
-            toolbar.Title = GetString(Resource.String.About);
-
-            SetSupportActionBar(toolbar);
-
-            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            SupportActionBar.SetDisplayShowHomeEnabled(true);
-
-            toolbar.NavigationClick += onNavigateBack;
-        }
-
-        private void onNavigateBack(object sender, Toolbar.NavigationClickEventArgs e)
-        {
-            var toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
-            toolbar.NavigationClick -= onNavigateBack;
-
-            ViewModel.CloseWithDefaultResult();
         }
     }
 }

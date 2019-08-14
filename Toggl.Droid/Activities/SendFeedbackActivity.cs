@@ -35,10 +35,7 @@ namespace Toggl.Droid.Activities
             OverridePendingTransition(Resource.Animation.abc_slide_in_right, Resource.Animation.abc_fade_out);
 
             InitializeViews();
-            SetSupportActionBar(toolbar);
-            SupportActionBar.Title = GetString(Resource.String.SendFeedbackTitle);
-            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            SupportActionBar.SetDisplayShowHomeEnabled(true);
+            SetupToolbar(GetString(Resource.String.SendFeedbackTitle));
 
             feedbackEditText.Rx().Text()
                 .Subscribe(ViewModel.FeedbackText)
@@ -97,10 +94,6 @@ namespace Toggl.Droid.Activities
             {
                 case Resource.Id.SendMenuItem:
                     sendFeedbackSubject.OnNext(Unit.Default);
-                    return true;
-
-                case Android.Resource.Id.Home:
-                    ViewModel.CloseWithDefaultResult();
                     return true;
 
                 default:

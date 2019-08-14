@@ -11,15 +11,13 @@ namespace Toggl.Droid.Activities
         private Switch toggleCalendarsSwitch;
         private View calendarsContainer;
         private RecyclerView calendarsRecyclerView;
-        private Toolbar toolbar;
-
+        
         protected override void InitializeViews()
         {
             toggleCalendarsView = FindViewById(Resource.Id.ToggleCalendarsView);
             toggleCalendarsSwitch = FindViewById<Switch>(Resource.Id.ToggleCalendarsSwitch);
             calendarsContainer = FindViewById(Resource.Id.CalendarsContainer);
             calendarsRecyclerView = FindViewById<RecyclerView>(Resource.Id.CalendarsRecyclerView);
-            toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
         }
     }
 }

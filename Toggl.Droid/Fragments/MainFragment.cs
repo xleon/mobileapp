@@ -50,7 +50,8 @@ namespace Toggl.Droid.Fragments
             var view = inflater.Inflate(Resource.Layout.MainFragment, container, false);
 
             InitializeViews(view);
-            setupToolbar();
+            SetupToolbar(view);
+            mainRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
 
             return view;
         }
@@ -353,14 +354,6 @@ namespace Toggl.Droid.Fragments
             {
                 welcomeBackView.Visibility = ViewStates.Gone;
             }
-        }
-
-        private void setupToolbar()
-        {
-            var activity = Activity as AppCompatActivity;
-            toolbar.Title = "";
-            mainRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
-            activity.SetSupportActionBar(toolbar);
         }
     }
 }
