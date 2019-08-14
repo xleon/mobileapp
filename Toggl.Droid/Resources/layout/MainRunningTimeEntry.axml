@@ -83,11 +83,13 @@
         android:textSize="15sp"
         android:singleLine="true"
         android:fontFamily="sans-serif-medium"
-        local:layout_constraintRight_toRightOf="parent"
+        android:gravity="left"
+        local:layout_constraintRight_toLeftOf="@+id/MainStopButton"
         local:layout_constraintBaseline_toBaselineOf="@id/LeadingTextView"
         local:layout_constraintLeft_toRightOf="@id/MainRunningTimeEntryProjectDotContainer"
         android:layout_width="0dp"
         android:layout_marginLeft="4dp"
+        android:layout_marginRight="18dp"
         android:layout_marginBottom="16dp"
         android:layout_height="wrap_content" />
     <View
