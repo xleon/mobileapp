@@ -1,21 +1,24 @@
-## Target Language: <!-- Requested Language Here -->
-<!-- Please check that no other request for the same language fix has been made before submitting this issue. Leave a comment in the issue if you'd like collaborate -->
+---
+name: "🌏 Translation Improvement Request"
+about: Oh, noticed an odd translation in our app? Please help us by creating an issue to fix it :) Please check that no other request for the same language fix has been made before submitting this issue.
 
-## Requested at: <!-- enter date of request -->
+---
 
-## Tell us more about the problem
-### What is wrong?
-<!-- please inform the screen(s) where the translation looks odd/wrong -->
-<!-- provide us with screenshots if possible -->
+# Translation Improvement Request
 
-### How should it be?
-<!-- If the fix is easy enough, you can just type how it should be, and where. One of our devs can create the fix PR  -->
+## Target Language 
+<!-- Requested Language Here -->
 
-## Progress
+## Tell us more about the problem  
+<!-- Please let us know exactly where the translation looks odd/wrong and explain the problem. If possible, provide us with screenshots for context. -->
 
-- [ ] Translation fix has been analyzed and approved
-- [ ] Pull request created and awaiting review (Reference PR to this issue). [PR template can be copied from here.](../PULL_REQUEST_TEMPLATE/translation-fix-pull-request-template.md)
-- [ ] Pull request approved
-- [ ] Pull request merged into develop
-- [ ] Released on iOS in version `add release version here`
-- [ ] Released on Android in version `add release version here`
+- Problematic text
+```  
+  Type/paste the problematic text here.
+```
+- Better translation
+```  
+  Type/paste the better translation here. 
+```
+
+Leave a comment in this issue if you'd like collaborate.
