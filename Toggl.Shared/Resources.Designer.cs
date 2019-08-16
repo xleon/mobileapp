@@ -1498,6 +1498,18 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string TagsList {
+            get {
+                return ResourceManager.GetString("TagsList", resourceCulture);
+            }
+        }
+        
+        public static string NoTags {
+            get {
+                return ResourceManager.GetString("NoTags", resourceCulture);
+            }
+        }
+        
         public static string EmptyTagText {
             get {
                 return ResourceManager.GetString("EmptyTagText", resourceCulture);
