@@ -40,6 +40,8 @@ namespace Toggl.Droid.Activities
 
             setupRecyclerView(adapter: recyclerAdapter);
 
+            filterEditText.Hint = Shared.Resources.SelectCountry;
+
             ViewModel.Countries
                 .Subscribe(replaceCountries)
                 .DisposedBy(DisposeBag);

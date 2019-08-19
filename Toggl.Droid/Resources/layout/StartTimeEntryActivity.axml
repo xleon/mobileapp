@@ -112,7 +112,7 @@
         <Button
             android:id="@+id/DoneButton"
             android:paddingLeft="16dp"
-            android:text="@string/Save"
+            tools:text="Save"
             android:paddingRight="16dp"
             android:textColor="@android:color/black"
             android:background="?attr/selectableItemBackgroundBorderless"

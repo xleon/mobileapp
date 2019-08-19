@@ -27,6 +27,8 @@ namespace Toggl.Droid.Fragments
                 SelectWorkspaceViewHolder.Create
             );
 
+            titleLabel.Text = Shared.Resources.Workspace;
+
             adapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectWorkspace.Inputs)
                 .DisposedBy(DisposeBag);

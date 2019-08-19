@@ -10,6 +10,7 @@ namespace Toggl.Droid.Activities
         private View errorIcon;
         private TextView oopsTextView;
         private TextView errorInfoText;
+        private TextView feedbackHelperTitle;
         private EditText feedbackEditText;
         private Toolbar toolbar;
         private ProgressBar progressBar;
@@ -20,6 +21,7 @@ namespace Toggl.Droid.Activities
             errorIcon = FindViewById<View>(Resource.Id.ErrorIcon);
             oopsTextView = FindViewById<TextView>(Resource.Id.OopsTextView);
             errorInfoText = FindViewById<TextView>(Resource.Id.ErrorInfoText);
+            feedbackHelperTitle = FindViewById<TextView>(Resource.Id.FeedbackHelperTitle);
             feedbackEditText = FindViewById<EditText>(Resource.Id.FeedbackEditText);
             progressBar = FindViewById<ProgressBar>(Resource.Id.ProgressBar);
             toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);

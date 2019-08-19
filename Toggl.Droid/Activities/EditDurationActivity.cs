@@ -25,12 +25,12 @@ namespace Toggl.Droid.Activities
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class EditDurationActivity : ReactiveActivity<EditDurationViewModel>
     {
-        private readonly Dictionary<TemporalInconsistency, int> inconsistencyMessages = new Dictionary<TemporalInconsistency, int>
+        private readonly Dictionary<TemporalInconsistency, string> inconsistencyMessages = new Dictionary<TemporalInconsistency, string>
         {
-            [StartTimeAfterCurrentTime] = Resource.String.StartTimeAfterCurrentTimeWarning,
-            [StartTimeAfterStopTime] = Resource.String.StartTimeAfterStopTimeWarning,
-            [StopTimeBeforeStartTime] = Resource.String.StopTimeBeforeStartTimeWarning,
-            [DurationTooLong] = Resource.String.DurationTooLong,
+            [StartTimeAfterCurrentTime] = Shared.Resources.StartTimeAfterCurrentTimeWarning,
+            [StartTimeAfterStopTime] = Shared.Resources.StartTimeAfterStopTimeWarning,
+            [StopTimeBeforeStartTime] = Shared.Resources.StopTimeBeforeStartTimeWarning,
+            [DurationTooLong] = Shared.Resources.DurationTooLong,
         };
 
         private readonly Subject<DateTimeOffset> activeEditionChangedSubject = new Subject<DateTimeOffset>();
@@ -58,6 +58,11 @@ namespace Toggl.Droid.Activities
             SetContentView(Resource.Layout.EditDurationActivity);
             InitializeViews();
             setupToolbar();
+
+            startLabel.Text = Shared.Resources.Start;
+            stopLabel.Text = Shared.Resources.Stop;
+            stopTimerLabel.Text = Shared.Resources.StopTimer;
+            durationLabel.Text = Shared.Resources.Duration;
 
             ViewModel.TimeFormat
                 .Subscribe(v => is24HoursFormat = v.IsTwentyFourHoursFormat)
@@ -208,6 +213,8 @@ namespace Toggl.Droid.Activities
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             MenuInflater.Inflate(Resource.Menu.GenericSaveMenu, menu);
+            var sendMenuItem = menu.FindItem(Resource.Id.SaveMenuItem);
+            sendMenuItem.SetTitle(Shared.Resources.Save);
             return true;
         }
 
@@ -258,9 +265,8 @@ namespace Toggl.Droid.Activities
             canDismiss = false;
             toast?.Cancel();
             toast = null;
-
-            var messageResourceId = inconsistencyMessages[temporalInconsistency];
-            var message = Resources.GetString(messageResourceId);
+            
+            var message = inconsistencyMessages[temporalInconsistency];
 
             toast = Toast.MakeText(this, message, ToastLength.Short);
             toast.Show();

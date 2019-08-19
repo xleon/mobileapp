@@ -51,6 +51,19 @@ namespace Toggl.Droid.Activities
 
             InitializeViews();
 
+            var menu = navigationView.Menu;
+            var timerTab = menu.FindItem(Resource.Id.MainTabTimerItem);
+            timerTab.SetTitle(Shared.Resources.Timer);
+
+            var reportsTab = menu.FindItem(Resource.Id.MainTabReportsItem);
+            reportsTab.SetTitle(Shared.Resources.Reports);
+
+            var calendarTab = menu.FindItem(Resource.Id.MainTabCalendarItem);
+            calendarTab.SetTitle(Shared.Resources.Calendar);
+
+            var settingsTab = menu.FindItem(Resource.Id.MainTabSettinsItem);
+            settingsTab.SetTitle(Shared.Resources.Settings);
+
             restoreFragmentsViewModels();
             showInitialFragment(getInitialTab(Intent));
             loadReportsIntentExtras(Intent);

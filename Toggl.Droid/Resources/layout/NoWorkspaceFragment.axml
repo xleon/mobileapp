@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout 
+<android.support.constraint.ConstraintLayout
     xmlns:local="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:animateLayoutChanges="true"
@@ -21,7 +22,7 @@
     <TextView
         android:id="@+id/UhOhTextView"
         android:textSize="20dp"
-        android:text="@string/Uhoh"
+        tools:text="Uh oh."
         android:textColor="@color/darkLabel"
         android:fontFamily="sans-serif-medium"
         local:layout_constraintLeft_toLeftOf="parent"
@@ -39,7 +40,7 @@
         android:lineSpacingExtra="2dp"
         android:fontFamily="sans-serif"
         android:textColor="@color/darkLabel"
-        android:text="@string/NoWorkspaceHelperText"
+        tools:text="Seems someone has removed you from their workspace.\nNo worries. Create a new workspace to continue."
         local:layout_constraintLeft_toLeftOf="parent"
         local:layout_constraintRight_toRightOf="parent"
         local:layout_constraintTop_toBottomOf="@id/UhOhTextView"
@@ -67,7 +68,7 @@
         android:clickable="true"
         android:focusable="true"
         android:textAllCaps="true"
-        android:text="@string/TryAgain"
+        tools:text="Try Again"
         android:textColor="@color/BlueTextColor"
         android:fontFamily="sans-serif-medium"
         local:layout_constraintLeft_toLeftOf="parent"
@@ -90,7 +91,7 @@
         android:textAllCaps="true"
         android:textColor="@color/BlueTextColor"
         android:fontFamily="sans-serif-medium"
-        android:text="@string/CreateWorkspace"
+        tools:text="Create Workspace"
         local:layout_constraintRight_toRightOf="parent"
         local:layout_constraintBaseline_toBaselineOf="@id/TryAgainTextView"
         android:background="?android:selectableItemBackground"

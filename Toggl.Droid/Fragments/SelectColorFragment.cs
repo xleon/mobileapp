@@ -44,6 +44,10 @@ namespace Toggl.Droid.Fragments
             selectableColorsAdapter = new SimpleAdapter<SelectableColorViewModel>(
                 Resource.Layout.SelectColorFragmentCell, ColorSelectionViewHolder.Create);
 
+            titleLabel.Text = Shared.Resources.ProjectColor;
+            closeButton.Text = Shared.Resources.Cancel;
+            saveButton.Text = Shared.Resources.Done;
+
             selectableColorsAdapter.ItemTapObservable
                 .Select(x => x.Color)
                 .Subscribe(ViewModel.SelectColor.Inputs)

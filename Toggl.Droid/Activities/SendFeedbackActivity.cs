@@ -36,9 +36,13 @@ namespace Toggl.Droid.Activities
 
             InitializeViews();
             SetSupportActionBar(toolbar);
-            SupportActionBar.Title = GetString(Resource.String.SendFeedbackTitle);
+            SupportActionBar.Title = Shared.Resources.SubmitFeedback;
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetDisplayShowHomeEnabled(true);
+
+            oopsTextView.Text = Shared.Resources.Oops;
+            feedbackHelperTitle.Text = Shared.Resources.FeedbackFieldPlaceholder;
+            feedbackEditText.Hint = Shared.Resources.FeedbackHint;
 
             feedbackEditText.Rx().Text()
                 .Subscribe(ViewModel.FeedbackText)
@@ -88,6 +92,7 @@ namespace Toggl.Droid.Activities
         {
             var sendMenuItem = menu.FindItem(Resource.Id.SendMenuItem);
             sendMenuItem.SetEnabled(sendEnabled);
+            sendMenuItem.SetTitle(Shared.Resources.Send);
             return true;
         }
 
@@ -122,7 +127,7 @@ namespace Toggl.Droid.Activities
 
         private string selectErrorMessage(Exception exception)
             => exception is OfflineException
-                ? GetString(Resource.String.GenericInternetConnectionErrorMessage)
-                : GetString(Resource.String.GenericErrorMessage);
+                ? Shared.Resources.GenericInternetConnectionErrorMessage
+                : Shared.Resources.SomethingWentWrongTryAgain;
     }
 }

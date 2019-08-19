@@ -33,6 +33,12 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
+
+            uhOhTextView.Text = Shared.Resources.UhOh;
+            errorInfoTextView.Text = Shared.Resources.NoWorkspaceErrorMessage;
+            tryAgainTextView.Text = Shared.Resources.NoWorkspaceTryAgain;
+            createWorkspaceTextView.Text = Shared.Resources.CreateNewWorkspace;
+
             createWorkspaceTextView.Rx()
                 .BindAction(ViewModel.CreateWorkspaceWithDefaultName)
                 .DisposedBy(DisposeBag);

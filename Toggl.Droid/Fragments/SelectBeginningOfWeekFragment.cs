@@ -34,6 +34,8 @@ namespace Toggl.Droid.Fragments
         {
             base.OnViewCreated(view, savedInstanceState);
 
+            title.Text = Shared.Resources.FirstDayOfTheWeek;
+
             setupRecyclerView();
 
             adapter.ItemTapObservable

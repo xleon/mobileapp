@@ -27,6 +27,10 @@ namespace Toggl.Droid.Activities
 
             InitializeViews();
 
+            licensesButton.Text = Shared.Resources.Licenses;
+            privacyPolicyButton.Text = Shared.Resources.PrivacyPolicy;
+            termsOfServiceButton.Text = Shared.Resources.TermsOfService;
+
             licensesButton.Rx()
                 .BindAction(ViewModel.OpenLicensesView)
                 .DisposedBy(DisposeBag);
@@ -52,7 +56,7 @@ namespace Toggl.Droid.Activities
         {
             var toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
 
-            toolbar.Title = GetString(Resource.String.About);
+            toolbar.Title = Shared.Resources.About;
 
             SetSupportActionBar(toolbar);
 

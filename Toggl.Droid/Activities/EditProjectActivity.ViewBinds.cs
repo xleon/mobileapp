@@ -17,6 +17,8 @@ namespace Toggl.Droid.Activities
         private TextView clientNameTextView;
         private TextView createProjectButton;
         private TextView projectNameTextView;
+        private TextView privateProjectLabel;
+        private TextView privateProjectHintLabel;
 
         private Switch isPrivateSwitch;
 
@@ -37,6 +39,8 @@ namespace Toggl.Droid.Activities
             workspaceNameLabel = FindViewById<TextView>(Resource.Id.WorkspaceNameLabel);
             createProjectButton = FindViewById<TextView>(Resource.Id.CreateProjectButton);
             projectNameTextView = FindViewById<TextView>(Resource.Id.ProjectNameTextView);
+            privateProjectLabel = FindViewById<TextView>(Resource.Id.ChangeWorkspaceViewPrivateProjectLabel);
+            privateProjectHintLabel = FindViewById<TextView>(Resource.Id.PrivateProjectHint);
             toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
         }
     }

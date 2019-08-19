@@ -34,6 +34,9 @@ namespace Toggl.Droid.Activities
 
             InitializeViews();
 
+            textField.Hint = Shared.Resources.AddTags;
+            saveButton.Text = Shared.Resources.Done;
+
             setupLayoutManager(selectTagsRecyclerAdapter);
 
             ViewModel.Tags

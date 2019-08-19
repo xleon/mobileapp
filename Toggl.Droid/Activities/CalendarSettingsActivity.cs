@@ -38,6 +38,11 @@ namespace Toggl.Droid.Activities
 
             setupRecyclerView();
 
+            linkCalendarsTitle.Text = Shared.Resources.LinkCalendars;
+            linkCalendarsMessage.Text = Shared.Resources.LinkCalendarsMessage;
+            selectCalendarsTitle.Text = Shared.Resources.SelectCalendars;
+            selectCalendarsMessage.Text = Shared.Resources.SelectCalendarsMessage;
+
             toggleCalendarsView.Rx().Tap()
                 .Subscribe(ViewModel.TogglCalendarIntegration.Inputs)
                 .DisposedBy(DisposeBag);
@@ -65,6 +70,8 @@ namespace Toggl.Droid.Activities
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             MenuInflater.Inflate(Resource.Menu.CalendarSettingsMenu, menu);
+            var doneMenuItem = menu.FindItem(Resource.Id.Done);
+            doneMenuItem.SetTitle(Shared.Resources.Done);
             return true;
         }
 

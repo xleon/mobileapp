@@ -19,6 +19,12 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
+
+            titleView.Text = Shared.Resources.NoWorries;
+            messageView.Text = Shared.Resources.CalendarAccessExplanation;
+            continueButton.Text = Shared.Resources.Continue;
+            allowAccessButton.Text = Shared.Resources.AllowAccess;
+
             continueButton.Rx().Tap()
                 .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);

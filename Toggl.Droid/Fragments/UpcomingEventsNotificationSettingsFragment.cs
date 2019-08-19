@@ -27,6 +27,9 @@ namespace Toggl.Droid.Fragments
             base.OnViewCreated(view, savedInstanceState);
             setupRecyclerView();
 
+            setSmartRemindersTitle.Text = Shared.Resources.SetSmartReminders;
+            setSmartRemindersMessage.Text = Shared.Resources.SetSmartRemindersMessage;
+
             adapter
                 .ItemTapObservable
                 .Subscribe(ViewModel.SelectOption.Inputs)

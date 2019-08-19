@@ -13,7 +13,7 @@ namespace Toggl.Droid.Activities
         private View startDotSeparator;
         private TextView startDateText;
         private View stopIcon;
-        private View stopLabel;
+        private TextView stopLabel;
         private TextView stopTimeText;
         private TextView stopTimerLabel;
         private View stopDotSeparator;
@@ -22,6 +22,7 @@ namespace Toggl.Droid.Activities
         private WheelBackgroundView wheelBackground;
         private WheelForegroundView wheelForeground;
         private WheelDurationInput wheelNumericInput;
+        private TextView durationLabel;
         private Toolbar toolbar;
 
         protected override void InitializeViews()
@@ -32,7 +33,7 @@ namespace Toggl.Droid.Activities
             startDotSeparator = FindViewById<View>(Resource.Id.StartDotSeparator);
             startDateText = FindViewById<TextView>(Resource.Id.StartDateText);
             stopIcon = FindViewById<View>(Resource.Id.StopIcon);
-            stopLabel = FindViewById<View>(Resource.Id.StopLabel);
+            stopLabel = FindViewById<TextView>(Resource.Id.StopLabel);
             stopTimeText = FindViewById<TextView>(Resource.Id.StopTimeText);
             stopTimerLabel = FindViewById<TextView>(Resource.Id.StopTimerLabel);
             stopDotSeparator = FindViewById<View>(Resource.Id.StopDotSeparator);
@@ -41,6 +42,7 @@ namespace Toggl.Droid.Activities
             wheelBackground = FindViewById<WheelBackgroundView>(Resource.Id.WheelBackground);
             wheelForeground = FindViewById<WheelForegroundView>(Resource.Id.WheelForeground);
             wheelNumericInput = FindViewById<WheelDurationInput>(Resource.Id.WheelDurationInput);
+            durationLabel = FindViewById<TextView>(Resource.Id.DurationLabel);
             toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
         }
     }

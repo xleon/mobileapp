@@ -25,6 +25,8 @@ namespace Toggl.Droid.Fragments
         private View emptyStateView;
         private ViewStub welcomeBackStub;
         private View welcomeBackView;
+        private TextView welcomeBackTitle;
+        private TextView welcomeBackSubText;
         private Toolbar toolbar;
         private AppBarLayout appBarLayout;
 

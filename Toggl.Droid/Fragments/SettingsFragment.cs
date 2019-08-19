@@ -32,6 +32,29 @@ namespace Toggl.Droid.Fragments
 
             versionTextView.Text = ViewModel.Version;
 
+            logoutView.Text = Shared.Resources.SignOutOfToggl;
+            helpView.Text = Shared.Resources.Help;
+            feedbackView.Text = Shared.Resources.SubmitFeedback;
+            calendarSettingsView.Text = Shared.Resources.CalendarSettingsTitle;
+            yourProfileLabel.Text = Shared.Resources.YourProfile;
+            usernameLabel.Text = Shared.Resources.Username;
+            emailLabel.Text = Shared.Resources.Email;
+            defaultWorkspaceLabel.Text = Shared.Resources.DefaultWorkspace;
+            displayLabel.Text = Shared.Resources.Display;
+            dateFormatLabel.Text = Shared.Resources.DateFormat;
+            beginningOfWeekLabel.Text = Shared.Resources.FirstDayOfTheWeek;
+            durationFormatLabel.Text = Shared.Resources.DurationFormat;
+            use24HourClockLabel.Text = Shared.Resources.Use24HourClock;
+            groupedTimeEntriesLabel.Text = Shared.Resources.GroupTimeEntries;
+            smartRemindersLabel.Text = Shared.Resources.SmartReminders;
+            notificationsLabel.Text = Shared.Resources.Notifications;
+            notificationsRunningTimerLabel.Text = Shared.Resources.NotificationsRunningTimer;
+            notificationsStoppedTimerLabel.Text = Shared.Resources.NotificationsStoppedTimer;
+            generalLabel.Text = Shared.Resources.General;
+            aboutLabel.Text = Shared.Resources.About;
+            settingsToggleManualModeLabel.Text = Shared.Resources.ManualMode;
+            settingsToggleManualModeExplanation.Text = Shared.Resources.ManualModeDescription;
+
             ViewModel.Name
                 .Subscribe(nameTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
@@ -166,7 +189,7 @@ namespace Toggl.Droid.Fragments
         {
             if (!succeeeded) return;
 
-            var toast = Toast.MakeText(Context, Resource.String.SendFeedbackSuccessMessage, ToastLength.Long);
+            var toast = Toast.MakeText(Context, Shared.Resources.SendFeedbackSuccessMessage, ToastLength.Long);
             toast.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.Bottom, 0, 0);
             toast.Show();
         }

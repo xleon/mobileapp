@@ -34,6 +34,8 @@ namespace Toggl.Droid.Activities
 
             InitializeViews();
 
+            filterEditText.Hint = Shared.Resources.AddClient;
+
             setupLayoutManager(selectClientRecyclerAdapter);
 
             ViewModel.Clients

@@ -28,13 +28,22 @@ namespace Toggl.Droid.ViewHolders
 
         private CardView summaryCard;
         private TextView reportsSummaryTotal;
+        private TextView reportsSummaryTotalLabel;
         private ImageView reportsTotalChartImageView;
         private TextView reportsSummaryBillable;
+        private TextView reportsSummaryBillableLabel;
         private View billablePercentageView;
+
+        private TextView clockedHoursLabel;
+        private TextView billableTextLabel;
+        private TextView nonBillableTextLabel;
 
         private CardView pieChartCard;
         private PieChartView pieChartView;
+
         private LinearLayout emptyStateView;
+        private TextView emptyStateTitle;
+        private TextView emptyStateMessage;
 
         private Drawable reportsTotalChartImageDrawable;
 
@@ -53,15 +62,30 @@ namespace Toggl.Droid.ViewHolders
         {
             summaryCard = ItemView.FindViewById<CardView>(Resource.Id.SummaryCard);
             reportsSummaryTotal = ItemView.FindViewById<TextView>(Resource.Id.ReportsSummaryTotal);
+            reportsSummaryTotalLabel = ItemView.FindViewById<TextView>(Resource.Id.ReportsSummaryTotalLabel);
             reportsTotalChartImageView = ItemView.FindViewById<ImageView>(Resource.Id.ReportsTotalChartImageView);
             reportsTotalChartImageDrawable = reportsTotalChartImageView.Drawable;
             reportsSummaryBillable = ItemView.FindViewById<TextView>(Resource.Id.ReportsSummaryBillable);
+            reportsSummaryBillableLabel = ItemView.FindViewById<TextView>(Resource.Id.ReportsSummaryBillableLabel);
             billablePercentageView = ItemView.FindViewById(Resource.Id.BillablePercentageView);
+            clockedHoursLabel = ItemView.FindViewById<TextView>(Resource.Id.ClockedHours);
+            billableTextLabel = ItemView.FindViewById<TextView>(Resource.Id.BillableText);
+            nonBillableTextLabel = ItemView.FindViewById<TextView>(Resource.Id.NonBillableText);
             pieChartCard = ItemView.FindViewById<CardView>(Resource.Id.PieChartCard);
             pieChartView = ItemView.FindViewById<PieChartView>(Resource.Id.PieChartView);
             emptyStateView = ItemView.FindViewById<LinearLayout>(Resource.Id.EmptyStateView);
+            emptyStateTitle = ItemView.FindViewById<TextView>(Resource.Id.EmptyStateTitle);
+            emptyStateMessage = ItemView.FindViewById<TextView>(Resource.Id.EmptyStateMessage);
 
             summaryCard.Click += hideCalendar;
+
+            reportsSummaryTotalLabel.Text = Shared.Resources.Total;
+            reportsSummaryBillableLabel.Text = Shared.Resources.Billable;
+            clockedHoursLabel.Text = Shared.Resources.ClockedHours;
+            billableTextLabel.Text = Shared.Resources.Billable;
+            nonBillableTextLabel.Text = Shared.Resources.NonBillable;
+            emptyStateTitle.Text = Shared.Resources.ReportsEmptyStateTitle;
+            emptyStateMessage.Text = Shared.Resources.ReportsEmptyStateDescription;
         }
 
         protected override void UpdateView()

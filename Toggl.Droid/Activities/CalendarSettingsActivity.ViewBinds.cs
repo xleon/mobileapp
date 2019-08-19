@@ -12,9 +12,17 @@ namespace Toggl.Droid.Activities
         private View calendarsContainer;
         private RecyclerView calendarsRecyclerView;
         private Toolbar toolbar;
+        private TextView linkCalendarsTitle;
+        private TextView linkCalendarsMessage;
+        private TextView selectCalendarsTitle;
+        private TextView selectCalendarsMessage;
 
         protected override void InitializeViews()
         {
+            linkCalendarsTitle = FindViewById<TextView>(Resource.Id.LinkCalendarsTitle);
+            linkCalendarsMessage = FindViewById<TextView>(Resource.Id.LinkCalendarsMessage);
+            selectCalendarsTitle = FindViewById<TextView>(Resource.Id.SelectCalendarsTitle);
+            selectCalendarsMessage = FindViewById<TextView>(Resource.Id.SelectCalendarsMessage);
             toggleCalendarsView = FindViewById(Resource.Id.ToggleCalendarsView);
             toggleCalendarsSwitch = FindViewById<Switch>(Resource.Id.ToggleCalendarsSwitch);
             calendarsContainer = FindViewById(Resource.Id.CalendarsContainer);

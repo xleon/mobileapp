@@ -21,6 +21,7 @@ namespace Toggl.Droid.Activities
         private Group stoppedTimeEntryStopTimeElements;
         private Group billableRelatedViews;
 
+        private TextView errorTitle;
         private CardView errorContainer;
         private TextView errorText;
 
@@ -35,19 +36,23 @@ namespace Toggl.Droid.Activities
         private RecyclerView tagsRecycler;
 
         private View billableButton;
+        private TextView billableLabel;
         private Switch billableSwitch;
 
         private TextView startTimeTextView;
+        private TextView startTimeLabel;
         private TextView startDateTextView;
         private View changeStartTimeButton;
 
         private TextView stopTimeTextView;
+        private TextView stopTimeLabel;
         private TextView stopDateTextView;
         private View changeStopTimeButton;
 
         private View stopTimeEntryButton;
 
         private TextView durationTextView;
+        private TextView durationLabel;
         private View changeDurationButton;
 
         private TextView deleteLabel;
@@ -70,6 +75,7 @@ namespace Toggl.Droid.Activities
             billableRelatedViews = FindViewById<Group>(BillableRelatedViews);
 
             errorContainer = FindViewById<CardView>(ErrorContainer);
+            errorTitle = FindViewById<TextView>(ErrorTitle);
             errorText = FindViewById<TextView>(ErrorText);
 
             groupCountTextView = FindViewById<TextView>(GroupCount);
@@ -83,19 +89,23 @@ namespace Toggl.Droid.Activities
             tagsRecycler = FindViewById<RecyclerView>(TagsRecyclerView);
 
             billableButton = FindViewById(ToggleBillableButton);
+            billableLabel = FindViewById<TextView>(Resource.Id.BillableLabel);
             billableSwitch = FindViewById<Switch>(BillableSwitch);
 
             startTimeTextView = FindViewById<TextView>(StartTime);
+            startTimeLabel = FindViewById<TextView>(StartTimeLabel);
             startDateTextView = FindViewById<TextView>(StartDate);
             changeStartTimeButton = FindViewById(StartTimeButton);
 
             stopTimeTextView = FindViewById<TextView>(StopTime);
+            stopTimeLabel = FindViewById<TextView>(EditStopTimeLabel);
             stopDateTextView = FindViewById<TextView>(StopDate);
             changeStopTimeButton = FindViewById(StopTimeButton);
 
             stopTimeEntryButton = FindViewById(StopTimeEntryButtonLabel);
 
             durationTextView = FindViewById<TextView>(Duration);
+            durationLabel = FindViewById<TextView>(DurationLabel);
             changeDurationButton = FindViewById(DurationButton);
 
             deleteLabel = FindViewById<TextView>(DeleteLabel);

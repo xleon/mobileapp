@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:local="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -61,7 +62,7 @@
                 android:layout_below="@id/SignUpCountrySelection" />
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/SignUpEmail"
-                android:hint="@string/Email"
+                tools:hint="Email"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:layout_marginBottom="20dp"
@@ -77,7 +78,7 @@
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/SignUpPassword"
-                android:hint="@string/Password"
+                tools:hint="Password"
                 local:passwordToggleEnabled="true"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
@@ -105,7 +106,7 @@
                 android:layout_below="@id/SignUpPassword" />
             <Button
                 android:id="@+id/SignUpButton"
-                android:text="@string/SignUpForFree"
+                tools:text="Sign up for free"
                 android:background="@color/buttonBlue"
                 android:textColor="@color/BlueButtonTextColor"
                 android:foreground="?attr/selectableItemBackground"
@@ -128,7 +129,7 @@
                 android:layout_centerHorizontal="true" />
             <TextView
                 android:id="@+id/SignUpOrLabel"
-                android:text="@string/Or"
+                tools:text="Or"
                 android:textAllCaps="true"
                 android:layout_marginBottom="24dp"
                 android:layout_width="wrap_content"
@@ -170,13 +171,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
+                    android:id="@+id/SignUpWithGoogleLabel"
                     android:textSize="13sp"
                     android:textStyle="normal"
                     android:paddingStart="18dp"
                     android:letterSpacing="0.02"
                     android:textColor="#8a000000"
                     android:fontFamily="sans-serif-medium"
-                    android:text="@string/SignUpWithGoogle"
+                    tools:text="Sign up with Google"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -204,7 +206,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@android:color/black"
                 local:layout_constraintTop_toTopOf="parent"
-                android:text="@string/AlreadyHaveAnAccount"
+                tools:text="Already have an account?"
                 local:layout_constraintLeft_toLeftOf="parent"
                 local:layout_constraintVertical_chainStyle="packed"
                 local:layout_constraintBottom_toTopOf="@+id/LoginLabel"
@@ -216,7 +218,7 @@
             <TextView
                 android:id="@+id/LoginLabel"
                 android:textSize="14dp"
-                android:text="@string/Login"
+                tools:text="Log In"
                 android:letterSpacing="-0.02"
                 android:lineSpacingExtra="4sp"
                 android:textColor="@color/buttonBlue"

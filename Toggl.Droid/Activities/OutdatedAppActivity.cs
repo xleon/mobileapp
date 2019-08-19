@@ -25,6 +25,11 @@ namespace Toggl.Droid.Activities
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
             InitializeViews();
 
+            oopsTextView.Text = Shared.Resources.Oops;
+            outdatedAppMessageView.Text = Shared.Resources.AppOutdatedMessage;
+            openWebsiteButton.Text = Shared.Resources.OutdatedAppTryTogglCom;
+            updateAppButton.Text = Shared.Resources.UpdateTheApp;
+
             updateAppButton.Rx()
                 .BindAction(ViewModel.UpdateApp)
                 .DisposedBy(DisposeBag);

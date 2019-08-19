@@ -389,6 +389,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string And {
+            get {
+                return ResourceManager.GetString("And", resourceCulture);
+            }
+        }
+        
         public static string TermsOfServiceUrl {
             get {
                 return ResourceManager.GetString("TermsOfServiceUrl", resourceCulture);
@@ -875,6 +881,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string TermsOfServiceDialogMessageDroid {
+            get {
+                return ResourceManager.GetString("TermsOfServiceDialogMessageDroid", resourceCulture);
+            }
+        }
+        
         public static string CountryOfResidence {
             get {
                 return ResourceManager.GetString("CountryOfResidence", resourceCulture);
@@ -899,9 +911,21 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string RatingViewPositiveCallToActionDescription {
+        public static string RatingViewPositiveCallToActionDescriptionIos {
             get {
-                return ResourceManager.GetString("RatingViewPositiveCallToActionDescription", resourceCulture);
+                return ResourceManager.GetString("RatingViewPositiveCallToActionDescriptionIos", resourceCulture);
+            }
+        }
+        
+        public static string RatingViewPositiveCallToActionDescriptionDroid {
+            get {
+                return ResourceManager.GetString("RatingViewPositiveCallToActionDescriptionDroid", resourceCulture);
+            }
+        }
+        
+        public static string Later {
+            get {
+                return ResourceManager.GetString("Later", resourceCulture);
             }
         }
         
@@ -1061,9 +1085,39 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string NotificationSettingsTitle {
+        public static string Notifications {
             get {
-                return ResourceManager.GetString("NotificationSettingsTitle", resourceCulture);
+                return ResourceManager.GetString("Notifications", resourceCulture);
+            }
+        }
+        
+        public static string NotificationsRunningTimer {
+            get {
+                return ResourceManager.GetString("NotificationsRunningTimer", resourceCulture);
+            }
+        }
+        
+        public static string NotificationsStoppedTimer {
+            get {
+                return ResourceManager.GetString("NotificationsStoppedTimer", resourceCulture);
+            }
+        }
+        
+        public static string General {
+            get {
+                return ResourceManager.GetString("General", resourceCulture);
+            }
+        }
+        
+        public static string SetSmartReminders {
+            get {
+                return ResourceManager.GetString("SetSmartReminders", resourceCulture);
+            }
+        }
+        
+        public static string SetSmartRemindersMessage {
+            get {
+                return ResourceManager.GetString("SetSmartRemindersMessage", resourceCulture);
             }
         }
         
@@ -1193,15 +1247,33 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string StartTime {
+            get {
+                return ResourceManager.GetString("StartTime", resourceCulture);
+            }
+        }
+        
         public static string End {
             get {
                 return ResourceManager.GetString("End", resourceCulture);
             }
         }
         
+        public static string EndTime {
+            get {
+                return ResourceManager.GetString("EndTime", resourceCulture);
+            }
+        }
+        
         public static string Stop {
             get {
                 return ResourceManager.GetString("Stop", resourceCulture);
+            }
+        }
+        
+        public static string StopTimer {
+            get {
+                return ResourceManager.GetString("StopTimer", resourceCulture);
             }
         }
         
@@ -1529,6 +1601,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string SelectCalendarsMessage {
+            get {
+                return ResourceManager.GetString("SelectCalendarsMessage", resourceCulture);
+            }
+        }
+        
         public static string FilterWorkspaces {
             get {
                 return ResourceManager.GetString("FilterWorkspaces", resourceCulture);
@@ -1565,6 +1643,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string FeedbackHint {
+            get {
+                return ResourceManager.GetString("FeedbackHint", resourceCulture);
+            }
+        }
+        
         public static string SomethingWentWrongTryAgain {
             get {
                 return ResourceManager.GetString("SomethingWentWrongTryAgain", resourceCulture);
@@ -1580,6 +1664,12 @@ namespace Toggl.Shared {
         public static string YourProfile {
             get {
                 return ResourceManager.GetString("YourProfile", resourceCulture);
+            }
+        }
+        
+        public static string Display {
+            get {
+                return ResourceManager.GetString("Display", resourceCulture);
             }
         }
         
@@ -1619,9 +1709,9 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string SmartAlerts {
+        public static string SmartReminders {
             get {
-                return ResourceManager.GetString("SmartAlerts", resourceCulture);
+                return ResourceManager.GetString("SmartReminders", resourceCulture);
             }
         }
         
@@ -2162,6 +2252,120 @@ namespace Toggl.Shared {
         public static string SiriShortcutsReportsShortcuts {
             get {
                 return ResourceManager.GetString("SiriShortcutsReportsShortcuts", resourceCulture);
+            }
+        }
+        
+        public static string CalendarEvents {
+            get {
+                return ResourceManager.GetString("CalendarEvents", resourceCulture);
+            }
+        }
+        
+        public static string CalendarOnboardingTitle {
+            get {
+                return ResourceManager.GetString("CalendarOnboardingTitle", resourceCulture);
+            }
+        }
+        
+        public static string CalendarOnboardingMessage {
+            get {
+                return ResourceManager.GetString("CalendarOnboardingMessage", resourceCulture);
+            }
+        }
+        
+        public static string LinkCalendars {
+            get {
+                return ResourceManager.GetString("LinkCalendars", resourceCulture);
+            }
+        }
+        
+        public static string LinkYourCalendars {
+            get {
+                return ResourceManager.GetString("LinkYourCalendars", resourceCulture);
+            }
+        }
+        
+        public static string LinkCalendarsMessage {
+            get {
+                return ResourceManager.GetString("LinkCalendarsMessage", resourceCulture);
+            }
+        }
+        
+        public static string AllowAccess {
+            get {
+                return ResourceManager.GetString("AllowAccess", resourceCulture);
+            }
+        }
+        
+        public static string PrivateProjectHint {
+            get {
+                return ResourceManager.GetString("PrivateProjectHint", resourceCulture);
+            }
+        }
+        
+        public static string Username {
+            get {
+                return ResourceManager.GetString("Username", resourceCulture);
+            }
+        }
+        
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        public static string DefaultWorkspace {
+            get {
+                return ResourceManager.GetString("DefaultWorkspace", resourceCulture);
+            }
+        }
+        
+        public static string StartTimeAfterCurrentTimeWarning {
+            get {
+                return ResourceManager.GetString("StartTimeAfterCurrentTimeWarning", resourceCulture);
+            }
+        }
+        
+        public static string StartTimeAfterStopTimeWarning {
+            get {
+                return ResourceManager.GetString("StartTimeAfterStopTimeWarning", resourceCulture);
+            }
+        }
+        
+        public static string StopTimeBeforeStartTimeWarning {
+            get {
+                return ResourceManager.GetString("StopTimeBeforeStartTimeWarning", resourceCulture);
+            }
+        }
+        
+        public static string DurationTooLong {
+            get {
+                return ResourceManager.GetString("DurationTooLong", resourceCulture);
+            }
+        }
+        
+        public static string CategorizeWithProjects {
+            get {
+                return ResourceManager.GetString("CategorizeWithProjects", resourceCulture);
+            }
+        }
+        
+        public static string GenericInternetConnectionErrorMessage {
+            get {
+                return ResourceManager.GetString("GenericInternetConnectionErrorMessage", resourceCulture);
+            }
+        }
+        
+        public static string TotalEvents {
+            get {
+                return ResourceManager.GetString("TotalEvents", resourceCulture);
+            }
+        }
+        
+        public static string SendFeedbackSuccessMessage {
+            get {
+                return ResourceManager.GetString("SendFeedbackSuccessMessage", resourceCulture);
             }
         }
     }

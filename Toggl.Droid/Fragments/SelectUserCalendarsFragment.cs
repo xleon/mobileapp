@@ -34,6 +34,11 @@ namespace Toggl.Droid.Fragments
             base.OnViewCreated(view, savedInstanceState);
             setupRecyclerView();
 
+            titleLabel.Text = Shared.Resources.SelectCalendars;
+            messageLabel.Text = Shared.Resources.SelectCalendarsMessage;
+            cancelButton.Text = Shared.Resources.Cancel;
+            doneButton.Text = Shared.Resources.Done;
+
             cancelButton.Rx().Tap()
                 .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);

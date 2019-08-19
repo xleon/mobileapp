@@ -39,6 +39,10 @@ namespace Toggl.Droid.Activities
             InitializeViews();
             setupInputField();
 
+            loginEmail.HelperText = Shared.Resources.PasswordResetExplanation;
+            loginEmail.Hint = Shared.Resources.Email;
+            resetPasswordButton.Text = Shared.Resources.GetPasswordResetLink;
+
             ViewModel.ErrorMessage
                 .Subscribe(errorMessage =>
                 {
@@ -85,7 +89,7 @@ namespace Toggl.Droid.Activities
         private void showResetPasswordSuccessToast()
         {
             loginEmailEditText.RemoveFocus();
-            Toast.MakeText(this, Resource.String.ResetPasswordEmailSentMessage, ToastLength.Long).Show();
+            Toast.MakeText(this, Shared.Resources.PasswordResetSuccess, ToastLength.Long).Show();
         }
 
         private void setupToolbar()
@@ -95,7 +99,7 @@ namespace Toggl.Droid.Activities
             SetSupportActionBar(toolbar);
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetDisplayShowHomeEnabled(true);
-            SupportActionBar.Title = GetString(Resource.String.ForgotPasswordTitle);
+            SupportActionBar.Title = Shared.Resources.LoginForgotPassword;
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)

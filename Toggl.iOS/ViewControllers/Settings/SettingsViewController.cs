@@ -36,7 +36,7 @@ namespace Toggl.iOS.ViewControllers
             ManualModeCellLabel.Text = Resources.ManualMode;
             ManualModeDescriptionLabel.Text = Resources.ManualModeDescription;
             CalendarSettingsCellLabel.Text = Resources.CalendarSettingsTitle;
-            SmartAlertCellLabel.Text = Resources.SmartAlerts;
+            SmartAlertCellLabel.Text = Resources.SmartReminders;
             SubmitFeedbackCellLabel.Text = Resources.SubmitFeedback;
             AboutCellLabel.Text = Resources.About;
             HelpCellLabel.Text = Resources.Help;
@@ -125,7 +125,7 @@ namespace Toggl.iOS.ViewControllers
             {
                 hideSiriSection();
             }
-            
+
             FeedbackView.Rx()
                 .BindAction(ViewModel.SubmitFeedback)
                 .DisposedBy(DisposeBag);

@@ -32,6 +32,10 @@ namespace Toggl.Droid.Fragments
         {
             base.OnViewCreated(view, savedInstanceState);
 
+            headerCalendarEventsLabel.Text = Shared.Resources.CalendarEvents;
+            headerCalendarTimeEntriesLabel.Text = Shared.Resources.TimeEntries;
+            headerLinkCalendarsButton.Text = Shared.Resources.LinkCalendars;
+
             var timeService = AndroidDependencyContainer.Instance.TimeService;
             var schedulerProvider = AndroidDependencyContainer.Instance.SchedulerProvider;
 
@@ -131,8 +135,15 @@ namespace Toggl.Droid.Fragments
                 return;
 
             onboardingView = onboardingViewStub.Inflate();
+            onboardingTitleView = onboardingView.FindViewById<TextView>(Resource.Id.CalendarOnboardingTitle);
+            onboardingMessageView = onboardingView.FindViewById<TextView>(Resource.Id.CalendarOnboardingMessage);
             getStartedButton = onboardingView.FindViewById<Button>(Resource.Id.CalendarOnboardingGetStartedButton);
             skipButton = onboardingView.FindViewById<TextView>(Resource.Id.CalendarOnboardingSkipButton);
+
+            onboardingTitleView.Text = Shared.Resources.CalendarOnboardingTitle;
+            onboardingMessageView.Text = Shared.Resources.CalendarOnboardingMessage;
+            getStartedButton.Text = Shared.Resources.LinkYourCalendars;
+            skipButton.Text = Shared.Resources.Skip;
 
             getStartedButton.Rx().Tap()
                 .Subscribe(ViewModel.GetStarted.Inputs)
@@ -145,7 +156,7 @@ namespace Toggl.Droid.Fragments
 
         private void updateCalendarEventsCount(int count)
         {
-            var text = Context.GetString(Resource.String.TotalEvents, count.ToString());
+            var text = string.Format(Shared.Resources.TotalEvents, count.ToString());
             headerCalendarEventsTextView.Text = text;
         }
 

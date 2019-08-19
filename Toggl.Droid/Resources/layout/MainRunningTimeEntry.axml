@@ -51,7 +51,7 @@
         android:textSize="15sp"
         android:singleLine="true"
         android:fontFamily="sans-serif"
-        android:text="@string/AddDescription"
+        tools:text="Add description"
         android:textColor="@color/defaultText"
         local:layout_constraintBaseline_toBaselineOf="@id/LeadingTextView"
         local:layout_constraintLeft_toRightOf="@id/MainRunningTimeEntryDescription"

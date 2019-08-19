@@ -9,6 +9,7 @@ namespace Toggl.Droid.Fragments
 {
     public partial class SelectColorFragment
     {
+        private TextView titleLabel;
         private HueSaturationPickerView hueSaturationPicker;
         private ValueSlider valueSlider;
         private Button saveButton;
@@ -18,6 +19,7 @@ namespace Toggl.Droid.Fragments
 
         protected override void InitializeViews(View view)
         {
+            titleLabel = view.FindViewById<TextView>(Resource.Id.SelectColorTitle);
             recyclerView = view.FindViewById<RecyclerView>(Resource.Id.SelectColorRecyclerView);
             saveButton = view.FindViewById<Button>(Resource.Id.SelectColorSave);
             closeButton = view.FindViewById<Button>(Resource.Id.SelectColorClose);

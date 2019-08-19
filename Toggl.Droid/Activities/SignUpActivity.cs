@@ -32,6 +32,14 @@ namespace Toggl.Droid.Activities
 
             InitializeViews();
 
+            signUpEmailLabel.Hint = Shared.Resources.Email;
+            signUpPasswordLabel.Hint = Shared.Resources.Password;
+            signUpOrLabel.Text = Shared.Resources.Or;
+            signUpWithGoogleLabel.Text = Shared.Resources.GoogleSignUp;
+            alreadyHaveAnAccountLabel.Text = Shared.Resources.AlreadyHaveAnAccountQuestionMark;
+            loginLabel.Text = Shared.Resources.LoginTitle;
+            signupButton.Text = Shared.Resources.SignUpTitle;
+
             ViewModel.Email.FirstAsync()
                 .SubscribeOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(emailEditText.Rx().TextObserver())
@@ -105,7 +113,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             string signupButtonTitle(bool isLoading)
-                => isLoading ? "" : Resources.GetString(Resource.String.SignUpForFree);
+                => isLoading ? "" : Shared.Resources.SignUpTitle;
         }
     }
 }

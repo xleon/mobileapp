@@ -38,6 +38,8 @@ namespace Toggl.Droid.Fragments
             selectDurationRecyclerAdapter.Items = ViewModel.DurationFormats.ToList();
             recyclerView.SetAdapter(selectDurationRecyclerAdapter);
 
+            titleLabel.Text = Shared.Resources.DurationFormat;
+
             selectDurationRecyclerAdapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectDurationFormat.Inputs)
                 .DisposedBy(DisposeBag);

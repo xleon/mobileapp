@@ -1,4 +1,5 @@
-﻿using Android.Views;
+﻿using Android.Support.Design.Widget;
+using Android.Views;
 using Android.Widget;
 
 namespace Toggl.Droid.Activities
@@ -15,8 +16,15 @@ namespace Toggl.Droid.Activities
         private EditText emailEditText;
         private EditText passwordEditText;
 
+        private TextInputLayout signUpEmailLabel;
+        private TextInputLayout signUpPasswordLabel;
+
         private TextView errorTextView;
         private TextView countryNameTextView;
+        private TextView signUpOrLabel;
+        private TextView signUpWithGoogleLabel;
+        private TextView alreadyHaveAnAccountLabel;
+        private TextView loginLabel;
 
         private LinearLayout countrySelection;
 
@@ -24,9 +32,15 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeViews()
         {
+            signUpEmailLabel = FindViewById<TextInputLayout>(Resource.Id.SignUpEmail);
+            signUpPasswordLabel = FindViewById<TextInputLayout>(Resource.Id.SignUpPassword);
             loginCard = FindViewById(Resource.Id.LoginSignupCardView);
             errorTextView = FindViewById<TextView>(Resource.Id.SignUpError);
             countryNameTextView = FindViewById<TextView>(Resource.Id.SignUpCountryName);
+            signUpOrLabel = FindViewById<TextView>(Resource.Id.SignUpOrLabel);
+            signUpWithGoogleLabel = FindViewById<TextView>(Resource.Id.SignUpWithGoogleLabel);
+            alreadyHaveAnAccountLabel = FindViewById<TextView>(Resource.Id.AlreadyHaveAnAccountLabel);
+            loginLabel = FindViewById<TextView>(Resource.Id.LoginLabel);
             countrySelection = FindViewById<LinearLayout>(Resource.Id.SignUpCountrySelection);
             signupButton = FindViewById<Button>(Resource.Id.SignUpButton);
             googleSignupButton = FindViewById<View>(Resource.Id.SignUpWithGoogleButton);

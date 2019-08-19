@@ -1,12 +1,10 @@
 using Android.App;
 using Android.Content.PM;
-using Android.Content.Res;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Text;
 using System;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
@@ -16,9 +14,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.ViewHolders;
-using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using static Toggl.Droid.Resource.String;
 using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
 using TextResources = Toggl.Shared.Resources;
 using TimeEntryExtensions = Toggl.Droid.Extensions.TimeEntryExtensions;
@@ -92,6 +88,15 @@ namespace Toggl.Droid.Activities
             timeEntriesGroupModeViews.Visibility = ViewModel.IsEditingGroup.ToVisibility();
 
             descriptionEditText.Text = ViewModel.Description.Value;
+            descriptionEditText.Hint = Shared.Resources.StartTimeEntryPlaceholder;
+            confirmButton.Text = Shared.Resources.Save;
+            errorTitle.Text = Shared.Resources.Oops;
+            billableLabel.Text = Shared.Resources.Billable;
+            startTimeLabel.Text = Shared.Resources.StartTime;
+            stopTimeLabel.Text = Shared.Resources.EndTime;
+            durationLabel.Text = Shared.Resources.Duration;
+            deleteLabel.Text = Shared.Resources.DeleteThisEntry;
+            closeButton.ContentDescription = Shared.Resources.Cancel;
 
             groupCountTextView.Text = string.Format(
                 TextResources.EditingTimeEntryGroup,
@@ -122,8 +127,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             descriptionEditText.Rx().FocusChanged()
-                .Select(isFocused => isFocused ? Done : Save)
-                .Select(Resources.GetString)
+                .Select(isFocused => isFocused ? TextResources.Done : TextResources.Save)
                 .Subscribe(confirmButton.Rx().TextObserver());
 
             descriptionEditText.Rx().Text()

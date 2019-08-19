@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:local="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -31,7 +32,7 @@
                 android:layout_centerHorizontal="true" />
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/LoginEmail"
-                android:hint="@string/Email"
+                tools:hint="Email"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:layout_marginBottom="20dp"
@@ -47,7 +48,7 @@
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/LoginPassword"
-                android:hint="@string/Password"
+                tools:hint="Password"
                 local:passwordToggleEnabled="true"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
@@ -101,7 +102,7 @@
                 android:id="@+id/LoginForgotPassword"
                 android:textSize="13sp"
                 android:textColor="@color/grey"
-                android:text="@string/ForgotPassword"
+                tools:text="Forgot your password? Get help logging in"
                 android:layout_marginTop="60dp"
                 android:layout_marginBottom="24dp"
                 android:layout_width="wrap_content"
@@ -128,7 +129,7 @@
                 android:layout_toLeftOf="@+id/LoginOrLabel" />
             <TextView
                 android:id="@+id/LoginOrLabel"
-                android:text="@string/Or"
+                tools:text="Or"
                 android:textAllCaps="true"
                 android:layout_marginBottom="24dp"
                 android:layout_width="wrap_content"
@@ -152,13 +153,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
+                    android:id="@+id/LoginGoogleLoginLabel"
                     android:textSize="13sp"
                     android:textStyle="normal"
                     android:paddingStart="18dp"
                     android:letterSpacing="0.02"
                     android:textColor="#8a000000"
                     android:fontFamily="sans-serif-medium"
-                    android:text="@string/SignInWithGoogle"
+                    tools:text="Sign in With Google"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -185,7 +187,7 @@
                 android:lineSpacingExtra="4sp"
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@android:color/black"
-                android:text="@string/DontHaveAnAccount"
+                tools:text="Don\'t have an account?"
                 local:layout_constraintTop_toTopOf="parent"
                 local:layout_constraintLeft_toLeftOf="parent"
                 local:layout_constraintVertical_chainStyle="packed"
@@ -200,7 +202,7 @@
                 android:textSize="14dp"
                 android:letterSpacing="-0.02"
                 android:lineSpacingExtra="4sp"
-                android:text="@string/SignUpForFree"
+                tools:text="Sign up for free"
                 android:textColor="@color/buttonBlue"
                 android:fontFamily="sans-serif-medium"
                 local:layout_constraintBottom_toBottomOf="parent"

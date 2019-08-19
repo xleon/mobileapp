@@ -38,6 +38,8 @@ namespace Toggl.Droid.Fragments
 
             recyclerView.SetAdapter(selectDateRecyclerAdapter);
 
+            titleLabel.Text = Shared.Resources.DateFormat;
+
             selectDateRecyclerAdapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectDateFormat.Inputs)
                 .DisposedBy(DisposeBag);

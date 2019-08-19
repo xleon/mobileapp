@@ -36,6 +36,11 @@ namespace Toggl.Droid.Activities
             setupToolbar();
             errorText.Visibility = ViewStates.Gone;
 
+            errorText.Text = Shared.Resources.ProjectNameTakenError;
+            privateProjectLabel.Text = Shared.Resources.PrivateProject;
+            privateProjectHintLabel.Text = Shared.Resources.PrivateProjectHint;
+            createProjectButton.Text = Shared.Resources.Create;
+
             // Name
             projectNameTextView.Rx()
                 .Text()
@@ -59,7 +64,7 @@ namespace Toggl.Droid.Activities
                 .Select(color => color.ToNativeColor())
                 .Subscribe(colorCircle.SetCircleColor)
                 .DisposedBy(DisposeBag);
-                
+
             // Error
             ViewModel.Error
                 .Subscribe(errorText.Rx().TextObserver())

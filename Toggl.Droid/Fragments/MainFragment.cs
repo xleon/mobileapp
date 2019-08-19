@@ -9,6 +9,7 @@ using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
 using Android.Text;
 using Android.Views;
+using Android.Widget;
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -58,6 +59,9 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
+
+            timeEntryCardAddDescriptionLabel.Text = Shared.Resources.AddDescription;
+
             stopButton.Rx().BindAction(ViewModel.StopTimeEntry, _ => TimeEntryStopOrigin.Manual).DisposedBy(DisposeBag);
 
             playButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => true).DisposedBy(DisposeBag);
@@ -345,6 +349,12 @@ namespace Toggl.Droid.Fragments
                 if (welcomeBackView == null)
                 {
                     welcomeBackView = welcomeBackStub.Inflate();
+
+                    welcomeBackTitle = welcomeBackView.FindViewById<TextView>(Resource.Id.WelcomeBackTitle);
+                    welcomeBackSubText = welcomeBackView.FindViewById<TextView>(Resource.Id.WelcomeBackSubText);
+
+                    welcomeBackTitle.Text = FoundationResources.LogEmptyStateTitle;
+                    welcomeBackSubText.Text = FoundationResources.LogEmptyStateText;
                 }
 
                 welcomeBackView.Visibility = ViewStates.Visible;

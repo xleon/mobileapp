@@ -30,6 +30,14 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
+
+            reviewTheTermsTextView.Text = Shared.Resources.ReviewTheTerms;
+            termsMessageTextView.Text = Shared.Resources.TermsOfServiceDialogMessageDroid;
+            termsOfServiceTextView.Text = Shared.Resources.TermsOfService;
+            andTextView.Text = Shared.Resources.And;
+            privacyPolicyTextView.Text = Shared.Resources.PrivacyPolicy;
+            acceptButton.Text = Shared.Resources.IAgree;
+
             bindViews();
         }
 

@@ -33,6 +33,15 @@ namespace Toggl.Droid.Activities
 
             InitializeViews();
 
+            loginEmail.Hint = Shared.Resources.Email;
+            loginPassword.Hint = Shared.Resources.Password;
+
+            forgotPasswordView.Text = Shared.Resources.LoginForgotPassword;
+            googleLoginLabel.Text = Shared.Resources.GoogleLogin;
+            haveAnAccountLabel.Text = Shared.Resources.AlreadyHaveAnAccountQuestionMark;
+            orLabel.Text = Shared.Resources.Or;
+            signUpLabel.Text = Shared.Resources.SignUpTitle;
+
             ViewModel.Email.FirstAsync()
                 .SubscribeOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(emailEditText.Rx().TextObserver())
@@ -98,7 +107,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             string loginButtonTitle(bool isLoading)
-                => isLoading ? "" : Resources.GetString(Resource.String.Login);
+                => isLoading ? "" : Shared.Resources.LoginTitle;
 
             this.CancelAllNotifications();
         }

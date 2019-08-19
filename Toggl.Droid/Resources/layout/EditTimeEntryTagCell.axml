@@ -14,7 +14,7 @@
     android:layout_height="wrap_content">
     <TextView
         android:id="@+id/Text"
-        tools:text="@string/Tag"
+        tools:text="Tag"
         android:textSize="12sp"
         android:textColor="@color/buttonBlue"
         android:layout_width="wrap_content"

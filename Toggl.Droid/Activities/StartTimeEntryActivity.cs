@@ -45,6 +45,8 @@ namespace Toggl.Droid.Activities
 
             InitializeViews();
 
+            doneButton.Text = Shared.Resources.Done;
+
             // Suggestions RecyclerView
             var adapter = new StartTimeEntryRecyclerAdapter();
             recyclerView.SetLayoutManager(new LinearLayoutManager(this));
@@ -163,7 +165,7 @@ namespace Toggl.Droid.Activities
                 this,
                 Resource.Layout.TooltipWithCenteredBottomArrow,
                 Resource.Id.TooltipText,
-                Resource.String.OnboardingAddProjectOrTag);
+                Shared.Resources.AddProjectBubbleText);
 
             var storage = ViewModel.OnboardingStorage;
 

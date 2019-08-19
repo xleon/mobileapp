@@ -64,7 +64,7 @@
                     android:fontFamily="sans-serif"
                     android:textStyle="normal"
                     android:textColor="@android:color/black"
-                    android:text="@string/CalendarEvents"
+                    tools:text="Calendar events"
                     app:layout_constraintVertical_chainStyle="packed"
                     android:layout_marginBottom="4dp"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -112,7 +112,7 @@
                     android:fontFamily="sans-serif"
                     android:textStyle="normal"
                     android:textColor="@android:color/black"
-                    android:text="@string/TimeEntries"
+                    tools:text="Time entries"
                     android:layout_marginBottom="4dp"
                     app:layout_constraintVertical_chainStyle="packed"
                     app:layout_constraintTop_toTopOf="parent"
@@ -156,7 +156,7 @@
             android:background="@drawable/BlueButton"
             android:foreground="?android:attr/selectableItemBackground"
             android:textAllCaps="false"
-            android:text="@string/LinkCalendars"
+            tools:text="Link calendars"
             android:visibility="gone"/>
     </LinearLayout>
 </android.support.design.widget.AppBarLayout>
