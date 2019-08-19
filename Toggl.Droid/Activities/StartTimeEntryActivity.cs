@@ -1,7 +1,6 @@
 using Android.App;
 using Android.Content.PM;
-using Android.OS;
-using Android.Support.V7.Widget;
+using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using System;
@@ -12,10 +11,10 @@ using Toggl.Core.Autocomplete;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Onboarding.StartTimeEntryView;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Helper;
+using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Activities
@@ -31,25 +30,19 @@ namespace Toggl.Droid.Activities
         private PopupWindow onboardingPopupWindow;
         private IDisposable onboardingDisposable;
 
-        protected override void OnCreate(Bundle bundle)
+        public StartTimeEntryActivity() : base(
+            Resource.Layout.StartTimeEntryActivity,
+            Resource.Style.AppTheme_Light,
+            Transitions.SlideInFromBottom)
+        { }
+
+        public StartTimeEntryActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
-            SetTheme(Resource.Style.AppTheme_Light);
-            base.OnCreate(bundle);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.StartTimeEntryActivity);
-            OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
+        }
 
-            InitializeViews();
-
-            // Suggestions RecyclerView
-            var adapter = new StartTimeEntryRecyclerAdapter();
-            recyclerView.SetLayoutManager(new LinearLayoutManager(this));
-            recyclerView.SetAdapter(adapter);
-
+        protected override void InitializeBindings()
+        {
             ViewModel.Suggestions
                 .Subscribe(adapter.Rx().Items())
                 .DisposedBy(DisposeBag);
@@ -147,12 +140,6 @@ namespace Toggl.Droid.Activities
             selectProjectToolbarButton.LayoutChange -= onSelectProjectToolbarButtonLayoutChanged;
             onboardingPopupWindow?.Dismiss();
             onboardingPopupWindow = null;
-        }
-
-        public override void Finish()
-        {
-            base.Finish();
-            OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
         }
 
         private void setupStartTimeEntryOnboardingStep()

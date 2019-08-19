@@ -1,6 +1,6 @@
 using Android.App;
 using Android.Content.PM;
-using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using System;
@@ -12,6 +12,7 @@ using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Presentation;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -33,9 +34,8 @@ namespace Toggl.Droid.Activities
             [DurationTooLong] = Resource.String.DurationTooLong,
         };
 
-        private readonly Subject<DateTimeOffset> activeEditionChangedSubject = new Subject<DateTimeOffset>();
         private readonly Subject<Unit> viewClosedSubject = new Subject<Unit>();
-        //private readonly Subject<Unit> saveSubject = new Subject<Unit>();
+        private readonly Subject<DateTimeOffset> activeEditionChangedSubject = new Subject<DateTimeOffset>();
 
         private DateTimeOffset minDateTime;
         private DateTimeOffset maxDateTime;
@@ -46,19 +46,19 @@ namespace Toggl.Droid.Activities
         private Dialog editDialog;
         private Toast toast;
 
-        protected override void OnCreate(Bundle bundle)
-        {
-            SetTheme(Resource.Style.AppTheme_Light);
-            base.OnCreate(bundle);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.EditDurationActivity);
-            InitializeViews();
-            SetupToolbar(title: Shared.Resources.StartAndStopTime);
+        public EditDurationActivity() : base(
+            Resource.Layout.EditDurationActivity,
+            Resource.Style.AppTheme_Light,
+            Transitions.SlideInFromBottom)
+        { }
 
+        public EditDurationActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
+        {
+        }
+
+        protected override void InitializeBindings()
+        {
             ViewModel.TimeFormat
                 .Subscribe(v => is24HoursFormat = v.IsTwentyFourHoursFormat)
                 .DisposedBy(DisposeBag);
@@ -213,12 +213,11 @@ namespace Toggl.Droid.Activities
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            switch (item.ItemId)
+            if (item.ItemId == Resource.Id.SaveMenuItem)
             {
-                case Resource.Id.SaveMenuItem:
-                    wheelNumericInput.ApplyDurationIfBeingEdited();
-                    ViewModel.Save.Execute();
-                    return true;
+                wheelNumericInput.ApplyDurationIfBeingEdited();
+                ViewModel.Save.Execute();
+                return true;
             }
             return base.OnOptionsItemSelected(item);
         }

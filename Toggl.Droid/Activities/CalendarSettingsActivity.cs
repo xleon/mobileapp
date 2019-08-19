@@ -1,16 +1,14 @@
 ﻿using Android.App;
 using Android.Content.PM;
-using Android.OS;
-using Android.Support.V7.Widget;
+using Android.Runtime;
 using Android.Views;
 using System;
 using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels.Settings;
-using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
-using TogglResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Activities
 {
@@ -20,25 +18,19 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class CalendarSettingsActivity : ReactiveActivity<CalendarSettingsViewModel>
     {
-        private UserCalendarsRecyclerAdapter userCalendarsAdapter;
+        public CalendarSettingsActivity() : base(
+            Resource.Layout.CalendarSettingsActivity,
+            Resource.Style.AppTheme_Light,
+            Transitions.SlideInFromRight)
+        { }
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        public CalendarSettingsActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
-            SetTheme(Resource.Style.AppTheme_Light);
-            base.OnCreate(savedInstanceState);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.CalendarSettingsActivity);
-            OverridePendingTransition(Resource.Animation.abc_slide_in_right, Resource.Animation.abc_fade_out);
+        }
 
-            InitializeViews();
-            SetupToolbar(title: TogglResources.CalendarSettingsTitle);
-
-            setupRecyclerView();
-
+        protected override void InitializeBindings()
+        {
             toggleCalendarsView.Rx().Tap()
                 .Subscribe(ViewModel.TogglCalendarIntegration.Inputs)
                 .DisposedBy(DisposeBag);
@@ -71,27 +63,13 @@ namespace Toggl.Droid.Activities
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            switch (item.ItemId)
+            if (item.ItemId == Resource.Id.Done)
             {
-                case Resource.Id.Done:
-                    ViewModel.Save.Execute();
-                    return true;
+                ViewModel.Save.Execute();
+                return true;
             }
 
             return base.OnOptionsItemSelected(item);
-        }
-
-        public override void Finish()
-        {
-            base.Finish();
-            OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_right);
-        }
-
-        private void setupRecyclerView()
-        {
-            userCalendarsAdapter = new UserCalendarsRecyclerAdapter();
-            calendarsRecyclerView.SetAdapter(userCalendarsAdapter);
-            calendarsRecyclerView.SetLayoutManager(new LinearLayoutManager(this));
         }
     }
 }

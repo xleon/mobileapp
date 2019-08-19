@@ -40,6 +40,8 @@ namespace Toggl.Droid.Activities
             wheelBackground = FindViewById<WheelBackgroundView>(Resource.Id.WheelBackground);
             wheelForeground = FindViewById<WheelForegroundView>(Resource.Id.WheelForeground);
             wheelNumericInput = FindViewById<WheelDurationInput>(Resource.Id.WheelDurationInput);
+
+            SetupToolbar(title: Shared.Resources.StartAndStopTime);
         }
     }
 }

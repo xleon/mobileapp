@@ -5,13 +5,20 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Droid.Extensions;
 using static Toggl.Droid.Resource.Id;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
+using TextResources = Toggl.Shared.Resources;
+using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
+using Toggl.Droid.ViewHolders;
 
 namespace Toggl.Droid.Activities
 {
     public sealed partial class EditTimeEntryActivity : ReactiveActivity<EditTimeEntryViewModel>
     {
+        private readonly TagsAdapter tagsAdapter = new TagsAdapter(
+            Resource.Layout.EditTimeEntryTagCell,
+            StringViewHolder.Create);
+
         private ImageView closeButton;
         private TextView confirmButton;
         private EditText descriptionEditText;
@@ -104,6 +111,27 @@ namespace Toggl.Droid.Activities
             toolbar = FindViewById(DescriptionContainer);
             scrollView = FindViewById<NestedScrollView>(Resource.Id.ScrollView);
             appBarLayout = FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
+
+            singleTimeEntryModeViews.Visibility = (!ViewModel.IsEditingGroup).ToVisibility();
+            timeEntriesGroupModeViews.Visibility = ViewModel.IsEditingGroup.ToVisibility();
+
+            descriptionEditText.Text = ViewModel.Description.Value;
+
+            groupCountTextView.Text = string.Format(
+                TextResources.EditingTimeEntryGroup,
+                ViewModel.GroupCount);
+
+            var layoutManager = new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false);
+            layoutManager.ItemPrefetchEnabled = true;
+            layoutManager.InitialPrefetchItemCount = 5;
+            tagsRecycler.SetLayoutManager(layoutManager);
+            tagsRecycler.SetAdapter(tagsAdapter);
+
+            deleteLabel.Text = ViewModel.IsEditingGroup
+                ? string.Format(TextResources.DeleteNTimeEntries, ViewModel.GroupCount)
+                : TextResources.DeleteThisEntry;
+
+            scrollView.AttachMaterialScrollBehaviour(appBarLayout);
         }
     }
 }

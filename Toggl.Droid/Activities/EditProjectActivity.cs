@@ -1,7 +1,6 @@
 ﻿using Android.App;
 using Android.Content.PM;
-using Android.OS;
-using Android.Support.V4.Graphics;
+using Android.Runtime;
 using Android.Views;
 using System;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
 using AndroidColor = Android.Graphics.Color;
 using FoundationResources = Toggl.Shared.Resources;
@@ -21,20 +21,19 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class EditProjectActivity : ReactiveActivity<EditProjectViewModel>
     {
-        protected override void OnCreate(Bundle bundle)
-        {
-            SetTheme(Resource.Style.AppTheme_Light_WhiteBackground);
-            base.OnCreate(bundle);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.EditProjectActivity);
-            InitializeViews();
-            OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
-            SetupToolbar(ViewModel.Title);
+        public EditProjectActivity() : base(
+            Resource.Layout.EditProjectActivity,
+            Resource.Style.AppTheme_Light_WhiteBackground,
+            Transitions.SlideInFromBottom)
+        { }
 
+        public EditProjectActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
+        {
+        }
+
+        protected override void InitializeBindings()
+        {
             errorText.Visibility = ViewStates.Gone;
 
             // Name
@@ -133,13 +132,6 @@ namespace Toggl.Droid.Activities
 
             AndroidColor createProjectTextColor(bool enabled)
                 => enabled ? enabledColor : disabledColor;
-        }
-
-
-        public override void Finish()
-        {
-            base.Finish();
-            OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
         }
     }
 }

@@ -1,6 +1,6 @@
 using Android.Support.Design.Widget;
 using Android.Widget;
-
+using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Activities
 {
@@ -17,6 +17,11 @@ namespace Toggl.Droid.Activities
             loginEmailEditText = FindViewById<EditText>(Resource.Id.LoginEmailEditText);
             resetPasswordButton = FindViewById<Button>(Resource.Id.ResetPasswordButton);
             loadingProgressBar = FindViewById<ProgressBar>(Resource.Id.LoadingProgressBar);
+
+            loginEmailEditText.SetFocus();
+            loginEmailEditText.SetSelection(loginEmailEditText.Text?.Length ?? 0);
+
+            SetupToolbar(GetString(Resource.String.ForgotPasswordTitle));
         }
     }
 }
