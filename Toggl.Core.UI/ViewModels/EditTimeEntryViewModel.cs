@@ -78,7 +78,7 @@ namespace Toggl.Core.UI.ViewModels
         public TimeSpan GroupDuration { get; private set; }
 
         private BehaviorSubject<IEnumerable<IThreadSafeTag>> tagsSubject;
-        public IObservable<IEnumerable<string>> Tags { get; set; }
+        public IObservable<IImmutableList<string>> Tags { get; set; }
         private IEnumerable<long> tagIds
             => tagsSubject.Value.Select(tag => tag.Id);
 

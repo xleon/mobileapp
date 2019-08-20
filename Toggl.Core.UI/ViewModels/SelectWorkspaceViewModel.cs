@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace Toggl.Core.UI.ViewModels
         private long currentWorkspaceId;
 
         public string Title { get; private set; }
-        public ReadOnlyCollection<SelectableWorkspaceViewModel> Workspaces { get; private set; }
+        public IImmutableList<SelectableWorkspaceViewModel> Workspaces { get; private set; }
 
         public InputAction<SelectableWorkspaceViewModel> SelectWorkspace { get; }
 
@@ -49,8 +50,7 @@ namespace Toggl.Core.UI.ViewModels
             Workspaces = workspaces
                 .Where(w => w.IsEligibleForProjectCreation())
                 .Select(w => new SelectableWorkspaceViewModel(w, w.Id == currentWorkspaceId))
-                .ToList()
-                .AsReadOnly();
+                .ToImmutableList();
         }
 
         public override void CloseWithDefaultResult()

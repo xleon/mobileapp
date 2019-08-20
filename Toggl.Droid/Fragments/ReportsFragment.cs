@@ -39,8 +39,6 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(ViewModel.SelectWorkspace.Inputs)
                 .DisposedBy(DisposeBag);
 
-            calendarView.SetupWith(ViewModel.CalendarViewModel);
-
             setupReportsRecyclerView();
             ViewModel.StartDate.CombineLatest(
                     ViewModel.EndDate,
@@ -67,12 +65,8 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(reportsRecyclerAdapter.UpdateReportsSummary)
                 .DisposedBy(DisposeBag);
 
-            reportsRecyclerAdapter.SummaryCardClicks
-                .Subscribe(hideCalendar)
-                .DisposedBy(DisposeBag);
-
             toolbarCurrentDateRangeText.Rx().Tap()
-                .Subscribe(toggleCalendar)
+                .Subscribe(showCalendar)
                 .DisposedBy(DisposeBag);
 
             ViewModel.CurrentDateRange
@@ -128,16 +122,15 @@ namespace Toggl.Droid.Fragments
             reportsRecyclerView.SetAdapter(reportsRecyclerAdapter);
         }
 
-        private void toggleCalendar()
+        private void showCalendar()
         {
-            reportsMainContainer.ToggleCalendar(false);
-            ViewModel.CalendarViewModel.SelectStartOfSelectionIfNeeded();
-        }
+            AndroidDependencyContainer
+                .Instance
+                .ViewModelCache
+                .Cache(ViewModel.CalendarViewModel);
 
-        private void hideCalendar()
-        {
-            reportsMainContainer.ToggleCalendar(true);
-            ViewModel.CalendarViewModel.SelectStartOfSelectionIfNeeded();
+            new ReportsCalendarFragment()
+                .Show(ChildFragmentManager, nameof(ReportsCalendarFragment));
         }
     }
 }

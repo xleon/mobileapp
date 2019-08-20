@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Net;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -63,6 +64,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
 
             downloadJson()
                 .Select(JsonConvert.DeserializeObject<List<SiriWorkflow>>)
+                .Select(list => list.ToImmutableList())
                 .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(TableView.Rx().ReloadItems(source))
                 .DisposedBy(DisposeBag);

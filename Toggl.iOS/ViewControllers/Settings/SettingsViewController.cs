@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Reactive.Linq;
 using CoreGraphics;
 using Toggl.Core.UI.Collections;
@@ -67,7 +68,7 @@ namespace Toggl.iOS.ViewControllers
             setting.Action.Execute();
         }
 
-        private IObservable<IEnumerable<SettingSection>> settingsSections()
+        private IObservable<IImmutableList<SettingSection>> settingsSections()
         {
             var sections = new List<IObservable<SettingSection>>();
 
@@ -163,7 +164,7 @@ namespace Toggl.iOS.ViewControllers
 
             sections.Add(footerSection);
 
-            return sections.CombineLatest();
+            return sections.CombineLatest().Select(list => list.ToImmutableList());
         }
 
 #if DEBUG

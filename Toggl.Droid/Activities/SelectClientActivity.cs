@@ -31,7 +31,6 @@ namespace Toggl.Droid.Activities
         protected override void InitializeBindings()
         {
             ViewModel.Clients
-                .Select(clients => clients.ToList())
                 .Subscribe(selectClientRecyclerAdapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 

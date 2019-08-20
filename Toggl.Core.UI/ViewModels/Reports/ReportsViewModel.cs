@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
@@ -86,9 +87,9 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public ReportsCalendarViewModel CalendarViewModel { get; }
 
-        public IObservable<IReadOnlyList<ChartSegment>> SegmentsObservable { get; private set; }
+        public IObservable<IImmutableList<ChartSegment>> SegmentsObservable { get; private set; }
 
-        public IObservable<IReadOnlyList<ChartSegment>> GroupedSegmentsObservable { get; private set; }
+        public IObservable<IImmutableList<ChartSegment>> GroupedSegmentsObservable { get; private set; }
 
         public IObservable<bool> ShowEmptyStateObservable { get; private set; }
 
@@ -358,17 +359,16 @@ namespace Toggl.Core.UI.ViewModels.Reports
             updateCurrentDateRangeString();
         }
 
-        private IReadOnlyList<ChartSegment> applyDurationFormat(IReadOnlyList<ChartSegment> chartSegments, DurationFormat durationFormat)
+        private IImmutableList<ChartSegment> applyDurationFormat(IReadOnlyList<ChartSegment> chartSegments, DurationFormat durationFormat)
         {
             return chartSegments.Select(segment => segment.WithDurationFormat(durationFormat))
-                .ToList()
-                .AsReadOnly();
+                .ToImmutableList();
         }
 
         private bool shouldShowEmptyState(IReadOnlyList<ChartSegment> chartSegments, bool isLoading)
             => chartSegments.None() && !isLoading;
 
-        private IReadOnlyList<ChartSegment> groupSegments(IReadOnlyList<ChartSegment> segments, DurationFormat durationFormat)
+        private IImmutableList<ChartSegment> groupSegments(IReadOnlyList<ChartSegment> segments, DurationFormat durationFormat)
         {
             var groupedData = segments.GroupBy(segment => segment.Percentage >= minimumSegmentPercentageToBeOnItsOwn).ToList();
 
@@ -402,9 +402,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
             }
 
             if (!finalOtherProjects.Any())
-            {
-                return segments;
-            }
+                return segments.ToImmutableList();
 
             var leftOutOfOther = remainingOtherProjectCandidates.Except(finalOtherProjects).ToList();
             aboveStandAloneThresholdSegments.AddRange(leftOutOfOther);
@@ -439,8 +437,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             return onTheirOwnSegments
                 .Append(lastSegment)
-                .ToList()
-                .AsReadOnly();
+                .ToImmutableList();
         }
 
         private async Task selectWorkspace()

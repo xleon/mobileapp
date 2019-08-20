@@ -13,8 +13,6 @@ namespace Toggl.Droid.Fragments
         private TextView workspaceName;
         private TextView toolbarCurrentDateRangeText;
         private RecyclerView reportsRecyclerView;
-        private ReportsLinearLayout reportsMainContainer;
-        private ReportsCalendarView calendarView;
         private AppBarLayout appBarLayout;
 
         protected override void InitializeViews(View fragmentView)
@@ -23,9 +21,6 @@ namespace Toggl.Droid.Fragments
             workspaceName = fragmentView.FindViewById<TextView>(Resource.Id.ReportsFragmentWorkspaceName);
             toolbarCurrentDateRangeText = fragmentView.FindViewById<TextView>(Resource.Id.ToolbarCurrentDateRangeText);
             reportsRecyclerView = fragmentView.FindViewById<RecyclerView>(Resource.Id.ReportsFragmentRecyclerView);
-            reportsMainContainer = fragmentView.FindViewById<ReportsLinearLayout>(Resource.Id.ReportsFragmentMainContainer);
-            calendarView = fragmentView.FindViewById<ReportsCalendarView>(Resource.Id.ReportsFragmentCalendarView);
-            reportsMainContainer.CalendarContainer = calendarView;
             appBarLayout = fragmentView.FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
         }
     }

@@ -93,16 +93,11 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             ViewModel.SelectableColors
-                     .Subscribe(updateColors)
-                     .DisposedBy(DisposeBag);
+                .Subscribe(selectableColorsAdapter.Rx().Items())
+                .DisposedBy(DisposeBag);
 
             hueSaturationPicker.Visibility = ViewModel.AllowCustomColors.ToVisibility();
             valueSlider.Visibility = ViewModel.AllowCustomColors.ToVisibility();
-        }
-
-        private void updateColors(IEnumerable<SelectableColorViewModel> colors)
-        {
-            selectableColorsAdapter.Items = colors.ToList();
         }
 
         public override void OnResume()

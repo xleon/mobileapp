@@ -96,8 +96,8 @@ namespace Toggl.Droid.Views
         public ReportsCalendarDayView(Context context, IAttributeSet attrs, int defStyle)
             : base(context, attrs, defStyle)
         {
-            cornerRadius = (int)22.DpToPixels(context);
-            verticalPadding = (int)6.DpToPixels(context);
+            cornerRadius = 23.DpToPixels(context);
+            verticalPadding = 6.DpToPixels(context);
             selectedPaint = new Paint
             {
                 Flags = PaintFlags.AntiAlias,
@@ -123,15 +123,10 @@ namespace Toggl.Droid.Views
 
             if (IsSelected)
             {
-                if (IsSingleDaySelection)
-                {
-                    drawCircle(canvas, width, height, selectedPaint);
-                }
-                else
-                {
-                    var roundRect = new RectF(0, verticalPadding, width, height + verticalPadding);
-                    canvas.DrawRoundRect(roundRect, cornerRadius, cornerRadius, selectedPaint);
+                drawCircle(canvas, width, height, selectedPaint);
 
+                if (!IsSingleDaySelection)
+                {
                     var squareRectLeft = RoundLeft ? cornerRadius : 0;
                     var squareRectRight = width - (RoundRight ? cornerRadius : 0);
                     var squareRect = new RectF(squareRectLeft, verticalPadding, squareRectRight, height + verticalPadding);

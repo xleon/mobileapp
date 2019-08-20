@@ -92,9 +92,9 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<AutocompleteSuggestion> SelectSuggestion { get; }
         public InputAction<TimeSpan> SetRunningTime { get; }
         public InputAction<ProjectSuggestion> ToggleTasks { get; }
-        public InputAction<IEnumerable<ISpan>> SetTextSpans { get; }
+        public InputAction<IImmutableList<ISpan>> SetTextSpans { get; }
 
-        public IObservable<IList<SectionModel<string, AutocompleteSuggestion>>> Suggestions { get; }
+        public IObservable<IImmutableList<SectionModel<string, AutocompleteSuggestion>>> Suggestions { get; }
         public IObservable<string> DisplayedTime { get; }
 
         public StartTimeEntryViewModel(
@@ -146,7 +146,7 @@ namespace Toggl.Core.UI.ViewModels
             SelectSuggestion = rxActionFactory.FromAsync<AutocompleteSuggestion>(selectSuggestion);
             SetRunningTime = rxActionFactory.FromAction<TimeSpan>(setRunningTime);
             ToggleTasks = rxActionFactory.FromAction<ProjectSuggestion>(toggleTasks);
-            SetTextSpans = rxActionFactory.FromAction<IEnumerable<ISpan>>(setTextSpans);
+            SetTextSpans = rxActionFactory.FromAction<IImmutableList<ISpan>>(setTextSpans);
 
             var queryByType = queryByTypeSubject
                 .AsObservable()
@@ -160,7 +160,6 @@ namespace Toggl.Core.UI.ViewModels
                 .SelectMany(query => interactorFactory.GetAutocompleteSuggestions(query).Execute());
 
             Suggestions = Observable.Merge(queryByText, queryByType)
-                .Select(items => items.ToList()) // This is line is needed for now to read objects from realm
                 .Select(filter)
                 .Select(group)
                 .CombineLatest(expandedProjects, (groups, _) => groups)
@@ -258,9 +257,9 @@ namespace Toggl.Core.UI.ViewModels
             Close();
         }
 
-        private void setTextSpans(IEnumerable<ISpan> spans)
+        private void setTextSpans(IImmutableList<ISpan> spans)
         {
-            textFieldInfo.Accept(textFieldInfo.Value.ReplaceSpans(spans.ToImmutableList()));
+            textFieldInfo.Accept(textFieldInfo.Value.ReplaceSpans(spans));
         }
 
         private void setRunningTime(TimeSpan runningTime)
@@ -589,7 +588,7 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        private IList<SectionModel<string, AutocompleteSuggestion>> addStaticElements(IEnumerable<SectionModel<string, AutocompleteSuggestion>> sections)
+        private IImmutableList<SectionModel<string, AutocompleteSuggestion>> addStaticElements(IEnumerable<SectionModel<string, AutocompleteSuggestion>> sections)
         {
             var suggestions = sections.SelectMany(section => section.Items);
 
@@ -633,7 +632,7 @@ namespace Toggl.Core.UI.ViewModels
                 }
             }
 
-            return sections.ToList();
+            return sections.ToImmutableList();
 
             bool shouldAddProjectCreationSuggestion()
                 => canCreateProjectsInWorkspace && !textFieldInfo.Value.HasProject &&

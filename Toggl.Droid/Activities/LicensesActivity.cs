@@ -46,7 +46,7 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeBindings()
         {
-            adapter.Items = ViewModel.Licenses.ToList();
+            adapter.Items = ViewModel.Licenses;
         }
     }
 }

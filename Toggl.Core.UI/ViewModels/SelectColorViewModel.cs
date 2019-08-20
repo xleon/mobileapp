@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -29,7 +30,7 @@ namespace Toggl.Core.UI.ViewModels
 
         public bool AllowCustomColors { get; private set; }
 
-        public IObservable<IEnumerable<SelectableColorViewModel>> SelectableColors { get; }
+        public IObservable<IImmutableList<SelectableColorViewModel>> SelectableColors { get; }
         public IObservable<float> Hue { get; }
         public IObservable<float> Saturation { get; }
         public IObservable<float> Value { get; }
@@ -120,8 +121,8 @@ namespace Toggl.Core.UI.ViewModels
                 save();
         }
 
-        private IEnumerable<SelectableColorViewModel> updateSelectableColors(IEnumerable<Color> availableColors, Color selectedColor)
-            => availableColors.Select(color => new SelectableColorViewModel(color, color == selectedColor));
+        private IImmutableList<SelectableColorViewModel> updateSelectableColors(IEnumerable<Color> availableColors, Color selectedColor)
+            => availableColors.Select(color => new SelectableColorViewModel(color, color == selectedColor)).ToImmutableList();
         
         private void save()
         {

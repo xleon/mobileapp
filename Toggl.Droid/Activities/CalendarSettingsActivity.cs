@@ -45,7 +45,6 @@ namespace Toggl.Droid.Activities
 
             ViewModel
                 .Calendars
-                .Select(calendars => calendars.ToList())
                 .Subscribe(userCalendarsAdapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 

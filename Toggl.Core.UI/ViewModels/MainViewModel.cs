@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -24,10 +25,10 @@ using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Services;
-using Toggl.Shared.Models;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -77,10 +78,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> ShouldShowStoppedTimeEntryNotification { get; private set; }
         public IObservable<IThreadSafeTimeEntry> CurrentRunningTimeEntry { get; private set; }
         public IObservable<bool> ShouldShowRatingView { get; private set; }
-
         public IObservable<bool> SwipeActionsEnabled { get; }
-
-        public IObservable<IEnumerable<MainLogSection>> TimeEntries { get; }
+        public IObservable<IImmutableList<MainLogSection>> TimeEntries { get; }
 
         public RatingViewModel RatingViewModel { get; }
         public SuggestionsViewModel SuggestionsViewModel { get; }
@@ -158,7 +157,7 @@ namespace Toggl.Core.UI.ViewModels
 
             TimeEntries = TimeEntriesViewModel.TimeEntries
                 .Throttle(TimeSpan.FromSeconds(throttlePeriodInSeconds))
-                .AsDriver(Enumerable.Empty<MainLogSection>(), schedulerProvider);
+                .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider);
 
             LogEmpty = TimeEntriesViewModel.Empty.AsDriver(schedulerProvider);
             TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(schedulerProvider);

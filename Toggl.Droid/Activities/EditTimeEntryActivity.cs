@@ -125,7 +125,6 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.Tags
-                .Select(tags => tags.ToArray())
                 .Subscribe(tagsAdapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 

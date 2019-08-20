@@ -31,7 +31,6 @@ namespace Toggl.Droid.Activities
         protected override void InitializeBindings()
         {
             ViewModel.Countries
-                .Select(x => x.ToList())
                 .Subscribe(recyclerAdapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 

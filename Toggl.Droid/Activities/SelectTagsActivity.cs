@@ -34,7 +34,6 @@ namespace Toggl.Droid.Activities
         protected override void InitializeBindings()
         {
             ViewModel.Tags
-                .Select(tags => tags.ToList())
                 .Subscribe(selectTagsRecyclerAdapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 
