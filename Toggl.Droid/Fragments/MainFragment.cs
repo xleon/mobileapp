@@ -13,6 +13,7 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.Analytics;
+using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Sync;
 using Toggl.Core.UI.Extensions;
@@ -130,7 +131,7 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(onSyncChanged)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter = new MainRecyclerAdapter(ViewModel.TimeService)
+            mainRecyclerAdapter = new MainRecyclerAdapter(Context, ViewModel.TimeService)
             {
                 SuggestionsViewModel = ViewModel.SuggestionsViewModel,
                 RatingViewModel = ViewModel.RatingViewModel,
@@ -219,7 +220,18 @@ namespace Toggl.Droid.Fragments
                 return new SpannableString(string.Empty);
 
             var hasProject = te.ProjectId != null;
-            return Extensions.TimeEntryExtensions.ToProjectTaskClient(hasProject, te.Project?.Name, te.Project?.Color, te.Task?.Name, te.Project?.Client?.Name);
+            var projectIsPlaceholder = te.Project?.IsPlaceholder() ?? false;
+            var taskIsPlaceholder = te.Task?.IsPlaceholder() ?? false;
+            return Extensions.TimeEntryExtensions.ToProjectTaskClient(
+                Context, 
+                hasProject, 
+                te.Project?.Name, 
+                te.Project?.Color, 
+                te.Task?.Name, 
+                te.Project?.Client?.Name,
+                projectIsPlaceholder,
+                taskIsPlaceholder,
+                displayPlaceholders: true);
         }
 
         private void setupRatingViewVisibility(bool isVisible)

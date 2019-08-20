@@ -111,6 +111,7 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
             IAccessibilityService accessibilityService,
+            IUpdateRemoteConfigCacheService updateRemoteConfigCacheService,
             IAccessRestrictionStorage accessRestrictionStorage,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory,
@@ -130,6 +131,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
             Ensure.Argument.IsNotNull(accessibilityService, nameof(accessibilityService));
+            Ensure.Argument.IsNotNull(updateRemoteConfigCacheService, nameof(updateRemoteConfigCacheService));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
@@ -161,8 +163,8 @@ namespace Toggl.Core.UI.ViewModels
             LogEmpty = TimeEntriesViewModel.Empty.AsDriver(schedulerProvider);
             TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(schedulerProvider);
 
-            ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, OnboardingStorage, remoteConfigService);
-
+            ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService, updateRemoteConfigCacheService);
+            
             SwipeActionsEnabled = userPreferences.SwipeActionsEnabled.AsDriver(schedulerProvider);
         }
 

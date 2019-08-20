@@ -154,11 +154,19 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Android.Arch.Lifecycle.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Xamarin.Android.Arch.Lifecycle.Extensions.1.1.1.1\lib\monoandroid90\Xamarin.Android.Arch.Lifecycle.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xamarin.Android.Support.Constraint.Layout, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Xamarin.Android.Support.Constraint.Layout.1.1.0\lib\MonoAndroid70\Xamarin.Android.Support.Constraint.Layout.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Android.Support.Constraint.Layout.Solver, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Xamarin.Android.Support.Constraint.Layout.Solver.1.1.0\lib\MonoAndroid70\Xamarin.Android.Support.Constraint.Layout.Solver.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Firebase.Messaging, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Xamarin.Firebase.Messaging.60.1142.1\lib\MonoAndroid80\Xamarin.Firebase.Messaging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.GooglePlayServices.Basement">
       <HintPath>..\packages\Xamarin.GooglePlayServices.Basement.60.1142.1\lib\MonoAndroid80\Xamarin.GooglePlayServices.Basement.dll</HintPath>
@@ -369,6 +377,12 @@
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
     <Compile Include="Presentation\ActivityTransitions.cs" />
     <Compile Include="Presentation\RunningTimeEntrySheetBehavior.cs" />
+    <Compile Include="Services\JobServicesConstants.cs" />
+    <Compile Include="Services\FetchRemoteConfigServiceAndroid.cs" />
+    <Compile Include="Services\SyncJobService.cs" />
+    <Compile Include="Services\TogglFirebaseIIDService.cs" />
+    <Compile Include="Services\TogglFirebaseMessagingService.cs" />
+    <Compile Include="Services\PushNotificationsTokenServiceAndroid.cs" />
     <Compile Include="Extensions\PermissionRequesterComponentExtensions.cs" />
     <Compile Include="Helper\IPermissionRequesterComponent.cs" />
     <Compile Include="Presentation\ActivityPresenter.cs" />
@@ -550,7 +564,6 @@
     <Compile Include="Adapters\SimpleAdapter.cs" />
     <Compile Include="Activities\AboutActivity.cs" />
     <Compile Include="Services\RatingServiceAndroid.cs" />
-    <Compile Include="Services\RemoteConfigServiceAndroid.cs" />
     <Compile Include="Activities\EditTimeEntryActivity.ViewBinds.cs">
       <DependentUpon>EditTimeEntryActivity.cs</DependentUpon>
     </Compile>
@@ -592,7 +605,6 @@
     <Compile Include="Extensions\Reactive\ImageViewExtensions.cs" />
     <Compile Include="Extensions\TimeEntryExtensions.cs" />
     <Compile Include="PlatformInfoAndroid.cs" />
-    <Compile Include="Startup\ApplicationLifecycleObserver.cs" />
     <Compile Include="Services\BackgroundSyncServiceAndroid.cs" />
     <Compile Include="Services\BackgroundSyncJobSchedulerService.cs" />
     <Compile Include="ViewHolders\Tags\TagCreationSelectionViewHolder.cs" />
@@ -662,6 +674,7 @@
     </Compile>
     <Compile Include="BroadcastReceivers\BootCompletedBroadcastReceiver.cs" />
     <Compile Include="Services\ScheduleEventNotificationsService.cs" />
+    <Compile Include="Views\VerticallyCenteredImageSpan.cs" />
     <Compile Include="Services\AccessibilityServiceAndroid.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -672,6 +685,7 @@
     <AndroidResource Include="Resources\drawable\Dot.xml" />
     <AndroidResource Include="Resources\drawable\ic_archived.xml" />
     <AndroidResource Include="Resources\drawable\Splash.xml" />
+    <AndroidResource Include="Resources\drawable\text_placeholder.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
@@ -1234,4 +1248,6 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.0\build\Accord.targets'))" />
   </Target>
+  <Import Project="..\packages\Xamarin.Firebase.Messaging.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Messaging.targets" Condition="Exists('..\packages\Xamarin.Firebase.Messaging.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Messaging.targets')" />
+  <Import Project="..\packages\Xamarin.Android.Arch.Lifecycle.Extensions.1.1.1.1\build\monoandroid90\Xamarin.Android.Arch.Lifecycle.Extensions.targets" Condition="Exists('..\packages\Xamarin.Android.Arch.Lifecycle.Extensions.1.1.1.1\build\monoandroid90\Xamarin.Android.Arch.Lifecycle.Extensions.targets')" />
 </Project>
