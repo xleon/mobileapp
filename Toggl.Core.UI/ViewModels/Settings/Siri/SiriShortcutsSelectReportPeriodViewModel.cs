@@ -25,7 +25,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
         public BehaviorRelay<IThreadSafeWorkspace> SelectedWorkspace { get; } = new BehaviorRelay<IThreadSafeWorkspace>(null);
         public BehaviorRelay<ReportPeriod> SelectReportPeriod { get; } = new BehaviorRelay<ReportPeriod>(ReportPeriod.Today);
-        public IObservable<IEnumerable<SelectableReportPeriodViewModel>> ReportPeriods { get; }
+        public IObservable<IImmutableList<SelectableReportPeriodViewModel>> ReportPeriods { get; }
         public UIAction PickWorkspace { get; }
 
         public IObservable<string> WorkspaceName { get; }
@@ -52,8 +52,8 @@ namespace Toggl.Core.UI.ViewModels.Settings
                 .ToImmutableList();
 
             ReportPeriods = SelectReportPeriod
-                .Select(selectedPeriod => reportPeriods.Select(p => new SelectableReportPeriodViewModel(p, p == selectedPeriod)))
-                .AsDriver(new SelectableReportPeriodViewModel[0], schedulerProvider);
+                .Select(selectedPeriod => reportPeriods.Select(p => new SelectableReportPeriodViewModel(p, p == selectedPeriod)).ToImmutableList())
+                .AsDriver(ImmutableList<SelectableReportPeriodViewModel>.Empty, schedulerProvider);
 
             WorkspaceName = SelectedWorkspace
                 .Where(ws => ws != null)

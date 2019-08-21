@@ -1,7 +1,6 @@
 ﻿using Android.Views;
 using Android.Widget;
 using Toggl.Droid.Views;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace Toggl.Droid.Activities
 {
@@ -24,8 +23,6 @@ namespace Toggl.Droid.Activities
 
         private CircleView colorCircle;
 
-        private Toolbar toolbar;
-
         protected override void InitializeViews()
         {
             errorText = FindViewById<TextView>(Resource.Id.ErrorText);
@@ -41,7 +38,13 @@ namespace Toggl.Droid.Activities
             projectNameTextView = FindViewById<TextView>(Resource.Id.ProjectNameTextView);
             privateProjectLabel = FindViewById<TextView>(Resource.Id.ChangeWorkspaceViewPrivateProjectLabel);
             privateProjectHintLabel = FindViewById<TextView>(Resource.Id.PrivateProjectHint);
-            toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
+            
+            errorText.Text = Shared.Resources.ProjectNameTakenError;
+            privateProjectLabel.Text = Shared.Resources.PrivateProject;
+            privateProjectHintLabel.Text = Shared.Resources.PrivateProjectHint;
+            createProjectButton.Text = Shared.Resources.Create;
+            
+            SetupToolbar(ViewModel.Title);
         }
     }
 }

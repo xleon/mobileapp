@@ -887,6 +887,12 @@
     <data name="Tags" xml:space="preserve">
         <value>Tags</value>
     </data>
+    <data name="TagsList" xml:space="preserve">
+        <value>Tags: {0}</value>
+    </data>
+    <data name="NoTags" xml:space="preserve">
+        <value>No tags</value>
+    </data>
     <data name="EmptyTagText" xml:space="preserve">
         <value>Your tags will show up here.
             Use them to add keywords to your time entries.</value>
@@ -936,11 +942,20 @@
     <data name="Display" xml:space="preserve">
         <value>Display</value>
     </data>
+    <data name="Name" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="DateAndTime" xml:space="preserve">
+        <value>Date and Time</value>
+    </data>
     <data name="FormatSettings" xml:space="preserve">
         <value>Format settings</value>
     </data>
     <data name="Use24HourClock" xml:space="preserve">
         <value>Use 24-hour clock</value>
+    </data>
+    <data name="SwipeActions" xml:space="preserve">
+        <value>Cell Swipe Actions</value>
     </data>
     <data name="TimerSettings" xml:space="preserve">
         <value>Timer defaults</value>
@@ -950,6 +965,9 @@
     </data>
     <data name="ManualMode" xml:space="preserve">
         <value>Manual mode</value>
+    </data>
+    <data name="TimerDefaults" xml:space="preserve">
+        <value>Timer Defaults</value>
     </data>
     <data name="ManualModeDescription" xml:space="preserve">
         <value>You can add your data manually, instead of tracking in real time.</value>

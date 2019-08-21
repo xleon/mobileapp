@@ -59,7 +59,6 @@ namespace Toggl.Droid.Fragments
         private Switch stoppedTimerNotificationsSwitch;
         private Switch groupTimeEntriesSwitch;
 
-        private Toolbar toolbar;
         private AppBarLayout appBarLayout;
         private NestedScrollView scrollView;
 
@@ -115,7 +114,6 @@ namespace Toggl.Droid.Fragments
             stoppedTimerNotificationsSwitch = fragmentView.FindViewById<Switch>(Resource.Id.SettingsAreStoppedTimerNotificationsEnabledSwitch);
             groupTimeEntriesSwitch = fragmentView.FindViewById<Switch>(Resource.Id.GroupTimeEntriesSwitch);
 
-            toolbar = fragmentView.FindViewById<Toolbar>(Resource.Id.Toolbar);
             appBarLayout = fragmentView.FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
 
             scrollView = fragmentView.FindViewById<NestedScrollView>(Resource.Id.ScrollView);

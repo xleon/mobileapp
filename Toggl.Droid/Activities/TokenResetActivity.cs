@@ -1,13 +1,12 @@
 ﻿using Android.App;
 using Android.Content.PM;
-using Android.OS;
+using Android.Runtime;
 using System;
-using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
-using static Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Activities
 {
@@ -16,31 +15,27 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class TokenResetActivity : ReactiveActivity<TokenResetViewModel>
     {
-        protected override void OnCreate(Bundle bundle)
-        {
-            SetTheme(Resource.Style.AppTheme_Light);
-            base.OnCreate(bundle);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.TokenResetActivity);
-            OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
-            InitializeViews();
+        public TokenResetActivity() : base(
+            Resource.Layout.TokenResetActivity,
+            Resource.Style.AppTheme_Light,
+            Transitions.Fade)
+        { }
 
-            toolbar.Title = LoginTitle;
-            SetSupportActionBar(toolbar);
-            SupportActionBar.SetDisplayHomeAsUpEnabled(false);
-            SupportActionBar.SetDisplayShowHomeEnabled(false);
+        public TokenResetActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
+        {
+        }
+
+        protected override void InitializeBindings()
+        {
             this.CancelAllNotifications();
 
             emailLabel.Text = ViewModel.Email.ToString();
-            tokenResetPasswordLayout.Hint = Password;
-            passwordEditText.Hint = Password;
-            tokenResetMessageWarning.Text = APITokenResetSuccess;
-            tokenResetMessageEnterPasswordLabel.Text = TokenResetInstruction;
-            signoutLabel.Text = OrSignOut;
+            tokenResetPasswordLayout.Hint = Shared.Resources.Password;
+            passwordEditText.Hint = Shared.Resources.Password;
+            tokenResetMessageWarning.Text = Shared.Resources.APITokenResetSuccess;
+            tokenResetMessageEnterPasswordLabel.Text = Shared.Resources.TokenResetInstruction;
+            signoutLabel.Text = Shared.Resources.OrSignOut;
 
             passwordEditText
                 .Rx().Text()

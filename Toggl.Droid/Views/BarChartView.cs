@@ -4,6 +4,7 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using System;
+using System.Collections.Immutable;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
@@ -59,8 +60,8 @@ namespace Toggl.Droid.Views
         private bool willDrawDayLabels;
         private float startEndDatesY;
         private float barsStartingLeft;
-        private BarViewModel[] bars;
-        private BarChartDayLabel[] horizontalLabels;
+        private IImmutableList<BarViewModel> bars;
+        private IImmutableList<BarChartDayLabel> horizontalLabels;
         private string maxHours;
         private string halfHours;
         private string zeroHours;
@@ -133,7 +134,7 @@ namespace Toggl.Droid.Views
 
             var barChartDataValue = barChartData.Value;
 
-            barsCount = barChartDataValue.Bars.Length;
+            barsCount = barChartDataValue.Bars.Count;
             willDrawBarChart = barsCount > 0;
 
             if (!willDrawBarChart) return;
@@ -162,7 +163,7 @@ namespace Toggl.Droid.Views
             hoursLabelsX = MeasuredWidth - barsRightMargin + textLeftMargin;
             hoursBottomMargin = textBottomMargin * 2f;
 
-            willDrawDayLabels = horizontalLabels.Length > 0;
+            willDrawDayLabels = horizontalLabels.Count > 0;
             startEndDatesY = barsBottom + bottomLabelMarginTop * 2f;
             dayLabelsY = barsBottom + bottomLabelMarginTop * 1.25f;
             barsStartingLeft = barsLeftMargin + (barsWidth - (actualBarWidth * barsCount + spaces * spacing)) / 2f;
@@ -198,7 +199,7 @@ namespace Toggl.Droid.Views
             othersPaint.TextAlign = Paint.Align.Center;
             var originalTextSize = othersPaint.TextSize;
 
-            for (var barIndex = 0; barIndex < bars.Length; barIndex++)
+            for (var barIndex = 0; barIndex < bars.Count; barIndex++)
             {
                 var bar = bars[barIndex];
                 var barRight = left + actualBarWidth;

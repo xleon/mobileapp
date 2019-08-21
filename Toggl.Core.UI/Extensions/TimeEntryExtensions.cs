@@ -24,6 +24,7 @@ namespace Toggl.Core.UI.Extensions
                 new[] { timeEntry.Id },
                 visualizationIntent,
                 timeEntry.Billable,
+                timeEntry.Project?.Active ?? true,
                 timeEntry.Description,
                 timeEntry.Duration.HasValue
                     ? DurationAndFormatToString.Convert(
@@ -39,6 +40,8 @@ namespace Toggl.Core.UI.Extensions
                 timeEntry.IsInaccessible,
                 indexInLog,
                 dayInLog,
-                daysInThePast);
+                daysInThePast,
+                timeEntry.Project?.IsPlaceholder() ?? false,
+                timeEntry.Task?.IsPlaceholder() ?? false);
     }
 }

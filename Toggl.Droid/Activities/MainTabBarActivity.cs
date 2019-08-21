@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using System;
 using System.Collections.Generic;
@@ -37,33 +37,19 @@ namespace Toggl.Droid.Activities
         private DateTimeOffset? reportsRequestedStartDate;
         private DateTimeOffset? reportsRequestedEndDate;
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        public MainTabBarActivity() : base(
+            Resource.Layout.MainTabBarActivity,
+            Resource.Style.AppTheme_Light,
+            Transitions.Fade)
+        { }
+
+        public MainTabBarActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
-            SetTheme(Resource.Style.AppTheme_Light);
-            base.OnCreate(savedInstanceState);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.MainTabBarActivity);
-            OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
+        }
 
-            InitializeViews();
-
-            var menu = navigationView.Menu;
-            var timerTab = menu.FindItem(Resource.Id.MainTabTimerItem);
-            timerTab.SetTitle(Shared.Resources.Timer);
-
-            var reportsTab = menu.FindItem(Resource.Id.MainTabReportsItem);
-            reportsTab.SetTitle(Shared.Resources.Reports);
-
-            var calendarTab = menu.FindItem(Resource.Id.MainTabCalendarItem);
-            calendarTab.SetTitle(Shared.Resources.Calendar);
-
-            var settingsTab = menu.FindItem(Resource.Id.MainTabSettinsItem);
-            settingsTab.SetTitle(Shared.Resources.Settings);
-
+        protected override void InitializeBindings()
+        {
             restoreFragmentsViewModels();
             showInitialFragment(getInitialTab(Intent));
             loadReportsIntentExtras(Intent);

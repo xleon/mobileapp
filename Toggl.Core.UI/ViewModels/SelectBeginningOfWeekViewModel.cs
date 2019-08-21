@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Services;
@@ -13,7 +14,7 @@ namespace Toggl.Core.UI.ViewModels
     {
         private BeginningOfWeek defaultResult;
 
-        public SelectableBeginningOfWeekViewModel[] BeginningOfWeekCollection { get; }
+        public IImmutableList<SelectableBeginningOfWeekViewModel> BeginningOfWeekCollection { get; }
 
         public InputAction<SelectableBeginningOfWeekViewModel> SelectBeginningOfWeek { get; }
 
@@ -27,7 +28,7 @@ namespace Toggl.Core.UI.ViewModels
             BeginningOfWeekCollection = Enum.GetValues(typeof(BeginningOfWeek))
                 .Cast<BeginningOfWeek>()
                 .Select(beginningOfWeek => new SelectableBeginningOfWeekViewModel(beginningOfWeek, false))
-                .ToArray();
+                .ToImmutableList();
         }
 
         public override Task Initialize(BeginningOfWeek defaultValue)
