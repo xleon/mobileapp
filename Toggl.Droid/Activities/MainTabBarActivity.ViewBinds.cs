@@ -23,7 +23,6 @@ namespace Toggl.Droid.Activities
 
             var settingsTab = menu.FindItem(Resource.Id.MainTabSettinsItem);
             settingsTab.SetTitle(Shared.Resources.Settings);
-
         }
     }
 }

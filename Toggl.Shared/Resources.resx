@@ -241,9 +241,6 @@
     <data name="Syncing" xml:space="preserve">
         <value>Syncing...</value>
     </data>
-    <data name="SyncFailed" xml:space="preserve">
-        <value>Syncing failed</value>
-    </data>
     <data name="Offline" xml:space="preserve">
         <value>Offline</value>
     </data>
@@ -1154,9 +1151,6 @@
     </data>
     <data name="Timer" xml:space="preserve">
         <value>Timer</value>
-    </data>
-    <data name="StartTimeEntry" xml:space="preserve">
-        <value>StartTimeEntry</value>
     </data>
     <data name="CurrentlyRunningTimeEntry" xml:space="preserve">
         <value>Currently Running Time Entry</value>

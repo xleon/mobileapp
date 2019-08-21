@@ -3,7 +3,6 @@ using Android.Content.PM;
 using Android.Runtime;
 using Android.Views;
 using System;
-using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;

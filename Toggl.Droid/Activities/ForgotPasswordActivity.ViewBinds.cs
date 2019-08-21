@@ -25,7 +25,7 @@ namespace Toggl.Droid.Activities
             loginEmail.Hint = Shared.Resources.Email;
             resetPasswordButton.Text = Shared.Resources.GetPasswordResetLink;
             
-            SetupToolbar(GetString(Resource.String.ForgotPasswordTitle));
+            SetupToolbar(Shared.Resources.LoginForgotPassword);
         }
     }
 }

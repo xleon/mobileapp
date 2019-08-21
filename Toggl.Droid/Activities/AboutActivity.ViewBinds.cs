@@ -1,5 +1,4 @@
-﻿using Android.Views;
-using Android.Widget;
+﻿using Android.Widget;
 
 namespace Toggl.Droid.Activities
 {
@@ -11,9 +10,9 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeViews()
         {
-            licensesButton = FindViewById(Resource.Id.LicensesButton);
-            privacyPolicyButton = FindViewById(Resource.Id.PrivacyPolicyButton);
-            termsOfServiceButton = FindViewById(Resource.Id.TermsOfServiceButton);
+            licensesButton = FindViewById<TextView>(Resource.Id.LicensesButton);
+            privacyPolicyButton = FindViewById<TextView>(Resource.Id.PrivacyPolicyButton);
+            termsOfServiceButton = FindViewById<TextView>(Resource.Id.TermsOfServiceButton);
             
             licensesButton.Text = Shared.Resources.Licenses;
             privacyPolicyButton.Text = Shared.Resources.PrivacyPolicy;
