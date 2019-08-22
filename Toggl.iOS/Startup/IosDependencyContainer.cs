@@ -70,6 +70,9 @@ namespace Toggl.iOS
         protected override IBackgroundSyncService CreateBackgroundSyncService()
             => new BackgroundSyncServiceIos();
 
+        protected override IFetchRemoteConfigService CreateFetchRemoteConfigService()
+            => new FetchRemoteConfigServiceIos();
+
         protected override ICalendarService CreateCalendarService()
             => new CalendarServiceIos(PermissionsChecker);
 
@@ -97,14 +100,14 @@ namespace Toggl.iOS
         protected override IRatingService CreateRatingService()
             => new RatingServiceIos();
 
-        protected override IRemoteConfigService CreateRemoteConfigService()
-            => new RemoteConfigServiceIos();
-
         protected override ISchedulerProvider CreateSchedulerProvider()
             => new IOSSchedulerProvider();
 
         protected override IApplicationShortcutCreator CreateShortcutCreator()
             => new ApplicationShortcutCreator();
+        
+        protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
+            => new PushNotificationsTokenServiceIos();
 
         protected override INavigationService CreateNavigationService()
             => new NavigationService(ViewPresenter, ViewModelLoader, AnalyticsService);

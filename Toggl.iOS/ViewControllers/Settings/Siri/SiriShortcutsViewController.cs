@@ -3,6 +3,7 @@ using Intents;
 using IntentsUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -157,7 +158,7 @@ namespace Toggl.iOS.ViewControllers.Settings
                 .ToObservable().Merge().ToList();
         }
 
-        private IEnumerable<ShortcutSection> toSections(IEnumerable<SiriShortcutViewModel> shortcuts)
+        private IImmutableList<ShortcutSection> toSections(IEnumerable<SiriShortcutViewModel> shortcuts)
         {
             var allShortcuts = shortcuts
                 .Aggregate(new List<SiriShortcutViewModel>(), (acc, shortcut) =>
@@ -175,10 +176,10 @@ namespace Toggl.iOS.ViewControllers.Settings
                     acc.Add(shortcut);
                     return acc;
                 })
-                .OrderBy(shortcut => !shortcut.IsActive);
+                .OrderBy(shortcut => !shortcut.IsActive)
+                .ToList();
 
-            return new[]
-            {
+            return ImmutableList.Create(
                 new ShortcutSection(
                     "Timer shortcuts",
                     allShortcuts.Where(s => s.IsTimerShortcut())
@@ -186,8 +187,7 @@ namespace Toggl.iOS.ViewControllers.Settings
                 new ShortcutSection(
                     "Reports shortcuts",
                     allShortcuts.Where(s => s.IsReportsShortcut())
-                )
-            };
+            ));
         }
 
         private long? stringToLong(string str)

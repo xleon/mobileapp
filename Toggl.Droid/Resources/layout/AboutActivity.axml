@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:local="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/Toolbar"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/toolbarBlack"
-        local:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+      <android.support.v7.widget.Toolbar
+          android:id="@+id/Toolbar"
+          android:minHeight="?attr/actionBarSize"
+          android:background="@color/defaultBackground"
+          app:popupTheme="@style/ThemeOverlay.AppCompat"
+          android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+    </android.support.design.widget.AppBarLayout>
     <TextView
-        android:id="@+id/AboutLicensesButton"
+        android:id="@+id/LicensesButton"
         android:textSize="15sp"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="gone"
         android:paddingLeft="16dp"
         android:textAllCaps="false"
         android:gravity="center_vertical"
@@ -28,12 +31,11 @@
         android:layout_marginTop="12dp"
         android:layout_width="match_parent" />
     <View
-        android:visibility="gone"
         android:background="@color/separator"
         android:layout_height="0.5dp"
         android:layout_width="match_parent" />
     <TextView
-        android:id="@+id/AboutPrivacyPolicyButton"
+        android:id="@+id/PrivacyPolicyButton"
         android:textSize="15sp"
         android:clickable="true"
         android:focusable="true"
@@ -44,14 +46,13 @@
         android:text="@string/AboutPrivacyPolicy"
         android:background="?attr/selectableItemBackground"
         android:layout_height="48dp"
-        android:layout_marginTop="12dp"
         android:layout_width="match_parent" />
     <View
         android:background="@color/separator"
         android:layout_height="0.5dp"
         android:layout_width="match_parent" />
     <TextView
-        android:id="@+id/AboutTermsOfServiceButton"
+        android:id="@+id/TermsOfServiceButton"
         android:textSize="15sp"
         android:clickable="true"
         android:focusable="true"

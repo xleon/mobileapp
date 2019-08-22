@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -24,6 +25,7 @@ using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Services;
@@ -76,8 +78,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> ShouldShowStoppedTimeEntryNotification { get; private set; }
         public IObservable<IThreadSafeTimeEntry> CurrentRunningTimeEntry { get; private set; }
         public IObservable<bool> ShouldShowRatingView { get; private set; }
-
-        public IObservable<IEnumerable<MainLogSection>> TimeEntries { get; }
+        public IObservable<bool> SwipeActionsEnabled { get; }
+        public IObservable<IImmutableList<MainLogSection>> TimeEntries { get; }
 
         public RatingViewModel RatingViewModel { get; }
         public SuggestionsViewModel SuggestionsViewModel { get; }
@@ -108,6 +110,7 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             IRemoteConfigService remoteConfigService,
             IAccessibilityService accessibilityService,
+            IUpdateRemoteConfigCacheService updateRemoteConfigCacheService,
             IAccessRestrictionStorage accessRestrictionStorage,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory,
@@ -127,6 +130,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
             Ensure.Argument.IsNotNull(accessibilityService, nameof(accessibilityService));
+            Ensure.Argument.IsNotNull(updateRemoteConfigCacheService, nameof(updateRemoteConfigCacheService));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
@@ -153,12 +157,14 @@ namespace Toggl.Core.UI.ViewModels
 
             TimeEntries = TimeEntriesViewModel.TimeEntries
                 .Throttle(TimeSpan.FromSeconds(throttlePeriodInSeconds))
-                .AsDriver(Enumerable.Empty<MainLogSection>(), schedulerProvider);
+                .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider);
 
             LogEmpty = TimeEntriesViewModel.Empty.AsDriver(schedulerProvider);
             TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(schedulerProvider);
 
-            ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, OnboardingStorage, remoteConfigService);
+            ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService, updateRemoteConfigCacheService);
+            
+            SwipeActionsEnabled = userPreferences.SwipeActionsEnabled.AsDriver(schedulerProvider);
         }
 
         public override async Task Initialize()
@@ -398,9 +404,10 @@ namespace Toggl.Core.UI.ViewModels
             if (hasStopButtonEverBeenUsed)
                 OnboardingStorage.SetNavigatedAwayFromMainViewAfterStopButton();
 
+            var requestCameFromLongPress = !useDefaultMode;
             var parameter = initializeInManualMode
-                ? StartTimeEntryParameters.ForManualMode(TimeService.CurrentDateTime)
-                : StartTimeEntryParameters.ForTimerMode(TimeService.CurrentDateTime);
+                ? StartTimeEntryParameters.ForManualMode(TimeService.CurrentDateTime, requestCameFromLongPress)
+                : StartTimeEntryParameters.ForTimerMode(TimeService.CurrentDateTime, requestCameFromLongPress);
 
             return navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(parameter);
         }

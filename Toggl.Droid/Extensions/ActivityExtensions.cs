@@ -25,26 +25,6 @@ namespace Toggl.Droid.Extensions
         private static readonly string defaultChannelName = "Toggl";
         private static readonly string defaultChannelDescription = "Toggl notifications";
 
-        public static void ChangeStatusBarColor(this Activity activity, Color color, bool useDarkIcons = false)
-        {
-            var window = activity.Window;
-            window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
-            window.ClearFlags(WindowManagerFlags.TranslucentStatus);
-            window.SetStatusBarColor(color);
-
-            if (MarshmallowApis.AreNotAvailable)
-            {
-                if (color == Color.White && useDarkIcons)
-                {
-                    window.SetStatusBarColor(lollipopFallbackStatusBarColor);
-                }
-                return;
-            }
-
-            window.DecorView.SystemUiVisibility =
-                (StatusBarVisibility)(useDarkIcons ? SystemUiFlags.LightStatusBar : SystemUiFlags.Visible);
-        }
-
         public static (int widthPixels, int heightPixels, bool isLargeScreen) GetMetrics(this Activity activity, Context context = null)
         {
             const int largeScreenThreshold = 360;
@@ -64,7 +44,7 @@ namespace Toggl.Droid.Extensions
             var javaClass = Java.Lang.Class.FromType(typeof(BackgroundSyncJobSchedulerService));
             var component = new ComponentName(context, javaClass);
 
-            var builder = new JobInfo.Builder(BackgroundSyncJobSchedulerService.JobId, component)
+            var builder = new JobInfo.Builder(JobServicesConstants.BackgroundSyncJobServiceJobId, component)
                 .SetRequiredNetworkType(NetworkType.Any)
                 .SetPeriodic(periodicity)
                 .SetPersisted(true);

@@ -10,9 +10,11 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeViews()
         {
-            licensesButton = FindViewById(Resource.Id.AboutLicensesButton);
-            privacyPolicyButton = FindViewById(Resource.Id.AboutPrivacyPolicyButton);
-            termsOfServiceButton = FindViewById(Resource.Id.AboutTermsOfServiceButton);
+            licensesButton = FindViewById(Resource.Id.LicensesButton);
+            privacyPolicyButton = FindViewById(Resource.Id.PrivacyPolicyButton);
+            termsOfServiceButton = FindViewById(Resource.Id.TermsOfServiceButton);
+            
+            SetupToolbar(title: GetString(Resource.String.About));
         }
     }
 }

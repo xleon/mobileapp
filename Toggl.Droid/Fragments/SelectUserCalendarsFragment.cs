@@ -43,9 +43,7 @@ namespace Toggl.Droid.Fragments
                 .BindAction(ViewModel.Save)
                 .DisposedBy(DisposeBag);
 
-            ViewModel
-                .Calendars
-                .Select(calendars => calendars.ToList())
+            ViewModel.Calendars
                 .Subscribe(userCalendarsAdapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 

@@ -1,7 +1,8 @@
 using Android.App;
 using Android.Content.PM;
+using Android.Content.Res;
 using Android.OS;
-using Android.Support.V7.Widget;
+using Android.Runtime;
 using Android.Text;
 using System;
 using System.Linq;
@@ -13,11 +14,10 @@ using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
-using Toggl.Droid.ViewHolders;
+using Toggl.Droid.Presentation;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Droid.Resource.String;
-using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
-using TextResources = Toggl.Shared.Resources;
 using TimeEntryExtensions = Toggl.Droid.Extensions.TimeEntryExtensions;
 
 namespace Toggl.Droid.Activities
@@ -27,28 +27,18 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class EditTimeEntryActivity : ReactiveActivity<EditTimeEntryViewModel>
     {
-        private TagsAdapter tagsAdapter = new TagsAdapter(Resource.Layout.EditTimeEntryTagCell, StringViewHolder.Create);
+        public EditTimeEntryActivity() : base(
+            Resource.Layout.EditTimeEntryActivity,
+            Resource.Style.AppTheme_Light_WhiteBackground,
+            Transitions.SlideInFromBottom)
+        { }
 
-        protected override void OnCreate(Bundle bundle)
+        public EditTimeEntryActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
-            SetTheme(Resource.Style.AppTheme_BlueStatusBar);
-            base.OnCreate(bundle);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.EditTimeEntryActivity);
-            restoreTimeEntryIds(bundle);
-
-            OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
-
-            InitializeViews();
-            setupViews();
-            setupBindings();
         }
 
-        private void restoreTimeEntryIds(Bundle bundle)
+        protected override void RestoreViewModelStateFromBundle(Bundle bundle)
         {
             if (bundle == null) return;
             if (!bundle.ContainsKey(nameof(ViewModel.TimeEntryIds))) return;
@@ -57,12 +47,6 @@ namespace Toggl.Droid.Activities
             if (viewModelTimeEntryIds == null) return;
 
             ViewModel.TimeEntryIds = viewModelTimeEntryIds;
-        }
-
-        protected override void OnSaveInstanceState(Bundle outState)
-        {
-            outState?.PutLongArray(nameof(ViewModel.TimeEntryIds), ViewModel.TimeEntryIds);
-            base.OnSaveInstanceState(outState);
         }
 
         protected override void OnResume()
@@ -77,35 +61,19 @@ namespace Toggl.Droid.Activities
             clearOnboardingOnStop();
         }
 
+        protected override void OnSaveInstanceState(Bundle outState)
+        {
+            outState?.PutLongArray(nameof(ViewModel.TimeEntryIds), ViewModel.TimeEntryIds);
+            base.OnSaveInstanceState(outState);
+        }
+
         public override void Finish()
         {
             base.Finish();
             OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
         }
 
-        private void setupViews()
-        {
-            singleTimeEntryModeViews.Visibility = (!ViewModel.IsEditingGroup).ToVisibility();
-            timeEntriesGroupModeViews.Visibility = ViewModel.IsEditingGroup.ToVisibility();
-
-            descriptionEditText.Text = ViewModel.Description.Value;
-
-            groupCountTextView.Text = string.Format(
-                TextResources.EditingTimeEntryGroup,
-                ViewModel.GroupCount);
-
-            var layoutManager = new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false);
-            layoutManager.ItemPrefetchEnabled = true;
-            layoutManager.InitialPrefetchItemCount = 5;
-            tagsRecycler.SetLayoutManager(layoutManager);
-            tagsRecycler.SetAdapter(tagsAdapter);
-
-            deleteLabel.Text = ViewModel.IsEditingGroup
-                ? string.Format(TextResources.DeleteNTimeEntries, ViewModel.GroupCount)
-                : TextResources.DeleteThisEntry;
-        }
-
-        private void setupBindings()
+        protected override void InitializeBindings()
         {
             closeButton.Rx().Tap()
                 .Subscribe(ViewModel.CloseWithDefaultResult)
@@ -157,7 +125,6 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.Tags
-                .Select(tags => tags.ToArray())
                 .Subscribe(tagsAdapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 
@@ -185,20 +152,15 @@ namespace Toggl.Droid.Activities
                 .Subscribe(ViewModel.ToggleBillable.Inputs)
                 .DisposedBy(DisposeBag);
 
-            billableSwitch.Rx().Checked()
-                .SelectUnit()
-                .Subscribe(ViewModel.ToggleBillable.Inputs)
-                .DisposedBy(DisposeBag);
-
             ViewModel.StartTime
                 .WithLatestFrom(ViewModel.Preferences,
-                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.TimeOfDayFormat.Format, AndroidDependencyContainer.Instance.AnalyticsService))
+                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.TimeOfDayFormat.Format))
                 .Subscribe(startTimeTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
             ViewModel.StartTime
                 .WithLatestFrom(ViewModel.Preferences,
-                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.DateFormat.Short, AndroidDependencyContainer.Instance.AnalyticsService))
+                    (startTime, preferences) => DateTimeToFormattedString.Convert(startTime, preferences.DateFormat.Short))
                 .Subscribe(startDateTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
@@ -213,13 +175,13 @@ namespace Toggl.Droid.Activities
 
             stopTimeObservable
                 .WithLatestFrom(ViewModel.Preferences,
-                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.TimeOfDayFormat.Format, AndroidDependencyContainer.Instance.AnalyticsService))
+                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.TimeOfDayFormat.Format))
                 .Subscribe(stopTimeTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
             stopTimeObservable
                 .WithLatestFrom(ViewModel.Preferences,
-                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.DateFormat.Short, AndroidDependencyContainer.Instance.AnalyticsService))
+                    (stopTime, preferences) => DateTimeToFormattedString.Convert(stopTime, preferences.DateFormat.Short))
                 .Subscribe(stopDateTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
@@ -291,10 +253,13 @@ namespace Toggl.Droid.Activities
 
         private ISpannable generateProjectTaskClientFormattedString(EditTimeEntryViewModel.ProjectClientTaskInfo projectClientTask)
             => TimeEntryExtensions.ToProjectTaskClient(
-                    projectClientTask.HasProject,
-                    projectClientTask.Project,
-                    projectClientTask.ProjectColor,
-                    projectClientTask.Task,
-                    projectClientTask.Client);
+                this,
+                projectClientTask.HasProject,
+                projectClientTask.Project,
+                projectClientTask.ProjectColor,
+                projectClientTask.Task,
+                projectClientTask.Client,
+                projectClientTask.ProjectIsPlaceholder,
+                projectClientTask.TaskIsPlaceholder);
     }
 }

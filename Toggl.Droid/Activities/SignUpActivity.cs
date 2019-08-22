@@ -1,12 +1,12 @@
 ﻿using Android.App;
 using Android.Content.PM;
-using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using System;
 using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Presentation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
@@ -18,23 +18,28 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class SignUpActivity : ReactiveActivity<SignupViewModel>
     {
-        protected override void OnCreate(Bundle bundle)
+        public SignUpActivity() : base(
+            Resource.Layout.SignUpActivity,
+            Resource.Style.AppTheme_Light,
+            Transitions.SlideInFromBottom)
+        { }
+
+        public SignUpActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
-            SetTheme(Resource.Style.AppTheme_WhiteStatusBar);
-            this.ChangeStatusBarColor(Android.Graphics.Color.White, true);
-            base.OnCreate(bundle);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.SignUpActivity);
-            OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
+        }
 
-            InitializeViews();
+        protected override void InitializeBindings()
+        {
+            ViewModel.Email.FirstAsync()
+                .SubscribeOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
+                .Subscribe(emailEditText.Rx().TextObserver())
+                .DisposedBy(DisposeBag);
 
-            emailEditText.Text = ViewModel.Email.FirstAsync().GetAwaiter().GetResult();
-            passwordEditText.Text = ViewModel.Password.FirstAsync().GetAwaiter().GetResult();
+            ViewModel.Password.FirstAsync()
+                .SubscribeOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
+                .Subscribe(passwordEditText.Rx().TextObserver())
+                .DisposedBy(DisposeBag);
 
             //Text
             ViewModel.ErrorMessage

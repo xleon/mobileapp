@@ -196,23 +196,20 @@ namespace Toggl.iOS.ViewControllers
                 .Select(_ => DescriptionTextView.AttributedText) // Programatically changing the text doesn't send an event, that's why we do this, to get the last version of the text
                 .SubscribeOn(ThreadPoolScheduler.Instance)
                 .Do(updatePlaceholder)
-                .Select(text => text.AsSpans((int)DescriptionTextView.SelectedRange.Location))
-                .ObserveOn(SynchronizationContext.Current)
+                .Select(text => text.AsSpans((int)DescriptionTextView.SelectedRange.Location).ToIImmutableList())
+                .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(ViewModel.SetTextSpans.Inputs)
                 .DisposedBy(DisposeBag);
         }
 
         private void onTextFieldInfo(TextFieldInfo textFieldInfo)
         {
-            var (attributedText, cursorPosition) = textFieldInfo.AsAttributedTextAndCursorPosition();
+            var attributedText = textFieldInfo.AsAttributedTextAndCursorPosition();
             if (DescriptionTextView.AttributedText.GetHashCode() == attributedText.GetHashCode())
                 return;
 
             DescriptionTextView.InputDelegate = emptyInputDelegate; //This line is needed for when the user selects from suggestion and the iOS autocorrect is ready to add text at the same time. Without this line both will happen.
             DescriptionTextView.AttributedText = attributedText;
-            var positionToSet =
-                DescriptionTextView.GetPosition(DescriptionTextView.BeginningOfDocument, cursorPosition);
-            DescriptionTextView.SelectedTextRange = DescriptionTextView.GetTextRange(positionToSet, positionToSet);
 
             updatePlaceholder();
         }

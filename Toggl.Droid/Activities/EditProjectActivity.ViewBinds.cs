@@ -34,6 +34,8 @@ namespace Toggl.Droid.Activities
             workspaceNameLabel = FindViewById<TextView>(Resource.Id.WorkspaceNameLabel);
             createProjectButton = FindViewById<TextView>(Resource.Id.CreateProjectButton);
             projectNameTextView = FindViewById<TextView>(Resource.Id.ProjectNameTextView);
+
+            SetupToolbar(ViewModel.Title);
         }
     }
 }

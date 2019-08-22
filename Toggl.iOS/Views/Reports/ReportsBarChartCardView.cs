@@ -82,7 +82,7 @@ namespace Toggl.iOS.Views.Reports
 
             Item.BarChartViewModel.HorizontalLegend
                 .Where(legend => legend == null)
-                .Subscribe((DateTimeOffset[] _) =>
+                .Subscribe(_ =>
                 {
                     HorizontalLegendStackView.Subviews.ForEach(subview => subview.RemoveFromSuperview());
                     StartDateLabel.Hidden = false;
@@ -108,7 +108,7 @@ namespace Toggl.iOS.Views.Reports
 
             var spacingObservable = Item.BarChartViewModel.Bars
                 .CombineLatest(updateLayout, (bars, _) => bars)
-                .Select(bars => BarsStackView.Frame.Width / bars.Length * barChartSpacingProportion);
+                .Select(bars => BarsStackView.Frame.Width / bars.Count * barChartSpacingProportion);
 
             spacingObservable
                 .Subscribe(BarsStackView.Rx().Spacing())

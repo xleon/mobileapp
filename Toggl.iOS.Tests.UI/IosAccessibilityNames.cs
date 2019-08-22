@@ -69,11 +69,18 @@
 
     public static class EditTimeEntry
     {
+        public const string View = "EditTimeEntryView";
         public const string EditTags = "EditTimeEntryTags";
         public const string Confirm = "EditTimeEntryConfirm";
         public const string EditProject = "EditTimeEntryProject";
         public const string DeleteButton = "EditTimeEntryDelete";
         public const string EditDescription = "EditTimeEntryDescription";
+        public const string StartTime = "EditTimeEntryStartTime";
+        public const string StopTime = "EditTimeEntryStopTime";
+        public const string StopButton = "EditTimeEntryStopButton";
+        public const string Duration = "EditTimeEntryDuration";
+        public const string StartDate = "EditTimeEntryStartDate";
+        public const string Billable = "EditTimeEntryBillable";
     }
 
     public static class Client

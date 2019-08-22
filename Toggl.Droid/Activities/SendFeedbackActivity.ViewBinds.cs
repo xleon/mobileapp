@@ -23,6 +23,8 @@ namespace Toggl.Droid.Activities
             feedbackEditText = FindViewById<EditText>(Resource.Id.FeedbackEditText);
             progressBar = FindViewById<ProgressBar>(Resource.Id.ProgressBar);
             toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
+
+            SetupToolbar(GetString(Resource.String.SendFeedbackTitle));
         }
     }
 }

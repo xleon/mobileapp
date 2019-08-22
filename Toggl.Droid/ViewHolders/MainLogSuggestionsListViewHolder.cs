@@ -53,7 +53,6 @@ namespace Toggl.Droid.ViewHolders
                 .DisposedBy(DisposeBag);
 
             suggestionsViewModel.Suggestions
-                .Select(Enumerable.ToList)
                 .Subscribe(adapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 

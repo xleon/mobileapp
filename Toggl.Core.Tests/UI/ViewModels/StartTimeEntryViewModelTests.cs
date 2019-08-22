@@ -164,7 +164,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var observable = Substitute.For<IConnectableObservable<DateTimeOffset>>();
                 TimeService.CurrentDateTimeObservable.Returns(observable);
-                var parameter = StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now);
+                var parameter = StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now, false);
 
                 ViewModel.Initialize(parameter);
 
@@ -458,10 +458,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     await ViewModel.Initialize(DefaultParameter);
 
                     ViewModel.SetTextSpans.ExecuteSequentally(
-                        new List<ISpan> { projectSpan },
-                        new List<ISpan> { projectSpan, querySpan }
-                        )
-                        .Subscribe();
+                        ImmutableList.Create<ISpan>(projectSpan),
+                        ImmutableList.Create<ISpan>(projectSpan, querySpan)
+                    ).Subscribe();
 
                     TestScheduler.Start();
                     observer.LastEmittedValue()
@@ -480,9 +479,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var observer = TestScheduler.CreateObserver<CollectionSections>();
                     ViewModel.Suggestions.Subscribe(observer);
 
-                    ViewModel.SetTextSpans.ExecuteWithCompletion(new List<ISpan> { projectSpan })
+                    ViewModel.SetTextSpans.ExecuteWithCompletion(ImmutableList.Create<ISpan>(projectSpan))
                         .PrependAction(ViewModel.ToggleTagSuggestions)
-                        .PrependAction(ViewModel.SetTextSpans, new List<ISpan> { projectSpan, querySpan })
+                        .PrependAction(ViewModel.SetTextSpans, ImmutableList.Create<ISpan>(projectSpan, querySpan))
                         .Subscribe();
 
                     TestScheduler.Start();
@@ -639,7 +638,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Returns(Observable.Return(project));
 
                 ViewModel.SelectSuggestion.ExecuteWithCompletion(new ProjectSuggestion(project))
-                    .PrependAction(ViewModel.SetTextSpans, new List<ISpan> { querySpan, projectSpan })
+                    .PrependAction(ViewModel.SetTextSpans, ImmutableList.Create<ISpan>(querySpan, projectSpan))
                     .PrependAction(ViewModel.SelectSuggestion, tagSuggestion)
                     .Subscribe();
 
@@ -698,7 +697,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         {
             public TheCloseWithDefaultResultMethod()
             {
-                var parameter = StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now);
+                var parameter = StartTimeEntryParameters.ForTimerMode(DateTimeOffset.Now, false);
                 ViewModel.Initialize(parameter);
             }
 
@@ -850,7 +849,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public void SetsTheIsSuggestingProjectsPropertyToTrueIfNotInProjectSuggestionMode()
             {
                 var isSuggestingObserver = TestScheduler.CreateObserver<bool>();
-                var suggestionObserver = TestScheduler.CreateObserver<IList<SectionModel<string, AutocompleteSuggestion>>>();
+                var suggestionObserver = TestScheduler.CreateObserver<IImmutableList<SectionModel<string, AutocompleteSuggestion>>>();
                 ViewModel.Initialize(DefaultParameter);
                 ViewModel.Suggestions.Subscribe(suggestionObserver);
                 ViewModel.IsSuggestingProjects.Subscribe(isSuggestingObserver);
@@ -967,7 +966,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Suggestions.Subscribe();
 
                 ViewModel.Initialize(DefaultParameter);
-                ViewModel.SetTextSpans.Execute(new List<ISpan> { new QueryTextSpan(description, description.Length) });
+                ViewModel.SetTextSpans.Execute(ImmutableList.Create<ISpan>(new QueryTextSpan(description, description.Length)));
 
                 ViewModel.ToggleProjectSuggestions.Execute();
 
@@ -1084,9 +1083,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Suggestions.Subscribe();
 
                 ViewModel.SetTextSpans.ExecuteSequentally(
-                    new List<ISpan> { new ProjectSpan(ProjectId, ProjectName, ProjectColor) },
-                    new List<ISpan> { new QueryTextSpan(description, description.Length) }
-                    )
+                    ImmutableList.Create<ISpan>(new ProjectSpan(ProjectId, ProjectName, ProjectColor)),
+                    ImmutableList.Create<ISpan>(new QueryTextSpan(description, description.Length)))
                     .PrependAction(ViewModel.ToggleTagSuggestions)
                     .Subscribe();
 
@@ -1124,7 +1122,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task TracksStartTimeTap()
             {
                 var now = DateTimeOffset.UtcNow;
-                var parameters = StartTimeEntryParameters.ForTimerMode(now);
+                var parameters = StartTimeEntryParameters.ForTimerMode(now, false);
                 var returnParameter = DurationParameter.WithStartAndDuration(now, TimeSpan.FromMinutes(1));
                 NavigationService
                     .Navigate<EditDurationViewModel, EditDurationParameters, DurationParameter>(Arg.Any<EditDurationParameters>(), ViewModel.View)
@@ -1141,7 +1139,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheSetStartDateCommand : StartTimeEntryViewModelTest
         {
             private static readonly DateTimeOffset now = new DateTimeOffset(2018, 02, 13, 23, 59, 12, TimeSpan.FromHours(-1));
-            private static readonly StartTimeEntryParameters prepareParameters = StartTimeEntryParameters.ForTimerMode(now);
+            private static readonly StartTimeEntryParameters prepareParameters = StartTimeEntryParameters.ForTimerMode(now, false);
 
             public TheSetStartDateCommand()
             {
@@ -1175,7 +1173,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public async Task OpensTheSelectDateTimeViewModelWithCorrectLimitsForAStoppedTimeEntry()
             {
-                var stoppedParametsrs = StartTimeEntryParameters.ForManualMode(now);
+                var stoppedParametsrs = StartTimeEntryParameters.ForManualMode(now, false);
                 ViewModel.Initialize(stoppedParametsrs);
 
                 ViewModel.SetStartDate.Execute();
@@ -2019,13 +2017,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.Initialize(DefaultParameter);
                 ViewModel.SetTextSpans.ExecuteSequentally(
-                    new List<ISpan> { new QueryTextSpan(text, text.Length) },
-                    new List<ISpan> { new QueryTextSpan(text, 0) }
+                    ImmutableList.Create<ISpan>(new QueryTextSpan(text, text.Length)),
+                    ImmutableList.Create<ISpan>(new QueryTextSpan(text, 0))
                 ).Subscribe();
 
                 TestScheduler.Start();
 
-                ViewModel.SetTextSpans.Execute(new List<ISpan> { new QueryTextSpan("x" + text, 1) });
+                ViewModel.SetTextSpans.Execute(ImmutableList.Create<ISpan>(new QueryTextSpan("x" + text, 1)));
 
                 TestScheduler.Start();
                 await interactor.Received().Execute();
@@ -2099,8 +2097,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await ViewModel.Initialize(DefaultParameter);
 
                 ViewModel.SetTextSpans.ExecuteWithCompletion(
-                        new List<ISpan> { new QueryTextSpan($"{QuerySymbols.Tags}{query}", 1) }
-                    )
+                        ImmutableList.Create<ISpan>(new QueryTextSpan($"{QuerySymbols.Tags}{query}", 1)))
                     .PrependAction(ViewModel.SelectSuggestion, new TagSuggestion(tag))
                     .Subscribe();
 

@@ -22,7 +22,6 @@ namespace Toggl.Droid.Activities
         private WheelBackgroundView wheelBackground;
         private WheelForegroundView wheelForeground;
         private WheelDurationInput wheelNumericInput;
-        private Toolbar toolbar;
 
         protected override void InitializeViews()
         {
@@ -41,7 +40,8 @@ namespace Toggl.Droid.Activities
             wheelBackground = FindViewById<WheelBackgroundView>(Resource.Id.WheelBackground);
             wheelForeground = FindViewById<WheelForegroundView>(Resource.Id.WheelForeground);
             wheelNumericInput = FindViewById<WheelDurationInput>(Resource.Id.WheelDurationInput);
-            toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
+
+            SetupToolbar(title: Shared.Resources.StartAndStopTime);
         }
     }
 }

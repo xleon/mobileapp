@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:local="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/EditTimeEntryView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
@@ -10,62 +11,65 @@
     android:focusableInTouchMode="true"
     android:importantForAutofill="noExcludeDescendants"
     android:orientation="vertical">
-    <FrameLayout
-        android:id="@+id/DescriptionContainer"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/AppBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/blueToolbarBackground"
-        android:elevation="2dp"
-        android:minHeight="@dimen/expandedToolbarHeight"
-        android:paddingBottom="16dp">
-
-        <ImageView
-            android:id="@+id/CloseButton"
-            android:contentDescription="@string/Cancel"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:focusable="true"
-            android:layout_gravity="left"
-            android:padding="16dp"
-            android:src="@drawable/close"
-            android:tint="@android:color/white" />
-
-        <EditText
-            android:id="@+id/DescriptionEditText"
+        android:layout_height="wrap_content">
+        <FrameLayout
+            android:id="@+id/DescriptionContainer"
             android:layout_width="match_parent"
+            android:paddingBottom="16dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="64dp"
-            android:layout_marginRight="16dp"
-            android:background="@color/blueToolbarBackground"
-            android:gravity="left"
-            android:hint="@string/StartTimeEntryHint"
-            android:inputType="textMultiLine"
-            android:letterSpacing="-0.01"
-            android:lineSpacingExtra="5sp"
-            android:maxLines="4"
-            android:minLines="1"
-            android:scrollHorizontally="true"
-            android:textColor="@android:color/white"
-            android:textColorHint="@color/blueBackgroundTextHintColor"
-            android:textCursorDrawable="@drawable/EditTextWhiteCursor"
-            android:textSize="19sp" />
+            android:background="@android:color/white"
+            android:minHeight="@dimen/expandedToolbarHeight">
+            <ImageView
+                android:id="@+id/CloseButton"
+                android:contentDescription="@string/Cancel"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
+                android:layout_gravity="left"
+                android:padding="16dp"
+                android:src="@drawable/close"
+                android:tint="@android:color/black" />
+            <EditText
+                android:id="@+id/DescriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="64dp"
+                android:layout_marginRight="16dp"
+                android:background="@null"
+                android:gravity="left"
+                android:hint="@string/StartTimeEntryHint"
+                android:inputType="textMultiLine"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="5sp"
+                android:maxLines="4"
+                android:minLines="1"
+                android:scrollHorizontally="true"
+                android:textColor="@android:color/black"
+                android:textColorHint="@color/placeholderText"
+                android:textCursorDrawable="@drawable/EditTextCursor"
+                android:textSize="19sp" />
 
-        <TextView
-            android:id="@+id/ConfirmButton"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:layout_gravity="right"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center_vertical"
-            android:padding="16dp"
-            android:text="@string/Save"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
-    </FrameLayout>
+            <TextView
+                android:id="@+id/ConfirmButton"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_gravity="right"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="@string/Save"
+                android:textAllCaps="true"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+      </FrameLayout>
+    </android.support.design.widget.AppBarLayout>
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/ScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:foregroundGravity="top"
@@ -80,28 +84,28 @@
                 android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                local:constraint_referenced_ids="GroupCount,GroupDuration,TimeMiddleGuide,TimeIcon,StartTimeButton,StartTime,StartDate,StartTimeLabel,StopTimeButton,StopTime,StopDate,StopTimeButton,EditStopTimeLabel,TimeBottomBorder,DurationButton,Duration,DurationLabel,DurationBottomBorder" />
+                app:constraint_referenced_ids="GroupCount,GroupDuration,TimeMiddleGuide,TimeIcon,StartTimeButton,StartTime,StartDate,StartTimeLabel,StopTimeButton,StopTime,StopDate,StopTimeButton,EditStopTimeLabel,TimeBottomBorder,DurationButton,Duration,DurationLabel,DurationBottomBorder" />
 			
             <android.support.constraint.Group
                 android:id="@+id/TimeEntriesGroupModeViews"
                 android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                local:constraint_referenced_ids="GroupCount,GroupDuration" />
+                app:constraint_referenced_ids="GroupCount,GroupDuration" />
 
             <android.support.constraint.Group
                 android:id="@+id/BillableRelatedViews"
                 android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                local:constraint_referenced_ids="BillableIcon,ToggleBillableButton,BillableLabel,BillableSwitch,BillableBottomBorder" />
+                app:constraint_referenced_ids="BillableIcon,ToggleBillableButton,BillableLabel,BillableSwitch,BillableBottomBorder" />
 
             <android.support.constraint.Group
                 android:id="@+id/StoppedTimeEntryStopTimeElements"
                 android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                local:constraint_referenced_ids="StopTime,StopDate" />
+                app:constraint_referenced_ids="StopTime,StopDate" />
 
             <!-- ERROR MESSAGE -->
 
@@ -114,9 +118,9 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="8dp"
                 android:visibility="gone"
-                local:layout_constraintLeft_toLeftOf="parent"
-                local:layout_constraintRight_toRightOf="parent"
-                local:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -131,8 +135,8 @@
                         android:layout_marginTop="16dp"
                         android:scaleType="center"
                         android:src="@drawable/error_baddata"
-                        local:layout_constraintLeft_toLeftOf="parent"
-                        local:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/ErrorTitle"
@@ -145,9 +149,9 @@
                         android:textColor="@color/errorText"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        local:layout_constraintBottom_toBottomOf="@id/ErrorIcon"
-                        local:layout_constraintLeft_toRightOf="@+id/ErrorIcon"
-                        local:layout_constraintTop_toTopOf="@id/ErrorIcon" />
+                        app:layout_constraintBottom_toBottomOf="@id/ErrorIcon"
+                        app:layout_constraintLeft_toRightOf="@+id/ErrorIcon"
+                        app:layout_constraintTop_toTopOf="@id/ErrorIcon" />
 
                     <TextView
                         android:id="@+id/ErrorText"
@@ -159,10 +163,10 @@
                         android:minLines="1"
                         android:textColor="@color/defaultText"
                         android:textSize="14sp"
-                        local:layout_constraintBottom_toBottomOf="parent"
-                        local:layout_constraintLeft_toLeftOf="@id/ErrorTitle"
-                        local:layout_constraintRight_toRightOf="parent"
-                        local:layout_constraintTop_toBottomOf="@id/ErrorTitle"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="@id/ErrorTitle"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ErrorTitle"
                         tools:text="This time entry cant be saved and is rather large. Definitely multilined at best. This should really be big." />
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>
@@ -177,8 +181,8 @@
                 android:textAllCaps="true"
                 android:textColor="#757575"
                 android:textSize="12sp"
-                local:layout_constraintLeft_toLeftOf="parent"
-                local:layout_constraintTop_toBottomOf="@id/ErrorContainer"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ErrorContainer"
                 tools:text="Editing 2 time entries" />
 
             <TextView
@@ -190,8 +194,8 @@
                 android:gravity="center_vertical"
                 android:textColor="#757575"
                 android:textSize="12sp"
-                local:layout_constraintRight_toRightOf="parent"
-                local:layout_constraintTop_toBottomOf="@id/ErrorContainer"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ErrorContainer"
                 tools:text="1:30:00" />
 
             <View
@@ -199,7 +203,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:background="@color/separator"
-                local:layout_constraintTop_toBottomOf="@id/GroupCount" />
+                app:layout_constraintTop_toBottomOf="@id/GroupCount" />
 
             <!-- PROJECT/TASK/CLIENT -->
 
@@ -209,14 +213,14 @@
                 android:layout_height="48dp"
                 android:scaleType="center"
                 android:src="@drawable/project"
-                local:layout_constraintTop_toBottomOf="@id/GroupCount"
-                local:layout_constraintLeft_toLeftOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/GroupCount"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
             <View
                 android:id="@+id/SelectProjectButton"
                 android:background="?attr/selectableItemBackground"
-                local:layout_constraintLeft_toLeftOf="@id/ProjectIcon"
-                local:layout_constraintTop_toTopOf="@id/ProjectIcon"
+                app:layout_constraintLeft_toLeftOf="@id/ProjectIcon"
+                app:layout_constraintTop_toTopOf="@id/ProjectIcon"
                 android:layout_width="match_parent"
                 android:layout_height="48dp" />
 
@@ -227,8 +231,8 @@
                 android:gravity="center_vertical|left"
                 android:textColor="@color/placeholderText"
                 android:textSize="15sp"
-                local:layout_constraintLeft_toRightOf="@id/ProjectIcon"
-                local:layout_constraintTop_toTopOf="@+id/ProjectIcon"
+                app:layout_constraintLeft_toRightOf="@id/ProjectIcon"
+                app:layout_constraintTop_toTopOf="@+id/ProjectIcon"
                 tools:text="Add project..." />
 
             <TextView
@@ -243,9 +247,9 @@
                 android:scrollHorizontally="true"
                 android:textColor="@android:color/black"
                 android:textSize="15sp"
-                local:layout_constraintLeft_toRightOf="@id/ProjectIcon"
-                local:layout_constraintRight_toRightOf="parent"
-                local:layout_constraintTop_toTopOf="@+id/ProjectIcon"
+                app:layout_constraintLeft_toRightOf="@id/ProjectIcon"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ProjectIcon"
                 tools:text="Superday" />
 
             <View
@@ -254,7 +258,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="56dp"
                 android:background="@color/separator"
-                local:layout_constraintTop_toBottomOf="@id/ProjectIcon" />
+                app:layout_constraintTop_toBottomOf="@id/ProjectIcon" />
 
             <!-- TAGS -->
 
@@ -264,14 +268,14 @@
                 android:layout_height="48dp"
                 android:scaleType="center"
                 android:src="@drawable/tag"
-                local:layout_constraintTop_toBottomOf="@id/ProjectBottomBorder"
-                local:layout_constraintLeft_toLeftOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/ProjectBottomBorder"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
             <View
                 android:id="@+id/SelectTagsButton"
                 android:background="?attr/selectableItemBackground"
-                local:layout_constraintLeft_toLeftOf="@id/TagsIcon"
-                local:layout_constraintTop_toTopOf="@id/TagsIcon"
+                app:layout_constraintLeft_toLeftOf="@id/TagsIcon"
+                app:layout_constraintTop_toTopOf="@id/TagsIcon"
                 android:layout_width="match_parent"
                 android:layout_height="48dp" />
 
@@ -282,9 +286,9 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/placeholderText"
                 android:textSize="15sp"
-                local:layout_constraintLeft_toRightOf="@id/TagsIcon"
-                local:layout_constraintRight_toRightOf="parent"
-                local:layout_constraintTop_toTopOf="@+id/TagsIcon"
+                app:layout_constraintLeft_toRightOf="@id/TagsIcon"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/TagsIcon"
                 tools:text="Add tags" />
 
             <android.support.v7.widget.RecyclerView
@@ -293,9 +297,9 @@
                 android:layout_height="wrap_content"
 				android:focusableInTouchMode="true"
 				android:clickable="true"
-                local:layout_constraintLeft_toRightOf="@id/TagsIcon"
-                local:layout_constraintTop_toTopOf="@+id/TagsIcon"
-                local:layout_constraintBottom_toBottomOf="@+id/TagsIcon" />
+                app:layout_constraintLeft_toRightOf="@id/TagsIcon"
+                app:layout_constraintTop_toTopOf="@+id/TagsIcon"
+                app:layout_constraintBottom_toBottomOf="@+id/TagsIcon" />
 
             <View
                 android:id="@+id/TagsBottomBorder"
@@ -303,7 +307,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="56dp"
                 android:background="@color/separator"
-                local:layout_constraintTop_toBottomOf="@id/TagsIcon" />
+                app:layout_constraintTop_toBottomOf="@id/TagsIcon" />
 
             <!-- BILLABLE -->
 
@@ -313,15 +317,15 @@
                 android:layout_height="48dp"
                 android:scaleType="center"
                 android:src="@drawable/billable"
-                local:layout_constraintTop_toBottomOf="@id/TagsBottomBorder"
-                local:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/TagsBottomBorder"
+                app:layout_constraintLeft_toLeftOf="parent"
                 />
 
             <View
                 android:id="@+id/ToggleBillableButton"
                 android:background="?attr/selectableItemBackground"
-                local:layout_constraintLeft_toLeftOf="@id/BillableIcon"
-                local:layout_constraintTop_toTopOf="@id/BillableIcon"
+                app:layout_constraintLeft_toLeftOf="@id/BillableIcon"
+                app:layout_constraintTop_toTopOf="@id/BillableIcon"
                 android:layout_width="match_parent"
                 android:layout_height="48dp" />
 
@@ -334,16 +338,17 @@
                 android:text="@string/Billable"
                 android:textColor="@color/darkLabel"
                 android:textSize="15sp"
-                local:layout_constraintLeft_toRightOf="@id/BillableIcon"
-                local:layout_constraintTop_toTopOf="@+id/BillableIcon" />
+                app:layout_constraintLeft_toRightOf="@id/BillableIcon"
+                app:layout_constraintTop_toTopOf="@+id/BillableIcon" />
 
             <Switch
                 android:id="@+id/BillableSwitch"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginRight="18dp"
-                local:layout_constraintRight_toRightOf="parent"
-                local:layout_constraintTop_toBottomOf="@id/TagsBottomBorder"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/TagsBottomBorder"
+                android:clickable="false"/>
 
             <View
                 android:id="@+id/BillableBottomBorder"
@@ -351,7 +356,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="56dp"
                 android:background="@color/separator"
-                local:layout_constraintTop_toBottomOf="@id/BillableIcon" />
+                app:layout_constraintTop_toBottomOf="@id/BillableIcon" />
 
             <!-- TIME -->
 
@@ -361,9 +366,9 @@
                 android:layout_height="72dp"
                 android:background="#dddddd"
                 android:orientation="vertical"
-                local:layout_constraintLeft_toLeftOf="parent"
-                local:layout_constraintRight_toRightOf="parent"
-                local:layout_constraintTop_toBottomOf="@id/BillableBottomBorder" />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/BillableBottomBorder" />
 
             <ImageView
                 android:id="@+id/TimeIcon"
@@ -371,16 +376,16 @@
                 android:layout_height="48dp"
                 android:scaleType="center"
                 android:src="@drawable/timer_dark"
-                local:layout_constraintTop_toBottomOf="@id/BillableBottomBorder"
-                local:layout_constraintLeft_toLeftOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/BillableBottomBorder"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
             <View
                 android:id="@+id/StartTimeButton"
                 android:background="?attr/selectableItemBackground"
-                local:layout_constraintLeft_toLeftOf="parent"
-                local:layout_constraintRight_toLeftOf="@id/TimeMiddleGuide"
-                local:layout_constraintTop_toBottomOf="@id/BillableBottomBorder"
-                local:layout_constraintBottom_toTopOf="@+id/TimeBottomBorder"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/TimeMiddleGuide"
+                app:layout_constraintTop_toBottomOf="@id/BillableBottomBorder"
+                app:layout_constraintBottom_toTopOf="@+id/TimeBottomBorder"
                 android:layout_width="0dp"
                 android:layout_height="0dp" />
 
@@ -391,8 +396,8 @@
                 android:textColor="@color/darkLabel"
                 android:textSize="15sp"
                 android:layout_marginTop="12dp"
-                local:layout_constraintLeft_toRightOf="@id/TimeIcon"
-                local:layout_constraintTop_toTopOf="@id/TimeIcon"
+                app:layout_constraintLeft_toRightOf="@id/TimeIcon"
+                app:layout_constraintTop_toTopOf="@id/TimeIcon"
                 tools:text="11:25 AM" />
 
             <TextView
@@ -402,8 +407,8 @@
                 android:layout_marginLeft="8dp"
                 android:textColor="@color/editViewDate"
                 android:textSize="15sp"
-                local:layout_constraintBaseline_toBaselineOf="@id/StartTime"
-                local:layout_constraintLeft_toRightOf="@id/StartTime"
+                app:layout_constraintBaseline_toBaselineOf="@id/StartTime"
+                app:layout_constraintLeft_toRightOf="@id/StartTime"
                 tools:text="06.05." />
 
             <TextView
@@ -414,17 +419,17 @@
                 android:text="@string/StartTime"
                 android:textColor="@color/defaultText"
                 android:textSize="12sp"
-                local:layout_constraintLeft_toRightOf="@id/TimeIcon"
-                local:layout_constraintTop_toBottomOf="@id/StartTime"
-                local:layout_constraintLeft_toLeftOf="@id/StartTime" />
+                app:layout_constraintLeft_toRightOf="@id/TimeIcon"
+                app:layout_constraintTop_toBottomOf="@id/StartTime"
+                app:layout_constraintLeft_toLeftOf="@id/StartTime" />
 
             <View
                 android:id="@+id/StopTimeButton"
                 android:background="?attr/selectableItemBackground"
-                local:layout_constraintLeft_toLeftOf="@id/TimeMiddleGuide"
-                local:layout_constraintRight_toRightOf="parent"
-                local:layout_constraintTop_toTopOf="@id/TimeIcon"
-                local:layout_constraintBottom_toTopOf="@id/TimeBottomBorder"
+                app:layout_constraintLeft_toLeftOf="@id/TimeMiddleGuide"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/TimeIcon"
+                app:layout_constraintBottom_toTopOf="@id/TimeBottomBorder"
                 android:layout_width="0dp"
                 android:layout_height="0dp" />
 
@@ -437,8 +442,8 @@
                 android:layout_weight="1"
                 android:textColor="@color/darkLabel"
                 android:textSize="15sp"
-                local:layout_constraintBaseline_toBaselineOf="@id/StartTime"
-                local:layout_constraintLeft_toRightOf="@id/TimeMiddleGuide"
+                app:layout_constraintBaseline_toBaselineOf="@id/StartTime"
+                app:layout_constraintLeft_toRightOf="@id/TimeMiddleGuide"
                 tools:text="11:48 AM" />
 
             <TextView
@@ -448,8 +453,8 @@
                 android:layout_marginLeft="8dp"
                 android:textColor="@color/editViewDate"
                 android:textSize="15sp"
-                local:layout_constraintBaseline_toBaselineOf="@id/StopTime"
-                local:layout_constraintLeft_toRightOf="@id/StopTime"
+                app:layout_constraintBaseline_toBaselineOf="@id/StopTime"
+                app:layout_constraintLeft_toRightOf="@id/StopTime"
                 tools:text="06.05." />
 
             <TextView
@@ -460,8 +465,8 @@
                 android:textColor="@color/buttonBlue"
                 android:layout_marginLeft="16dp"
                 android:textSize="15sp"
-                local:layout_constraintBaseline_toBaselineOf="@id/StartTime"
-                local:layout_constraintLeft_toRightOf="@id/TimeMiddleGuide" />
+                app:layout_constraintBaseline_toBaselineOf="@id/StartTime"
+                app:layout_constraintLeft_toRightOf="@id/TimeMiddleGuide" />
 
             <TextView
                 android:id="@+id/EditStopTimeLabel"
@@ -472,8 +477,8 @@
                 android:text="@string/EndTime"
                 android:textColor="@color/defaultText"
                 android:textSize="12sp"
-                local:layout_constraintTop_toBottomOf="@id/StartTime"
-                local:layout_constraintLeft_toRightOf="@id/TimeMiddleGuide" />
+                app:layout_constraintTop_toBottomOf="@id/StartTime"
+                app:layout_constraintLeft_toRightOf="@id/TimeMiddleGuide" />
 
             <View
                 android:id="@+id/TimeBottomBorder"
@@ -481,16 +486,16 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="56dp"
                 android:background="@color/separator"
-                local:layout_constraintTop_toBottomOf="@id/TimeMiddleGuide" />
+                app:layout_constraintTop_toBottomOf="@id/TimeMiddleGuide" />
 
             <!-- DURATION -->
 
             <View
                 android:id="@+id/DurationButton"
                 android:background="?attr/selectableItemBackground"
-                local:layout_constraintLeft_toLeftOf="@id/TimeIcon"
-                local:layout_constraintTop_toBottomOf="@id/TimeBottomBorder"
-                local:layout_constraintBottom_toTopOf="@+id/DurationBottomBorder"
+                app:layout_constraintLeft_toLeftOf="@id/TimeIcon"
+                app:layout_constraintTop_toBottomOf="@id/TimeBottomBorder"
+                app:layout_constraintBottom_toTopOf="@+id/DurationBottomBorder"
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
 
@@ -503,8 +508,8 @@
                 android:textColor="@color/darkLabel"
                 android:textSize="15sp"
                 tools:text="0:11:25"
-                local:layout_constraintTop_toBottomOf="@id/TimeBottomBorder"
-                local:layout_constraintLeft_toRightOf="@id/TimeIcon" />
+                app:layout_constraintTop_toBottomOf="@id/TimeBottomBorder"
+                app:layout_constraintLeft_toRightOf="@id/TimeIcon" />
 
             <TextView
                 android:id="@+id/DurationLabel"
@@ -514,8 +519,8 @@
                 android:text="@string/Duration"
                 android:textColor="@color/defaultText"
                 android:textSize="12sp"
-                local:layout_constraintTop_toBottomOf="@id/Duration"
-                local:layout_constraintLeft_toLeftOf="@id/Duration" />
+                app:layout_constraintTop_toBottomOf="@id/Duration"
+                app:layout_constraintLeft_toLeftOf="@id/Duration" />
 
             <View
                 android:id="@+id/DurationBottomBorder"
@@ -524,7 +529,7 @@
                 android:layout_marginLeft="56dp"
                 android:layout_marginTop="16dp"
                 android:background="@color/separator"
-                local:layout_constraintTop_toBottomOf="@id/DurationLabel" />
+                app:layout_constraintTop_toBottomOf="@id/DurationLabel" />
 
             <!-- DELETE -->
 
@@ -534,13 +539,13 @@
                 android:layout_height="48dp"
                 android:scaleType="center"
                 android:src="@drawable/delete"
-                local:layout_constraintTop_toBottomOf="@id/DurationBottomBorder"
-                local:layout_constraintLeft_toLeftOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/DurationBottomBorder"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
             <View
                 android:id="@+id/DeleteButton"
                 android:background="?attr/selectableItemBackground"
-                local:layout_constraintTop_toTopOf="@id/DeleteIcon"
+                app:layout_constraintTop_toTopOf="@id/DeleteIcon"
                 android:layout_width="match_parent"
                 android:layout_height="48dp" />
 
@@ -552,8 +557,8 @@
                 android:text="@string/DeleteEntry"
                 android:textColor="@color/errorText"
                 android:textSize="15sp"
-                local:layout_constraintLeft_toRightOf="@id/DeleteIcon"
-                local:layout_constraintTop_toBottomOf="@id/DurationBottomBorder" />
+                app:layout_constraintLeft_toRightOf="@id/DeleteIcon"
+                app:layout_constraintTop_toBottomOf="@id/DurationBottomBorder" />
 
             <View
                 android:id="@+id/DeleteBottomBorder"
@@ -561,7 +566,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="56dp"
                 android:background="@color/separator"
-                local:layout_constraintTop_toBottomOf="@id/DeleteLabel" />
+                app:layout_constraintTop_toBottomOf="@id/DeleteLabel" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

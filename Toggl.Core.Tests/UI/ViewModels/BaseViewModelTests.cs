@@ -27,9 +27,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
         protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
         protected IRemoteConfigService RemoteConfigService { get; } = Substitute.For<IRemoteConfigService>();
         protected IAccessibilityService AccessibilityService { get; } = Substitute.For<IAccessibilityService>();
+        protected IUpdateRemoteConfigCacheService UpdateRemoteConfigCacheService { get; } = Substitute.For<IUpdateRemoteConfigCacheService>();
         protected IErrorHandlingService ErrorHandlingService { get; } = Substitute.For<IErrorHandlingService>();
         protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
-     
+
         protected TestScheduler TestScheduler { get; }
         protected IRxActionFactory RxActionFactory { get; }
 

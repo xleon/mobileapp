@@ -1,9 +1,6 @@
 ﻿using Android.App;
 using Android.Content.PM;
-using Android.Graphics;
-using Android.OS;
-using Android.Support.V4.Graphics;
-using Android.Support.V7.Widget;
+using Android.Runtime;
 using Android.Views;
 using System;
 using System.Linq;
@@ -11,7 +8,9 @@ using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
+using AndroidColor = Android.Graphics.Color;
 using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Activities
@@ -22,19 +21,19 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class EditProjectActivity : ReactiveActivity<EditProjectViewModel>
     {
-        protected override void OnCreate(Bundle bundle)
+        public EditProjectActivity() : base(
+            Resource.Layout.EditProjectActivity,
+            Resource.Style.AppTheme_Light_WhiteBackground,
+            Transitions.SlideInFromBottom)
+        { }
+
+        public EditProjectActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
-            SetTheme(Resource.Style.AppTheme_BlueStatusBar_WhiteBackground);
-            base.OnCreate(bundle);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.EditProjectActivity);
-            InitializeViews();
-            OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
-            setupToolbar();
+        }
+
+        protected override void InitializeBindings()
+        {
             errorText.Visibility = ViewStates.Gone;
 
             // Name
@@ -97,7 +96,7 @@ namespace Toggl.Droid.Activities
                 .Subscribe(clientNameTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
-            var noClientColor = Color.ParseColor("#CECECE");
+            var noClientColor = AndroidColor.ParseColor("#CECECE");
             ViewModel.ClientName
                 .Select(clientTextColor)
                 .Subscribe(clientNameTextView.SetTextColor)
@@ -118,8 +117,8 @@ namespace Toggl.Droid.Activities
                 .BindAction(ViewModel.Save)
                 .DisposedBy(DisposeBag);
 
-            var enabledColor = Color.White;
-            var disabledColor = new Color(ColorUtils.SetAlphaComponent(Color.White, 127));
+            var enabledColor = AndroidColor.Black;
+            var disabledColor = AndroidColor.LightGray;
             ViewModel.Save.Enabled
                 .Select(createProjectTextColor)
                 .Subscribe(createProjectButton.SetTextColor)
@@ -128,40 +127,11 @@ namespace Toggl.Droid.Activities
             string clientNameWithEmptyText(string clientName)
                 => string.IsNullOrEmpty(clientName) ? FoundationResources.AddClient : clientName;
 
-            Color clientTextColor(string clientName)
-                => string.IsNullOrEmpty(clientName) ? noClientColor : Color.Black;
+            AndroidColor clientTextColor(string clientName)
+                => string.IsNullOrEmpty(clientName) ? noClientColor : AndroidColor.Black;
 
-            Color createProjectTextColor(bool enabled)
+            AndroidColor createProjectTextColor(bool enabled)
                 => enabled ? enabledColor : disabledColor;
-        }
-
-
-        public override void Finish()
-        {
-            base.Finish();
-            OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
-        }
-
-        public override bool OnOptionsItemSelected(IMenuItem item)
-        {
-            if (item.ItemId == Android.Resource.Id.Home)
-            {
-                ViewModel.CloseWithDefaultResult();
-                return true;
-            }
-
-            return base.OnOptionsItemSelected(item);
-        }
-
-        private void setupToolbar()
-        {
-            var toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
-            toolbar.Title = ViewModel.Title;
-
-            SetSupportActionBar(toolbar);
-
-            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            SupportActionBar.SetDisplayShowHomeEnabled(true);
         }
     }
 }

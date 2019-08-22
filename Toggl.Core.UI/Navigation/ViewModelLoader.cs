@@ -99,6 +99,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.RemoteConfigService,
                     dependencyContainer.AccessibilityService,
+                    dependencyContainer.UpdateRemoteConfigCacheService,
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.UserAccessManager,
@@ -120,6 +121,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.RemoteConfigService,
                     dependencyContainer.AccessibilityService,
+                    dependencyContainer.UpdateRemoteConfigCacheService,
                     dependencyContainer.AccessRestrictionStorage,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.RxActionFactory,
@@ -165,7 +167,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.TimeService,
                     dependencyContainer.DataSource,
                     dependencyContainer.RxActionFactory,
-                    dependencyContainer.NavigationService);
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.SchedulerProvider);
             }
 
             if (viewModelType == typeof(SelectBeginningOfWeekViewModel))
@@ -426,11 +429,9 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PlatformInfo,
                     dependencyContainer.UserPreferences,
                     dependencyContainer.AnalyticsService,
-                    dependencyContainer.UserAccessManager,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.OnboardingStorage,
                     dependencyContainer.NavigationService,
-                    dependencyContainer.PrivateSharedStorageService,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.SchedulerProvider);
