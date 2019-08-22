@@ -1,9 +1,8 @@
 using Android.Support.V7.Widget;
 using Android.Widget;
+using Toggl.Droid.Adapters;
 using Toggl.Droid.Views;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
 using static Toggl.Droid.Resource.Id;
-using Android.Views;
 
 namespace Toggl.Droid.Activities
 {
@@ -20,8 +19,7 @@ namespace Toggl.Droid.Activities
         private RecyclerView recyclerView;
 
         private AutocompleteEditText descriptionField;
-
-        private View toolbar;
+        private StartTimeEntryRecyclerAdapter adapter;
 
         protected override void InitializeViews()
         {
@@ -36,8 +34,12 @@ namespace Toggl.Droid.Activities
             recyclerView = FindViewById<RecyclerView>(SuggestionsRecyclerView);
 
             descriptionField = FindViewById<AutocompleteEditText>(DescriptionTextField);
+            
+            doneButton.Text = Shared.Resources.Done;
 
-            toolbar = FindViewById(Resource.Id.Toolbar);
+            adapter = new StartTimeEntryRecyclerAdapter();
+            recyclerView.SetLayoutManager(new LinearLayoutManager(this));
+            recyclerView.SetAdapter(adapter);
         }
     }
 }

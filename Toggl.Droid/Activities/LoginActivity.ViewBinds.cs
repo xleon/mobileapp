@@ -42,6 +42,14 @@ namespace Toggl.Droid.Activities
             emailEditText = FindViewById<EditText>(Resource.Id.LoginEmailEditText);
             loginPassword = FindViewById<TextInputLayout>(Resource.Id.LoginPassword);
             passwordEditText = FindViewById<EditText>(Resource.Id.LoginPasswordEditText);
+            
+            loginEmail.Hint = Shared.Resources.Email;
+            loginPassword.Hint = Shared.Resources.Password;
+            forgotPasswordView.Text = Shared.Resources.LoginForgotPassword;
+            googleLoginLabel.Text = Shared.Resources.GoogleLogin;
+            haveAnAccountLabel.Text = Shared.Resources.AlreadyHaveAnAccountQuestionMark;
+            orLabel.Text = Shared.Resources.Or;
+            signUpLabel.Text = Shared.Resources.SignUpTitle;
         }
     }
 }

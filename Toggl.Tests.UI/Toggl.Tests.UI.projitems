@@ -29,6 +29,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\NoTimeEntryException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\TimeEntryFoundException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SelectProjectExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EditTimeEntryExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\EditViewAssertionException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Helpers\" />

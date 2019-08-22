@@ -10,7 +10,6 @@
 
 namespace Toggl.Shared {
     using System;
-    using System.Reflection;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
@@ -290,12 +289,6 @@ namespace Toggl.Shared {
         public static string Syncing {
             get {
                 return ResourceManager.GetString("Syncing", resourceCulture);
-            }
-        }
-        
-        public static string SyncFailed {
-            get {
-                return ResourceManager.GetString("SyncFailed", resourceCulture);
             }
         }
         
@@ -1577,6 +1570,18 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string TagsList {
+            get {
+                return ResourceManager.GetString("TagsList", resourceCulture);
+            }
+        }
+        
+        public static string NoTags {
+            get {
+                return ResourceManager.GetString("NoTags", resourceCulture);
+            }
+        }
+        
         public static string EmptyTagText {
             get {
                 return ResourceManager.GetString("EmptyTagText", resourceCulture);
@@ -1673,6 +1678,18 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        public static string DateAndTime {
+            get {
+                return ResourceManager.GetString("DateAndTime", resourceCulture);
+            }
+        }
+        
         public static string FormatSettings {
             get {
                 return ResourceManager.GetString("FormatSettings", resourceCulture);
@@ -1682,6 +1699,12 @@ namespace Toggl.Shared {
         public static string Use24HourClock {
             get {
                 return ResourceManager.GetString("Use24HourClock", resourceCulture);
+            }
+        }
+        
+        public static string SwipeActions {
+            get {
+                return ResourceManager.GetString("SwipeActions", resourceCulture);
             }
         }
         
@@ -1700,6 +1723,12 @@ namespace Toggl.Shared {
         public static string ManualMode {
             get {
                 return ResourceManager.GetString("ManualMode", resourceCulture);
+            }
+        }
+        
+        public static string TimerDefaults {
+            get {
+                return ResourceManager.GetString("TimerDefaults", resourceCulture);
             }
         }
         
@@ -2090,6 +2119,12 @@ namespace Toggl.Shared {
         public static string IsBillable {
             get {
                 return ResourceManager.GetString("IsBillable", resourceCulture);
+            }
+        }
+        
+        public static string SyncFailed {
+            get {
+                return ResourceManager.GetString("SyncFailed", resourceCulture);
             }
         }
         

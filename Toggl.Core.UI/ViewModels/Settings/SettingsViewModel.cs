@@ -42,15 +42,11 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly ITogglDataSource dataSource;
         private readonly ISyncManager syncManager;
-        private readonly IUserAccessManager userAccessManager;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly IPlatformInfo platformInfo;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IInteractorFactory interactorFactory;
-        private readonly IPrivateSharedStorageService privateSharedStorageService;
-        private readonly IRxActionFactory rxActionFactory;
-        private readonly ISchedulerProvider schedulerProvider;
         private readonly IPermissionsChecker permissionsChecker;
 
         private bool isSyncing;
@@ -79,6 +75,7 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> IsFeedbackSuccessViewShowing { get; }
         public IObservable<bool> IsCalendarSmartRemindersVisible { get; }
         public IObservable<string> CalendarSmartReminders { get; }
+        public IObservable<bool> SwipeActionsEnabled { get; }
 
         public UIAction OpenCalendarSettings { get; }
         public UIAction OpenCalendarSmartReminders { get; }
@@ -95,6 +92,8 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction SelectDurationFormat { get; }
         public UIAction ToggleTimeEntriesGrouping { get; }
         public UIAction SelectBeginningOfWeek { get; }
+        public UIAction ToggleManualMode { get; }
+        public UIAction ToggleSwipeActions { get; }
 
         public SettingsViewModel(
             ITogglDataSource dataSource,
@@ -102,11 +101,9 @@ namespace Toggl.Core.UI.ViewModels
             IPlatformInfo platformInfo,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
-            IUserAccessManager userAccessManager,
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
             INavigationService navigationService,
-            IPrivateSharedStorageService privateSharedStorageService,
             IRxActionFactory rxActionFactory,
             IPermissionsChecker permissionsChecker,
             ISchedulerProvider schedulerProvider)
@@ -119,8 +116,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
-            Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
@@ -129,14 +124,10 @@ namespace Toggl.Core.UI.ViewModels
             this.syncManager = syncManager;
             this.platformInfo = platformInfo;
             this.userPreferences = userPreferences;
-            this.rxActionFactory = rxActionFactory;
             this.analyticsService = analyticsService;
             this.interactorFactory = interactorFactory;
-            this.userAccessManager = userAccessManager;
             this.onboardingStorage = onboardingStorage;
-            this.schedulerProvider = schedulerProvider;
             this.permissionsChecker = permissionsChecker;
-            this.privateSharedStorageService = privateSharedStorageService;
 
             IsSynced =
                 syncManager.ProgressObservable
@@ -236,6 +227,9 @@ namespace Toggl.Core.UI.ViewModels
             IsFeedbackSuccessViewShowing = isFeedbackSuccessViewShowing.AsObservable()
                 .AsDriver(schedulerProvider);
 
+            SwipeActionsEnabled = userPreferences.SwipeActionsEnabled
+                .AsDriver(schedulerProvider);
+
             OpenCalendarSettings = rxActionFactory.FromAsync(openCalendarSettings);
             OpenCalendarSmartReminders = rxActionFactory.FromAsync(openCalendarSmartReminders);
             OpenNotificationSettings = rxActionFactory.FromAsync(openNotificationSettings);
@@ -251,6 +245,8 @@ namespace Toggl.Core.UI.ViewModels
             SelectDurationFormat = rxActionFactory.FromAsync(selectDurationFormat);
             SelectBeginningOfWeek = rxActionFactory.FromAsync(selectBeginningOfWeek);
             ToggleTimeEntriesGrouping = rxActionFactory.FromAsync(toggleTimeEntriesGrouping);
+            ToggleManualMode = rxActionFactory.FromAction(toggleManualMode);
+            ToggleSwipeActions = rxActionFactory.FromAction(toggleSwipeActions);
         }
 
         public override async Task Initialize()
@@ -279,7 +275,7 @@ namespace Toggl.Core.UI.ViewModels
             await updatePreferences(timeFormat: timeFormat);
         }
 
-        public void ToggleManualMode()
+        private void toggleManualMode()
         {
             if (userPreferences.IsManualModeEnabled)
             {
@@ -450,6 +446,11 @@ namespace Toggl.Core.UI.ViewModels
         {
             permissionsChecker.CalendarPermissionGranted.FirstAsync()
                 .Subscribe(calendarPermissionGranted.OnNext);
+        }
+
+        private void toggleSwipeActions()
+        {
+            userPreferences.SetSwipeActionsEnabled(!userPreferences.AreSwipeActionsEnabled);
         }
     }
 }

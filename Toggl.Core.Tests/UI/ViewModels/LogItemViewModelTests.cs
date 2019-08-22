@@ -79,6 +79,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     timeEntries.Select(te => te.Id).ToArray(),
                     LogItemVisualizationIntent.CollapsedGroupHeader,
                     false,
+                    false,
                     string.Empty,
                     string.Empty,
                     string.Empty,
@@ -91,7 +92,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     false,
                     0,
                     0,
-                    0);
+                    0,
+                    false,
+                    false);
 
                 viewModel.RepresentedTimeEntriesIds.Should().BeInAscendingOrder();
             }
@@ -106,6 +109,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     timeEntries.Select(te => te.Id).ToArray(),
                     LogItemVisualizationIntent.CollapsedGroupHeader,
                     false,
+                    false,
                     string.Empty,
                     string.Empty,
                     string.Empty,
@@ -118,7 +122,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     false,
                     0,
                     0,
-                    0);
+                    0,
+                    false,
+                    false);
 
                 viewModel.RepresentedTimeEntriesIds.Should().BeEquivalentTo(ids.Get);
             }

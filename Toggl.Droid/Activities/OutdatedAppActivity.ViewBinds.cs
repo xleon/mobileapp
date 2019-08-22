@@ -15,6 +15,11 @@ namespace Toggl.Droid.Activities
             outdatedAppMessageView = FindViewById<TextView>(Resource.Id.OutdatedAppMessageView);
             openWebsiteButton = FindViewById<Button>(Resource.Id.OpenWebsiteButton);
             updateAppButton = FindViewById<Button>(Resource.Id.UpdateAppButton);
+            
+            oopsTextView.Text = Shared.Resources.Oops;
+            outdatedAppMessageView.Text = Shared.Resources.AppOutdatedMessage;
+            openWebsiteButton.Text = Shared.Resources.OutdatedAppTryTogglCom;
+            updateAppButton.Text = Shared.Resources.UpdateTheApp;
         }
     }
 }

@@ -1,13 +1,10 @@
 ﻿using Android.Support.Design.Widget;
 using Android.Widget;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace Toggl.Droid.Activities
 {
     public sealed partial class TokenResetActivity
     {
-        private Toolbar toolbar;
-
         private TextInputLayout tokenResetPasswordLayout;
         private EditText passwordEditText;
         private ProgressBar progressBar;
@@ -19,8 +16,6 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeViews()
         {
-            toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
-
             tokenResetPasswordLayout = FindViewById<TextInputLayout>(Resource.Id.TokenResetPasswordLayout);
             passwordEditText = FindViewById<EditText>(Resource.Id.TokenResetPassword);
             progressBar = FindViewById<ProgressBar>(Resource.Id.TokenResetProgressBar);
@@ -29,6 +24,8 @@ namespace Toggl.Droid.Activities
             emailLabel = FindViewById<TextView>(Resource.Id.TokenResetEmailLabel);
             signoutLabel = FindViewById<TextView>(Resource.Id.TokenResetSignOutLabel);
             doneButton = FindViewById<FloatingActionButton>(Resource.Id.TokenResetDoneButton);
+
+            SetupToolbar(Shared.Resources.LoginTitle, showHomeAsUp: false);
         }
     }
 }

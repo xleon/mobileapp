@@ -2,6 +2,7 @@
 using Foundation;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.Models.Interfaces;
@@ -76,7 +77,7 @@ namespace Toggl.iOS.ViewControllers
             calendarSizeDisposable = CalendarContainer.AddObserver(boundsKey, NSKeyValueObservingOptions.New, onCalendarSizeChanged);
 
             source = new ReportsTableViewSource(ReportsTableView, ViewModel);
-            source.SetItems(Enumerable.Empty<ChartSegment>().ToList().AsReadOnly());
+            source.SetItems(ImmutableList<ChartSegment>.Empty);
             ReportsTableView.ReloadData();
 
             ViewModel.SegmentsObservable

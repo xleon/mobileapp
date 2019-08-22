@@ -35,7 +35,7 @@ namespace Toggl.Droid.Fragments
 
             recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
             selectDurationRecyclerAdapter = new SelectDurationFormatRecyclerAdapter();
-            selectDurationRecyclerAdapter.Items = ViewModel.DurationFormats.ToList();
+            selectDurationRecyclerAdapter.Items = ViewModel.DurationFormats;
             recyclerView.SetAdapter(selectDurationRecyclerAdapter);
 
             titleLabel.Text = Shared.Resources.DurationFormat;

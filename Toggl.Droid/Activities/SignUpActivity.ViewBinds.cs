@@ -48,6 +48,14 @@ namespace Toggl.Droid.Activities
             emailEditText = FindViewById<EditText>(Resource.Id.SignUpEmailEditText);
             passwordEditText = FindViewById<EditText>(Resource.Id.SignUpPasswordEditText);
             countryErrorView = FindViewById<ImageView>(Resource.Id.SignUpCountryErrorView);
+            
+            signUpEmailLabel.Hint = Shared.Resources.Email;
+            signUpPasswordLabel.Hint = Shared.Resources.Password;
+            signUpOrLabel.Text = Shared.Resources.Or;
+            signUpWithGoogleLabel.Text = Shared.Resources.GoogleSignUp;
+            alreadyHaveAnAccountLabel.Text = Shared.Resources.AlreadyHaveAnAccountQuestionMark;
+            loginLabel.Text = Shared.Resources.LoginTitle;
+            signupButton.Text = Shared.Resources.SignUpTitle;
         }
     }
 }

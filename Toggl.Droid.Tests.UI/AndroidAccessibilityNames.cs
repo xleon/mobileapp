@@ -78,11 +78,19 @@ namespace Toggl.Tests.UI
 
     public static class EditTimeEntry
     {
+        public const string View = "EditTimeEntryView";
         public const string Confirm = "ConfirmButton";
         public const string DeleteButton = "EditTimeEntryDelete";
         public const string EditTags = "EditTimeEntryTagsContainer";
+        public const string TagsList = "TagsRecyclerView";
         public const string EditProject = "SelectProjectButton";
         public const string EditDescription = "DescriptionEditText";
+        public const string StartTime = "StartTime";
+        public const string StopTime = "StopTime";
+        public const string StopButton = "StopButton";
+        public const string Duration = "Duration";
+        public const string StartDate = "StartDate";
+        public const string Billable = "EditTimeEntryBillable";
     }
 
     public static class Client

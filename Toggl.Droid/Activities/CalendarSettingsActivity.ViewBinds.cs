@@ -1,7 +1,7 @@
 ﻿using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
+using Toggl.Droid.Adapters;
 
 namespace Toggl.Droid.Activities
 {
@@ -11,11 +11,11 @@ namespace Toggl.Droid.Activities
         private Switch toggleCalendarsSwitch;
         private View calendarsContainer;
         private RecyclerView calendarsRecyclerView;
-        private Toolbar toolbar;
         private TextView linkCalendarsTitle;
         private TextView linkCalendarsMessage;
         private TextView selectCalendarsTitle;
         private TextView selectCalendarsMessage;
+        private UserCalendarsRecyclerAdapter userCalendarsAdapter;
 
         protected override void InitializeViews()
         {
@@ -27,7 +27,17 @@ namespace Toggl.Droid.Activities
             toggleCalendarsSwitch = FindViewById<Switch>(Resource.Id.ToggleCalendarsSwitch);
             calendarsContainer = FindViewById(Resource.Id.CalendarsContainer);
             calendarsRecyclerView = FindViewById<RecyclerView>(Resource.Id.CalendarsRecyclerView);
-            toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
+
+            userCalendarsAdapter = new UserCalendarsRecyclerAdapter();
+            calendarsRecyclerView.SetAdapter(userCalendarsAdapter);
+            calendarsRecyclerView.SetLayoutManager(new LinearLayoutManager(this));
+            
+            linkCalendarsTitle.Text = Shared.Resources.LinkCalendars;
+            linkCalendarsMessage.Text = Shared.Resources.LinkCalendarsMessage;
+            selectCalendarsTitle.Text = Shared.Resources.SelectCalendars;
+            selectCalendarsMessage.Text = Shared.Resources.SelectCalendarsMessage;
+            
+            SetupToolbar(Shared.Resources.CalendarSettingsTitle);
         }
     }
 }
