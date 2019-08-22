@@ -909,7 +909,7 @@ Use them to add keywords to your time entries.</value>
     <value>Timer Defaults</value>
   </data>
     <data name="ManualModeDescription" xml:space="preserve">
-    <value>You can add your data manually, instead of tracking in real time.</value>
+    <value>Sets the default behavior for the start button. Long pressing the button will always activate the alternative mode.</value>
   </data>
     <data name="SmartAlerts" xml:space="preserve">
     <value>Smart alerts</value>
