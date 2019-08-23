@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -173,7 +174,7 @@ namespace Toggl.Core.UI.ViewModels
                 dataSource.User.Current
                     .Select(user => user.BeginningOfWeek)
                     .DistinctUntilChanged()
-                    .Select(beginningOfWeek => beginningOfWeek.ToString())
+                    .Select(beginningOfWeek => beginningOfWeek.ToLocalizedString())
                     .AsDriver(schedulerProvider);
 
             DateFormat =

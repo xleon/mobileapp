@@ -39,18 +39,12 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-            recyclerView.SetLayoutManager(new GridLayoutManager(Context, 5));
-
-            selectableColorsAdapter = new SimpleAdapter<SelectableColorViewModel>(
-                Resource.Layout.SelectColorFragmentCell, ColorSelectionViewHolder.Create);
-
+            
             selectableColorsAdapter.ItemTapObservable
                 .Select(x => x.Color)
                 .Subscribe(ViewModel.SelectColor.Inputs)
                 .DisposedBy(DisposeBag);
-
-            recyclerView.SetAdapter(selectableColorsAdapter);
-
+            
             ViewModel.Hue
                 .Subscribe(hueSaturationPicker.Rx().HueObserver())
                 .DisposedBy(DisposeBag);

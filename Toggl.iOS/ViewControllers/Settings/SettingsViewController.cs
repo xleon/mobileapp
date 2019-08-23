@@ -118,7 +118,7 @@ namespace Toggl.iOS.ViewControllers
                 var calendarSection = new SettingSection(Resources.Calendar, new ISettingRow[]
                 {
                     new NavigationRow(Resources.CalendarSettingsTitle, ViewModel.OpenCalendarSettings),
-                    new NavigationRow(Resources.SmartAlerts, ViewModel.OpenNotificationSettings),
+                    new NavigationRow(Resources.SmartReminders, ViewModel.OpenNotificationSettings),
                 });
 
                 sections.Add(Observable.Return(calendarSection));
@@ -126,10 +126,10 @@ namespace Toggl.iOS.ViewControllers
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
             {
-                var siriSection = new SettingSection("Siri", new ISettingRow[]
+                var siriSection = new SettingSection(Resources.Siri, new ISettingRow[]
                 {
-                    new NavigationRow(Resources.Siri_Shortcuts, ViewModel.OpenSiriShortcuts),
-                    new NavigationRow(Resources.Siri_Workflows, ViewModel.OpenSiriWorkflows),
+                    new NavigationRow(Resources.SiriShortcuts, ViewModel.OpenSiriShortcuts),
+                    new NavigationRow(Resources.SiriWorkflows, ViewModel.OpenSiriWorkflows),
                 });
 
                 sections.Add(Observable.Return(siriSection));

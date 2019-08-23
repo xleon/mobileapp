@@ -1,11 +1,9 @@
 using Android.App;
 using Android.Content.PM;
-using Android.Content.Res;
 using Android.OS;
 using Android.Runtime;
 using Android.Text;
 using System;
-using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
@@ -14,10 +12,10 @@ using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
-using Toggl.Droid.Presentation;
-using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using static Toggl.Droid.Resource.String;
+using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
+using TextResources = Toggl.Shared.Resources;
+using Toggl.Droid.Presentation;
 using TimeEntryExtensions = Toggl.Droid.Extensions.TimeEntryExtensions;
 
 namespace Toggl.Droid.Activities
@@ -85,8 +83,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             descriptionEditText.Rx().FocusChanged()
-                .Select(isFocused => isFocused ? Done : Save)
-                .Select(Resources.GetString)
+                .Select(isFocused => isFocused ? TextResources.Done : TextResources.Save)
                 .Subscribe(confirmButton.Rx().TextObserver());
 
             descriptionEditText.Rx().Text()

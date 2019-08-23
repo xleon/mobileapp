@@ -223,7 +223,7 @@ namespace Toggl.Droid.Views
         }
 
         private string formatHour(DateTime hour)
-            => hour.ToString(fixedHoursFormat(), CultureInfo.InvariantCulture);
+            => hour.ToString(fixedHoursFormat(), CultureInfo.CurrentCulture);
 
         private string fixedHoursFormat()
             => timeOfDayFormat.IsTwentyFourHoursFormat ? twentyFourHoursFormat : twelveHoursFormat;

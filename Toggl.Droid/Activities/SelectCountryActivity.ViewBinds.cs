@@ -23,6 +23,7 @@ namespace Toggl.Droid.Activities
             filterEditText = FindViewById<EditText>(Resource.Id.FilterEditText);
             recyclerView = FindViewById<RecyclerView>(Resource.Id.RecyclerView);
 
+            filterEditText.Hint = Shared.Resources.SelectCountry;
             recyclerView.SetLayoutManager(new LinearLayoutManager(this)
             {
                 ItemPrefetchEnabled = true,

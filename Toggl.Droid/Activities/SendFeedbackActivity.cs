@@ -28,8 +28,7 @@ namespace Toggl.Droid.Activities
 
         public SendFeedbackActivity(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
-        {
-        }
+        { }
 
         protected override void InitializeBindings()
         {
@@ -74,8 +73,8 @@ namespace Toggl.Droid.Activities
 
             string selectErrorMessage(Exception exception)
                 => exception is OfflineException
-                    ? GetString(Resource.String.GenericInternetConnectionErrorMessage)
-                    : GetString(Resource.String.GenericErrorMessage);
+                    ? Shared.Resources.GenericInternetConnectionErrorMessage
+                    : Shared.Resources.SomethingWentWrongTryAgain;
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -88,6 +87,7 @@ namespace Toggl.Droid.Activities
         {
             var sendMenuItem = menu.FindItem(Resource.Id.SendMenuItem);
             sendMenuItem.SetEnabled(sendEnabled);
+            sendMenuItem.SetTitle(Shared.Resources.Send);
             return true;
         }
 

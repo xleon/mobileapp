@@ -1,8 +1,6 @@
 using Android.App;
 using Android.Content.PM;
 using System;
-using System.Reactive.Linq;
-using System.Linq;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions.Reactive;
@@ -25,8 +23,7 @@ namespace Toggl.Droid.Activities
 
         public SelectClientActivity(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
-        {
-        }
+        { }
 
         protected override void InitializeBindings()
         {

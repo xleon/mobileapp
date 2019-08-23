@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <ImageView
@@ -29,7 +30,7 @@
         android:fontFamily="sans-serif-medium"
         android:textStyle="normal"
         android:textColor="@android:color/black"
-        android:text="@string/NoWorries"/>
+        tools:text="No worries"/>
     <TextView
         android:id="@+id/Message"
         android:layout_width="0dp"
@@ -49,7 +50,7 @@
         android:textColor="@android:color/black"
         android:letterSpacing="0.01"
         android:lineSpacingExtra="8sp"
-        android:text="@string/CalendarPermissionDeniedMessage"/>
+        tools:text="Toggl needs access to your calendar to display events. You can enable this later."/>
     <Button
         android:id="@+id/Continue"
         android:layout_width="wrap_content"
@@ -70,7 +71,7 @@
         android:letterSpacing="0.04"
         android:lineSpacingExtra="2sp"
         android:textAllCaps="false"
-        android:text="@string/Continue"/>
+        tools:text="Continue"/>
     <Button
         android:id="@+id/AllowAccess"
         android:layout_width="wrap_content"
@@ -87,5 +88,5 @@
         android:letterSpacing="0.04"
         android:lineSpacingExtra="2sp"
         android:textAllCaps="false"
-        android:text="@string/AllowAccess"/>
+        tools:text="Allow access"/>
 </android.support.constraint.ConstraintLayout>

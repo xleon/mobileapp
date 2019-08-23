@@ -765,7 +765,7 @@
                     <exclude reference="gNx-N3-DUE"/>
                 </mask>
             </variation>
-            <point key="canvasLocation" x="127" y="-167"/>
+            <point key="canvasLocation" x="126.08695652173914" y="-167.41071428571428"/>
         </view>
     </objects>
     <resources>

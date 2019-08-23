@@ -1,13 +1,10 @@
-﻿using Android.Content;
-using Android.OS;
+﻿using Android.OS;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Views;
 using System;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
-using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
@@ -33,9 +30,8 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-
-            setupRecyclerView();
-
+            
+            adapter.Items = ViewModel.BeginningOfWeekCollection;
             adapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectBeginningOfWeek.Inputs)
                 .DisposedBy(DisposeBag);
@@ -46,19 +42,6 @@ namespace Toggl.Droid.Fragments
             base.OnResume();
 
             Dialog.Window.SetDefaultDialogLayout(Activity, Context, heightDp: 400);
-        }
-
-        private void setupRecyclerView()
-        {
-            recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
-
-            adapter = new SimpleAdapter<SelectableBeginningOfWeekViewModel>(
-                Resource.Layout.SelectBeginningOfWeekFragmentCell,
-                BeginningOfWeekViewHolder.Create);
-
-            adapter.Items = ViewModel.BeginningOfWeekCollection;
-
-            recyclerView.SetAdapter(adapter);
         }
     }
 }

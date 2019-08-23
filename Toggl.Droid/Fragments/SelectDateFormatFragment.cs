@@ -1,11 +1,8 @@
-﻿using Android.Content;
-using Android.OS;
+﻿using Android.OS;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Views;
 using System;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Shared.Extensions;
 
@@ -31,13 +28,9 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-            recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
-
-            var selectDateRecyclerAdapter = new SelectDateFormatRecyclerAdapter();
+            
             selectDateRecyclerAdapter.Items = ViewModel.DateTimeFormats;
-
-            recyclerView.SetAdapter(selectDateRecyclerAdapter);
-
+            
             selectDateRecyclerAdapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectDateFormat.Inputs)
                 .DisposedBy(DisposeBag);

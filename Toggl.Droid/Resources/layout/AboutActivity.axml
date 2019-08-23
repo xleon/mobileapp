@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -24,7 +25,7 @@
         android:paddingLeft="16dp"
         android:textAllCaps="false"
         android:gravity="center_vertical"
-        android:text="@string/AboutLicenses"
+        tools:text="Licenses"
         android:textColor="@android:color/black"
         android:background="?attr/selectableItemBackground"
         android:layout_height="48dp"
@@ -43,7 +44,7 @@
         android:textAllCaps="false"
         android:gravity="center_vertical"
         android:textColor="@android:color/black"
-        android:text="@string/AboutPrivacyPolicy"
+        tools:text="Privacy Policy"
         android:background="?attr/selectableItemBackground"
         android:layout_height="48dp"
         android:layout_width="match_parent" />
@@ -60,7 +61,7 @@
         android:textAllCaps="false"
         android:gravity="center_vertical"
         android:textColor="@android:color/black"
-        android:text="@string/AboutTermsOfService"
+        tools:text="Terms of Service"
         android:background="?attr/selectableItemBackground"
         android:layout_height="48dp"
         android:layout_width="match_parent" />

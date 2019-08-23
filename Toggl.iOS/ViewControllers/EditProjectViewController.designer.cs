@@ -34,6 +34,9 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UITextField NameTextField { get; set; }
 
 		[Outlet]
+		UIKit.UILabel PrivateProjectLabel { get; set; }
+
+		[Outlet]
 		UIKit.UISwitch PrivateProjectSwitch { get; set; }
 
 		[Outlet]
@@ -124,6 +127,11 @@ namespace Toggl.iOS.ViewControllers
 			if (WorkspaceLabel != null) {
 				WorkspaceLabel.Dispose ();
 				WorkspaceLabel = null;
+			}
+
+			if (PrivateProjectLabel != null) {
+				PrivateProjectLabel.Dispose ();
+				PrivateProjectLabel = null;
 			}
 		}
 	}

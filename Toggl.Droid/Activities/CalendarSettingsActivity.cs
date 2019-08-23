@@ -3,8 +3,6 @@ using Android.Content.PM;
 using Android.Runtime;
 using Android.Views;
 using System;
-using System.Linq;
-using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Presentation;
@@ -57,6 +55,8 @@ namespace Toggl.Droid.Activities
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             MenuInflater.Inflate(Resource.Menu.CalendarSettingsMenu, menu);
+            var doneMenuItem = menu.FindItem(Resource.Id.Done);
+            doneMenuItem.SetTitle(Shared.Resources.Done);
             return true;
         }
 

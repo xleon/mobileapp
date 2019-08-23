@@ -32,6 +32,7 @@ namespace Toggl.iOS.ViewControllers
             ErrorLabel.Text = Resources.ProjectNameTakenError;
             DoneButton.SetTitle(Resources.Create, UIControlState.Normal);
             ProjectNameUsedErrorTextHeight.Constant = 0;
+            PrivateProjectLabel.Text = Resources.PrivateProject;
 
             // Name
             NameTextField.Rx().Text()

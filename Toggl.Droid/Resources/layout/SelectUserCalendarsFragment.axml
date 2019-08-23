@@ -30,7 +30,7 @@
             android:letterSpacing="0.04"
             android:lineSpacingExtra="2sp"
             android:textAllCaps="false"
-            android:text="@string/Cancel"/>
+            tools:text="Cancel"/>
         <Button
             android:id="@+id/DoneButton"
             android:layout_width="wrap_content"
@@ -46,6 +46,6 @@
             android:letterSpacing="0.04"
             android:lineSpacingExtra="2sp"
             android:textAllCaps="false"
-            android:text="@string/Done"/>
+            tools:text="Done"/>
     </LinearLayout>
 </LinearLayout>

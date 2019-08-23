@@ -42,7 +42,7 @@
                 android:textSize="12sp"
                 android:lineSpacingExtra="4sp"
                 android:textColor="@color/errorText"
-                android:text="@string/ProjectNameTakenError"
+                tools:text="Sorry, such project already exists"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ProjectNameTextView"
@@ -95,7 +95,7 @@
                 android:layout_centerVertical="true"
                 android:layout_below="@+id/ProjectImageView" />
             <TextView
-                android:id="@+id/WorkspaceNameLabel" 
+                android:id="@+id/WorkspaceNameLabel"
                 android:lines="1"
                 android:textSize="15sp"
                 android:singleLine="true"
@@ -203,7 +203,7 @@
                 android:textSize="15sp"
                 android:singleLine="true"
                 android:lineSpacingExtra="5sp"
-                android:text="@string/PrivateProject"
+                tools:text="Private project"
                 android:textColor="@android:color/black"
                 android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
@@ -211,10 +211,11 @@
                 android:layout_alignTop="@id/ChangeWorkspaceViewPrivateProjectImage"
                 android:layout_toRightOf="@id/ChangeWorkspaceViewPrivateProjectImage" />
             <TextView
+                android:id="@+id/PrivateProjectHint"
                 android:textSize="12sp"
                 android:lineSpacingExtra="5sp"
                 android:textColor="@color/defaultText"
-                android:text="@string/PrivateProjectHint"
+                tools:text="Private projects are only accessible\nto project members"
                 android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -256,7 +257,7 @@
             android:textStyle="normal"
             android:textAllCaps="true"
             android:letterSpacing="0.04"
-            android:text="@string/Create"
+            tools:text="Create"
             android:textColor="@android:color/black"
             android:fontFamily="sans-serif-medium"
             android:background="?attr/selectableItemBackground"

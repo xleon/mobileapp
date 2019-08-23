@@ -1,14 +1,10 @@
 using Android.App;
 using Android.Content.PM;
-using Android.OS;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using System;
-using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
@@ -28,8 +24,7 @@ namespace Toggl.Droid.Activities
 
         public SelectTagsActivity(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
-        {
-        }
+        { }
 
         protected override void OnStart()
         {

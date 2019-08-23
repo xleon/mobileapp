@@ -43,8 +43,8 @@ namespace Toggl.Droid.ViewHolders
         private View errorImageView;
         private View errorNeedsSync;
         private View timeEntriesLogCellContinueButton;
-        private View mainLogBackgroundContinue;
-        private View mainLogBackgroundDelete;
+        private TextView mainLogBackgroundContinue;
+        private TextView mainLogBackgroundDelete;
         private View billableIcon;
         private View hasTagsIcon;
         private View durationPadding;
@@ -80,8 +80,8 @@ namespace Toggl.Droid.ViewHolders
             errorImageView = ItemView.FindViewById(ErrorImageView);
             errorNeedsSync = ItemView.FindViewById(ErrorNeedsSync);
             timeEntriesLogCellContinueButton = ItemView.FindViewById(TimeEntriesLogCellContinueButton);
-            mainLogBackgroundContinue = ItemView.FindViewById(MainLogBackgroundContinue);
-            mainLogBackgroundDelete = ItemView.FindViewById(MainLogBackgroundDelete);
+            mainLogBackgroundContinue = ItemView.FindViewById<TextView>(MainLogBackgroundContinue);
+            mainLogBackgroundDelete = ItemView.FindViewById<TextView>(MainLogBackgroundDelete);
             billableIcon = ItemView.FindViewById(TimeEntriesLogCellBillable);
             hasTagsIcon = ItemView.FindViewById(TimeEntriesLogCellTags);
             durationPadding = ItemView.FindViewById(TimeEntriesLogCellDurationPaddingArea);
@@ -91,6 +91,10 @@ namespace Toggl.Droid.ViewHolders
             groupExpansionButton = ItemView.FindViewById(TimeEntriesLogCellToggleExpansionButton);
             timeEntriesLogCellContinueButton.Click += onContinueClick;
             groupExpansionButton.Click += onExpansionClick;
+
+            mainLogBackgroundContinue.Text = Shared.Resources.Continue;
+            mainLogBackgroundDelete.Text = Shared.Resources.Delete;
+            addDescriptionLabel.Text = Shared.Resources.AddDescription;
         }
 
         private void onExpansionClick(object sender, EventArgs e)

@@ -2,7 +2,9 @@
 using Android.Views;
 using Android.Widget;
 using System;
+using System.Globalization;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.ViewHolders
 {
@@ -32,8 +34,7 @@ namespace Toggl.Droid.ViewHolders
 
         protected override void UpdateView()
         {
-            // How to localize this?
-            beginningOfWeekTextView.Text = Item.BeginningOfWeek.ToString();
+            beginningOfWeekTextView.Text = Item.BeginningOfWeek.ToLocalizedString();
             selectedButton.Checked = Item.Selected;
         }
     }

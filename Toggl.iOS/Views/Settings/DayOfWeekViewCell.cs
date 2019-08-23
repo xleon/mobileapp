@@ -2,6 +2,7 @@
 using System;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Cells;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views.Settings
@@ -24,7 +25,7 @@ namespace Toggl.iOS.Views.Settings
 
         protected override void UpdateView()
         {
-            DayOfWeekLabel.Text = Item.BeginningOfWeek.ToString();
+            DayOfWeekLabel.Text = Item.BeginningOfWeek.ToLocalizedString();
             SelectedImageView.Hidden = !Item.Selected;
         }
     }

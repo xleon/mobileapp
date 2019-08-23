@@ -5,7 +5,6 @@ using Android.Views;
 using Android.Widget;
 using System;
 using System.Reactive.Linq;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
@@ -69,7 +68,7 @@ namespace Toggl.Droid.Activities
             void showResetPasswordSuccessToast()
             {
                 loginEmailEditText.RemoveFocus();
-                Toast.MakeText(this, Resource.String.ResetPasswordEmailSentMessage, ToastLength.Long).Show();
+                Toast.MakeText(this, Shared.Resources.PasswordResetSuccess, ToastLength.Long).Show();
             }
         }
     }

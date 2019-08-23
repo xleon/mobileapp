@@ -9,6 +9,7 @@ using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
@@ -46,6 +47,9 @@ namespace Toggl.iOS.Views.Reports
             BarChartContainerView.AddSubview(barChart);
             overview.Frame = OverviewContainerView.Bounds;
             barChart.Frame = BarChartContainerView.Bounds;
+
+            EmptyStateTitleLabel.Text = Resources.ReportsEmptyStateTitle;
+            EmptyStateDescriptionLabel.Text = Resources.ReportsEmptyStateDescription;
         }
 
         public override void LayoutSubviews()

@@ -1,5 +1,4 @@
 ﻿using Android.OS;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Droid.Adapters;
@@ -25,8 +24,8 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-            setupRecyclerView();
-
+            
+            adapter.Items = ViewModel.AvailableOptions;
             adapter
                 .ItemTapObservable
                 .Subscribe(ViewModel.SelectOption.Inputs)
@@ -40,14 +39,6 @@ namespace Toggl.Droid.Fragments
             layoutParams.Width = ViewGroup.LayoutParams.MatchParent;
             layoutParams.Height = ViewGroup.LayoutParams.WrapContent;
             Dialog.Window.Attributes = layoutParams;
-        }
-
-        private void setupRecyclerView()
-        {
-            adapter = new SelectCalendarNotificationsOptionAdapter();
-            adapter.Items = ViewModel.AvailableOptions;
-            recyclerView.SetAdapter(adapter);
-            recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
         }
     }
 }

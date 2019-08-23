@@ -124,8 +124,8 @@ namespace Toggl.Droid.Views
                 .DisposedBy(disposeBag);
 
             viewModel.CurrentMonthObservable
-                .Select(calendarMonth
-                    => $"{CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(calendarMonth.Month)} {calendarMonth.Year}")
+                .Select(calendarMonth => calendarMonth.ToDateTime())
+                .Select(dateTime => dateTime.ToString(CultureInfo.CurrentCulture.DateTimeFormat.YearMonthPattern)) 
                 .Subscribe(monthYear.Rx().TextObserver())
                 .DisposedBy(disposeBag);
 

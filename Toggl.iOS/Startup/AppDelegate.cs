@@ -42,6 +42,7 @@ namespace Toggl.iOS
 
             IosDependencyContainer.EnsureInitialized(Window, this);
             var app = new AppStart(IosDependencyContainer.Instance);
+            app.LoadLocalizationConfiguration();
             app.UpdateOnboardingProgress();
             app.SetFirstOpened();
             app.SetupBackgroundSync();

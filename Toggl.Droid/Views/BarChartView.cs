@@ -107,7 +107,7 @@ namespace Toggl.Droid.Views
             textLeftMargin = 12.DpToPixels(context);
             textBottomMargin = 4.DpToPixels(context);
             bottomLabelMarginTop = 12.DpToPixels(context);
-            hourSymbol = context.GetString(Resource.String.HourSymbol);
+            hourSymbol = Shared.Resources.UnitHour;
             dateTopPadding = 4.DpToPixels(context);
 
             othersPaint.TextSize = textSize;

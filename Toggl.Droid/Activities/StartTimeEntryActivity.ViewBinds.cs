@@ -34,6 +34,8 @@ namespace Toggl.Droid.Activities
             recyclerView = FindViewById<RecyclerView>(SuggestionsRecyclerView);
 
             descriptionField = FindViewById<AutocompleteEditText>(DescriptionTextField);
+            
+            doneButton.Text = Shared.Resources.Done;
 
             adapter = new StartTimeEntryRecyclerAdapter();
             recyclerView.SetLayoutManager(new LinearLayoutManager(this));

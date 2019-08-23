@@ -30,7 +30,6 @@ namespace Toggl.Droid.Activities
             : base(javaReference, transfer)
         {
         }
-
         protected override void InitializeBindings()
         {
             ViewModel.Email.FirstAsync()
@@ -98,7 +97,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             string loginButtonTitle(bool isLoading)
-                => isLoading ? "" : Resources.GetString(Resource.String.Login);
+                => isLoading ? "" : Shared.Resources.LoginTitle;
 
             this.CancelAllNotifications();
         }

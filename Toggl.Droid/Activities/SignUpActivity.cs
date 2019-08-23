@@ -26,9 +26,8 @@ namespace Toggl.Droid.Activities
 
         public SignUpActivity(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
-        {
-        }
-
+        { }
+        
         protected override void InitializeBindings()
         {
             ViewModel.Email.FirstAsync()
@@ -104,7 +103,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             string signupButtonTitle(bool isLoading)
-                => isLoading ? "" : Resources.GetString(Resource.String.SignUpForFree);
+                => isLoading ? "" : Shared.Resources.SignUpTitle;
         }
     }
 }

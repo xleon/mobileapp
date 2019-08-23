@@ -28,6 +28,7 @@ namespace Toggl.Droid.Activities
         private Group stoppedTimeEntryStopTimeElements;
         private Group billableRelatedViews;
 
+        private TextView errorTitle;
         private CardView errorContainer;
         private TextView errorText;
 
@@ -42,26 +43,28 @@ namespace Toggl.Droid.Activities
         private RecyclerView tagsRecycler;
 
         private View billableButton;
+        private TextView billableLabel;
         private Switch billableSwitch;
 
         private TextView startTimeTextView;
+        private TextView startTimeLabel;
         private TextView startDateTextView;
         private View changeStartTimeButton;
 
         private TextView stopTimeTextView;
+        private TextView stopTimeLabel;
         private TextView stopDateTextView;
         private View changeStopTimeButton;
 
         private View stopTimeEntryButton;
 
         private TextView durationTextView;
+        private TextView durationLabel;
         private View changeDurationButton;
 
         private TextView deleteLabel;
         private View deleteButton;
-
-        private View toolbar;
-
+        
         private AppBarLayout appBarLayout;
         private NestedScrollView scrollView;
 
@@ -77,6 +80,7 @@ namespace Toggl.Droid.Activities
             billableRelatedViews = FindViewById<Group>(BillableRelatedViews);
 
             errorContainer = FindViewById<CardView>(ErrorContainer);
+            errorTitle = FindViewById<TextView>(ErrorTitle);
             errorText = FindViewById<TextView>(ErrorText);
 
             groupCountTextView = FindViewById<TextView>(GroupCount);
@@ -90,25 +94,28 @@ namespace Toggl.Droid.Activities
             tagsRecycler = FindViewById<RecyclerView>(TagsRecyclerView);
 
             billableButton = FindViewById(ToggleBillableButton);
+            billableLabel = FindViewById<TextView>(Resource.Id.BillableLabel);
             billableSwitch = FindViewById<Switch>(BillableSwitch);
 
             startTimeTextView = FindViewById<TextView>(StartTime);
+            startTimeLabel = FindViewById<TextView>(StartTimeLabel);
             startDateTextView = FindViewById<TextView>(StartDate);
             changeStartTimeButton = FindViewById(StartTimeButton);
 
             stopTimeTextView = FindViewById<TextView>(StopTime);
+            stopTimeLabel = FindViewById<TextView>(EditStopTimeLabel);
             stopDateTextView = FindViewById<TextView>(StopDate);
             changeStopTimeButton = FindViewById(StopTimeButton);
 
             stopTimeEntryButton = FindViewById(StopTimeEntryButtonLabel);
 
             durationTextView = FindViewById<TextView>(Duration);
+            durationLabel = FindViewById<TextView>(DurationLabel);
             changeDurationButton = FindViewById(DurationButton);
 
             deleteLabel = FindViewById<TextView>(DeleteLabel);
             deleteButton = FindViewById(DeleteButton);
 
-            toolbar = FindViewById(DescriptionContainer);
             scrollView = FindViewById<NestedScrollView>(Resource.Id.ScrollView);
             appBarLayout = FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
 
@@ -116,20 +123,30 @@ namespace Toggl.Droid.Activities
             timeEntriesGroupModeViews.Visibility = ViewModel.IsEditingGroup.ToVisibility();
 
             descriptionEditText.Text = ViewModel.Description.Value;
+            descriptionEditText.Hint = Shared.Resources.StartTimeEntryPlaceholder;
+            confirmButton.Text = Shared.Resources.Save;
+            errorTitle.Text = Shared.Resources.Oops;
+            billableLabel.Text = Shared.Resources.Billable;
+            startTimeLabel.Text = Shared.Resources.StartTime;
+            stopTimeLabel.Text = Shared.Resources.EndTime;
+            durationLabel.Text = Shared.Resources.Duration;
+            deleteLabel.Text = Shared.Resources.DeleteThisEntry;
+            closeButton.ContentDescription = Shared.Resources.Cancel;
+            projectPlaceholderLabel.Text = Shared.Resources.AddProjectTask;
 
             groupCountTextView.Text = string.Format(
                 TextResources.EditingTimeEntryGroup,
                 ViewModel.GroupCount);
+
+            deleteLabel.Text = ViewModel.IsEditingGroup
+                ? string.Format(TextResources.DeleteNTimeEntries, ViewModel.GroupCount)
+                : TextResources.DeleteThisEntry;
 
             var layoutManager = new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false);
             layoutManager.ItemPrefetchEnabled = true;
             layoutManager.InitialPrefetchItemCount = 5;
             tagsRecycler.SetLayoutManager(layoutManager);
             tagsRecycler.SetAdapter(tagsAdapter);
-
-            deleteLabel.Text = ViewModel.IsEditingGroup
-                ? string.Format(TextResources.DeleteNTimeEntries, ViewModel.GroupCount)
-                : TextResources.DeleteThisEntry;
 
             scrollView.AttachMaterialScrollBehaviour(appBarLayout);
         }

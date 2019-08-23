@@ -4,7 +4,6 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using System;
-using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Toggl.Core.Autocomplete;
@@ -38,8 +37,7 @@ namespace Toggl.Droid.Activities
 
         public StartTimeEntryActivity(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
-        {
-        }
+        { }
 
         protected override void InitializeBindings()
         {
@@ -150,7 +148,7 @@ namespace Toggl.Droid.Activities
                 this,
                 Resource.Layout.TooltipWithCenteredBottomArrow,
                 Resource.Id.TooltipText,
-                Resource.String.OnboardingAddProjectOrTag);
+                Shared.Resources.AddProjectBubbleText);
 
             var storage = ViewModel.OnboardingStorage;
 

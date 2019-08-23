@@ -18,6 +18,7 @@ namespace Toggl.Droid.Activities
             filterEditText = FindViewById<EditText>(Resource.Id.FilterEditText);
             selectClientRecyclerView = FindViewById<RecyclerView>(Resource.Id.SelectClientRecyclerView);
 
+            filterEditText.Hint = Shared.Resources.AddClient;
             selectClientRecyclerView.SetLayoutManager(new LinearLayoutManager(this)
             {
                 ItemPrefetchEnabled = true,
