@@ -31,6 +31,12 @@ namespace Toggl.Droid.Activities
         {
         }
 
+        protected override void OnStart()
+        {
+            base.OnStart();
+            textField.RequestFocus();
+        }
+
         protected override void InitializeBindings()
         {
             ViewModel.Tags
