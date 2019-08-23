@@ -2,7 +2,7 @@
 using Android.Content.PM;
 using Android.Runtime;
 using System;
-using System.Reactive.Linq;
+using Android.OS;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions.Reactive;
@@ -25,6 +25,12 @@ namespace Toggl.Droid.Activities
         public SelectProjectActivity(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            searchField.RequestFocus();
         }
 
         protected override void InitializeBindings()
