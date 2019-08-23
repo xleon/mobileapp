@@ -32,10 +32,6 @@ namespace Toggl.Droid.Fragments
         {
             base.OnViewCreated(view, savedInstanceState);
 
-            headerCalendarEventsLabel.Text = Shared.Resources.CalendarEvents;
-            headerCalendarTimeEntriesLabel.Text = Shared.Resources.TimeEntries;
-            headerLinkCalendarsButton.Text = Shared.Resources.LinkCalendars;
-
             var timeService = AndroidDependencyContainer.Instance.TimeService;
             var schedulerProvider = AndroidDependencyContainer.Instance.SchedulerProvider;
 

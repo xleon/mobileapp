@@ -20,11 +20,6 @@ namespace Toggl.Droid.Fragments
         {
             base.OnViewCreated(view, savedInstanceState);
 
-            titleView.Text = Shared.Resources.NoWorries;
-            messageView.Text = Shared.Resources.CalendarAccessExplanation;
-            continueButton.Text = Shared.Resources.Continue;
-            allowAccessButton.Text = Shared.Resources.AllowAccess;
-
             continueButton.Rx().Tap()
                 .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);

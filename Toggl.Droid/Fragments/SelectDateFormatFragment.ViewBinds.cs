@@ -1,6 +1,7 @@
 ﻿using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using Toggl.Droid.Adapters;
 
 namespace Toggl.Droid.Fragments
 {
@@ -8,11 +9,18 @@ namespace Toggl.Droid.Fragments
     {
         private TextView titleLabel;
         private RecyclerView recyclerView;
+        private SelectDateFormatRecyclerAdapter selectDateRecyclerAdapter;
 
         protected override void InitializeViews(View rootView)
         {
             titleLabel = rootView.FindViewById<TextView>(Resource.Id.SelectDateFormatTitle);
             recyclerView = rootView.FindViewById<RecyclerView>(Resource.Id.SelectDateFormatRecyclerView);
+            
+            titleLabel.Text = Shared.Resources.DateFormat;
+
+            recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
+            selectDateRecyclerAdapter = new SelectDateFormatRecyclerAdapter();
+            recyclerView.SetAdapter(selectDateRecyclerAdapter);
         }
     }
 }

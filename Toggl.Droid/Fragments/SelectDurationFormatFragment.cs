@@ -1,12 +1,8 @@
-using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Views;
 using System;
-using System.Linq;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Shared.Extensions;
 
@@ -32,14 +28,9 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-
-            recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
-            selectDurationRecyclerAdapter = new SelectDurationFormatRecyclerAdapter();
+            
             selectDurationRecyclerAdapter.Items = ViewModel.DurationFormats;
-            recyclerView.SetAdapter(selectDurationRecyclerAdapter);
-
-            titleLabel.Text = Shared.Resources.DurationFormat;
-
+            
             selectDurationRecyclerAdapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectDurationFormat.Inputs)
                 .DisposedBy(DisposeBag);

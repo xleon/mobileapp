@@ -25,6 +25,12 @@ namespace Toggl.Droid.Activities
             signoutLabel = FindViewById<TextView>(Resource.Id.TokenResetSignOutLabel);
             doneButton = FindViewById<FloatingActionButton>(Resource.Id.TokenResetDoneButton);
 
+            tokenResetPasswordLayout.Hint = Shared.Resources.Password;
+            passwordEditText.Hint = Shared.Resources.Password;
+            tokenResetMessageWarning.Text = Shared.Resources.APITokenResetSuccess;
+            tokenResetMessageEnterPasswordLabel.Text = Shared.Resources.TokenResetInstruction;
+            signoutLabel.Text = Shared.Resources.OrSignOut;
+            
             SetupToolbar(Shared.Resources.LoginTitle, showHomeAsUp: false);
         }
     }

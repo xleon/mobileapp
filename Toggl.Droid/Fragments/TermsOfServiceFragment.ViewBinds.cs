@@ -20,6 +20,13 @@ namespace Toggl.Droid.Fragments
             andTextView = fragmentView.FindViewById<TextView>(Resource.Id.AndTextView);
             privacyPolicyTextView = fragmentView.FindViewById<TextView>(Resource.Id.ViewPrivacyPolicyTextView);
             acceptButton = fragmentView.FindViewById<Button>(Resource.Id.AcceptButton);
+            
+            reviewTheTermsTextView.Text = Shared.Resources.ReviewTheTerms;
+            termsMessageTextView.Text = Shared.Resources.TermsOfServiceDialogMessageDroid;
+            termsOfServiceTextView.Text = Shared.Resources.TermsOfService;
+            andTextView.Text = Shared.Resources.And;
+            privacyPolicyTextView.Text = Shared.Resources.PrivacyPolicy;
+            acceptButton.Text = Shared.Resources.IAgree;
         }
     }
 }

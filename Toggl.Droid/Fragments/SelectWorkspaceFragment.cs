@@ -22,21 +22,12 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-            var adapter = new SimpleAdapter<SelectableWorkspaceViewModel>(
-                Resource.Layout.SelectWorkspaceFragmentCell,
-                SelectWorkspaceViewHolder.Create
-            );
-
-            titleLabel.Text = Shared.Resources.Workspace;
-
-            adapter.ItemTapObservable
+            
+            selectableWorkspaceAdapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectWorkspace.Inputs)
                 .DisposedBy(DisposeBag);
 
-            adapter.Items = ViewModel.Workspaces;
-
-            recyclerView.SetAdapter(adapter);
-            recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
+            selectableWorkspaceAdapter.Items = ViewModel.Workspaces;
         }
 
         public override void OnResume()

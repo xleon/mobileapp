@@ -3,6 +3,7 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
+using Toggl.Droid.ViewHolders;
 using Toggl.Droid.Views;
 
 namespace Toggl.Droid.Fragments
@@ -25,6 +26,14 @@ namespace Toggl.Droid.Fragments
             closeButton = view.FindViewById<Button>(Resource.Id.SelectColorClose);
             hueSaturationPicker = view.FindViewById<HueSaturationPickerView>(Resource.Id.SelectColorHueSaturationPicker);
             valueSlider = view.FindViewById<ValueSlider>(Resource.Id.SelectColorValueSlider);
+            
+            titleLabel.Text = Shared.Resources.ProjectColor;
+            closeButton.Text = Shared.Resources.Cancel;
+            saveButton.Text = Shared.Resources.Done;
+            selectableColorsAdapter = new SimpleAdapter<SelectableColorViewModel>(
+                Resource.Layout.SelectColorFragmentCell, ColorSelectionViewHolder.Create);
+            recyclerView.SetLayoutManager(new GridLayoutManager(Context, 5));
+            recyclerView.SetAdapter(selectableColorsAdapter);
         }
     }
 }

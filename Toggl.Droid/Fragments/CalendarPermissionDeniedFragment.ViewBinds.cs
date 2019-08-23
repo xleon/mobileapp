@@ -16,6 +16,11 @@ namespace Toggl.Droid.Fragments
             messageView = view.FindViewById<TextView>(Resource.Id.Message);
             continueButton = view.FindViewById<Button>(Resource.Id.Continue);
             allowAccessButton = view.FindViewById<Button>(Resource.Id.AllowAccess);
+            
+            titleView.Text = Shared.Resources.NoWorries;
+            messageView.Text = Shared.Resources.CalendarAccessExplanation;
+            continueButton.Text = Shared.Resources.Continue;
+            allowAccessButton.Text = Shared.Resources.AllowAccess;
         }
     }
 }

@@ -48,6 +48,8 @@ namespace Toggl.Droid.Fragments
             welcomeBackStub = fragmentView.FindViewById<ViewStub>(Resource.Id.WelcomeBackViewStub);
             toolbar = fragmentView.FindViewById<Toolbar>(Resource.Id.Toolbar);
             appBarLayout = fragmentView.FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
+            
+            timeEntryCardAddDescriptionLabel.Text = Shared.Resources.AddDescription;
         }
     }
 }

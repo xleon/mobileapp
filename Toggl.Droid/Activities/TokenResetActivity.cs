@@ -31,11 +31,6 @@ namespace Toggl.Droid.Activities
             this.CancelAllNotifications();
 
             emailLabel.Text = ViewModel.Email.ToString();
-            tokenResetPasswordLayout.Hint = Shared.Resources.Password;
-            passwordEditText.Hint = Shared.Resources.Password;
-            tokenResetMessageWarning.Text = Shared.Resources.APITokenResetSuccess;
-            tokenResetMessageEnterPasswordLabel.Text = Shared.Resources.TokenResetInstruction;
-            signoutLabel.Text = Shared.Resources.OrSignOut;
 
             passwordEditText
                 .Rx().Text()

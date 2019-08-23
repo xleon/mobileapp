@@ -34,11 +34,6 @@ namespace Toggl.Droid.Fragments
         {
             base.OnViewCreated(view, savedInstanceState);
 
-            uhOhTextView.Text = Shared.Resources.UhOh;
-            errorInfoTextView.Text = Shared.Resources.NoWorkspaceErrorMessage;
-            tryAgainTextView.Text = Shared.Resources.NoWorkspaceTryAgain;
-            createWorkspaceTextView.Text = Shared.Resources.CreateNewWorkspace;
-
             createWorkspaceTextView.Rx()
                 .BindAction(ViewModel.CreateWorkspaceWithDefaultName)
                 .DisposedBy(DisposeBag);

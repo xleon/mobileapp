@@ -39,6 +39,10 @@ namespace Toggl.Droid.Fragments
             calendarRecyclerView = view.FindViewById<CalendarRecyclerView>(Resource.Id.calendarRecyclerView);
             onboardingViewStub = view.FindViewById<ViewStub>(Resource.Id.OnboardingViewStub);
             appBarLayout = view.FindViewById<AppBarLayout>(Resource.Id.HeaderView);
+            
+            headerCalendarEventsLabel.Text = Shared.Resources.CalendarEvents;
+            headerCalendarTimeEntriesLabel.Text = Shared.Resources.TimeEntries;
+            headerLinkCalendarsButton.Text = Shared.Resources.LinkCalendars;
         }
     }
 }

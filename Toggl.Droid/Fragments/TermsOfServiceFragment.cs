@@ -31,18 +31,6 @@ namespace Toggl.Droid.Fragments
         {
             base.OnViewCreated(view, savedInstanceState);
 
-            reviewTheTermsTextView.Text = Shared.Resources.ReviewTheTerms;
-            termsMessageTextView.Text = Shared.Resources.TermsOfServiceDialogMessageDroid;
-            termsOfServiceTextView.Text = Shared.Resources.TermsOfService;
-            andTextView.Text = Shared.Resources.And;
-            privacyPolicyTextView.Text = Shared.Resources.PrivacyPolicy;
-            acceptButton.Text = Shared.Resources.IAgree;
-
-            bindViews();
-        }
-
-        private void bindViews()
-        {
             privacyPolicyTextView.Rx()
                 .BindAction(ViewModel.ViewPrivacyPolicy)
                 .DisposedBy(DisposeBag);

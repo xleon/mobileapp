@@ -1,9 +1,7 @@
 using Android.OS;
-using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
 using System;
-using System.Reactive.Linq;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
@@ -31,29 +29,6 @@ namespace Toggl.Droid.Fragments
             base.OnViewCreated(view, savedInstanceState);
 
             versionTextView.Text = ViewModel.Version;
-
-            logoutView.Text = Shared.Resources.SignOutOfToggl;
-            helpView.Text = Shared.Resources.Help;
-            feedbackView.Text = Shared.Resources.SubmitFeedback;
-            calendarSettingsView.Text = Shared.Resources.CalendarSettingsTitle;
-            yourProfileLabel.Text = Shared.Resources.YourProfile;
-            usernameLabel.Text = Shared.Resources.Username;
-            emailLabel.Text = Shared.Resources.Email;
-            defaultWorkspaceLabel.Text = Shared.Resources.DefaultWorkspace;
-            displayLabel.Text = Shared.Resources.Display;
-            dateFormatLabel.Text = Shared.Resources.DateFormat;
-            beginningOfWeekLabel.Text = Shared.Resources.FirstDayOfTheWeek;
-            durationFormatLabel.Text = Shared.Resources.DurationFormat;
-            use24HourClockLabel.Text = Shared.Resources.Use24HourClock;
-            groupedTimeEntriesLabel.Text = Shared.Resources.GroupTimeEntries;
-            smartRemindersLabel.Text = Shared.Resources.SmartReminders;
-            notificationsLabel.Text = Shared.Resources.Notifications;
-            notificationsRunningTimerLabel.Text = Shared.Resources.NotificationsRunningTimer;
-            notificationsStoppedTimerLabel.Text = Shared.Resources.NotificationsStoppedTimer;
-            generalLabel.Text = Shared.Resources.General;
-            aboutLabel.Text = Shared.Resources.About;
-            settingsToggleManualModeLabel.Text = Shared.Resources.ManualMode;
-            settingsToggleManualModeExplanation.Text = Shared.Resources.ManualModeDescription;
 
             ViewModel.Name
                 .Subscribe(nameTextView.Rx().TextObserver())

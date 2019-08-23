@@ -32,12 +32,6 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-            setupRecyclerView();
-
-            titleLabel.Text = Shared.Resources.SelectCalendars;
-            messageLabel.Text = Shared.Resources.SelectCalendarsMessage;
-            cancelButton.Text = Shared.Resources.Cancel;
-            doneButton.Text = Shared.Resources.Done;
 
             cancelButton.Rx().Tap()
                 .Subscribe(ViewModel.CloseWithDefaultResult)
@@ -65,13 +59,6 @@ namespace Toggl.Droid.Fragments
             layoutParams.Width = ViewGroup.LayoutParams.MatchParent;
             layoutParams.Height = ViewGroup.LayoutParams.WrapContent;
             Dialog.Window.Attributes = layoutParams;
-        }
-
-        private void setupRecyclerView()
-        {
-            userCalendarsAdapter = new UserCalendarsRecyclerAdapter();
-            recyclerView.SetAdapter(userCalendarsAdapter);
-            recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
         }
     }
 }
