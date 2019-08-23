@@ -317,6 +317,7 @@ namespace Toggl.Core.UI.Helper
             }
 
             public static readonly Color SelectedDayBackgoundColor = new Color(181, 188, 192);
+            public static readonly Color YearColor = new Color(181, 188, 192);
             public static readonly Color Today = new Color(181, 188, 192, 30);
             public static readonly Color CellTextColorInCurrentMonth = new Color(0, 0, 0);
             public static readonly Color CellTextColorOutOfCurrentMonth = new Color(163, 163, 163);

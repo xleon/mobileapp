@@ -395,6 +395,9 @@
     <data name="ReportPeriod" xml:space="preserve">
         <value>Report period</value>
     </data>
+    <data name="Siri" xml:space="preserve">
+        <value>Siri</value>
+    </data>
     <data name="SiriReportPeriodInstruction" xml:space="preserve">
         <value>Ask Siri to view a report for this period</value>
     </data>
@@ -1302,5 +1305,38 @@
     </data>
     <data name="SendFeedbackSuccessMessage" xml:space="preserve">
         <value>Message sent. Thank you for your feedback. If you had any questions, we'll get back to you soon.</value>
+    </data>
+    <data name="SiriWorkflowsProductionURL" xml:space="preserve">
+        <value>https://toggl-mobile.firebaseapp.com/</value>
+    </data>
+    <data name="SiriWorkflowsDebugURL" xml:space="preserve">
+        <value>https://toggl-mobile.firebaseapp.com/dev/</value>
+    </data>
+    <data name="SiriWorkflowsAdHocURL" xml:space="preserve">
+        <value>https://toggl-mobile.firebaseapp.com/adhoc/</value>
+    </data>
+    <data name="SiriWorkflowDictateTimeEntryTitle" xml:space="preserve">
+        <value>Dictate time entry</value>
+    </data>
+    <data name="SiriWorkflowDictateTimeEntryDescription" xml:space="preserve">
+        <value>Tell Siri to start a time entry with a custom description you can dictate.</value>
+    </data>
+    <data name="SiriWorkflowDoneForTheDayTitle" xml:space="preserve">
+        <value>Done for the day</value>
+    </data>
+    <data name="SiriWorkflowDoneForTheDayDescription" xml:space="preserve">
+        <value>Stop the running timer and view a custom Summary Report.</value>
+    </data>
+    <data name="SiriWorkflowStartAPomodoroTitle" xml:space="preserve">
+        <value>Start a Pomodoro</value>
+    </data>
+    <data name="SiriWorkflowStartAPomodoroDescription" xml:space="preserve">
+        <value>Start a Time Entry and set an alarm for 25 minutes.</value>
+    </data>
+    <data name="SiriWorkflowFocusModeTitle" xml:space="preserve">
+        <value>Focus mode</value>
+    </data>
+    <data name="SiriWorkflowFocusModeDescription" xml:space="preserve">
+        <value>Start a Time Entry, select a music playlist and turn on do not disturb.</value>
     </data>
 </root>

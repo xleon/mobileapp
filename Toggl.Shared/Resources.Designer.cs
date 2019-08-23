@@ -598,6 +598,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string Siri {
+            get {
+                return ResourceManager.GetString("Siri", resourceCulture);
+            }
+        }
+        
         public static string SiriReportPeriodInstruction {
             get {
                 return ResourceManager.GetString("SiriReportPeriodInstruction", resourceCulture);
@@ -2401,6 +2407,72 @@ namespace Toggl.Shared {
         public static string SendFeedbackSuccessMessage {
             get {
                 return ResourceManager.GetString("SendFeedbackSuccessMessage", resourceCulture);
+            }
+        }
+        
+        public static string SiriWorkflowsProductionURL {
+            get {
+                return ResourceManager.GetString("SiriWorkflowsProductionURL", resourceCulture);
+            }
+        }
+        
+        public static string SiriWorkflowsDebugURL {
+            get {
+                return ResourceManager.GetString("SiriWorkflowsDebugURL", resourceCulture);
+            }
+        }
+        
+        public static string SiriWorkflowsAdHocURL {
+            get {
+                return ResourceManager.GetString("SiriWorkflowsAdHocURL", resourceCulture);
+            }
+        }
+        
+        public static string SiriWorkflowDictateTimeEntryTitle {
+            get {
+                return ResourceManager.GetString("SiriWorkflowDictateTimeEntryTitle", resourceCulture);
+            }
+        }
+        
+        public static string SiriWorkflowDictateTimeEntryDescription {
+            get {
+                return ResourceManager.GetString("SiriWorkflowDictateTimeEntryDescription", resourceCulture);
+            }
+        }
+        
+        public static string SiriWorkflowDoneForTheDayTitle {
+            get {
+                return ResourceManager.GetString("SiriWorkflowDoneForTheDayTitle", resourceCulture);
+            }
+        }
+        
+        public static string SiriWorkflowDoneForTheDayDescription {
+            get {
+                return ResourceManager.GetString("SiriWorkflowDoneForTheDayDescription", resourceCulture);
+            }
+        }
+        
+        public static string SiriWorkflowStartAPomodoroTitle {
+            get {
+                return ResourceManager.GetString("SiriWorkflowStartAPomodoroTitle", resourceCulture);
+            }
+        }
+        
+        public static string SiriWorkflowStartAPomodoroDescription {
+            get {
+                return ResourceManager.GetString("SiriWorkflowStartAPomodoroDescription", resourceCulture);
+            }
+        }
+        
+        public static string SiriWorkflowFocusModeTitle {
+            get {
+                return ResourceManager.GetString("SiriWorkflowFocusModeTitle", resourceCulture);
+            }
+        }
+        
+        public static string SiriWorkflowFocusModeDescription {
+            get {
+                return ResourceManager.GetString("SiriWorkflowFocusModeDescription", resourceCulture);
             }
         }
     }

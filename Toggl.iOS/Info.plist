@@ -84,5 +84,11 @@
 	<string>2.2</string>
 	<key>CFBundleDisplayName</key>
 	<string>Toggl for Devs</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+	     <string>en</string>
+	</array>
 </dict>
 </plist>

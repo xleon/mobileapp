@@ -126,7 +126,7 @@ namespace Toggl.iOS.ViewControllers
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
             {
-                var siriSection = new SettingSection("Siri", new ISettingRow[]
+                var siriSection = new SettingSection(Resources.Siri, new ISettingRow[]
                 {
                     new NavigationRow(Resources.SiriShortcuts, ViewModel.OpenSiriShortcuts),
                     new NavigationRow(Resources.SiriWorkflows, ViewModel.OpenSiriWorkflows),

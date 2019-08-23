@@ -340,8 +340,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
             }
             else
             {
-                var startDateText = startDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture);
-                var endDateText = endDate.ToString(dateFormat.Short, CultureInfo.InvariantCulture);
+                var startDateText = startDate.ToString(dateFormat.Short, CultureInfo.CurrentCulture);
+                var endDateText = endDate.ToString(dateFormat.Short, CultureInfo.CurrentCulture);
                 var dateRangeText = $"{startDateText} - {endDateText}";
                 currentDateRangeStringSubject.OnNext(dateRangeText);
             }
