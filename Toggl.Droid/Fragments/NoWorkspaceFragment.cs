@@ -33,7 +33,6 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-
             createWorkspaceTextView.Rx()
                 .BindAction(ViewModel.CreateWorkspaceWithDefaultName)
                 .DisposedBy(DisposeBag);

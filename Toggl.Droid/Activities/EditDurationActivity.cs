@@ -55,7 +55,7 @@ namespace Toggl.Droid.Activities
             : base(javaReference, transfer)
         {
         }
-        
+
         protected override void InitializeBindings()
         {
             ViewModel.TimeFormat

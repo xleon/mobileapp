@@ -34,7 +34,7 @@ namespace Toggl.Droid.Activities
         protected override void InitializeBindings()
         {
             errorText.Visibility = ViewStates.Gone;
-            
+
             // Name
             projectNameTextView.Rx()
                 .Text()

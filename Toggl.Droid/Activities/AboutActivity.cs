@@ -40,11 +40,5 @@ namespace Toggl.Droid.Activities
                 .BindAction(ViewModel.OpenTermsOfServiceView)
                 .DisposedBy(DisposeBag);
         }
-
-        public override void Finish()
-        {
-            base.Finish();
-            OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_right);
-        }
     }
 }
