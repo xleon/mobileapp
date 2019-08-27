@@ -117,6 +117,11 @@ namespace Toggl.Droid.Activities
                 .Subscribe(projectTaskClientTextView.Rx().TextFormattedObserver())
                 .DisposedBy(DisposeBag);
 
+            ViewModel.ProjectClientTask
+                .Select(pct => !pct.HasProject)
+                .Subscribe(projectPlaceholderLabel.Rx().IsVisible())
+                .DisposedBy(DisposeBag);
+
             projectButton.Rx().Tap()
                 .Subscribe(ViewModel.SelectProject.Inputs)
                 .DisposedBy(DisposeBag);
