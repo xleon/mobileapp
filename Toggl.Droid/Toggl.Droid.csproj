@@ -40,8 +40,7 @@
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
-    <DebugType>
-    </DebugType>
+    <DebugType></DebugType>
     <OutputPath>..\bin</OutputPath>
     <DefineConstants>USE_APPCENTER;ADHOC</DefineConstants>
     <AndroidKeyStore>True</AndroidKeyStore>
@@ -50,19 +49,22 @@
     <AndroidSigningKeyAlias>{KEYSTORE_ALIAS}</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>{KEYSTORE_ALIAS_PASSWORD}</AndroidSigningKeyPass>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+    <AotAssemblies>true</AotAssemblies>
+    <EnableLLVM>true</EnableLLVM>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidLinkTool>r8</AndroidLinkTool>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.PlayStore|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>bin\Release.PlayStore</OutputPath>
-    <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API</DefineConstants>
     <WarningLevel>4</WarningLevel>
-    <AndroidLinkSkip>
-    </AndroidLinkSkip>
+    <AndroidLinkSkip></AndroidLinkSkip>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
-    <DebugType>
-    </DebugType>
+    <DebugType></DebugType>
     <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API;USE_APPCENTER</DefineConstants>
     <AndroidKeyStore>True</AndroidKeyStore>
     <AndroidSigningKeyStore>../giskard.keystore</AndroidSigningKeyStore>
@@ -70,8 +72,12 @@
     <AndroidSigningKeyAlias>{KEYSTORE_ALIAS}</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>{KEYSTORE_ALIAS_PASSWORD}</AndroidSigningKeyPass>
     <AndroidCreatePackagePerAbi>true</AndroidCreatePackagePerAbi>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     <AotAssemblies>true</AotAssemblies>
     <EnableLLVM>true</EnableLLVM>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidLinkTool>r8</AndroidLinkTool>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=null">
