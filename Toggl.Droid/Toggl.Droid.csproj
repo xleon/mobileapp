@@ -16,30 +16,27 @@
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidLinkSkip>Toggl.Giskard</AndroidLinkSkip>
-    <EnableProguard>true</EnableProguard>
     <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
-    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-    <AndroidUseAapt2>true</AndroidUseAapt2>
-    <AndroidDexTool>d8</AndroidDexTool>
-    <DebugType>portable</DebugType>
-    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\bin\Debug</OutputPath>
     <DefineConstants>DEBUG;__DROID__</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
+    <DebugType>portable</DebugType>
     <WarningLevel>4</WarningLevel>
+    <AndroidDexTool>d8</AndroidDexTool>
+    <EnableProguard>true</EnableProguard>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <AndroidSupportedAbis>arm64-v8a;armeabi-v7a;x86;x86_64</AndroidSupportedAbis>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
-    <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
-    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
+    <Optimize>true</Optimize>
     <DebugType></DebugType>
     <OutputPath>..\bin</OutputPath>
     <DefineConstants>USE_APPCENTER;ADHOC</DefineConstants>
@@ -49,35 +46,40 @@
     <AndroidSigningKeyAlias>{KEYSTORE_ALIAS}</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>{KEYSTORE_ALIAS_PASSWORD}</AndroidSigningKeyPass>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
-    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     <AotAssemblies>true</AotAssemblies>
     <EnableLLVM>true</EnableLLVM>
+    <AndroidDexTool>d8</AndroidDexTool>
+    <EnableProguard>true</EnableProguard>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidPackageFormat>aab</AndroidPackageFormat>
-    <AndroidLinkTool>r8</AndroidLinkTool>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+    <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.PlayStore|AnyCPU' ">
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Release.PlayStore</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <AndroidLinkSkip></AndroidLinkSkip>
-    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
-    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
+    <Optimize>true</Optimize>
     <DebugType></DebugType>
+    <OutputPath>bin\Release.PlayStore</OutputPath>
     <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API;USE_APPCENTER</DefineConstants>
     <AndroidKeyStore>True</AndroidKeyStore>
     <AndroidSigningKeyStore>../giskard.keystore</AndroidSigningKeyStore>
     <AndroidSigningStorePass>{KEYSTORE_PASSWORD}</AndroidSigningStorePass>
     <AndroidSigningKeyAlias>{KEYSTORE_ALIAS}</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>{KEYSTORE_ALIAS_PASSWORD}</AndroidSigningKeyPass>
-    <AndroidCreatePackagePerAbi>true</AndroidCreatePackagePerAbi>
-    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <AotAssemblies>true</AotAssemblies>
     <EnableLLVM>true</EnableLLVM>
+    <AndroidDexTool>d8</AndroidDexTool>
+    <EnableProguard>true</EnableProguard>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidPackageFormat>aab</AndroidPackageFormat>
-    <AndroidLinkTool>r8</AndroidLinkTool>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+    <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=null">
