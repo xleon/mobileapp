@@ -45,15 +45,16 @@
     <AndroidSigningStorePass>{KEYSTORE_PASSWORD}</AndroidSigningStorePass>
     <AndroidSigningKeyAlias>{KEYSTORE_ALIAS}</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>{KEYSTORE_ALIAS_PASSWORD}</AndroidSigningKeyPass>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
-    <AotAssemblies>true</AotAssemblies>
     <EnableLLVM>true</EnableLLVM>
+    <AotAssemblies>true</AotAssemblies>
     <AndroidDexTool>d8</AndroidDexTool>
     <AndroidLinkTool>r8</AndroidLinkTool>
     <AndroidUseAapt2>true</AndroidUseAapt2>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidPackageFormat>aab</AndroidPackageFormat>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
@@ -68,15 +69,16 @@
     <AndroidSigningStorePass>{KEYSTORE_PASSWORD}</AndroidSigningStorePass>
     <AndroidSigningKeyAlias>{KEYSTORE_ALIAS}</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>{KEYSTORE_ALIAS_PASSWORD}</AndroidSigningKeyPass>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
-    <AotAssemblies>true</AotAssemblies>
     <EnableLLVM>true</EnableLLVM>
+    <AotAssemblies>true</AotAssemblies>
     <AndroidDexTool>d8</AndroidDexTool>
     <AndroidLinkTool>r8</AndroidLinkTool>
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <BundleAssemblies>false</BundleAssemblies>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <AndroidPackageFormat>aab</AndroidPackageFormat>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
