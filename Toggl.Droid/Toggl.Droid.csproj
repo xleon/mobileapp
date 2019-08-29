@@ -27,17 +27,22 @@
     <ErrorReport>prompt</ErrorReport>
     <DebugType>portable</DebugType>
     <WarningLevel>4</WarningLevel>
+    <EnableLLVM>false</EnableLLVM>
     <AndroidDexTool>d8</AndroidDexTool>
+    <AotAssemblies>false</AotAssemblies>
     <AndroidLinkTool>r8</AndroidLinkTool>
     <AndroidUseAapt2>true</AndroidUseAapt2>
+    <BundleAssemblies>false</BundleAssemblies>
     <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <AndroidSupportedAbis>arm64-v8a;armeabi-v7a;x86;x86_64</AndroidSupportedAbis>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
-    <DebugType></DebugType>
+    <DebugType>
+    </DebugType>
     <OutputPath>..\bin</OutputPath>
     <DefineConstants>USE_APPCENTER;ADHOC</DefineConstants>
     <AndroidKeyStore>True</AndroidKeyStore>
@@ -53,7 +58,6 @@
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidPackageFormat>aab</AndroidPackageFormat>
-    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
@@ -61,7 +65,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.PlayStore|AnyCPU' ">
     <Optimize>true</Optimize>
-    <DebugType></DebugType>
+    <DebugType>
+    </DebugType>
     <OutputPath>bin\Release.PlayStore</OutputPath>
     <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API;USE_APPCENTER</DefineConstants>
     <AndroidKeyStore>True</AndroidKeyStore>
@@ -77,7 +82,6 @@
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <AndroidPackageFormat>aab</AndroidPackageFormat>
-    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
