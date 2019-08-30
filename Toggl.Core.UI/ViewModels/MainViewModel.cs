@@ -64,6 +64,8 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly ISubject<Unit> hideRatingView = new Subject<Unit>();
 
+        public TimeEntrySharingManager SharingManager { get; }
+
         public IObservable<bool> LogEmpty { get; }
         public IObservable<int> TimeEntriesCount { get; }
         public IObservable<bool> IsInManualMode { get; private set; }
@@ -93,6 +95,8 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<(long[], EditTimeEntryOrigin)> SelectTimeEntry { get; private set; }
         public InputAction<TimeEntryStopOrigin> StopTimeEntry { get; private set; }
         public RxAction<ContinueTimeEntryInfo, IThreadSafeTimeEntry> ContinueTimeEntry { get; private set; }
+
+        public InputAction<SharePayload> ShareTimeEntry { get; private set; }
 
         public ITimeService TimeService { get; }
 
@@ -151,6 +155,8 @@ namespace Toggl.Core.UI.ViewModels
             TimeService = timeService;
             OnboardingStorage = onboardingStorage;
 
+            SharingManager = new TimeEntrySharingManager(rxActionFactory, schedulerProvider);
+            
             SuggestionsViewModel = new SuggestionsViewModel(interactorFactory, OnboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager);
             RatingViewModel = new RatingViewModel(timeService, ratingService, analyticsService, OnboardingStorage, navigationService, schedulerProvider, rxActionFactory);
             TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
@@ -163,7 +169,7 @@ namespace Toggl.Core.UI.ViewModels
             TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(schedulerProvider);
 
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService, updateRemoteConfigCacheService);
-            
+
             SwipeActionsEnabled = userPreferences.SwipeActionsEnabled.AsDriver(schedulerProvider);
         }
 
@@ -251,6 +257,8 @@ namespace Toggl.Core.UI.ViewModels
             StartTimeEntry = rxActionFactory.FromAsync<bool>(startTimeEntry, IsTimeEntryRunning.Invert());
             StopTimeEntry = rxActionFactory.FromObservable<TimeEntryStopOrigin>(stopTimeEntry, IsTimeEntryRunning);
 
+            ShareTimeEntry = rxActionFactory.FromAsync<SharePayload>(openSharingScreen);
+
             ShouldShowRatingView = Observable.Merge(
                     ratingViewExperiment.RatingViewShouldBeVisible,
                     RatingViewModel.HideRatingView.SelectValue(false),
@@ -272,6 +280,9 @@ namespace Toggl.Core.UI.ViewModels
                 .Subscribe(postAccessibilityAnnouncementAboutSync)
                 .DisposedBy(disposeBag);
         }
+
+        private Task openSharingScreen(SharePayload payload)
+            => Navigate<ShareTimeEntryViewModel, SharePayload>(payload);
 
         public void Track(ITrackableEvent e)
         {

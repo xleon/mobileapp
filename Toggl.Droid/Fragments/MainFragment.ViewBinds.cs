@@ -29,6 +29,7 @@ namespace Toggl.Droid.Fragments
         private TextView welcomeBackSubText;
         private Toolbar toolbar;
         private AppBarLayout appBarLayout;
+        private ImageView acceptSharedTimeEntryButton;
 
         protected override void InitializeViews(View fragmentView)
         {
@@ -48,6 +49,8 @@ namespace Toggl.Droid.Fragments
             welcomeBackStub = fragmentView.FindViewById<ViewStub>(Resource.Id.WelcomeBackViewStub);
             toolbar = fragmentView.FindViewById<Toolbar>(Resource.Id.Toolbar);
             appBarLayout = fragmentView.FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
+
+            acceptSharedTimeEntryButton = fragmentView.FindViewById<ImageView>(Resource.Id.AcceptSharedTimeEntry);
             
             timeEntryCardAddDescriptionLabel.Text = Shared.Resources.AddDescription;
         }

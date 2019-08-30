@@ -67,6 +67,7 @@ namespace Toggl.Droid.Activities
         
         private AppBarLayout appBarLayout;
         private NestedScrollView scrollView;
+        private View shareButton;
 
         protected override void InitializeViews()
         {
@@ -122,6 +123,8 @@ namespace Toggl.Droid.Activities
             singleTimeEntryModeViews.Visibility = (!ViewModel.IsEditingGroup).ToVisibility();
             timeEntriesGroupModeViews.Visibility = ViewModel.IsEditingGroup.ToVisibility();
 
+            shareButton = FindViewById(Resource.Id.ShareButton);
+            
             descriptionEditText.Text = ViewModel.Description.Value;
             descriptionEditText.Hint = Shared.Resources.StartTimeEntryPlaceholder;
             confirmButton.Text = Shared.Resources.Save;

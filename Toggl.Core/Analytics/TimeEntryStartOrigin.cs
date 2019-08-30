@@ -77,6 +77,11 @@
         /// <summary>
         /// Starting a time entry by long pressing the Play button in Timer mode
         /// </summary>
-        ManualLongPress
+        ManualLongPress,
+
+        /// <summary>
+        /// Starting a time entry by accepting a shared time entry
+        /// </summary>
+        WifiShared
     }
 }

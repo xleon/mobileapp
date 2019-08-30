@@ -66,7 +66,7 @@
                 android:textAllCaps="true"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
-      </FrameLayout>
+        </FrameLayout>
     </android.support.design.widget.AppBarLayout>
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/ScrollView"
@@ -85,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:constraint_referenced_ids="GroupCount,GroupDuration,TimeMiddleGuide,TimeIcon,StartTimeButton,StartTime,StartDate,StartTimeLabel,StopTimeButton,StopTime,StopDate,StopTimeButton,EditStopTimeLabel,TimeBottomBorder,DurationButton,Duration,DurationLabel,DurationBottomBorder" />
-			
+
             <android.support.constraint.Group
                 android:id="@+id/TimeEntriesGroupModeViews"
                 android:visibility="visible"
@@ -567,6 +567,44 @@
                 android:layout_marginLeft="56dp"
                 android:background="@color/separator"
                 app:layout_constraintTop_toBottomOf="@id/DeleteLabel" />
+
+            <!-- SHARE -->
+
+            <ImageView
+                android:id="@+id/ShareIcon"
+                android:layout_width="56dp"
+                android:layout_height="48dp"
+                android:scaleType="center"
+                android:src="@drawable/forward"
+                app:layout_constraintTop_toBottomOf="@id/DeleteBottomBorder"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <View
+                android:id="@+id/ShareButton"
+                android:background="?attr/selectableItemBackground"
+                app:layout_constraintTop_toTopOf="@id/ShareIcon"
+                android:layout_width="match_parent"
+                android:layout_height="48dp" />
+
+            <TextView
+                android:id="@+id/ShareLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:text="Share with WIFI peers"
+                android:textColor="@color/defaultText"
+                android:textSize="15sp"
+                app:layout_constraintLeft_toRightOf="@id/ShareIcon"
+                app:layout_constraintTop_toBottomOf="@id/DeleteBottomBorder" />
+
+            <View
+                android:id="@+id/ShareBottomBorder"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="56dp"
+                android:background="@color/separator"
+                app:layout_constraintTop_toBottomOf="@id/ShareLabel" />
+
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

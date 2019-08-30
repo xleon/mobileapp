@@ -10,9 +10,13 @@ using Android.Support.V7.Widget.Helper;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
+using Newtonsoft.Json;
 using System;
+using System.Net;
+using System.Net.Sockets;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Text;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
@@ -61,7 +65,7 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-            
+
             stopButton.Rx().BindAction(ViewModel.StopTimeEntry, _ => TimeEntryStopOrigin.Manual).DisposedBy(DisposeBag);
 
             playButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => true).DisposedBy(DisposeBag);
@@ -209,6 +213,18 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             setupOnboardingSteps();
+
+            acceptSharedTimeEntryButton.Rx().Tap()
+                .Subscribe(ViewModel.SharingManager.EnableSharedPayload.Inputs)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.SharingManager.IsReceiving
+                .Subscribe(onReceivingChanged)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.SharingManager.EnableSharedPayload.Elements
+                .Subscribe(ViewModel.ShareTimeEntry.Inputs)
+                .DisposedBy(DisposeBag);
         }
 
         public void ScrollToTop()
@@ -225,11 +241,11 @@ namespace Toggl.Droid.Fragments
             var projectIsPlaceholder = te.Project?.IsPlaceholder() ?? false;
             var taskIsPlaceholder = te.Task?.IsPlaceholder() ?? false;
             return Extensions.TimeEntryExtensions.ToProjectTaskClient(
-                Context, 
-                hasProject, 
-                te.Project?.Name, 
-                te.Project?.Color, 
-                te.Task?.Name, 
+                Context,
+                hasProject,
+                te.Project?.Name,
+                te.Project?.Color,
+                te.Task?.Name,
                 te.Project?.Client?.Name,
                 projectIsPlaceholder,
                 taskIsPlaceholder,
@@ -277,6 +293,35 @@ namespace Toggl.Droid.Fragments
         {
             var newPadding = isRunning ? 104.DpToPixels(Context) : 70.DpToPixels(Context);
             mainRecyclerView.SetPadding(0, 0, 0, newPadding);
+        }
+
+        class Dismissal : BaseTransientBottomBar.BaseCallback
+        {
+            private Action action;
+            public Dismissal(Action action)
+            {
+                this.action = action;
+            }
+            public override void OnDismissed(Java.Lang.Object transientBottomBar, int e)
+            {
+                action();
+            }
+        }
+
+        private Snackbar receivingSnackbar;
+        private void onReceivingChanged(bool isReceiving)
+        {
+            if (!isReceiving)
+            {
+                receivingSnackbar?.Dismiss();
+                receivingSnackbar = null;
+                return;
+            }
+
+            receivingSnackbar = Snackbar.Make(coordinatorLayout, "Receiving Time Entry...", Snackbar.LengthIndefinite);
+            receivingSnackbar.Show();
+
+            receivingSnackbar.AddCallback(new Dismissal(ViewModel.SharingManager.Stop));
         }
 
         private void onSyncChanged(SyncProgress syncProgress)

@@ -34,7 +34,7 @@
       android:id="@+id/MainRunningTimeEntrySheet"
       android:layout_height="wrap_content"
       android:layout_width="match_parent"
-      android:visibility="invisible"    
+      android:visibility="invisible"
       android:clickable="true"
       android:focusable="true"
       android:elevation="8dp"
@@ -65,11 +65,18 @@
             app:layout_scrollFlags="scroll|enterAlways"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
-            <ImageView 
+            <ImageView
               android:src="@drawable/ic_toggl_logo"
               android:layout_gravity="start"
               android:layout_height="24dp"
               android:layout_width="80dp"/>
+            <ImageView
+                android:id="@+id/AcceptSharedTimeEntry"
+                android:src="@drawable/share_logo"
+                android:layout_gravity="end"
+                android:layout_marginRight="16dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>

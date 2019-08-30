@@ -1,11 +1,14 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Net.Sockets;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Text;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
@@ -100,6 +103,7 @@ namespace Toggl.Core.UI.ViewModels
         public UIAction DismissSyncErrorMessage { get; private set; }
         public UIAction Save { get; private set; }
         public UIAction Delete { get; private set; }
+        public UIAction BroadcastTimeEntry { get; private set; }
 
         public EditTimeEntryViewModel(
             ITimeService timeService,
@@ -220,6 +224,7 @@ namespace Toggl.Core.UI.ViewModels
             DismissSyncErrorMessage = actionFactory.FromAction(dismissSyncErrorMessage);
             Save = actionFactory.FromAsync(save);
             Delete = actionFactory.FromAsync(delete);
+            BroadcastTimeEntry = actionFactory.FromAsync(broadcastTimeEntry);
         }
 
         public override async Task Initialize(long[] timeEntryIds)
@@ -304,6 +309,55 @@ namespace Toggl.Core.UI.ViewModels
                 return tag.Name;
 
             return $"{tag.Name.UnicodeSafeSubstring(0, MaxTagLength)}...";
+        }
+
+        private async Task broadcastTimeEntry()
+        {
+            try
+            {
+                var workspace = await interactorFactory.GetWorkspaceById(workspaceId).Execute();
+                var project = projectId.HasValue
+                    ? await interactorFactory.GetProjectById(projectId.Value).Execute()
+                    : null;
+
+                var client = project != null && project.ClientId.HasValue
+                    ? await interactorFactory.GetClientById(project.ClientId.Value).Execute()
+                    : null;
+
+                var task = taskId.HasValue
+                    ? await interactorFactory.GetTaskById(taskId.Value).Execute()
+                    : null;
+
+                var tags = tagsSubject.Value.Select(t => new ShareTag { Id = t.Id, Name = t.Name }).ToArray();
+
+                var data = new SharePayload()
+                {
+                    WorkspaceId = workspaceId,
+                    WorkspaceName = workspace.Name,
+                    ProjectId = projectId,
+                    ProjectName = project?.Name,
+                    ClientId = client?.Id,
+                    ClientName = client?.Name,
+                    Tags = tags,
+                    Description = Description.Value,
+                    TaskId = taskId,
+                    TaskName = task?.Name,
+                    IsBillable = isBillableSubject.Value,
+                    Start = startTimeSubject.Value,
+                    Stop = await StopTime.FirstAsync()
+                };
+
+                var broadcastAddress = "255.255.255.255";
+                var udp = new UdpClient();
+
+                var json = JsonConvert.SerializeObject(data, Formatting.Indented);
+                var bytes = Encoding.UTF8.GetBytes(json);
+
+                udp.Send(bytes, bytes.Length, broadcastAddress, 50000);
+            }
+            catch
+            {
+            }
         }
 
         private async Task selectProject()

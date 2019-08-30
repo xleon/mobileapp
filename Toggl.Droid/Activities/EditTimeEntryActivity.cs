@@ -17,6 +17,8 @@ using TagsAdapter = Toggl.Droid.Adapters.SimpleAdapter<string>;
 using TextResources = Toggl.Shared.Resources;
 using Toggl.Droid.Presentation;
 using TimeEntryExtensions = Toggl.Droid.Extensions.TimeEntryExtensions;
+using System.Net.Sockets;
+using System.Text;
 
 namespace Toggl.Droid.Activities
 {
@@ -223,6 +225,10 @@ namespace Toggl.Droid.Activities
 
             deleteButton.Rx().Tap()
                 .Subscribe(ViewModel.Delete.Inputs)
+                .DisposedBy(DisposeBag);
+
+            shareButton.Rx().Tap()
+                .Subscribe(ViewModel.BroadcastTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
         }
 
