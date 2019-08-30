@@ -233,8 +233,8 @@ namespace Toggl.Core.Interactors
 
         #region Suggestions
 
-        IInteractor<IObservable<IEnumerable<Suggestion>>> GetSuggestions(int count);
-        IInteractor<IObservable<IReadOnlyList<ISuggestionProvider>>> GetSuggestionProviders(int count);
+        IInteractor<IObservable<IEnumerable<Suggestion>>> GetSuggestions(int count, IObservable<(string, DateTimeOffset)> shared);
+        IInteractor<IObservable<IReadOnlyList<ISuggestionProvider>>> GetSuggestionProviders(int count, IObservable<(string, DateTimeOffset)> shared);
 
         #endregion
 

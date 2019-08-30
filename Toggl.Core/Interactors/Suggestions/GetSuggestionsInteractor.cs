@@ -15,12 +15,13 @@ namespace Toggl.Core.Interactors.Suggestions
 
         public GetSuggestionsInteractor(
             int suggestionCount,
-            IInteractorFactory interactorFactory)
+            IInteractorFactory interactorFactory,
+            IObservable<(string, DateTimeOffset)> shared)
         {
             Ensure.Argument.IsInClosedRange(suggestionCount, 1, 9, nameof(suggestionCount));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
 
-            this.getSuggestionProvidersInteractor = interactorFactory.GetSuggestionProviders(suggestionCount);
+            this.getSuggestionProvidersInteractor = interactorFactory.GetSuggestionProviders(suggestionCount, shared);
             this.suggestionCount = suggestionCount;
         }
 

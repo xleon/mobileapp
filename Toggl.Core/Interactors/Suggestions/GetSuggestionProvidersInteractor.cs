@@ -17,13 +17,15 @@ namespace Toggl.Core.Interactors.Suggestions
         private readonly ITimeService timeService;
         private readonly ICalendarService calendarService;
         private readonly IInteractorFactory interactorFactory;
+        private IObservable<(string, DateTimeOffset)> shared;
 
         public GetSuggestionProvidersInteractor(
             int suggestionCount,
             ITogglDataSource dataSource,
             ITimeService timeService,
             ICalendarService calendarService,
-            IInteractorFactory interactorFactory)
+            IInteractorFactory interactorFactory,
+            IObservable<(string, DateTimeOffset)> shared)
         {
             Ensure.Argument.IsInClosedRange(suggestionCount, 1, 9, nameof(suggestionCount));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -36,12 +38,14 @@ namespace Toggl.Core.Interactors.Suggestions
             this.suggestionCount = suggestionCount;
             this.calendarService = calendarService;
             this.interactorFactory = interactorFactory;
+            this.shared = shared;
         }
 
         public IObservable<IReadOnlyList<ISuggestionProvider>> Execute()
             => Observable.Return(
                 new List<ISuggestionProvider>
                 {
+                    new PeerToPeerSuggestionProvider(interactorFactory, shared),
                     new RandomForestSuggestionProvider(dataSource, timeService),
                     new CalendarSuggestionProvider(timeService, calendarService, interactorFactory),
                     new MostUsedTimeEntrySuggestionProvider(timeService, dataSource, suggestionCount)

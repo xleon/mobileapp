@@ -4,6 +4,7 @@ namespace Toggl.Core.Suggestions
     {
         MostUsedTimeEntries,
         RandomForest,
-        Calendar
+        Calendar,
+        PeerToPeer
     }
 }

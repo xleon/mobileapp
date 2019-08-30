@@ -21,6 +21,7 @@ using Toggl.iOS.ExtensionKit;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Presentation;
+using Toggl.iOS.Services;
 using Toggl.iOS.Suggestions;
 using Toggl.iOS.Views;
 using Toggl.iOS.ViewSources;
@@ -218,6 +219,13 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(CurrentTimeEntryDescriptionLabel.Rx().Text())
                 .DisposedBy(DisposeBag);
 
+            ViewModel.CurrentRunningTimeEntry
+                .Subscribe(timeEntry =>
+                {
+                    MPCManager.Instance.TimeEntryToShare = timeEntry;
+                })
+                .DisposedBy(DisposeBag);
+
             ViewModel.ElapsedTime
                 .Subscribe(CurrentTimeEntryElapsedTimeLabel.Rx().Text())
                 .DisposedBy(DisposeBag);
@@ -294,6 +302,26 @@ namespace Toggl.iOS.ViewControllers
             View.LayoutIfNeeded();
 
             NSNotificationCenter.DefaultCenter.AddObserver(UIApplication.DidBecomeActiveNotification, onApplicationDidBecomeActive);
+
+            ViewModel.IsTimeEntryRunning
+                .Where(isRunning => isRunning)
+                .Subscribe(_ =>
+                {
+                    startAdvertisingTimeEntry();
+                    stopBrowsingTimeEntry();
+                })
+                .DisposedBy(disposeBag);
+
+            ViewModel.IsTimeEntryRunning
+                .Where(isRunning => !isRunning)
+                .Subscribe(_ =>
+                {
+                    stopAdvertisingTimeEntry();
+                    startBrowsingTimeEntry();
+                })
+                .DisposedBy(disposeBag);
+
+            MPCManager.Instance.SharedTimeEntryObservable.Subscribe(ViewModel.updateSharedTimentry).Dispose();
         }
 
         public override void ViewDidDisappear(bool animated)
@@ -747,6 +775,26 @@ namespace Toggl.iOS.ViewControllers
                 firstTimeEntryCell.Frame, TimeEntriesLogTableView.Superview);
 
             TapToEditBubbleViewTopConstraint.Constant = position.Bottom + tooltipOffset;
+        }
+
+        private void startAdvertisingTimeEntry()
+        {
+            MPCManager.Instance.StartAdvertising();
+        }
+
+        private void startBrowsingTimeEntry()
+        {
+            MPCManager.Instance.StartBrowsing();
+        }
+
+        private void stopAdvertisingTimeEntry()
+        {
+            MPCManager.Instance.StopAdvertising();
+        }
+
+        private void stopBrowsingTimeEntry()
+        {
+            MPCManager.Instance.StopBrowsing();
         }
     }
 }

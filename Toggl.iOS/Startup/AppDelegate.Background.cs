@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Toggl.iOS.Services;
 using Toggl.Shared.Extensions;
 using UIKit;
 
@@ -34,6 +35,7 @@ namespace Toggl.iOS
         public override void DidEnterBackground(UIApplication application)
         {
             IosDependencyContainer.Instance.BackgroundService.EnterBackground();
+            MPCManager.Instance.CleanUpConnections();
         }
 
         private UIBackgroundFetchResult mapToNativeOutcomes(Core.Models.SyncOutcome outcome)

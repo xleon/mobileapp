@@ -1421,12 +1421,15 @@
     <Compile Include="Extensions\SectionedIndexExtensions.cs" />
     <Compile Include="Extensions\ViewControllerExtensions.cs" />
     <Compile Include="Helper\PermissionsHelper.cs" />
+    <Compile Include="Models\Device.cs" />
+    <Compile Include="Models\NSTimeEntry.cs" />
     <Compile Include="Presentation\IosPresenter.cs" />
     <Compile Include="Presentation\NavigationPresenter.cs" />
     <Compile Include="Presentation\ModalDialogPresenter.cs" />
     <Compile Include="Presentation\ModalCardPresenter.cs" />
     <Compile Include="Presentation\RootPresenter.cs" />
     <Compile Include="Presentation\ViewControllerLocator.cs" />
+    <Compile Include="Services\MPCManager.cs" />
     <Compile Include="Services\PermissionsCheckerIos.cs" />
     <Compile Include="Models\SiriShortcut.cs" />
     <Compile Include="Models\SiriShortcutType.cs" />

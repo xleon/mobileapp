@@ -98,6 +98,10 @@ namespace Toggl.Core.UI.ViewModels
 
         public TimeEntriesViewModel TimeEntriesViewModel { get; }
 
+        private IObservable<(string, DateTimeOffset)> sharedTimeEntryObservable;
+
+        private ISubject<(string, DateTimeOffset)> sharedTimeEntrySubject = new Subject<(string, DateTimeOffset)>();
+
         public MainViewModel(
             ITogglDataSource dataSource,
             ISyncManager syncManager,
@@ -151,7 +155,9 @@ namespace Toggl.Core.UI.ViewModels
             TimeService = timeService;
             OnboardingStorage = onboardingStorage;
 
-            SuggestionsViewModel = new SuggestionsViewModel(interactorFactory, OnboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager);
+            sharedTimeEntryObservable = sharedTimeEntrySubject.AsObservable();
+
+            SuggestionsViewModel = new SuggestionsViewModel(interactorFactory, OnboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager, sharedTimeEntryObservable);
             RatingViewModel = new RatingViewModel(timeService, ratingService, analyticsService, OnboardingStorage, navigationService, schedulerProvider, rxActionFactory);
             TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 
@@ -163,7 +169,7 @@ namespace Toggl.Core.UI.ViewModels
             TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(schedulerProvider);
 
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService, updateRemoteConfigCacheService);
-            
+
             SwipeActionsEnabled = userPreferences.SwipeActionsEnabled.AsDriver(schedulerProvider);
         }
 
@@ -276,6 +282,11 @@ namespace Toggl.Core.UI.ViewModels
         public void Track(ITrackableEvent e)
         {
             analyticsService.Track(e);
+        }
+
+        public void updateSharedTimentry((string, DateTimeOffset) tuple)
+        {
+            sharedTimeEntrySubject.OnNext(tuple);
         }
 
         private bool canPresentRating(bool shouldBeVisible)

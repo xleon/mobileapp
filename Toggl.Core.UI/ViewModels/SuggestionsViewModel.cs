@@ -38,6 +38,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IBackgroundService backgroundService;
         private readonly IUserPreferences userPreferences;
         private readonly ISyncManager syncManager;
+        private readonly IObservable<(string, DateTimeOffset)> sharedTimeEntryObservable;
 
         public IObservable<IImmutableList<Suggestion>> Suggestions { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
@@ -54,7 +55,8 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             IBackgroundService backgroundService,
             IUserPreferences userPreferences,
-            ISyncManager syncManager)
+            ISyncManager syncManager,
+            IObservable<(string, DateTimeOffset)> sharedTimeEntryObservable)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
@@ -67,6 +69,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
+            Ensure.Argument.IsNotNull(sharedTimeEntryObservable, nameof(sharedTimeEntryObservable));
 
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
@@ -78,6 +81,7 @@ namespace Toggl.Core.UI.ViewModels
             this.backgroundService = backgroundService;
             this.userPreferences = userPreferences;
             this.syncManager = syncManager;
+            this.sharedTimeEntryObservable = sharedTimeEntryObservable;
         }
 
         public override Task Initialize()
@@ -105,6 +109,7 @@ namespace Toggl.Core.UI.ViewModels
                 .ReemitWhen(appResumedFromBackground)
                 .ReemitWhen(userCalendarPreferencesChanged)
                 .ReemitWhen(syncingFinishedWhenInForeground)
+                .ReemitWhen(sharedTimeEntryObservable.SelectUnit())
                 .Throttle(recalculationThrottleDuration, schedulerProvider.BackgroundScheduler)
                 .SelectMany(isCalendarAuthorized => getSuggestions()
                     .Do(suggestions => trackPresentedSuggestions(suggestions, isCalendarAuthorized)))
@@ -121,7 +126,7 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private IObservable<IImmutableList<Suggestion>> getSuggestions()
-            => interactorFactory.GetSuggestions(suggestionCount).Execute()
+            => interactorFactory.GetSuggestions(suggestionCount, sharedTimeEntryObservable).Execute()
                 .Select(suggestions => suggestions.ToImmutableList());
 
         private IObservable<IThreadSafeTimeEntry> startTimeEntry(Suggestion suggestion)

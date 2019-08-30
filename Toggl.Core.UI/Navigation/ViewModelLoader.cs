@@ -289,21 +289,22 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory);
             }
 
-            if (viewModelType == typeof(SuggestionsViewModel))
-            {
-                return new SuggestionsViewModel(
-                    dependencyContainer.InteractorFactory,
-                    dependencyContainer.OnboardingStorage,
-                    dependencyContainer.SchedulerProvider,
-                    dependencyContainer.RxActionFactory,
-                    dependencyContainer.AnalyticsService,
-                    dependencyContainer.TimeService,
-                    dependencyContainer.PermissionsChecker,
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.BackgroundService,
-                    dependencyContainer.UserPreferences,
-                    dependencyContainer.SyncManager);
-            }
+//            if (viewModelType == typeof(SuggestionsViewModel))
+//            {
+//                return new SuggestionsViewModel(
+//                    dependencyContainer.InteractorFactory,
+//                    dependencyContainer.OnboardingStorage,
+//                    dependencyContainer.SchedulerProvider,
+//                    dependencyContainer.RxActionFactory,
+//                    dependencyContainer.AnalyticsService,
+//                    dependencyContainer.TimeService,
+//                    dependencyContainer.PermissionsChecker,
+//                    dependencyContainer.NavigationService,
+//                    dependencyContainer.BackgroundService,
+//                    dependencyContainer.UserPreferences,
+//                    dependencyContainer.SyncManager,
+//                    );
+//            }
 
             if (viewModelType == typeof(SyncFailuresViewModel))
             {

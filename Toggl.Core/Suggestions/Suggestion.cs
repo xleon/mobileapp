@@ -82,6 +82,14 @@ namespace Toggl.Core.Suggestions
             ProviderType = providerType;
         }
 
+        internal Suggestion(string description, DateTimeOffset start, long workspaceId, SuggestionProviderType providerType)
+        {
+            WorkspaceId = workspaceId;
+            Description = description;
+            StartTime = start;
+            ProviderType = providerType;
+        }
+
         public bool Equals(Suggestion other)
         {
             if (other is null)
