@@ -569,7 +569,11 @@ namespace Toggl.Core.UI.ViewModels
                         items = items.Prepend(ProjectSuggestion.NoProject(projectSuggestion.WorkspaceId,
                             projectSuggestion.WorkspaceName));
                     }
-
+                    else if (group.First() is TimeEntrySuggestion timeEntrySuggestion)
+                    {
+                        header = timeEntrySuggestion.WorkspaceName;
+                    }
+                    
                     return new SectionModel<string, AutocompleteSuggestion>(header, items);
                 }
             );
