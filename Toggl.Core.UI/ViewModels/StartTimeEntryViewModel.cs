@@ -50,8 +50,8 @@ namespace Toggl.Core.UI.ViewModels
         private bool isDirty => !string.IsNullOrEmpty(textFieldInfo.Value.Description)
                                 || textFieldInfo.Value.Spans.Any(s => s is ProjectSpan || s is TagSpan)
                                 || isBillable.Value
-                                || startTime != parameter.StartTime
-                                || duration != parameter.Duration;
+                                || startTime != parameter?.StartTime
+                                || duration != parameter?.Duration;
 
         private bool hasAnyTags;
         private bool hasAnyProjects;
@@ -250,9 +250,13 @@ namespace Toggl.Core.UI.ViewModels
         {
             if (isDirty)
             {
-                var shouldDiscard = await View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
-                if (!shouldDiscard)
-                    return;
+                var view = View;
+                if (view != null)
+                {
+                    var shouldDiscard = await view.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
+                    if (!shouldDiscard)
+                        return;
+                }
             }
 
             Close();
