@@ -20,6 +20,7 @@ using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.iOS.ExtensionKit;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.iOS.Helper;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Suggestions;
 using Toggl.iOS.Views;
@@ -295,6 +296,17 @@ namespace Toggl.iOS.ViewControllers
             View.LayoutIfNeeded();
 
             NSNotificationCenter.DefaultCenter.AddObserver(UIApplication.DidBecomeActiveNotification, onApplicationDidBecomeActive);
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            var activity = new NSUserActivity(Handoff.Action.Log);
+            activity.EligibleForHandoff = true;
+            activity.WebPageUrl = Handoff.Url.Log;
+            UserActivity = activity;
+            activity.BecomeCurrent();
         }
 
         public override void ViewDidDisappear(bool animated)
