@@ -4,14 +4,18 @@ using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.DTOs;
+using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Xunit;
@@ -315,6 +319,36 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
 
                 observer.LastEmittedValue().Should().Be(defaultWorkspace.Name);
+            }
+        }
+
+        public sealed class TheIsPrivateProperty : EditProjectViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public void DefaultsToTrue()
+            {
+                ViewModel.IsPrivate.Value.Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task IsSetToTrueWhenTheUserSelectsAWorkspaceInWhichTheyAreNotAdmins()
+            {
+                var mockWorkspace = new MockWorkspace { Admin = false };
+                var interactor = Substitute.For<IInteractor<IObservable<IThreadSafeWorkspace>>>();
+                interactor.Execute().Returns(Observable.Return(mockWorkspace));
+                InteractorFactory.GetWorkspaceById(Arg.Is(1L)).Returns(interactor);
+                NavigationService
+                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(
+                        Arg.Any<SelectWorkspaceParameters>(), Arg.Any<IView>())
+                    .Returns(Task.FromResult(1L));
+                ViewModel.CanCreatePublicProjects.Subscribe();
+
+                ViewModel.IsPrivate.Accept(false);
+                var awaitable = ViewModel.PickWorkspace.ExecuteWithCompletion(Unit.Default);
+                TestScheduler.Start();
+                await awaitable;
+
+                ViewModel.IsPrivate.Value.Should().BeTrue();
             }
         }
 

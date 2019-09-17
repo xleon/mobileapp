@@ -42,6 +42,7 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<Color> Color { get; }
         public IObservable<string> ClientName { get; }
         public IObservable<string> WorkspaceName { get; }
+        public IObservable<bool> CanCreatePublicProjects { get; }
         public UIAction Save { get; }
         public OutputAction<Color> PickColor { get; }
         public OutputAction<IThreadSafeClient> PickClient { get; }
@@ -65,7 +66,7 @@ namespace Toggl.Core.UI.ViewModels
             this.interactorFactory = interactorFactory;
 
             Name = new BehaviorRelay<string>("");
-            IsPrivate = new BehaviorRelay<bool>(false, CommonFunctions.Invert);
+            IsPrivate = new BehaviorRelay<bool>(true);
 
             PickColor = rxActionFactory.FromObservable<Color>(pickColor);
             PickClient = rxActionFactory.FromObservable<IThreadSafeClient>(pickClient);
@@ -89,6 +90,12 @@ namespace Toggl.Core.UI.ViewModels
 
             WorkspaceName = currentWorkspace
                 .Select(w => w.Name)
+                .DistinctUntilChanged()
+                .AsDriver(schedulerProvider);
+
+            CanCreatePublicProjects = currentWorkspace
+                .Select(w => w.Admin)
+                .DoIf(isAdmin => !isAdmin, _ => IsPrivate.Accept(true))
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
