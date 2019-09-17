@@ -24,7 +24,7 @@ namespace Toggl.Networking.ApiClients
             => SendRequest<Project, IProject>(endPoints.Get, AuthHeader);
 
         public IObservable<List<IProject>> GetAllSince(DateTimeOffset threshold)
-            => SendRequest<Project, IProject>(endPoints.GetSince(threshold), AuthHeader);
+            => SendRequest<Project, IProject>(endPoints.GetSince(threshold, includeArchived: true), AuthHeader);
 
         public IObservable<IProject> Create(IProject project)
         {
