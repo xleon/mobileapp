@@ -1282,7 +1282,7 @@ to project members</value>
         <value>Email</value>
     </data>
     <data name="DefaultWorkspace" xml:space="preserve">
-        <value>DefaultWorkspace</value>
+        <value>Default Workspace</value>
     </data>
     <data name="StartTimeAfterCurrentTimeWarning" xml:space="preserve">
         <value>Start time must be before current time!</value>
