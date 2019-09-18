@@ -252,10 +252,13 @@ namespace Toggl.Droid.Activities
             SupportFragmentManager.RemoveAllFragments();
 
             var initialFragment = getCachedFragment(initialTabItemId);
-            SupportFragmentManager
-                .BeginTransaction()
-                .Add(Resource.Id.CurrentTabFragmmentContainer, initialFragment)
-                .Commit();
+            if (!initialFragment.IsAdded)
+            {
+                SupportFragmentManager
+                    .BeginTransaction()
+                    .Add(Resource.Id.CurrentTabFragmmentContainer, initialFragment)
+                    .Commit();
+            }
 
             if (initialFragment is MainFragment mainFragment)
                 mainFragment.SetFragmentIsVisible(true);
