@@ -180,7 +180,7 @@ namespace Toggl.iOS.ViewControllers
                 UserActivity = userActivity;
                 UserActivity.BecomeCurrent();
             }
- 
+
             void toggleCalendar()
             {
                 if (calendarIsVisible)
@@ -233,6 +233,9 @@ namespace Toggl.iOS.ViewControllers
 
         public void ScrollToTop()
         {
+            if (ReportsTableView == null)
+                return;
+
             var point = new CGPoint(0, -ReportsTableView.ContentInset.Top);
             ReportsTableView.SetContentOffset(point, true);
         }
