@@ -53,9 +53,37 @@ namespace Toggl.iOS.ViewControllers
         {
         }
 
+
+        public override void WillTransitionToTraitCollection(UITraitCollection traitCollection, IUIViewControllerTransitionCoordinator coordinator)
+        {
+            if (calendarIsVisible)
+                HideCalendar();
+
+            base.WillTransitionToTraitCollection(traitCollection, coordinator);
+        }
+
         public override void TraitCollectionDidChange(UITraitCollection previousTraitCollection)
         {
             base.TraitCollectionDidChange(previousTraitCollection);
+
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact)
+            {
+                AddChildViewController(calendarViewController);
+                CalendarContainer.AddSubview(calendarViewController.View);
+
+                calendarViewController.View.TopAnchor.ConstraintEqualTo(CalendarContainer.TopAnchor).Active = true;
+                calendarViewController.View.BottomAnchor.ConstraintEqualTo(CalendarContainer.BottomAnchor).Active = true;
+                calendarViewController.View.LeftAnchor.ConstraintEqualTo(CalendarContainer.LeftAnchor).Active = true;
+                calendarViewController.View.RightAnchor.ConstraintEqualTo(CalendarContainer.RightAnchor).Active = true;
+                calendarViewController.View.TranslatesAutoresizingMaskIntoConstraints = false;
+                calendarViewController.DidMoveToParentViewController(this);
+            }
+            else
+            {
+                calendarViewController.DismissViewController(false, null);
+                calendarViewController.RemoveFromParentViewController();
+                calendarViewController.View.RemoveFromSuperview();
+            }
 
             ReportsTableView.ReloadData();
         }
@@ -208,24 +236,7 @@ namespace Toggl.iOS.ViewControllers
             if (alreadyLoadedCalendar)
                 return;
 
-            // Calendar
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
-            {
-                AddChildViewController(calendarViewController);
-                CalendarContainer.AddSubview(calendarViewController.View);
-
-                calendarViewController.View.TopAnchor.ConstraintEqualTo(CalendarContainer.TopAnchor).Active = true;
-                calendarViewController.View.BottomAnchor.ConstraintEqualTo(CalendarContainer.BottomAnchor).Active = true;
-                calendarViewController.View.LeftAnchor.ConstraintEqualTo(CalendarContainer.LeftAnchor).Active = true;
-                calendarViewController.View.RightAnchor.ConstraintEqualTo(CalendarContainer.RightAnchor).Active = true;
-                calendarViewController.View.TranslatesAutoresizingMaskIntoConstraints = false;
-                calendarViewController.DidMoveToParentViewController(this);
-            }
-            else
-            {
-                ViewModel.CalendarViewModel.SelectInitialShortcut();
-            }
-
+            ViewModel.CalendarViewModel.SelectInitialShortcut();
             alreadyLoadedCalendar = true;
 
             viewDidAppearSubject.OnNext(Unit.Default);
@@ -285,7 +296,7 @@ namespace Toggl.iOS.ViewControllers
 
         internal void HideCalendar()
         {
-            calendarViewController.DismissViewController(false, null);
+            calendarViewController.DismissViewController(true, null);
 
             TopCalendarConstraint.Constant = calendarHeight;
             Animate(
@@ -310,6 +321,7 @@ namespace Toggl.iOS.ViewControllers
 
             PresentViewController(calendarViewController, true, null);
             ViewModel.CalendarViewModel.Reload();
+            calendarIsVisible = true;
         }
 
         public override void ViewDidLayoutSubviews()
