@@ -59,8 +59,8 @@ namespace Toggl.Droid.Activities
             SetContentView(layoutResId);
             OverridePendingTransition(transitions.SelfIn, transitions.OtherOut);
 
-            RestoreViewModelStateFromBundle(bundle);
             InitializeViews();
+            RestoreViewModelStateFromBundle(bundle);
             InitializeBindings();
         }
 

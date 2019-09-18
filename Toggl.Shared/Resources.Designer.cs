@@ -10,6 +10,7 @@
 
 namespace Toggl.Shared {
     using System;
+    using System.Reflection;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
@@ -2473,6 +2474,54 @@ namespace Toggl.Shared {
         public static string SiriWorkflowFocusModeDescription {
             get {
                 return ResourceManager.GetString("SiriWorkflowFocusModeDescription", resourceCulture);
+            }
+        }
+        
+        public static string SystemDefault {
+            get {
+                return ResourceManager.GetString("SystemDefault", resourceCulture);
+            }
+        }
+        
+        public static string Light {
+            get {
+                return ResourceManager.GetString("Light", resourceCulture);
+            }
+        }
+        
+        public static string Dark {
+            get {
+                return ResourceManager.GetString("Dark", resourceCulture);
+            }
+        }
+        
+        public static string RestartNeeded {
+            get {
+                return ResourceManager.GetString("RestartNeeded", resourceCulture);
+            }
+        }
+        
+        public static string RestartNeededMessage {
+            get {
+                return ResourceManager.GetString("RestartNeededMessage", resourceCulture);
+            }
+        }
+
+        public static string AppTheme {
+            get {
+                return ResourceManager.GetString("AppTheme", resourceCulture);
+            }
+        }
+
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
             }
         }
     }

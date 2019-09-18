@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
     <ImageView
         android:scaleType="centerCrop"
-        android:src="@drawable/bg_noise_login"
+        android:src="@drawable/login_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <ScrollView
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/LoginLogo"
-                android:src="@drawable/logo_black"
+                android:src="@drawable/ic_toggl_logo"
                 android:layout_width="102dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="64dp"
@@ -77,8 +77,8 @@
                 android:layout_below="@+id/LoginPassword" />
             <Button
                 android:id="@+id/LoginLoginButton"
-                android:background="@color/buttonBlue"
-                android:textColor="@color/BlueButtonTextColor"
+                android:background="@color/raisedButtonBackground"
+                android:textColor="@color/RaisedButtonTextColor"
                 android:foreground="?attr/selectableItemBackground"
                 android:layout_height="36dp"
                 android:layout_marginLeft="24dp"
@@ -101,7 +101,7 @@
             <TextView
                 android:id="@+id/LoginForgotPassword"
                 android:textSize="13sp"
-                android:textColor="@color/grey"
+                android:textColor="@color/secondaryText"
                 tools:text="Forgot your password? Get help logging in"
                 android:layout_marginTop="60dp"
                 android:layout_marginBottom="24dp"
@@ -141,7 +141,7 @@
                 android:elevation="2dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:background="@android:color/white"
+                android:background="@color/cardBackground"
                 android:layout_height="36dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
@@ -158,7 +158,7 @@
                     android:textStyle="normal"
                     android:paddingStart="18dp"
                     android:letterSpacing="0.02"
-                    android:textColor="#8a000000"
+                    android:textColor="@color/primaryText"
                     android:fontFamily="sans-serif-medium"
                     tools:text="Sign in With Google"
                     android:layout_width="wrap_content"
@@ -168,6 +168,7 @@
     </ScrollView>
     <android.support.v7.widget.CardView
         android:id="@+id/LoginSignupCardView"
+        app:cardBackgroundColor="@color/cardBackground"
         app:cardCornerRadius="8dp"
         android:layout_height="80dp"
         android:layout_gravity="bottom"
@@ -176,7 +177,6 @@
         android:layout_marginBottom="-8dp"
         android:layout_width="match_parent">
         <android.support.constraint.ConstraintLayout
-            android:background="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
@@ -186,7 +186,7 @@
                 android:letterSpacing="-0.02"
                 android:lineSpacingExtra="4sp"
                 android:fontFamily="sans-serif-medium"
-                android:textColor="@android:color/black"
+                android:textColor="@color/primaryText"
                 tools:text="Don\'t have an account?"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -203,7 +203,7 @@
                 android:letterSpacing="-0.02"
                 android:lineSpacingExtra="4sp"
                 tools:text="Sign up for free"
-                android:textColor="@color/buttonBlue"
+                android:textColor="@color/flatButtonText"
                 android:fontFamily="sans-serif-medium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="@id/HaveAnAccountLabel"

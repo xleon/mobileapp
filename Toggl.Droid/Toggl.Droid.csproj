@@ -375,6 +375,7 @@
     <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
     <Compile Include="Fragments\ReportsCalendarFragment.cs" />
+    <Compile Include="Helper\ActiveTheme.cs" />
     <Compile Include="Presentation\ActivityTransitions.cs" />
     <Compile Include="Presentation\RunningTimeEntrySheetBehavior.cs" />
     <Compile Include="Services\JobServicesConstants.cs" />
@@ -659,7 +660,7 @@
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
-    <AndroidResource Include="Resources\color\BlueTextColor.xml" />
+    <AndroidResource Include="Resources\color\FlatButtonTextColor.xml" />
     <AndroidResource Include="Resources\drawable\Dot.xml" />
     <AndroidResource Include="Resources\drawable\ic_archived.xml" />
     <AndroidResource Include="Resources\drawable\Splash.xml" />
@@ -671,15 +672,12 @@
     <AndroidResource Include="Resources\layout\SelectProjectActivityProjectCell.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityTaskCell.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityWorkspaceHeader.axml" />
-    <AndroidResource Include="Resources\drawable\TransparentToLightGrayGradient.xml" />
+    <AndroidResource Include="Resources\layout\SelectDateFormatFragment.axml" />
+    <AndroidResource Include="Resources\layout\SelectDateFormatFragmentCell.axml" />
+    <AndroidResource Include="Resources\drawable\TransparentToBackgroundGradient.xml" />
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
-    <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\logo.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\logo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\logo.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\logo.png" />
     <AndroidResource Include="Resources\menu\GenericSaveMenu.xml" />
     <AndroidResource Include="Resources\values\Strings.xml" />
     <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
@@ -721,8 +719,8 @@
     <AndroidResource Include="Resources\layout\MainFragment.axml" />
     <AndroidResource Include="Resources\layout\LoginActivity.axml" />
     <AndroidResource Include="Resources\values\Styles.xml" />
-    <AndroidResource Include="Resources\values-v23\Styles.xml" />
-    <AndroidResource Include="Resources\values-v27\Styles.xml" />
+    <AndroidResource Include="Resources\values-notnight-v23\Styles.xml" />
+    <AndroidResource Include="Resources\values-notnight-v27\Styles.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\arrow_back.png" />
     <AndroidResource Include="Resources\drawable-hdpi\billable.png" />
     <AndroidResource Include="Resources\drawable-hdpi\check_light.png" />
@@ -736,7 +734,6 @@
     <AndroidResource Include="Resources\drawable-hdpi\dropdown.png" />
     <AndroidResource Include="Resources\drawable-hdpi\error_baddata.png" />
     <AndroidResource Include="Resources\drawable-hdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\logo_icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\next_light.png" />
     <AndroidResource Include="Resources\drawable-hdpi\play.png" />
     <AndroidResource Include="Resources\drawable-hdpi\play_white.png" />
@@ -768,7 +765,6 @@
     <AndroidResource Include="Resources\drawable-mdpi\dropdown.png" />
     <AndroidResource Include="Resources\drawable-mdpi\error_baddata.png" />
     <AndroidResource Include="Resources\drawable-mdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\logo_icon.png" />
     <AndroidResource Include="Resources\drawable-mdpi\next_light.png" />
     <AndroidResource Include="Resources\drawable-mdpi\play.png" />
     <AndroidResource Include="Resources\drawable-mdpi\play_white.png" />
@@ -800,7 +796,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\dropdown.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\error_baddata.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\logo_icon.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\next_light.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\play.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\play_white.png" />
@@ -832,7 +827,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\dropdown.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\error_baddata.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\logo_icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\next_light.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\play.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\play_white.png" />
@@ -864,7 +858,6 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\dropdown.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\error_baddata.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\logo_icon.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\next_light.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\play.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\play_white.png" />
@@ -885,7 +878,7 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\unsynced.png" />
     <AndroidResource Include="Resources\values\Colors.xml" />
     <AndroidResource Include="Resources\layout\MainLogCell.axml" />
-    <AndroidResource Include="Resources\drawable\TransparentToWhiteGradient.xml" />
+    <AndroidResource Include="Resources\drawable\TransparentToCardColorGradient.xml" />
     <AndroidResource Include="Resources\layout\MainSuggestions.axml" />
     <AndroidResource Include="Resources\layout\MainLogHeader.axml" />
     <AndroidResource Include="Resources\drawable\SmallDot.xml" />
@@ -916,7 +909,6 @@
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentDayCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentPage.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarShortcutCell.axml" />
-    <AndroidResource Include="Resources\drawable\OnboardingGradient.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\book.png" />
     <AndroidResource Include="Resources\drawable-hdpi\timer.png" />
     <AndroidResource Include="Resources\drawable-mdpi\book.png" />
@@ -927,11 +919,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\timer.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\book.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\timer.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\toggl_logo.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\toggl_logo.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\toggl_logo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\toggl_logo.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\toggl_logo.png" />
     <AndroidResource Include="Resources\drawable-hdpi\ic_illustration_error_spider.png" />
     <AndroidResource Include="Resources\drawable-mdpi\ic_illustration_error_spider.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\ic_illustration_error_spider.png" />
@@ -946,11 +933,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\date_light.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\date_light.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\date_light.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\logo_black.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\logo_black.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\logo_black.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\logo_black.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\logo_black.png" />
     <AndroidResource Include="Resources\drawable-hdpi\visibility_off.png" />
     <AndroidResource Include="Resources\drawable-mdpi\visibility_off.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\visibility_off.png" />
@@ -971,9 +953,9 @@
     <AndroidResource Include="Resources\drawable-xhdpi\paws.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\paws.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\paws.png" />
-    <AndroidResource Include="Resources\drawable\LightBlueRoundedRectangle.xml" />
+    <AndroidResource Include="Resources\drawable\RoundedRectangle.xml" />
     <AndroidResource Include="Resources\layout\ForgotPasswordActivity.axml" />
-    <AndroidResource Include="Resources\color\BlueButtonTextColor.xml" />
+    <AndroidResource Include="Resources\color\RaisedButtonTextColor.xml" />
     <AndroidResource Include="Resources\layout\SignUpActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectCountryActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectCountryActivityCountryCell.axml" />
@@ -1020,16 +1002,14 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_workspace.png" />
     <AndroidResource Include="Resources\layout\ReportsFragmentWorkspaceName.axml" />
     <AndroidResource Include="Resources\drawable\workspace_white.xml" />
-    <AndroidResource Include="Resources\values-v23\Strings.xml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragmentCell.axml" />
-    <AndroidResource Include="Resources\drawable\bg_noise_login.png" />
     <AndroidResource Include="Resources\drawable\ic_thumbs_down.xml" />
     <AndroidResource Include="Resources\drawable\ic_thumbs_up.xml" />
     <AndroidResource Include="Resources\layout\MainUserFeedbackCard.axml" />
     <AndroidResource Include="Resources\xml\RemoteConfigDefaults.xml" />
     <AndroidResource Include="Resources\layout\MainLogEmptyView.axml" />
-    <AndroidResource Include="Resources\drawable\BorderRectangle.xml" />
+    <AndroidResource Include="Resources\drawable\TagsBackground.xml" />
     <AndroidResource Include="Resources\drawable\EmptyViewRoundedRectangle.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\toggl_spider.png" />
     <AndroidResource Include="Resources\drawable-mdpi\toggl_spider.png" />
@@ -1040,7 +1020,7 @@
     <AndroidResource Include="Resources\layout\SelectUserCalendarsFragment.axml" />
     <AndroidResource Include="Resources\layout\UserCalendarItem.axml" />
     <AndroidResource Include="Resources\layout\UserCalendarHeader.axml" />
-    <AndroidResource Include="Resources\color\BlueLinkTextColor.xml" />
+    <AndroidResource Include="Resources\color\LinkTextColor.xml" />
     <AndroidResource Include="Resources\layout\MainTabBarActivity.axml" />
     <AndroidResource Include="Resources\menu\MainTabBarBottomMenu.xml" />
     <AndroidResource Include="Resources\color\MainTabBarItemTextColor.xml" />
@@ -1055,7 +1035,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\calendar_onboarding.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\calendar_onboarding.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\calendar_onboarding.png" />
-    <AndroidResource Include="Resources\drawable\BlueButton.axml" />
+    <AndroidResource Include="Resources\drawable\RaisedButton.axml" />
     <AndroidResource Include="Resources\layout\CalendarPermissionDeniedFragment.axml" />
     <AndroidResource Include="Resources\layout\UpcomingEventsNotificationSettingsFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectCalendarNotificationsOptionItem.axml" />
@@ -1157,6 +1137,45 @@
     <AndroidResource Include="Resources\drawable\license_background.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-night\Colors.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-notnight\Colors.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-night-v27\Styles.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-night-v23\Styles.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-night\Styles.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-notnight\Styles.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\login_background.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />

@@ -19,7 +19,7 @@ namespace Toggl.Droid.Activities
         private bool hasToggledTasks = false;
         public SelectProjectActivity() : base(
             Resource.Layout.SelectProjectActivity,
-            Resource.Style.AppTheme_Light_WhiteBackground,
+            Resource.Style.AppTheme,
             Transitions.SlideInFromBottom)
         {
         }

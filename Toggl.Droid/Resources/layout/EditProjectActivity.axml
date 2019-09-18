@@ -27,7 +27,7 @@
                 android:textSize="15sp"
                 android:singleLine="true"
                 android:lineSpacingExtra="5sp"
-                android:textColor="@android:color/black"
+                android:textColor="@color/primaryText"
                 android:background="@null"
                 tools:text="Some client with a ridiculously big name to help us test fading totally"
                 android:layout_width="match_parent"
@@ -49,7 +49,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignStart="@+id/ProjectNameTextView" />
             <View
-                android:background="@drawable/TransparentToWhiteGradient"
+                android:background="@drawable/TransparentToBackgroundGradient"
                 android:layout_width="80dp"
                 android:layout_marginRight="40dp"
                 android:layout_height="match_parent"
@@ -101,7 +101,7 @@
                 android:textSize="15sp"
                 android:singleLine="true"
                 android:lineSpacingExtra="5sp"
-                android:textColor="@android:color/black"
+                android:textColor="@color/primaryText"
                 tools:text="Some Workspace with a ridiculously big name to help us test fading"
                 android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
@@ -110,7 +110,7 @@
                 android:layout_toRightOf="@id/ChangeWorkspaceViewWorkspaceImage"
                 android:layout_marginRight="16dp" />
             <View
-                android:background="@drawable/TransparentToWhiteGradient"
+                android:background="@drawable/TransparentToBackgroundGradient"
                 android:layout_width="64dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
@@ -152,7 +152,7 @@
                 android:textSize="15sp"
                 android:singleLine="true"
                 android:lineSpacingExtra="5sp"
-                android:textColor="@android:color/black"
+                android:textColor="@color/primaryText"
                 tools:text="Some client with a ridiculously big name to help us test fading"
                 android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
@@ -161,7 +161,7 @@
                 android:layout_toRightOf="@id/ChangeWorkspaceViewClientImage"
                 android:layout_marginRight="16dp" />
             <View
-                android:background="@drawable/TransparentToWhiteGradient"
+                android:background="@drawable/TransparentToBackgroundGradient"
                 android:layout_width="64dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
@@ -205,7 +205,7 @@
                 android:singleLine="true"
                 android:lineSpacingExtra="5sp"
                 tools:text="Private project"
-                android:textColor="@android:color/black"
+                android:textColor="@color/primaryText"
                 android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -215,7 +215,7 @@
                 android:id="@+id/PrivateProjectHint"
                 android:textSize="12sp"
                 android:lineSpacingExtra="5sp"
-                android:textColor="@color/defaultText"
+                android:textColor="@color/secondaryText"
                 tools:text="Private projects are only accessible\nto project members"
                 android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
@@ -246,12 +246,13 @@
         android:layout_marginTop="?attr/actionBarSize" />
     <android.support.v7.widget.Toolbar
         android:id="@+id/Toolbar"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@android:color/white"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        android:layout_width="match_parent"
         android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/background"
+        app:titleTextColor="@color/primaryText"
+        android:theme="@style/AppBarTheme"
+        app:popupTheme="@style/AppBarPopupTheme"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/CreateProjectButton"
@@ -262,7 +263,7 @@
             android:textAllCaps="true"
             android:letterSpacing="0.04"
             tools:text="Create"
-            android:textColor="@android:color/black"
+            android:textColor="@color/primaryText"
             android:fontFamily="sans-serif-medium"
             android:background="?attr/selectableItemBackground"
             android:layout_gravity="end"

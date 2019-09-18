@@ -65,6 +65,9 @@ namespace Toggl.Droid.Fragments
         {
             base.OnViewCreated(view, savedInstanceState);
 
+            refreshLayout.SetProgressBackgroundColorSchemeResource(Resource.Color.cardBackground);
+            refreshLayout.SetColorSchemeResources(new[] { Resource.Color.primaryText });
+
             stopButton.Rx().BindAction(ViewModel.StopTimeEntry, _ => TimeEntryStopOrigin.Manual).DisposedBy(DisposeBag);
 
             playButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => true).DisposedBy(DisposeBag);
@@ -156,7 +159,6 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             mainRecyclerAdapter.ContinueTimeEntry
-                .Select(vm => new ContinueTimeEntryInfo(vm.LogItem, vm.ContinueMode))
                 .Subscribe(ViewModel.ContinueTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 

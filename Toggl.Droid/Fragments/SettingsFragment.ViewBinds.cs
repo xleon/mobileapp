@@ -78,7 +78,7 @@ namespace Toggl.Droid.Fragments
             stoppedTimerNotificationsView = fragmentView.FindViewById(Resource.Id.SettingsStoppedTimerNotificationsView);
             groupTimeEntriesView = fragmentView.FindViewById(Resource.Id.GroupTimeEntriesView);
             defaultWorkspaceView = fragmentView.FindViewById(Resource.Id.DefaultWorkspaceView);
-
+      
             logoutView = fragmentView.FindViewById<TextView>(Resource.Id.SettingsLogoutButton);
             helpView = fragmentView.FindViewById<TextView>(Resource.Id.SettingsHelpButton);
             feedbackView = fragmentView.FindViewById<TextView>(Resource.Id.SettingsSubmitFeedbackButton);
