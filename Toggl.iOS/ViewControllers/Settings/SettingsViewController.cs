@@ -36,6 +36,11 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            NavigationItem.RightBarButtonItem = new UIBarButtonItem(
+                UIBarButtonSystemItem.Done,
+                (sender, args) => ViewModel.Close()
+            );
+
             var source = new SettingsTableViewSource(tableView);
             tableView.Source = source;
             tableView.TableFooterView = new UIView(frame: new CGRect(0, 0, 0, bottomInset));

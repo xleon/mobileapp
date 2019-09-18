@@ -366,7 +366,6 @@
     <Compile Include="Adapters\DiffingStrategies\IdentifierEqualityDiffingStrategy.cs" />
     <Compile Include="Adapters\DiffingStrategies\IDiffingStrategy.cs" />
     <Compile Include="Adapters\ReportsCalendarShortcutAdapter.cs" />
-    <Compile Include="Adapters\SelectDurationFormatRecyclerAdapter.cs" />
     <Compile Include="Adapters\SelectTagsRecyclerAdapter.cs" />
     <Compile Include="Activities\SelectProjectActivity.cs" />
     <Compile Include="Activities\SelectProjectActivity.ViewBinds.cs">
@@ -415,9 +414,6 @@
     <Compile Include="Fragments\CalendarFragment.ViewBinds.cs">
       <DependentUpon>CalendarFragment.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fragments\SelectWorkspaceFragment.ViewBinds.cs">
-      <DependentUpon>SelectWorkspaceFragment.cs</DependentUpon>
-    </Compile>
     <Compile Include="Helper\PersistentNotificationsHelper.cs" />
     <Compile Include="Fragments\NoWorkspaceFragment.cs" />
     <Compile Include="Fragments\NoWorkspaceFragment.ViewBinds.cs">
@@ -461,8 +457,6 @@
     <Compile Include="ViewHolders\MainLogSuggestionItemViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogSuggestionsListViewHolder.cs" />
     <Compile Include="ViewHolders\SimpleTextViewHolder.cs" />
-    <Compile Include="ViewHolders\SelectDurationFormatViewHolder.cs" />
-    <Compile Include="ViewHolders\SelectWorkspaceViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsCalendarShortcutCellViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsHeaderCellViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsItemCellViewHolder.cs" />
@@ -519,17 +513,7 @@
     <Compile Include="Views\ValueSlider.cs" />
     <Compile Include="Activities\SelectClientActivity.cs" />
     <Compile Include="Adapters\SelectClientRecyclerAdapter.cs" />
-    <Compile Include="Fragments\SelectWorkspaceFragment.cs" />
     <Compile Include="Services\LicenseProviderAndroid.cs" />
-    <Compile Include="Fragments\SelectDateFormatFragment.cs" />
-    <Compile Include="Fragments\SelectDateFormatFragment.ViewBinds.cs">
-      <DependentUpon>SelectDateFormatFragment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Fragments\SelectBeginningOfWeekFragment.cs" />
-    <Compile Include="Fragments\SelectDurationFormatFragment.cs" />
-    <Compile Include="Fragments\SelectDurationFormatFragment.ViewBinds.cs">
-      <DependentUpon>SelectDurationFormatFragment.cs</DependentUpon>
-    </Compile>
     <Compile Include="Adapters\ReportsRecyclerAdapter.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Views\PieChartView.cs" />
@@ -609,17 +593,11 @@
     <Compile Include="Services\BackgroundSyncJobSchedulerService.cs" />
     <Compile Include="ViewHolders\Tags\TagCreationSelectionViewHolder.cs" />
     <Compile Include="ViewHolders\Tags\TagSelectionViewHolder.cs" />
-    <Compile Include="Adapters\SelectDateFormatRecyclerAdapter.cs" />
-    <Compile Include="ViewHolders\SelectDateFormatViewHolder.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Views\EditDuration\WheelDurationInput.cs" />
     <Compile Include="Views\EditDuration\WheelDurationInput.InputFilter.cs">
       <DependentUpon>WheelDurationInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fragments\SelectBeginningOfWeekFragment.ViewBinds.cs">
-      <DependentUpon>SelectBeginningOfWeekFragment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewHolders\BeginningOfWeekViewHolder.cs" />
     <Compile Include="Fragments\SettingsFragment.cs" />
     <Compile Include="Fragments\SettingsFragment.ViewBinds.cs">
       <DependentUpon>SettingsFragment.cs</DependentUpon>
@@ -693,14 +671,8 @@
     <AndroidResource Include="Resources\layout\SelectProjectActivityProjectCell.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityTaskCell.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityWorkspaceHeader.axml" />
-    <AndroidResource Include="Resources\layout\SelectDateFormatFragment.axml" />
-    <AndroidResource Include="Resources\layout\SelectDateFormatFragmentCell.axml" />
     <AndroidResource Include="Resources\drawable\TransparentToLightGrayGradient.xml" />
     <GoogleServicesJson Include="google-services.json" />
-    <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragment.axml" />
-    <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragmentCell.axml" />
-    <AndroidResource Include="Resources\layout\SelectDurationFormatFragment.axml" />
-    <AndroidResource Include="Resources\layout\SelectDurationFormatFragmentCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
     <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
@@ -940,8 +912,6 @@
     <AndroidResource Include="Resources\drawable\ValueSliderThumb.xml" />
     <AndroidResource Include="Resources\layout\SelectClientActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectClientActivityCell.axml" />
-    <AndroidResource Include="Resources\layout\SelectWorkspaceFragment.axml" />
-    <AndroidResource Include="Resources\layout\SelectWorkspaceFragmentCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentItem.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentDayCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentPage.axml" />
