@@ -171,13 +171,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.SchedulerProvider);
             }
 
-            if (viewModelType == typeof(SelectBeginningOfWeekViewModel))
-            {
-                return new SelectBeginningOfWeekViewModel(
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.RxActionFactory);
-            }
-
             if (viewModelType == typeof(SelectClientViewModel))
             {
                 return new SelectClientViewModel(
@@ -201,13 +194,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory);
             }
 
-            if (viewModelType == typeof(SelectDateFormatViewModel))
-            {
-                return new SelectDateFormatViewModel(
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.RxActionFactory);
-            }
-
             if (viewModelType == typeof(SelectDateTimeViewModel))
             {
                 return new SelectDateTimeViewModel(
@@ -222,13 +208,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.NavigationService,
                     dependencyContainer.AccessRestrictionStorage,
-                    dependencyContainer.RxActionFactory);
-            }
-
-            if (viewModelType == typeof(SelectDurationFormatViewModel))
-            {
-                return new SelectDurationFormatViewModel(
-                    dependencyContainer.NavigationService,
                     dependencyContainer.RxActionFactory);
             }
 
@@ -248,14 +227,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.RxActionFactory);
-            }
-
-            if (viewModelType == typeof(SelectWorkspaceViewModel))
-            {
-                return new SelectWorkspaceViewModel(
-                    dependencyContainer.InteractorFactory,
-                    dependencyContainer.NavigationService,
                     dependencyContainer.RxActionFactory);
             }
 

@@ -538,7 +538,7 @@ Start the timer and your most used time entries will appear here.</value>
     </data>
     <data name="TermsOfServiceDialogMessageDroid" xml:space="preserve">
         <value>By tapping "I Agree", you
-understand and agree to Toggl\'s</value>
+understand and agree to Toggl's</value>
     </data>
     <data name="CountryOfResidence" xml:space="preserve">
         <value>Country of residence</value>
@@ -826,7 +826,8 @@ understand and agree to Toggl\'s</value>
         <value>Uh oh.</value>
     </data>
     <data name="NoWorkspaceErrorMessage" xml:space="preserve">
-        <value>Seems someone has removed you from their workspace.\nNo worries. Create a new workspace to continue.</value>
+        <value>Seems someone has removed you from their workspace.
+No worries. Create a new workspace to continue.</value>
     </data>
     <data name="Skip" xml:space="preserve">
         <value>Skip</value>
@@ -1271,7 +1272,8 @@ the selected time period.</value>
         <value>Allow access</value>
     </data>
     <data name="PrivateProjectHint" xml:space="preserve">
-        <value>Private projects are only accessible\nto project members</value>
+        <value>Private projects are only accessible
+to project members</value>
     </data>
     <data name="Username" xml:space="preserve">
         <value>Username</value>
@@ -1280,7 +1282,7 @@ the selected time period.</value>
         <value>Email</value>
     </data>
     <data name="DefaultWorkspace" xml:space="preserve">
-        <value>DefaultWorkspace</value>
+        <value>Default Workspace</value>
     </data>
     <data name="StartTimeAfterCurrentTimeWarning" xml:space="preserve">
         <value>Start time must be before current time!</value>

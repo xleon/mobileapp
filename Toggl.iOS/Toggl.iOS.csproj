@@ -82,7 +82,7 @@
     </MtouchVerbosity>
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <MtouchLink>Full</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
   </PropertyGroup>
@@ -1316,7 +1316,6 @@
     <InterfaceDefinition Include="Views\Onboarding\ReportsPage.xib" />
     <InterfaceDefinition Include="ViewControllers\EditProjectViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectColorViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\SelectWorkspaceViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectClientViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\OutdatedAppViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\TokenResetViewController.xib" />
@@ -1337,12 +1336,6 @@
     <InterfaceDefinition Include="Views\Reports\ReportsHeaderView.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\NoEntityInfoViewCell.xib" />
     <InterfaceDefinition Include="Views\Suggestions\SuggestionView.xib" />
-    <InterfaceDefinition Include="Views\Settings\DateFormatViewCell.xib" />
-    <InterfaceDefinition Include="ViewControllers\SelectDateFormatViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\SelectDurationFormatViewController.xib" />
-    <InterfaceDefinition Include="Views\Settings\DurationFormatViewCell.xib" />
-    <InterfaceDefinition Include="ViewControllers\SelectBeginningOfWeekViewController.xib" />
-    <InterfaceDefinition Include="Views\Settings\DayOfWeekViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\SettingsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\AboutViewController.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntriesEmptyLogView.xib" />
@@ -1399,6 +1392,7 @@
     <InterfaceDefinition Include="Cells\Settings\SettingsSyncCell.xib" />
     <InterfaceDefinition Include="Cells\Settings\SettingsAnnotationCell.xib" />
     <InterfaceDefinition Include="Cells\Settings\SettingsButtonCell.xib" />
+    <InterfaceDefinition Include="Cells\Common\SelectorCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1455,6 +1449,7 @@
     <Compile Include="Startup\IOSSchedulerProvider.cs" />
     <Compile Include="Extensions\AnimationExtensions.cs" />
     <Compile Include="Transformations\ProjectTaskClientToAttributedString.cs" />
+    <Compile Include="ViewControllers\Common\SelectorViewController.cs" />
     <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.DialogProvider.cs">
@@ -1578,10 +1573,6 @@
       <DependentUpon>SelectColorViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\ColorSelectionCollectionViewSource.cs" />
-    <Compile Include="ViewControllers\SelectWorkspaceViewController.cs" />
-    <Compile Include="ViewControllers\SelectWorkspaceViewController.designer.cs">
-      <DependentUpon>SelectWorkspaceViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewSources\ClientTableViewSource.cs" />
     <Compile Include="ViewControllers\SelectClientViewController.cs" />
     <Compile Include="ViewControllers\SelectClientViewController.designer.cs">
@@ -1714,30 +1705,6 @@
       <DependentUpon>SuggestionView.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\LicenseProviderIos.cs" />
-    <Compile Include="Views\Settings\DateFormatViewCell.cs" />
-    <Compile Include="Views\Settings\DateFormatViewCell.designer.cs">
-      <DependentUpon>DateFormatViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\SelectDateFormatViewController.cs" />
-    <Compile Include="ViewControllers\SelectDateFormatViewController.designer.cs">
-      <DependentUpon>SelectDateFormatViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\SelectDurationFormatViewController.cs" />
-    <Compile Include="ViewControllers\SelectDurationFormatViewController.designer.cs">
-      <DependentUpon>SelectDurationFormatViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings\DurationFormatViewCell.cs" />
-    <Compile Include="Views\Settings\DurationFormatViewCell.designer.cs">
-      <DependentUpon>DurationFormatViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\SelectBeginningOfWeekViewController.cs" />
-    <Compile Include="ViewControllers\SelectBeginningOfWeekViewController.designer.cs">
-      <DependentUpon>SelectBeginningOfWeekViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings\DayOfWeekViewCell.cs" />
-    <Compile Include="Views\Settings\DayOfWeekViewCell.designer.cs">
-      <DependentUpon>DayOfWeekViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\Log\TimeEntriesEmptyLogView.cs" />
     <Compile Include="Views\Log\TimeEntriesEmptyLogView.designer.cs">
       <DependentUpon>TimeEntriesEmptyLogView.cs</DependentUpon>
@@ -2014,6 +1981,13 @@
     <Compile Include="Cells\Settings\SettingsButtonCell.designer.cs">
       <DependentUpon>SettingsButtonCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\PageSheetPresenter.cs" />
+    <Compile Include="Cells\Common\SelectorCell.cs" />
+    <Compile Include="Cells\Common\SelectorCell.designer.cs">
+      <DependentUpon>SelectorCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\Generic\Common\SelectorTableViewSource.cs" />
+    <Compile Include="Helper\Handoff.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">
@@ -2092,6 +2066,8 @@
     <Folder Include="Resources\Images.xcassets\thumbsdown.imageset\" />
     <Folder Include="Resources\Images.xcassets\thumbsup.imageset\" />
     <Folder Include="Resources\Images.xcassets\togglLogoBig.imageset\" />
+    <Folder Include="Cells\Common\" />
+    <Folder Include="ViewSources\Generic\Common\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

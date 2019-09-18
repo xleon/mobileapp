@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditProjectViewController">
             <connections>
+                <outlet property="BottomSeparator" destination="4pW-A2-noR" id="TB8-kG-u3z"/>
                 <outlet property="ClientLabel" destination="vLP-Wm-fD5" id="qFO-lQ-5Wt"/>
                 <outlet property="CloseButton" destination="HiK-yy-d1C" id="2db-eW-HDw"/>
                 <outlet property="ColorCircleView" destination="oGf-TO-JiY" id="JzO-Jt-Pal"/>
