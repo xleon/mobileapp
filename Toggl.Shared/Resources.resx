@@ -883,7 +883,7 @@ Please update your app to continue.</value>
     </data>
     <data name="EmptyProjectText" xml:space="preserve">
         <value>Your projects will show up here.
-            Use them to categorize your time.</value>
+Use them to categorize your time.</value>
     </data>
     <data name="Tags" xml:space="preserve">
         <value>Tags</value>

@@ -142,6 +142,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.CurrentPageObservable
+                .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(CalendarCollectionView.Rx().CurrentPageObserver())
                 .DisposedBy(DisposeBag);
 

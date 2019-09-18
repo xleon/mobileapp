@@ -8,7 +8,6 @@ using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
-using Toggl.iOS.DebugHelpers;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Helper;
@@ -211,7 +210,7 @@ namespace Toggl.iOS.ViewControllers
 
         private void showErrorTriggeringView()
         {
-            PresentViewController(new ErrorTriggeringViewController
+            PresentViewController(new Toggl.iOS.DebugHelpers.ErrorTriggeringViewController
             {
                 ModalPresentationStyle = UIModalPresentationStyle.Custom,
                 TransitioningDelegate = new ModalDialogTransitionDelegate()
