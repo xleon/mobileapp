@@ -13,13 +13,11 @@ namespace Toggl.Droid.Activities
                 Resource.Layout.SelectCountryActivityCountryCell,
                 CountrySelectionViewHolder.Create);
 
-        private ImageView backImageView;
         private EditText filterEditText;
         private RecyclerView recyclerView;
 
         protected override void InitializeViews()
         {
-            backImageView = FindViewById<ImageView>(Resource.Id.BackImageView);
             filterEditText = FindViewById<EditText>(Resource.Id.FilterEditText);
             recyclerView = FindViewById<RecyclerView>(Resource.Id.RecyclerView);
 
@@ -30,6 +28,8 @@ namespace Toggl.Droid.Activities
                 InitialPrefetchItemCount = 4
             });
             recyclerView.SetAdapter(recyclerAdapter);
+            
+            SetupToolbar();
         }
     }
 }

@@ -639,13 +639,8 @@
       android:layout_height="wrap_content">
       <android.support.v7.widget.Toolbar
           android:id="@+id/Toolbar"
-          android:minHeight="?attr/actionBarSize"
-          android:background="@color/background"
-          app:titleTextColor="@color/primaryText"
+          style="@style/ToolbarStyle"
           app:layout_scrollFlags="scroll|enterAlways"
-          app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-          android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content" />
+           />
   </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>

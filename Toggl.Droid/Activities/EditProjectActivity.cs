@@ -20,11 +20,14 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class EditProjectActivity : ReactiveActivity<EditProjectViewModel>
     {
+        private IMenuItem createMenuItem;
+
         public EditProjectActivity() : base(
             Resource.Layout.EditProjectActivity,
             Resource.Style.AppTheme,
             Transitions.SlideInFromBottom)
-        { }
+        {
+        }
 
         public EditProjectActivity(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
@@ -115,15 +118,9 @@ namespace Toggl.Droid.Activities
             ViewModel.CanCreatePublicProjects
                 .Subscribe(toggleIsPrivateView.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
-
-            // Save
-            createProjectButton.Rx()
-                .BindAction(ViewModel.Save)
-                .DisposedBy(DisposeBag);
-
+            
             ViewModel.Save.Enabled
-                .Select(createProjectTextColor)
-                .Subscribe(createProjectButton.SetTextColor)
+                .Subscribe(isEnabled => createMenuItem?.SetEnabled(isEnabled))
                 .DisposedBy(DisposeBag);
 
             string clientNameWithEmptyText(string clientName)
@@ -132,8 +129,25 @@ namespace Toggl.Droid.Activities
             Color clientTextColor(string clientName)
                 => string.IsNullOrEmpty(clientName) ? placeholderTextColor : primaryTextColor;
 
-            Color createProjectTextColor(bool enabled)
-                => enabled ? primaryTextColor : placeholderTextColor;
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.OneButtonMenu, menu);
+            createMenuItem = menu.FindItem(Resource.Id.ButtonMenuItem);
+            createMenuItem.SetTitle(Shared.Resources.Create);
+            return true;
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (item.ItemId == Resource.Id.ButtonMenuItem)
+            {
+                ViewModel.Save.Execute();
+                return true;
+            }
+
+            return base.OnOptionsItemSelected(item);
         }
     }
 }

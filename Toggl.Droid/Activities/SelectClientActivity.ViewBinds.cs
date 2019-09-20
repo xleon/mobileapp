@@ -8,13 +8,11 @@ namespace Toggl.Droid.Activities
     {
         private readonly SelectClientRecyclerAdapter selectClientRecyclerAdapter = new SelectClientRecyclerAdapter();
 
-        private ImageView backImageView;
         private EditText filterEditText;
         private RecyclerView selectClientRecyclerView;
 
         protected override void InitializeViews()
         {
-            backImageView = FindViewById<ImageView>(Resource.Id.BackImageView);
             filterEditText = FindViewById<EditText>(Resource.Id.FilterEditText);
             selectClientRecyclerView = FindViewById<RecyclerView>(Resource.Id.SelectClientRecyclerView);
 
@@ -25,6 +23,8 @@ namespace Toggl.Droid.Activities
                 InitialPrefetchItemCount = 4
             });
             selectClientRecyclerView.SetAdapter(selectClientRecyclerAdapter);
+            
+            SetupToolbar();
         }
     }
 }

@@ -9,13 +9,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/Toolbar"
-        android:elevation="4dp"
-        android:background="@color/background"
-        app:titleTextColor="@color/primaryText"
-        android:theme="@style/AppBarTheme"
-        app:popupTheme="@style/AppBarPopupTheme"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        style="@style/ToolbarStyle"
         app:title="Calendar Settings"/>
 
     <View

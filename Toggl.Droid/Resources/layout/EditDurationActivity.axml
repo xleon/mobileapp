@@ -11,14 +11,8 @@
         android:layout_height="wrap_content">
         <android.support.v7.widget.Toolbar
             android:id="@+id/Toolbar"
-            android:elevation="4dp"
-            android:background="@color/background"
-            app:titleTextColor="@color/primaryText"
-            android:theme="@style/AppBarTheme"
-            app:popupTheme="@style/AppBarPopupTheme"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize" />
+            style="@style/ToolbarStyle"
+            app:layout_constraintTop_toTopOf="parent" />
         <android.support.constraint.Guideline
             android:id="@+id/CenterGuideline"
             android:orientation="vertical"

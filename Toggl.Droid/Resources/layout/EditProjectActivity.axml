@@ -246,28 +246,5 @@
         android:layout_marginTop="?attr/actionBarSize" />
     <android.support.v7.widget.Toolbar
         android:id="@+id/Toolbar"
-        android:elevation="4dp"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/background"
-        app:titleTextColor="@color/primaryText"
-        android:theme="@style/AppBarTheme"
-        app:popupTheme="@style/AppBarPopupTheme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/CreateProjectButton"
-            android:padding="16dp"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:textStyle="normal"
-            android:textAllCaps="true"
-            android:letterSpacing="0.04"
-            tools:text="Create"
-            android:textColor="@color/primaryText"
-            android:fontFamily="sans-serif-medium"
-            android:background="?attr/selectableItemBackground"
-            android:layout_gravity="end"
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize" />
-    </android.support.v7.widget.Toolbar>
+        style="@style/ToolbarStyle" />
 </android.support.design.widget.CoordinatorLayout>

@@ -25,7 +25,19 @@
         <item name="android:windowBackground">@color/outdatedStatusBar</item>
         <item name="android:navigationBarColor">@color/outdatedStatusBar</item>
     </style>
-  
+
+    <style name="ToolbarStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?android:actionBarSize</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:elevation">@dimen/toolbarElevation</item>
+        <item name="popupTheme">@style/AppBarPopupTheme</item>
+        <item name="android:theme">@style/AppBarTheme</item>
+        <item name="android:background">@color/background</item>
+        <item name="contentInsetStartWithNavigation">2dp</item>
+    </style>
+
+
     <style name="TextInputLayoutErrorAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/errorText</item>
         <item name="android:textSize">12sp</item>
