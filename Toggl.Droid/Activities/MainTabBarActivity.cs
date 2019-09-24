@@ -274,8 +274,12 @@ namespace Toggl.Droid.Activities
         {
             SupportFragmentManager.RemoveAllFragments();
 
+            requestedInitialTab = initialTabItemId;
+            navigationView.SelectedItemId = initialTabItemId;
+
             tabLoadingIndicator.Visibility = ViewStates.Visible;
             var initialFragment = await getCachedFragment(initialTabItemId);
+            activeFragment = initialFragment;
             if (!initialFragment.IsAdded)
             {
                 SupportFragmentManager
@@ -292,10 +296,6 @@ namespace Toggl.Droid.Activities
 
             if (initialFragment is MainFragment mainFragment)
                 mainFragment.SetFragmentIsVisible(true);
-
-            requestedInitialTab = initialTabItemId;
-            navigationView.SelectedItemId = initialTabItemId;
-            activeFragment = initialFragment;
         }
     }
 }
