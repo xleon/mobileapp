@@ -36,7 +36,7 @@ namespace Toggl.Droid.Presentation
             typeof(TokenResetViewModel)
         };
 
-        private readonly Dictionary<Type, ActivityPresenterInfo> presentableActivitiesInfos = new Dictionary<Type, ActivityPresenterInfo>
+        private readonly Dictionary<Type, ActivityPresenterInfo> presentableActivitiesInfos = new Dictionary<Type, ActivityPresenterInfo>(18)
         {
             [typeof(AboutViewModel)] = new ActivityPresenterInfo(typeof(AboutActivity)),
             [typeof(CalendarSettingsViewModel)] = new ActivityPresenterInfo(typeof(CalendarSettingsActivity)),
