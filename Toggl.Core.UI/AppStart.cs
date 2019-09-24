@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using static Toggl.Core.Helper.Constants;
 
 namespace Toggl.Core.UI
@@ -96,10 +97,11 @@ namespace Toggl.Core.UI
             dependencyContainer.OnboardingStorage.SetIsNewUser(false);
         }
 
-        public void ForceFullSync()
-        {
-            dependencyContainer.SyncManager.ForceFullSync().Subscribe();
-        }
+        public Task ForceFullSync()
+            => Task.Run(() => dependencyContainer
+                .SyncManager
+                .ForceFullSync()
+                .Subscribe());
         
         private string getTwoLettersLanguageCode(string dotNetLanguageCode)
             => dotNetLanguageCode.Split(dotNetLanguageCodeSeparator)[0];

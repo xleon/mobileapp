@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Arch.Lifecycle;
 using Android.Content;
@@ -8,15 +9,17 @@ using Java.Interop;
 using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Droid.BroadcastReceivers;
-using Toggl.Droid.Extensions;
 using Toggl.Droid.Helper;
 using static Android.Support.V7.App.AppCompatDelegate;
+using static Android.Content.Intent;
 
 namespace Toggl.Droid
 {
     [Application(AllowBackup = false)]
     public class TogglApplication : Application, ILifecycleObserver
     {
+        public AppStart AppStart { get; private set; }
+
         public TimezoneChangedBroadcastReceiver TimezoneChangedBroadcastReceiver { get; set; }
 
         public bool IsInForeground { get; private set; } = false;
@@ -28,33 +31,12 @@ namespace Toggl.Droid
 
         public override void OnCreate()
         {
-            DefaultNightMode = QApis.AreAvailable ? ModeNightFollowSystem : ModeNightAuto;
-
             base.OnCreate();
             ProcessLifecycleOwner.Get().Lifecycle.AddObserver(this);
 
 #if !DEBUG
             Firebase.FirebaseApp.InitializeApp(this);
 #endif
-            AndroidDependencyContainer.EnsureInitialized(Context);
-            var app = new AppStart(AndroidDependencyContainer.Instance);
-            app.LoadLocalizationConfiguration();
-            var accessLevel = app.GetAccessLevel();
-            app.SetupBackgroundSync();
-            app.SetFirstOpened();
-            if (accessLevel == AccessLevel.TokenRevoked || accessLevel == AccessLevel.LoggedIn)
-            {
-                AndroidDependencyContainer.Instance
-                    .UserAccessManager
-                    .LoginWithSavedCredentials();
-            }
-
-            var accessibilityManager = GetSystemService(AccessibilityService) as AccessibilityManager;
-            if (accessibilityManager != null)
-            {
-                var accessibilityEnabled = accessibilityManager.IsTouchExplorationEnabled;
-                AndroidDependencyContainer.Instance.AnalyticsService.AccessibilityEnabled.Track(accessibilityEnabled);
-            }
 
 #if USE_APPCENTER
             Microsoft.AppCenter.AppCenter.Start(
@@ -62,6 +44,21 @@ namespace Toggl.Droid
                 typeof(Microsoft.AppCenter.Crashes.Crashes),
                 typeof(Microsoft.AppCenter.Analytics.Analytics));
 #endif
+
+            DefaultNightMode = QApis.AreAvailable ? ModeNightFollowSystem : ModeNightAuto;
+
+            AndroidDependencyContainer.EnsureInitialized(Context);
+            AppStart = new AppStart(AndroidDependencyContainer.Instance);
+
+            Task.Run(secondaryInitialization);
+
+            var accessLevel = AppStart.GetAccessLevel();
+            if (accessLevel == AccessLevel.TokenRevoked || accessLevel == AccessLevel.LoggedIn)
+            {
+                AndroidDependencyContainer.Instance
+                    .UserAccessManager
+                    .LoginWithSavedCredentials();
+            }
 
 #if DEBUG
             // Add or remove `Detect*` chains to detect unwanted behaviour
@@ -82,6 +79,34 @@ namespace Toggl.Droid
                     .PenaltyLog()
                     .Build());
 #endif
+        }
+
+        private async Task secondaryInitialization()
+        {
+            await Task.Yield();
+
+            var container = AndroidDependencyContainer.Instance;
+
+            AppStart.LoadLocalizationConfiguration();
+            AppStart.SetupBackgroundSync();
+            AppStart.SetFirstOpened();
+            AppStart.UpdateOnboardingProgress();
+
+            var accessibilityManager = GetSystemService(AccessibilityService) as AccessibilityManager;
+            if (accessibilityManager != null)
+            {
+                var accessibilityEnabled = accessibilityManager.IsTouchExplorationEnabled;
+                AndroidDependencyContainer.Instance.AnalyticsService.AccessibilityEnabled.Track(accessibilityEnabled);
+            }
+
+            var currentTimezoneChangedBroadcastReceiver = TimezoneChangedBroadcastReceiver;
+            if (currentTimezoneChangedBroadcastReceiver != null)
+            {
+                UnregisterReceiver(currentTimezoneChangedBroadcastReceiver);
+            }
+
+            TimezoneChangedBroadcastReceiver = new TimezoneChangedBroadcastReceiver(container.TimeService);
+            ApplicationContext.RegisterReceiver(TimezoneChangedBroadcastReceiver, new IntentFilter(ActionTimezoneChanged));
         }
 
         [Export]

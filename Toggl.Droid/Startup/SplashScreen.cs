@@ -4,6 +4,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.App;
 using System;
+using System.Diagnostics;
 using Toggl.Core;
 using Toggl.Core.Services;
 using Toggl.Core.UI;
@@ -13,7 +14,6 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Activities;
 using Toggl.Droid.BroadcastReceivers;
 using Toggl.Droid.Presentation;
-using static Android.Content.Intent;
 
 namespace Toggl.Droid
 {
@@ -48,11 +48,8 @@ namespace Toggl.Droid
             base.OnCreate(savedInstanceState);
 
             var dependencyContainer = AndroidDependencyContainer.Instance;
-            registerTimezoneChangedBroadcastReceiver(dependencyContainer.TimeService);
 
-            var app = new AppStart(dependencyContainer);
-            app.UpdateOnboardingProgress();
-
+            var app = getAppStart();
             var accessLevel = app.GetAccessLevel();
             if (accessLevel != AccessLevel.LoggedIn)
             {
@@ -69,6 +66,7 @@ namespace Toggl.Droid
             if (string.IsNullOrEmpty(navigationUrl))
             {
                 app.ForceFullSync();
+
                 StartActivity(typeof(MainTabBarActivity));
                 Finish();
                 return;
@@ -83,25 +81,15 @@ namespace Toggl.Droid
             viewModelCache.ClearAll();
             var viewModel = viewModelLoader.Load<MainTabBarViewModel>();
             viewModelCache.Cache(viewModel);
-
-            viewModel.Initialize();
         }
 
-        private void registerTimezoneChangedBroadcastReceiver(ITimeService timeService)
+        private AppStart getAppStart()
         {
-            var togglApplication = getTogglApplication();
-            var currentTimezoneChangedBroadcastReceiver = togglApplication.TimezoneChangedBroadcastReceiver;
-            if (currentTimezoneChangedBroadcastReceiver != null)
-            {
-                Application.UnregisterReceiver(currentTimezoneChangedBroadcastReceiver);
-            }
-
-            togglApplication.TimezoneChangedBroadcastReceiver = new TimezoneChangedBroadcastReceiver(timeService);
-            ApplicationContext.RegisterReceiver(togglApplication.TimezoneChangedBroadcastReceiver, new IntentFilter(ActionTimezoneChanged));
+            var container = AndroidDependencyContainer.Instance;
+            var togglApplication = Application as TogglApplication;
+            var appStart = togglApplication?.AppStart ?? new AppStart(container);
+            return appStart;
         }
-
-        private TogglApplication getTogglApplication()
-            => (TogglApplication)Application;
 
         private void navigateAccordingToAccessLevel(AccessLevel accessLevel)
         {
