@@ -66,7 +66,8 @@ namespace Toggl.Core.DataSources
                     .Merge(Updated.Where(update => update.Id == currentlyRunningTimeEntryId).Select(update => update.Entity))
                     .Merge(Deleted.Where(id => id == currentlyRunningTimeEntryId).Select(_ => null as IThreadSafeTimeEntry))
                     .Select(runningTimeEntry)
-                    .ConnectedReplay();
+                    .Replay(1)
+                    .RefCount();
 
             IsEmpty =
                 Observable.Return(default(IThreadSafeTimeEntry))
@@ -74,7 +75,9 @@ namespace Toggl.Core.DataSources
                     .Merge(Updated.Select(tuple => tuple.Entity))
                     .Merge(Created)
                     .SelectMany(_ => GetAll(te => te.IsDeleted == false))
-                    .Select(timeEntries => timeEntries.None());
+                    .Select(timeEntries => timeEntries.None())
+                    .Replay(1)
+                    .RefCount();
 
             RivalsResolver = new TimeEntryRivalsResolver(timeService);
 

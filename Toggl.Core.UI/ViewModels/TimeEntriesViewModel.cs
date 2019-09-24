@@ -22,10 +22,12 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels
 {
+    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
 
     [Preserve(AllMembers = true)]
     public sealed class TimeEntriesViewModel
     {
+        private static readonly TimeSpan timeEntriesThrottlePeriod = TimeSpan.FromSeconds(0.1);
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly ISchedulerProvider schedulerProvider;
@@ -74,28 +76,36 @@ namespace Toggl.Core.UI.ViewModels
             var deletingOrPressingUndo = timeEntriesPendingDeletionSubject.SelectUnit();
             var collapsingOrExpanding = ToggleGroupExpansion.Elements;
 
-            var visibleTimeEntries = interactorFactory.ObserveAllTimeEntriesVisibleToTheUser().Execute()
+            var visibleTimeEntries = interactorFactory.ObserveAllTimeEntriesVisibleToTheUser()
+                .Execute()
                 .Select(timeEntries => timeEntries.Where(isNotRunning))
                 .ReemitWhen(deletingOrPressingUndo)
                 .Select(timeEntries => timeEntries.Where(isNotDeleted))
                 .Select(group)
-                .ReemitWhen(collapsingOrExpanding);
-
-            TimeEntries = Observable.CombineLatest(
-                    visibleTimeEntries,
+                .ReemitWhen(collapsingOrExpanding)
+                .ObserveOn(schedulerProvider.BackgroundScheduler)
+                .Throttle(timeEntriesThrottlePeriod)
+                .CombineLatest(
                     dataSource.Preferences.Current,
                     groupsFlatteningStrategy.Flatten)
-                .AsDriver(schedulerProvider);
+                .SubscribeOn(schedulerProvider.BackgroundScheduler)
+                .ConnectedReplay();
 
-            Empty = TimeEntries
+            TimeEntries = visibleTimeEntries
+                .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider)
+                .SubscribeOn(schedulerProvider.BackgroundScheduler);
+
+            Empty = visibleTimeEntries
                 .Select(groups => groups.None())
                 .AsDriver(schedulerProvider);
 
-            Count = TimeEntries
+            Count = visibleTimeEntries
                 .Select(log => log.Sum(day => day.Items.Count))
                 .AsDriver(schedulerProvider);
 
-            TimeEntriesPendingDeletion = timeEntriesPendingDeletionSubject.AsObservable().AsDriver(schedulerProvider);
+            TimeEntriesPendingDeletion = timeEntriesPendingDeletionSubject
+                .AsObservable()
+                .AsDriver(schedulerProvider);
         }
 
         public async Task FinalizeDelayDeleteTimeEntryIfNeeded()

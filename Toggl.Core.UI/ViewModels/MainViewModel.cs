@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -25,20 +23,16 @@ using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Services;
 
 namespace Toggl.Core.UI.ViewModels
 {
-    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
-
     [Preserve(AllMembers = true)]
     public sealed class MainViewModel : ViewModel
     {
         private const int ratingViewTimeout = 5;
-        private const double throttlePeriodInSeconds = 0.1;
 
         private bool noWorkspaceViewPresented;
         private bool hasStopButtonEverBeenUsed;
@@ -61,8 +55,6 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly ISubject<Unit> hideRatingView = new Subject<Unit>();
 
-        public IObservable<bool> LogEmpty { get; }
-        public IObservable<int> TimeEntriesCount { get; }
         public IObservable<bool> IsInManualMode { get; private set; }
         public IObservable<string> ElapsedTime { get; private set; }
         public IObservable<bool> IsTimeEntryRunning { get; private set; }
@@ -76,7 +68,6 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<IThreadSafeTimeEntry> CurrentRunningTimeEntry { get; private set; }
         public IObservable<bool> ShouldShowRatingView { get; private set; }
         public IObservable<bool> SwipeActionsEnabled { get; }
-        public IObservable<IImmutableList<MainLogSection>> TimeEntries { get; }
 
         public RatingViewModel RatingViewModel { get; }
         public SuggestionsViewModel SuggestionsViewModel { get; }
@@ -152,13 +143,6 @@ namespace Toggl.Core.UI.ViewModels
             RatingViewModel = new RatingViewModel(timeService, ratingService, analyticsService, OnboardingStorage, navigationService, schedulerProvider, rxActionFactory);
             TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 
-            TimeEntries = TimeEntriesViewModel.TimeEntries
-                .Throttle(TimeSpan.FromSeconds(throttlePeriodInSeconds))
-                .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider);
-
-            LogEmpty = TimeEntriesViewModel.Empty.AsDriver(schedulerProvider);
-            TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(schedulerProvider);
-
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService, updateRemoteConfigCacheService);
             
             SwipeActionsEnabled = userPreferences.SwipeActionsEnabled.AsDriver(schedulerProvider);
@@ -209,13 +193,15 @@ namespace Toggl.Core.UI.ViewModels
 
             CurrentRunningTimeEntry = dataSource.TimeEntries
                 .CurrentlyRunningTimeEntry
-                .AsDriver(schedulerProvider);
+                .AsDriver(schedulerProvider)
+                .SubscribeOn(schedulerProvider.BackgroundScheduler);
 
             IsTimeEntryRunning = dataSource.TimeEntries
                 .CurrentlyRunningTimeEntry
                 .Select(te => te != null)
                 .DistinctUntilChanged()
-                .AsDriver(schedulerProvider);
+                .AsDriver(schedulerProvider)
+                .SubscribeOn(schedulerProvider.BackgroundScheduler);
 
             var durationObservable = dataSource
                 .Preferences
@@ -226,18 +212,21 @@ namespace Toggl.Core.UI.ViewModels
                 .CurrentDateTimeObservable
                 .CombineLatest(CurrentRunningTimeEntry, (now, te) => (now - te?.Start) ?? TimeSpan.Zero)
                 .CombineLatest(durationObservable, (duration, format) => duration.ToFormattedString(format))
-                .AsDriver(schedulerProvider);
+                .AsDriver(schedulerProvider)
+                .SubscribeOn(schedulerProvider.BackgroundScheduler);
 
             NumberOfSyncFailures = interactorFactory
                 .GetItemsThatFailedToSync()
                 .Execute()
                 .Select(i => i.Count())
-                .AsDriver(schedulerProvider);
+                .AsDriver(schedulerProvider)
+                .SubscribeOn(schedulerProvider.BackgroundScheduler);
 
             ShouldReloadTimeEntryLog = Observable.Merge(
                 TimeService.MidnightObservable.SelectUnit(),
                 TimeService.SignificantTimeChangeObservable.SelectUnit())
-                .AsDriver(schedulerProvider);
+                .AsDriver(schedulerProvider)
+                .SubscribeOn(schedulerProvider.BackgroundScheduler);
 
             Refresh = rxActionFactory.FromAsync(refresh);
             OpenReports = rxActionFactory.FromAsync(openReports);
@@ -256,7 +245,8 @@ namespace Toggl.Core.UI.ViewModels
                 .Select(canPresentRating)
                 .DistinctUntilChanged()
                 .Do(trackRatingViewPresentation)
-                .AsDriver(schedulerProvider);
+                .AsDriver(schedulerProvider)
+                .SubscribeOn(schedulerProvider.BackgroundScheduler);
 
             OnboardingStorage.StopButtonWasTappedBefore
                              .Subscribe(hasBeen => hasStopButtonEverBeenUsed = hasBeen)

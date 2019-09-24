@@ -68,7 +68,7 @@ namespace Toggl.Droid.Fragments
 
         private void setupMainLogObservables()
         {
-            var collectionChanges = ViewModel.TimeEntries.SelectUnit();
+            var collectionChanges = ViewModel.TimeEntriesViewModel.TimeEntries.SelectUnit();
             mainRecyclerViewChangesObservable = mainRecyclerViewScrollChanges
                 .Merge(collectionChanges);
         }

@@ -101,18 +101,22 @@ namespace Toggl.Core.UI.ViewModels
                 .Where(progress => progress != SyncProgress.Syncing && progress != SyncProgress.Unknown && !backgroundService.AppIsInBackground)
                 .SelectUnit();
 
-            Suggestions = permissionsChecker.CalendarPermissionGranted
+            var suggestionsObservable = permissionsChecker.CalendarPermissionGranted
                 .ReemitWhen(appResumedFromBackground)
                 .ReemitWhen(userCalendarPreferencesChanged)
                 .ReemitWhen(syncingFinishedWhenInForeground)
-                .Throttle(recalculationThrottleDuration, schedulerProvider.BackgroundScheduler)
+                .Throttle(recalculationThrottleDuration, schedulerProvider.DefaultScheduler)
+                .ObserveOn(schedulerProvider.BackgroundScheduler)
                 .SelectMany(isCalendarAuthorized => getSuggestions()
                     .Do(suggestions => trackPresentedSuggestions(suggestions, isCalendarAuthorized)))
                 .DistinctUntilChanged(suggestionsComparer)
-                .ObserveOn(schedulerProvider.BackgroundScheduler)
+                .SubscribeOn(schedulerProvider.BackgroundScheduler)
+                .ConnectedReplay();
+
+            Suggestions = suggestionsObservable
                 .AsDriver(onErrorJustReturn: ImmutableList.Create<Suggestion>(), schedulerProvider: schedulerProvider);
 
-            IsEmpty = Suggestions
+            IsEmpty = suggestionsObservable
                 .Select(suggestions => suggestions.None())
                 .StartWith(true)
                 .AsDriver(onErrorJustReturn: true, schedulerProvider: schedulerProvider);

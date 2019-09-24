@@ -115,12 +115,12 @@ namespace Toggl.iOS.ViewControllers
 
             TimeEntriesLogTableView.Source = tableViewSource;
 
-            ViewModel.TimeEntries
+            ViewModel.TimeEntriesViewModel.TimeEntries
                 .Subscribe(TimeEntriesLogTableView.Rx().AnimateSections<MainLogSection, DaySummaryViewModel, LogItemViewModel, IMainLogKey>(tableViewSource))
                 .DisposedBy(disposeBag);
 
             ViewModel.ShouldReloadTimeEntryLog
-                .WithLatestFrom(ViewModel.TimeEntries, (_, timeEntries) => timeEntries)
+                .WithLatestFrom(ViewModel.TimeEntriesViewModel.TimeEntries, (_, timeEntries) => timeEntries)
                 .Subscribe(TimeEntriesLogTableView.Rx().ReloadSections(tableViewSource))
                 .DisposedBy(disposeBag);
 
@@ -723,7 +723,7 @@ namespace Toggl.iOS.ViewControllers
         {
             var storage = ViewModel.OnboardingStorage;
 
-            var timelineIsEmpty = ViewModel.LogEmpty;
+            var timelineIsEmpty = ViewModel.TimeEntriesViewModel.Empty;
 
             new StartTimeEntryOnboardingStep(storage)
                 .ManageDismissableTooltip(StartTimeEntryOnboardingBubbleView, storage)

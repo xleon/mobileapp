@@ -179,7 +179,7 @@ namespace Toggl.Droid.Fragments
                  .Subscribe(ViewModel.Refresh.Inputs)
                  .DisposedBy(DisposeBag);
 
-            ViewModel.TimeEntries
+            ViewModel.TimeEntriesViewModel.TimeEntries
                 .Subscribe(mainRecyclerAdapter.UpdateCollection)
                 .DisposedBy(DisposeBag);
 
@@ -199,7 +199,7 @@ namespace Toggl.Droid.Fragments
 
             setupItemTouchHelper(touchCallback);
 
-            ViewModel.TimeEntriesCount
+            ViewModel.TimeEntriesViewModel.Count
                 .Subscribe(timeEntriesCountSubject)
                 .DisposedBy(DisposeBag);
 
