@@ -22,6 +22,9 @@ namespace Toggl.Core.UI.Navigation
 
         private IViewModel findViewModel(Type viewModelType)
         {
+            if (viewModelType == typeof(MainTabBarViewModel))
+                return new MainTabBarViewModel(dependencyContainer);
+            
             if (viewModelType == typeof(EditDurationViewModel))
             {
                 return new EditDurationViewModel(
@@ -80,31 +83,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.InteractorFactory);
-            }
-
-            if (viewModelType == typeof(MainTabBarViewModel))
-            {
-                return new MainTabBarViewModel(
-                    dependencyContainer.TimeService,
-                    dependencyContainer.DataSource,
-                    dependencyContainer.SyncManager,
-                    dependencyContainer.RatingService,
-                    dependencyContainer.UserPreferences,
-                    dependencyContainer.AnalyticsService,
-                    dependencyContainer.BackgroundService,
-                    dependencyContainer.InteractorFactory,
-                    dependencyContainer.OnboardingStorage,
-                    dependencyContainer.SchedulerProvider,
-                    dependencyContainer.PermissionsChecker,
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.RemoteConfigService,
-                    dependencyContainer.AccessibilityService,
-                    dependencyContainer.UpdateRemoteConfigCacheService,
-                    dependencyContainer.AccessRestrictionStorage,
-                    dependencyContainer.RxActionFactory,
-                    dependencyContainer.UserAccessManager,
-                    dependencyContainer.PrivateSharedStorageService,
-                    dependencyContainer.PlatformInfo);
             }
 
             if (viewModelType == typeof(MainViewModel))

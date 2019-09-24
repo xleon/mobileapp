@@ -35,8 +35,9 @@ namespace Toggl.iOS.ViewControllers
             ViewModel = viewModel;
             ViewControllers = ViewModel.Tabs.Select(createTabFor).ToArray();
 
-            UIViewController createTabFor(ViewModel childViewModel)
+            UIViewController createTabFor(Lazy<ViewModel> lazViewModel)
             {
+                var childViewModel = lazViewModel.Value;
                 var viewController = ViewControllerLocator.GetNavigationViewController(childViewModel);
                 var childViewModelType = childViewModel.GetType();
                 var item = new UITabBarItem();

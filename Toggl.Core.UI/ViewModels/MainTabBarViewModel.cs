@@ -1,153 +1,107 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using Toggl.Core.Analytics;
-using Toggl.Core.DataSources;
-using Toggl.Core.Interactors;
-using Toggl.Core.Login;
-using Toggl.Core.Services;
-using Toggl.Core.Sync;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.UI.Services;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Shared;
-using Toggl.Shared.Extensions;
-using Toggl.Storage.Settings;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class MainTabBarViewModel : ViewModel
     {
-        private readonly IRemoteConfigService remoteConfigService;
         private readonly IPlatformInfo platformInfo;
 
-        private readonly MainViewModel mainViewModel;
-        private readonly ReportsViewModel reportsViewModel;
-        private readonly CalendarViewModel calendarViewModel;
-        private readonly SettingsViewModel settingsViewModel;
+        private readonly Lazy<ViewModel> mainViewModel;
+        private readonly Lazy<ViewModel> reportsViewModel;
+        private readonly Lazy<ViewModel> calendarViewModel;
+        private readonly Lazy<ViewModel> settingsViewModel;
 
-        private bool hasOpenedReports = false;
+        public IImmutableList<Lazy<ViewModel>> Tabs { get; }
 
-        public IList<ViewModel> Tabs { get; }
-
-        public MainTabBarViewModel(
-            ITimeService timeService,
-            ITogglDataSource dataSource,
-            ISyncManager syncManager,
-            IRatingService ratingService,
-            IUserPreferences userPreferences,
-            IAnalyticsService analyticsService,
-            IBackgroundService backgroundService,
-            IInteractorFactory interactorFactory,
-            IOnboardingStorage onboardingStorage,
-            ISchedulerProvider schedulerProvider,
-            IPermissionsChecker permissionsChecker,
-            INavigationService navigationService,
-            IRemoteConfigService remoteConfigService,
-            IAccessibilityService accessibilityService,
-            IUpdateRemoteConfigCacheService updateRemoteConfigCacheService,
-            IAccessRestrictionStorage accessRestrictionStorage,
-            IRxActionFactory rxActionFactory,
-            IUserAccessManager userAccessManager,
-            IPrivateSharedStorageService privateSharedStorageService,
-            IPlatformInfo platformInfo)
-            : base(navigationService)
+        public MainTabBarViewModel(UIDependencyContainer dependencyContainer)
+            : base(dependencyContainer.NavigationService)
         {
-            Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
-            Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
-            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(ratingService, nameof(ratingService));
-            Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
-            Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
-            Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
-            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
-            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
-            Ensure.Argument.IsNotNull(remoteConfigService, nameof(remoteConfigService));
-            Ensure.Argument.IsNotNull(accessibilityService, nameof(accessibilityService));
-            Ensure.Argument.IsNotNull(updateRemoteConfigCacheService, nameof(updateRemoteConfigCacheService));
-            Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
-            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
-            Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
-            Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
-            Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
+            platformInfo = dependencyContainer.PlatformInfo;
 
-            this.remoteConfigService = remoteConfigService;
-            this.platformInfo = platformInfo;
+            mainViewModel = new Lazy<ViewModel>(() => new MainViewModel(
+                dependencyContainer.DataSource,
+                dependencyContainer.SyncManager,
+                dependencyContainer.TimeService,
+                dependencyContainer.RatingService,
+                dependencyContainer.UserPreferences,
+                dependencyContainer.AnalyticsService,
+                dependencyContainer.OnboardingStorage,
+                dependencyContainer.InteractorFactory,
+                dependencyContainer.NavigationService,
+                dependencyContainer.RemoteConfigService,
+                dependencyContainer.AccessibilityService,
+                dependencyContainer.UpdateRemoteConfigCacheService,
+                dependencyContainer.AccessRestrictionStorage,
+                dependencyContainer.SchedulerProvider,
+                dependencyContainer.RxActionFactory,
+                dependencyContainer.PermissionsChecker,
+                dependencyContainer.BackgroundService,
+                platformInfo));
 
-            mainViewModel = new MainViewModel(
-                dataSource,
-                syncManager,
-                timeService,
-                ratingService,
-                userPreferences,
-                analyticsService,
-                onboardingStorage,
-                interactorFactory,
-                navigationService,
-                remoteConfigService,
-                accessibilityService,
-                updateRemoteConfigCacheService,
-                accessRestrictionStorage,
-                schedulerProvider,
-                rxActionFactory,
-                permissionsChecker,
-                backgroundService,
-                platformInfo);
+            reportsViewModel = new Lazy<ViewModel>(() => new ReportsViewModel(
+                dependencyContainer.DataSource,
+                dependencyContainer.TimeService,
+                dependencyContainer.NavigationService,
+                dependencyContainer.InteractorFactory,
+                dependencyContainer.AnalyticsService,
+                dependencyContainer.SchedulerProvider,
+                dependencyContainer.RxActionFactory));
 
-            reportsViewModel = new ReportsViewModel(
-                dataSource,
-                timeService,
-                navigationService,
-                interactorFactory,
-                analyticsService,
-                schedulerProvider,
-                rxActionFactory);
+            calendarViewModel = new Lazy<ViewModel>(() => new CalendarViewModel(
+                dependencyContainer.DataSource,
+                dependencyContainer.TimeService,
+                dependencyContainer.UserPreferences,
+                dependencyContainer.AnalyticsService,
+                dependencyContainer.BackgroundService,
+                dependencyContainer.InteractorFactory,
+                dependencyContainer.OnboardingStorage,
+                dependencyContainer.SchedulerProvider,
+                dependencyContainer.PermissionsChecker,
+                dependencyContainer.NavigationService,
+                dependencyContainer.RxActionFactory));
 
-            calendarViewModel = new CalendarViewModel(
-                dataSource,
-                timeService,
-                userPreferences,
-                analyticsService,
-                backgroundService,
-                interactorFactory,
-                onboardingStorage,
-                schedulerProvider,
-                permissionsChecker,
-                navigationService,
-                rxActionFactory);
+            settingsViewModel = new Lazy<ViewModel>(() => new SettingsViewModel(
+                dependencyContainer.DataSource,
+                dependencyContainer.SyncManager,
+                dependencyContainer.PlatformInfo,
+                dependencyContainer.UserPreferences,
+                dependencyContainer.AnalyticsService,
+                dependencyContainer.InteractorFactory,
+                dependencyContainer.OnboardingStorage,
+                dependencyContainer.NavigationService,
+                dependencyContainer.RxActionFactory,
+                dependencyContainer.PermissionsChecker,
+                dependencyContainer.SchedulerProvider));
 
-            settingsViewModel = new SettingsViewModel(
-                dataSource,
-                syncManager,
-                platformInfo,
-                userPreferences,
-                analyticsService,
-                interactorFactory,
-                onboardingStorage,
-                navigationService,
-                rxActionFactory,
-                permissionsChecker,
-                schedulerProvider);
-
-            Tabs = getViewModels().ToList();
+            Tabs = getViewModels().ToImmutableList();
         }
 
-        public override async Task Initialize()
+        public TViewModel GetViewModel<TViewModel>()
+            where TViewModel : class, IViewModel
         {
-            await base.Initialize();
+            var expectedType = typeof(TViewModel);
+            if (expectedType == typeof(MainViewModel))
+                return mainViewModel.Value as TViewModel;
 
-            await Tabs
-                .Select(vm => vm.Initialize())
-                .Apply(Task.WhenAll);
+            if (expectedType == typeof(ReportsViewModel))
+                return reportsViewModel.Value as TViewModel;
+
+            if (expectedType == typeof(CalendarViewModel))
+                return calendarViewModel.Value as TViewModel;
+
+            if (expectedType == typeof(SettingsViewModel))
+                return settingsViewModel.Value as TViewModel;
+
+            throw new InvalidOperationException();
         }
 
-        private IEnumerable<ViewModel> getViewModels()
+        private IEnumerable<Lazy<ViewModel>> getViewModels()
         {
             yield return mainViewModel;
             yield return reportsViewModel;

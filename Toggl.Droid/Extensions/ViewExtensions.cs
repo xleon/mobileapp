@@ -63,6 +63,12 @@ namespace Toggl.Droid.Extensions
             }
         }
 
+        public static void SafeShow(this View view)
+            => view.Post(() => view.Visibility = ViewStates.Visible);
+
+        public static void SafeHide(this View view)
+            => view.Post(() => view.Visibility = ViewStates.Gone);
+
         private class MaterialScrollBehaviorListener : Java.Lang.Object, View.IOnScrollChangeListener
         {
             private readonly AppBarLayout appBarLayout;
