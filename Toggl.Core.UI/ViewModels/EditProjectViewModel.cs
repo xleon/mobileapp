@@ -44,7 +44,7 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<string> ClientName { get; }
         public IObservable<string> WorkspaceName { get; }
         public IObservable<bool> CanCreatePublicProjects { get; }
-        public UIAction Save { get; }
+        public ViewAction Save { get; }
         public OutputAction<Color> PickColor { get; }
         public OutputAction<IThreadSafeClient> PickClient { get; }
         public OutputAction<IThreadSafeWorkspace> PickWorkspace { get; }
