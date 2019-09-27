@@ -63,6 +63,20 @@ While this list provides a list of steps to do as a Project lead, it is in no wa
 	* [ ] Week N - Early
 	* [ ] Week N - Late
 
+#### Crisis management
+⚠ This section is activated when you realize that the deadline is no longer attainable (regardless of the reasons). However, you should be observant enough to anticipate potential delays ahead of time.
+
+* [ ] Inform the teamlead and the product manager immediatelly
+
+SCENARIO 1 - If the project can be completed partially
+* [ ] If there are possible features you can cut from your project, that should be step 1. Carefully weigh down what can be cut and make a decision. If you need help, don't hesitate to contact the teamlead for guidance.
+* [ ] When you have decided what to do, inform all the involved parties (the teamlead, the product manager and other stakeholders)
+
+SCENARIO 2 - If cutting does not make sense within the context of the project
+* [ ] If the delay seems necessary, discuss it with the teamlead as soon as possible. And in this case `as soon as possible` really means **as soon as possible**.
+* [ ] In cooperation with the teamlead, decide how to proceed further.
+* [ ] When teamlead blesses the recovery strategy, continue as decided.
+
 ### 4. After the project is implemented
 * [ ] ✅ Test! Test! Test!
 	* Besides you and your project team, feel free to employ all Togglrs to help with testing by reaching out on public channels.
@@ -78,17 +92,3 @@ project PR into `develop`. The teamlead gives the green light in this case.
 ### 5. Aftermath
 * [ ] ⚡ Remember to keep an eye on how the users interact with the new features
 * [ ] 📃 Write a follow-up document when you see the influence of the feature on our users
-
-### 6. Crisis management
-⚠ This section is activated when you realize that the deadline is no longer attainable (regardless of the reasons). However, you should be observant enough to anticipate potential delays ahead of time.
-
-* [ ] Inform the teamlead and the product manager immediatelly
-
-SCENARIO 1 - If the project can be completed partially
-* [ ] If there are possible features you can cut from your project, that should be step 1. Carefully weigh down what can be cut and make a decision. If you need help, don't hesitate to contact the teamlead for guidance.
-* [ ] When you have decided what to do, inform all the involved parties (the teamlead, the product manager and other stakeholders)
-
-SCENARIO 2 - If cutting does not make sense within the context of the project
-* [ ] If the delay seems necessary, discuss it with the teamlead as soon as possible. And in this case `as soon as possible` really means **as soon as possible**.
-* [ ] In cooperation with the teamlead, decide how to proceed further.
-* [ ] When teamlead blesses the recovery strategy, continue as decided.
