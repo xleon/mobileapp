@@ -25,26 +25,6 @@ namespace Toggl.Droid.Extensions
         private static readonly string defaultChannelName = "Toggl";
         private static readonly string defaultChannelDescription = "Toggl notifications";
 
-        public static void ChangeStatusBarColor(this Activity activity, Color color, bool useDarkIcons = false)
-        {
-            var window = activity.Window;
-            window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
-            window.ClearFlags(WindowManagerFlags.TranslucentStatus);
-            window.SetStatusBarColor(color);
-
-            if (MarshmallowApis.AreNotAvailable)
-            {
-                if (color == Color.White && useDarkIcons)
-                {
-                    window.SetStatusBarColor(lollipopFallbackStatusBarColor);
-                }
-                return;
-            }
-
-            window.DecorView.SystemUiVisibility =
-                (StatusBarVisibility)(useDarkIcons ? SystemUiFlags.LightStatusBar : SystemUiFlags.Visible);
-        }
-
         public static (int widthPixels, int heightPixels, bool isLargeScreen) GetMetrics(this Activity activity, Context context = null)
         {
             const int largeScreenThreshold = 360;
@@ -127,7 +107,8 @@ namespace Toggl.Droid.Extensions
                         return;
                     }
 
-                    var builder = new AlertDialog.Builder(activity, Resource.Style.TogglDialog).SetMessage(message)
+                    var builder = new AlertDialog.Builder(activity)
+                        .SetMessage(message)
                         .SetPositiveButton(confirmButtonText, (s, e) => observer.CompleteWith(true));
 
                     if (!string.IsNullOrWhiteSpace(title))
@@ -141,9 +122,9 @@ namespace Toggl.Droid.Extensions
                     }
 
                     var dialog = builder.Create();
-                    dialog.CancelEvent += (s, e) => observer.CompleteWith(false);
-
                     dialog.Show();
+
+                    dialog.CancelEvent += (s, e) => observer.CompleteWith(false);
                 }
 
                 activity.RunOnUiThread(showDialogIfActivityIsThere);

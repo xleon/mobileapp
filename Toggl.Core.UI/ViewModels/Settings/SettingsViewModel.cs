@@ -8,11 +8,9 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.DTOs;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
-using Toggl.Core.Login;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
@@ -22,6 +20,7 @@ using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Services;
 using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels.Settings;
+using Toggl.Core.UI.Views;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
@@ -30,8 +29,6 @@ using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.Core.UI.ViewModels
 {
-    using WorkspaceToSelectableWorkspaceLambda = Func<IEnumerable<IThreadSafeWorkspace>, IList<SelectableWorkspaceViewModel>>;
-
     [Preserve(AllMembers = true)]
     public sealed class SettingsViewModel : ViewModel
     {
@@ -42,23 +39,17 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly ITogglDataSource dataSource;
         private readonly ISyncManager syncManager;
-        private readonly IUserAccessManager userAccessManager;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly IPlatformInfo platformInfo;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly IInteractorFactory interactorFactory;
-        private readonly IPrivateSharedStorageService privateSharedStorageService;
-        private readonly IStopwatchProvider stopwatchProvider;
-        private readonly IRxActionFactory rxActionFactory;
-        private readonly ISchedulerProvider schedulerProvider;
         private readonly IPermissionsChecker permissionsChecker;
 
         private bool isSyncing;
         private bool isLoggingOut;
         private IThreadSafeUser currentUser;
         private IThreadSafePreferences currentPreferences;
-        private IStopwatch navigationFromMainViewModelStopwatch;
 
         public string Title { get; private set; } = Resources.Settings;
         public bool CalendarSettingsEnabled => onboardingStorage.CompletedCalendarOnboarding();
@@ -81,22 +72,25 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> IsFeedbackSuccessViewShowing { get; }
         public IObservable<bool> IsCalendarSmartRemindersVisible { get; }
         public IObservable<string> CalendarSmartReminders { get; }
+        public IObservable<bool> SwipeActionsEnabled { get; }
 
-        public UIAction OpenCalendarSettings { get; }
-        public UIAction OpenCalendarSmartReminders { get; }
-        public UIAction OpenNotificationSettings { get; }
-        public UIAction ToggleTwentyFourHourSettings { get; }
-        public UIAction OpenHelpView { get; }
-        public UIAction TryLogout { get; }
-        public UIAction OpenAboutView { get; }
-        public UIAction OpenSiriShortcuts { get; }
-        public UIAction OpenSiriWorkflows { get; }
-        public UIAction SubmitFeedback { get; }
-        public UIAction SelectDateFormat { get; }
-        public UIAction PickDefaultWorkspace { get; }
-        public UIAction SelectDurationFormat { get; }
-        public UIAction ToggleTimeEntriesGrouping { get; }
-        public UIAction SelectBeginningOfWeek { get; }
+        public ViewAction OpenCalendarSettings { get; }
+        public ViewAction OpenCalendarSmartReminders { get; }
+        public ViewAction OpenNotificationSettings { get; }
+        public ViewAction ToggleTwentyFourHourSettings { get; }
+        public ViewAction OpenHelpView { get; }
+        public ViewAction TryLogout { get; }
+        public ViewAction OpenAboutView { get; }
+        public ViewAction OpenSiriShortcuts { get; }
+        public ViewAction OpenSiriWorkflows { get; }
+        public ViewAction SubmitFeedback { get; }
+        public ViewAction SelectDateFormat { get; }
+        public ViewAction PickDefaultWorkspace { get; }
+        public ViewAction SelectDurationFormat { get; }
+        public ViewAction ToggleTimeEntriesGrouping { get; }
+        public ViewAction SelectBeginningOfWeek { get; }
+        public ViewAction ToggleManualMode { get; }
+        public ViewAction ToggleSwipeActions { get; }
 
         public SettingsViewModel(
             ITogglDataSource dataSource,
@@ -104,12 +98,9 @@ namespace Toggl.Core.UI.ViewModels
             IPlatformInfo platformInfo,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
-            IUserAccessManager userAccessManager,
             IInteractorFactory interactorFactory,
             IOnboardingStorage onboardingStorage,
             INavigationService navigationService,
-            IPrivateSharedStorageService privateSharedStorageService,
-            IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory,
             IPermissionsChecker permissionsChecker,
             ISchedulerProvider schedulerProvider)
@@ -122,9 +113,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
-            Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
-            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
@@ -133,15 +121,10 @@ namespace Toggl.Core.UI.ViewModels
             this.syncManager = syncManager;
             this.platformInfo = platformInfo;
             this.userPreferences = userPreferences;
-            this.rxActionFactory = rxActionFactory;
             this.analyticsService = analyticsService;
             this.interactorFactory = interactorFactory;
-            this.userAccessManager = userAccessManager;
             this.onboardingStorage = onboardingStorage;
-            this.stopwatchProvider = stopwatchProvider;
-            this.schedulerProvider = schedulerProvider;
             this.permissionsChecker = permissionsChecker;
-            this.privateSharedStorageService = privateSharedStorageService;
 
             IsSynced =
                 syncManager.ProgressObservable
@@ -188,7 +171,7 @@ namespace Toggl.Core.UI.ViewModels
                 dataSource.User.Current
                     .Select(user => user.BeginningOfWeek)
                     .DistinctUntilChanged()
-                    .Select(beginningOfWeek => beginningOfWeek.ToString())
+                    .Select(beginningOfWeek => beginningOfWeek.ToLocalizedString())
                     .AsDriver(schedulerProvider);
 
             DateFormat =
@@ -199,8 +182,7 @@ namespace Toggl.Core.UI.ViewModels
 
             DurationFormat =
                 dataSource.Preferences.Current
-                    .Select(preferences => preferences.DurationFormat)
-                    .Select(DurationFormatToString.Convert)
+                    .Select(preferences => preferences.DurationFormat.ToFormattedString())
                     .DistinctUntilChanged()
                     .AsDriver(schedulerProvider);
 
@@ -241,6 +223,9 @@ namespace Toggl.Core.UI.ViewModels
             IsFeedbackSuccessViewShowing = isFeedbackSuccessViewShowing.AsObservable()
                 .AsDriver(schedulerProvider);
 
+            SwipeActionsEnabled = userPreferences.SwipeActionsEnabled
+                .AsDriver(schedulerProvider);
+
             OpenCalendarSettings = rxActionFactory.FromAsync(openCalendarSettings);
             OpenCalendarSmartReminders = rxActionFactory.FromAsync(openCalendarSmartReminders);
             OpenNotificationSettings = rxActionFactory.FromAsync(openNotificationSettings);
@@ -256,21 +241,19 @@ namespace Toggl.Core.UI.ViewModels
             SelectDurationFormat = rxActionFactory.FromAsync(selectDurationFormat);
             SelectBeginningOfWeek = rxActionFactory.FromAsync(selectBeginningOfWeek);
             ToggleTimeEntriesGrouping = rxActionFactory.FromAsync(toggleTimeEntriesGrouping);
+            ToggleManualMode = rxActionFactory.FromAction(toggleManualMode);
+            ToggleSwipeActions = rxActionFactory.FromAction(toggleSwipeActions);
         }
 
         public override async Task Initialize()
         {
             await base.Initialize();
-            await checkCalendarPermissions();
-            navigationFromMainViewModelStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenSettingsView);
-            stopwatchProvider.Remove(MeasuredOperation.OpenStartView);
+            checkCalendarPermissions();
         }
 
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            navigationFromMainViewModelStopwatch?.Stop();
-            navigationFromMainViewModelStopwatch = null;
             checkCalendarPermissions();
         }
 
@@ -288,7 +271,7 @@ namespace Toggl.Core.UI.ViewModels
             await updatePreferences(timeFormat: timeFormat);
         }
 
-        public void ToggleManualMode()
+        private void toggleManualMode()
         {
             if (userPreferences.IsManualModeEnabled)
             {
@@ -402,28 +385,41 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task selectDateFormat()
         {
-            var newDateFormat = await Navigate<SelectDateFormatViewModel, DateFormat, DateFormat>(currentPreferences.DateFormat);
+            var validDateFormats = Shared.DateFormat.ValidDateFormats;
+            var dayFormatSelections = validDateFormats.Select(selectOptionFromDateFormat);
+            var selectedDayFormatIndex = validDateFormats
+                .IndexOf(pref => pref.Long == currentPreferences.DateFormat.Long);
+
+            var newDateFormat = await View
+                .Select(Resources.DateFormat, dayFormatSelections, selectedDayFormatIndex);
 
             if (currentPreferences.DateFormat == newDateFormat)
                 return;
 
             await updatePreferences(dateFormat: newDateFormat);
+
+            SelectOption<DateFormat> selectOptionFromDateFormat(DateFormat dateFormat)
+                => new SelectOption<DateFormat>(dateFormat, dateFormat.Localized);
         }
 
         private async Task pickDefaultWorkspace()
         {
-            var defaultWorkspace = await interactorFactory.GetDefaultWorkspace()
-                .TrackException<InvalidOperationException, IThreadSafeWorkspace>("SettingsViewModel.PickDefaultWorkspace")
-                .Execute();
+            var validWorkspaces = await interactorFactory.GetAllWorkspaces().Execute();
+            var workspaceSelections = validWorkspaces.Select(selectOptionFromWorkspace);
+            var selectedWorkspaceIndex = validWorkspaces
+                .IndexOf(ws => ws.Id == currentUser.DefaultWorkspaceId);
 
-            var selectedWorkspaceId =
-                await Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(new SelectWorkspaceParameters(Resources.SetDefaultWorkspace, defaultWorkspace.Id));
+            var newWorkspace = await View
+                .Select(Resources.DefaultWorkspace, workspaceSelections, selectedWorkspaceIndex);
 
-            if (selectedWorkspaceId == currentUser.DefaultWorkspaceId)
+            if (currentUser.DefaultWorkspaceId == newWorkspace.Id)
                 return;
 
-            await interactorFactory.UpdateDefaultWorkspace(selectedWorkspaceId).Execute();
+            await interactorFactory.UpdateDefaultWorkspace(newWorkspace.Id).Execute();
             syncManager.InitiatePushSync();
+
+            SelectOption<IThreadSafeWorkspace> selectOptionFromWorkspace(IThreadSafeWorkspace workspace)
+                => new SelectOption<IThreadSafeWorkspace>(workspace, workspace.Name);
         }
 
         private async Task toggleTimeEntriesGrouping()
@@ -435,30 +431,54 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task selectDurationFormat()
         {
-            var newDurationFormat = await Navigate<SelectDurationFormatViewModel, DurationFormat, DurationFormat>(currentPreferences.DurationFormat);
+            var validDurationFormats = Enum.GetValues(typeof(DurationFormat)).Cast<DurationFormat>();
+            var durationFormats = validDurationFormats.Select(selectOptionFromDurationFormat);
+            var selectedDurationFormatIndex = validDurationFormats
+                .IndexOf(durationFormat => durationFormat == currentPreferences.DurationFormat);
+
+            var newDurationFormat = await View
+                .Select(Resources.DurationFormat, durationFormats, selectedDurationFormatIndex);
 
             if (currentPreferences.DurationFormat == newDurationFormat)
                 return;
 
             await updatePreferences(newDurationFormat);
+
+            SelectOption<DurationFormat> selectOptionFromDurationFormat(DurationFormat durationFormat)
+                => new SelectOption<DurationFormat>(durationFormat, durationFormat.ToFormattedString());
         }
 
         private async Task selectBeginningOfWeek()
         {
-            var newBeginningOfWeek = await Navigate<SelectBeginningOfWeekViewModel, BeginningOfWeek, BeginningOfWeek>(currentUser
-                    .BeginningOfWeek);
+            var validDaysOfWeek = Enum.GetValues(typeof(BeginningOfWeek)).Cast<BeginningOfWeek>();
+            var beginningOfWeekSelections = validDaysOfWeek.Select(selectOptionFromBeginningOfWeek);
+            var selectedDayIndex = validDaysOfWeek
+                .IndexOf(beginningOfWeek => beginningOfWeek == currentUser.BeginningOfWeek);
+
+            var newBeginningOfWeek = await View
+                .Select(Resources.FirstDayOfTheWeek, beginningOfWeekSelections, selectedDayIndex);
 
             if (currentUser.BeginningOfWeek == newBeginningOfWeek)
                 return;
 
-            await interactorFactory.UpdateUser(new EditUserDTO { BeginningOfWeek = newBeginningOfWeek }).Execute();
+            await interactorFactory
+                .UpdateUser(new EditUserDTO { BeginningOfWeek = newBeginningOfWeek })
+                .Execute();
             syncManager.InitiatePushSync();
+
+            SelectOption<BeginningOfWeek> selectOptionFromBeginningOfWeek(BeginningOfWeek beginningOfWeek)
+                => new SelectOption<BeginningOfWeek>(beginningOfWeek, beginningOfWeek.ToLocalizedString());
         }
 
-        private async Task checkCalendarPermissions()
+        private void checkCalendarPermissions()
         {
-            var authorized = permissionsChecker.CalendarPermissionGranted.FirstAsync().GetAwaiter().GetResult();
-            calendarPermissionGranted.OnNext(authorized);
+            permissionsChecker.CalendarPermissionGranted.FirstAsync()
+                .Subscribe(calendarPermissionGranted.OnNext);
+        }
+
+        private void toggleSwipeActions()
+        {
+            userPreferences.SetSwipeActionsEnabled(!userPreferences.AreSwipeActionsEnabled);
         }
     }
 }

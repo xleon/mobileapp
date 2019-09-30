@@ -9,11 +9,11 @@ using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
 using Android.Text;
 using Android.Views;
+using Android.Widget;
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.Analytics;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Sync;
@@ -26,12 +26,13 @@ using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Helper;
 using Toggl.Droid.Presentation;
-using Toggl.Droid.Services;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Shared.Extensions;
 using static Android.Content.Context;
 using static Toggl.Core.Sync.SyncProgress;
+using static Toggl.Core.Analytics.EditTimeEntryOrigin;
 using FoundationResources = Toggl.Shared.Resources;
+using System.Linq;
 
 namespace Toggl.Droid.Fragments
 {
@@ -40,8 +41,8 @@ namespace Toggl.Droid.Fragments
         private const int snackbarDuration = 5000;
         private NotificationManager notificationManager;
         private MainRecyclerAdapter mainRecyclerAdapter;
+        private MainRecyclerViewTouchCallback touchCallback;
         private LinearLayoutManager layoutManager;
-        private FirebaseStopwatchProviderAndroid localStopwatchProvider = new FirebaseStopwatchProviderAndroid();
         private bool shouldShowRatingViewOnResume;
         private ISubject<bool> visibilityChangedSubject = new BehaviorSubject<bool>(false);
         private IObservable<bool> visibilityChanged => visibilityChangedSubject.AsObservable();
@@ -51,21 +52,22 @@ namespace Toggl.Droid.Fragments
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            var onCreateStopwatch = localStopwatchProvider.Create(MeasuredOperation.MainActivityOnCreate);
-            onCreateStopwatch.Start();
-
             var view = inflater.Inflate(Resource.Layout.MainFragment, container, false);
 
             InitializeViews(view);
-            setupToolbar();
+            SetupToolbar(view);
+            mainRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
 
-            onCreateStopwatch.Stop();
             return view;
         }
 
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
+
+            refreshLayout.SetProgressBackgroundColorSchemeResource(Resource.Color.cardBackground);
+            refreshLayout.SetColorSchemeResources(new[] { Resource.Color.primaryText });
+
             stopButton.Rx().BindAction(ViewModel.StopTimeEntry, _ => TimeEntryStopOrigin.Manual).DisposedBy(DisposeBag);
 
             playButton.Rx().BindAction(ViewModel.StartTimeEntry, _ => true).DisposedBy(DisposeBag);
@@ -73,13 +75,13 @@ namespace Toggl.Droid.Fragments
 
             runningEntryCardFrame.Rx().Tap()
                 .WithLatestFrom(ViewModel.CurrentRunningTimeEntry,
-                    (_, te) => (new[] { te.Id }, EditTimeEntryOrigin.RunningTimeEntryCard))
+                    (_, te) => new EditTimeEntryInfo(RunningTimeEntryCard, te.Id))
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
             ViewModel.ElapsedTime
                 .Subscribe(timeEntryCardTimerLabel.Rx().TextObserver())
-                .DisposedBy(DisposeBag);    
+                .DisposedBy(DisposeBag);
 
             ViewModel.CurrentRunningTimeEntry
                 .Select(te => te?.Description ?? "")
@@ -141,9 +143,9 @@ namespace Toggl.Droid.Fragments
             {
                 SuggestionsViewModel = ViewModel.SuggestionsViewModel,
                 RatingViewModel = ViewModel.RatingViewModel,
-                StopwatchProvider = localStopwatchProvider
             };
             mainRecyclerAdapter.SetupRatingViewVisibility(shouldShowRatingViewOnResume);
+            touchCallback = new MainRecyclerViewTouchCallback(mainRecyclerAdapter);
 
             setupRecycler();
 
@@ -157,7 +159,6 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             mainRecyclerAdapter.ContinueTimeEntry
-                .Select(vm => new ContinueTimeEntryInfo(vm.LogItem, vm.ContinueMode))
                 .Subscribe(ViewModel.ContinueTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
@@ -191,7 +192,12 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
             Activity.BindIdleTimer(notificationManager, ViewModel.IsTimeEntryRunning, ViewModel.ShouldShowStoppedTimeEntryNotification)
                 .DisposedBy(DisposeBag);
-            setupItemTouchHelper(mainRecyclerAdapter);
+
+            ViewModel.SwipeActionsEnabled
+                .Subscribe(onSwipeActionsChanged)
+                .DisposedBy(DisposeBag);
+
+            setupItemTouchHelper(touchCallback);
 
             ViewModel.TimeEntriesCount
                 .Subscribe(timeEntriesCountSubject)
@@ -230,11 +236,11 @@ namespace Toggl.Droid.Fragments
             var projectIsPlaceholder = te.Project?.IsPlaceholder() ?? false;
             var taskIsPlaceholder = te.Task?.IsPlaceholder() ?? false;
             return Extensions.TimeEntryExtensions.ToProjectTaskClient(
-                Context, 
-                hasProject, 
-                te.Project?.Name, 
-                te.Project?.Color, 
-                te.Task?.Name, 
+                Context,
+                hasProject,
+                te.Project?.Name,
+                te.Project?.Color,
+                te.Task?.Name,
                 te.Project?.Client?.Name,
                 projectIsPlaceholder,
                 taskIsPlaceholder,
@@ -266,9 +272,8 @@ namespace Toggl.Droid.Fragments
             mainRecyclerView.SetAdapter(mainRecyclerAdapter);
         }
 
-        private void setupItemTouchHelper(MainRecyclerAdapter mainAdapter)
+        private void setupItemTouchHelper(MainRecyclerViewTouchCallback callback)
         {
-            var callback = new MainRecyclerViewTouchCallback(mainAdapter);
             var itemTouchHelper = new ItemTouchHelper(callback);
             itemTouchHelper.AttachToRecyclerView(mainRecyclerView);
         }
@@ -311,15 +316,20 @@ namespace Toggl.Droid.Fragments
             }
         }
 
-        private (long[], EditTimeEntryOrigin) editEventInfo(LogItemViewModel item)
+        private EditTimeEntryInfo editEventInfo(LogItemViewModel item)
         {
             var origin = item.IsTimeEntryGroupHeader
-                ? EditTimeEntryOrigin.GroupHeader
+                ? GroupHeader
                 : item.BelongsToGroup
-                    ? EditTimeEntryOrigin.GroupTimeEntry
-                    : EditTimeEntryOrigin.SingleTimeEntry;
+                    ? GroupTimeEntry
+                    : SingleTimeEntry;
 
-            return (item.RepresentedTimeEntriesIds, origin);
+            return new EditTimeEntryInfo(origin, item.RepresentedTimeEntriesIds);
+        }
+
+        private void onSwipeActionsChanged(bool enabled)
+        {
+            touchCallback.AreSwipeActionsEnabled = enabled;
         }
 
         private void onTimeEntryCardVisibilityChanged(bool visible)
@@ -365,6 +375,12 @@ namespace Toggl.Droid.Fragments
                 if (welcomeBackView == null)
                 {
                     welcomeBackView = welcomeBackStub.Inflate();
+
+                    welcomeBackTitle = welcomeBackView.FindViewById<TextView>(Resource.Id.WelcomeBackTitle);
+                    welcomeBackSubText = welcomeBackView.FindViewById<TextView>(Resource.Id.WelcomeBackSubText);
+
+                    welcomeBackTitle.Text = FoundationResources.LogEmptyStateTitle;
+                    welcomeBackSubText.Text = FoundationResources.LogEmptyStateText;
                 }
 
                 welcomeBackView.Visibility = ViewStates.Visible;
@@ -373,13 +389,6 @@ namespace Toggl.Droid.Fragments
             {
                 welcomeBackView.Visibility = ViewStates.Gone;
             }
-        }
-
-        private void setupToolbar()
-        {
-            var activity = Activity as AppCompatActivity;
-            toolbar.Title = "";
-            activity.SetSupportActionBar(toolbar);
         }
     }
 }

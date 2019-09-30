@@ -1,19 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Reactive.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using FluentAssertions;
-using FsCheck;
 using NSubstitute;
-using Toggl.Core.Analytics;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
-using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
 using Xunit;
-using Notification = Toggl.Shared.Notification;
 using SyncOutcome = Toggl.Core.Models.SyncOutcome;
 using SyncState = Toggl.Core.Sync.SyncState;
 
@@ -25,12 +18,11 @@ namespace Toggl.Core.Tests.Interactors.Workspace
         {
             [Theory, LogIfTooSlow]
             [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useSyncManager, bool useStopwatchProvider, bool useAnalyticsService)
+            public void ThrowsIfAnyOfTheArgumentsIsNull(bool useSyncManager, bool useAnalyticsService)
             {
                 Action tryingToConstructWithNull = () =>
                     new RunSyncInteractor(
                         useSyncManager ? SyncManager : null,
-                        useStopwatchProvider ? StopwatchProvider : null,
                         useAnalyticsService ? AnalyticsService : null,
                         PushNotificationSyncSourceState.Foreground
                     );
@@ -52,7 +44,6 @@ namespace Toggl.Core.Tests.Interactors.Workspace
             {
                 return new RunSyncInteractor(
                     SyncManager,
-                    StopwatchProvider,
                     AnalyticsService,
                     sourceState
                 );

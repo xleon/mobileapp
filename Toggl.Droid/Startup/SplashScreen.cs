@@ -68,6 +68,7 @@ namespace Toggl.Droid
             var navigationUrl = Intent.Data?.ToString() ?? getTrackUrlFromProcessedText();
             if (string.IsNullOrEmpty(navigationUrl))
             {
+                app.ForceFullSync();
                 StartActivity(typeof(MainTabBarActivity));
                 Finish();
                 return;

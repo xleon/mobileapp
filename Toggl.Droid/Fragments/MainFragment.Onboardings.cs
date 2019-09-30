@@ -37,7 +37,7 @@ namespace Toggl.Droid.Fragments
             mainRecyclerViewScrollChangesDisposable = mainRecyclerView
                 .Rx()
                 .OnScrolled()
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(mainRecyclerViewScrollChanges.OnNext);
         }
 
@@ -50,8 +50,12 @@ namespace Toggl.Droid.Fragments
         public override void OnStop()
         {
             base.OnStop();
-            playButtonTooltipPopupWindow.Dismiss();
-            stopButtonTooltipPopupWindow.Dismiss();
+            playButtonTooltipPopupWindow?.Dismiss();
+            stopButtonTooltipPopupWindow?.Dismiss();
+            tapToEditPopup?.Dismiss();
+            playButtonTooltipPopupWindow = null;
+            stopButtonTooltipPopupWindow = null;
+            tapToEditPopup = null;
         }
 
         private void setupOnboardingSteps()
@@ -77,7 +81,7 @@ namespace Toggl.Droid.Fragments
                     Context,
                     Resource.Layout.TooltipWithRightArrow,
                     Resource.Id.TooltipText,
-                    Resource.String.OnboardingTapToStartTimer);
+                    Shared.Resources.TapToStartTimer);
             }
 
             new StartTimeEntryOnboardingStep(ViewModel.OnboardingStorage)
@@ -98,7 +102,7 @@ namespace Toggl.Droid.Fragments
                     Context,
                     Resource.Layout.TooltipWithRightBottomArrow,
                     Resource.Id.TooltipText,
-                    Resource.String.OnboardingTapToStopTimer);
+                    Shared.Resources.TapToStopTimer);
             }
 
             new StopTimeEntryOnboardingStep(ViewModel.OnboardingStorage, ViewModel.IsTimeEntryRunning)
@@ -117,7 +121,7 @@ namespace Toggl.Droid.Fragments
                 Context,
                 Resource.Layout.TooltipWithLeftTopArrow,
                 Resource.Id.TooltipText,
-                Resource.String.OnboardingTapToEdit);
+                Shared.Resources.TapToEditIt);
 
             editTimeEntryOnboardingStep = new EditTimeEntryOnboardingStep(
                 ViewModel.OnboardingStorage, Observable.Return(false));
@@ -132,7 +136,7 @@ namespace Toggl.Droid.Fragments
             showTapToEditOnboardingStepObservable
                 .Where(shouldShowStep => shouldShowStep)
                 .Select(_ => findOldestTimeEntryView())
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(updateTapToEditOnboardingStep)
                 .DisposedBy(DisposeBag);
         }

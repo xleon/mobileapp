@@ -1,7 +1,6 @@
 ﻿using System;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.Login;
 using Toggl.Core.Reports;
 using Toggl.Core.Services;
@@ -28,7 +27,6 @@ namespace Toggl.Core.Interactors
         private readonly Lazy<IUserPreferences> lazyUserPreferences;
         private readonly Lazy<ICalendarService> lazyCalendarService;
         private readonly Lazy<IAnalyticsService> lazyAnalyticsService;
-        private readonly Lazy<IStopwatchProvider> lazyStopwatchProvider;
         private readonly Lazy<INotificationService> lazyNotificationService;
         private readonly Lazy<ILastTimeUsageStorage> lazyLastTimeUsageStorage;
         private readonly Lazy<IApplicationShortcutCreator> lazyShortcutCreator;
@@ -47,7 +45,6 @@ namespace Toggl.Core.Interactors
         private IUserPreferences userPreferences => lazyUserPreferences.Value;
         private ICalendarService calendarService => lazyCalendarService.Value;
         private IAnalyticsService analyticsService => lazyAnalyticsService.Value;
-        private IStopwatchProvider stopwatchProvider => lazyStopwatchProvider.Value;
         private IApplicationShortcutCreator shortcutCreator => lazyShortcutCreator.Value;
         private INotificationService notificationService => lazyNotificationService.Value;
         private ILastTimeUsageStorage lastTimeUsageStorage => lazyLastTimeUsageStorage.Value;
@@ -67,7 +64,6 @@ namespace Toggl.Core.Interactors
             Lazy<ICalendarService> calendarService,
             Lazy<IUserPreferences> userPreferences,
             Lazy<IAnalyticsService> analyticsService,
-            Lazy<IStopwatchProvider> stopwatchProvider,
             Lazy<INotificationService> notificationService,
             Lazy<ILastTimeUsageStorage> lastTimeUsageStorage,
             Lazy<IApplicationShortcutCreator> shortcutCreator,
@@ -87,7 +83,6 @@ namespace Toggl.Core.Interactors
             Ensure.Argument.IsNotNull(shortcutCreator, nameof(shortcutCreator));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
-            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(notificationService, nameof(notificationService));
             Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
@@ -109,7 +104,6 @@ namespace Toggl.Core.Interactors
             lazyUserPreferences = userPreferences;
             lazyShortcutCreator = shortcutCreator;
             lazyAnalyticsService = analyticsService;
-            lazyStopwatchProvider = stopwatchProvider;
             lazyNotificationService = notificationService;
             lazyLastTimeUsageStorage = lastTimeUsageStorage;
             lazyPrivateSharedStorageService = privateSharedStorageService;

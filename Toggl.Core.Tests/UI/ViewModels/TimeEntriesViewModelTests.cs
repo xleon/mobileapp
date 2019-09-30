@@ -244,6 +244,22 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 // 3 - undo bar hidden
                 observer.Messages.Should().HaveCount(3);
             }
+
+            [Fact]
+            public async ThreadingTask TracksTheDeleteOfSingleTimeEntryEvent()
+            {
+                viewModel.DelayDeleteTimeEntries.Execute(new[] { 123L });
+                SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks);
+                AnalyticsService.DeleteTimeEntry.Received().Track(DeleteTimeEntryOrigin.LogSwipe);
+            }
+
+            [Fact]
+            public async ThreadingTask TracksTheDeleteOfGroupedTimeEntriesEvent()
+            {
+                viewModel.DelayDeleteTimeEntries.Execute(new[] { 123L, 456L, 789L });
+                SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks);
+                AnalyticsService.DeleteTimeEntry.Received().Track(DeleteTimeEntryOrigin.GroupedLogSwipe);
+            }
         }
 
         public sealed class TheCancelDeleteTimeEntryAction : TimeEntriesViewModelTest

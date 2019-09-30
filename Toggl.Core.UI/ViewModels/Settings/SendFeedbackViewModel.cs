@@ -22,8 +22,8 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ISubject<Exception> currentErrorSubject = new BehaviorSubject<Exception>(null);
 
         // Actions
-        public UIAction DismissError { get; }
-        public UIAction Send { get; }
+        public ViewAction DismissError { get; }
+        public ViewAction Send { get; }
 
         // Inputs
         public ISubject<string> FeedbackText { get; } = new BehaviorSubject<string>(string.Empty);
@@ -73,9 +73,13 @@ namespace Toggl.Core.UI.ViewModels
             var feedbackText = await FeedbackText.FirstAsync();
             if (!string.IsNullOrEmpty(feedbackText))
             {
-                var shouldDiscard = await View.ConfirmDestructiveAction(ActionType.DiscardFeedback);
-                if (!shouldDiscard)
-                    return;
+                var view = View;
+                if (view != null)
+                {
+                    var shouldDiscard = await View.ConfirmDestructiveAction(ActionType.DiscardFeedback);
+                    if (!shouldDiscard)
+                        return;
+                }
             }
 
             base.CloseWithDefaultResult();

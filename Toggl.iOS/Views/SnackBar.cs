@@ -1,4 +1,4 @@
-using CoreGraphics;
+﻿using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
 using System;
@@ -60,11 +60,12 @@ namespace Toggl.iOS
             };
 
             snackBar.text = text;
+            snackBar.IsAccessibilityElement = false;
             snackBar.configure();
             return snackBar;
         }
 
-        public void AddButton(String title, Action onTap)
+        public void AddButton(String title, Action onTap, string accessibilityLabel = null)
         {
             var button = new UIButton(UIButtonType.Plain);
             button.TouchUpInside += (sender, e) =>
@@ -75,6 +76,8 @@ namespace Toggl.iOS
             button.SetContentCompressionResistancePriority(1000, UILayoutConstraintAxis.Vertical);
             button.SetContentCompressionResistancePriority(1000, UILayoutConstraintAxis.Horizontal);
             button.HorizontalAlignment = UIControlContentHorizontalAlignment.Right;
+            button.IsAccessibilityElement = !string.IsNullOrEmpty(accessibilityLabel);
+            button.AccessibilityLabel = accessibilityLabel;
             buttonsStackView.AddArrangedSubview(button);
 
             SetNeedsLayout();
@@ -188,7 +191,7 @@ namespace Toggl.iOS
             public static SnackBar CreateUndoSnackBar(Action onUndo, string text)
             {
                 var snackBar = SnackBar.Create(text);
-                snackBar.AddButton(Resources.UndoButtonTitle, onUndo);
+                snackBar.AddButton(Resources.UndoButtonTitle, onUndo, Resources.UndoDeletedTimeEntry);
                 return snackBar;
             }
         }

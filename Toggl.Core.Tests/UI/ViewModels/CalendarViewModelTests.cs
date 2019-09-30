@@ -90,7 +90,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     SchedulerProvider,
                     PermissionsChecker,
                     NavigationService,
-                    StopwatchProvider,
                     RxActionFactory
                 );
         }
@@ -110,7 +109,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useSchedulerProvider,
                 bool useNavigationService,
                 bool usePermissionsChecker,
-                bool useStopwatchProvider,
                 bool useRxActionFactory)
             {
                 var dataSource = useDataSource ? DataSource : null;
@@ -123,7 +121,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var permissionsService = usePermissionsChecker ? PermissionsChecker : null;
-                var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
@@ -138,7 +135,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         schedulerProvider,
                         permissionsService,
                         navigationService,
-                        stopwatchProvider,
                         rxActionFactory);
 
                 tryingToConstructWithEmptyParameters.Should().Throw<ArgumentNullException>();
@@ -372,7 +368,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public abstract class LinkCalendarsTest : CalendarViewModelTest
         {
-            protected abstract UIAction Action { get; }
+            protected abstract ViewAction Action { get; }
 
             [Fact, LogIfTooSlow]
             public async Task RequestsCalendarPermission()
@@ -486,7 +482,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheLinkCalendarsAction : LinkCalendarsTest
         {
-            protected override UIAction Action => ViewModel.LinkCalendars;
+            protected override ViewAction Action => ViewModel.LinkCalendars;
         }
 
         public sealed class TheHasCalendarsLinkedObservable : CalendarViewModelTest
@@ -604,7 +600,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheGetStartedAction : LinkCalendarsTest
         {
-            protected override UIAction Action => ViewModel.GetStarted;
+            protected override ViewAction Action => ViewModel.GetStarted;
 
             [Fact, LogIfTooSlow]
             public async Task SetsCalendarOnboardingAsCompletedIfUserGrantsAccess()
@@ -1057,10 +1053,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.OnCalendarEventLongPressed.Inputs.OnNext(calendarEvent);
 
-                await View.Received().Select(
+                await View.Received().SelectAction(
                     Arg.Any<string>(),
-                    Arg.Is<IEnumerable<SelectOption<CalendarItem?>>>(options => options.Count() == 2),
-                    Arg.Any<int>());
+                    Arg.Is<IEnumerable<SelectOption<CalendarItem?>>>(options => options.Count() == 2));
             }
 
             [Fact, LogIfTooSlow]
@@ -1070,10 +1065,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 ViewModel.OnCalendarEventLongPressed.Inputs.OnNext(calendarEvent);
 
-                await View.Received().Select(
+                await View.Received().SelectAction(
                     Arg.Any<string>(),
-                    Arg.Is<IEnumerable<SelectOption<CalendarItem?>>>(options => options.Count() == 3),
-                    Arg.Any<int>());
+                    Arg.Is<IEnumerable<SelectOption<CalendarItem?>>>(options => options.Count() == 3));
             }
 
             [Fact, LogIfTooSlow]
@@ -1131,7 +1125,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             private void selectOptionByOptionText(string text)
             {
-                View.Select<CalendarItem?>(null, null, 0)
+                View.SelectAction<CalendarItem?>(null, null)
                     .ReturnsForAnyArgs(callInfo =>
                     {
                         var copyOption = callInfo.Arg<IEnumerable<SelectOption<CalendarItem?>>>()

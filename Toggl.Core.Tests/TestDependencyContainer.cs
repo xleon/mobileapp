@@ -1,11 +1,9 @@
 ﻿using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
-using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
@@ -112,11 +110,7 @@ namespace Toggl.Core.UI
         internal IApplicationShortcutCreator MockShortcutCreator { get; set; }
         protected override IApplicationShortcutCreator CreateShortcutCreator()
             => MockShortcutCreator;
-
-        internal IStopwatchProvider MockStopwatchProvider { get; set; }
-        protected override IStopwatchProvider CreateStopwatchProvider()
-            => MockStopwatchProvider;
-
+        
         internal IPushNotificationsTokenService MockPushNotificationsTokenService { get; set; }
         protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
             => MockPushNotificationsTokenService;
@@ -140,6 +134,10 @@ namespace Toggl.Core.UI
         internal ITogglDataSource MockDataSource { get; set; }
         protected override ITogglDataSource CreateDataSource()
             => MockDataSource;
+
+        internal IAccessibilityService MockAccessibilityService { get; set; }
+        protected override IAccessibilityService CreateAccessibilityService()
+            => MockAccessibilityService;
 
         internal IPushNotificationsTokenStorage MockPushNotificationsTokenStorage { get; set; }
         protected override IPushNotificationsTokenStorage CreatePushNotificationsTokenStorage()

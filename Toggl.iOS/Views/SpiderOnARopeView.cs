@@ -13,18 +13,18 @@ namespace Toggl.iOS.Views
     [Register(nameof(SpiderOnARopeView))]
     public class SpiderOnARopeView : UIView
     {
-        private const double height = 155.0;
         private const int chainLength = 8;
-        private const double chainLinkHeight = height / chainLength;
         private const double chainWidth = 2;
-        private const float spiderResistance = 0.75f;
-        private const float spiderAttachmentLength = 1;
+        private const float spiderResistance = 0.85f;
         private readonly CGColor ropeColor = Colors.Main.SpiderNetColor.ToNativeColor().CGColor;
+
+        private double spiderRadius;
 
         private UIDynamicAnimator spiderAnimator;
         private UIGravityBehavior gravity;
+        private UISnapBehavior dragging;
         private CMMotionManager motionManager;
-        private CMAcceleration? previousAcceleration;
+        private UIAttachmentBehavior spiderAttachment;
 
         private UIImage spiderImage;
         private UIView spiderView;
@@ -45,7 +45,6 @@ namespace Toggl.iOS.Views
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
-
             init();
         }
 
@@ -81,8 +80,12 @@ namespace Toggl.iOS.Views
 
             if (links != null && IsVisible == true)
             {
-                drawTheRope(ctx);
-                rotateTheSpider();
+                var points = links.Select(links => links.Center).ToArray();
+                var path = createCurvedPath(anchorPoint, points);
+                ctx.SetStrokeColor(ropeColor);
+                ctx.SetLineWidth((nfloat)chainWidth);
+                ctx.AddPath(path);
+                ctx.DrawPath(CGPathDrawingMode.Stroke);
             }
         }
 
@@ -107,23 +110,56 @@ namespace Toggl.iOS.Views
         public override void TouchesBegan(NSSet touches, UIEvent evt)
         {
             base.TouchesBegan(touches, evt);
+            snapTo(touches);
+        }
 
+        public override void TouchesMoved(NSSet touches, UIEvent evt)
+        {
+            base.TouchesMoved(touches, evt);
+            snapTo(touches);
+        }
+
+        public override void TouchesEnded(NSSet touches, UIEvent evt)
+        {
+            base.TouchesEnded(touches, evt);
+            releaseSnap();
+        }
+
+        public override void TouchesCancelled(NSSet touches, UIEvent evt)
+        {
+            base.TouchesCancelled(touches, evt);
+            releaseSnap();
+        }
+
+        private void snapTo(NSSet touches)
+        {
             if (spiderView == null) return;
 
-            var spiderTouchRadius = spiderImage.Size.Width;
-            var spiderTouchRadiusSq = spiderTouchRadius * spiderTouchRadius;
-            foreach (UITouch touch in touches)
+            var touch = (UITouch)touches.First();
+
+            lock (spiderAnimator)
             {
-                var position = touch.LocationInView(this);
-                var dx = position.X - spiderView.Center.X;
-                var dy = position.Y - spiderView.Center.Y;
-                var distanceSq = dx * dx + dy * dy;
-                if (distanceSq < spiderTouchRadiusSq)
+                if (dragging != null)
                 {
-                    var direction = new CGVector(anchorPoint.X - spiderView.Center.X, anchorPoint.Y - spiderView.Center.Y);
-                    applyForce(direction, touch.Force);
-                    break;
+                    spiderAnimator.RemoveBehavior(dragging);
                 }
+
+                var position = touch.LocationInView(this);
+                dragging = new UISnapBehavior(spiderView, position);
+
+                spiderAnimator.RemoveBehavior(gravity);
+                spiderAnimator.AddBehavior(dragging);
+            }
+        }
+
+        private void releaseSnap()
+        {
+            lock (spiderAnimator)
+            {
+                spiderAnimator.RemoveBehavior(dragging);
+                spiderAnimator.AddBehavior(gravity);
+
+                dragging = null;
             }
         }
 
@@ -149,17 +185,18 @@ namespace Toggl.iOS.Views
 
         private void preparePhysics()
         {
-            spiderView.Center = new CGPoint(Center.X, -height - spiderImage.Size.Height);
-            spiderView.Layer.AnchorPoint = new CGPoint(0.5, 0);
+            spiderRadius = Math.Sqrt(Math.Pow(spiderImage.Size.Width / 2, 2) + Math.Pow(spiderImage.Size.Height / 2, 2));
+            double height = (UIScreen.MainScreen.ApplicationFrame.Size.Width / 2) - 1.5 * spiderRadius;
 
             spiderAnimator = new UIDynamicAnimator(this);
 
             var spider = new UIDynamicItemBehavior(spiderView);
             spider.Action = () => SetNeedsDisplay();
             spider.Resistance = spiderResistance;
+            spider.AllowsRotation = true;
             spiderAnimator.AddBehavior(spider);
 
-            links = createRope();
+            links = createRope(height);
 
             gravity = new UIGravityBehavior(links);
             spiderAnimator.AddBehavior(gravity);
@@ -169,20 +206,22 @@ namespace Toggl.iOS.Views
             motionManager.StartAccelerometerUpdates(NSOperationQueue.CurrentQueue, processAccelerometerData);
         }
 
-        private UIView[] createRope()
+        private UIView[] createRope(double length)
         {
+            double chainLinkHeight = length / chainLength;
             var chain = new List<UIView>();
             UIView lastLink = null;
 
             for (int i = 0; i < chainLength; i++)
             {
-                var chainLink = createChainLink(i * chainLinkHeight, lastLink);
+                var chainLink = createChainLink(i, chainLinkHeight, lastLink);
                 chain.Add(chainLink);
-                lastLink = chainLink;
+                lastLink = chainLink;   
             }
 
-            var spiderAttachment = new UIAttachmentBehavior(spiderView, UIOffset.Zero, lastLink, UIOffset.Zero);
-            spiderAttachment.Length = spiderAttachmentLength;
+            spiderView.Center = new CGPoint(Center.X, -length + spiderImage.Size.Height / 2);
+            spiderAttachment = new UIAttachmentBehavior(lastLink, UIOffset.Zero, spiderView, new UIOffset(0, -spiderImage.Size.Height / 2));
+            spiderAttachment.Length = 0;
             spiderAnimator.AddBehavior(spiderAttachment);
 
             chain.Add(spiderView);
@@ -190,11 +229,13 @@ namespace Toggl.iOS.Views
             return chain.ToArray();
         }
 
-        private UIView createChainLink(double y, UIView lastLink)
+        private UIView createChainLink(int n, double chainLinkHeight, UIView lastLink)
         {
+            double y = -n * chainLinkHeight;
+
             var chainLink = new UIView();
             chainLink.BackgroundColor = UIColor.Clear;
-            chainLink.Frame = new CGRect(Center.X, -y, chainWidth, chainLinkHeight);
+            chainLink.Frame = new CGRect(Center.X, y, chainWidth, chainLinkHeight);
 
             AddSubview(chainLink);
 
@@ -205,29 +246,10 @@ namespace Toggl.iOS.Views
                 ? new UIAttachmentBehavior(chainLink, anchorPoint)
                 : new UIAttachmentBehavior(chainLink, lastLink);
             attachment.Length = (nfloat)chainLinkHeight;
+
             spiderAnimator.AddBehavior(attachment);
 
             return chainLink;
-        }
-
-        private void drawTheRope(CGContext ctx)
-        {
-            var points = links.Select(links => links.Center).ToArray();
-            var path = createCurvedPath(anchorPoint, points);
-            ctx.SetStrokeColor(ropeColor);
-            ctx.SetLineWidth((nfloat)chainWidth);
-            ctx.AddPath(path);
-            ctx.DrawPath(CGPathDrawingMode.Stroke);
-        }
-
-        private void rotateTheSpider()
-        {
-            // rotate the spider so it is perpendicular to a line
-            // defined by its position and the anchor point
-            var dx = spiderView.Center.X - anchorPoint.X;
-            var dy = spiderView.Center.Y - anchorPoint.Y;
-            var angle = (nfloat)(Math.Atan2(dy, dx) - Math.PI / 2.0);
-            spiderView.Transform = CGAffineTransform.Rotate(spiderView.Transform, angle);
         }
 
         private CGPath createCurvedPath(CGPoint anchor, CGPoint[] points)
@@ -279,32 +301,6 @@ namespace Toggl.iOS.Views
 
             var angle = -(nfloat)Math.Atan2(ay, ax);
             gravity.Angle = angle;
-
-            if (previousAcceleration.HasValue)
-            {
-                var (previousX, previousY) = convertXYCoordinate(previousAcceleration.Value.X,
-                    previousAcceleration.Value.Y, UIApplication.SharedApplication.StatusBarOrientation);
-
-                var dx = (nfloat)(ax - previousX);
-                var dy = (nfloat)(ay - previousY);
-
-                var direction = new CGVector(dx, dy);
-                var magnitude = (nfloat)Math.Sqrt(dx * dx + dy * dy);
-                if (magnitude > 0.25f)
-                {
-                    applyForce(direction, magnitude);
-                }
-            }
-
-            previousAcceleration = data.Acceleration;
-        }
-
-        private void applyForce(CGVector direction, nfloat magnitude)
-        {
-            var force = new UIPushBehavior(UIPushBehaviorMode.Instantaneous, spiderView);
-            force.PushDirection = direction;
-            force.Magnitude = magnitude;
-            spiderAnimator.AddBehavior(force);
         }
 
         // Catmull-Rom to Cubic Bezier conversion matrix:

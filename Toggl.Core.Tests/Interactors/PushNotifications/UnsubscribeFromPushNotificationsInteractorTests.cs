@@ -27,7 +27,7 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
         }
 
         [Fact, LogIfTooSlow]
-        public async Task ClearsThepushNotificationsTokenStorage()
+        public async Task ClearsThePushNotificationsTokenStorage()
         {
             PushNotificationsTokenService.Token.Returns(new PushNotificationsToken("token"));
             pushNotificationsTokenStorage.PreviouslyRegisteredToken.Returns(new PushNotificationsToken("token"));

@@ -10,7 +10,6 @@ using Toggl.Core.UI.Services;
 using Toggl.Networking;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 
 namespace Toggl.Core.Tests.Sync.Helpers
 {
@@ -34,8 +33,6 @@ namespace Toggl.Core.Tests.Sync.Helpers
 
         public ILastTimeUsageStorage LastTimeUsageStorageSubstitute { get; } = Substitute.For<ILastTimeUsageStorage>();
 
-        public IStopwatchProvider StopwatchProvider { get; } = Substitute.For<IStopwatchProvider>();
-
         public ISyncManager SyncManager { get; }
 
         public IAutomaticSyncingService AutomaticSyncingService { get; } = Substitute.For<IAutomaticSyncingService>();
@@ -47,6 +44,9 @@ namespace Toggl.Core.Tests.Sync.Helpers
 
         public IPushNotificationsTokenStorage PushNotificationsTokenStorage { get; } =
             Substitute.For<IPushNotificationsTokenStorage>();
+
+        public IRemoteConfigService RemoteConfigService { get; } =
+            Substitute.For<IRemoteConfigService>();
 
         public AppServices(ITogglApi api, ITogglDatabase database)
         {
@@ -67,6 +67,7 @@ namespace Toggl.Core.Tests.Sync.Helpers
             dependencyContainer.MockPushNotificationsTokenService = PushNotificationsTokenService;
             dependencyContainer.MockTimeService = TimeService;
             dependencyContainer.MockPushNotificationsTokenStorage = PushNotificationsTokenStorage;
+            dependencyContainer.MockRemoteConfigService = RemoteConfigService;
 
             SyncManager = TogglSyncManager.CreateSyncManager(
                 database,
@@ -76,7 +77,6 @@ namespace Toggl.Core.Tests.Sync.Helpers
                 AnalyticsServiceSubstitute,
                 LastTimeUsageStorageSubstitute,
                 Scheduler,
-                StopwatchProvider,
                 AutomaticSyncingService,
                 dependencyContainer);
 

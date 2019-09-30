@@ -6,7 +6,6 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
-using Toggl.iOS.Views;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -18,7 +17,7 @@ namespace Toggl.iOS.ViewControllers
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UIView CurrentTimeEntryCard { get; set; }
+		Toggl.iOS.Views.AccessibilityAwareView CurrentTimeEntryCard { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -39,7 +38,7 @@ namespace Toggl.iOS.ViewControllers
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		FadeView RunningEntryDescriptionFadeView { get; set; }
+		Toggl.iOS.Views.FadeView RunningEntryDescriptionFadeView { get; set; }
 
 		[Outlet]
 		UIKit.UIView SendFeedbackSuccessView { get; set; }
@@ -74,7 +73,7 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UILabel TapToStopTimerLabel { get; set; }
 
 		[Outlet]
-		TimeEntriesLogTableView TimeEntriesLogTableView { get; set; }
+		Toggl.iOS.Views.TimeEntriesLogTableView TimeEntriesLogTableView { get; set; }
 
 		[Outlet]
 		UIKit.NSLayoutConstraint TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint { get; set; }
@@ -93,12 +92,47 @@ namespace Toggl.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UIView WelcomeBackView { get; set; }
-
+		
 		void ReleaseDesignerOutlets ()
 		{
+			if (CurrentTimeEntryCard != null) {
+				CurrentTimeEntryCard.Dispose ();
+				CurrentTimeEntryCard = null;
+			}
+
+			if (CreatedFirstTimeEntryLabel != null) {
+				CreatedFirstTimeEntryLabel.Dispose ();
+				CreatedFirstTimeEntryLabel = null;
+			}
+
+			if (CurrentTimeEntryDescriptionLabel != null) {
+				CurrentTimeEntryDescriptionLabel.Dispose ();
+				CurrentTimeEntryDescriptionLabel = null;
+			}
+
+			if (CurrentTimeEntryElapsedTimeLabel != null) {
+				CurrentTimeEntryElapsedTimeLabel.Dispose ();
+				CurrentTimeEntryElapsedTimeLabel = null;
+			}
+
 			if (CurrentTimeEntryProjectTaskClientLabel != null) {
 				CurrentTimeEntryProjectTaskClientLabel.Dispose ();
 				CurrentTimeEntryProjectTaskClientLabel = null;
+			}
+
+			if (FeedbackSentDescriptionLabel != null) {
+				FeedbackSentDescriptionLabel.Dispose ();
+				FeedbackSentDescriptionLabel = null;
+			}
+
+			if (FeedbackSentSuccessTitleLabel != null) {
+				FeedbackSentSuccessTitleLabel.Dispose ();
+				FeedbackSentSuccessTitleLabel = null;
+			}
+
+			if (RunningEntryDescriptionFadeView != null) {
+				RunningEntryDescriptionFadeView.Dispose ();
+				RunningEntryDescriptionFadeView = null;
 			}
 
 			if (SendFeedbackSuccessView != null) {
@@ -106,9 +140,24 @@ namespace Toggl.iOS.ViewControllers
 				SendFeedbackSuccessView = null;
 			}
 
+			if (StartTimeEntryButton != null) {
+				StartTimeEntryButton.Dispose ();
+				StartTimeEntryButton = null;
+			}
+
 			if (StartTimeEntryOnboardingBubbleView != null) {
 				StartTimeEntryOnboardingBubbleView.Dispose ();
 				StartTimeEntryOnboardingBubbleView = null;
+			}
+
+			if (StartTimerBubbleLabel != null) {
+				StartTimerBubbleLabel.Dispose ();
+				StartTimerBubbleLabel = null;
+			}
+
+			if (StopTimeEntryButton != null) {
+				StopTimeEntryButton.Dispose ();
+				StopTimeEntryButton = null;
 			}
 
 			if (StopTimeEntryOnboardingBubbleView != null) {
@@ -116,7 +165,7 @@ namespace Toggl.iOS.ViewControllers
 				StopTimeEntryOnboardingBubbleView = null;
 			}
 
-            if (TapToEditBubbleView != null) {
+			if (TapToEditBubbleView != null) {
 				TapToEditBubbleView.Dispose ();
 				TapToEditBubbleView = null;
 			}
@@ -124,6 +173,16 @@ namespace Toggl.iOS.ViewControllers
 			if (TapToEditBubbleViewTopConstraint != null) {
 				TapToEditBubbleViewTopConstraint.Dispose ();
 				TapToEditBubbleViewTopConstraint = null;
+			}
+
+			if (TapToEditItLabel != null) {
+				TapToEditItLabel.Dispose ();
+				TapToEditItLabel = null;
+			}
+
+			if (TapToStopTimerLabel != null) {
+				TapToStopTimerLabel.Dispose ();
+				TapToStopTimerLabel = null;
 			}
 
 			if (TimeEntriesLogTableView != null) {
@@ -146,39 +205,9 @@ namespace Toggl.iOS.ViewControllers
 				TopSeparator = null;
 			}
 
-			if (WelcomeBackView != null) {
-				WelcomeBackView.Dispose ();
-				WelcomeBackView = null;
-			}
-
-			if (CurrentTimeEntryCard != null) {
-				CurrentTimeEntryCard.Dispose ();
-				CurrentTimeEntryCard = null;
-			}
-
-			if (CurrentTimeEntryDescriptionLabel != null) {
-				CurrentTimeEntryDescriptionLabel.Dispose ();
-				CurrentTimeEntryDescriptionLabel = null;
-			}
-
-			if (CurrentTimeEntryElapsedTimeLabel != null) {
-				CurrentTimeEntryElapsedTimeLabel.Dispose ();
-				CurrentTimeEntryElapsedTimeLabel = null;
-			}
-
-			if (RunningEntryDescriptionFadeView != null) {
-				RunningEntryDescriptionFadeView.Dispose ();
-				RunningEntryDescriptionFadeView = null;
-			}
-
-			if (StartTimeEntryButton != null) {
-				StartTimeEntryButton.Dispose ();
-				StartTimeEntryButton = null;
-			}
-
-			if (StopTimeEntryButton != null) {
-				StopTimeEntryButton.Dispose ();
-				StopTimeEntryButton = null;
+			if (WelcomeBackDescriptionLabel != null) {
+				WelcomeBackDescriptionLabel.Dispose ();
+				WelcomeBackDescriptionLabel = null;
 			}
 
 			if (WelcomeBackLabel != null) {
@@ -186,39 +215,9 @@ namespace Toggl.iOS.ViewControllers
 				WelcomeBackLabel = null;
 			}
 
-			if (WelcomeBackDescriptionLabel != null) {
-				WelcomeBackDescriptionLabel.Dispose ();
-				WelcomeBackDescriptionLabel = null;
-			}
-
-            if (CreatedFirstTimeEntryLabel != null) {
-				CreatedFirstTimeEntryLabel.Dispose ();
-				CreatedFirstTimeEntryLabel = null;
-			}
-
-			if (TapToEditItLabel != null) {
-				TapToEditItLabel.Dispose ();
-				TapToEditItLabel = null;
-			}
-
-			if (StartTimerBubbleLabel != null) {
-				StartTimerBubbleLabel.Dispose ();
-				StartTimerBubbleLabel = null;
-			}
-
-			if (TapToStopTimerLabel != null) {
-				TapToStopTimerLabel.Dispose ();
-				TapToStopTimerLabel = null;
-			}
-
-			if (FeedbackSentSuccessTitleLabel != null) {
-				FeedbackSentSuccessTitleLabel.Dispose ();
-				FeedbackSentSuccessTitleLabel = null;
-			}
-
-			if (FeedbackSentDescriptionLabel != null) {
-				FeedbackSentDescriptionLabel.Dispose ();
-				FeedbackSentDescriptionLabel = null;
+			if (WelcomeBackView != null) {
+				WelcomeBackView.Dispose ();
+				WelcomeBackView = null;
 			}
 		}
 	}

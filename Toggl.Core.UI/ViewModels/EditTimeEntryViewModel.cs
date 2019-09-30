@@ -9,7 +9,6 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.DTOs;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
@@ -35,14 +34,10 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ITogglDataSource dataSource;
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
-        private readonly IStopwatchProvider stopwatchProvider;
         private readonly ISyncManager syncManager;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IRxActionFactory actionFactory;
         public IOnboardingStorage OnboardingStorage { get; private set; }
-
-        private IStopwatch stopwatchFromCalendar;
-        private IStopwatch stopwatchFromMainLog;
 
         private long workspaceId;
         private long? projectId;
@@ -83,7 +78,7 @@ namespace Toggl.Core.UI.ViewModels
         public TimeSpan GroupDuration { get; private set; }
 
         private BehaviorSubject<IEnumerable<IThreadSafeTag>> tagsSubject;
-        public IObservable<IEnumerable<string>> Tags { get; set; }
+        public IObservable<IImmutableList<string>> Tags { get; set; }
         private IEnumerable<long> tagIds
             => tagsSubject.Value.Select(tag => tag.Id);
 
@@ -96,15 +91,15 @@ namespace Toggl.Core.UI.ViewModels
 
         public IObservable<IThreadSafePreferences> Preferences { get; private set; }
 
-        public UIAction SelectProject { get; private set; }
-        public UIAction SelectTags { get; private set; }
-        public UIAction ToggleBillable { get; private set; }
+        public ViewAction SelectProject { get; private set; }
+        public ViewAction SelectTags { get; private set; }
+        public ViewAction ToggleBillable { get; private set; }
         public InputAction<EditViewTapSource> EditTimes { get; private set; }
-        public UIAction SelectStartDate { get; }
-        public UIAction StopTimeEntry { get; private set; }
-        public UIAction DismissSyncErrorMessage { get; private set; }
-        public UIAction Save { get; private set; }
-        public UIAction Delete { get; private set; }
+        public ViewAction SelectStartDate { get; }
+        public ViewAction StopTimeEntry { get; private set; }
+        public ViewAction DismissSyncErrorMessage { get; private set; }
+        public ViewAction Save { get; private set; }
+        public ViewAction Delete { get; private set; }
 
         public EditTimeEntryViewModel(
             ITimeService timeService,
@@ -114,7 +109,6 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             IOnboardingStorage onboardingStorage,
             IAnalyticsService analyticsService,
-            IStopwatchProvider stopwatchProvider,
             IRxActionFactory actionFactory,
             ISchedulerProvider schedulerProvider)
             : base(navigationService)
@@ -125,7 +119,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
-            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(actionFactory, nameof(actionFactory));
 
@@ -134,7 +127,6 @@ namespace Toggl.Core.UI.ViewModels
             this.timeService = timeService;
             this.interactorFactory = interactorFactory;
             this.analyticsService = analyticsService;
-            this.stopwatchProvider = stopwatchProvider;
             this.schedulerProvider = schedulerProvider;
             this.actionFactory = actionFactory;
             OnboardingStorage = onboardingStorage;
@@ -239,11 +231,6 @@ namespace Toggl.Core.UI.ViewModels
 
             TimeEntryIds = timeEntryIds;
 
-            stopwatchFromCalendar = stopwatchProvider.Get(MeasuredOperation.EditTimeEntryFromCalendar);
-            stopwatchProvider.Remove(MeasuredOperation.EditTimeEntryFromCalendar);
-            stopwatchFromMainLog = stopwatchProvider.Get(MeasuredOperation.EditTimeEntryFromMainLog);
-            stopwatchProvider.Remove(MeasuredOperation.EditTimeEntryFromMainLog);
-
             var timeEntries = await interactorFactory.GetMultipleTimeEntriesById(TimeEntryIds).Execute();
             var timeEntry = timeEntries.First();
             originalTimeEntry = timeEntry;
@@ -300,17 +287,6 @@ namespace Toggl.Core.UI.ViewModels
                 : timeEntry.LastSyncErrorMessage);
         }
 
-        public override void ViewAppeared()
-        {
-            base.ViewAppeared();
-
-            stopwatchFromCalendar?.Stop();
-            stopwatchFromCalendar = null;
-
-            stopwatchFromMainLog?.Stop();
-            stopwatchFromMainLog = null;
-        }
-
         public override void ViewDestroyed()
         {
             base.ViewDestroyed();
@@ -336,11 +312,6 @@ namespace Toggl.Core.UI.ViewModels
             analyticsService.EditViewTapped.Track(EditViewTapSource.Project);
 
             OnboardingStorage.SelectsProject();
-
-            var selectProjectStopwatch = stopwatchProvider.CreateAndStore(
-                MeasuredOperation.OpenSelectProjectFromEditView, true);
-
-            selectProjectStopwatch.Start();
 
             var chosenProject = await Navigate<SelectProjectViewModel, SelectProjectParameter, SelectProjectParameter>(
                                     new SelectProjectParameter(projectId, taskId, workspaceId));
@@ -400,7 +371,6 @@ namespace Toggl.Core.UI.ViewModels
         {
             analyticsService.EditEntrySelectTag.Track();
             analyticsService.EditViewTapped.Track(EditViewTapSource.Tags);
-            stopwatchProvider.CreateAndStore(MeasuredOperation.OpenSelectTagsView).Start();
 
             var currentTags = tagIds.OrderBy(CommonFunctions.Identity).ToArray();
 
@@ -470,11 +440,16 @@ namespace Toggl.Core.UI.ViewModels
         {
             if (await isDirty())
             {
-                var userConfirmedDiscardingChanges = await View.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
-                if (!userConfirmedDiscardingChanges)
-                    return;
+                var view = View;
+                if (view != null)
+                {
+                    var userConfirmedDiscardingChanges = await view.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                    if (!userConfirmedDiscardingChanges)
+                        return;
+                }
             }
 
+            analyticsService.EditViewClosed.Track(closeReason(EditViewCloseReason.Close));
             base.CloseWithDefaultResult();
         }
 
@@ -494,9 +469,14 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task save()
         {
+            var reason = await isDirty()
+                ? EditViewCloseReason.Save
+                : EditViewCloseReason.SaveWithoutChange;
+
             OnboardingStorage.EditedTimeEntry();
 
-            var timeEntries = await interactorFactory.GetMultipleTimeEntriesById(TimeEntryIds).Execute();
+            var timeEntries = await interactorFactory
+                .GetMultipleTimeEntriesById(TimeEntryIds).Execute();
 
             var duration = await durationSubject.FirstAsync();
             var commonTimeEntryData = new EditTimeEntryDto
@@ -516,12 +496,13 @@ namespace Toggl.Core.UI.ViewModels
                 .Select(timeEntry => applyDataFromTimeEntry(commonTimeEntryData, timeEntry))
                 .ToArray();
 
-            interactorFactory
+            close(reason);
+
+            await interactorFactory
                 .UpdateMultipleTimeEntries(timeEntriesDtos)
                 .Execute()
-                .ObserveOn(schedulerProvider.MainScheduler)
-                .SubscribeToErrorsAndCompletion((Exception ex) => Close(), () => Close())
-                .DisposedBy(disposeBag);
+                .Catch(Observable.Empty<IEnumerable<IThreadSafeTimeEntry>>())
+                .SubscribeOn(schedulerProvider.BackgroundScheduler);
         }
 
         private EditTimeEntryDto applyDataFromTimeEntry(EditTimeEntryDto commonTimeEntryData, IThreadSafeTimeEntry timeEntry)
@@ -551,7 +532,7 @@ namespace Toggl.Core.UI.ViewModels
             var isDeletionConfirmed = await delete(actionType, TimeEntryIds.Length, interactor);
 
             if (isDeletionConfirmed)
-                Close();
+                close(EditViewCloseReason.Delete);
         }
 
         private async Task<bool> delete(ActionType actionType, int entriesCount, IInteractor<IObservable<Unit>> deletionInteractor)
@@ -564,7 +545,12 @@ namespace Toggl.Core.UI.ViewModels
             await deletionInteractor.Execute();
 
             syncManager.InitiatePushSync();
-            analyticsService.DeleteTimeEntry.Track();
+
+            var deleteMode = entriesCount > 1
+                ? DeleteTimeEntryOrigin.GroupedEditView
+                : DeleteTimeEntryOrigin.EditView;
+
+            analyticsService.DeleteTimeEntry.Track(deleteMode);
 
             return true;
         }
@@ -592,6 +578,29 @@ namespace Toggl.Core.UI.ViewModels
 
             public static ProjectClientTaskInfo Empty
                 => new ProjectClientTaskInfo(null, null, null, null, false, false);
+        }
+
+        private void close(EditViewCloseReason reason)
+        {
+            analyticsService.EditViewClosed.Track(closeReason(reason));
+            Close();
+        }
+
+        private EditViewCloseReason closeReason(EditViewCloseReason reason)
+        {
+            switch (reason)
+            {
+                case EditViewCloseReason.Close when IsEditingGroup:
+                    return EditViewCloseReason.GroupClose;
+                case EditViewCloseReason.Delete when IsEditingGroup:
+                    return EditViewCloseReason.GroupDelete;
+                case EditViewCloseReason.Save when IsEditingGroup:
+                    return EditViewCloseReason.GroupSave;
+                case EditViewCloseReason.SaveWithoutChange when IsEditingGroup:
+                    return EditViewCloseReason.GroupSaveWithoutChange;
+                default:
+                    return reason;
+            }
         }
     }
 }

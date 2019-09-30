@@ -83,7 +83,7 @@ namespace Toggl.iOS.ViewSources
 
             collection
                 .CollectionChange
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(_ => onCollectionChanges())
                 .DisposedBy(disposeBag);
 
@@ -95,7 +95,7 @@ namespace Toggl.iOS.ViewSources
             timeService
                 .CurrentDateTimeObservable
                 .DistinctUntilChanged(offset => offset.Minute)
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(_ => updateLayoutAttributesIfNeeded())
                 .DisposedBy(disposeBag);
 
@@ -126,7 +126,7 @@ namespace Toggl.iOS.ViewSources
             {
                 var reusableView = collectionView.DequeueReusableSupplementaryView(elementKind, hourReuseIdentifier, indexPath) as HourSupplementaryView;
                 var hour = date.AddHours((int)indexPath.Item);
-                reusableView.SetLabel(hour.ToString(supplementaryHourFormat(), CultureInfo.InvariantCulture));
+                reusableView.SetLabel(hour.ToString(supplementaryHourFormat(), CultureInfo.CurrentCulture));
                 return reusableView;
             }
             else if (elementKind == CalendarCollectionViewLayout.EditingHourSupplementaryViewKind)
@@ -134,7 +134,7 @@ namespace Toggl.iOS.ViewSources
                 var reusableView = collectionView.DequeueReusableSupplementaryView(elementKind, editingHourReuseIdentifier, indexPath) as EditingHourSupplementaryView;
                 var attrs = layoutAttributes[(int)editingItemIndexPath.Item];
                 var hour = (int)indexPath.Item == 0 ? attrs.StartTime.ToLocalTime() : attrs.EndTime.ToLocalTime();
-                reusableView.SetLabel(hour.ToString(editingHourFormat(), CultureInfo.InvariantCulture));
+                reusableView.SetLabel(hour.ToString(editingHourFormat(), CultureInfo.CurrentCulture));
                 return reusableView;
             }
 
@@ -200,7 +200,6 @@ namespace Toggl.iOS.ViewSources
         public void StopEditing()
         {
             IsEditing = false;
-            editingItemIndexPath = null;
             layout.IsEditing = false;
             layoutAttributes = calculateLayoutAttributes();
             layout.InvalidateLayoutForVisibleItems();
@@ -256,7 +255,7 @@ namespace Toggl.iOS.ViewSources
         private void onCollectionChanges()
         {
             long? originalId = null;
-            if (IsEditing)
+            if (IsEditing && editingItemIndexPath != null)
             {
                 var editingIndex = (int)editingItemIndexPath.Item;
                 originalId = calendarItems[editingIndex].TimeEntryId;
@@ -355,12 +354,12 @@ namespace Toggl.iOS.ViewSources
             if (startEditingHour != null)
             {
                 var hour = attrs.StartTime.ToLocalTime();
-                startEditingHour.SetLabel(hour.ToString(editingHourFormat(), CultureInfo.InvariantCulture));
+                startEditingHour.SetLabel(hour.ToString(editingHourFormat(), CultureInfo.CurrentCulture));
             }
             if (endEditingHour != null)
             {
                 var hour = attrs.EndTime.ToLocalTime();
-                endEditingHour.SetLabel(hour.ToString(editingHourFormat(), CultureInfo.InvariantCulture));
+                endEditingHour.SetLabel(hour.ToString(editingHourFormat(), CultureInfo.CurrentCulture));
             }
         }
 

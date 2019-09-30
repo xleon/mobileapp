@@ -1,4 +1,5 @@
 using Android.Content;
+using Android.Graphics;
 using Android.Text;
 using Android.Views;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
@@ -10,7 +11,8 @@ namespace Toggl.Droid.ViewHelpers
     {
         public LogItemViewModel ViewModel { get; }
         public ISpannable ProjectTaskClientText { get; }
-
+        public ViewStates ProjectArchivedIconVisibility { get; }
+        public Color ProjectArchivedIconTintColor { get; }
         public ViewStates ProjectTaskClientVisibility { get; }
         public ViewStates HasTagsIconVisibility { get; }
         public ViewStates BillableIconVisibility { get; }
@@ -24,6 +26,15 @@ namespace Toggl.Droid.ViewHelpers
         public TimeEntryViewData(Context context, LogItemViewModel viewModel)
         {
             ViewModel = viewModel;
+            if (viewModel.HasProject)
+            {
+                ProjectArchivedIconTintColor = Color.ParseColor(viewModel.ProjectColor);
+                ProjectArchivedIconVisibility = (!viewModel.IsActive).ToVisibility();
+            }
+            else
+            {
+                ProjectArchivedIconVisibility = ViewStates.Gone;
+            }
             ProjectTaskClientText = TimeEntryExtensions.ToProjectTaskClient(context,
                 ViewModel.HasProject,
                 ViewModel.ProjectName,
