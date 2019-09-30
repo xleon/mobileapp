@@ -25,7 +25,10 @@ namespace Toggl.Droid.Fragments
         private View emptyStateView;
         private ViewStub welcomeBackStub;
         private View welcomeBackView;
+        private TextView welcomeBackTitle;
+        private TextView welcomeBackSubText;
         private Toolbar toolbar;
+        private AppBarLayout appBarLayout;
 
         protected override void InitializeViews(View fragmentView)
         {
@@ -44,6 +47,9 @@ namespace Toggl.Droid.Fragments
             emptyStateViewStub = fragmentView.FindViewById<ViewStub>(Resource.Id.EmptyStateViewStub);
             welcomeBackStub = fragmentView.FindViewById<ViewStub>(Resource.Id.WelcomeBackViewStub);
             toolbar = fragmentView.FindViewById<Toolbar>(Resource.Id.Toolbar);
+            appBarLayout = fragmentView.FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
+            
+            timeEntryCardAddDescriptionLabel.Text = Shared.Resources.AddDescription;
         }
     }
 }

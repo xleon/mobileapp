@@ -2,7 +2,7 @@
 
 When testing the mobile app, one should always use the staging environment. Xamarin has some problems with that due to the certificate staging uses, so you need to do some preparations before testing the application.
 
-The link to the certificate can be found on #mobile-dev (it's pinned, but you can always ask if you can't find it).
+The link to the certificate can be found on #mobile-team (it's pinned, but you can always ask if you can't find it).
 
 ## Integration tests :computer:
 

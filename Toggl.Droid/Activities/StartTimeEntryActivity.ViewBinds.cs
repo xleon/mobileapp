@@ -1,6 +1,6 @@
 using Android.Support.V7.Widget;
-using Android.Views;
 using Android.Widget;
+using Toggl.Droid.Adapters;
 using Toggl.Droid.Views;
 using static Toggl.Droid.Resource.Id;
 
@@ -8,8 +8,6 @@ namespace Toggl.Droid.Activities
 {
     public partial class StartTimeEntryActivity
     {
-        private View doneButton;
-        private View closeButton;
         private ImageView selectTagToolbarButton;
         private ImageView selectProjectToolbarButton;
         private ImageView selectBillableToolbarButton;
@@ -19,11 +17,10 @@ namespace Toggl.Droid.Activities
         private RecyclerView recyclerView;
 
         private AutocompleteEditText descriptionField;
+        private StartTimeEntryRecyclerAdapter adapter;
 
         protected override void InitializeViews()
         {
-            doneButton = FindViewById(DoneButton);
-            closeButton = FindViewById(CloseButton);
             selectTagToolbarButton = FindViewById<ImageView>(ToolbarTagButton);
             selectProjectToolbarButton = FindViewById<ImageView>(ToolbarProjectButton);
             selectBillableToolbarButton = FindViewById<ImageView>(ToolbarBillableButton);
@@ -33,6 +30,13 @@ namespace Toggl.Droid.Activities
             recyclerView = FindViewById<RecyclerView>(SuggestionsRecyclerView);
 
             descriptionField = FindViewById<AutocompleteEditText>(DescriptionTextField);
+
+            adapter = new StartTimeEntryRecyclerAdapter();
+            recyclerView.SetLayoutManager(new LinearLayoutManager(this));
+            recyclerView.SetAdapter(adapter);
+
+            SetupToolbar();
+            SupportActionBar.SetHomeAsUpIndicator(Resource.Drawable.toolbar_close);
         }
     }
 }

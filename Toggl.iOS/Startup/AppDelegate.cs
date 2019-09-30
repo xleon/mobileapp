@@ -1,10 +1,11 @@
-using Foundation;
+﻿using Foundation;
 using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Presentation;
+using Toggl.iOS.Services;
 using UIKit;
 using UserNotifications;
 using Firebase.CloudMessaging;
@@ -41,13 +42,20 @@ namespace Toggl.iOS
 
             IosDependencyContainer.EnsureInitialized(Window, this);
             var app = new AppStart(IosDependencyContainer.Instance);
+            app.LoadLocalizationConfiguration();
             app.UpdateOnboardingProgress();
             app.SetFirstOpened();
             app.SetupBackgroundSync();
 
             var accessLevel = app.GetAccessLevel();
             loginWithCredentialsIfNecessary(accessLevel);
-            navigateAccordingToAccessLevel(accessLevel);
+            navigateAccordingToAccessLevel(accessLevel, app);
+            
+            var accessibilityEnabled = UIAccessibility.IsVoiceOverRunning;
+            IosDependencyContainer.Instance.AnalyticsService.AccessibilityEnabled.Track(accessibilityEnabled);
+
+            var watchservice = new WatchService();
+            watchservice.TryLogWatchConnectivity();
 
 #if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();
@@ -75,7 +83,7 @@ namespace Toggl.iOS
             }
 
 #if USE_ANALYTICS
-            var openUrlOptions = new UIApplicationOpenUrlOptions(options);
+            var openUrlOptions = new UIKit.UIApplicationOpenUrlOptions(options);
             return Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
 #endif
 
@@ -92,7 +100,7 @@ namespace Toggl.iOS
             IosDependencyContainer.Instance.TimeService.SignificantTimeChanged();
         }
 
-        private void navigateAccordingToAccessLevel(AccessLevel accessLevel)
+        private void navigateAccordingToAccessLevel(AccessLevel accessLevel, AppStart app)
         {
             var navigationService = IosDependencyContainer.Instance.NavigationService;
 
@@ -108,6 +116,7 @@ namespace Toggl.iOS
                     navigationService.Navigate<TokenResetViewModel>(null);
                     return;
                 case AccessLevel.LoggedIn:
+                    app.ForceFullSync();
                     var viewModel = IosDependencyContainer.Instance
                         .ViewModelLoader
                         .Load<MainTabBarViewModel>();

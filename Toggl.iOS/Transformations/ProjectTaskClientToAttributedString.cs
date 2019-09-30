@@ -4,6 +4,7 @@ using System.Text;
 using CoreGraphics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Suggestions;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
@@ -15,15 +16,13 @@ namespace Toggl.iOS.Transformations
     {
         private const string projectDotImageResource = "icProjectDot";
         private readonly UIColor clientColor;
-        private readonly bool shouldColorProject;
         private readonly nfloat fontHeight;
 
-        public ProjectTaskClientToAttributedString(nfloat fontHeight, UIColor clientColor, bool shouldColorProject)
+        public ProjectTaskClientToAttributedString(nfloat fontHeight, UIColor clientColor)
         {
             Ensure.Argument.IsNotNull(clientColor, nameof(clientColor));
 
             this.clientColor = clientColor;
-            this.shouldColorProject = shouldColorProject;
             this.fontHeight = fontHeight;
         }
 
@@ -48,6 +47,16 @@ namespace Toggl.iOS.Transformations
                 projectColor,
                 timeEntry.Project?.IsPlaceholder() ?? false,
                 timeEntry.Task?.IsPlaceholder() ?? false);
+        }
+
+        public NSAttributedString Convert(Suggestion suggestion)
+        {
+            var projectColor = new Color(suggestion.ProjectColor ?? string.Empty).ToNativeColor();
+            return Convert(
+                suggestion.ProjectName ?? "",
+                suggestion.TaskName ?? "",
+                suggestion.ClientName ?? "",
+                projectColor);
         }
 
         public NSAttributedString Convert(string project, string task, string client, UIColor color, bool isProjectPlaceholder = false, bool isTaskPlaceholder = false)
@@ -98,12 +107,10 @@ namespace Toggl.iOS.Transformations
 
             var result = new NSMutableAttributedString(text);
             var clientIndex = text.Length - (client?.Length ?? 0);
-            if (shouldColorProject)
-            {
-                var projectNameRange = new NSRange(0, clientIndex);
-                var projectNameAttributes = new UIStringAttributes { ForegroundColor = color };
-                result.AddAttributes(projectNameAttributes, projectNameRange);
-            }
+
+            var projectNameRange = new NSRange(0, clientIndex);
+            var projectNameAttributes = new UIStringAttributes { ForegroundColor = color };
+            result.AddAttributes(projectNameAttributes, projectNameRange);
 
             if (hasClient)
             {

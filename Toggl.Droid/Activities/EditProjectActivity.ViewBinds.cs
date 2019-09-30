@@ -14,8 +14,9 @@ namespace Toggl.Droid.Activities
 
         private TextView workspaceNameLabel;
         private TextView clientNameTextView;
-        private TextView createProjectButton;
         private TextView projectNameTextView;
+        private TextView privateProjectLabel;
+        private TextView privateProjectHintLabel;
 
         private Switch isPrivateSwitch;
 
@@ -32,8 +33,15 @@ namespace Toggl.Droid.Activities
             isPrivateSwitch = FindViewById<Switch>(Resource.Id.IsPrivateSwitch);
             clientNameTextView = FindViewById<TextView>(Resource.Id.ClientNameTextView);
             workspaceNameLabel = FindViewById<TextView>(Resource.Id.WorkspaceNameLabel);
-            createProjectButton = FindViewById<TextView>(Resource.Id.CreateProjectButton);
             projectNameTextView = FindViewById<TextView>(Resource.Id.ProjectNameTextView);
+            privateProjectLabel = FindViewById<TextView>(Resource.Id.ChangeWorkspaceViewPrivateProjectLabel);
+            privateProjectHintLabel = FindViewById<TextView>(Resource.Id.PrivateProjectHint);
+            
+            errorText.Text = Shared.Resources.ProjectNameTakenError;
+            privateProjectLabel.Text = Shared.Resources.PrivateProject;
+            privateProjectHintLabel.Text = Shared.Resources.PrivateProjectHint;
+            
+            SetupToolbar(ViewModel.Title);
         }
     }
 }

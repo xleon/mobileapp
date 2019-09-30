@@ -2,10 +2,8 @@
 using System;
 using Toggl.Core;
 using Toggl.Core.Analytics;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
-using Toggl.Core.Suggestions;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
@@ -48,7 +46,8 @@ namespace Toggl.iOS
                 new RootPresenter(window, appDelegate),
                 new NavigationPresenter(window, appDelegate),
                 new ModalDialogPresenter(window, appDelegate),
-                new ModalCardPresenter(window, appDelegate)
+                new ModalCardPresenter(window, appDelegate),
+                new PageSheetPresenter(window, appDelegate)
             );
 
             Instance = new IosDependencyContainer(viewPresenter, environment, Platform.Daneel, version);
@@ -107,10 +106,7 @@ namespace Toggl.iOS
 
         protected override IApplicationShortcutCreator CreateShortcutCreator()
             => new ApplicationShortcutCreator();
-
-        protected override IStopwatchProvider CreateStopwatchProvider()
-            => new FirebaseStopwatchProviderIos();
-
+        
         protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
             => new PushNotificationsTokenServiceIos();
 
@@ -128,5 +124,8 @@ namespace Toggl.iOS
 
         protected override IAccessRestrictionStorage CreateAccessRestrictionStorage()
             => settingsStorage.Value;
+
+        protected override IAccessibilityService CreateAccessibilityService()
+            => new AccessibilityServiceIos();
     }
 }

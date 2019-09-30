@@ -59,8 +59,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> IsPasswordMasked { get; }
         public IObservable<bool> IsShowPasswordButtonVisible { get; }
 
-        public UIAction Signup { get; }
-        public UIAction ForgotPassword { get; }
+        public ViewAction Signup { get; }
+        public ViewAction ForgotPassword { get; }
 
         public LoginViewModel(
             IUserAccessManager userAccessManager,
@@ -193,7 +193,7 @@ namespace Toggl.Core.UI.ViewModels
 
             isLoadingSubject.OnNext(true);
 
-            loginDisposable = View
+            loginDisposable = View?
                 .GetGoogleToken()
                 .SelectMany(userAccessManager.LoginWithGoogle)
                 .Track(analyticsService.Login, AuthenticationMethod.Google)

@@ -29,9 +29,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     PermissionsChecker,
                     NavigationService,
                     RemoteConfigService,
+                    AccessibilityService,
                     UpdateRemoteConfigCacheService,
                     AccessRestrictionStorage,
-                    StopwatchProvider,
                     RxActionFactory,
                     UserAccessManager,
                     PrivateSharedStorageService,
@@ -57,9 +57,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool usePermissionsChecker,
                     bool useNavigationService,
                     bool useRemoteConfigService,
+                    bool useAccessibilityService,
                     bool useRemoteConfigUpdateService,
                     bool useAccessRestrictionStorage,
-                    bool useStopwatchProvider,
                     bool useRxActionFactory,
                     bool useUserAccessManager,
                     bool usePrivateSharedStorageService,
@@ -78,9 +78,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var permissionsService = usePermissionsChecker ? PermissionsChecker : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
+                var accessibilityService = useAccessibilityService ? AccessibilityService : null;
                 var remoteConfigUpdateService = useRemoteConfigUpdateService ? UpdateRemoteConfigCacheService : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
-                var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var userAccessManager = useUserAccessManager ? UserAccessManager : null;
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
@@ -101,9 +101,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         permissionsService,
                         navigationService,
                         remoteConfigService,
+                        accessibilityService,
                         remoteConfigUpdateService,
                         accessRestrictionStorage,
-                        stopwatchProvider,
                         rxActionFactory,
                         userAccessManager,
                         privateSharedStorageService,

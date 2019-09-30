@@ -9,6 +9,7 @@ using System.Reactive.Linq;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Droid.Adapters.Calendar;
+using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Presentation;
 using Toggl.Droid.Views.Calendar;
@@ -107,26 +108,38 @@ namespace Toggl.Droid.Fragments
         {
             if (visible)
             {
-                if (onboardingView == null)
-                {
-                    initializeOnboardingView();
-                }
+                initializeOnboardingViewIfNeeded();
 
-                calendarRecyclerView.Visibility = ViewStates.Gone;
+                appBarLayout.Visibility = ViewStates.Gone;
                 onboardingView.Visibility = ViewStates.Visible;
+                calendarRecyclerView.Visibility = ViewStates.Gone;
+                return;
             }
-            else if (onboardingView != null)
-            {
-                onboardingView.Visibility = ViewStates.Gone;
-                calendarRecyclerView.Visibility = ViewStates.Visible;
-            }
+
+            appBarLayout.Visibility = ViewStates.Visible;
+            calendarRecyclerView.Visibility = ViewStates.Visible;
+
+            if (onboardingView == null)
+                return;
+
+            onboardingView.Visibility = ViewStates.Gone;
         }
 
-        private void initializeOnboardingView()
+        private void initializeOnboardingViewIfNeeded()
         {
+            if (onboardingView != null)
+                return;
+
             onboardingView = onboardingViewStub.Inflate();
+            onboardingTitleView = onboardingView.FindViewById<TextView>(Resource.Id.CalendarOnboardingTitle);
+            onboardingMessageView = onboardingView.FindViewById<TextView>(Resource.Id.CalendarOnboardingMessage);
             getStartedButton = onboardingView.FindViewById<Button>(Resource.Id.CalendarOnboardingGetStartedButton);
             skipButton = onboardingView.FindViewById<TextView>(Resource.Id.CalendarOnboardingSkipButton);
+
+            onboardingTitleView.Text = Shared.Resources.CalendarOnboardingTitle;
+            onboardingMessageView.Text = Shared.Resources.CalendarOnboardingMessage;
+            getStartedButton.Text = Shared.Resources.LinkYourCalendars;
+            skipButton.Text = Shared.Resources.Skip;
 
             getStartedButton.Rx().Tap()
                 .Subscribe(ViewModel.GetStarted.Inputs)
@@ -139,7 +152,7 @@ namespace Toggl.Droid.Fragments
 
         private void updateCalendarEventsCount(int count)
         {
-            var text = Context.GetString(Resource.String.TotalEvents, count.ToString());
+            var text = string.Format(Shared.Resources.TotalEvents, count.ToString());
             headerCalendarEventsTextView.Text = text;
         }
 

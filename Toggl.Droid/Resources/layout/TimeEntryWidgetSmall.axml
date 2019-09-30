@@ -11,7 +11,7 @@
             android:layout_gravity="center"
             android:src="@drawable/stop_white"
             android:background="@drawable/RoundedButton"
-            android:backgroundTint="@color/playButtonRed"/>
+            android:backgroundTint="@android:color/holo_red_light"/>
     <ImageButton
             android:id="@+id/StartButton"
             android:layout_width="60dp"
@@ -19,5 +19,5 @@
             android:layout_gravity="center"
             android:src="@drawable/play_white"
             android:background="@drawable/RoundedButton"
-            android:backgroundTint="@color/playButtonGreen"/>
+            android:backgroundTint="@android:color/holo_green_dark"/>
 </FrameLayout>

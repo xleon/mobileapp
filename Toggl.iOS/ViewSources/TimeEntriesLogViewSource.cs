@@ -10,6 +10,7 @@ using Toggl.iOS.Extensions;
 using Toggl.iOS.Views;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 using UIKit;
 
 namespace Toggl.iOS.ViewSources
@@ -26,15 +27,14 @@ namespace Toggl.iOS.ViewSources
         public delegate IObservable<DaySummaryViewModel> ObservableHeaderForSection(int section);
 
         private readonly Subject<LogItemViewModel> continueTapSubject = new Subject<LogItemViewModel>();
-        private readonly Subject<LogItemViewModel> swipeToContinueSubject = new Subject<LogItemViewModel>();
-        private readonly Subject<LogItemViewModel> swipeToDeleteSubject = new Subject<LogItemViewModel>();
+        private readonly Subject<LogItemViewModel> continueSwipeSubject = new Subject<LogItemViewModel>();
+        private readonly Subject<LogItemViewModel> deleteSwipeSubject = new Subject<LogItemViewModel>();
         private readonly Subject<GroupId> toggleGroupExpansionSubject = new Subject<GroupId>();
 
         private readonly ReplaySubject<TimeEntriesLogViewCell> firstCellSubject = new ReplaySubject<TimeEntriesLogViewCell>(1);
         private readonly Subject<bool> isDraggingSubject = new Subject<bool>();
 
-        //Using the old API so that delete action would work on pre iOS 11 devices
-        private readonly UITableViewRowAction deleteTableViewRowAction;
+        private bool swipeActionsEnabled = true;
 
         public const int SpaceBetweenSections = 20;
 
@@ -53,18 +53,18 @@ namespace Toggl.iOS.ViewSources
                 throw new InvalidOperationException($"{nameof(TimeEntriesLogViewSource)} must be created on the main thread");
             }
 
-            if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
-            {
-                deleteTableViewRowAction = createLegacySwipeDeleteAction();
-            }
-
             ContinueTap = continueTapSubject.AsObservable();
-            SwipeToContinue = swipeToContinueSubject.AsObservable();
-            SwipeToDelete = swipeToDeleteSubject.AsObservable();
+            SwipeToContinue = continueSwipeSubject.AsObservable();
+            SwipeToDelete = deleteSwipeSubject.AsObservable();
             ToggleGroupExpansion = toggleGroupExpansionSubject.AsObservable();
 
             FirstCell = firstCellSubject.AsObservable();
             IsDragging = isDraggingSubject.AsObservable();
+        }
+
+        public void SetSwipeActionsEnabled(bool enabled)
+        {
+            swipeActionsEnabled = enabled;
         }
 
         public override nfloat GetHeightForHeader(UITableView tableView, nint section) => headerHeight + SpaceBetweenSections;
@@ -79,14 +79,6 @@ namespace Toggl.iOS.ViewSources
             tableView.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
             ? rowHeightRegular
             : rowHeightCompact;
-
-        public override UITableViewRowAction[] EditActionsForRow(UITableView tableView, NSIndexPath indexPath)
-        {
-            if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
-                return new[] { deleteTableViewRowAction };
-
-            return new UITableViewRowAction[] { };
-        }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
@@ -117,11 +109,26 @@ namespace Toggl.iOS.ViewSources
             return header;
         }
 
-        public override UISwipeActionsConfiguration GetLeadingSwipeActionsConfiguration(UITableView tableView, NSIndexPath indexPath)
-            => createSwipeActionConfiguration(continueSwipeActionFor, indexPath);
+        public override UISwipeActionsConfiguration GetLeadingSwipeActionsConfiguration(UITableView tableView,
+            NSIndexPath indexPath)
+        {
+            if (!swipeActionsEnabled)
+            {
+                return createDisabledActionConfiguration();
+            }
+
+            return createSwipeActionConfiguration(continueSwipeActionFor, indexPath);
+        }
 
         public override UISwipeActionsConfiguration GetTrailingSwipeActionsConfiguration(UITableView tableView, NSIndexPath indexPath)
-            => createSwipeActionConfiguration(deleteSwipeActionFor, indexPath);
+        {
+            if (!swipeActionsEnabled)
+            {
+                return createDisabledActionConfiguration();
+            }
+
+            return createSwipeActionConfiguration(deleteSwipeActionFor, indexPath);
+        }
 
         public override void DraggingStarted(UIScrollView scrollView)
         {
@@ -133,28 +140,9 @@ namespace Toggl.iOS.ViewSources
             isDraggingSubject.OnNext(false);
         }
 
-        private void handleDeleteTableViewRowAction(UITableViewRowAction rowAction, NSIndexPath indexPath)
-        {
-            var item = ModelAt(indexPath);
-            swipeToDeleteSubject.OnNext(item);
-        }
-
-        private UITableViewRowAction createLegacySwipeDeleteAction()
-        {
-            var deleteAction = UITableViewRowAction.Create(
-                UITableViewRowActionStyle.Destructive,
-                Resources.Delete,
-                handleDeleteTableViewRowAction);
-            deleteAction.BackgroundColor = Core.UI.Helper.Colors.TimeEntriesLog.DeleteSwipeActionBackground.ToNativeColor();
-            return deleteAction;
-        }
-
         private UISwipeActionsConfiguration createSwipeActionConfiguration(
             Func<LogItemViewModel, UIContextualAction> factory, NSIndexPath indexPath)
         {
-            if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
-                return null;
-
             var item = ModelAt(indexPath);
             if (item == null)
                 return null;
@@ -169,7 +157,7 @@ namespace Toggl.iOS.ViewSources
                 Resources.Continue,
                 (action, sourceView, completionHandler) =>
                 {
-                    swipeToContinueSubject.OnNext(viewModel);
+                    continueSwipeSubject.OnNext(viewModel);
                     completionHandler.Invoke(finished: true);
                 }
             );
@@ -184,12 +172,19 @@ namespace Toggl.iOS.ViewSources
                 Resources.Delete,
                 (action, sourceView, completionHandler) =>
                 {
-                    swipeToDeleteSubject.OnNext(viewModel);
+                    deleteSwipeSubject.OnNext(viewModel);
                     completionHandler.Invoke(finished: true);
                 }
             );
             deleteAction.BackgroundColor = Core.UI.Helper.Colors.TimeEntriesLog.DeleteSwipeActionBackground.ToNativeColor();
             return deleteAction;
+        }
+
+        private UISwipeActionsConfiguration createDisabledActionConfiguration()
+        {
+            var swipeAction = UISwipeActionsConfiguration.FromActions(new UIContextualAction[]{});
+            swipeAction.PerformsFirstActionWithFullSwipe = false;
+            return swipeAction;
         }
     }
 }

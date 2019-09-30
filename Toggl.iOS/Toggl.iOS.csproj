@@ -30,7 +30,7 @@
     <MtouchLink>Full</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchExtraArgs>--linkskip Toggl.iOS --registrar:static</MtouchExtraArgs>
+    <MtouchExtraArgs>--linkskip Toggl.iOS --linkskip=Toggl.Storage.Realm --registrar:static</MtouchExtraArgs>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
@@ -48,8 +48,8 @@
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchFastDev>true</MtouchFastDev>
     <MtouchFloat32>true</MtouchFloat32>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchLink>Full</MtouchLink>
+    <MtouchExtraArgs>--linkskip Toggl.iOS --linkskip=Toggl.Storage.Realm --registrar:static</MtouchExtraArgs>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
   </PropertyGroup>
@@ -59,7 +59,7 @@
     <DefineConstants>__UNIFIED__;__MOBILE__;__IOS__;USE_PRODUCTION_API;USE_ANALYTICS;USE_APPCENTER</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <CodesignKey>iPhone Distribution: Toggl OU (B227VTMZ94)</CodesignKey>
-    <MtouchExtraArgs>--linkskip Toggl.iOS</MtouchExtraArgs>
+    <MtouchExtraArgs>--linkskip Toggl.iOS --linkskip=Toggl.Storage.Realm --registrar:static</MtouchExtraArgs>
     <MtouchFloat32>true</MtouchFloat32>
     <MtouchLink>Full</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
@@ -78,7 +78,7 @@
     <WarningLevel>4</WarningLevel>
     <CodesignProvision>Daneel AdHoc</CodesignProvision>
     <CodesignKey>iPhone Distribution: Toggl OU (B227VTMZ94)</CodesignKey>
-    <MtouchExtraArgs>--linkskip Toggl.iOS</MtouchExtraArgs>
+    <MtouchExtraArgs>--linkskip Toggl.iOS --linkskip=Toggl.Storage.Realm --registrar:static</MtouchExtraArgs>
     <MtouchVerbosity>
     </MtouchVerbosity>
     <MtouchFloat32>true</MtouchFloat32>
@@ -86,20 +86,6 @@
     <MtouchLink>Full</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.UITest|iPhoneSimulator' ">
-    <Optimize>false</Optimize>
-    <OutputPath>bin\iPhoneSimulator\Release.UITest</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
-    <MtouchVerbosity>
-    </MtouchVerbosity>
-    <MtouchLink>None</MtouchLink>
-    <MtouchArch>x86_64</MtouchArch>
-    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=null">
@@ -1317,7 +1303,6 @@
     <InterfaceDefinition Include="Views\Onboarding\ReportsPage.xib" />
     <InterfaceDefinition Include="ViewControllers\EditProjectViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectColorViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\SelectWorkspaceViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectClientViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\OutdatedAppViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\TokenResetViewController.xib" />
@@ -1338,12 +1323,6 @@
     <InterfaceDefinition Include="Views\Reports\ReportsHeaderView.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\NoEntityInfoViewCell.xib" />
     <InterfaceDefinition Include="Views\Suggestions\SuggestionView.xib" />
-    <InterfaceDefinition Include="Views\Settings\DateFormatViewCell.xib" />
-    <InterfaceDefinition Include="ViewControllers\SelectDateFormatViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\SelectDurationFormatViewController.xib" />
-    <InterfaceDefinition Include="Views\Settings\DurationFormatViewCell.xib" />
-    <InterfaceDefinition Include="ViewControllers\SelectBeginningOfWeekViewController.xib" />
-    <InterfaceDefinition Include="Views\Settings\DayOfWeekViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\SettingsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\AboutViewController.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntriesEmptyLogView.xib" />
@@ -1395,12 +1374,19 @@
     <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\Siri\PasteFromClipboardViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriWorkflowsViewController.xib" />
+    <InterfaceDefinition Include="Cells\Settings\SettingCell.xib" />
+    <InterfaceDefinition Include="Cells\Settings\SettingsSectionHeader.xib" />
+    <InterfaceDefinition Include="Cells\Settings\SettingsSyncCell.xib" />
+    <InterfaceDefinition Include="Cells\Settings\SettingsAnnotationCell.xib" />
+    <InterfaceDefinition Include="Cells\Settings\SettingsButtonCell.xib" />
+    <InterfaceDefinition Include="Cells\Common\SelectorCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
+    <BundleResource Include="RemoteConfigDefaults.plist" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analytics\SiriIntentErrorTrackingEvent.cs" />
@@ -1439,6 +1425,7 @@
     <Compile Include="Services\IntentDonationService.cs" />
     <Compile Include="Services\FetchRemoteConfigServiceIos.cs" />
     <Compile Include="Services\UserDefaultsStorageIos.cs" />
+    <Compile Include="Services\WatchService.cs" />
     <Compile Include="Startup\AppDelegate.Deeplink.cs">
       <DependentUpon>AppDelegate.cs</DependentUpon>
     </Compile>
@@ -1449,6 +1436,7 @@
     <Compile Include="Startup\IOSSchedulerProvider.cs" />
     <Compile Include="Extensions\AnimationExtensions.cs" />
     <Compile Include="Transformations\ProjectTaskClientToAttributedString.cs" />
+    <Compile Include="ViewControllers\Common\SelectorViewController.cs" />
     <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.DialogProvider.cs">
@@ -1467,6 +1455,13 @@
     <Compile Include="ViewControllers\Reactive\ReactiveViewController.PermissionsHandler.cs">
       <DependentUpon>ReactiveViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\Settings\Models\AnnotationRow.cs" />
+    <Compile Include="ViewControllers\Settings\Models\ButtonRow.cs" />
+    <Compile Include="ViewControllers\Settings\Models\CustomRow.cs" />
+    <Compile Include="ViewControllers\Settings\Models\InfoRow.cs" />
+    <Compile Include="ViewControllers\Settings\Models\ISettingRow.cs" />
+    <Compile Include="ViewControllers\Settings\Models\NavigationRow.cs" />
+    <Compile Include="ViewControllers\Settings\Models\ToggleRow.cs" />
     <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsSelectReportPeriodViewController.cs" />
     <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsSelectReportPeriodViewController.designer.cs">
       <DependentUpon>SiriShortcutsSelectReportPeriodViewController.cs</DependentUpon>
@@ -1479,6 +1474,7 @@
     <Compile Include="ViewControllers\SyncFailuresViewController.cs" />
     <Compile Include="ViewSources\Generic\CollectionView\ReloadCollectionViewSource.cs" />
     <Compile Include="ViewSources\Generic\TableView\BaseTableViewSource.cs" />
+    <Compile Include="ViewSources\SettingsTableViewSource.cs" />
     <Compile Include="ViewSources\SiriShortcutsTableViewSource.cs" />
     <Compile Include="ViewSources\TimeEntriesLogViewSource.cs" />
     <Compile Include="ViewControllers\MainViewController.cs" />
@@ -1564,10 +1560,6 @@
       <DependentUpon>SelectColorViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\ColorSelectionCollectionViewSource.cs" />
-    <Compile Include="ViewControllers\SelectWorkspaceViewController.cs" />
-    <Compile Include="ViewControllers\SelectWorkspaceViewController.designer.cs">
-      <DependentUpon>SelectWorkspaceViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewSources\ClientTableViewSource.cs" />
     <Compile Include="ViewControllers\SelectClientViewController.cs" />
     <Compile Include="ViewControllers\SelectClientViewController.designer.cs">
@@ -1668,7 +1660,6 @@
     <Compile Include="Views\RoundedView.cs" />
     <Compile Include="Views\Reports\PieChartView.cs" />
     <Compile Include="Views\Reports\PercentageView.cs" />
-    <Compile Include="Services\ITopViewControllerProvider.cs" />
     <Compile Include="Views\Reports\ReportsLegendViewCell.cs" />
     <Compile Include="Views\Reports\ReportsLegendViewCell.designer.cs">
       <DependentUpon>ReportsLegendViewCell.cs</DependentUpon>
@@ -1701,30 +1692,6 @@
       <DependentUpon>SuggestionView.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\LicenseProviderIos.cs" />
-    <Compile Include="Views\Settings\DateFormatViewCell.cs" />
-    <Compile Include="Views\Settings\DateFormatViewCell.designer.cs">
-      <DependentUpon>DateFormatViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\SelectDateFormatViewController.cs" />
-    <Compile Include="ViewControllers\SelectDateFormatViewController.designer.cs">
-      <DependentUpon>SelectDateFormatViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\SelectDurationFormatViewController.cs" />
-    <Compile Include="ViewControllers\SelectDurationFormatViewController.designer.cs">
-      <DependentUpon>SelectDurationFormatViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings\DurationFormatViewCell.cs" />
-    <Compile Include="Views\Settings\DurationFormatViewCell.designer.cs">
-      <DependentUpon>DurationFormatViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\SelectBeginningOfWeekViewController.cs" />
-    <Compile Include="ViewControllers\SelectBeginningOfWeekViewController.designer.cs">
-      <DependentUpon>SelectBeginningOfWeekViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings\DayOfWeekViewCell.cs" />
-    <Compile Include="Views\Settings\DayOfWeekViewCell.designer.cs">
-      <DependentUpon>DayOfWeekViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\Log\TimeEntriesEmptyLogView.cs" />
     <Compile Include="Views\Log\TimeEntriesEmptyLogView.designer.cs">
       <DependentUpon>TimeEntriesEmptyLogView.cs</DependentUpon>
@@ -1883,7 +1850,6 @@
     <Compile Include="Views\Reports\BarLegendLabel.cs" />
     <Compile Include="Views\Reports\EmptyBarView.cs" />
     <Compile Include="Extensions\Reactive\UIBarButtonItemExtensions.cs" />
-    <Compile Include="Services\FirebaseStopwatchProviderIos.cs" />
     <Compile Include="ViewControllers\SelectDefaultWorkspaceViewController.cs" />
     <Compile Include="ViewControllers\SelectDefaultWorkspaceViewController.designer.cs">
       <DependentUpon>SelectDefaultWorkspaceViewController.cs</DependentUpon>
@@ -1979,7 +1945,36 @@
     <Compile Include="ViewControllers\Reactive\IReactiveViewController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveNavigationController.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringViewController.cs" />
-    <Compile Include="DebugHelpers\ErrorTriggeringViewControllerShortcuts.cs" />
+    <Compile Include="Extensions\Reactive\UIActivityIndicatorViewExtensions.cs" />
+    <Compile Include="Views\AccessibilityAwareView.cs" />
+    <Compile Include="Services\AccessibilityServiceIos.cs" />
+    <Compile Include="Cells\Settings\SettingCell.cs" />
+    <Compile Include="Cells\Settings\SettingCell.designer.cs">
+      <DependentUpon>SettingCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Settings\SettingsSectionHeader.cs" />
+    <Compile Include="Cells\Settings\SettingsSectionHeader.designer.cs">
+      <DependentUpon>SettingsSectionHeader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Settings\SettingsSyncCell.cs" />
+    <Compile Include="Cells\Settings\SettingsSyncCell.designer.cs">
+      <DependentUpon>SettingsSyncCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Settings\SettingsAnnotationCell.cs" />
+    <Compile Include="Cells\Settings\SettingsAnnotationCell.designer.cs">
+      <DependentUpon>SettingsAnnotationCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Settings\SettingsButtonCell.cs" />
+    <Compile Include="Cells\Settings\SettingsButtonCell.designer.cs">
+      <DependentUpon>SettingsButtonCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\PageSheetPresenter.cs" />
+    <Compile Include="Cells\Common\SelectorCell.cs" />
+    <Compile Include="Cells\Common\SelectorCell.designer.cs">
+      <DependentUpon>SelectorCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\Generic\Common\SelectorTableViewSource.cs" />
+    <Compile Include="Helper\Handoff.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">
@@ -2073,10 +2068,7 @@
   <Import Project="..\packages\Realm.3.0.0\build\Realm.targets" Condition="Exists('..\packages\Realm.3.0.0\build\Realm.targets')" />
   <Import Project="..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.targets" Condition="Exists('..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.targets')" />
   <Import Project="..\packages\Xamarin.Google.iOS.Core.3.1.0.1\build\Xamarin.Google.iOS.Core.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.Core.3.1.0.1\build\Xamarin.Google.iOS.Core.targets')" />
-  <Import Project="..\packages\Xamarin.Google.iOS.SignIn.4.1.1.1\build\Xamarin.Google.iOS.SignIn.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.SignIn.4.1.1.1\build\Xamarin.Google.iOS.SignIn.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\build\Xamarin.Firebase.iOS.PerformanceMonitoring.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.1.1.0.1\build\Xamarin.Firebase.iOS.PerformanceMonitoring.targets')" />
   <Import Project="..\packages\Xamarin.Firebase.iOS.RemoteConfig.3.0.1\build\Xamarin.Firebase.iOS.RemoteConfig.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.RemoteConfig.3.0.1\build\Xamarin.Firebase.iOS.RemoteConfig.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.2.1.2\build\Xamarin.Firebase.iOS.PerformanceMonitoring.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.2.1.2\build\Xamarin.Firebase.iOS.PerformanceMonitoring.targets')" />
   <Import Project="..\packages\Xamarin.Firebase.iOS.InstanceID.3.4.0\build\Xamarin.Firebase.iOS.InstanceID.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.InstanceID.3.4.0\build\Xamarin.Firebase.iOS.InstanceID.targets')" />
   <Import Project="..\packages\Xamarin.Firebase.iOS.Analytics.5.5.0\build\Xamarin.Firebase.iOS.Analytics.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.Analytics.5.5.0\build\Xamarin.Firebase.iOS.Analytics.targets')" />
   <Import Project="..\packages\Xamarin.Google.iOS.SignIn.4.4.0\build\Xamarin.Google.iOS.SignIn.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.SignIn.4.4.0\build\Xamarin.Google.iOS.SignIn.targets')" />

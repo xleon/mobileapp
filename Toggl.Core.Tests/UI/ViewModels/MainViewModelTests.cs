@@ -51,10 +51,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     InteractorFactory,
                     NavigationService,
                     RemoteConfigService,
+                    AccessibilityService,
                     UpdateRemoteConfigCacheService,
                     AccessRestrictionStorage,
                     SchedulerProvider,
-                    StopwatchProvider,
                     RxActionFactory,
                     PermissionsChecker,
                     BackgroundService,
@@ -103,10 +103,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useInteractorFactory,
                 bool useNavigationService,
                 bool useRemoteConfigService,
+                bool useAccessibilityService,
                 bool useRemoteConfigUpdateService,
                 bool useAccessRestrictionStorage,
                 bool useSchedulerProvider,
-                bool useStopwatchProvider,
                 bool useRxActionFactory,
                 bool usePermissionsChecker,
                 bool useBackgroundService,
@@ -122,10 +122,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
+                var accessibilityService = useAccessibilityService ? AccessibilityService : null;
                 var remoteConfigUpdateService = useRemoteConfigUpdateService ? UpdateRemoteConfigCacheService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
-                var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var permissionsChecker = usePermissionsChecker ? PermissionsChecker : null;
                 var backgroundService = useBackgroundService ? BackgroundService : null;
@@ -143,10 +143,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         interactorFactory,
                         navigationService,
                         remoteConfigService,
+                        accessibilityService,
                         remoteConfigUpdateService,
                         accessRestrictionStorage,
                         schedulerProvider,
-                        stopwatchProvider,
                         rxActionFactory,
                         permissionsChecker,
                         backgroundService,

@@ -38,22 +38,6 @@ private Action Test(string[] projectPaths)
     };
 }
 
-private Action UITest(string[] dllPaths)
-{
-    return () =>
-    {
-        foreach(var dllPath in dllPaths)
-        {
-            var args = $"tools/nunit.runners.2.6.3/NUnit.Runners/tools/nunit-console.exe {dllPath} -stoponerror";
-
-            var result = StartProcess("mono", new ProcessSettings { Arguments = args });
-            if (result == 0) continue;
-
-            throw new Exception($"Failed while running UI tests at {dllPath}");
-        }
-    };
-}
-
 private Action BuildSolution(string configuration, string platform = "")
 {
     const string togglSolution = "./Toggl.sln";
@@ -569,6 +553,32 @@ private TemporaryFileTransformation GetIntegrationTestsConfigurationTransformati
     };
 }
 
+private TemporaryFileTransformation GetAndroidAppIconTransformation()
+{
+    const string path = "Toggl.Droid/Resources/mipmap-anydpi-v26/ic_launcher.xml";
+    const string drawableToReplace = "@color/launcherBackgroundDebug";
+    var drawable = "@color/launcherBackgroundDebug";
+    
+    if (target == "Build.Release.Android.AdHoc")
+    {
+        drawable = "@color/launcherBackgroundAdHoc";
+    }
+    else if (target == "Build.Release.Android.PlayStore")
+    {
+        drawable = "@color/launcherBackground";
+    }
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    {
+        Path = path,
+        Original = file,
+        Temporary = file.Replace(drawableToReplace, drawable)
+    };
+}
+
 var transformations = new List<TemporaryFileTransformation>
 {
     GetIosInfoConfigurationTransformation(),
@@ -586,7 +596,8 @@ var transformations = new List<TemporaryFileTransformation>
     GetAndroidGoogleLoginTransformation(),
     GetAndroidSplashScreenTransformation(),
     GetAndroidTogglApplicationTransformation(),
-    GetAndroidManifestTransformation()
+    GetAndroidManifestTransformation(),
+    GetAndroidAppIconTransformation(),
 };
 
 private HashSet<string> targetsThatSkipTearDown = new HashSet<string>
@@ -603,11 +614,6 @@ private string[] GetUnitTestProjects() => new []
     "./Toggl.Networking.Tests/Toggl.Networking.Tests.csproj",
     "./Toggl.Storage.Tests/Toggl.Storage.Tests.csproj",
     "./Toggl.Core.Tests/Toggl.Core.Tests.csproj",
-};
-
-private string[] GetUITestFiles() => new []
-{
-    "./bin/Release/Toggl.iOS.Tests.UI.dll"
 };
 
 private string[] GetIntegrationTestProjects()
@@ -678,10 +684,6 @@ Task("Build.Tests.Sync")
     .IsDependentOn("Nuget")
     .Does(BuildSolution("SyncTests"));
 
-Task("Build.Tests.UI")
-    .IsDependentOn("Nuget")
-    .Does(BuildSolution("UITests"));
-
 Task("BuildSyncDiagramGenerator")
     .IsDependentOn("Nuget")
     .Does(BuildSolution("SyncDiagramGenerator"));
@@ -727,16 +729,10 @@ Task("Tests.Sync")
     .IsDependentOn("Build.Tests.Sync")
     .Does(Test(GetSyncTestProjects()));
 
-//UI Tests
-Task("Tests.UI")
-    .IsDependentOn("Build.Tests.UI")
-    .Does(UITest(GetUITestFiles()));
-
 // All Tests
 Task("Tests")
     .IsDependentOn("Tests.Unit")
-    .IsDependentOn("Tests.Integration")
-    .IsDependentOn("Tests.UI");
+    .IsDependentOn("Tests.Integration");
 
 //Default Operation
 Task("Default")

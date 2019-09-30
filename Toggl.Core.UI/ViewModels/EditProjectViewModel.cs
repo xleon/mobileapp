@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.DataSources;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.DTOs;
 using Toggl.Core.Helper;
 using Toggl.Core.Interactors;
@@ -15,6 +14,7 @@ using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Views;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
@@ -29,11 +29,9 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly Random random = new Random();
         private readonly IInteractorFactory interactorFactory;
-        private readonly IStopwatchProvider stopwatchProvider;
         private readonly ITogglDataSource dataSource;
 
         private long initialWorkspaceId;
-        private IStopwatch navigationFromStartTimeEntryViewModelStopwatch;
         private readonly IObservable<IThreadSafeClient> currentClient;
         private readonly IObservable<IThreadSafeWorkspace> currentWorkspace;
 
@@ -45,7 +43,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<Color> Color { get; }
         public IObservable<string> ClientName { get; }
         public IObservable<string> WorkspaceName { get; }
-        public UIAction Save { get; }
+        public IObservable<bool> CanCreatePublicProjects { get; }
+        public ViewAction Save { get; }
         public OutputAction<Color> PickColor { get; }
         public OutputAction<IThreadSafeClient> PickClient { get; }
         public OutputAction<IThreadSafeWorkspace> PickWorkspace { get; }
@@ -56,7 +55,6 @@ namespace Toggl.Core.UI.ViewModels
             IRxActionFactory rxActionFactory,
             IInteractorFactory interactorFactory,
             ISchedulerProvider schedulerProvider,
-            IStopwatchProvider stopwatchProvider,
             INavigationService navigationService)
             : base(navigationService)
         {
@@ -64,14 +62,12 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
 
-            this.stopwatchProvider = stopwatchProvider;
-            this.interactorFactory = interactorFactory;
             this.dataSource = dataSource;
+            this.interactorFactory = interactorFactory;
 
             Name = new BehaviorRelay<string>("");
-            IsPrivate = new BehaviorRelay<bool>(false, CommonFunctions.Invert);
+            IsPrivate = new BehaviorRelay<bool>(true);
 
             PickColor = rxActionFactory.FromObservable<Color>(pickColor);
             PickClient = rxActionFactory.FromObservable<IThreadSafeClient>(pickClient);
@@ -95,6 +91,12 @@ namespace Toggl.Core.UI.ViewModels
 
             WorkspaceName = currentWorkspace
                 .Select(w => w.Name)
+                .DistinctUntilChanged()
+                .AsDriver(schedulerProvider);
+
+            CanCreatePublicProjects = currentWorkspace
+                .Select(w => w.Admin)
+                .DoIf(isAdmin => !isAdmin, _ => IsPrivate.Accept(true))
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
@@ -162,17 +164,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             Name.Accept(name);
 
-            navigationFromStartTimeEntryViewModelStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenCreateProjectViewFromStartTimeEntryView);
-            stopwatchProvider.Remove(MeasuredOperation.OpenCreateProjectViewFromStartTimeEntryView);
-
             return base.Initialize(name);
-        }
-
-        public override void ViewAppeared()
-        {
-            base.ViewAppeared();
-            navigationFromStartTimeEntryViewModelStopwatch?.Stop();
-            navigationFromStartTimeEntryViewModelStopwatch = null;
         }
 
         private IObservable<IThreadSafeWorkspace> pickWorkspace()
@@ -180,9 +172,16 @@ namespace Toggl.Core.UI.ViewModels
             return currentWorkspace.FirstAsync().SelectMany(workspaceFromViewModel);
 
             IObservable<IThreadSafeWorkspace> workspaceFromViewModel(IThreadSafeWorkspace currentWorkspace)
-                => Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(new SelectWorkspaceParameters(Resources.SetDefaultWorkspace, currentWorkspace.Id))
-                    .ToObservable()
-                    .SelectMany(selectedWorkspaceId => workspaceFromId(selectedWorkspaceId, currentWorkspace));
+                => interactorFactory.GetAllWorkspaces().Execute()
+                .SelectMany(allWorkspaces =>
+                {
+                    var eligibleWorkspaces = allWorkspaces.Where(ws => ws.IsEligibleForProjectCreation()).ToList();
+                    var selectWorkspaces = eligibleWorkspaces.Select(ws => new SelectOption<IThreadSafeWorkspace>(ws, ws.Name));
+                    var selectedWorkspaceIndex = eligibleWorkspaces.IndexOf(ws => ws.Id == currentWorkspace.Id);
+
+                    return View.Select(Resources.Workspace, selectWorkspaces, selectedWorkspaceIndex);
+                })
+                .SelectMany(selectedWorkspace => workspaceFromId(selectedWorkspace.Id, currentWorkspace));
 
             IObservable<IThreadSafeWorkspace> workspaceFromId(long selectedWorkspaceId, IThreadSafeWorkspace currentWorkspace)
                 => selectedWorkspaceId == currentWorkspace.Id

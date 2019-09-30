@@ -11,7 +11,6 @@ using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Span;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.DataSources;
-using Toggl.Core.Diagnostics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
@@ -27,8 +26,6 @@ using Toggl.Shared.Extensions.Reactive;
 using Toggl.Storage.Settings;
 using static Toggl.Core.Helper.Constants;
 using static Toggl.Shared.Extensions.CommonFunctions;
-using IStopwatch = Toggl.Core.Diagnostics.IStopwatch;
-using IStopwatchProvider = Toggl.Core.Diagnostics.IStopwatchProvider;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -40,7 +37,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly IStopwatchProvider stopwatchProvider;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly BehaviorRelay<TextFieldInfo> textFieldInfo = new BehaviorRelay<TextFieldInfo>(Autocomplete.TextFieldInfo.Empty(0));
@@ -54,8 +50,8 @@ namespace Toggl.Core.UI.ViewModels
         private bool isDirty => !string.IsNullOrEmpty(textFieldInfo.Value.Description)
                                 || textFieldInfo.Value.Spans.Any(s => s is ProjectSpan || s is TagSpan)
                                 || isBillable.Value
-                                || startTime != parameter.StartTime
-                                || duration != parameter.Duration;
+                                || startTime != parameter?.StartTime
+                                || duration != parameter?.Duration;
 
         private bool hasAnyTags;
         private bool hasAnyProjects;
@@ -66,10 +62,6 @@ namespace Toggl.Core.UI.ViewModels
 
         private DateTimeOffset startTime;
         private TimeSpan? duration;
-
-        private IStopwatch startTimeEntryStopwatch;
-        private Dictionary<string, IStopwatch> suggestionsLoadingStopwatches = new Dictionary<string, IStopwatch>();
-        private IStopwatch suggestionsRenderingStopwatch;
 
         private bool isRunning => !duration.HasValue;
 
@@ -91,18 +83,18 @@ namespace Toggl.Core.UI.ViewModels
         public IOnboardingStorage OnboardingStorage { get; }
 
         public OutputAction<IThreadSafeTimeEntry> Done { get; }
-        public UIAction DurationTapped { get; }
-        public UIAction ToggleBillable { get; }
-        public UIAction SetStartDate { get; }
-        public UIAction ChangeTime { get; }
-        public UIAction ToggleTagSuggestions { get; }
-        public UIAction ToggleProjectSuggestions { get; }
+        public ViewAction DurationTapped { get; }
+        public ViewAction ToggleBillable { get; }
+        public ViewAction SetStartDate { get; }
+        public ViewAction ChangeTime { get; }
+        public ViewAction ToggleTagSuggestions { get; }
+        public ViewAction ToggleProjectSuggestions { get; }
         public InputAction<AutocompleteSuggestion> SelectSuggestion { get; }
         public InputAction<TimeSpan> SetRunningTime { get; }
         public InputAction<ProjectSuggestion> ToggleTasks { get; }
-        public InputAction<IEnumerable<ISpan>> SetTextSpans { get; }
+        public InputAction<IImmutableList<ISpan>> SetTextSpans { get; }
 
-        public IObservable<IList<SectionModel<string, AutocompleteSuggestion>>> Suggestions { get; }
+        public IObservable<IImmutableList<SectionModel<string, AutocompleteSuggestion>>> Suggestions { get; }
         public IObservable<string> DisplayedTime { get; }
 
         public StartTimeEntryViewModel(
@@ -114,7 +106,6 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             IAnalyticsService analyticsService,
             ISchedulerProvider schedulerProvider,
-            IStopwatchProvider stopwatchProvider,
             IRxActionFactory rxActionFactory)
             : base(navigationService)
         {
@@ -125,7 +116,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(stopwatchProvider, nameof(stopwatchProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.timeService = timeService;
@@ -133,7 +123,6 @@ namespace Toggl.Core.UI.ViewModels
             this.interactorFactory = interactorFactory;
             this.analyticsService = analyticsService;
             this.schedulerProvider = schedulerProvider;
-            this.stopwatchProvider = stopwatchProvider;
 
             DataSource = dataSource;
             OnboardingStorage = onboardingStorage;
@@ -157,21 +146,21 @@ namespace Toggl.Core.UI.ViewModels
             SelectSuggestion = rxActionFactory.FromAsync<AutocompleteSuggestion>(selectSuggestion);
             SetRunningTime = rxActionFactory.FromAction<TimeSpan>(setRunningTime);
             ToggleTasks = rxActionFactory.FromAction<ProjectSuggestion>(toggleTasks);
-            SetTextSpans = rxActionFactory.FromAction<IEnumerable<ISpan>>(setTextSpans);
+            SetTextSpans = rxActionFactory.FromAction<IImmutableList<ISpan>>(setTextSpans);
 
             var queryByType = queryByTypeSubject
                 .AsObservable()
-                .SelectMany(type => interactorFactory.GetAutocompleteSuggestions(new QueryInfo("", type)).Execute());
+                .Select(type => new QueryInfo("", type));
 
             var queryByText = textFieldInfo
                 .SelectMany(setBillableValues)
                 .Select(QueryInfo.ParseFieldInfo)
                 .Do(onParsedQuery)
-                .ObserveOn(schedulerProvider.BackgroundScheduler)
-                .SelectMany(query => interactorFactory.GetAutocompleteSuggestions(query).Execute());
+                .ObserveOn(schedulerProvider.BackgroundScheduler);
 
             Suggestions = Observable.Merge(queryByText, queryByType)
-                .Select(items => items.ToList()) // This is line is needed for now to read objects from realm
+                .SelectMany(query => interactorFactory.GetAutocompleteSuggestions(query).Execute())
+                .Select(items => items.ToList()) // This is line is needed for now to read objects from realm .ObserveOn(schedulerProvider.BackgroundScheduler)
                 .Select(filter)
                 .Select(group)
                 .CombineLatest(expandedProjects, (groups, _) => groups)
@@ -200,9 +189,6 @@ namespace Toggl.Core.UI.ViewModels
                 .Where(_ => isRunning)
                 .Subscribe(currentTime => displayedTime.Accept(currentTime - startTime))
                 .DisposedBy(disposeBag);
-
-            startTimeEntryStopwatch = stopwatchProvider.Get(MeasuredOperation.OpenStartView);
-            stopwatchProvider.Remove(MeasuredOperation.OpenStartView);
 
             defaultWorkspace = await interactorFactory.GetDefaultWorkspace()
                 .TrackException<InvalidOperationException, IThreadSafeWorkspace>("StartTimeEntryViewModel.Initialize")
@@ -254,40 +240,31 @@ namespace Toggl.Core.UI.ViewModels
             hasAnyProjects = (await DataSource.Projects.GetAll()).Any();
         }
 
-        public override void ViewAppeared()
-        {
-            base.ViewAppeared();
-            startTimeEntryStopwatch?.Stop();
-            startTimeEntryStopwatch = null;
-        }
-
         public override void ViewDestroyed()
         {
             base.ViewDestroyed();
             disposeBag?.Dispose();
         }
 
-        public void StopSuggestionsRenderingStopwatch()
-        {
-            suggestionsRenderingStopwatch?.Stop();
-            suggestionsRenderingStopwatch = null;
-        }
-
         public override async void CloseWithDefaultResult()
         {
             if (isDirty)
             {
-                var shouldDiscard = await View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
-                if (!shouldDiscard)
-                    return;
+                var view = View;
+                if (view != null)
+                {
+                    var shouldDiscard = await view.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
+                    if (!shouldDiscard)
+                        return;
+                }
             }
 
             Close();
         }
 
-        private void setTextSpans(IEnumerable<ISpan> spans)
+        private void setTextSpans(IImmutableList<ISpan> spans)
         {
-            textFieldInfo.Accept(textFieldInfo.Value.ReplaceSpans(spans.ToImmutableList()));
+            textFieldInfo.Accept(textFieldInfo.Value.ReplaceSpans(spans));
         }
 
         private void setRunningTime(TimeSpan runningTime)
@@ -385,11 +362,9 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task createProject()
         {
-            var createProjectStopwatch = stopwatchProvider.CreateAndStore(MeasuredOperation.OpenCreateProjectViewFromStartTimeEntryView);
-            createProjectStopwatch.Start();
-
             var projectId = await Navigate<EditProjectViewModel, string, long?>(currentQuery);
-            if (projectId == null) return;
+            if (projectId == null)
+                return;
 
             var project = await interactorFactory.GetProjectById(projectId.Value).Execute();
             var projectSuggestion = new ProjectSuggestion(project);
@@ -517,9 +492,11 @@ namespace Toggl.Core.UI.ViewModels
                 origin = paramOrigin;
             }
 
+            Close();
+
             return interactorFactory.CreateTimeEntry(timeEntry, origin)
                 .Execute()
-                .Do(_ => Close());
+                .SubscribeOn(schedulerProvider.BackgroundScheduler);
         }
 
         private void onParsedQuery(QueryInfo parsedQuery)
@@ -528,9 +505,8 @@ namespace Toggl.Core.UI.ViewModels
             if (currentQuery != newQuery)
             {
                 currentQuery = newQuery;
-                suggestionsLoadingStopwatches[currentQuery] = stopwatchProvider.Create(MeasuredOperation.StartTimeEntrySuggestionsLoadingTime);
-                suggestionsLoadingStopwatches[currentQuery].Start();
             }
+
             bool suggestsTags = parsedQuery.SuggestionType == AutocompleteSuggestionType.Tags;
             bool suggestsProjects = parsedQuery.SuggestionType == AutocompleteSuggestionType.Projects;
 
@@ -550,9 +526,6 @@ namespace Toggl.Core.UI.ViewModels
 
         private IEnumerable<AutocompleteSuggestion> filter(IEnumerable<AutocompleteSuggestion> suggestions)
         {
-            suggestionsRenderingStopwatch = stopwatchProvider.Create(MeasuredOperation.StartTimeEntrySuggestionsRenderingTime);
-            suggestionsRenderingStopwatch.Start();
-
             if (textFieldInfo.Value.HasProject && !isSuggestingProjects.Value && !isSuggestingTags.Value)
             {
                 var projectId = textFieldInfo.Value.Spans.OfType<ProjectSpan>().Single().ProjectId;
@@ -600,16 +573,14 @@ namespace Toggl.Core.UI.ViewModels
                         items = items.Prepend(ProjectSuggestion.NoProject(projectSuggestion.WorkspaceId,
                             projectSuggestion.WorkspaceName));
                     }
-
+                    else if (group.First() is TimeEntrySuggestion timeEntrySuggestion)
+                    {
+                        header = timeEntrySuggestion.WorkspaceName;
+                    }
+                    
                     return new SectionModel<string, AutocompleteSuggestion>(header, items);
                 }
             );
-
-            if (suggestionsLoadingStopwatches.ContainsKey(currentQuery))
-            {
-                suggestionsLoadingStopwatches[currentQuery]?.Stop();
-                suggestionsLoadingStopwatches = new Dictionary<string, IStopwatch>();
-            }
 
             return sections;
         }
@@ -628,7 +599,7 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        private IList<SectionModel<string, AutocompleteSuggestion>> addStaticElements(IEnumerable<SectionModel<string, AutocompleteSuggestion>> sections)
+        private IImmutableList<SectionModel<string, AutocompleteSuggestion>> addStaticElements(IEnumerable<SectionModel<string, AutocompleteSuggestion>> sections)
         {
             var suggestions = sections.SelectMany(section => section.Items);
 
@@ -672,7 +643,7 @@ namespace Toggl.Core.UI.ViewModels
                 }
             }
 
-            return sections.ToList();
+            return sections.ToImmutableList();
 
             bool shouldAddProjectCreationSuggestion()
                 => canCreateProjectsInWorkspace && !textFieldInfo.Value.HasProject &&

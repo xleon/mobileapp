@@ -47,8 +47,7 @@ namespace Toggl.iOS.ViewControllers
 
             projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
                 ProjectTaskClientLabel.Font.CapHeight,
-                Colors.EditTimeEntry.ClientText.ToNativeColor(),
-                false);
+                Colors.EditTimeEntry.ClientText.ToNativeColor());
 
             tagsListToAttributedString = new TagsListToAttributedString(TagsTextView);
 
@@ -76,6 +75,10 @@ namespace Toggl.iOS.ViewControllers
 
             DescriptionTextView.TextObservable
                 .Subscribe(ViewModel.Description.Accept)
+                .DisposedBy(DisposeBag);
+
+            DescriptionTextView.SizeChangedObservable
+                .Subscribe(adjustHeight)
                 .DisposedBy(DisposeBag);
 
             ViewModel.SyncErrorMessage
@@ -153,8 +156,7 @@ namespace Toggl.iOS.ViewControllers
                 .WithLatestFrom(ViewModel.Preferences,
                     (startTime, preferences) => DateTimeToFormattedString.Convert(
                         startTime,
-                        preferences.TimeOfDayFormat.Format,
-                        IosDependencyContainer.Instance.AnalyticsService))
+                        preferences.TimeOfDayFormat.Format))
                 .Subscribe(StartTimeLabel.Rx().Text())
                 .DisposedBy(DisposeBag);
 
@@ -162,8 +164,7 @@ namespace Toggl.iOS.ViewControllers
                 .WithLatestFrom(ViewModel.Preferences,
                     (startTime, preferences) => DateTimeToFormattedString.Convert(
                         startTime,
-                        preferences.DateFormat.Short,
-                        IosDependencyContainer.Instance.AnalyticsService))
+                        preferences.DateFormat.Short))
                 .Subscribe(StartDateLabel.Rx().Text())
                 .DisposedBy(DisposeBag);
 
@@ -191,8 +192,7 @@ namespace Toggl.iOS.ViewControllers
                 .WithLatestFrom(ViewModel.Preferences,
                     (stopTime, preferences) => DateTimeToFormattedString.Convert(
                         stopTime,
-                        preferences.TimeOfDayFormat.Format,
-                        IosDependencyContainer.Instance.AnalyticsService))
+                        preferences.TimeOfDayFormat.Format))
                 .Subscribe(EndTimeLabel.Rx().Text())
                 .DisposedBy(DisposeBag);
 
@@ -237,14 +237,27 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(TagsTextView.Rx().AttributedTextObserver())
                 .DisposedBy(DisposeBag);
 
+            ViewModel.Tags
+                .Select(tags =>
+                {
+                    if (tags.Any())
+                    {
+                        return string.Format(Resources.TagsList, string.Join(", ", tags));
+                    }
+                    else
+                    {
+                        return Resources.NoTags;
+                    }
+                })
+                .Subscribe(TagsContainerView.Rx().AccessibilityLabel())
+                .DisposedBy(DisposeBag);
+
             View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
         }
 
         public override void ViewWillLayoutSubviews()
         {
             base.ViewWillLayoutSubviews();
-
-            adjustHeight();
 
             View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
         }
@@ -256,8 +269,7 @@ namespace Toggl.iOS.ViewControllers
             centerTextVertically(TagsTextView);
             TagsTextView.TextContainer.LineFragmentPadding = 0;
 
-            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
-                && UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Pad)
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Pad)
             {
                 var bottomSafeAreaInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
                 if (bottomSafeAreaInset >= ButtonsContainerBottomConstraint.Constant)
@@ -305,8 +317,8 @@ namespace Toggl.iOS.ViewControllers
             StopButton.UserInteractionEnabled = !isInaccessible;
 
             BillableSwitch.Enabled = !isInaccessible;
-            TagsContainerView.Hidden = isInaccessible;
-            TagsSeparator.Hidden = isInaccessible;
+            TagsTextView.UserInteractionEnabled = !isInaccessible;
+            AddTagsView.Hidden = isInaccessible;
 
             var textColor = isInaccessible
                 ? Colors.Common.Disabled.ToNativeColor()
@@ -342,12 +354,31 @@ namespace Toggl.iOS.ViewControllers
         private void adjustHeight()
         {
             double height;
+            nfloat coveredByKeyboard = 0;
+
             if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
             {
                 height = nonScrollableContentHeight + ScrollViewContent.Bounds.Height;
-                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                height += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+
+                if (keyboardHeight > 0)
                 {
-                    height += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+                    // this bit of code depends on the knowledge of the component tree:
+                    // - description label is inside of a container view which is placed in a stack view
+                    // - we want to know the vertical location of the container view in the whole view
+                    // - we actually want to know the Y coordinate of the bottom of the container and make
+                    //   sure we don't overaly it with the keyboard
+                    var container = DescriptionTextView.Superview;
+                    var absoluteLocation = View.ConvertPointFromView(container.Frame.Location, container.Superview.Superview);
+                    var minimumVisibleContentHeight = View.Frame.Height - absoluteLocation.Y - container.Frame.Height;
+
+                    coveredByKeyboard = keyboardHeight - minimumVisibleContentHeight;
+
+                    var safeAreaOffset = Math.Max(UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top,
+                        UIApplication.SharedApplication.StatusBarFrame.Height);
+                    var distanceFromTop = Math.Max(safeAreaOffset, View.Frame.Y - coveredByKeyboard);
+
+                    height = UIScreen.MainScreen.Bounds.Height - distanceFromTop;
                 }
             }
             else
@@ -360,50 +391,29 @@ namespace Toggl.iOS.ViewControllers
                 var timeFieldsHeight = ViewModel.IsEditingGroup ? 0 : 167;
                 height = preferredIpadHeight + errorHeight + titleHeight + timeFieldsHeight + isBillableHeight;
             }
+
             var newSize = new CGSize(0, height);
+
             if (newSize != PreferredContentSize)
             {
                 PreferredContentSize = newSize;
                 PresentationController.ContainerViewWillLayoutSubviews();
-                adjustDistanceFromTop();
             }
+
             ScrollView.ScrollEnabled = ScrollViewContent.Bounds.Height > ScrollView.Bounds.Height;
-        }
 
-        private void adjustDistanceFromTop()
-        {
-            if (keyboardHeight > 0)
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
             {
-                // this bit of code depends on the knowledge of the component tree:
-                // - description label is inside of a container view which is placed in a stack view
-                // - we want to know the vertical location of the container view in the whole view
-                // - we actually want to know the Y coordinate of the bottom of the container and make
-                //   sure we don't overaly it with the keyboard
-                var container = DescriptionTextView.Superview;
-                var absoluteLocation = View.ConvertPointFromView(container.Frame.Location, container.Superview);
-                var minimumVisibleContentHeight = View.Frame.Height - absoluteLocation.Y - container.Frame.Height;
-
-                var coveredByKeyboard = keyboardHeight - minimumVisibleContentHeight;
-
-                if (coveredByKeyboard < 0)
+                if (ScrollView.ScrollEnabled && keyboardHeight > 0)
                 {
-                    return;
+                    nfloat scrollViewContentBottomPadding = ViewModel.IsEditingGroup ? coveredByKeyboard : 0;
+                    ScrollView.ContentSize = new CGSize(ScrollView.ContentSize.Width, ScrollViewContent.Bounds.Height + scrollViewContentBottomPadding);
+                    ScrollView.SetContentOffset(new CGPoint(0, ScrollView.ContentSize.Height - ScrollView.Bounds.Height), false);
                 }
-
-                var safeAreaOffset = UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
-                    ? Math.Max(UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top, UIApplication.SharedApplication.StatusBarFrame.Height)
-                    : 0;
-                var distanceFromTop = Math.Max(safeAreaOffset, View.Frame.Y - coveredByKeyboard);
-
-                View.Frame = new CGRect(View.Frame.X, distanceFromTop, View.Frame.Width, View.Frame.Height);
-                UIView.Animate(Animation.Timings.EnterTiming, View.LayoutIfNeeded);
-            }
-            else
-            {
-                var distanceFromTop = UIScreen.MainScreen.Bounds.Height - View.Frame.Height;
-
-                View.Frame = new CGRect(View.Frame.X, distanceFromTop, View.Frame.Width, View.Frame.Height);
-                UIView.Animate(Animation.Timings.EnterTiming, View.LayoutIfNeeded);
+                else
+                {
+                    ScrollView.ContentSize = new CGSize(ScrollView.ContentSize.Width, ScrollViewContent.Bounds.Height);
+                }
             }
         }
 
@@ -424,13 +434,13 @@ namespace Toggl.iOS.ViewControllers
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
         {
             keyboardHeight = (float)e.FrameEnd.Height;
-            adjustDistanceFromTop();
+            adjustHeight();
         }
 
         protected override void KeyboardWillHide(object sender, UIKeyboardEventArgs e)
         {
             keyboardHeight = 0;
-            adjustDistanceFromTop();
+            adjustHeight();
         }
     }
 }

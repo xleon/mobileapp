@@ -47,8 +47,12 @@ namespace Toggl.iOS.Extensions
 
             void toggleVisibility(bool shouldBeVisible)
             {
+                if (view == null) return;
+
                 var isVisible = view.Hidden == false;
                 if (isVisible == shouldBeVisible) return;
+
+                if (view.Superview == null) return;
 
                 if (shouldBeVisible)
                 {
@@ -62,10 +66,6 @@ namespace Toggl.iOS.Extensions
                         {
                             view.Alpha = 1;
                             view.Transform = CGAffineTransform.MakeScale(1f, 1f);
-                        },
-                        () =>
-                        {
-                            isVisible = true;
                         });
                 }
                 else
@@ -83,7 +83,6 @@ namespace Toggl.iOS.Extensions
                         () =>
                         {
                             view.Hidden = true;
-                            isVisible = false;
                         });
                 }
             }

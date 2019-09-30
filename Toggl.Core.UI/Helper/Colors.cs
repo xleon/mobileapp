@@ -283,8 +283,11 @@ namespace Toggl.Core.UI.Helper
 
         public static class Settings
         {
+            public static readonly Color SectionHeaderText = silver;
             public static readonly Color SyncStatusText = new Color(144, 146, 147);
             public static readonly Color Background = nearlyWhite;
+            public static readonly Color DetailLabel = brownishGrey;
+            public static readonly Color SeparatorColor = new Color(232, 232, 232);
         }
 
         public static class Feedback
@@ -314,6 +317,7 @@ namespace Toggl.Core.UI.Helper
             }
 
             public static readonly Color SelectedDayBackgoundColor = new Color(181, 188, 192);
+            public static readonly Color YearColor = new Color(181, 188, 192);
             public static readonly Color Today = new Color(181, 188, 192, 30);
             public static readonly Color CellTextColorInCurrentMonth = new Color(0, 0, 0);
             public static readonly Color CellTextColorOutOfCurrentMonth = new Color(163, 163, 163);
@@ -360,6 +364,11 @@ namespace Toggl.Core.UI.Helper
         public static class Licenses
         {
             public static readonly Color Border = new Color(232, 232, 232);
+        }
+
+        public static class Calendar
+        {
+            public static readonly Color EnableCalendarAction = lightishGreen;
         }
 
         public static readonly Color[] DefaultProjectColors =

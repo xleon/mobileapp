@@ -22,7 +22,7 @@
                 android:textSize="20sp"
                 android:fontFamily="sans-serif-medium"
                 android:textStyle="normal"
-                android:textColor="@color/BlueTextColor"
+                android:textColor="@color/accent"
                 android:lineSpacingExtra="4sp"
                 android:singleLine="true"
                 android:ellipsize="marquee"
@@ -94,13 +94,13 @@
                 android:layout_height="40dp"
                 android:src="@drawable/stop_white"
                 android:background="@drawable/RoundedButton"
-                android:backgroundTint="@color/playButtonRed"/>
+                android:backgroundTint="@android:color/holo_red_light"/>
         <ImageButton
                 android:id="@+id/StartButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/play_white"
                 android:background="@drawable/RoundedButton"
-                android:backgroundTint="@color/playButtonGreen"/>
+                android:backgroundTint="@android:color/holo_green_dark"/>
     </FrameLayout>
 </LinearLayout>

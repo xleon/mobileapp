@@ -17,11 +17,15 @@ namespace Toggl.Storage.Settings
 
         IObservable<bool> AreStoppedTimerNotificationsEnabledObservable { get; }
 
+        IObservable<bool> SwipeActionsEnabled { get; }
+
         bool IsManualModeEnabled { get; }
 
         bool AreRunningTimerNotificationsEnabled { get; }
 
         bool AreStoppedTimerNotificationsEnabled { get; }
+
+        bool AreSwipeActionsEnabled { get; }
 
         void EnableManualMode();
 
@@ -40,5 +44,7 @@ namespace Toggl.Storage.Settings
         void SetCalendarNotificationsEnabled(bool enabled);
 
         void SetTimeSpanBeforeCalendarNotifications(TimeSpan timeSpan);
+
+        void SetSwipeActionsEnabled(bool enabled);
     }
 }
