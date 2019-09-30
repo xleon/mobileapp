@@ -317,8 +317,8 @@ namespace Toggl.iOS.ViewControllers
             StopButton.UserInteractionEnabled = !isInaccessible;
 
             BillableSwitch.Enabled = !isInaccessible;
-            TagsContainerView.Hidden = isInaccessible;
-            TagsSeparator.Hidden = isInaccessible;
+            TagsTextView.UserInteractionEnabled = !isInaccessible;
+            AddTagsView.Hidden = isInaccessible;
 
             var textColor = isInaccessible
                 ? Colors.Common.Disabled.ToNativeColor()
