@@ -211,7 +211,10 @@ namespace Toggl.iOS.ViewControllers
 
             foreach (UIView view in DescriptionTextView.Subviews) // This line is needed for when the user selects from suggestion and the iOS autocorrect is ready to add text at the same time too. Without this the little selection will persist even after the suggestion has been selected
                 if (view.Class.Name == "UIAutocorrectInlinePrompt")
+                {
                     view.RemoveFromSuperview();
+                    break;
+                }
 
             updatePlaceholder();
         }
