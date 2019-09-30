@@ -206,10 +206,17 @@ namespace Toggl.iOS.ViewControllers
             if (DescriptionTextView.AttributedText.GetHashCode() == attributedText.GetHashCode())
                 return;
 
-            DescriptionTextView.InputDelegate = emptyInputDelegate; //This line is needed for when the user selects from suggestion and the iOS autocorrect is ready to add text at the same time. Without this line both will happen.
+            //This line is needed for when the user selects from suggestion and
+            // the iOS autocorrect is ready to add text at the same time.
+            // Without this line both will happen.
+            DescriptionTextView.InputDelegate = emptyInputDelegate;
             DescriptionTextView.AttributedText = attributedText;
 
-            foreach (UIView view in DescriptionTextView.Subviews) // This line is needed for when the user selects from suggestion and the iOS autocorrect is ready to add text at the same time too. Without this the little selection will persist even after the suggestion has been selected
+            // This line is needed for when the user selects from suggestion and
+            // the iOS autocorrect is ready to add text at the same time too.
+            // Without this the little selection will persist even after the
+            // suggestion has been selected
+            foreach (var view in DescriptionTextView.Subviews)
                 if (view.Class.Name == "UIAutocorrectInlinePrompt")
                 {
                     view.RemoveFromSuperview();
