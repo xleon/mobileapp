@@ -3,6 +3,7 @@ using Android.Appwidget;
 using Android.Content;
 using Android.OS;
 using Android.Widget;
+using Toggl.Droid.Services;
 using Toggl.Droid.Widgets.Services;
 
 namespace Toggl.Droid.Widgets
@@ -12,6 +13,21 @@ namespace Toggl.Droid.Widgets
     [MetaData("android.appwidget.provider", Resource = "@xml/timeentrywidgetprovider")]
     public class TimeEntryWidget : AppWidgetProvider
     {
+        public override void OnReceive(Context context, Intent intent)
+        {
+            base.OnReceive(context, intent);
+
+            var action = intent.Action;
+            if (action == TimerBackgroundService.StartTimeEntryAction)
+            {
+                TimerBackgroundService.EnqueueStartTimeEntry(context, intent);
+            }
+            else if (action == TimerBackgroundService.StopRunningTimeEntryAction)
+            {
+                TimerBackgroundService.EnqueueStopTimeEntry(context, intent);
+            }
+        }
+
         public override void OnDeleted(Context context, int[] appWidgetIds)
         {
             reportInstallationState(context, false);
@@ -44,8 +60,29 @@ namespace Toggl.Droid.Widgets
         }
 
         private RemoteViews getRemoteViews(Context context, int minWidth)
-            => minWidth < 110
+        {
+            var remoteViews = minWidth < 110
                 ? new RemoteViews(context.PackageName, Resource.Layout.TimeEntryWidgetSmall)
                 : new RemoteViews(context.PackageName, Resource.Layout.TimeEntryWidget);
+
+            remoteViews.SetOnClickPendingIntent(Resource.Id.StartButton, startTimeEntryPendingIntent(context));
+            remoteViews.SetOnClickPendingIntent(Resource.Id.StopButton, stopTimeEntryPendingIntent(context));
+
+            return remoteViews;
+        }
+
+        private PendingIntent startTimeEntryPendingIntent(Context context)
+        {
+            var intent = new Intent(context, typeof(TimeEntryWidget));
+            intent.SetAction(TimerBackgroundService.StartTimeEntryAction);
+            return PendingIntent.GetBroadcast(context, 0, intent, PendingIntentFlags.UpdateCurrent);
+        }
+
+        private PendingIntent stopTimeEntryPendingIntent(Context context)
+        {
+            var intent = new Intent(context, typeof(TimeEntryWidget));
+            intent.SetAction(TimerBackgroundService.StopRunningTimeEntryAction);
+            return PendingIntent.GetBroadcast(context, 0, intent, PendingIntentFlags.UpdateCurrent);
+        }
     }
 }

@@ -659,6 +659,7 @@
     <Compile Include="Widgets\Services\InstallationStateReportService.cs" />
     <Compile Include="Widgets\TimeEntryWidget.cs" />
     <Compile Include="Services\AccessibilityServiceAndroid.cs" />
+    <Compile Include="Services\TimerBackgroundService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
