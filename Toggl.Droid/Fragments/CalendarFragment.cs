@@ -12,7 +12,7 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    public partial class CalendarFragment : ReactiveTabFragment<CalendarViewModel>, IScrollableToTop
+    public partial class CalendarFragment : ReactiveTabFragment<CalendarViewModel>, IScrollableToStart
     {
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -66,9 +66,15 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
         }
 
-        public void ScrollToTop()
+        public void ScrollToStart()
         {
-            //Todo: Scroll To Top
+            calendarDayView?.ScrollToCurrentHour(true);
+        }
+
+        public override void OnResume()
+        {
+            base.OnResume();
+            calendarDayView?.ScrollToCurrentHour();
         }
 
         private void onboardingVisibilityChanged(bool visible)

@@ -390,7 +390,7 @@
     <Compile Include="Presentation\ViewModelCache.cs" />
     <Compile Include="Startup\AndroidDependencyContainer.cs" />
     <Compile Include="Extensions\FloatingActionButtonExtensions.cs" />
-    <Compile Include="Presentation\IScrollableToTop.cs" />
+    <Compile Include="Presentation\IScrollableToStart.cs" />
     <Compile Include="ViewHelpers\CalendarItemRectAttributes.cs" />
     <Compile Include="ViewHolders\LicenseViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\SuggestionRecyclerViewHolder.cs" />

@@ -39,11 +39,13 @@ namespace Toggl.Droid.Views.Calendar
         private float availableWidth;
         private int hourHeight;
         private int maxHeight;
+        private Paint currentHourPaint;
         private readonly RectF tapCheckRectF = new RectF();
         
         private Vibrator hapticFeedbackProvider;
         private int vibrationDurationInMilliseconds = 5;
         private int vibrationAmplitude = 7;
+        private int scrollAnimationDurationInMillis = 300;
 
         private ImmutableList<CalendarItem> calendarItems = ImmutableList<CalendarItem>.Empty;
         private ImmutableList<CalendarItemRectAttributes> calendarItemLayoutAttributes = ImmutableList<CalendarItemRectAttributes>.Empty;
@@ -103,7 +105,11 @@ namespace Toggl.Droid.Views.Calendar
             handler = new Handler(Looper.MainLooper);
             hourHeight = 56.DpToPixels(Context);
             maxHeight = hourHeight * 24;
-            
+            currentHourPaint = new Paint(PaintFlags.AntiAlias);
+            currentHourPaint.Color = Context.SafeGetColor(Resource.Color.currentHourColor);
+            currentHourPaint.StrokeWidth = 1.DpToPixels(Context);
+            currentHourPaint.SetStyle(Paint.Style.FillAndStroke);
+
             initBackgroundBackingFields();
             initEventDrawingBackingFields();
             initEventEditionBackingFields();
@@ -133,10 +139,36 @@ namespace Toggl.Droid.Views.Calendar
             canvas.ClipRect(0, scrollOffset, Width, Height + scrollOffset);
             drawHourLines(canvas);
             drawCalendarItems(canvas);
+            drawCurrentHourIndicator(canvas);
 
             canvas.Restore();
         }
 
+        public void ScrollToCurrentHour(bool scrollSmoothly = false)
+        {
+            var hourOffset = calculateCurrentHourOffset();
+            isScrolling = true;
+            if (scrollSmoothly)
+                scroller.StartScroll(0, scrollOffset, 0, hourOffset - scrollOffset, scrollAnimationDurationInMillis);
+            else
+                scroller.StartScroll(0, scrollOffset, 0, hourOffset - scrollOffset);
+            
+            continueScroll();
+        }
+
+        private int calculateCurrentHourOffset()
+        {
+            var now = timeService.CurrentDateTime.LocalDateTime;
+            return (int)calculateHourOffsetFrom(now, hourHeight);
+        }
+
+        private void drawCurrentHourIndicator(Canvas canvas)
+        {
+            var currentHourY = calculateCurrentHourOffset();
+            canvas.DrawLine(timeSliceStartX, currentHourY, Width, currentHourY, currentHourPaint);
+            canvas.DrawCircle(timeSliceStartX, currentHourY, 4.DpToPixels(Context), currentHourPaint);
+        }
+        
         partial void drawHourLines(Canvas canvas);
         partial void drawCalendarItems(Canvas canvas);
 

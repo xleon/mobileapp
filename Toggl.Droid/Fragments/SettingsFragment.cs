@@ -15,7 +15,7 @@ using static Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Fragments
 {
-    public sealed partial class SettingsFragment : ReactiveTabFragment<SettingsViewModel>, IScrollableToTop
+    public sealed partial class SettingsFragment : ReactiveTabFragment<SettingsViewModel>, IScrollableToStart
     {
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -190,7 +190,7 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
         }
 
-        public void ScrollToTop()
+        public void ScrollToStart()
         {
             scrollView?.SmoothScrollTo(0, 0);
         }
