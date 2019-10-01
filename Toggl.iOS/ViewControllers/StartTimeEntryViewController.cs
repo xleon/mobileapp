@@ -26,7 +26,6 @@ namespace Toggl.iOS.ViewControllers
     public sealed partial class StartTimeEntryViewController : KeyboardAwareViewController<StartTimeEntryViewModel>
     {
         private const double desiredIpadHeight = 360;
-        private const string autocorrectPromptClassName = "UIAutocorrectInlinePrompt";
 
         private bool isUpdatingDescriptionField;
 
@@ -213,16 +212,7 @@ namespace Toggl.iOS.ViewControllers
             DescriptionTextView.InputDelegate = emptyInputDelegate;
             DescriptionTextView.AttributedText = attributedText;
 
-            // This line is needed for when the user selects from suggestion and
-            // the iOS autocorrect is ready to add text at the same time too.
-            // Without this the little selection will persist even after the
-            // suggestion has been selected
-            foreach (var view in DescriptionTextView.Subviews)
-                if (view.Class.Name == autocorrectPromptClassName)
-                {
-                    view.RemoveFromSuperview();
-                    break;
-                }
+            DescriptionTextView.rejectAutocorrect();
 
             updatePlaceholder();
         }
