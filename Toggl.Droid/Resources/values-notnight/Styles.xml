@@ -4,6 +4,10 @@
   </style>
   
   <style name="AppBarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
+    <item name="android:actionMenuTextColor">@color/ToolbarButtonTextColor</item>
+    <item name="actionMenuTextColor">@color/ToolbarButtonTextColor</item>
+    <item name="android:colorControlNormal">@color/primaryText</item>
+    <item name="colorControlNormal">@color/primaryText</item>
   </style>
 
   <style name="WheelDialogStyle" parent="android:Theme.Material.Light.Dialog">

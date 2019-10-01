@@ -3,8 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/SaveMenuItem"
+        android:id="@+id/ButtonMenuItem"
         app:showAsAction="always"
         android:title=""
-        tools:title="Save" />
+        tools:title="Done" />
+    <item
+        android:id="@+id/ClearMenuItem"
+        app:showAsAction="always"
+        android:visible="false"
+        android:title=""
+        android:icon="@drawable/toolbar_close" />
 </menu>

@@ -4,23 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-        android:elevation="4dp"
-        android:paddingRight="16dp"
-        android:orientation="horizontal"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/background"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/BackImageView"
-            android:padding="16dp"
-            android:clickable="true"
-            android:src="@drawable/arrow_back"
-            android:tint="@color/primaryText"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_width="56dp"
-            android:layout_height="56dp" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/Toolbar"
+        style="@style/ToolbarStyle">
         <EditText
             android:id="@+id/FilterEditText"
             android:lines="1"
@@ -35,9 +21,9 @@
             android:textColor="@color/primaryText"
             android:textColorHint="@color/placeholderText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical" />
-    </LinearLayout>
+            android:layout_height="wrap_content" />
+    </android.support.v7.widget.Toolbar>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/SelectClientRecyclerView"
         android:scrollbars="vertical"

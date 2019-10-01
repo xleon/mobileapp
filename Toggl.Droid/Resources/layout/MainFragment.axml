@@ -61,10 +61,9 @@
         android:layout_height="wrap_content">
         <android.support.v7.widget.Toolbar
             android:id="@+id/Toolbar"
-            android:background="@color/background"
+            style="@style/ToolbarStyle"
             app:layout_scrollFlags="scroll|enterAlways"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            >
             <ImageView 
               android:src="@drawable/ic_toggl_logo"
               android:layout_gravity="start"

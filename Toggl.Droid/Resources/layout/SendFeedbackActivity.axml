@@ -10,12 +10,7 @@
         android:layout_height="wrap_content">
         <android.support.v7.widget.Toolbar
             android:id="@+id/Toolbar"
-            android:background="@color/background"
-            app:titleTextColor="@color/primaryText"
-            android:theme="@style/AppBarTheme"
-            app:popupTheme="@style/AppBarPopupTheme"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            style="@style/ToolbarStyle" />
     </android.support.design.widget.AppBarLayout>
     <android.support.v7.widget.CardView
         android:id="@+id/ErrorCard"

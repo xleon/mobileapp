@@ -15,7 +15,8 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidLinkSkip>Toggl.Giskard</AndroidLinkSkip>
+    <AndroidLinkMode>Full</AndroidLinkMode>
+    <AndroidLinkSkip>Toggl.Giskard;Toggl.Storage.Realm</AndroidLinkSkip>
     <EnableProguard>true</EnableProguard>
     <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
@@ -46,15 +47,12 @@
     <AndroidSigningStorePass>{KEYSTORE_PASSWORD}</AndroidSigningStorePass>
     <AndroidSigningKeyAlias>{KEYSTORE_ALIAS}</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>{KEYSTORE_ALIAS_PASSWORD}</AndroidSigningKeyPass>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.PlayStore|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>bin\Release.PlayStore</OutputPath>
     <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API</DefineConstants>
     <WarningLevel>4</WarningLevel>
-    <AndroidLinkSkip>
-    </AndroidLinkSkip>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
@@ -393,6 +391,7 @@
     <Compile Include="Startup\AndroidDependencyContainer.cs" />
     <Compile Include="Extensions\FloatingActionButtonExtensions.cs" />
     <Compile Include="Presentation\IScrollableToTop.cs" />
+    <Compile Include="ViewHelpers\CalendarItemRectAttributes.cs" />
     <Compile Include="ViewHolders\LicenseViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\SuggestionRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\ProjectSuggestionViewHolder.cs" />
@@ -465,6 +464,9 @@
     <Compile Include="ViewHolders\StringViewHolder.cs" />
     <Compile Include="Views\BarChartView.cs" />
     <Compile Include="Views\CalendarRecyclerView.cs" />
+    <Compile Include="Views\Calendar\CalendarDayView.Background.cs" />
+    <Compile Include="Views\Calendar\CalendarDayView.cs" />
+    <Compile Include="Views\Calendar\CalendarDayView.Events.cs" />
     <Compile Include="Views\Calendar\CalendarLayoutManager.cs" />
     <Compile Include="Views\Calendar\CalendarLayoutManager.AnchorInfo.cs">
       <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
@@ -661,6 +663,11 @@
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\color\FlatButtonTextColor.xml" />
+    <AndroidResource Include="Resources\color\ToolbarButtonTextColor.xml" />
+    <AndroidResource Include="Resources\drawable\toolbar_close.xml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\Dot.xml" />
     <AndroidResource Include="Resources\drawable\ic_archived.xml" />
     <AndroidResource Include="Resources\drawable\Splash.xml" />
@@ -678,7 +685,8 @@
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
-    <AndroidResource Include="Resources\menu\GenericSaveMenu.xml" />
+    <AndroidResource Include="Resources\menu\DoneOrClearMenu.xml" />
+    <AndroidResource Include="Resources\menu\OneButtonMenu.xml" />
     <AndroidResource Include="Resources\values\Strings.xml" />
     <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png" />
