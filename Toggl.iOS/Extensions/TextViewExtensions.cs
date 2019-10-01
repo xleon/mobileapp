@@ -6,7 +6,7 @@ namespace Toggl.iOS.Extensions
 {
     public static class TextViewExtensions
     {
-        public static void rejectAutocorrect(this UITextView textView)
+        public static void RejectAutocorrect(this UITextView textView)
         {
             var originalText = textView.Text;
             NSRange originalRange = textView.SelectedRange;
