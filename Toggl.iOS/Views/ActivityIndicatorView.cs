@@ -1,8 +1,7 @@
-﻿using System;
-using CoreAnimation;
+﻿using CoreAnimation;
 using Foundation;
+using System;
 using Toggl.iOS.Extensions;
-using Toggl.Core.Helper;
 using UIKit;
 using static Toggl.Core.UI.Helper.Animation;
 using static Toggl.Shared.Math;
@@ -37,7 +36,6 @@ namespace Toggl.iOS.Views
 
         public override void AwakeFromNib()
         {
-            base.AwakeFromNib();
             init(null);
         }
 

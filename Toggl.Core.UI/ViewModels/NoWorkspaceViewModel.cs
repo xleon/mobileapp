@@ -3,10 +3,10 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Interactors;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
@@ -23,8 +23,8 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IRxActionFactory rxActionFactory;
 
         public IObservable<bool> IsLoading { get; }
-        public UIAction CreateWorkspaceWithDefaultName { get; }
-        public UIAction TryAgain { get; }
+        public ViewAction CreateWorkspaceWithDefaultName { get; }
+        public ViewAction TryAgain { get; }
 
         public NoWorkspaceViewModel(
             ISyncManager syncManager,
@@ -63,17 +63,17 @@ namespace Toggl.Core.UI.ViewModels
 
             if (anyWorkspaceIsAvailable)
             {
-                close();
+                Close();
             }
         }
 
         private IObservable<Unit> createWorkspaceWithDefaultName()
-            => interactorFactory.CreateDefaultWorkspace().Execute().Do(close);
+            => interactorFactory.CreateDefaultWorkspace().Execute().Do(() => Close());
 
-        private void close()
+        public override void Close()
         {
             accessRestrictionStorage.SetNoWorkspaceStateReached(false);
-            Finish();
+            base.Close();
         }
     }
 }

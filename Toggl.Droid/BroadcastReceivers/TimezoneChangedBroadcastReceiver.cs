@@ -6,7 +6,7 @@ namespace Toggl.Droid.BroadcastReceivers
 {
     [BroadcastReceiver(Enabled = false)]
     [IntentFilter(new[] { Intent.ActionTimezoneChanged })]
-    public class TimezoneChangedBroadcastReceiver: BroadcastReceiver
+    public class TimezoneChangedBroadcastReceiver : BroadcastReceiver
     {
         private ITimeService timeService;
 

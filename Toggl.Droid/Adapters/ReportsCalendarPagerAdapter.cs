@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Support.V4.View;
+using Android.Support.V7.Widget;
+using Android.Views;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
-using Android.Content;
-using Android.Runtime;
-using Android.Support.V4.View;
-using Android.Support.V7.Widget;
-using Android.Views;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Droid.Views;
@@ -24,16 +25,18 @@ namespace Toggl.Droid.Adapters
 
         private readonly Context context;
         private readonly RecyclerView.RecycledViewPool recyclerviewPool = new RecyclerView.RecycledViewPool();
-        private IReadOnlyList<ReportsCalendarPageViewModel> currentMonths = ImmutableList<ReportsCalendarPageViewModel>.Empty;
+        private IImmutableList<ReportsCalendarPageViewModel> currentMonths = ImmutableList<ReportsCalendarPageViewModel>.Empty;
         private Subject<ReportsCalendarDayViewModel> dayTaps = new Subject<ReportsCalendarDayViewModel>();
         private Subject<ReportsDateRangeParameter> selectionChanges = new Subject<ReportsDateRangeParameter>();
         private ReportsDateRangeParameter currentDateRange;
+        private Handler mainHandler;
 
         public IObservable<ReportsCalendarDayViewModel> DayTaps => dayTaps.AsObservable();
 
         public ReportsCalendarPagerAdapter(Context context)
         {
             this.context = context;
+            mainHandler = new Handler(Looper.MainLooper);
         }
 
         public ReportsCalendarPagerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
@@ -80,7 +83,7 @@ namespace Toggl.Droid.Adapters
                 .DisposedBy(disposeBag);
 
             selectionChanges
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(adapter.UpdateDateRangeParameter)
                 .DisposedBy(disposeBag);
         }
@@ -117,9 +120,9 @@ namespace Toggl.Droid.Adapters
         public override bool IsViewFromObject(View view, Object @object)
             => view == @object;
 
-        public void UpdateMonths(List<ReportsCalendarPageViewModel> newMonths)
+        public void UpdateMonths(IImmutableList<ReportsCalendarPageViewModel> newMonths)
         {
-            currentMonths = newMonths.ToImmutableList();
+            currentMonths = newMonths;
             NotifyDataSetChanged();
             notifyPageContentAdapters();
         }

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.Graphics;
-using Android.OS;
-using Android.Support.V4.Graphics;
-using Android.Support.V7.Widget;
+using Android.Runtime;
 using Android.Views;
+using System;
+using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
-using Toggl.Droid.Fragments;
+using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
 using FoundationResources = Toggl.Shared.Resources;
 
@@ -23,19 +20,22 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class EditProjectActivity : ReactiveActivity<EditProjectViewModel>
     {
-        protected override void OnCreate(Bundle bundle)
+        private IMenuItem createMenuItem;
+
+        public EditProjectActivity() : base(
+            Resource.Layout.EditProjectActivity,
+            Resource.Style.AppTheme,
+            Transitions.SlideInFromBottom)
         {
-            SetTheme(Resource.Style.AppTheme_BlueStatusBar);
-            base.OnCreate(bundle);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.EditProjectActivity);
-            InitializeViews();
-            OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
-            setupToolbar();
+        }
+
+        public EditProjectActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
+        {
+        }
+
+        protected override void InitializeBindings()
+        {
             errorText.Visibility = ViewStates.Gone;
 
             // Name
@@ -98,93 +98,59 @@ namespace Toggl.Droid.Activities
                 .Subscribe(clientNameTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
-            var noClientColor = Color.ParseColor("#CECECE");
+            var primaryTextColor = this.SafeGetColor(Resource.Color.primaryText);
+            var placeholderTextColor = this.SafeGetColor(Resource.Color.placeholderText);
             ViewModel.ClientName
                 .Select(clientTextColor)
                 .Subscribe(clientNameTextView.SetTextColor)
                 .DisposedBy(DisposeBag);
 
             // Is Private
-            toggleIsPrivateView.Rx().Tap()
-                .Select(_ => isPrivateSwitch.Checked)
-                .Subscribe(ViewModel.IsPrivate.Accept)
+            toggleIsPrivateView.Rx()
+                .BindAction(ViewModel.ToggleIsPrivate)
+                .DisposedBy(DisposeBag);
+
+            isPrivateSwitch.Rx()
+                .BindAction(ViewModel.ToggleIsPrivate)
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsPrivate
-                .Subscribe(isPrivateSwitch.Rx().CheckedObserver())
+                .Subscribe(isPrivateSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
-            // Save
-            createProjectButton.Rx()
-                .BindAction(ViewModel.Save)
+            ViewModel.CanCreatePublicProjects
+                .Subscribe(toggleIsPrivateView.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
-
-            var enabledColor = Color.White;
-            var disabledColor = new Color(ColorUtils.SetAlphaComponent(Color.White, 127));
+            
             ViewModel.Save.Enabled
-                .Select(createProjectTextColor)
-                .Subscribe(createProjectButton.SetTextColor)
+                .Subscribe(isEnabled => createMenuItem?.SetEnabled(isEnabled))
                 .DisposedBy(DisposeBag);
 
             string clientNameWithEmptyText(string clientName)
                 => string.IsNullOrEmpty(clientName) ? FoundationResources.AddClient : clientName;
 
             Color clientTextColor(string clientName)
-                => string.IsNullOrEmpty(clientName) ? noClientColor : Color.Black;
+                => string.IsNullOrEmpty(clientName) ? placeholderTextColor : primaryTextColor;
 
-            Color createProjectTextColor(bool enabled)
-                => enabled ? enabledColor : disabledColor;
         }
 
-
-        public override void Finish()
+        public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            base.Finish();
-            OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
-        }
-
-        public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
-        {
-            if (keyCode == Keycode.Back)
-            {
-                var fragment = SupportFragmentManager.Fragments.FirstOrDefault();
-                if (fragment is SelectWorkspaceFragment selectWorkspaceFragment)
-                {
-                    selectWorkspaceFragment.ViewModel.Close.Execute();
-                    return true;
-                }
-
-                ViewModel.Close.Execute();
-                return true;
-            }
-
-            return base.OnKeyDown(keyCode, e);
+            MenuInflater.Inflate(Resource.Menu.OneButtonMenu, menu);
+            createMenuItem = menu.FindItem(Resource.Id.ButtonMenuItem);
+            createMenuItem.SetTitle(Shared.Resources.Create);
+            return true;
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            if (item.ItemId == Android.Resource.Id.Home)
+            if (item.ItemId == Resource.Id.ButtonMenuItem)
             {
-                navigateBack();
+                ViewModel.Save.Execute();
                 return true;
             }
+
             return base.OnOptionsItemSelected(item);
-        }
-
-        private void setupToolbar()
-        {
-            var toolbar = FindViewById<Toolbar>(Resource.Id.Toolbar);
-            toolbar.Title = ViewModel.Title;
-
-            SetSupportActionBar(toolbar);
-
-            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            SupportActionBar.SetDisplayShowHomeEnabled(true);
-        }
-
-        private void navigateBack()
-        {
-            ViewModel.Close.Execute();
         }
     }
 }

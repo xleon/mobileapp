@@ -1,5 +1,4 @@
 ﻿using System;
-using Toggl.Core.DataSources;
 using static Toggl.Shared.WorkspaceFeatureId;
 
 namespace Toggl.Core.Interactors

@@ -24,24 +24,24 @@ namespace Toggl.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UILabel ErrorLabel { get; set; }
-
-		[Outlet]
-		UIKit.UIView ErrorView { get; set; }
-
+		
 		[Outlet]
 		UIKit.UILabel InstructionLabel { get; set; }
 
 		[Outlet]
-		UIKit.UITextField PasswordTextField { get; set; }
+		LoginTextField PasswordTextField { get; set; }
 
 		[Outlet]
 		UIKit.UILabel ResetSuccessLabel { get; set; }
 
 		[Outlet]
-		UIKit.UIImageView ShowPasswordButton { get; set; }
+		UIKit.UIButton ShowPasswordButton { get; set; }
 
 		[Outlet]
 		UIKit.UIButton SignOutButton { get; set; }
+		
+		[Outlet]
+		UIKit.UIButton LoginButton { get; set; }
 
 		void ReleaseDesignerOutlets ()
 		{
@@ -64,12 +64,7 @@ namespace Toggl.iOS.ViewControllers
 				ErrorLabel.Dispose ();
 				ErrorLabel = null;
 			}
-
-			if (ErrorView != null) {
-				ErrorView.Dispose ();
-				ErrorView = null;
-			}
-
+			
 			if (PasswordTextField != null) {
 				PasswordTextField.Dispose ();
 				PasswordTextField = null;
@@ -93,6 +88,11 @@ namespace Toggl.iOS.ViewControllers
 			if (ResetSuccessLabel != null) {
 				ResetSuccessLabel.Dispose ();
 				ResetSuccessLabel = null;
+			}
+			
+			if (LoginButton != null) {
+				LoginButton.Dispose ();
+				LoginButton = null;
 			}
 		}
 	}

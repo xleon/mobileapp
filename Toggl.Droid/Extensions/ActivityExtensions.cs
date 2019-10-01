@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using Android.App;
+﻿using Android.App;
 using Android.App.Job;
 using Android.Content;
 using Android.Graphics;
 using Android.Support.V4.App;
 using Android.Util;
 using Android.Views;
-using Toggl.Core.UI.Services;
+using System;
+using System.Collections.Generic;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Helper;
 using Toggl.Droid.Services;
@@ -25,26 +24,6 @@ namespace Toggl.Droid.Extensions
         private static readonly string defaultChannelId = "Toggl";
         private static readonly string defaultChannelName = "Toggl";
         private static readonly string defaultChannelDescription = "Toggl notifications";
-
-        public static void ChangeStatusBarColor(this Activity activity, Color color, bool useDarkIcons = false)
-        {
-            var window = activity.Window;
-            window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
-            window.ClearFlags(WindowManagerFlags.TranslucentStatus);
-            window.SetStatusBarColor(color);
-
-            if (MarshmallowApis.AreNotAvailable)
-            {
-                if (color == Color.White && useDarkIcons)
-                {
-                    window.SetStatusBarColor(lollipopFallbackStatusBarColor);
-                }
-                return;
-            }
-
-            window.DecorView.SystemUiVisibility =
-                (StatusBarVisibility)(useDarkIcons ? SystemUiFlags.LightStatusBar : SystemUiFlags.Visible);
-        }
 
         public static (int widthPixels, int heightPixels, bool isLargeScreen) GetMetrics(this Activity activity, Context context = null)
         {
@@ -65,7 +44,7 @@ namespace Toggl.Droid.Extensions
             var javaClass = Java.Lang.Class.FromType(typeof(BackgroundSyncJobSchedulerService));
             var component = new ComponentName(context, javaClass);
 
-            var builder = new JobInfo.Builder(BackgroundSyncJobSchedulerService.JobId, component)
+            var builder = new JobInfo.Builder(JobServicesConstants.BackgroundSyncJobServiceJobId, component)
                 .SetRequiredNetworkType(NetworkType.Any)
                 .SetPeriodic(periodicity)
                 .SetPersisted(true);
@@ -128,7 +107,8 @@ namespace Toggl.Droid.Extensions
                         return;
                     }
 
-                    var builder = new AlertDialog.Builder(activity, Resource.Style.TogglDialog).SetMessage(message)
+                    var builder = new AlertDialog.Builder(activity)
+                        .SetMessage(message)
                         .SetPositiveButton(confirmButtonText, (s, e) => observer.CompleteWith(true));
 
                     if (!string.IsNullOrWhiteSpace(title))
@@ -142,9 +122,9 @@ namespace Toggl.Droid.Extensions
                     }
 
                     var dialog = builder.Create();
-                    dialog.CancelEvent += (s, e) => observer.CompleteWith(false);
-
                     dialog.Show();
+
+                    dialog.CancelEvent += (s, e) => observer.CompleteWith(false);
                 }
 
                 activity.RunOnUiThread(showDialogIfActivityIsThere);
@@ -152,7 +132,7 @@ namespace Toggl.Droid.Extensions
                 return Disposable.Empty;
             });
         }
-        
+
         public static IObservable<T> ShowSelectionDialog<T>(this Activity activity, string title, IEnumerable<SelectOption<T>> options, int initialSelectionIndex = 0)
         {
             return Observable.Create<T>(observer =>

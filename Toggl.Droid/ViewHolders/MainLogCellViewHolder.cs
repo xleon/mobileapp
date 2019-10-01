@@ -1,79 +1,63 @@
-using System;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using Android.Animation;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Support.Constraints;
-using Android.Support.V4.Content;
 using Android.Views;
 using Android.Widget;
+using System;
+using System.Reactive.Subjects;
 using Toggl.Core.Analytics;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
-using Toggl.Shared.Extensions;
-using GroupingColor = Toggl.Core.UI.Helper.Colors.TimeEntriesLog.Grouping;
 using static Toggl.Droid.Resource.Id;
 
 namespace Toggl.Droid.ViewHolders
 {
     public class MainLogCellViewHolder : BaseRecyclerViewHolder<TimeEntryViewData>
     {
-        public enum AnimationSide
-        {
-            Left,
-            Right
-        }
+        private Color cardColor;
+        private Color backgroundColor;
 
-        public MainLogCellViewHolder(View itemView) : base(itemView)
-        {
-        }
-
-        public MainLogCellViewHolder(IntPtr handle, JniHandleOwnership ownership) : base(handle, ownership)
-        {
-        }
-
-        private static readonly int animationDuration = 1000;
-
+        private GroupId groupId;
         private TextView timeEntriesLogCellDescription;
         private TextView addDescriptionLabel;
         private TextView timeEntriesLogCellProjectLabel;
         private TextView timeEntriesLogCellDuration;
+        private ImageView timeEntriesLogCellProjectArchivedIcon;
         private View groupItemBackground;
         private View timeEntriesLogCellContinueImage;
         private View errorImageView;
         private View errorNeedsSync;
         private View timeEntriesLogCellContinueButton;
-        private View mainLogBackgroundContinue;
-        private View mainLogBackgroundDelete;
+        private TextView mainLogBackgroundContinue;
+        private TextView mainLogBackgroundDelete;
         private View billableIcon;
         private View hasTagsIcon;
         private View durationPadding;
         private View durationFadeGradient;
         private TextView groupCountTextView;
         private View groupExpansionButton;
-        
-        private ObjectAnimator animator;
-
-        public bool IsAnimating => animator?.IsRunning ?? false;
 
         public bool CanSync => Item.ViewModel.CanContinue;
-
         public View MainLogContentView { get; private set; }
-        public Subject<(LogItemViewModel, ContinueTimeEntryMode)> ContinueButtonTappedSubject { get; set; }
+        public Subject<ContinueTimeEntryInfo> ContinueButtonTappedSubject { get; set; }
         public Subject<GroupId> ToggleGroupExpansionSubject { get; set; }
 
-        private GroupId groupId;
+        public MainLogCellViewHolder(View itemView)
+            : base(itemView)
+        {
+        }
 
-        private Color whiteColor;
-        private Color grayColor;
+        public MainLogCellViewHolder(IntPtr handle, JniHandleOwnership ownership)
+            : base(handle, ownership)
+        {
+        }
 
         protected override void InitializeViews()
         {
-            whiteColor = new Color(ContextCompat.GetColor(ItemView.Context, Resource.Color.mainLogCellPaddingWhite));
-            grayColor = new Color(ContextCompat.GetColor(ItemView.Context, Resource.Color.mainLogCellPaddingLightGray));
+            cardColor = ItemView.Context.SafeGetColor(Resource.Color.cardBackground);
+            backgroundColor = ItemView.Context.SafeGetColor(Resource.Color.background);
 
             groupItemBackground = ItemView.FindViewById<View>(MainLogGroupBackground);
             groupCountTextView = ItemView.FindViewById<TextView>(TimeEntriesLogCellGroupCount);
@@ -82,12 +66,13 @@ namespace Toggl.Droid.ViewHolders
             addDescriptionLabel = ItemView.FindViewById<TextView>(AddDescriptionLabel);
             timeEntriesLogCellProjectLabel = ItemView.FindViewById<TextView>(TimeEntriesLogCellProjectLabel);
             timeEntriesLogCellDuration = ItemView.FindViewById<TextView>(TimeEntriesLogCellDuration);
+            timeEntriesLogCellProjectArchivedIcon = ItemView.FindViewById<ImageView>(TimeEntriesLogCellProjectArchivedIcon);
             timeEntriesLogCellContinueImage = ItemView.FindViewById(TimeEntriesLogCellContinueImage);
             errorImageView = ItemView.FindViewById(ErrorImageView);
             errorNeedsSync = ItemView.FindViewById(ErrorNeedsSync);
             timeEntriesLogCellContinueButton = ItemView.FindViewById(TimeEntriesLogCellContinueButton);
-            mainLogBackgroundContinue = ItemView.FindViewById(MainLogBackgroundContinue);
-            mainLogBackgroundDelete = ItemView.FindViewById(MainLogBackgroundDelete);
+            mainLogBackgroundContinue = ItemView.FindViewById<TextView>(MainLogBackgroundContinue);
+            mainLogBackgroundDelete = ItemView.FindViewById<TextView>(MainLogBackgroundDelete);
             billableIcon = ItemView.FindViewById(TimeEntriesLogCellBillable);
             hasTagsIcon = ItemView.FindViewById(TimeEntriesLogCellTags);
             durationPadding = ItemView.FindViewById(TimeEntriesLogCellDurationPaddingArea);
@@ -97,6 +82,10 @@ namespace Toggl.Droid.ViewHolders
             groupExpansionButton = ItemView.FindViewById(TimeEntriesLogCellToggleExpansionButton);
             timeEntriesLogCellContinueButton.Click += onContinueClick;
             groupExpansionButton.Click += onExpansionClick;
+
+            mainLogBackgroundContinue.Text = Shared.Resources.Continue;
+            mainLogBackgroundDelete.Text = Shared.Resources.Delete;
+            addDescriptionLabel.Text = Shared.Resources.AddDescription;
         }
 
         private void onExpansionClick(object sender, EventArgs e)
@@ -106,21 +95,18 @@ namespace Toggl.Droid.ViewHolders
 
         public void ShowSwipeToContinueBackground()
         {
-            StopAnimating();
             mainLogBackgroundContinue.Visibility = ViewStates.Visible;
             mainLogBackgroundDelete.Visibility = ViewStates.Invisible;
         }
 
         public void ShowSwipeToDeleteBackground()
         {
-            StopAnimating();
             mainLogBackgroundContinue.Visibility = ViewStates.Invisible;
             mainLogBackgroundDelete.Visibility = ViewStates.Visible;
         }
 
         public void HideSwipeBackgrounds()
         {
-            StopAnimating();
             mainLogBackgroundContinue.Visibility = ViewStates.Invisible;
             mainLogBackgroundDelete.Visibility = ViewStates.Invisible;
         }
@@ -131,7 +117,7 @@ namespace Toggl.Droid.ViewHolders
                 ? ContinueTimeEntryMode.TimeEntriesGroupContinueButton
                 : ContinueTimeEntryMode.SingleTimeEntryContinueButton;
 
-            ContinueButtonTappedSubject?.OnNext((Item.ViewModel, ContinueTimeEntryMode.SingleTimeEntryContinueButton));
+            ContinueButtonTappedSubject?.OnNext(new ContinueTimeEntryInfo(Item.ViewModel, continueMode));
         }
 
         private ConstraintLayout.LayoutParams getDurationPaddingWidthDependentOnIcons()
@@ -148,8 +134,6 @@ namespace Toggl.Droid.ViewHolders
 
         protected override void UpdateView()
         {
-            StopAnimating();
-
             groupId = Item.ViewModel.GroupId;
 
             timeEntriesLogCellDescription.Text = Item.ViewModel.Description;
@@ -158,6 +142,9 @@ namespace Toggl.Droid.ViewHolders
 
             timeEntriesLogCellProjectLabel.TextFormatted = Item.ProjectTaskClientText;
             timeEntriesLogCellProjectLabel.Visibility = Item.ProjectTaskClientVisibility;
+
+            timeEntriesLogCellProjectArchivedIcon.Visibility = Item.ProjectArchivedIconVisibility;
+            timeEntriesLogCellProjectArchivedIcon.SetColorFilter(Item.ProjectArchivedIconTintColor);
 
             timeEntriesLogCellDuration.Text = Item.ViewModel.Duration;
 
@@ -193,50 +180,6 @@ namespace Toggl.Droid.ViewHolders
             }
         }
 
-        public void StartAnimating(AnimationSide side)
-        {
-            if (animator != null && animator.IsRunning)
-                return;
-
-            mainLogBackgroundContinue.Visibility = side == AnimationSide.Right ? ViewStates.Visible : ViewStates.Invisible;
-            mainLogBackgroundDelete.Visibility = side == AnimationSide.Left ? ViewStates.Visible : ViewStates.Invisible;
-
-            var offsetsInDp = getAnimationOffsetsForSide(side);
-            var offsetsInPx = offsetsInDp.Select(offset => (float)offset.DpToPixels(ItemView.Context)).ToArray();
-
-            animator = ObjectAnimator.OfFloat(MainLogContentView, "translationX", offsetsInPx);
-            animator.SetDuration(animationDuration);
-            animator.RepeatMode = ValueAnimatorRepeatMode.Reverse;
-            animator.RepeatCount = ValueAnimator.Infinite;
-            animator.Start();
-        }
-
-        public void StopAnimating()
-        {
-            if (animator != null)
-            {
-                animator.Cancel();
-                animator = null;
-            }
-
-            MainLogContentView.TranslationX = 0;
-            mainLogBackgroundContinue.Visibility = ViewStates.Invisible;
-            mainLogBackgroundDelete.Visibility = ViewStates.Invisible;
-        }
-
-        private float[] getAnimationOffsetsForSide(AnimationSide side)
-        {
-            switch (side)
-            {
-                case AnimationSide.Right:
-                    return new[] { 50, 0, 3.5f, 0 };
-                case AnimationSide.Left:
-                    return new[] { -50, 0, -3.5f, 0 };
-                default:
-                    throw new ArgumentException("Unexpected side");
-            }
-        }
-
         private void presentAsCollapsedGroupHeader(int timeEntriesCount)
         {
             groupExpansionButton.Enabled = true;
@@ -244,23 +187,23 @@ namespace Toggl.Droid.ViewHolders
             groupCountTextView.Enabled = true;
             groupCountTextView.Text = timeEntriesCount.ToString();
             groupCountTextView.Visibility = ViewStates.Visible;
-            groupCountTextView.SetTextColor(GroupingColor.Collapsed.Text.ToNativeColor());
+            groupCountTextView.SetTextColor(ItemView.Context.SafeGetColor(Resource.Color.primaryText));
             groupItemBackground.Visibility = ViewStates.Gone;
-            durationPadding.SetBackgroundColor(whiteColor);
-            durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToWhiteGradient);
+            durationPadding.SetBackgroundColor(cardColor);
+            durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToCardColorGradient);
         }
 
         private void presentAsExpandedGroupHeader(int timeEntriesCount)
         {
             groupExpansionButton.Enabled = true;
-            groupCountTextView.SetBackgroundResource(Resource.Drawable.LightBlueRoundedRectangle);
+            groupCountTextView.SetBackgroundResource(Resource.Drawable.TagsBackground);
             groupCountTextView.Enabled = true;
             groupCountTextView.Text = timeEntriesCount.ToString();
             groupCountTextView.Visibility = ViewStates.Visible;
-            groupCountTextView.SetTextColor(GroupingColor.Expanded.Text.ToNativeColor());
+            groupCountTextView.SetTextColor(ItemView.Context.SafeGetColor(Resource.Color.accent));
             groupItemBackground.Visibility = ViewStates.Gone;
-            durationPadding.SetBackgroundColor(whiteColor);
-            durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToWhiteGradient);
+            durationPadding.SetBackgroundColor(cardColor);
+            durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToCardColorGradient);
         }
 
         private void presentAsSingleTimeEntry()
@@ -268,8 +211,8 @@ namespace Toggl.Droid.ViewHolders
             groupExpansionButton.Enabled = false;
             groupCountTextView.Visibility = ViewStates.Gone;
             groupItemBackground.Visibility = ViewStates.Gone;
-            durationPadding.SetBackgroundColor(whiteColor);
-            durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToWhiteGradient);
+            durationPadding.SetBackgroundColor(cardColor);
+            durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToCardColorGradient);
         }
 
         private void presentAsTimeEntryInAGroup()
@@ -277,8 +220,8 @@ namespace Toggl.Droid.ViewHolders
             groupExpansionButton.Enabled = false;
             groupCountTextView.Visibility = ViewStates.Invisible;
             groupItemBackground.Visibility = ViewStates.Visible;
-            durationPadding.SetBackgroundColor(grayColor);
-            durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToLightGrayGradient);
+            durationPadding.SetBackgroundColor(backgroundColor);
+            durationFadeGradient.SetBackgroundResource(Resource.Drawable.TransparentToBackgroundGradient);
         }
 
         protected override void Dispose(bool disposing)
@@ -290,6 +233,12 @@ namespace Toggl.Droid.ViewHolders
 
             timeEntriesLogCellContinueButton.Click -= onContinueClick;
             groupExpansionButton.Click -= onExpansionClick;
+        }
+
+        public enum AnimationSide
+        {
+            Left,
+            Right
         }
     }
 }

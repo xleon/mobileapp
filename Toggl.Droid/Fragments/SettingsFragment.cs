@@ -1,22 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using Android.Content;
-using Android.Graphics;
 using Android.OS;
-using Android.Support.V7.App;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using System;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Helper;
 using Toggl.Droid.Presentation;
-using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
-using FoundationResources = Toggl.Shared.Resources;
+using Toggl.Storage.Settings;
+using static Android.Support.V7.App.AppCompatDelegate;
+using static Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Fragments
 {
@@ -27,18 +22,14 @@ namespace Toggl.Droid.Fragments
             var view = inflater.Inflate(Resource.Layout.SettingsFragment, container, false);
 
             InitializeViews(view);
-            setupToolbar();
+            SetupToolbar(view, title: Settings);
+            scrollView.AttachMaterialScrollBehaviour(appBarLayout);
+            return view;
+        }
 
-            var adapter = new SimpleAdapter<SelectableWorkspaceViewModel>(
-                Resource.Layout.SettingsFragmentWorkspaceCell,
-                WorkspaceSelectionViewHolder.Create
-            );
-            adapter.ItemTapObservable
-                .Subscribe(ViewModel.SelectDefaultWorkspace.Inputs)
-                .DisposedBy(DisposeBag);
-
-            workspacesRecyclerView.SetAdapter(adapter);
-            workspacesRecyclerView.SetLayoutManager(new LinearLayoutManager(Context));
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
 
             versionTextView.Text = ViewModel.Version;
 
@@ -50,28 +41,32 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(emailTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
-            ViewModel.Workspaces
-                .Subscribe(adapter.Rx().Items())
+            ViewModel.WorkspaceName
+                .Subscribe(defaultWorkspaceNameTextView.Rx().TextObserver())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.SwipeActionsEnabled
+                .Subscribe(swipeActionsSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsManualModeEnabled
-                .Subscribe(manualModeSwitch.Rx().CheckedObserver())
+                .Subscribe(manualModeSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsGroupingTimeEntries
-               .Subscribe(groupTimeEntriesSwitch.Rx().CheckedObserver())
+               .Subscribe(groupTimeEntriesSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                .DisposedBy(DisposeBag);
 
             ViewModel.UseTwentyFourHourFormat
-                .Subscribe(is24hoursModeSwitch.Rx().CheckedObserver())
+                .Subscribe(is24hoursModeSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
             ViewModel.AreRunningTimerNotificationsEnabled
-                .Subscribe(runningTimerNotificationsSwitch.Rx().CheckedObserver())
+                .Subscribe(runningTimerNotificationsSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
             ViewModel.AreStoppedTimerNotificationsEnabled
-                .Subscribe(stoppedTimerNotificationsSwitch.Rx().CheckedObserver())
+                .Subscribe(stoppedTimerNotificationsSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
             ViewModel.DateFormat
@@ -98,15 +93,6 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(smartRemindersTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
-            ViewModel.UserAvatar
-                .Select(userImageFromBytes)
-                .Subscribe(bitmap =>
-                {
-                    avatarView.SetImageBitmap(bitmap);
-                    avatarContainer.Visibility = ViewStates.Visible;
-                })
-                .DisposedBy(DisposeBag);
-
             ViewModel.LoggingOut
                 .Subscribe(Context.CancelAllNotifications)
                 .DisposedBy(DisposeBag);
@@ -127,15 +113,35 @@ namespace Toggl.Droid.Fragments
                 .BindAction(ViewModel.OpenAboutView)
                 .DisposedBy(DisposeBag);
 
+            defaultWorkspaceView.Rx()
+                .BindAction(ViewModel.PickDefaultWorkspace)
+                .DisposedBy(DisposeBag);
+
             feedbackView.Rx()
                 .BindAction(ViewModel.SubmitFeedback)
                 .DisposedBy(DisposeBag);
 
-            manualModeView.Rx().Tap()
-                .Subscribe(ViewModel.ToggleManualMode)
+            swipeActionsView.Rx()
+                .BindAction(ViewModel.ToggleSwipeActions)
+                .DisposedBy(DisposeBag);
+
+            swipeActionsSwitch.Rx()
+                .BindAction(ViewModel.ToggleSwipeActions)
+                .DisposedBy(DisposeBag);
+
+            manualModeView.Rx()
+                .BindAction(ViewModel.ToggleManualMode)
+                .DisposedBy(DisposeBag);
+
+            manualModeSwitch.Rx()
+                .BindAction(ViewModel.ToggleManualMode)
                 .DisposedBy(DisposeBag);
 
             groupTimeEntriesView.Rx()
+                .BindAction(ViewModel.ToggleTimeEntriesGrouping)
+                .DisposedBy(DisposeBag);
+
+            groupTimeEntriesSwitch.Rx()
                 .BindAction(ViewModel.ToggleTimeEntriesGrouping)
                 .DisposedBy(DisposeBag);
 
@@ -143,11 +149,23 @@ namespace Toggl.Droid.Fragments
                 .BindAction(ViewModel.ToggleTwentyFourHourSettings)
                 .DisposedBy(DisposeBag);
 
+            is24hoursModeSwitch.Rx()
+                .BindAction(ViewModel.ToggleTwentyFourHourSettings)
+                .DisposedBy(DisposeBag);
+
             runningTimerNotificationsView.Rx().Tap()
                 .Subscribe(ViewModel.ToggleRunningTimerNotifications)
                 .DisposedBy(DisposeBag);
 
+            runningTimerNotificationsSwitch.Rx().Tap()
+                .Subscribe(ViewModel.ToggleRunningTimerNotifications)
+                .DisposedBy(DisposeBag);
+
             stoppedTimerNotificationsView.Rx().Tap()
+                .Subscribe(ViewModel.ToggleStoppedTimerNotifications)
+                .DisposedBy(DisposeBag);
+
+            stoppedTimerNotificationsSwitch.Rx().Tap()
                 .Subscribe(ViewModel.ToggleStoppedTimerNotifications)
                 .DisposedBy(DisposeBag);
 
@@ -170,32 +188,20 @@ namespace Toggl.Droid.Fragments
             smartRemindersView.Rx().Tap()
                 .Subscribe(ViewModel.OpenCalendarSmartReminders.Inputs)
                 .DisposedBy(DisposeBag);
-
-            return view;
         }
 
         public void ScrollToTop()
         {
-            scrollView.SmoothScrollTo(0, 0);
+            scrollView?.SmoothScrollTo(0, 0);
         }
 
         private void showFeedbackSuccessToast(bool succeeeded)
         {
             if (!succeeeded) return;
 
-            var toast = Toast.MakeText(Context, Resource.String.SendFeedbackSuccessMessage, ToastLength.Long);
+            var toast = Toast.MakeText(Context, Shared.Resources.SendFeedbackSuccessMessage, ToastLength.Long);
             toast.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.Bottom, 0, 0);
             toast.Show();
-        }
-
-        private Bitmap userImageFromBytes(byte[] imageBytes)
-            => BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
-
-        private void setupToolbar()
-        {
-            var activity = Activity as AppCompatActivity;
-            toolbar.Title = FoundationResources.Settings;
-            activity.SetSupportActionBar(toolbar);
         }
     }
 }

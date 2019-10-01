@@ -1,9 +1,8 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using CoreGraphics;
-using Foundation;
-using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
@@ -14,7 +13,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed partial class EditProjectViewController : ReactiveViewController<EditProjectViewModel>, IDismissableViewController
+    public sealed partial class EditProjectViewController : ReactiveViewController<EditProjectViewModel>
     {
         private const double desiredIpadHeight = 360;
         private static readonly nfloat errorVisibleHeight = 16;
@@ -22,12 +21,6 @@ namespace Toggl.iOS.ViewControllers
         public EditProjectViewController(EditProjectViewModel viewModel)
             : base(viewModel, nameof(EditProjectViewController))
         {
-        }
-
-        public Task<bool> Dismiss()
-        {
-            ViewModel.Close.Execute();
-            return Task.FromResult(true);
         }
 
         public override void ViewDidLoad()
@@ -39,6 +32,7 @@ namespace Toggl.iOS.ViewControllers
             ErrorLabel.Text = Resources.ProjectNameTakenError;
             DoneButton.SetTitle(Resources.Create, UIControlState.Normal);
             ProjectNameUsedErrorTextHeight.Constant = 0;
+            PrivateProjectLabel.Text = Resources.PrivateProject;
 
             // Name
             NameTextField.Rx().Text()
@@ -99,13 +93,17 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             // Is Private
-            PrivateProjectSwitchContainer.Rx().Tap()
+            PrivateProjectSwitch.Rx().Changed()
                 .Select(_ => PrivateProjectSwitch.On)
                 .Subscribe(ViewModel.IsPrivate.Accept)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.IsPrivate
-                .Subscribe(PrivateProjectSwitch.Rx().On())
+            ViewModel.CanCreatePublicProjects
+                .Subscribe(PrivateProjectSwitchContainer.Rx().IsVisible())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.CanCreatePublicProjects
+                .Subscribe(BottomSeparator.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
             // Save
@@ -113,8 +111,8 @@ namespace Toggl.iOS.ViewControllers
                 .BindAction(ViewModel.Save)
                 .DisposedBy(DisposeBag);
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             NSAttributedString attributedClientName(string clientName)

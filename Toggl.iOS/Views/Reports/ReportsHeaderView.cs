@@ -1,14 +1,15 @@
-﻿using System;
+﻿using CoreAnimation;
+using CoreGraphics;
+using Foundation;
+using System;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using CoreAnimation;
-using CoreGraphics;
-using Foundation;
 using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.iOS.Cells;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.iOS.Cells;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
@@ -46,6 +47,9 @@ namespace Toggl.iOS.Views.Reports
             BarChartContainerView.AddSubview(barChart);
             overview.Frame = OverviewContainerView.Bounds;
             barChart.Frame = BarChartContainerView.Bounds;
+
+            EmptyStateTitleLabel.Text = Resources.ReportsEmptyStateTitle;
+            EmptyStateDescriptionLabel.Text = Resources.ReportsEmptyStateDescription;
         }
 
         public override void LayoutSubviews()
@@ -86,7 +90,8 @@ namespace Toggl.iOS.Views.Reports
             barChart.Item = Item;
 
             //Loading chart
-            Item.IsLoadingObservable
+            Item.GroupedSegmentsObservable
+                .Select(segments => segments == null)
                 .Subscribe(LoadingPieChartView.Rx().IsVisibleWithFade())
                 .DisposedBy(disposeBag);
 

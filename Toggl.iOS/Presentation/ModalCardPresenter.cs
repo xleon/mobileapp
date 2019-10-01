@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.Views;
@@ -18,14 +17,10 @@ namespace Toggl.iOS.Presentation
             typeof(EditDurationViewModel),
             typeof(EditProjectViewModel),
             typeof(EditTimeEntryViewModel),
-            typeof(SelectBeginningOfWeekViewModel),
             typeof(SelectClientViewModel),
             typeof(SelectCountryViewModel),
-            typeof(SelectDateFormatViewModel),
-            typeof(SelectDurationFormatViewModel),
             typeof(SelectProjectViewModel),
             typeof(SelectTagsViewModel),
-            typeof(SelectWorkspaceViewModel),
             typeof(SendFeedbackViewModel),
             typeof(StartTimeEntryViewModel),
             typeof(UpcomingEventsNotificationSettingsViewModel),

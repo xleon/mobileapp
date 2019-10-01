@@ -1,6 +1,6 @@
+using Foundation;
 using System.Collections.Generic;
 using System.Linq;
-using Foundation;
 using Toggl.Shared.Models;
 
 namespace Toggl.iOS.ExtensionKit.Analytics
@@ -27,7 +27,7 @@ namespace Toggl.iOS.ExtensionKit.Analytics
     }
 
     [Register("SiriTrackingEvent")]
-    public class SiriTrackingEvent: NSObject, INSCoding
+    public class SiriTrackingEvent : NSObject, INSCoding
     {
         private static readonly string eventTypeEncodeKey = nameof(eventTypeEncodeKey);
         private static readonly string parametersEncodeKey = nameof(parametersEncodeKey);
@@ -70,22 +70,22 @@ namespace Toggl.iOS.ExtensionKit.Analytics
         [Export("initWithCoder:")]
         public SiriTrackingEvent(NSCoder coder)
         {
-            EventType = (SiriTrackingEventType) coder.DecodeInt(eventTypeEncodeKey);
+            EventType = (SiriTrackingEventType)coder.DecodeInt(eventTypeEncodeKey);
 
-            var nativeDict = (NSDictionary) coder.DecodeObject(parametersEncodeKey);
+            var nativeDict = (NSDictionary)coder.DecodeObject(parametersEncodeKey);
 
             if (nativeDict != null)
             {
                 var dict = new Dictionary<string, string>();
                 foreach (var item in nativeDict)
                 {
-                    dict.Add ((NSString)item.Key, (NSString)item.Value);
+                    dict.Add((NSString)item.Key, (NSString)item.Value);
                 }
                 Parameters = dict;
             }
         }
 
-        [Export ("encodeWithCoder:")]
+        [Export("encodeWithCoder:")]
         public void EncodeTo(NSCoder encoder)
         {
             encoder.Encode((int)EventType, eventTypeEncodeKey);

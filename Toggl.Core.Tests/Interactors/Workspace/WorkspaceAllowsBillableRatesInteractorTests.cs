@@ -1,7 +1,7 @@
-﻿using System.Reactive.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Shared;
 using Xunit;

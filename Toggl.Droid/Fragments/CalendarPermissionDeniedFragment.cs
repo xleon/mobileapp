@@ -1,5 +1,6 @@
 ﻿using Android.OS;
 using Android.Views;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
@@ -18,8 +19,9 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
+
             continueButton.Rx().Tap()
-                .Subscribe(ViewModel.Close.Inputs)
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             allowAccessButton.Rx().Tap()

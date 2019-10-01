@@ -1,6 +1,6 @@
-using System;
 using FluentAssertions;
 using NSubstitute;
+using System;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.Calendar;
 using Xunit;

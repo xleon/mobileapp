@@ -1,9 +1,9 @@
-using System;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using Android.Content;
 using Android.Content.PM;
 using Android.Support.V4.Content;
+using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Helper;
 
@@ -19,10 +19,10 @@ namespace Toggl.Droid.Activities
             this.ProcessRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
-        public Permission CheckPermission(string permission) 
+        public Permission CheckPermission(string permission)
             => ContextCompat.CheckSelfPermission(this, permission);
 
-        public void StartActivityIntent(Intent intent) 
+        public void StartActivityIntent(Intent intent)
             => StartActivity(intent);
 
         public IObservable<bool> RequestCalendarAuthorization(bool force = false)
@@ -31,7 +31,7 @@ namespace Toggl.Droid.Activities
         public IObservable<bool> RequestNotificationAuthorization(bool force = false)
             => Observable.Return(true);
 
-        public void OpenAppSettings() 
+        public void OpenAppSettings()
             => this.FireAppSettingsIntent();
     }
 }

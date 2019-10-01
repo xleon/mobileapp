@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
+using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels.Settings;
-using Toggl.Core.Interactors;
-using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
@@ -20,8 +19,8 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly ISchedulerProvider schedulerProvider;
 
-        public UIAction NavigateToCustomReportShortcut;
-        public UIAction NavigateToCustomTimeEntryShortcut;
+        public ViewAction NavigateToCustomReportShortcut { get; }
+        public ViewAction NavigateToCustomTimeEntryShortcut { get; }
 
         public SiriShortcutsViewModel(
             IInteractorFactory interactorFactory,

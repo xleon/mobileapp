@@ -6,7 +6,7 @@ namespace Toggl.Droid.Views.EditDuration.Shapes
 {
     public class ClockDial
     {
-        private const float angleOffsetCorrection = (float) FullCircle / 4f;
+        private const float angleOffsetCorrection = (float)FullCircle / 4f;
         private const char numberPaddingChar = '0';
         private const int digitsCount = 2;
         private readonly PointF dialCenter;

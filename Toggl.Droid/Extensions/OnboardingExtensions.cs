@@ -1,18 +1,14 @@
-﻿using System;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Threading;
-using Android.App;
-using Android.Support.V7.Widget;
+﻿using Android.App;
 using Android.Views;
 using Android.Widget;
-using Toggl.Droid.ViewHolders;
+using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Extensions;
 using Toggl.Storage.Onboarding;
 using Toggl.Storage.Settings;
-using AnimationSide = Toggl.Droid.ViewHolders.MainLogCellViewHolder.AnimationSide;
 
 namespace Toggl.Droid.Extensions
 {
@@ -22,13 +18,12 @@ namespace Toggl.Droid.Extensions
 
         public static IDisposable ManageDismissableTooltip(
             this IOnboardingStep step,
-            IObservable<bool> componentIsVisible, 
+            IObservable<bool> componentIsVisible,
             PopupWindow tooltip,
             View anchor,
             Func<PopupWindow, View, PopupOffsets> popupOffsetsGenerator,
             IOnboardingStorage storage)
         {
-            Ensure.Argument.IsNotNull(tooltip, nameof(tooltip));
             Ensure.Argument.IsNotNull(anchor, nameof(anchor));
 
             var dismissableStep = step.ToDismissable(step.GetType().FullName, storage);
@@ -45,7 +40,6 @@ namespace Toggl.Droid.Extensions
             View anchor,
             Func<PopupWindow, View, PopupOffsets> popupOffsetsGenerator)
         {
-            Ensure.Argument.IsNotNull(tooltip, nameof(tooltip));
             Ensure.Argument.IsNotNull(anchor, nameof(anchor));
 
             void toggleVisibilityOnMainThread(bool shouldBeVisible)
@@ -56,53 +50,28 @@ namespace Toggl.Droid.Extensions
                 }
                 else
                 {
-                    tooltip.Dismiss();
+                    tooltip?.Dismiss();
                 }
             }
 
             return step.ShouldBeVisible
                 .CombineLatest(componentIsVisible, CommonFunctions.And)
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .combineWithWindowTokenAvailabilityFrom(anchor)
                 .Subscribe(toggleVisibilityOnMainThread);
         }
 
-        public static IDisposable ManageSwipeActionAnimationOf(this IOnboardingStep step, RecyclerView recyclerView, MainLogCellViewHolder viewHolder, AnimationSide side)
-        {
-            Ensure.Argument.IsNotNull(viewHolder, nameof(viewHolder));
-
-            void toggleVisibilityOnMainThread(bool shouldBeVisible)
-            {
-                if (shouldBeVisible && !viewHolder.IsAnimating)
-                {
-                    viewHolder.StartAnimating(side);
-                    recyclerView.ScrollBy(0, 1);
-                }
-            }
-
-            var subscriptionDisposable = step.ShouldBeVisible
-                .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(toggleVisibilityOnMainThread);
-
-            return Disposable.Create(() =>
-            {
-                viewHolder.StopAnimating();
-                subscriptionDisposable?.Dispose();
-                subscriptionDisposable = null;
-            });
-        }
-
         public static void DismissByTapping(this IDismissable step, PopupWindow popupWindow, Action cleanup = null)
         {
-            Ensure.Argument.IsNotNull(popupWindow, nameof(popupWindow));
-
+            if (popupWindow == null) return;
+            
             void OnDismiss(object sender, EventArgs args)
             {
                 popupWindow.Dismiss();
                 step.Dismiss();
                 cleanup();
             }
-
+            
             popupWindow.ContentView.Click += OnDismiss;
         }
 
@@ -111,7 +80,7 @@ namespace Toggl.Droid.Extensions
             anchor.Post(() =>
             {
                 var activity = anchor.Context as Activity;
-                if (activity == null || activity.IsFinishing)
+                if (popupWindow == null || activity == null || activity.IsFinishing)
                     return;
 
                 popupWindow.ContentView.Measure(View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified), View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
@@ -162,7 +131,7 @@ namespace Toggl.Droid.Extensions
             {
                 return windowTokenIsReady;
             }
-            
+
             return false;
         }
     }

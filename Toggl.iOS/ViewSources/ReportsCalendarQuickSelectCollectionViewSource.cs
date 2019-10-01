@@ -1,9 +1,10 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using CoreGraphics;
-using Foundation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Toggl.iOS.Views.Reports;
@@ -22,7 +23,7 @@ namespace Toggl.iOS.ViewSources
         private ISubject<ReportsCalendarBaseQuickSelectShortcut> shortcutTaps = new Subject<ReportsCalendarBaseQuickSelectShortcut>();
         private readonly UICollectionView collectionView;
         private ReportsDateRangeParameter currentDateRange;
-        private IList<ReportsCalendarBaseQuickSelectShortcut> shortcuts = new List<ReportsCalendarBaseQuickSelectShortcut>();
+        private IImmutableList<ReportsCalendarBaseQuickSelectShortcut> shortcuts = ImmutableList<ReportsCalendarBaseQuickSelectShortcut>.Empty;
 
         public IObservable<ReportsCalendarBaseQuickSelectShortcut> ShortcutTaps { get; }
 
@@ -60,7 +61,7 @@ namespace Toggl.iOS.ViewSources
             shortcutTaps.OnNext(shortcuts[indexPath.Row]);
         }
 
-        public void UpdateShortcuts(IList<ReportsCalendarBaseQuickSelectShortcut> newShortcuts)
+        public void UpdateShortcuts(IImmutableList<ReportsCalendarBaseQuickSelectShortcut> newShortcuts)
         {
             shortcuts = newShortcuts;
             collectionView.ReloadData();

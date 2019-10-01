@@ -1,18 +1,17 @@
 ﻿using Toggl.Core.Analytics;
-using Toggl.Core.Diagnostics;
+using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
-using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
+using Toggl.Networking;
+using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Toggl.Networking;
-using Toggl.Networking.Network;
-using Toggl.Core.UI.Navigation;
 
 namespace Toggl.Core.UI
 {
@@ -32,9 +31,17 @@ namespace Toggl.Core.UI
         public override IUserAccessManager UserAccessManager
             => MockUserAccessManager ?? base.UserAccessManager;
 
+        internal IFetchRemoteConfigService MockFetchRemoteConfigService { get; set; }
+        protected override IFetchRemoteConfigService CreateFetchRemoteConfigService()
+            => MockFetchRemoteConfigService;
+
         internal IAccessRestrictionStorage MockAccessRestrictionStorage { get; set; }
         protected override IAccessRestrictionStorage CreateAccessRestrictionStorage()
             => MockAccessRestrictionStorage;
+
+        internal IUpdateRemoteConfigCacheService MockUpdateRemoteConfigCacheService { get; set; }
+        protected override IUpdateRemoteConfigCacheService CreateUpdateRemoteConfigCacheService()
+            => MockUpdateRemoteConfigCacheService;
 
         internal IAnalyticsService MockAnalyticsService { get; set; }
         protected override IAnalyticsService CreateAnalyticsService()
@@ -43,10 +50,6 @@ namespace Toggl.Core.UI
         internal IBackgroundSyncService MockBackgroundSyncService { get; set; }
         protected override IBackgroundSyncService CreateBackgroundSyncService()
             => MockBackgroundSyncService;
-
-        internal IBrowserService MockBrowserService { get; set; }
-        protected override IBrowserService CreateBrowserService()
-            => MockBrowserService;
 
         internal ICalendarService MockCalendarService { get; set; }
         protected override ICalendarService CreateCalendarService()
@@ -107,14 +110,10 @@ namespace Toggl.Core.UI
         internal IApplicationShortcutCreator MockShortcutCreator { get; set; }
         protected override IApplicationShortcutCreator CreateShortcutCreator()
             => MockShortcutCreator;
-
-        internal IStopwatchProvider MockStopwatchProvider { get; set; }
-        protected override IStopwatchProvider CreateStopwatchProvider()
-            => MockStopwatchProvider;
-
-        internal ISuggestionProviderContainer MockSuggestionProviderContainer { get; set; }
-        protected override ISuggestionProviderContainer CreateSuggestionProviderContainer()
-            => MockSuggestionProviderContainer;
+        
+        internal IPushNotificationsTokenService MockPushNotificationsTokenService { get; set; }
+        protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
+            => MockPushNotificationsTokenService;
 
         internal IUserPreferences MockUserPreferences { get; set; }
         protected override IUserPreferences CreateUserPreferences()
@@ -131,5 +130,17 @@ namespace Toggl.Core.UI
         internal ISyncManager MockSyncManager { get; set; }
         protected override ISyncManager CreateSyncManager()
             => MockSyncManager;
+
+        internal ITogglDataSource MockDataSource { get; set; }
+        protected override ITogglDataSource CreateDataSource()
+            => MockDataSource;
+
+        internal IAccessibilityService MockAccessibilityService { get; set; }
+        protected override IAccessibilityService CreateAccessibilityService()
+            => MockAccessibilityService;
+
+        internal IPushNotificationsTokenStorage MockPushNotificationsTokenStorage { get; set; }
+        protected override IPushNotificationsTokenStorage CreatePushNotificationsTokenStorage()
+            => MockPushNotificationsTokenStorage;
     }
 }

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit.Sdk;
 
 public sealed class LogIfTooSlowAttribute : BeforeAfterTestAttribute

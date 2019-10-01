@@ -1,10 +1,9 @@
-using System;
 using FluentAssertions;
+using System;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Services;
 using Xunit;
-using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.Services
 {

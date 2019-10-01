@@ -1,23 +1,21 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Collections.Generic;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
-using System.Threading.Tasks;
-using CoreGraphics;
-using Foundation;
-using Toggl.iOS.Extensions;
-using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Suggestions;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Onboarding.CreationView;
 using Toggl.Core.UI.Onboarding.StartTimeEntryView;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Autocomplete;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -25,7 +23,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed partial class StartTimeEntryViewController : KeyboardAwareViewController<StartTimeEntryViewModel>, IDismissableViewController
+    public sealed partial class StartTimeEntryViewController : KeyboardAwareViewController<StartTimeEntryViewModel>
     {
         private const double desiredIpadHeight = 360;
 
@@ -69,7 +67,7 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLayoutSubviews();
 
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
                 View.ClipsToBounds = true;
             }
@@ -79,7 +77,7 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewWillLayoutSubviews();
 
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
                 View.ClipsToBounds = true;
             }
@@ -148,8 +146,8 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             // Actions
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             DoneButton.Rx()
@@ -196,35 +194,20 @@ namespace Toggl.iOS.ViewControllers
                     DescriptionTextView.Rx().CursorPosition().SelectUnit()
                 )
                 .Select(_ => DescriptionTextView.AttributedText) // Programatically changing the text doesn't send an event, that's why we do this, to get the last version of the text
-                .SubscribeOn(ThreadPoolScheduler.Instance)
                 .Do(updatePlaceholder)
-                .Select(text => text.AsSpans((int)DescriptionTextView.SelectedRange.Location))
-                .ObserveOn(SynchronizationContext.Current)
+                .Select(text => text.AsSpans((int)DescriptionTextView.SelectedRange.Location).ToIImmutableList())
                 .Subscribe(ViewModel.SetTextSpans.Inputs)
                 .DisposedBy(DisposeBag);
-
-            source.TableRenderCallback = () =>
-            {
-                ViewModel.StopSuggestionsRenderingStopwatch();
-            };
-        }
-
-        public async Task<bool> Dismiss()
-        {
-            return await ViewModel.Close.ExecuteWithCompletion(Unit.Default);
         }
 
         private void onTextFieldInfo(TextFieldInfo textFieldInfo)
         {
-            var (attributedText, cursorPosition) = textFieldInfo.AsAttributedTextAndCursorPosition();
+            var attributedText = textFieldInfo.AsAttributedTextAndCursorPosition();
             if (DescriptionTextView.AttributedText.GetHashCode() == attributedText.GetHashCode())
                 return;
 
             DescriptionTextView.InputDelegate = emptyInputDelegate; //This line is needed for when the user selects from suggestion and the iOS autocorrect is ready to add text at the same time. Without this line both will happen.
             DescriptionTextView.AttributedText = attributedText;
-            var positionToSet =
-                DescriptionTextView.GetPosition(DescriptionTextView.BeginningOfDocument, cursorPosition);
-            DescriptionTextView.SelectedTextRange = DescriptionTextView.GetTextRange(positionToSet, positionToSet);
 
             updatePlaceholder();
         }
@@ -268,7 +251,7 @@ namespace Toggl.iOS.ViewControllers
 
         private void prepareViews()
         {
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
                 PreferredContentSize = new CGSize(0, desiredIpadHeight);
             }
@@ -371,11 +354,12 @@ namespace Toggl.iOS.ViewControllers
             disabledConfirmationButtonOnboardingDisposable
                 = disabledConfirmationButtonOnboardingStep
                     .ShouldBeVisible
-                    .Subscribe(visible => InvokeOnMainThread(() =>
+                    .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler)
+                    .Subscribe(visible =>
                     {
                         var image = visible ? greyCheckmarkButtonImage : greenCheckmarkButtonImage;
                         DoneButton.SetImage(image, UIControlState.Normal);
-                    }));
+                    });
         }
     }
 }

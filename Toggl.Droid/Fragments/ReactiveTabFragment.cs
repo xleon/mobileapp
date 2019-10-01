@@ -1,10 +1,12 @@
-﻿using System;
-using System.Reactive.Disposables;
-using System.Threading.Tasks;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.App;
+using Android.Support.V7.App;
+using Android.Support.V7.Widget;
 using Android.Views;
+using System;
+using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 
@@ -43,9 +45,9 @@ namespace Toggl.Droid.Fragments
         public override void OnResume()
         {
             base.OnResume();
-            
+
             if (IsHidden) return;
-            
+
             ViewModel?.ViewAppeared();
         }
 
@@ -72,7 +74,7 @@ namespace Toggl.Droid.Fragments
         public override void OnHiddenChanged(bool hidden)
         {
             base.OnHiddenChanged(hidden);
-            if (hidden) 
+            if (hidden)
                 ViewModel?.ViewDisappeared();
             else
                 ViewModel?.ViewAppeared();
@@ -86,9 +88,19 @@ namespace Toggl.Droid.Fragments
             DisposeBag?.Dispose();
         }
 
-        public Task Close()
+        public void SetupToolbar(View fragmentView, string title = "")
         {
-            return Task.CompletedTask;
+            var activity = Activity as AppCompatActivity;
+            var toolbar = fragmentView.FindViewById<Toolbar>(Resource.Id.Toolbar);
+            toolbar.Title = title;
+            activity.SetSupportActionBar(toolbar);
+
+            activity.SupportActionBar.SetDisplayHomeAsUpEnabled(false);
+            activity.SupportActionBar.SetDisplayShowHomeEnabled(false);
+        }
+
+        public void Close()
+        {
         }
 
         public IObservable<string> GetGoogleToken()

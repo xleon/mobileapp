@@ -1,14 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
-using Android.OS;
-using Android.Support.V7.Widget;
+using Android.Runtime;
 using Android.Views;
+using System;
 using Toggl.Core.UI.ViewModels.Settings;
-using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Activities
@@ -19,30 +16,29 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class CalendarSettingsActivity : ReactiveActivity<CalendarSettingsViewModel>
     {
-        private UserCalendarsRecyclerAdapter userCalendarsAdapter;
+        public CalendarSettingsActivity() : base(
+            Resource.Layout.CalendarSettingsActivity,
+            Resource.Style.AppTheme,
+            Transitions.SlideInFromRight)
+        { }
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        public CalendarSettingsActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
-            SetTheme(Resource.Style.AppTheme);
-            base.OnCreate(savedInstanceState);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.CalendarSettingsActivity);
+        }
 
-            InitializeViews();
-            setupToolbar();
+        protected override void InitializeBindings()
+        {
+            toggleCalendarsView.Rx()
+                .BindAction(ViewModel.TogglCalendarIntegration)
+                .DisposedBy(DisposeBag);
 
-            setupRecyclerView();
-
-            toggleCalendarsView.Rx().Tap()
-                .Subscribe(ViewModel.TogglCalendarIntegration.Inputs)
+            toggleCalendarsSwitch.Rx()
+                .BindAction(ViewModel.TogglCalendarIntegration)
                 .DisposedBy(DisposeBag);
 
             ViewModel.CalendarListVisible
-                .Subscribe(toggleCalendarsSwitch.Rx().CheckedObserver())
+                .Subscribe(toggleCalendarsSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
             ViewModel.CalendarListVisible
@@ -51,7 +47,6 @@ namespace Toggl.Droid.Activities
 
             ViewModel
                 .Calendars
-                .Select(calendars => calendars.ToList())
                 .Subscribe(userCalendarsAdapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 
@@ -64,36 +59,20 @@ namespace Toggl.Droid.Activities
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             MenuInflater.Inflate(Resource.Menu.CalendarSettingsMenu, menu);
+            var doneMenuItem = menu.FindItem(Resource.Id.Done);
+            doneMenuItem.SetTitle(Shared.Resources.Done);
             return true;
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            switch (item.ItemId)
+            if (item.ItemId == Resource.Id.Done)
             {
-                case Resource.Id.Done:
-                    ViewModel.Done.Execute();
-                    return true;
-                case Android.Resource.Id.Home:
-                    ViewModel.Close.Execute();
-                    return true;
+                ViewModel.Save.Execute();
+                return true;
             }
 
             return base.OnOptionsItemSelected(item);
-        }
-
-        private void setupToolbar()
-        {
-            SetSupportActionBar(toolbar);
-            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            SupportActionBar.SetDisplayShowHomeEnabled(true);
-        }
-
-        private void setupRecyclerView()
-        {
-            userCalendarsAdapter = new UserCalendarsRecyclerAdapter();
-            calendarsRecyclerView.SetAdapter(userCalendarsAdapter);
-            calendarsRecyclerView.SetLayoutManager(new LinearLayoutManager(this));
         }
     }
 }

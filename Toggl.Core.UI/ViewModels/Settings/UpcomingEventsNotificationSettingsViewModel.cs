@@ -1,11 +1,10 @@
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Immutable;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Extensions;
-using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
@@ -16,12 +15,9 @@ namespace Toggl.Core.UI.ViewModels.Settings
     public sealed class UpcomingEventsNotificationSettingsViewModel : ViewModel
     {
         private readonly IUserPreferences userPreferences;
-        private readonly IRxActionFactory rxActionFactory;
 
-        public IList<SelectableCalendarNotificationsOptionViewModel> AvailableOptions { get; }
-
+        public IImmutableList<SelectableCalendarNotificationsOptionViewModel> AvailableOptions { get; }
         public InputAction<SelectableCalendarNotificationsOptionViewModel> SelectOption { get; }
-        public UIAction Close { get; }
 
         public UpcomingEventsNotificationSettingsViewModel(
             INavigationService navigationService,
@@ -33,22 +29,18 @@ namespace Toggl.Core.UI.ViewModels.Settings
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.userPreferences = userPreferences;
-            this.rxActionFactory = rxActionFactory;
 
-            var options = new[] {
-                CalendarNotificationsOption.Disabled,
-                CalendarNotificationsOption.WhenEventStarts,
-                CalendarNotificationsOption.FiveMinutes,
-                CalendarNotificationsOption.TenMinutes,
-                CalendarNotificationsOption.FifteenMinutes,
-                CalendarNotificationsOption.ThirtyMinutes,
-                CalendarNotificationsOption.OneHour
-            };
-
-            AvailableOptions = options.Select(toSelectableOption).ToList();
+            AvailableOptions = ImmutableList.Create(
+               new SelectableCalendarNotificationsOptionViewModel(CalendarNotificationsOption.Disabled, false),
+               new SelectableCalendarNotificationsOptionViewModel(CalendarNotificationsOption.WhenEventStarts, false),
+               new SelectableCalendarNotificationsOptionViewModel(CalendarNotificationsOption.FiveMinutes, false),
+               new SelectableCalendarNotificationsOptionViewModel(CalendarNotificationsOption.TenMinutes, false),
+               new SelectableCalendarNotificationsOptionViewModel(CalendarNotificationsOption.FifteenMinutes, false),
+               new SelectableCalendarNotificationsOptionViewModel(CalendarNotificationsOption.ThirtyMinutes, false),
+               new SelectableCalendarNotificationsOptionViewModel(CalendarNotificationsOption.OneHour, false)
+            );
 
             SelectOption = rxActionFactory.FromAction<SelectableCalendarNotificationsOptionViewModel>(onSelectOption);
-            Close = rxActionFactory.FromAsync(close);
         }
 
         public override async Task Initialize()
@@ -57,9 +49,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
             var selectedOption = await userPreferences.CalendarNotificationsSettings().FirstAsync();
             AvailableOptions.ForEach(opt => opt.Selected = opt.Option == selectedOption);
         }
-
-        private Task close()
-            => Finish();
 
         private void onSelectOption(SelectableCalendarNotificationsOptionViewModel selectableOption)
         {
@@ -70,10 +59,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
             if (enabled)
                 userPreferences.SetTimeSpanBeforeCalendarNotifications(selectableOption.Option.Duration());
 
-            Finish();
+            Close();
         }
-
-        private SelectableCalendarNotificationsOptionViewModel toSelectableOption(CalendarNotificationsOption option)
-            => new SelectableCalendarNotificationsOptionViewModel(option, false);
     }
 }

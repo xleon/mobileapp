@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toggl.Shared;
-using Toggl.Shared.Models;
 using Toggl.Networking.Models;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
+using Toggl.Shared;
+using Toggl.Shared.Models;
 
 namespace Toggl.Networking.ApiClients
 {
@@ -24,7 +24,7 @@ namespace Toggl.Networking.ApiClients
             => SendRequest<Project, IProject>(endPoints.Get, AuthHeader);
 
         public IObservable<List<IProject>> GetAllSince(DateTimeOffset threshold)
-            => SendRequest<Project, IProject>(endPoints.GetSince(threshold), AuthHeader);
+            => SendRequest<Project, IProject>(endPoints.GetSince(threshold, includeArchived: true), AuthHeader);
 
         public IObservable<IProject> Create(IProject project)
         {
@@ -38,7 +38,7 @@ namespace Toggl.Networking.ApiClients
         {
             Ensure.Argument.IsNotNull(projectIds, nameof(projectIds));
 
-            var json = $"{{\"ids\":[{String.Join(",", projectIds)}]}}";
+            var json = $"{{\"ids\":[{string.Join(",", projectIds)}]}}";
             return SendRequest<Project, IProject>(reportsEndPoints.Search(workspaceId), AuthHeader, json);
         }
     }

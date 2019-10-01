@@ -1,6 +1,4 @@
-﻿using System;
-using Toggl.Core.Services;
-using Foundation;
+﻿using Toggl.Core.Services;
 using Toggl.iOS.ExtensionKit;
 
 namespace Toggl.iOS.Services
@@ -29,7 +27,7 @@ namespace Toggl.iOS.Services
 
         public bool HasUserDataStored()
             => !string.IsNullOrEmpty(SharedStorage.instance.GetApiToken());
-        
+
         public string GetApiToken()
             => SharedStorage.instance.GetApiToken();
     }

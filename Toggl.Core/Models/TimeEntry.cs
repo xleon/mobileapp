@@ -1,6 +1,6 @@
 ﻿using System;
-using Toggl.Storage;
 using System.Collections.Generic;
+using Toggl.Storage;
 using Toggl.Storage.Models;
 
 namespace Toggl.Core.Models

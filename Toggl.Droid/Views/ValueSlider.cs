@@ -1,11 +1,10 @@
-﻿using System;
-using Android.Content;
+﻿using Android.Content;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Runtime;
 using Android.Util;
 using Android.Widget;
-using Toggl.Droid.Extensions;
+using System;
 
 namespace Toggl.Droid.Views
 {

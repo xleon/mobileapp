@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Android.Widget;
 using System.Reactive.Linq;
-using Android.Widget;
 using Toggl.Core.UI.Onboarding.EditView;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Helper;
@@ -8,7 +7,7 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Activities
 {
-    public sealed partial class EditTimeEntryActivity 
+    public sealed partial class EditTimeEntryActivity
     {
         private PopupWindow projectTooltip;
 
@@ -19,14 +18,14 @@ namespace Toggl.Droid.Activities
                     this,
                     Resource.Layout.TooltipWithLeftTopArrow,
                     Resource.Id.TooltipText,
-                    Resource.String.CategorizeWithProjects);
+                    Shared.Resources.CategorizeWithProjects);
 
             prepareOnboarding();
         }
 
         private void clearOnboardingOnStop()
         {
-            projectTooltip.Dismiss();
+            projectTooltip?.Dismiss();
             projectTooltip = null;
         }
 

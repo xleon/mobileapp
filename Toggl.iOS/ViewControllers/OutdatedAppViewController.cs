@@ -1,7 +1,6 @@
+using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -22,6 +21,7 @@ namespace Toggl.iOS.ViewControllers
             HeadingLabel.Text = Resources.Oops;
             TextLabel.Text = Resources.AppOutdatedMessage;
             UpdateButton.SetTitle(Resources.UpdateTheApp, UIControlState.Normal);
+            WebsiteButton.SetTitle(Resources.OutdatedAppTryTogglCom, UIControlState.Normal);
 
             UpdateButton.Rx()
                 .BindAction(ViewModel.UpdateApp)

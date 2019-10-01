@@ -1,6 +1,6 @@
-﻿using Toggl.Shared;
-using Toggl.Networking;
+﻿using Toggl.Networking;
 using Toggl.Networking.Network;
+using Toggl.Shared;
 
 namespace Toggl.Core.Login
 {

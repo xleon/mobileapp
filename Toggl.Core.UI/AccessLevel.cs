@@ -1,5 +1,4 @@
-﻿using System;
-namespace Toggl.Core.UI
+﻿namespace Toggl.Core.UI
 {
     public enum AccessLevel
     {

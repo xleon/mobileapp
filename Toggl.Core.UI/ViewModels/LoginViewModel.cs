@@ -2,18 +2,19 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.Exceptions;
 using Toggl.Core.Extensions;
+using Toggl.Core.Interactors;
 using Toggl.Core.Login;
-using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
+using Toggl.Networking.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
-using Toggl.Networking.Exceptions;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -36,6 +37,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ITimeService timeService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IRxActionFactory rxActionFactory;
+        private readonly IInteractorFactory interactorFactory;
 
         private IDisposable loginDisposable;
 
@@ -57,8 +59,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> IsPasswordMasked { get; }
         public IObservable<bool> IsShowPasswordButtonVisible { get; }
 
-        public UIAction Signup { get; }
-        public UIAction ForgotPassword { get; }
+        public ViewAction Signup { get; }
+        public ViewAction ForgotPassword { get; }
 
         public LoginViewModel(
             IUserAccessManager userAccessManager,
@@ -69,7 +71,8 @@ namespace Toggl.Core.UI.ViewModels
             ILastTimeUsageStorage lastTimeUsageStorage,
             ITimeService timeService,
             ISchedulerProvider schedulerProvider,
-            IRxActionFactory rxActionFactory)
+            IRxActionFactory rxActionFactory,
+            IInteractorFactory interactorFactory)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
@@ -80,6 +83,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
+            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
 
             this.timeService = timeService;
             this.userAccessManager = userAccessManager;
@@ -88,6 +92,7 @@ namespace Toggl.Core.UI.ViewModels
             this.errorHandlingService = errorHandlingService;
             this.lastTimeUsageStorage = lastTimeUsageStorage;
             this.schedulerProvider = schedulerProvider;
+            this.interactorFactory = interactorFactory;
 
             var emailObservable = emailSubject.Select(email => email.TrimmedEnd());
 
@@ -188,7 +193,7 @@ namespace Toggl.Core.UI.ViewModels
 
             isLoadingSubject.OnNext(true);
 
-            loginDisposable = View
+            loginDisposable = View?
                 .GetGoogleToken()
                 .SelectMany(userAccessManager.LoginWithGoogle)
                 .Track(analyticsService.Login, AuthenticationMethod.Google)
@@ -219,6 +224,10 @@ namespace Toggl.Core.UI.ViewModels
             lastTimeUsageStorage.SetLogin(timeService.CurrentDateTime);
 
             onboardingStorage.SetIsNewUser(false);
+
+            interactorFactory.GetCurrentUser().Execute()
+                .Select(u => u.Id)
+                .Subscribe(analyticsService.SetAppCenterUserId);
 
             await UIDependencyContainer.Instance.SyncManager.ForceFullSync();
 

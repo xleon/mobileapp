@@ -31,23 +31,22 @@ namespace Toggl.Core.UI.ViewModels.Settings
             new BehaviorSubject<EditTimeEntryViewModel.ProjectClientTaskInfo>(EditTimeEntryViewModel
                 .ProjectClientTaskInfo.Empty);
 
-        public BehaviorRelay<bool> IsBillable = new BehaviorRelay<bool>(false);
-        public BehaviorRelay<string> Description = new BehaviorRelay<string>(string.Empty);
-        public BehaviorRelay<IThreadSafeWorkspace> Workspace = new BehaviorRelay<IThreadSafeWorkspace>(null);
-        public BehaviorRelay<IThreadSafeProject> Project = new BehaviorRelay<IThreadSafeProject>(null);
-        public BehaviorRelay<long?> TaskId = new BehaviorRelay<long?>(null);
-        public BehaviorRelay<IEnumerable<IThreadSafeTag>> Tags =
+        public BehaviorRelay<bool> IsBillable { get; } = new BehaviorRelay<bool>(false);
+        public BehaviorRelay<string> Description { get; } = new BehaviorRelay<string>(string.Empty);
+        public BehaviorRelay<IThreadSafeWorkspace> Workspace { get; } = new BehaviorRelay<IThreadSafeWorkspace>(null);
+        public BehaviorRelay<IThreadSafeProject> Project { get; } = new BehaviorRelay<IThreadSafeProject>(null);
+        public BehaviorRelay<long?> TaskId { get; } = new BehaviorRelay<long?>(null);
+        public BehaviorRelay<IEnumerable<IThreadSafeTag>> Tags { get; } =
             new BehaviorRelay<IEnumerable<IThreadSafeTag>>(Enumerable.Empty<IThreadSafeTag>());
-        public BehaviorRelay<bool> PasteFromClipboard = new BehaviorRelay<bool>(false);
+        public BehaviorRelay<bool> PasteFromClipboard { get; } = new BehaviorRelay<bool>(false);
         public IObservable<bool> IsBillableAvailable { get; }
         public IObservable<IEnumerable<string>> TagNames { get; }
         public IObservable<bool> HasTags { get; }
         public IObservable<EditTimeEntryViewModel.ProjectClientTaskInfo> ProjectClientTask { get; }
 
-        public UIAction SelectTags { get; }
-        public UIAction SelectProject { get; }
-        public UIAction Close { get; }
-        public UIAction SelectClipboard { get; }
+        public ViewAction SelectTags { get; }
+        public ViewAction SelectProject { get; }
+        public ViewAction SelectClipboard { get; }
 
         public SiriShortcutsCustomTimeEntryViewModel(
             ITogglDataSource dataSource,
@@ -68,7 +67,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
 
-            Close = rxActionFactory.FromAsync(Finish);
             SelectTags = rxActionFactory.FromAsync(selectTags);
             SelectProject = rxActionFactory.FromAsync(selectProject);
             SelectClipboard = rxActionFactory.FromAsync(selectClipboard);
@@ -155,15 +153,19 @@ namespace Toggl.Core.UI.ViewModels.Settings
             var project = await interactorFactory.GetProjectById(chosenProjectProjectId).Execute();
             clearTagsIfNeeded(workspaceId, project.WorkspaceId);
 
-            var taskName = chosenProjectParams.TaskId.HasValue
-                ? (await interactorFactory.GetTaskById((long)chosenProjectParams.TaskId).Execute())?.Name
-                : string.Empty;
+            var task = chosenProjectParams.TaskId.HasValue
+                ? await interactorFactory.GetTaskById(chosenProjectParams.TaskId.Value).Execute()
+                : null;
+
+            var taskName = task?.Name ?? string.Empty;
 
             projectClientTaskInfo.OnNext(new EditTimeEntryViewModel.ProjectClientTaskInfo(
                 project.DisplayName(),
                 project.DisplayColor(),
                 project.Client?.Name,
-                taskName));
+                taskName,
+                project.IsPlaceholder(),
+                task?.IsPlaceholder() ?? false));
 
             Workspace.Accept(chosenWorkspace);
             Project.Accept(project);
@@ -173,7 +175,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
         {
             if (!onboardingStorage.DidShowSiriClipboardInstruction())
             {
-                await Navigate<PasteFromClipboardViewModel, bool>();
+                await Navigate<PasteFromClipboardViewModel>();
             }
 
             PasteFromClipboard.Accept(!PasteFromClipboard.Value);

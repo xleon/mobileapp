@@ -1,25 +1,26 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FsCheck;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
-using NUnit.Framework;
 using Toggl.Core.Analytics;
 using Toggl.Core.Exceptions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Tests.Generators;
-using Toggl.Shared;
-using Toggl.Storage.Settings;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
+using Toggl.Shared;
+using Toggl.Storage.Settings;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
@@ -46,7 +47,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     LastTimeUsageStorage,
                     TimeService,
                     SchedulerProvider,
-                    RxActionFactory);
+                    RxActionFactory,
+                    InteractorFactory);
 
             protected override void AdditionalSetup()
             {
@@ -68,7 +70,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useLastTimeUsageStorage,
                 bool useTimeService,
                 bool useSchedulerProvider,
-                bool useRxActionFactory)
+                bool useRxActionFactory,
+                bool useInteractorFactory)
             {
                 var userAccessManager = useUserAccessManager ? UserAccessManager : null;
                 var analyticsSerivce = useAnalyticsService ? AnalyticsService : null;
@@ -79,6 +82,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var timeService = useTimeService ? TimeService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var interactorFactory = useInteractorFactory ? InteractorFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new LoginViewModel(userAccessManager,
@@ -89,7 +93,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                                              lastTimeUsageStorage,
                                              timeService,
                                              schedulerProvider,
-                                             rxActionFactory);
+                                             rxActionFactory,
+                                             interactorFactory);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -198,6 +203,20 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.Login();
 
                     AnalyticsService.Received().Login.Track(AuthenticationMethod.EmailAndPassword);
+                }
+
+                [Fact, LogIfTooSlow]
+                public void ReportsUserIdToAppCenter()
+                {
+                    var id = 1234567890L;
+                    var user = Substitute.For<IThreadSafeUser>();
+                    user.Id.Returns(id);
+                    var observable = Observable.Return(user);
+                    InteractorFactory.GetCurrentUser().Execute().Returns(observable);
+
+                    ViewModel.Login();
+
+                    AnalyticsService.Received().SetAppCenterUserId(id);
                 }
 
                 [FsCheck.Xunit.Property]
@@ -541,7 +560,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var email = Email.Empty;
                 var password = Password.From(passwordString.Get);
                 var parameter = CredentialsParameter.With(email, password);
-                var expectedValues = new[] { Password.Empty.ToString(),  password.ToString() };
+                var expectedValues = new[] { Password.Empty.ToString(), password.ToString() };
                 var actualValues = new List<string>();
                 viewModel.Password.Subscribe(actualValues.Add);
 

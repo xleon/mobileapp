@@ -1,26 +1,17 @@
 using System;
 using System.Reactive.Linq;
-using CoreText;
-using Foundation;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
-using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Helper;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public partial class TokenResetViewController : KeyboardAwareViewController<TokenResetViewModel>
+    public partial class TokenResetViewController : ReactiveViewController<TokenResetViewModel>
     {
-        private const int forgotPasswordLabelOffset = 27;
-
-        private readonly UIBarButtonItem nextButton =
-            new UIBarButtonItem { Title = Resources.LoginNextButton, TintColor = UIColor.White };
-
         public TokenResetViewController(TokenResetViewModel viewModel)
             : base(viewModel, nameof(TokenResetViewController))
         {
@@ -35,8 +26,6 @@ namespace Toggl.iOS.ViewControllers
             InstructionLabel.Text = Resources.TokenResetInstruction;
             PasswordTextField.Placeholder = Resources.Password;
             SignOutButton.SetTitle(Resources.OrSignOut, UIControlState.Normal);
-
-            prepareViews();
 
             EmailLabel.Text = ViewModel.Email.ToString();
 
@@ -69,7 +58,7 @@ namespace Toggl.iOS.ViewControllers
                 })
                 .DisposedBy(DisposeBag);
 
-            nextButton.Rx().Tap()
+            LoginButton.Rx().Tap()
                 .Subscribe(ViewModel.Done.Inputs)
                 .DisposedBy(DisposeBag);
 
@@ -79,12 +68,13 @@ namespace Toggl.iOS.ViewControllers
 
             //Enabled
             ViewModel.NextIsEnabled
-                .Subscribe(nextButton.Rx().Enabled())
+                .Subscribe(LoginButton.Rx().Enabled())
                 .DisposedBy(DisposeBag);
 
             //Visibility
+            ErrorLabel.Hidden = true;
             ViewModel.HasError
-                .Subscribe(ErrorView.Rx().IsVisible())
+                .Subscribe(ErrorLabel.Rx().AnimatedIsVisible())
                 .DisposedBy(DisposeBag);
 
             ViewModel.Done.Executing
@@ -93,57 +83,45 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.Done.Executing
-                .Subscribe(ActivityIndicatorView.Rx().IsVisible())
+                .Subscribe(ActivityIndicatorView.Rx().IsVisibleWithFade())
+                .DisposedBy(DisposeBag);
+            
+            ViewModel.Done.Executing.Select(loginButtonTitle)
+                .Subscribe(LoginButton.Rx().AnimatedTitle())
                 .DisposedBy(DisposeBag);
 
             PasswordTextField.BecomeFirstResponder();
+            ShowPasswordButton.SetupShowPasswordButton();
+            
+            //Color
+            ViewModel.HasError
+                .Select(loginButtonTintColor)
+                .Subscribe(LoginButton.Rx().TintColor())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.NextIsEnabled
+                .Select(loginButtonTitleColor)
+                .Subscribe(LoginButton.Rx().TitleColor())
+                .DisposedBy(DisposeBag);
+            
+            UIColor loginButtonTintColor(bool hasError)
+                => hasError ? UIColor.White : UIColor.Black;
+
+            UIColor loginButtonTitleColor(bool enabled) => enabled
+                ? Core.UI.Helper.Colors.Login.EnabledButtonColor.ToNativeColor()
+                : Core.UI.Helper.Colors.Login.DisabledButtonColor.ToNativeColor();
         }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            NavigationController.NavigationBar.UserInteractionEnabled = true;
+            ActivityIndicatorView.Alpha = 0;
+            ActivityIndicatorView.StartSpinning();
+            PasswordTextField.ResignFirstResponder();
         }
 
-        protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
-        {
-            BottomConstraint.Constant = e.FrameEnd.Height + forgotPasswordLabelOffset;
-            UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
-        }
-
-        protected override void KeyboardWillHide(object sender, UIKeyboardEventArgs e)
-        {
-            BottomConstraint.Constant = forgotPasswordLabelOffset;
-            UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
-        }
-
-        private void prepareViews()
-        {
-            prepareTextFields();
-            prepareNavigationBar();
-        }
-
-        private void prepareTextFields()
-        {
-            var placeholderAttributes = new CTStringAttributes(
-                new UIStringAttributes { ForegroundColor = UIColor.White.ColorWithAlpha(0.5f) }.Dictionary
-            );
-
-            PasswordTextField.TintColor = UIColor.White;
-            PasswordTextField.AttributedPlaceholder =
-                new NSAttributedString(Resources.LoginSignUpPasswordPlaceholder, placeholderAttributes);
-        }
-
-        private void prepareNavigationBar()
-        {
-            var attributes = new UITextAttributes { Font = UIFont.SystemFontOfSize(14, UIFontWeight.Medium) };
-            var spaceFix = new UIBarButtonItem(UIBarButtonSystemItem.FixedSpace) { Width = 8 };
-
-            NavigationItem.RightBarButtonItems = new[] { spaceFix, nextButton };
-
-            nextButton.SetTitleTextAttributes(attributes, UIControlState.Normal);
-            nextButton.SetTitleTextAttributes(attributes, UIControlState.Disabled);
-        }
+        private string loginButtonTitle(bool isLoading)
+            => isLoading ? "" : Resources.LoginTitle;
     }
 }
 

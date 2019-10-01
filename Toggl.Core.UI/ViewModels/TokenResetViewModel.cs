@@ -3,14 +3,14 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
-using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.Parameters;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
 using Toggl.Networking.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -33,8 +33,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> NextIsEnabled { get; }
         public ISubject<string> Password { get; } = new BehaviorSubject<string>(string.Empty);
 
-        public UIAction Done { get; private set; }
-        public UIAction SignOut { get; private set; }
+        public ViewAction Done { get; private set; }
+        public ViewAction SignOut { get; private set; }
 
         public TokenResetViewModel(
             IUserAccessManager userAccessManager,

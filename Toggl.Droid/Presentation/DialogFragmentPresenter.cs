@@ -1,7 +1,6 @@
+using Android.Support.V7.App;
 using System;
 using System.Collections.Generic;
-using Android.Support.V7.App;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Settings;
@@ -19,15 +18,11 @@ namespace Toggl.Droid.Presentation
         {
             typeof(CalendarPermissionDeniedViewModel),
             typeof(NoWorkspaceViewModel),
-            typeof(SelectBeginningOfWeekViewModel),
             typeof(SelectColorViewModel),
-            typeof(SelectDateFormatViewModel),
             typeof(SelectDefaultWorkspaceViewModel),
-            typeof(SelectDurationFormatViewModel),
             typeof(SelectUserCalendarsViewModel),
             typeof(TermsOfServiceViewModel),
-            typeof(UpcomingEventsNotificationSettingsViewModel),
-            typeof(SelectWorkspaceViewModel)
+            typeof(UpcomingEventsNotificationSettingsViewModel)
         };
 
         protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView)
@@ -53,22 +48,13 @@ namespace Toggl.Droid.Presentation
                     return new CalendarPermissionDeniedFragment();
 
                 case NoWorkspaceViewModel _:
-                    return new NoWorkspaceFragment();
-
-                case SelectBeginningOfWeekViewModel _:
-                    return new SelectBeginningOfWeekFragment();
+                    return new NoWorkspaceFragment { Cancelable = false };
 
                 case SelectColorViewModel _:
                     return new SelectColorFragment();
 
-                case SelectDateFormatViewModel _:
-                    return new SelectDateFormatFragment();
-
                 case SelectDefaultWorkspaceViewModel _:
-                    return new SelectDefaultWorkspaceFragment();
-
-                case SelectDurationFormatViewModel _:
-                    return new SelectDurationFormatFragment();
+                    return new SelectDefaultWorkspaceFragment { Cancelable = false };
 
                 case SelectUserCalendarsViewModel _:
                     return new SelectUserCalendarsFragment();
@@ -78,9 +64,6 @@ namespace Toggl.Droid.Presentation
 
                 case UpcomingEventsNotificationSettingsViewModel _:
                     return new UpcomingEventsNotificationSettingsFragment();
-
-                case SelectWorkspaceViewModel _:
-                    return new SelectWorkspaceFragment();
             }
 
             throw new InvalidOperationException($"There's no reactive dialog implementation for {viewModel.GetType().Name}");

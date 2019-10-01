@@ -7,7 +7,7 @@ namespace Toggl.Droid.Extensions
     {
         public static void UpdateWith(this PointF updatingPoint, TogglPoint point)
         {
-            updatingPoint.Set((float)point.X, (float)point.Y);            
+            updatingPoint.Set((float)point.X, (float)point.Y);
         }
 
         public static TogglPoint ToPoint(this PointF point)

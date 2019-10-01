@@ -1,9 +1,9 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Reactive.Linq;
 using Foundation;
 using SiriExtension.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
 using Toggl.iOS.ExtensionKit;
 using Toggl.iOS.ExtensionKit.Analytics;
 using Toggl.iOS.ExtensionKit.Extensions;

@@ -1,10 +1,9 @@
-using System;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.App;
-using System.Reactive;
+using System;
 using Toggl.Core;
 using Toggl.Core.Services;
 using Toggl.Core.UI;
@@ -49,9 +48,7 @@ namespace Toggl.Droid
             base.OnCreate(savedInstanceState);
 
             var dependencyContainer = AndroidDependencyContainer.Instance;
-
             registerTimezoneChangedBroadcastReceiver(dependencyContainer.TimeService);
-            registerApplicationLifecycleObserver(dependencyContainer.BackgroundService);
 
             var app = new AppStart(dependencyContainer);
             app.UpdateOnboardingProgress();
@@ -63,12 +60,15 @@ namespace Toggl.Droid
                 Finish();
                 return;
             }
-            
-            clearAllViewModelsAndSetupRootViewModel(dependencyContainer.ViewModelCache, dependencyContainer.ViewModelLoader); 
-            
+
+            clearAllViewModelsAndSetupRootViewModel(
+                dependencyContainer.ViewModelCache,
+                dependencyContainer.ViewModelLoader);
+
             var navigationUrl = Intent.Data?.ToString() ?? getTrackUrlFromProcessedText();
             if (string.IsNullOrEmpty(navigationUrl))
             {
+                app.ForceFullSync();
                 StartActivity(typeof(MainTabBarActivity));
                 Finish();
                 return;
@@ -81,25 +81,10 @@ namespace Toggl.Droid
         private void clearAllViewModelsAndSetupRootViewModel(ViewModelCache viewModelCache, ViewModelLoader viewModelLoader)
         {
             viewModelCache.ClearAll();
-            var viewModel = (MainTabBarViewModel)viewModelLoader.Load<Unit, Unit>(typeof(MainTabBarViewModel), Unit.Default)
-                .GetAwaiter()
-                .GetResult();
-            viewModelCache.Cache(viewModel);  
-        }
+            var viewModel = viewModelLoader.Load<MainTabBarViewModel>();
+            viewModelCache.Cache(viewModel);
 
-        private void registerApplicationLifecycleObserver(IBackgroundService backgroundService)
-        {
-            var togglApplication = getTogglApplication();
-            var currentAppLifecycleObserver = togglApplication.ApplicationLifecycleObserver;
-            if (currentAppLifecycleObserver != null)
-            {
-                Application.UnregisterActivityLifecycleCallbacks(currentAppLifecycleObserver);
-                Application.UnregisterComponentCallbacks(currentAppLifecycleObserver);
-            }
-            
-            togglApplication.ApplicationLifecycleObserver = new ApplicationLifecycleObserver(backgroundService);
-            Application.RegisterActivityLifecycleCallbacks(togglApplication.ApplicationLifecycleObserver);
-            Application.RegisterComponentCallbacks(togglApplication.ApplicationLifecycleObserver);
+            viewModel.Initialize();
         }
 
         private void registerTimezoneChangedBroadcastReceiver(ITimeService timeService)
@@ -112,7 +97,7 @@ namespace Toggl.Droid
             }
 
             togglApplication.TimezoneChangedBroadcastReceiver = new TimezoneChangedBroadcastReceiver(timeService);
-            ApplicationContext.RegisterReceiver(togglApplication.TimezoneChangedBroadcastReceiver, new IntentFilter(ActionTimezoneChanged));    
+            ApplicationContext.RegisterReceiver(togglApplication.TimezoneChangedBroadcastReceiver, new IntentFilter(ActionTimezoneChanged));
         }
 
         private TogglApplication getTogglApplication()

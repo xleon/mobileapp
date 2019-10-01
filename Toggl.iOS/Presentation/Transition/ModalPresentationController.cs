@@ -1,12 +1,11 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CoreGraphics;
-using Foundation;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.ViewControllers;
-using Toggl.Shared;
 using UIKit;
 using static System.Math;
 
@@ -26,8 +25,7 @@ namespace Toggl.iOS.Presentation.Transition
         private const double iPadStackModalViewSpacing = 40;
 
         private double topiPadMargin
-            => PresentingViewController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact
-               || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeLeft
+            => UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeLeft
                || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeRight
                 ? iPadTopMarginNarrow
                 : iPadTopMarginLarge;
@@ -42,19 +40,6 @@ namespace Toggl.iOS.Presentation.Transition
         private bool finishedPresenting = false;
 
         private List<NSObject> observers = new List<NSObject>();
-
-        private nfloat maximumHeight
-        {
-            get
-            {
-                var distanceFromTop = UIApplication.SharedApplication.StatusBarFrame.Height;
-                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
-                {
-                    distanceFromTop += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top;
-                }
-                return UIScreen.MainScreen.Bounds.Height - distanceFromTop;
-            }
-        }
 
         private readonly UIView dimmingView = new UIView
         {
@@ -143,7 +128,7 @@ namespace Toggl.iOS.Presentation.Transition
 
         public override void ContainerViewWillLayoutSubviews()
         {
-            dimmingView.Frame = ContainerView.Bounds;
+            dimmingView.Frame = ContainerView?.Bounds ?? CGRect.Empty;
             PresentedView.Frame = FrameOfPresentedViewInContainerView;
 
             PresentedViewController.View.Layer.CornerRadius = 8.0f;
@@ -152,13 +137,7 @@ namespace Toggl.iOS.Presentation.Transition
 
         public override CGSize GetSizeForChildContentContainer(IUIContentContainer contentContainer, CGSize parentContainerSize)
         {
-            var regularOrCompactHorizontalSizeClass = PresentingViewController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
-                                                      || PresentingViewController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact;
-            var regularVerticalSizeClass = PresentingViewController.TraitCollection.VerticalSizeClass == UIUserInterfaceSizeClass.Regular;
-
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad
-                && regularOrCompactHorizontalSizeClass
-                && regularVerticalSizeClass)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
                 var preferredContentHeight = PresentedViewController.PreferredContentSize.Height != 0
                     ? PresentedViewController.PreferredContentSize.Height
@@ -168,17 +147,13 @@ namespace Toggl.iOS.Presentation.Transition
                 var width = Min(iPadMaxWidth, parentContainerSize.Width);
                 var stackingDepth = iPadStackModalViewSpacing * levelsOfModalViews();
 
-                if (isKeyboardVisible)
-                {
-                    height = UIScreen.MainScreen.Bounds.Height - topiPadMargin - keyboardHeight - stackingDepth;
-                }
-
                 height = Min(height, iPadMaxHeight - stackingDepth);
                 return new CGSize(width, height);
             }
 
-            var preferredHeight = Min(maximumHeight, PresentedViewController.PreferredContentSize.Height);
-            return new CGSize(parentContainerSize.Width, preferredHeight == 0 ? maximumHeight : preferredHeight);
+            var maxHeight = PresentingViewController.View.Bounds.Height - PresentingViewController.View.SafeAreaInsets.Top;
+            var preferredHeight = Min(maxHeight, PresentedViewController.PreferredContentSize.Height);
+            return new CGSize(parentContainerSize.Width, preferredHeight == 0 ? maxHeight : preferredHeight);
         }
 
         public override CGRect FrameOfPresentedViewInContainerView
@@ -191,18 +166,32 @@ namespace Toggl.iOS.Presentation.Transition
                 var containerSize = ContainerView.Bounds.Size;
                 var frame = CGRect.Empty;
                 frame.Size = GetSizeForChildContentContainer(PresentedViewController, containerSize);
-                frame.X = 0;
-                frame.Y = containerSize.Height - frame.Size.Height;
 
-                if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+                if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
                 {
                     frame.X = (containerSize.Width - frame.Size.Width) / 2;
-
                     frame.Y = (containerSize.Height - frame.Size.Height) / 2 + (nfloat)iPadStackModalViewSpacing * levelsOfModalViews();
 
                     if (isKeyboardVisible || PresentingViewController.PresentingViewController != null)
                     {
                         frame.Y = (nfloat)topiPadMargin + (nfloat)iPadStackModalViewSpacing * levelsOfModalViews();
+                    }
+                }
+                else
+                {
+                    frame.X = 0;
+                    frame.Y = containerSize.Height - frame.Size.Height;
+
+                    if (isKeyboardVisible)
+                    {
+                        UIView firstResponder = PresentedView.GetFirstResponder();
+                        if (firstResponder != null)
+                        {
+                            var firstResponderFrame =
+                                firstResponder.ConvertRectToView(firstResponder.Frame, PresentedView);
+                            var newY = containerSize.Height - keyboardHeight - firstResponderFrame.Y - firstResponderFrame.Height;
+                            frame.Y = (nfloat)Min(frame.Y, newY);
+                        }
                     }
                 }
 
@@ -242,8 +231,9 @@ namespace Toggl.iOS.Presentation.Transition
                     break;
                 case UIGestureRecognizerState.Ended:
                 case UIGestureRecognizerState.Cancelled:
-                    if (percent > impactThreshold && await dismiss())
+                    if (percent > impactThreshold)
                     {
+                        dismiss();
                         feedbackGenerator.ImpactOccurred();
                     }
                     else
@@ -254,19 +244,15 @@ namespace Toggl.iOS.Presentation.Transition
             }
         }
 
-        private async Task<bool> dismiss()
+        private void dismiss()
         {
-            if (PresentedViewController is IDismissableViewController dismissableViewController)
+            if (PresentedViewController is IReactiveViewController reactiveViewController)
             {
-                if (await dismissableViewController.Dismiss() == false)
-                    return false;
-            }
-            else
-            {
-                PresentedViewController.DismissViewController(true, null);
+                reactiveViewController.DismissFromNavigationController();
+                return;
             }
 
-            return true;
+            PresentedViewController.DismissViewController(true, null);
         }
 
         private void resetPosition(UIGestureRecognizer recognizer)
@@ -290,10 +276,7 @@ namespace Toggl.iOS.Presentation.Transition
                 ? UIKeyboard.FrameEndFromNotification(notification).Height
                 : 0.0;
 
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad
-                && finishedPresenting
-                && ContainerView != null
-                && PresentedViewController.PresentedViewController == null)
+            if (finishedPresenting && ContainerView != null && PresentedViewController.PresentedViewController == null)
             {
                 var animationDuration = UIKeyboard.AnimationDurationFromNotification(notification);
                 AnimationExtensions.Animate(animationDuration, Animation.Curves.StandardEase, ContainerViewWillLayoutSubviews);

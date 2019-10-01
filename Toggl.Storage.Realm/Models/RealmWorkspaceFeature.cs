@@ -1,8 +1,8 @@
 ﻿using Realms;
 using System.Linq;
 using Toggl.Shared;
-using Toggl.Storage.Models;
 using Toggl.Shared.Models;
+using Toggl.Storage.Models;
 
 namespace Toggl.Storage.Realm
 {
@@ -16,7 +16,7 @@ namespace Toggl.Storage.Realm
         }
 
         public int FeatureIdInt { get; set; }
-        
+
         public bool Enabled { get; set; }
 
         public RealmWorkspaceFeature(IWorkspaceFeature entity)

@@ -19,41 +19,22 @@ namespace Toggl.Core.UI.ViewModels
         protected ViewModel(INavigationService navigationService)
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
+
             this.navigationService = navigationService;
         }
-
-        public Task<TNavigationOutput> Navigate<TViewModel, TNavigationInput, TNavigationOutput>(TNavigationInput payload)
-            where TViewModel : ViewModel<TNavigationInput, TNavigationOutput>
-        {
-            Ensure.Argument.IsNotNull(View, nameof(View));
-
-            return navigationService.Navigate<TViewModel, TNavigationInput, TNavigationOutput>(payload, View);
-        }
-
-        public Task Navigate<TViewModel>()
-            where TViewModel : ViewModel<Unit, Unit>
-            => Navigate<TViewModel, Unit, Unit>(Unit.Default);
-
-        public Task<TNavigationOutput> Navigate<TViewModel, TNavigationOutput>()
-            where TViewModel : ViewModel<Unit, TNavigationOutput>
-            => Navigate<TViewModel, Unit, TNavigationOutput>(Unit.Default);
-
-        public Task Navigate<TViewModel, TNavigationInput>(TNavigationInput payload)
-            where TViewModel : ViewModel<TNavigationInput, Unit>
-            => Navigate<TViewModel, TNavigationInput, Unit>(payload);
 
         public virtual Task Initialize(TInput payload)
             => Task.CompletedTask;
 
-        public async Task Finish(TOutput output)
+        public virtual void CloseWithDefaultResult()
         {
-            await View.Close();
-            resultCompletionSource.SetResult(output);
+            Close(default(TOutput));
         }
 
-        public async Task Cancel()
+        public virtual void Close(TOutput output)
         {
-            resultCompletionSource.SetResult(default(TOutput));
+            View?.Close();
+            resultCompletionSource.TrySetResult(output);
         }
 
         public void AttachView(IView viewToAttach)
@@ -85,6 +66,22 @@ namespace Toggl.Core.UI.ViewModels
         public virtual void ViewDestroyed()
         {
         }
+
+        public Task<TNavigationOutput> Navigate<TViewModel, TNavigationInput, TNavigationOutput>(TNavigationInput payload)
+            where TViewModel : ViewModel<TNavigationInput, TNavigationOutput>
+            => navigationService.Navigate<TViewModel, TNavigationInput, TNavigationOutput>(payload, View);
+
+        public Task Navigate<TViewModel>()
+            where TViewModel : ViewModel<Unit, Unit>
+            => Navigate<TViewModel, Unit, Unit>(Unit.Default);
+
+        public Task<TNavigationOutput> Navigate<TViewModel, TNavigationOutput>()
+            where TViewModel : ViewModel<Unit, TNavigationOutput>
+            => Navigate<TViewModel, Unit, TNavigationOutput>(Unit.Default);
+
+        public Task Navigate<TViewModel, TNavigationInput>(TNavigationInput payload)
+            where TViewModel : ViewModel<TNavigationInput, Unit>
+            => Navigate<TViewModel, TNavigationInput, Unit>(payload);
     }
 
     public abstract class ViewModel : ViewModel<Unit, Unit>
@@ -93,13 +90,17 @@ namespace Toggl.Core.UI.ViewModels
         {
         }
 
-        public Task Finish()
-            => Finish(Unit.Default);
+        public virtual void Close() => base.Close(Unit.Default);
 
         public virtual Task Initialize()
             => Task.CompletedTask;
 
         public sealed override Task Initialize(Unit payload)
             => Initialize();
+
+        public sealed override void Close(Unit output)
+        {
+            Close();
+        }
     }
 }

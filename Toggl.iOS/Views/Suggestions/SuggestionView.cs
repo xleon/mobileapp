@@ -1,20 +1,22 @@
 ﻿using Foundation;
 using System;
+using System.Diagnostics;
 using UIKit;
 using ObjCRuntime;
-using CoreGraphics;
 using Toggl.Core.Suggestions;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
+using CoreGraphics;
+using Toggl.Core.UI.Helper;
+using Toggl.iOS.Transformations;
 
 namespace Toggl.iOS
 {
     public sealed partial class SuggestionView : UIView
     {
-        private const float noProjectDistance = 11;
-        private const float hasProjectDistance = 0;
+        ProjectTaskClientToAttributedString projectTaskClientToAttributedString;
 
-        public SuggestionView (IntPtr handle) : base (handle)
+        public SuggestionView(IntPtr handle) : base(handle)
         {
         }
 
@@ -36,45 +38,24 @@ namespace Toggl.iOS
             }
         }
 
-        public override string AccessibilityLabel
-        {
-            get
-            {
-                var accessibilityLabel = "Suggestion, ";
-                if (!string.IsNullOrEmpty(suggestion.Description))
-                    accessibilityLabel += $"Description: {suggestion.Description}, ";
-                if (suggestion.HasProject)
-                    accessibilityLabel += $"Project: {suggestion.ProjectName }, ";
-                accessibilityLabel += "tap to start a time entry";
-                return accessibilityLabel;
-            }
-            set => base.AccessibilityLabel = value;
-        }
-
         private void onSuggestionChanged()
         {
             if (Suggestion == null) return;
 
+            updateAccessibilityProperties();
+
             Hidden = false;
+
             DescriptionLabel.Text = Suggestion.Description;
+            DescriptionLabel.Hidden = Suggestion.Description == string.Empty;
+            NoDescriptionLabel.Hidden = Suggestion.Description != string.Empty;
+
+            prefixWithProviderNameInDebug();
 
             var hasProject = Suggestion.ProjectId != null;
             ProjectFadeView.Hidden = !hasProject;
 
-            if (!hasProject)
-            {
-                hideProjectTaskClient();
-                return;
-            }
-
-            var projectColor = new Color(Suggestion.ProjectColor).ToNativeColor();
-            ProjectDot.TintColor = projectColor;
-            ProjectLabel.TextColor = projectColor;
-
-            ClientLabel.Text = Suggestion.ClientName;
-            ProjectLabel.Text = Suggestion.TaskId == null
-                ? Suggestion.ProjectName
-                : $"{Suggestion.ProjectName}: {Suggestion.TaskName}";
+            ProjectLabel.AttributedText = projectTaskClientToAttributedString.Convert(Suggestion);
         }
 
         public override void AwakeFromNib()
@@ -82,16 +63,20 @@ namespace Toggl.iOS
             base.AwakeFromNib();
 
             IsAccessibilityElement = true;
-
-            ProjectDot.Image = ProjectDot
-                .Image
-                .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
+            AccessibilityHint = Resources.SuggestionAccessibilityHint;
+            AccessibilityTraits = UIAccessibilityTrait.Button;
+            NoDescriptionLabel.Text = Resources.NoDescription;
 
             DescriptionFadeView.FadeRight = true;
             ProjectFadeView.FadeRight = true;
 
             if (Suggestion == null)
                 Hidden = true;
+
+            projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
+                ProjectLabel.Font.CapHeight,
+                Colors.TimeEntriesLog.ClientColor.ToNativeColor()
+            );
         }
 
         public override void LayoutSubviews()
@@ -110,12 +95,24 @@ namespace Toggl.iOS
             Layer.ShadowColor = UIColor.Black.CGColor;
         }
 
-        private void hideProjectTaskClient()
+        private void updateAccessibilityProperties()
         {
-            ProjectDot.Hidden
-                = ProjectLabel.Hidden
-                = ClientLabel.Hidden
-                = true;
+            AccessibilityLabel = $"{Resources.Suggestion}, ";
+            if (!string.IsNullOrEmpty(suggestion.Description))
+                AccessibilityLabel += $"{suggestion.Description}, ";
+            if (suggestion.HasProject)
+                AccessibilityLabel += $"{Resources.Project}: {suggestion.ProjectName }, ";
+            if (suggestion.HasTask)
+                AccessibilityLabel += $"{Resources.Task}: {suggestion.TaskName}, ";
+            if (suggestion.HasClient)
+                AccessibilityLabel += $"{Resources.Client}: {suggestion.ClientName}";
+        }
+
+        [Conditional("DEBUG")]
+        private void prefixWithProviderNameInDebug()
+        {
+            var prefix = Suggestion.ProviderType.ToString().Substring(0, 4);
+            DescriptionLabel.Text = $"{prefix} {Suggestion.Description}";
         }
     }
 }

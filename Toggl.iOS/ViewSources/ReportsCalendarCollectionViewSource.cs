@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Foundation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.iOS.Views;
@@ -20,7 +21,7 @@ namespace Toggl.iOS.ViewSources
         private readonly ISubject<ReportsCalendarDayViewModel> dayTaps = new Subject<ReportsCalendarDayViewModel>();
 
         private ReportsDateRangeParameter currentSelectedDateRange;
-        private List<ReportsCalendarPageViewModel> months = new List<ReportsCalendarPageViewModel>();
+        private IImmutableList<ReportsCalendarPageViewModel> months = ImmutableList<ReportsCalendarPageViewModel>.Empty;
 
         public IObservable<ReportsCalendarDayViewModel> DayTaps { get; }
         public IObservable<int> CurrentPageNotScrollingObservable { get; }
@@ -47,7 +48,7 @@ namespace Toggl.iOS.ViewSources
             return cell;
         }
 
-        public void UpdateMonths(List<ReportsCalendarPageViewModel> newMonths)
+        public void UpdateMonths(IImmutableList<ReportsCalendarPageViewModel> newMonths)
         {
             months = newMonths;
             if (currentSelectedDateRange != null)
@@ -79,7 +80,7 @@ namespace Toggl.iOS.ViewSources
             => months.Count;
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
-            => months[(int) section].Days.Count;
+            => months[(int)section].Days.Count;
 
         public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
         {
@@ -88,13 +89,13 @@ namespace Toggl.iOS.ViewSources
 
         public override void DecelerationEnded(UIScrollView scrollView)
         {
-            var page = (int) ((collectionView.ContentOffset.X + collectionView.Frame.Width/2) / collectionView.Frame.Width);
+            var page = (int)((collectionView.ContentOffset.X + collectionView.Frame.Width / 2) / collectionView.Frame.Width);
             currentPageNotScrollingSubject.OnNext(page);
         }
 
         public override void Scrolled(UIScrollView scrollView)
         {
-            var page = (int) ((collectionView.ContentOffset.X + collectionView.Frame.Width/2) / collectionView.Frame.Width);
+            var page = (int)((collectionView.ContentOffset.X + collectionView.Frame.Width / 2) / collectionView.Frame.Width);
             currentPageWhileScrollingSubject.OnNext(page);
         }
     }

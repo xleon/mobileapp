@@ -1,16 +1,15 @@
-using System;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
+using System;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Storage;
 using Toggl.Storage.Models;
-using Toggl.Shared.Models;
 using Xunit;
 using ITimeEntryPrototype = Toggl.Core.Models.ITimeEntryPrototype;
 
@@ -237,7 +236,7 @@ namespace Toggl.Core.Tests.Interactors
                     Duration = prototype.Duration?.Ticks,
                     Description = prototype.Description,
                     TagIds = prototype.TagIds
-                });
+                }, SuggestionProviderType.MostUsedTimeEntries);
 
                 return InteractorFactory.StartSuggestion(suggestion).Execute();
             }

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;

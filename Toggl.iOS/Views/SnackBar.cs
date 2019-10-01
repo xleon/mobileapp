@@ -1,8 +1,7 @@
-using System;
-using CoreGraphics;
+﻿using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
-using Toggl.Core;
+using System;
 using Toggl.Shared;
 using UIKit;
 
@@ -39,7 +38,7 @@ namespace Toggl.iOS
         private bool showing = false;
         private string text;
 
-        public SnackBar (IntPtr handle) : base (handle)
+        public SnackBar(IntPtr handle) : base(handle)
         {
         }
 
@@ -48,22 +47,25 @@ namespace Toggl.iOS
             var arr = NSBundle.MainBundle.LoadNib("SnackBar", null, null);
             var snackBar = Runtime.GetNSObject<SnackBar>(arr.ValueAt(0));
 
-            snackBar.TextAttributes = new UIStringAttributes{
+            snackBar.TextAttributes = new UIStringAttributes
+            {
                 ForegroundColor = snackBar.label.TextColor,
                 Font = snackBar.label.Font
             };
 
-            snackBar.ButtonAttributes = new UIStringAttributes{
+            snackBar.ButtonAttributes = new UIStringAttributes
+            {
                 ForegroundColor = snackBar.label.TextColor,
                 Font = UIFont.SystemFontOfSize(14, UIFontWeight.Semibold)
             };
 
             snackBar.text = text;
+            snackBar.IsAccessibilityElement = false;
             snackBar.configure();
             return snackBar;
         }
 
-        public void AddButton(String title, Action onTap)
+        public void AddButton(String title, Action onTap, string accessibilityLabel = null)
         {
             var button = new UIButton(UIButtonType.Plain);
             button.TouchUpInside += (sender, e) =>
@@ -74,6 +76,8 @@ namespace Toggl.iOS
             button.SetContentCompressionResistancePriority(1000, UILayoutConstraintAxis.Vertical);
             button.SetContentCompressionResistancePriority(1000, UILayoutConstraintAxis.Horizontal);
             button.HorizontalAlignment = UIControlContentHorizontalAlignment.Right;
+            button.IsAccessibilityElement = !string.IsNullOrEmpty(accessibilityLabel);
+            button.AccessibilityLabel = accessibilityLabel;
             buttonsStackView.AddArrangedSubview(button);
 
             SetNeedsLayout();
@@ -187,7 +191,7 @@ namespace Toggl.iOS
             public static SnackBar CreateUndoSnackBar(Action onUndo, string text)
             {
                 var snackBar = SnackBar.Create(text);
-                snackBar.AddButton(Resources.UndoButtonTitle, onUndo);
+                snackBar.AddButton(Resources.UndoButtonTitle, onUndo, Resources.UndoDeletedTimeEntry);
                 return snackBar;
             }
         }

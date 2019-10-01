@@ -1,8 +1,8 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;
 using Xunit;

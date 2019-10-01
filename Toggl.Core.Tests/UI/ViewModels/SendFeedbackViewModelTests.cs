@@ -1,22 +1,21 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Interactors;
-using Toggl.Core.UI.Services;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 using Toggl.Shared.Extensions;
 using Xunit;
-using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -188,7 +187,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var viewModel = CreateViewModel();
 
                 viewModel.IsLoading.StartWith(true).Subscribe(observer);
-                viewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
                 observer.LastEmittedValue().Should().BeFalse();
@@ -236,10 +235,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.FeedbackText.OnNext(string.Empty);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Property]
@@ -247,7 +246,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.FeedbackText.OnNext(feedbackText.Get);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
                 View.Received().ConfirmDestructiveAction(Arg.Any<ActionType>());
@@ -259,10 +258,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 View.ConfirmDestructiveAction(Arg.Any<ActionType>()).Returns(Observable.Return(true));
                 ViewModel.FeedbackText.OnNext(feedbackText.Get);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                View.Received().Close().Wait();
+                View.Received().Close();
             }
 
             [Property]
@@ -271,10 +270,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 View.ConfirmDestructiveAction(Arg.Any<ActionType>()).Returns(Observable.Return(false));
                 ViewModel.FeedbackText.OnNext(feedbackText.Get);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 TestScheduler.Start();
-                View.DidNotReceive().Close().Wait();
+                View.DidNotReceive().Close();
             }
         }
 

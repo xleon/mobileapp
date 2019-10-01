@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources.Interfaces;
-using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -47,7 +44,7 @@ namespace Toggl.Core.Sync.States.Pull
 
         private IObservable<IThreadSafeWorkspace> allStoredWorkspaces()
             => dataSource.GetAll(ws => ws.Id > 0 && ws.IsInaccessible == false)
-                         .SelectMany(CommonFunctions.Identity);
+                         .Flatten();
 
         private ITransition processLostWorkspaces(
             IEnumerable<IThreadSafeWorkspace> workspaces,

@@ -2,9 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>day_count</key>
+    <key>UserRatingDialogDelayInDays</key>
     <integer>5</integer>
-    <key>criterion</key>
+    <key>UserRatingDialogTrigger</key>
     <string>none</string>
+    <key>PushNotificationsRegisterTokenWithServer</key>
+    <false/>
+    <key>PushNotificationsHandle</key>
+    <false/>
 </dict>
 </plist>

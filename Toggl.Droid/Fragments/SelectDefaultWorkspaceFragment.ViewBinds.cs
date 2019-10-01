@@ -9,7 +9,7 @@ namespace Toggl.Droid.Fragments
 
         protected override void InitializeViews(View rootView)
         {
-            recyclerView = rootView.FindViewById<RecyclerView>(Resource.Id.SelectWorkspaceRecyclerView);
+            recyclerView = rootView.FindViewById<RecyclerView>(Resource.Id.SelectDefaultWorkspaceRecyclerView);
         }
     }
 }

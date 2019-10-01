@@ -1,23 +1,23 @@
-using System;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Core.DataSources;
+using System;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Networking.Models.Reports;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models.Reports;
-using Toggl.Networking.Models.Reports;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels.Reports
@@ -74,11 +74,11 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             new TimeEntriesTotalsGroup { Total = TimeSpan.FromHours(8),  Billable = TimeSpan.FromHours(7) }
         };
 
-        private readonly ITestableObserver<BarViewModel[]> barsObserver;
+        private readonly ITestableObserver<IImmutableList<BarViewModel>> barsObserver;
 
         public TheBarsObservable()
         {
-            barsObserver = TestScheduler.CreateObserver<BarViewModel[]>();
+            barsObserver = TestScheduler.CreateObserver<IImmutableList<BarViewModel>>();
             ViewModel.Bars.Subscribe(barsObserver);
         }
 
@@ -140,7 +140,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
         {
             if (days.Get <= 7) return;
 
-            var legendObserver = TestScheduler.CreateObserver<DateTimeOffset[]>();
+            var legendObserver = TestScheduler.CreateObserver<IImmutableList<DateTimeOffset>>();
             var viewModel = CreateViewModel();
             viewModel.HorizontalLegend.Subscribe(legendObserver);
             var groups = Enumerable.Range(0, days.Get)
@@ -151,7 +151,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             ReportsSubject.OnNext(Report);
 
             TestScheduler.Start();
-            legendObserver.SingleEmittedValue().Should().BeNull();
+            legendObserver.SingleEmittedValue().Should().BeEmpty();
         }
 
         [Theory]
@@ -159,7 +159,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
         [InlineData(Resolution.Week)]
         public void DoesNotEmitNewValuesForWeeksOrMonthsResolution(Resolution resolution)
         {
-            var legendObserver = TestScheduler.CreateObserver<DateTimeOffset[]>();
+            var legendObserver = TestScheduler.CreateObserver<IImmutableList<DateTimeOffset>>();
             ViewModel.HorizontalLegend.Subscribe(legendObserver);
             Report.Groups.Returns(new ITimeEntriesTotalsGroup[0]);
             Report.Resolution.Returns(resolution);
@@ -167,7 +167,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             ReportsSubject.OnNext(Report);
 
             TestScheduler.Start();
-            legendObserver.SingleEmittedValue().Should().BeNull();
+            legendObserver.SingleEmittedValue().Should().BeEmpty();
         }
 
         [Theory]
@@ -181,7 +181,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
         public void EmitsASequenceOfDays(int daysCount)
         {
             var start = new DateTimeOffset(2018, 09, 13, 14, 15, 16, TimeSpan.Zero);
-            var legendObserver = TestScheduler.CreateObserver<DateTimeOffset[]>();
+            var legendObserver = TestScheduler.CreateObserver<IImmutableList<DateTimeOffset>>();
             ViewModel.HorizontalLegend.Subscribe(legendObserver);
             var groups = Enumerable.Range(0, daysCount)
                 .Select(_ => Substitute.For<ITimeEntriesTotalsGroup>())

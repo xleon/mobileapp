@@ -1,10 +1,12 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.App.Job;
+using System;
+using System.Reactive.Linq;
+using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.Droid.Services
 {
-    [Service(Exported = true, 
+    [Service(Exported = true,
              Permission = "android.permission.BIND_JOB_SERVICE",
              Name = "com.toggl.giskard.BackgroundSyncJobSchedulerService")]
     public class BackgroundSyncJobSchedulerService : JobService
@@ -15,19 +17,15 @@ namespace Toggl.Droid.Services
 
         public override bool OnStartJob(JobParameters @params)
         {
-            // Background sync is temporary disabled due to a crash that is hard to reproduce
-            // Calling JobFinished and eturning early here stops the background job from running
-            JobFinished(@params, false);
-            return true;
-
+            AndroidDependencyContainer.EnsureInitialized(ApplicationContext);
             var dependencyContainer = AndroidDependencyContainer.Instance;
             if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
                 return false;
 
-            disposable = dependencyContainer.InteractorFactory
-                .RunBackgroundSync()
-                .Execute()
-                .Subscribe(_ => JobFinished(@params, false));
+            disposable = dependencyContainer.SyncManager
+                .PullTimeEntries()
+                .Subscribe(DoNothing, DoNothing,
+                    () => JobFinished(@params, false));
 
             return true;
         }
@@ -37,6 +35,8 @@ namespace Toggl.Droid.Services
             AndroidDependencyContainer
                 .Instance.AnalyticsService
                 .BackgroundSyncMustStopExcecution.Track();
+
+            disposable?.Dispose();
             return true;
         }
     }

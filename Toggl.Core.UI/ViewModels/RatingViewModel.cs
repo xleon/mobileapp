@@ -4,11 +4,11 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.Services;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
@@ -20,12 +20,10 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class RatingViewModel : ViewModel
     {
         private readonly ITimeService timeService;
-        private readonly ITogglDataSource dataSource;
         private readonly IRatingService ratingService;
         private readonly IAnalyticsService analyticsService;
         private readonly IOnboardingStorage onboardingStorage;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly IRxActionFactory rxActionFactory;
 
         private readonly BehaviorSubject<bool?> impressionSubject = new BehaviorSubject<bool?>(null);
         private readonly ISubject<bool> isFeedbackSuccessViewShowing = new Subject<bool>();
@@ -38,21 +36,14 @@ namespace Toggl.Core.UI.ViewModels
 
         public IObservable<bool?> Impression { get; }
 
-        public IObservable<string> CallToActionTitle { get; }
-
-        public IObservable<string> CallToActionDescription { get; }
-
-        public IObservable<string> CallToActionButtonTitle { get; }
-
         public IObservable<bool> IsFeedbackSuccessViewShowing { get; }
 
         public IObservable<Unit> HideRatingView { get; }
 
-        public UIAction PerformMainAction { get; }
+        public ViewAction PerformMainAction { get; }
 
         public RatingViewModel(
             ITimeService timeService,
-            ITogglDataSource dataSource,
             IRatingService ratingService,
             IAnalyticsService analyticsService,
             IOnboardingStorage onboardingStorage,
@@ -61,7 +52,6 @@ namespace Toggl.Core.UI.ViewModels
             IRxActionFactory rxActionFactory)
             : base(navigationService)
         {
-            Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(ratingService, nameof(ratingService));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
@@ -69,27 +59,13 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            this.dataSource = dataSource;
             this.timeService = timeService;
             this.ratingService = ratingService;
             this.analyticsService = analyticsService;
             this.onboardingStorage = onboardingStorage;
             this.schedulerProvider = schedulerProvider;
-            this.rxActionFactory = rxActionFactory;
 
             Impression = impressionSubject.AsDriver(this.schedulerProvider);
-
-            CallToActionTitle = impressionSubject
-                .Select(callToActionTitle)
-                .AsDriver(this.schedulerProvider);
-
-            CallToActionDescription = impressionSubject
-                .Select(callToActionDescription)
-                .AsDriver(this.schedulerProvider);
-
-            CallToActionButtonTitle = impressionSubject
-                .Select(callToActionButtonTitle)
-                .AsDriver(this.schedulerProvider);
 
             IsFeedbackSuccessViewShowing = isFeedbackSuccessViewShowing.AsDriver(this.schedulerProvider);
 
@@ -120,36 +96,6 @@ namespace Toggl.Core.UI.ViewModels
                     RatingViewOutcome.NegativeImpression,
                     analyticsService.RatingViewFirstStepDislike);
             }
-        }
-
-        private string callToActionTitle(bool? impressionIsPositive)
-        {
-            if (impressionIsPositive == null)
-                return string.Empty;
-
-            return impressionIsPositive.Value
-                   ? Resources.RatingViewPositiveCallToActionTitle
-                   : Resources.RatingViewNegativeCallToActionTitle;
-        }
-
-        private string callToActionDescription(bool? impressionIsPositive)
-        {
-            if (impressionIsPositive == null)
-                return string.Empty;
-
-            return impressionIsPositive.Value
-                   ? Resources.RatingViewPositiveCallToActionDescription
-                   : Resources.RatingViewNegativeCallToActionDescription;
-        }
-
-        private string callToActionButtonTitle(bool? impressionIsPositive)
-        {
-            if (impressionIsPositive == null)
-                return string.Empty;
-
-            return impressionIsPositive.Value
-                   ? Resources.RatingViewPositiveCallToActionButtonTitle
-                   : Resources.RatingViewNegativeCallToActionButtonTitle;
         }
 
         private async Task performMainAction()

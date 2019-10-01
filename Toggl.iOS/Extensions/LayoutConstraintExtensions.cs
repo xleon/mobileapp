@@ -1,7 +1,7 @@
-﻿using UIKit;
-using System;
+﻿using System;
 using Toggl.Core.UI.Helper;
 using Toggl.Shared;
+using UIKit;
 
 namespace Toggl.iOS.Extensions
 {

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.DTOs

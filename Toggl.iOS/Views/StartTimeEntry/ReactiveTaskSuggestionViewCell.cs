@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.iOS.Cells;
 using UIKit;

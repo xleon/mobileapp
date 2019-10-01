@@ -1,6 +1,4 @@
-﻿using System;
-using Toggl.Core.Models.Interfaces;
-using Toggl.Shared.Models;
+﻿using Toggl.Core.Models.Interfaces;
 
 namespace Toggl.Core.Autocomplete.Span
 {

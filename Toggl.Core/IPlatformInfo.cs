@@ -1,5 +1,3 @@
-﻿using Toggl.Networking.Network;
-
 namespace Toggl.Core
 {
     public interface IPlatformInfo
@@ -12,6 +10,10 @@ namespace Toggl.Core
         string BuildNumber { get; }
         string OperatingSystem { get; }
         string TimezoneIdentifier { get; }
+        string StoreUrl { get; }
+        string CurrentNativeLanguageCode { get; }
+        
+        ApplicationInstallLocation InstallLocation { get; }
     }
 
     public enum Platform

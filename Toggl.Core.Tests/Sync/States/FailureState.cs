@@ -1,9 +1,8 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute.ExceptionExtensions;
 using Toggl.Core.Sync.States;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Network;

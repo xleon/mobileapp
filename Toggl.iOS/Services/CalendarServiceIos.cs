@@ -1,11 +1,11 @@
-﻿using System;
+﻿using EventKit;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using EventKit;
-using Toggl.iOS.Extensions;
 using Toggl.Core.Calendar;
 using Toggl.Core.UI.Services;
+using Toggl.iOS.Extensions;
 using Toggl.Shared;
 
 namespace Toggl.iOS.Services
@@ -15,7 +15,7 @@ namespace Toggl.iOS.Services
         private EKEventStore eventStore => new EKEventStore();
 
         public CalendarServiceIos(IPermissionsChecker permissionsChecker)
-            : base (permissionsChecker)
+            : base(permissionsChecker)
         {
         }
 

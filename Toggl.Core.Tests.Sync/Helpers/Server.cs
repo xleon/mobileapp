@@ -7,21 +7,20 @@ using Toggl.Core.Exceptions;
 using Toggl.Core.Tests.Sync.Exceptions;
 using Toggl.Core.Tests.Sync.Extensions;
 using Toggl.Core.Tests.Sync.State;
-using Toggl.Shared;
-using Toggl.Shared.Extensions;
-using Toggl.Shared.Models;
 using Toggl.Networking;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Helpers;
 using Toggl.Networking.Network;
 using Toggl.Networking.Tests.Integration.Helper;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using Toggl.Shared.Models;
 
 namespace Toggl.Core.Tests.Sync.Helpers
 {
     public sealed class Server
     {
         public ITogglApi Api { get; }
-
         public ServerState InitialServerState { get; }
 
         private Server(ITogglApi api, ServerState initialServerState)
@@ -40,9 +39,10 @@ namespace Toggl.Core.Tests.Sync.Helpers
             var tasks = await Api.Tasks.GetAll();
             var timeEntries = await Api.TimeEntries.GetAll();
             var workspaces = await Api.Workspaces.GetAll();
+            var tokens = await Api.PushServices.GetAll();
 
             return new ServerState(
-                user, clients, projects, preferences, tags, tasks, timeEntries, workspaces);
+                user, clients, projects, preferences, tags, tasks, timeEntries, workspaces, pushNotificationsTokens: tokens);
         }
 
         public async Task Push(ServerState state)
@@ -215,6 +215,11 @@ namespace Toggl.Core.Tests.Sync.Helpers
             }
 
             await timeEntries.Select(Api.TimeEntries.Create).Merge().ToList();
+
+            if (state.PushNotificationsTokens.Any())
+            {
+                await state.PushNotificationsTokens.Select(Api.PushServices.Subscribe).Merge();
+            }
         }
 
         public static class Factory
@@ -240,7 +245,8 @@ namespace Toggl.Core.Tests.Sync.Helpers
                 {
                     if (user != null) await Task.Delay(TimeSpan.FromSeconds(1));
                     user = await Networking.Tests.Integration.User.Create();
-                } while (user.DefaultWorkspaceId.HasValue == false && ++numberOfTries < 3);
+                }
+                while (user.DefaultWorkspaceId.HasValue == false && ++numberOfTries < 3);
 
                 if (!user.DefaultWorkspaceId.HasValue)
                     throw new NoDefaultWorkspaceException($"Failed to create a new user account for testing even after {numberOfTries} tries.");

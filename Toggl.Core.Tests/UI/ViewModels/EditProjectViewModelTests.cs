@@ -1,21 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using NSubstitute;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.DTOs;
+using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Tests.Generators;
-using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Views;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Xunit;
 using ProjectPredicate = System.Func<Toggl.Storage.Models.IDatabaseProject, bool>;
-using Toggl.Shared;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -67,7 +71,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     RxActionFactory,
                     InteractorFactory,
                     SchedulerProvider,
-                    StopwatchProvider,
                     NavigationService
                 );
         }
@@ -125,10 +128,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         Observable.Return(projects)
                             .Select(p => p.Where<IThreadSafeProject>(callInfo.Arg<ProjectPredicate>())));
 
-                NavigationService
-                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(Arg.Any<SelectWorkspaceParameters>(), ViewModel.View)
-                    .Returns(Task.FromResult(1L));
-
+                View.Select(
+                    Arg.Any<string>(),
+                    Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(),
+                    Arg.Any<int>())
+                    .Returns(Observable.Return(new MockWorkspace { Id = 1L }));
             }
         }
 
@@ -141,23 +145,20 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useRxActionFactory,
                 bool useInteractorFactory,
                 bool useSchedulerProvider,
-                bool useNavigationService,
-                bool useStopwatchProvider)
+                bool useNavigationService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
-                var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
-
+            
                 Action tryingToConstructWithEmptyParameters =
                     () => new EditProjectViewModel(
                         dataSource,
                         rxActionFactory,
                         interactorFactory,
                         schedulerProvider,
-                        stopwatchProvider,
                         navigationService
                     );
 
@@ -322,15 +323,47 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : EditProjectViewModelTest
+        public sealed class TheIsPrivateProperty : EditProjectViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public void DefaultsToTrue()
+            {
+                ViewModel.IsPrivate.Value.Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task IsSetToTrueWhenTheUserSelectsAWorkspaceInWhichTheyAreNotAdmins()
+            {
+                var mockWorkspace = new MockWorkspace { Admin = false };
+                var interactor = Substitute.For<IInteractor<IObservable<IThreadSafeWorkspace>>>();
+                interactor.Execute().Returns(Observable.Return(mockWorkspace));
+                InteractorFactory.GetWorkspaceById(Arg.Is(1L)).Returns(interactor);
+                
+                View.Select(
+                        Arg.Any<string>(),
+                        Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(),
+                        Arg.Any<int>())
+                    .Returns(Observable.Return(new MockWorkspace { Id = 1L }));
+                ViewModel.CanCreatePublicProjects.Subscribe();
+
+                ViewModel.IsPrivate.Accept(false);
+                var awaitable = ViewModel.PickWorkspace.ExecuteWithCompletion(Unit.Default);
+                TestScheduler.Start();
+                await awaitable;
+
+                ViewModel.IsPrivate.Value.Should().BeTrue();
+            }
+        }
+
+        public sealed class TheCloseWithDefaultResultMethod : EditProjectViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -338,7 +371,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.Initialize("Some name");
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 (await ViewModel.Result)
@@ -350,7 +383,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.Initialize("Some name");
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 InteractorFactory.CreateProject(Arg.Any<CreateProjectDTO>()).DidNotReceive().Execute();
@@ -493,9 +526,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         .GetDefaultWorkspace()
                         .Execute()
                         .Returns(Observable.Return(defaultWorkspace));
-                    NavigationService
-                       .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(Arg.Any<SelectWorkspaceParameters>(), View)
-                       .Returns(Task.FromResult(selectedWorkspaceId));
+
+                    View.Select(
+                        Arg.Any<string>(),
+                        Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(),
+                        Arg.Any<int>())
+                        .Returns(Observable.Return(new MockWorkspace { Id = selectedWorkspaceId }));
                 }
 
                 protected override void AdditionalViewModelSetup()
@@ -602,21 +638,25 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public void CallsTheSelectWorkspaceViewModel()
+            public void CallsTheModalForSelectingWorkspace()
             {
                 ViewModel.PickWorkspace.Execute();
                 TestScheduler.Start();
 
-                NavigationService.Received()
-                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(Arg.Any<SelectWorkspaceParameters>(), ViewModel.View);
+                View.Received().Select(
+                    Arg.Any<string>(),
+                    Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(),
+                    Arg.Any<int>());
             }
 
             [Fact, LogIfTooSlow]
             public void SetsTheReturnedWorkspaceNameAsTheWorkspaceNameProperty()
             {
-                NavigationService
-                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(Arg.Any<SelectWorkspaceParameters>(), ViewModel.View)
-                    .Returns(Task.FromResult(workspaceId));
+                View.Select(
+                    Arg.Any<string>(),
+                    Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(),
+                    Arg.Any<int>())
+                    .Returns(Observable.Return(new MockWorkspace { Id = workspaceId }));
                 TestScheduler.Start();
                 var workspaceObserver = TestScheduler.CreateObserver<string>();
                 ViewModel.WorkspaceName.Subscribe(workspaceObserver);
@@ -630,9 +670,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void ResetsTheClientNameWhenTheWorkspaceChanges()
             {
-                NavigationService
-                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(Arg.Any<SelectWorkspaceParameters>(), ViewModel.View)
-                    .Returns(Task.FromResult(workspaceId));
+                View.Select(
+                    Arg.Any<string>(),
+                    Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(),
+                    Arg.Any<int>())
+                    .Returns(Observable.Return(new MockWorkspace { Id = workspaceId }));
                 var clientObserver = TestScheduler.CreateObserver<string>();
                 ViewModel.ClientName.Subscribe(clientObserver);
 
@@ -649,9 +691,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 NavigationService
                     .Navigate<SelectColorViewModel, ColorParameters, Color>(Arg.Any<ColorParameters>(), ViewModel.View)
                     .Returns(Task.FromResult(someColor));
-                NavigationService
-                    .Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(Arg.Any<SelectWorkspaceParameters>(), ViewModel.View)
-                    .Returns(Task.FromResult(workspaceId));
+                View.Select(
+                    Arg.Any<string>(),
+                    Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(),
+                    Arg.Any<int>())
+                    .Returns(Observable.Return(new MockWorkspace { Id = workspaceId }));
                 InteractorFactory.AreCustomColorsEnabledForWorkspace(workspaceId).Execute()
                     .Returns(Observable.Return(false));
                 ViewModel.PickColor.Execute();

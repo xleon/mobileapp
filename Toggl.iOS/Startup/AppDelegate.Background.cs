@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Toggl.Shared.Extensions;
@@ -14,6 +13,7 @@ namespace Toggl.iOS
 
         public override void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
         {
+            IosDependencyContainer.Instance.BackgroundService.EnterBackgroundFetch();
             var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
             interactorFactory?.RunBackgroundSync()
                 .Execute()

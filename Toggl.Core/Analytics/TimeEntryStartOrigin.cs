@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Toggl.Core.Analytics
+﻿namespace Toggl.Core.Analytics
 {
     public enum TimeEntryStartOrigin
     {
@@ -70,5 +68,15 @@ namespace Toggl.Core.Analytics
         /// Starting a time entry via an url
         /// </summary>
         Deeplink,
+
+        /// <summary>
+        /// Starting a time entry by long pressing the Play button in Manual mode
+        /// </summary>
+        TimerLongPress,
+
+        /// <summary>
+        /// Starting a time entry by long pressing the Play button in Timer mode
+        /// </summary>
+        ManualLongPress
     }
 }

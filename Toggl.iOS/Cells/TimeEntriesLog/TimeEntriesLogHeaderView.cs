@@ -1,10 +1,10 @@
-﻿using System;
-using System.Reactive.Disposables;
-using Foundation;
-using Toggl.iOS.Extensions;
-using UIKit;
+﻿using Foundation;
+using System;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
+using Toggl.Shared;
+using UIKit;
 
 namespace Toggl.iOS.Views
 {
@@ -29,7 +29,9 @@ namespace Toggl.iOS.Views
         {
             base.AwakeFromNib();
 
+            IsAccessibilityElement = true;
             ContentView.BackgroundColor = UIColor.White;
+            AccessibilityTraits = UIAccessibilityTrait.Header;
             DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
         }
 
@@ -37,6 +39,12 @@ namespace Toggl.iOS.Views
         {
             DateLabel.Text = Item.Title;
             DurationLabel.Text = Item.TotalTrackedTime;
+            updateAccessibilityProperties();
+        }
+
+        private void updateAccessibilityProperties()
+        {
+            AccessibilityLabel = $"{Item.Title}, {Resources.TrackedTime}: {Item.TotalTrackedTime}";
         }
     }
 }

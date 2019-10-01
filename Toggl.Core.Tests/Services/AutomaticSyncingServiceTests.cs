@@ -1,8 +1,8 @@
+using NSubstitute;
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using NSubstitute;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Storage.Settings;

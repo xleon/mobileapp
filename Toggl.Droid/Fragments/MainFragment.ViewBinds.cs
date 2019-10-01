@@ -13,7 +13,6 @@ namespace Toggl.Droid.Fragments
         private FloatingActionButton playButton;
         private FloatingActionButton stopButton;
         private CoordinatorLayout coordinatorLayout;
-        private View timeEntryCard;
         private TextView timeEntryCardTimerLabel;
         private TextView timeEntryCardDescriptionLabel;
         private TextView timeEntryCardAddDescriptionLabel;
@@ -26,16 +25,18 @@ namespace Toggl.Droid.Fragments
         private View emptyStateView;
         private ViewStub welcomeBackStub;
         private View welcomeBackView;
+        private TextView welcomeBackTitle;
+        private TextView welcomeBackSubText;
         private Toolbar toolbar;
+        private AppBarLayout appBarLayout;
 
         protected override void InitializeViews(View fragmentView)
         {
             mainRecyclerView = fragmentView.FindViewById<RecyclerView>(Resource.Id.MainRecyclerView);
-            runningEntryCardFrame = fragmentView.FindViewById(Resource.Id.MainRunningTimeEntryFrame);
+            runningEntryCardFrame = fragmentView.FindViewById(Resource.Id.MainRunningTimeEntrySheet);
             playButton = fragmentView.FindViewById<FloatingActionButton>(Resource.Id.MainPlayButton);
             stopButton = fragmentView.FindViewById<FloatingActionButton>(Resource.Id.MainStopButton);
             coordinatorLayout = fragmentView.FindViewById<CoordinatorLayout>(Resource.Id.MainCoordinatorLayout);
-            timeEntryCard = fragmentView.FindViewById(Resource.Id.MainContentArea);
             timeEntryCardTimerLabel = fragmentView.FindViewById<TextView>(Resource.Id.MainRunningTimeEntryTimerLabel);
             timeEntryCardDescriptionLabel = fragmentView.FindViewById<TextView>(Resource.Id.MainRunningTimeEntryDescription);
             timeEntryCardAddDescriptionLabel = fragmentView.FindViewById<TextView>(Resource.Id.MainRunningTimeEntryAddDescriptionLabel);
@@ -46,6 +47,9 @@ namespace Toggl.Droid.Fragments
             emptyStateViewStub = fragmentView.FindViewById<ViewStub>(Resource.Id.EmptyStateViewStub);
             welcomeBackStub = fragmentView.FindViewById<ViewStub>(Resource.Id.WelcomeBackViewStub);
             toolbar = fragmentView.FindViewById<Toolbar>(Resource.Id.Toolbar);
+            appBarLayout = fragmentView.FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
+            
+            timeEntryCardAddDescriptionLabel.Text = Shared.Resources.AddDescription;
         }
     }
 }

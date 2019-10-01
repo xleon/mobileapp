@@ -1,13 +1,14 @@
-using System;
-using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
-using Android.OS;
+using Android.Runtime;
 using Android.Views;
+using System;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Presentation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
@@ -19,22 +20,27 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class LoginActivity : ReactiveActivity<LoginViewModel>
     {
-        protected override void OnCreate(Bundle bundle)
+        public LoginActivity() : base(
+            Resource.Layout.LoginActivity,
+            Resource.Style.AppTheme,
+            Transitions.SlideInFromBottom)
+        { }
+
+        public LoginActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
-            SetTheme(Resource.Style.AppTheme_WhiteStatusBar);
-            base.OnCreate(bundle);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.LoginActivity);
-            OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
+        }
+        protected override void InitializeBindings()
+        {
+            ViewModel.Email.FirstAsync()
+                .SubscribeOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
+                .Subscribe(emailEditText.Rx().TextObserver())
+                .DisposedBy(DisposeBag);
 
-            InitializeViews();
-
-            emailEditText.Text = ViewModel.Email.FirstAsync().GetAwaiter().GetResult();
-            passwordEditText.Text = ViewModel.Password.FirstAsync().GetAwaiter().GetResult();
+            ViewModel.Password.FirstAsync()
+                .SubscribeOn(AndroidDependencyContainer.Instance.SchedulerProvider.MainScheduler)
+                .Subscribe(passwordEditText.Rx().TextObserver())
+                .DisposedBy(DisposeBag);
 
             //Text
             ViewModel.ErrorMessage
@@ -91,7 +97,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             string loginButtonTitle(bool isLoading)
-                => isLoading ? "" : Resources.GetString(Resource.String.Login);
+                => isLoading ? "" : Shared.Resources.LoginTitle;
 
             this.CancelAllNotifications();
         }

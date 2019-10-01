@@ -2,20 +2,19 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Extensions;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Transformations;
-using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Core.Helper.Constants;
 using static Toggl.Core.UI.Helper.TemporalInconsistency;
-using static Toggl.Shared.BeginningOfWeek;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -40,12 +39,11 @@ namespace Toggl.Core.UI.ViewModels
         private BehaviorSubject<DateTimeOffset> minimumDateTime = new BehaviorSubject<DateTimeOffset>(default(DateTimeOffset));
         private BehaviorSubject<DateTimeOffset> maximumDateTime = new BehaviorSubject<DateTimeOffset>(default(DateTimeOffset));
 
-        public UIAction Save { get; }
-        public UIAction Close { get; }
-        public UIAction EditStartTime { get; }
-        public UIAction EditStopTime { get; }
-        public UIAction StopEditingTime { get; }
-        public UIAction StopTimeEntry { get; }
+        public ViewAction Save { get; }
+        public ViewAction EditStartTime { get; }
+        public ViewAction EditStopTime { get; }
+        public ViewAction StopEditingTime { get; }
+        public ViewAction StopTimeEntry { get; }
         public InputAction<DateTimeOffset> ChangeStartTime { get; }
         public InputAction<DateTimeOffset> ChangeStopTime { get; }
         public InputAction<DateTimeOffset> ChangeActiveTime { get; }
@@ -92,8 +90,7 @@ namespace Toggl.Core.UI.ViewModels
             this.analyticsService = analyticsService;
             this.dataSource = dataSource;
 
-            Save = rxActionFactory.FromAsync(save);
-            Close = rxActionFactory.FromAsync(close);
+            Save = rxActionFactory.FromAction(save);
             EditStartTime = rxActionFactory.FromAction(editStartTime);
             EditStopTime = rxActionFactory.FromAction(editStopTime);
             StopEditingTime = rxActionFactory.FromAction(stopEditingTime);
@@ -141,6 +138,13 @@ namespace Toggl.Core.UI.ViewModels
             MaximumStartTime = stopTime.AsDriver(schedulerProvider);
             MinimumStopTime = startTime.AsDriver(schedulerProvider);
             MaximumStopTime = startTime.Select(v => v.AddHours(MaxTimeEntryDurationInHours)).AsDriver(schedulerProvider);
+        }
+
+        public override void CloseWithDefaultResult()
+        {
+            analyticsEvent = analyticsEvent.With(result: EditDurationEvent.Result.Cancel);
+            analyticsService.Track(analyticsEvent);
+            Close(defaultResult);
         }
 
         private void updateStopTime(DateTimeOffset stopTime)
@@ -192,20 +196,13 @@ namespace Toggl.Core.UI.ViewModels
             analyticsEvent = analyticsEvent.UpdateWith(source);
         }
 
-        private Task close()
-        {
-            analyticsEvent = analyticsEvent.With(result: EditDurationEvent.Result.Cancel);
-            analyticsService.Track(analyticsEvent);
-            return Finish(defaultResult);
-        }
-
-        private Task save()
+        private void save()
         {
             analyticsEvent = analyticsEvent.With(result: EditDurationEvent.Result.Save);
             analyticsService.Track(analyticsEvent);
             var duration = stopTime.Value - startTime.Value;
             var result = DurationParameter.WithStartAndDuration(startTime.Value, isRunning.Value ? (TimeSpan?)null : duration);
-            return Finish(result);
+            Close(result);
         }
 
         private void stopTimeEntry()
@@ -317,12 +314,12 @@ namespace Toggl.Core.UI.ViewModels
 
         private string toFormattedString(DateTimeOffset dateTimeOffset, TimeFormat timeFormat)
         {
-            return DateTimeToFormattedString.Convert(dateTimeOffset, timeFormat.Format, analyticsService);
+            return DateTimeToFormattedString.Convert(dateTimeOffset, timeFormat.Format);
         }
 
         private string toFormattedString(DateTimeOffset dateTimeOffset, DateFormat dateFormat)
         {
-            return DateTimeToFormattedString.Convert(dateTimeOffset, dateFormat.Short, analyticsService);
+            return DateTimeToFormattedString.Convert(dateTimeOffset, dateFormat.Short);
         }
 
         private string toFormattedString(TimeSpan timeSpan, DurationFormat format)

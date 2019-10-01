@@ -1,9 +1,9 @@
 ﻿
+using Android.Support.Design.Widget;
+using Android.Views;
 using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Android.Support.Design.Widget;
-using Android.Views;
 using Toggl.Core.UI.Reactive;
 
 namespace Toggl.Droid.Extensions.Reactive

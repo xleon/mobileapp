@@ -1,12 +1,11 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.UI.ViewModels;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
@@ -30,22 +29,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     PermissionsChecker,
                     NavigationService,
                     RemoteConfigService,
-                    SuggestionProviderContainer,
+                    AccessibilityService,
+                    UpdateRemoteConfigCacheService,
                     AccessRestrictionStorage,
-                    StopwatchProvider,
                     RxActionFactory,
                     UserAccessManager,
                     PrivateSharedStorageService,
                     PlatformInfo
                 );
-
-            protected override void AdditionalViewModelSetup()
-            {
-                base.AdditionalViewModelSetup();
-                var provider = Substitute.For<ISuggestionProvider>();
-                provider.GetSuggestions().Returns(Observable.Empty<Suggestion>());
-                SuggestionProviderContainer.Providers.Returns(new[] { provider }.ToList().AsReadOnly());
-            }
         }
 
         public sealed class TheConstructor : MainTabViewModelTest
@@ -66,14 +57,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool usePermissionsChecker,
                     bool useNavigationService,
                     bool useRemoteConfigService,
+                    bool useAccessibilityService,
+                    bool useRemoteConfigUpdateService,
                     bool useAccessRestrictionStorage,
-                    bool useSuggestionProviderContainer,
-                    bool useStopwatchProvider,
                     bool useRxActionFactory,
                     bool useUserAccessManager,
                     bool usePrivateSharedStorageService,
                     bool usePlatformInfo)
-
             {
                 var timeService = useTimeService ? TimeService : null;
                 var dataSource = useDataSource ? DataSource : null;
@@ -88,9 +78,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var permissionsService = usePermissionsChecker ? PermissionsChecker : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
+                var accessibilityService = useAccessibilityService ? AccessibilityService : null;
+                var remoteConfigUpdateService = useRemoteConfigUpdateService ? UpdateRemoteConfigCacheService : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
-                var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
-                var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var userAccessManager = useUserAccessManager ? UserAccessManager : null;
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
@@ -111,9 +101,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         permissionsService,
                         navigationService,
                         remoteConfigService,
-                        suggestionProviderContainer,
+                        accessibilityService,
+                        remoteConfigUpdateService,
                         accessRestrictionStorage,
-                        stopwatchProvider,
                         rxActionFactory,
                         userAccessManager,
                         privateSharedStorageService,

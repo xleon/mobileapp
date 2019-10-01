@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Android.Views;
+﻿using Android.Views;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.Droid.ViewHolders;

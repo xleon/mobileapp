@@ -1,10 +1,8 @@
-﻿using System;
-
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Extensions;
-using Toggl.iOS.Models;
 using Toggl.iOS.Transformations;
 using Toggl.iOS.ViewControllers.Settings;
 using Toggl.Shared;
@@ -35,8 +33,7 @@ namespace Toggl.iOS.Views.Settings
 
             projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
                 DetailsLabel.Font.CapHeight,
-                Colors.TimeEntriesLog.ClientColor.ToNativeColor(),
-                true
+                Colors.TimeEntriesLog.ClientColor.ToNativeColor()
             );
         }
 
@@ -48,7 +45,7 @@ namespace Toggl.iOS.Views.Settings
             DetailsLabel.TextColor = Colors.Siri.InvocationPhrase.ToNativeColor();
 
             if (Item.ProjectName == null)
-                DetailsLabel.Text = $"in {Item.WorkspaceName}";
+                DetailsLabel.Text = string.Format(Resources.CustomSiriShortcutCellIn, Item.WorkspaceName);
             else
                 DetailsLabel.AttributedText = projectTaskClientToAttributedString.Convert(Item.ProjectName, null, Item.ClientName, projectColor);
 

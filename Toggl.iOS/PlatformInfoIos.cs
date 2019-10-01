@@ -1,19 +1,23 @@
-﻿using System;
+﻿using System.Linq;
 using Foundation;
 using Toggl.Core;
+using Toggl.Core.Helper;
 
 namespace Toggl.iOS
 {
     public sealed class PlatformInfoIos : BasePlatformInfo
     {
         public PlatformInfoIos()
-            : base("https://support.toggl.com/toggl-timer-for-ios/", Platform.Daneel)
+            : base("https://support.toggl.com/toggl-timer-for-ios/",
+                   "https://itunes.apple.com/us/app/toggl/id1291898086?mt=8",
+                   Platform.Daneel)
         {
         }
 
         public override string PhoneModel => toDeviceModel(base.PhoneModel);
 
         public override string TimezoneIdentifier => NSTimeZone.LocalTimeZone.Name;
+
         private static string toDeviceModel(string identifier)
         {
             switch (identifier)
@@ -161,5 +165,9 @@ namespace Toggl.iOS
             }
         }
 
+        public override string CurrentNativeLanguageCode => getPreferredLanguageCode();
+
+        private string getPreferredLanguageCode() 
+            => NSLocale.PreferredLanguages.FirstOrDefault() ?? Constants.DefaultLanguageCode;
     }
 }

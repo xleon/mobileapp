@@ -11,11 +11,8 @@ about: Found something that could be improved? This is the place for you!
 ## 🚧 Refactor Proposal
 <!-- Describe what you wanna achieve in a short introduction -->
 
-## Platforms affected:
-<!-- Please list all areas of code that will be affected by this refactor -->
-- [ ] 🤖 Android
-- [ ] 🍎 iOS
-- [ ] 🖥️ Shared layer
+## Dependencies
+<!-- Specify what is needed before this refactor can be achieved -->
 
 ## Technical aspects
 <!-- Describe the changes you want to make, as thoroughly as possible -->

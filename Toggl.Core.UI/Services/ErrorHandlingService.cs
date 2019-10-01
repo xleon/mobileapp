@@ -1,12 +1,11 @@
 ﻿using System;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.Services;
-using Toggl.Core.Exceptions;
-using Toggl.Core.UI.Views;
+using Toggl.Networking.Exceptions;
 using Toggl.Shared;
 using Toggl.Storage.Settings;
-using Toggl.Networking.Exceptions;
 
 namespace Toggl.Core.UI.Services
 {

@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 namespace Toggl.Core
 {
     public static class ApplicationUrls

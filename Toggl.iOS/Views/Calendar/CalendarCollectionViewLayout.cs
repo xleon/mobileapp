@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CoreGraphics;
+using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
@@ -6,8 +8,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
-using CoreGraphics;
-using Foundation;
 using Toggl.Core;
 using Toggl.Core.UI.Calendar;
 using Toggl.Core.UI.Extensions;
@@ -89,7 +89,7 @@ namespace Toggl.iOS.Views.Calendar
             timeService
                 .CurrentDateTimeObservable
                 .DistinctUntilChanged(offset => offset.Minute)
-                .ObserveOn(SynchronizationContext.Current)
+                .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(_ => InvalidateCurrentTimeLayout())
                 .DisposedBy(disposeBag);
 

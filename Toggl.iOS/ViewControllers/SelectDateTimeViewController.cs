@@ -1,10 +1,10 @@
-﻿using System;
-using CoreGraphics;
+﻿using CoreGraphics;
 using Foundation;
+using System;
+using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -39,11 +39,11 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             SaveButton.Rx()
-                .BindAction(ViewModel.SaveCommand)
+                .BindAction(ViewModel.Save)
                 .DisposedBy(DisposeBag);
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.CloseCommand)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
         }
 

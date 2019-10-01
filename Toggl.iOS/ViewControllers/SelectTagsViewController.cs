@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
-using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.ViewSources;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed partial class SelectTagsViewController : KeyboardAwareViewController<SelectTagsViewModel>, IDismissableViewController
+    public sealed partial class SelectTagsViewController : KeyboardAwareViewController<SelectTagsViewModel>
     {
         private const double headerHeight = 100;
         private const double placeholderHeight = 250;
@@ -25,6 +26,11 @@ namespace Toggl.iOS.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            TitleLabel.Text = Resources.Tags;
+            TextField.Placeholder = Resources.AddFilterTags;
+            EmptyStateLabel.Text = Resources.EmptyTagText;
+            SaveButton.SetTitle(Resources.Save, UIControlState.Normal);
 
             var tableViewSource = new SelectTagsTableViewSource(TagsTableView);
 
@@ -67,8 +73,8 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(TextField.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             SaveButton.Rx()
@@ -86,12 +92,6 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewWillAppear(animated);
             TextField.BecomeFirstResponder();
-        }
-
-        public async Task<bool> Dismiss()
-        {
-            await ViewModel.Close.ExecuteWithCompletion();
-            return true;
         }
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)

@@ -8,10 +8,10 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using Xunit;
 
@@ -163,17 +163,17 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : SelectClientViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : SelectClientViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.Initialize(Parameters);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -181,7 +181,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 await ViewModel.Initialize(Parameters);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 (await ViewModel.Result).Should().BeNull();
@@ -208,7 +208,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectClient.Execute(client);
                 TestScheduler.Start();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]

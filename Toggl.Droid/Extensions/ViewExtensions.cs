@@ -1,9 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Android.Animation;
 using Android.Content;
+using Android.Graphics;
+using Android.Graphics.Drawables;
+using Android.Support.Design.Widget;
+using Android.Support.V4.Widget;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Views.InputMethods;
+using System.Collections.Generic;
+using System.Linq;
+using Toggl.Shared;
+using Color = Toggl.Shared.Color;
+using AndroidColor = Android.Graphics.Color;
+using Android.App;
+using Toggl.Droid.Helper;
 
 namespace Toggl.Droid.Extensions
 {
@@ -40,21 +50,42 @@ namespace Toggl.Droid.Extensions
             });
         }
 
-        public static void RunWhenAttachedToWindow(this View view, Action action)
+        public static void AttachMaterialScrollBehaviour(this View scrollView, AppBarLayout appBarLayout)
         {
-            if (view.IsAttachedToWindow)
+            if (MarshmallowApis.AreNotAvailable)
+                return;
+
+            scrollView.SetOnScrollChangeListener(new MaterialScrollBehaviorListener(appBarLayout));
+
+            if (scrollView is NestedScrollView)
             {
-                action();
+                appBarLayout.Post(() => appBarLayout.Elevation = 0);
             }
-            else
+        }
+
+        private class MaterialScrollBehaviorListener : Java.Lang.Object, View.IOnScrollChangeListener
+        {
+            private readonly AppBarLayout appBarLayout;
+            private const int defaultToolbarElevationInDPs = 4;
+
+            public MaterialScrollBehaviorListener(AppBarLayout appBarLayout)
             {
-                view.ViewAttachedToWindow += onViewAttachedToWindow;
+                this.appBarLayout = appBarLayout;
             }
 
-            void onViewAttachedToWindow(object sender, View.ViewAttachedToWindowEventArgs args)
+            public void OnScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY)
             {
-                view.ViewAttachedToWindow -= onViewAttachedToWindow;
-                view.Post(action);
+                if (v is RecyclerView recyclerView)
+                {
+                    var targetElevation = recyclerView.CanScrollVertically(-1) ?  defaultToolbarElevationInDPs.DpToPixels(appBarLayout.Context) : 0f;
+                    appBarLayout.Elevation = targetElevation;
+                }
+
+                if (v is NestedScrollView scrollView)
+                {
+                    var targetElevation = scrollView.CanScrollVertically(-1) ? defaultToolbarElevationInDPs.DpToPixels(appBarLayout.Context) : 0f;
+                    appBarLayout.Elevation = targetElevation;
+                }
             }
         }
     }

@@ -16,7 +16,7 @@
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidLinkMode>Full</AndroidLinkMode>
-    <AndroidLinkSkip>Toggl.Giskard</AndroidLinkSkip>
+    <AndroidLinkSkip>Toggl.Giskard;Toggl.Storage.Realm</AndroidLinkSkip>
     <EnableProguard>true</EnableProguard>
     <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
@@ -41,7 +41,7 @@
     <DebugType>
     </DebugType>
     <OutputPath>..\bin</OutputPath>
-    <DefineConstants>USE_APPCENTER</DefineConstants>
+    <DefineConstants>USE_APPCENTER;ADHOC</DefineConstants>
     <AndroidKeyStore>True</AndroidKeyStore>
     <AndroidSigningKeyStore>../giskard.keystore</AndroidSigningKeyStore>
     <AndroidSigningStorePass>{KEYSTORE_PASSWORD}</AndroidSigningStorePass>
@@ -53,9 +53,6 @@
     <OutputPath>bin\Release.PlayStore</OutputPath>
     <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API</DefineConstants>
     <WarningLevel>4</WarningLevel>
-    <AndroidLinkSkip>
-    </AndroidLinkSkip>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
@@ -72,6 +69,44 @@
     <EnableLLVM>true</EnableLLVM>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Accord.3.8.0\lib\netstandard2.0\Accord.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.MachineLearning, Version=3.8.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Accord.MachineLearning.3.8.0\lib\netstandard2.0\Accord.MachineLearning.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Math, Version=3.8.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Accord.Math.3.8.0\lib\netstandard2.0\Accord.Math.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Math.Core, Version=3.8.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Accord.Math.3.8.0\lib\netstandard2.0\Accord.Math.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Statistics, Version=3.8.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Accord.Statistics.3.8.0\lib\netstandard2.0\Accord.Statistics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AppCenter.2.1.1\lib\MonoAndroid403\Microsoft.AppCenter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter.Analytics, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.1.1\lib\MonoAndroid403\Microsoft.AppCenter.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter.Analytics.Android.Bindings, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.1.1\lib\MonoAndroid403\Microsoft.AppCenter.Analytics.Android.Bindings.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter.Android.Bindings, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AppCenter.2.1.1\lib\MonoAndroid403\Microsoft.AppCenter.Android.Bindings.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter.Crashes, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.1.1\lib\MonoAndroid403\Microsoft.AppCenter.Crashes.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter.Crashes.Android.Bindings, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.1.1\lib\MonoAndroid403\Microsoft.AppCenter.Crashes.Android.Bindings.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Reactive, Version=4.1.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263">
       <HintPath>..\packages\System.Reactive.4.1.2\lib\netstandard2.0\System.Reactive.dll</HintPath>
@@ -117,11 +152,19 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Android.Arch.Lifecycle.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Xamarin.Android.Arch.Lifecycle.Extensions.1.1.1.1\lib\monoandroid90\Xamarin.Android.Arch.Lifecycle.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xamarin.Android.Support.Constraint.Layout, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Xamarin.Android.Support.Constraint.Layout.1.1.0\lib\MonoAndroid70\Xamarin.Android.Support.Constraint.Layout.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Android.Support.Constraint.Layout.Solver, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Xamarin.Android.Support.Constraint.Layout.Solver.1.1.0\lib\MonoAndroid70\Xamarin.Android.Support.Constraint.Layout.Solver.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Firebase.Messaging, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Xamarin.Firebase.Messaging.60.1142.1\lib\MonoAndroid80\Xamarin.Firebase.Messaging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.GooglePlayServices.Basement">
       <HintPath>..\packages\Xamarin.GooglePlayServices.Basement.60.1142.1\lib\MonoAndroid80\Xamarin.GooglePlayServices.Basement.dll</HintPath>
@@ -156,26 +199,6 @@
     <Reference Include="Xamarin.GooglePlayServices.Identity">
       <HintPath>..\packages\Xamarin.GooglePlayServices.Identity.60.1142.1\lib\MonoAndroid80\Xamarin.GooglePlayServices.Identity.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AppCenter.Android.Bindings">
-      <HintPath>..\packages\Microsoft.AppCenter.1.6.1\lib\MonoAndroid403\Microsoft.AppCenter.Android.Bindings.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Microsoft.AppCenter">
-      <HintPath>..\packages\Microsoft.AppCenter.1.6.1\lib\MonoAndroid403\Microsoft.AppCenter.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Microsoft.AppCenter.Analytics.Android.Bindings">
-      <HintPath>..\packages\Microsoft.AppCenter.Analytics.1.6.1\lib\MonoAndroid403\Microsoft.AppCenter.Analytics.Android.Bindings.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AppCenter.Analytics">
-      <HintPath>..\packages\Microsoft.AppCenter.Analytics.1.6.1\lib\MonoAndroid403\Microsoft.AppCenter.Analytics.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AppCenter.Crashes.Android.Bindings">
-      <HintPath>..\packages\Microsoft.AppCenter.Crashes.1.6.1\lib\MonoAndroid403\Microsoft.AppCenter.Crashes.Android.Bindings.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AppCenter.Crashes">
-      <HintPath>..\packages\Microsoft.AppCenter.Crashes.1.6.1\lib\MonoAndroid403\Microsoft.AppCenter.Crashes.dll</HintPath>
-    </Reference>
     <Reference Include="Realm">
       <HintPath>..\packages\Realm.Database.3.0.0\lib\netstandard1.4\Realm.dll</HintPath>
     </Reference>
@@ -184,9 +207,6 @@
     </Reference>
     <Reference Include="System.Collections.Immutable">
       <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Firebase.Perf">
-      <HintPath>Xamarin.Firebase.Perf.dll</HintPath>
     </Reference>
     <Reference Include="Java.Interop" />
     <Reference Include="Xamarin.Firebase.Config">
@@ -318,6 +338,7 @@
     <Compile Include="Activities\ForgotPasswordActivity.ViewBinds.cs">
       <DependentUpon>ForgotPasswordActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Activities\LicensesActivity.cs" />
     <Compile Include="Activities\OutdatedAppActivity.ViewBinds.cs">
       <DependentUpon>OutdatedAppActivity.cs</DependentUpon>
     </Compile>
@@ -343,13 +364,24 @@
     <Compile Include="Adapters\DiffingStrategies\IdentifierEqualityDiffingStrategy.cs" />
     <Compile Include="Adapters\DiffingStrategies\IDiffingStrategy.cs" />
     <Compile Include="Adapters\ReportsCalendarShortcutAdapter.cs" />
-    <Compile Include="Adapters\SelectDurationFormatRecyclerAdapter.cs" />
     <Compile Include="Adapters\SelectTagsRecyclerAdapter.cs" />
     <Compile Include="Activities\SelectProjectActivity.cs" />
     <Compile Include="Activities\SelectProjectActivity.ViewBinds.cs">
       <DependentUpon>SelectProjectActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
+    <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
+    <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
+    <Compile Include="Fragments\ReportsCalendarFragment.cs" />
+    <Compile Include="Helper\ActiveTheme.cs" />
+    <Compile Include="Presentation\ActivityTransitions.cs" />
+    <Compile Include="Presentation\RunningTimeEntrySheetBehavior.cs" />
+    <Compile Include="Services\JobServicesConstants.cs" />
+    <Compile Include="Services\FetchRemoteConfigServiceAndroid.cs" />
+    <Compile Include="Services\SyncJobService.cs" />
+    <Compile Include="Services\TogglFirebaseIIDService.cs" />
+    <Compile Include="Services\TogglFirebaseMessagingService.cs" />
+    <Compile Include="Services\PushNotificationsTokenServiceAndroid.cs" />
     <Compile Include="Extensions\PermissionRequesterComponentExtensions.cs" />
     <Compile Include="Helper\IPermissionRequesterComponent.cs" />
     <Compile Include="Presentation\ActivityPresenter.cs" />
@@ -359,6 +391,8 @@
     <Compile Include="Startup\AndroidDependencyContainer.cs" />
     <Compile Include="Extensions\FloatingActionButtonExtensions.cs" />
     <Compile Include="Presentation\IScrollableToTop.cs" />
+    <Compile Include="ViewHelpers\CalendarItemRectAttributes.cs" />
+    <Compile Include="ViewHolders\LicenseViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\SuggestionRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\ProjectSuggestionViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\TimeEntrySuggestionViewHolder.cs" />
@@ -374,15 +408,11 @@
     <Compile Include="Extensions\Reactive\HueSaturationPickerViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\LayoutParamsExtensions.cs" />
     <Compile Include="Extensions\Reactive\PagerExtensions.cs" />
-    <Compile Include="Extensions\TracingExtensions.cs" />
     <Compile Include="Extensions\Reactive\RecyclerViewExtensions.cs" />
     <Compile Include="Extensions\Reactive\ValueSliderViewExtensions.cs" />
     <Compile Include="Fragments\CalendarFragment.cs" />
     <Compile Include="Fragments\CalendarFragment.ViewBinds.cs">
       <DependentUpon>CalendarFragment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Fragments\SelectWorkspaceFragment.ViewBinds.cs">
-      <DependentUpon>SelectWorkspaceFragment.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper\PersistentNotificationsHelper.cs" />
     <Compile Include="Fragments\NoWorkspaceFragment.cs" />
@@ -400,7 +430,6 @@
     <Compile Include="Startup\SplashScreen.DeepLink.cs">
       <DependentUpon>SplashScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\BrowserServiceAndroid.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Activities\LoginActivity.ViewBinds.cs">
       <DependentUpon>LoginActivity.cs</DependentUpon>
@@ -428,8 +457,6 @@
     <Compile Include="ViewHolders\MainLogSuggestionItemViewHolder.cs" />
     <Compile Include="ViewHolders\MainLogSuggestionsListViewHolder.cs" />
     <Compile Include="ViewHolders\SimpleTextViewHolder.cs" />
-    <Compile Include="ViewHolders\SelectDurationFormatViewHolder.cs" />
-    <Compile Include="ViewHolders\SelectWorkspaceViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsCalendarShortcutCellViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsHeaderCellViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsItemCellViewHolder.cs" />
@@ -437,6 +464,9 @@
     <Compile Include="ViewHolders\StringViewHolder.cs" />
     <Compile Include="Views\BarChartView.cs" />
     <Compile Include="Views\CalendarRecyclerView.cs" />
+    <Compile Include="Views\Calendar\CalendarDayView.Background.cs" />
+    <Compile Include="Views\Calendar\CalendarDayView.cs" />
+    <Compile Include="Views\Calendar\CalendarDayView.Events.cs" />
     <Compile Include="Views\Calendar\CalendarLayoutManager.cs" />
     <Compile Include="Views\Calendar\CalendarLayoutManager.AnchorInfo.cs">
       <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
@@ -466,8 +496,6 @@
     <Compile Include="Extensions\NumberExtensions.cs" />
     <Compile Include="Activities\StartTimeEntryActivity.cs" />
     <Compile Include="Extensions\VisibilityExtensions.cs" />
-    <Compile Include="Activities\BrowserActivity.cs" />
-    <Compile Include="Extensions\CircularRevealAnimation.cs" />
     <Compile Include="Activities\EditTimeEntryActivity.cs" />
     <Compile Include="ApplicationShortcutCreator.cs" />
     <Compile Include="Adapters\StartTimeEntryRecyclerAdapter.cs" />
@@ -485,25 +513,13 @@
     <Compile Include="Views\CircleView.cs" />
     <Compile Include="Views\HueSaturationPickerView.cs" />
     <Compile Include="Fragments\SelectColorFragment.cs" />
-    <Compile Include="Views\TextInputLayoutWithHelperText.cs" />
     <Compile Include="Views\ValueSlider.cs" />
     <Compile Include="Activities\SelectClientActivity.cs" />
     <Compile Include="Adapters\SelectClientRecyclerAdapter.cs" />
-    <Compile Include="Fragments\SelectWorkspaceFragment.cs" />
     <Compile Include="Services\LicenseProviderAndroid.cs" />
-    <Compile Include="Fragments\SelectDateFormatFragment.cs" />
-    <Compile Include="Fragments\SelectDateFormatFragment.ViewBinds.cs">
-      <DependentUpon>SelectDateFormatFragment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Fragments\SelectBeginningOfWeekFragment.cs" />
-    <Compile Include="Fragments\SelectDurationFormatFragment.cs" />
-    <Compile Include="Fragments\SelectDurationFormatFragment.ViewBinds.cs">
-      <DependentUpon>SelectDurationFormatFragment.cs</DependentUpon>
-    </Compile>
     <Compile Include="Adapters\ReportsRecyclerAdapter.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Views\PieChartView.cs" />
-    <Compile Include="Views\ReportsLinearLayout.cs" />
     <Compile Include="Views\ReportsCalendarDayView.cs" />
     <Compile Include="Adapters\ReportsCalendarRecyclerAdapter.cs" />
     <Compile Include="Views\ReportsCalendarRecyclerView.cs" />
@@ -532,11 +548,9 @@
     </Compile>
     <Compile Include="Adapters\BaseRecyclerAdapter.cs" />
     <Compile Include="ViewHolders\BaseRecyclerViewHolder.cs" />
-    <Compile Include="ViewHolders\WorkspaceSelectionViewHolder.cs" />
     <Compile Include="Adapters\SimpleAdapter.cs" />
     <Compile Include="Activities\AboutActivity.cs" />
     <Compile Include="Services\RatingServiceAndroid.cs" />
-    <Compile Include="Services\RemoteConfigServiceAndroid.cs" />
     <Compile Include="Activities\EditTimeEntryActivity.ViewBinds.cs">
       <DependentUpon>EditTimeEntryActivity.cs</DependentUpon>
     </Compile>
@@ -550,7 +564,6 @@
     <Compile Include="Services\NotificationServiceAndroid.cs" />
     <Compile Include="ViewHolders\MainLogSectionViewHolder.cs" />
     <Compile Include="Adapters\ReactiveSectionedRecyclerAdapter.cs" />
-    <Compile Include="Adapters\MainSuggestionsRecyclerAdapter.cs" />
     <Compile Include="Activities\SignUpActivity.ViewBinds.cs">
       <DependentUpon>SignUpActivity.cs</DependentUpon>
     </Compile>
@@ -570,7 +583,6 @@
     <Compile Include="Activities\TokenResetActivity.ViewBinds.cs">
       <DependentUpon>TokenResetActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\FirebaseStopwatchProviderAndroid.cs" />
     <Compile Include="ViewHolders\SelectDefaultWorkspaceViewHolder.cs" />
     <Compile Include="Fragments\SelectDefaultWorkspaceFragment.cs" />
     <Compile Include="Fragments\SelectDefaultWorkspaceFragment.ViewBinds.cs">
@@ -580,22 +592,15 @@
     <Compile Include="Extensions\Reactive\ImageViewExtensions.cs" />
     <Compile Include="Extensions\TimeEntryExtensions.cs" />
     <Compile Include="PlatformInfoAndroid.cs" />
-    <Compile Include="Startup\ApplicationLifecycleObserver.cs" />
     <Compile Include="Services\BackgroundSyncServiceAndroid.cs" />
     <Compile Include="Services\BackgroundSyncJobSchedulerService.cs" />
     <Compile Include="ViewHolders\Tags\TagCreationSelectionViewHolder.cs" />
     <Compile Include="ViewHolders\Tags\TagSelectionViewHolder.cs" />
-    <Compile Include="Adapters\SelectDateFormatRecyclerAdapter.cs" />
-    <Compile Include="ViewHolders\SelectDateFormatViewHolder.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Views\EditDuration\WheelDurationInput.cs" />
     <Compile Include="Views\EditDuration\WheelDurationInput.InputFilter.cs">
       <DependentUpon>WheelDurationInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fragments\SelectBeginningOfWeekFragment.ViewBinds.cs">
-      <DependentUpon>SelectBeginningOfWeekFragment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewHolders\BeginningOfWeekViewHolder.cs" />
     <Compile Include="Fragments\SettingsFragment.cs" />
     <Compile Include="Fragments\SettingsFragment.ViewBinds.cs">
       <DependentUpon>SettingsFragment.cs</DependentUpon>
@@ -650,15 +655,25 @@
     </Compile>
     <Compile Include="BroadcastReceivers\BootCompletedBroadcastReceiver.cs" />
     <Compile Include="Services\ScheduleEventNotificationsService.cs" />
+    <Compile Include="Views\VerticallyCenteredImageSpan.cs" />
+    <Compile Include="Services\AccessibilityServiceAndroid.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
-    <AndroidResource Include="Resources\color\BlueTextColor.xml" />
+    <AndroidResource Include="Resources\color\FlatButtonTextColor.xml" />
+    <AndroidResource Include="Resources\color\ToolbarButtonTextColor.xml" />
+    <AndroidResource Include="Resources\drawable\toolbar_close.xml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\Dot.xml" />
+    <AndroidResource Include="Resources\drawable\ic_archived.xml" />
     <AndroidResource Include="Resources\drawable\Splash.xml" />
+    <AndroidResource Include="Resources\drawable\text_placeholder.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
+    <AndroidResource Include="Resources\layout\ReportsCalendar.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityProjectCell.axml" />
@@ -666,21 +681,12 @@
     <AndroidResource Include="Resources\layout\SelectProjectActivityWorkspaceHeader.axml" />
     <AndroidResource Include="Resources\layout\SelectDateFormatFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDateFormatFragmentCell.axml" />
-    <AndroidResource Include="Resources\layout\SettingsFragmentWorkspaceCell.axml" />
-    <AndroidResource Include="Resources\drawable\TransparentToLightGrayGradient.xml" />
+    <AndroidResource Include="Resources\drawable\TransparentToBackgroundGradient.xml" />
     <GoogleServicesJson Include="google-services.json" />
-    <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragment.axml" />
-    <AndroidResource Include="Resources\layout\SelectBeginningOfWeekFragmentCell.axml" />
-    <AndroidResource Include="Resources\layout\SelectDurationFormatFragment.axml" />
-    <AndroidResource Include="Resources\layout\SelectDurationFormatFragmentCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
-    <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\logo.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\logo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\logo.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\logo.png" />
-    <AndroidResource Include="Resources\menu\GenericSaveMenu.xml" />
+    <AndroidResource Include="Resources\menu\DoneOrClearMenu.xml" />
+    <AndroidResource Include="Resources\menu\OneButtonMenu.xml" />
     <AndroidResource Include="Resources\values\Strings.xml" />
     <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png" />
@@ -721,7 +727,8 @@
     <AndroidResource Include="Resources\layout\MainFragment.axml" />
     <AndroidResource Include="Resources\layout\LoginActivity.axml" />
     <AndroidResource Include="Resources\values\Styles.xml" />
-    <AndroidResource Include="Resources\values-v23\Styles.xml" />
+    <AndroidResource Include="Resources\values-notnight-v23\Styles.xml" />
+    <AndroidResource Include="Resources\values-notnight-v27\Styles.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\arrow_back.png" />
     <AndroidResource Include="Resources\drawable-hdpi\billable.png" />
     <AndroidResource Include="Resources\drawable-hdpi\check_light.png" />
@@ -735,7 +742,6 @@
     <AndroidResource Include="Resources\drawable-hdpi\dropdown.png" />
     <AndroidResource Include="Resources\drawable-hdpi\error_baddata.png" />
     <AndroidResource Include="Resources\drawable-hdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\logo_icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\next_light.png" />
     <AndroidResource Include="Resources\drawable-hdpi\play.png" />
     <AndroidResource Include="Resources\drawable-hdpi\play_white.png" />
@@ -767,7 +773,6 @@
     <AndroidResource Include="Resources\drawable-mdpi\dropdown.png" />
     <AndroidResource Include="Resources\drawable-mdpi\error_baddata.png" />
     <AndroidResource Include="Resources\drawable-mdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\logo_icon.png" />
     <AndroidResource Include="Resources\drawable-mdpi\next_light.png" />
     <AndroidResource Include="Resources\drawable-mdpi\play.png" />
     <AndroidResource Include="Resources\drawable-mdpi\play_white.png" />
@@ -799,7 +804,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\dropdown.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\error_baddata.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\logo_icon.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\next_light.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\play.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\play_white.png" />
@@ -831,7 +835,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\dropdown.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\error_baddata.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\logo_icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\next_light.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\play.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\play_white.png" />
@@ -863,7 +866,6 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\dropdown.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\error_baddata.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\logo_icon.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\next_light.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\play.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\play_white.png" />
@@ -884,14 +886,13 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\unsynced.png" />
     <AndroidResource Include="Resources\values\Colors.xml" />
     <AndroidResource Include="Resources\layout\MainLogCell.axml" />
-    <AndroidResource Include="Resources\drawable\TransparentToWhiteGradient.xml" />
+    <AndroidResource Include="Resources\drawable\TransparentToCardColorGradient.xml" />
     <AndroidResource Include="Resources\layout\MainSuggestions.axml" />
     <AndroidResource Include="Resources\layout\MainLogHeader.axml" />
     <AndroidResource Include="Resources\drawable\SmallDot.xml" />
     <AndroidResource Include="Resources\layout\MainSuggestionsCard.axml" />
     <AndroidResource Include="Resources\layout\MainRunningTimeEntry.axml" />
     <AndroidResource Include="Resources\layout\SettingsFragment.axml" />
-    <AndroidResource Include="Resources\layout\BrowserActivity.axml" />
     <AndroidResource Include="Resources\drawable\TopShadow.xml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivity.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityTimeEntryCell.axml" />
@@ -912,13 +913,10 @@
     <AndroidResource Include="Resources\drawable\ValueSliderThumb.xml" />
     <AndroidResource Include="Resources\layout\SelectClientActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectClientActivityCell.axml" />
-    <AndroidResource Include="Resources\layout\SelectWorkspaceFragment.axml" />
-    <AndroidResource Include="Resources\layout\SelectWorkspaceFragmentCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentItem.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentDayCell.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarFragmentPage.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarShortcutCell.axml" />
-    <AndroidResource Include="Resources\drawable\OnboardingGradient.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\book.png" />
     <AndroidResource Include="Resources\drawable-hdpi\timer.png" />
     <AndroidResource Include="Resources\drawable-mdpi\book.png" />
@@ -929,11 +927,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\timer.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\book.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\timer.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\toggl_logo.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\toggl_logo.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\toggl_logo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\toggl_logo.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\toggl_logo.png" />
     <AndroidResource Include="Resources\drawable-hdpi\ic_illustration_error_spider.png" />
     <AndroidResource Include="Resources\drawable-mdpi\ic_illustration_error_spider.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\ic_illustration_error_spider.png" />
@@ -942,17 +935,12 @@
     <AndroidResource Include="Resources\layout\OutdatedAppActivity.axml" />
     <AndroidResource Include="Resources\layout\TokenResetActivity.axml" />
     <AndroidResource Include="Resources\layout\EditTimeEntryTagCell.axml" />
-    <AndroidResource Include="Resources\drawable\EditTextWhiteCursor.xml" />
+    <AndroidResource Include="Resources\drawable\EditTextCursor.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\date_light.png" />
     <AndroidResource Include="Resources\drawable-mdpi\date_light.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\date_light.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\date_light.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\date_light.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\logo_black.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\logo_black.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\logo_black.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\logo_black.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\logo_black.png" />
     <AndroidResource Include="Resources\drawable-hdpi\visibility_off.png" />
     <AndroidResource Include="Resources\drawable-mdpi\visibility_off.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\visibility_off.png" />
@@ -973,9 +961,9 @@
     <AndroidResource Include="Resources\drawable-xhdpi\paws.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\paws.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\paws.png" />
-    <AndroidResource Include="Resources\drawable\LightBlueRoundedRectangle.xml" />
+    <AndroidResource Include="Resources\drawable\RoundedRectangle.xml" />
     <AndroidResource Include="Resources\layout\ForgotPasswordActivity.axml" />
-    <AndroidResource Include="Resources\color\BlueButtonTextColor.xml" />
+    <AndroidResource Include="Resources\color\RaisedButtonTextColor.xml" />
     <AndroidResource Include="Resources\layout\SignUpActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectCountryActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectCountryActivityCountryCell.axml" />
@@ -1010,7 +998,6 @@
     <AndroidResource Include="Resources\anim\abc_slide_out_left.xml" />
     <AndroidResource Include="Resources\anim\abc_slide_in_left.xml" />
     <AndroidResource Include="Resources\anim\abc_slide_out_right.xml" />
-    <AndroidResource Include="Resources\layout\MainSuggestionsCardDescriptionOnly.axml" />
     <AndroidResource Include="Resources\drawable\ic_icon_running.xml" />
     <AndroidResource Include="Resources\drawable\ic_icon_notrunning.xml" />
     <AndroidResource Include="Resources\layout\SendFeedbackActivity.axml" />
@@ -1023,16 +1010,14 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_workspace.png" />
     <AndroidResource Include="Resources\layout\ReportsFragmentWorkspaceName.axml" />
     <AndroidResource Include="Resources\drawable\workspace_white.xml" />
-    <AndroidResource Include="Resources\values-v23\Strings.xml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragmentCell.axml" />
-    <AndroidResource Include="Resources\drawable\bg_noise_login.png" />
     <AndroidResource Include="Resources\drawable\ic_thumbs_down.xml" />
     <AndroidResource Include="Resources\drawable\ic_thumbs_up.xml" />
     <AndroidResource Include="Resources\layout\MainUserFeedbackCard.axml" />
     <AndroidResource Include="Resources\xml\RemoteConfigDefaults.xml" />
     <AndroidResource Include="Resources\layout\MainLogEmptyView.axml" />
-    <AndroidResource Include="Resources\drawable\BorderRectangle.xml" />
+    <AndroidResource Include="Resources\drawable\TagsBackground.xml" />
     <AndroidResource Include="Resources\drawable\EmptyViewRoundedRectangle.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\toggl_spider.png" />
     <AndroidResource Include="Resources\drawable-mdpi\toggl_spider.png" />
@@ -1043,7 +1028,7 @@
     <AndroidResource Include="Resources\layout\SelectUserCalendarsFragment.axml" />
     <AndroidResource Include="Resources\layout\UserCalendarItem.axml" />
     <AndroidResource Include="Resources\layout\UserCalendarHeader.axml" />
-    <AndroidResource Include="Resources\color\BlueLinkTextColor.xml" />
+    <AndroidResource Include="Resources\color\LinkTextColor.xml" />
     <AndroidResource Include="Resources\layout\MainTabBarActivity.axml" />
     <AndroidResource Include="Resources\menu\MainTabBarBottomMenu.xml" />
     <AndroidResource Include="Resources\color\MainTabBarItemTextColor.xml" />
@@ -1058,7 +1043,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\calendar_onboarding.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\calendar_onboarding.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\calendar_onboarding.png" />
-    <AndroidResource Include="Resources\drawable\BlueButton.axml" />
+    <AndroidResource Include="Resources\drawable\RaisedButton.axml" />
     <AndroidResource Include="Resources\layout\CalendarPermissionDeniedFragment.axml" />
     <AndroidResource Include="Resources\layout\UpcomingEventsNotificationSettingsFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectCalendarNotificationsOptionItem.axml" />
@@ -1127,6 +1112,79 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\ic_launcher.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\animator\Collapse.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\animator\Expand.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_toggl_logo.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\LicensesActivity.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\LicensesActivityCell.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\license_background.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-night\Colors.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-notnight\Colors.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-night-v27\Styles.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-night-v23\Styles.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-night\Styles.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-notnight\Styles.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\login_background.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
   <Import Project="..\packages\Xamarin.GooglePlayServices.Basement.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Basement.targets" Condition="Exists('..\packages\Xamarin.GooglePlayServices.Basement.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Basement.targets')" />
@@ -1135,7 +1193,6 @@
   <Import Project="..\packages\Xamarin.Firebase.Iid.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Iid.targets" Condition="Exists('..\packages\Xamarin.Firebase.Iid.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Iid.targets')" />
   <Import Project="..\packages\Xamarin.Firebase.Analytics.Impl.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Analytics.Impl.targets" Condition="Exists('..\packages\Xamarin.Firebase.Analytics.Impl.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Analytics.Impl.targets')" />
   <Import Project="..\packages\Xamarin.Firebase.Analytics.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Analytics.targets" Condition="Exists('..\packages\Xamarin.Firebase.Analytics.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Analytics.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.Perf.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Perf.targets" Condition="Exists('..\packages\Xamarin.Firebase.Perf.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Perf.targets')" />
   <Import Project="..\packages\Xamarin.GooglePlayServices.Base.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Base.targets" Condition="Exists('..\packages\Xamarin.GooglePlayServices.Base.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Base.targets')" />
   <Import Project="..\packages\Xamarin.GooglePlayServices.Auth.Api.Phone.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Auth.Api.Phone.targets" Condition="Exists('..\packages\Xamarin.GooglePlayServices.Auth.Api.Phone.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Auth.Api.Phone.targets')" />
   <Import Project="..\packages\Xamarin.GooglePlayServices.Auth.Base.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Auth.Base.targets" Condition="Exists('..\packages\Xamarin.GooglePlayServices.Auth.Base.60.1142.1\build\MonoAndroid80\Xamarin.GooglePlayServices.Auth.Base.targets')" />
@@ -1182,4 +1239,13 @@
   <Import Project="..\packages\Xamarin.Android.Support.v7.AppCompat.28.0.0.1\build\monoandroid90\Xamarin.Android.Support.v7.AppCompat.targets" Condition="Exists('..\packages\Xamarin.Android.Support.v7.AppCompat.28.0.0.1\build\monoandroid90\Xamarin.Android.Support.v7.AppCompat.targets')" />
   <Import Project="..\packages\Xamarin.Android.Support.v7.RecyclerView.28.0.0.1\build\monoandroid90\Xamarin.Android.Support.v7.RecyclerView.targets" Condition="Exists('..\packages\Xamarin.Android.Support.v7.RecyclerView.28.0.0.1\build\monoandroid90\Xamarin.Android.Support.v7.RecyclerView.targets')" />
   <Import Project="..\packages\Xamarin.Android.Support.Design.28.0.0.1\build\monoandroid90\Xamarin.Android.Support.Design.targets" Condition="Exists('..\packages\Xamarin.Android.Support.Design.28.0.0.1\build\monoandroid90\Xamarin.Android.Support.Design.targets')" />
+  <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.0\build\Accord.targets'))" />
+  </Target>
+  <Import Project="..\packages\Xamarin.Firebase.Messaging.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Messaging.targets" Condition="Exists('..\packages\Xamarin.Firebase.Messaging.60.1142.1\build\MonoAndroid80\Xamarin.Firebase.Messaging.targets')" />
+  <Import Project="..\packages\Xamarin.Android.Arch.Lifecycle.Extensions.1.1.1.1\build\monoandroid90\Xamarin.Android.Arch.Lifecycle.Extensions.targets" Condition="Exists('..\packages\Xamarin.Android.Arch.Lifecycle.Extensions.1.1.1.1\build\monoandroid90\Xamarin.Android.Arch.Lifecycle.Extensions.targets')" />
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 
 namespace Toggl.Core.Analytics
@@ -54,7 +55,7 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent RatingViewSecondStepDontSendFeedback { get; }
 
-        IAnalyticsEvent DeleteTimeEntry { get; }
+        IAnalyticsEvent<DeleteTimeEntryOrigin> DeleteTimeEntry { get; }
 
         IAnalyticsEvent<string> ApplicationShortcut { get; }
 
@@ -81,6 +82,8 @@ namespace Toggl.Core.Analytics
         IAnalyticsEvent<int> TagPlaceholdersCreated { get; }
 
         IAnalyticsEvent<EditViewTapSource> EditViewTapped { get; }
+
+        IAnalyticsEvent<EditViewCloseReason> EditViewClosed { get; }
 
         IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; }
 
@@ -166,9 +169,30 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<EditTimeEntryOrigin> EditViewOpened { get; }
 
-        IAnalyticsEvent<string, string, string, string> DebugScheduleError { get; }
-
         IAnalyticsEvent<Platform> ReceivedLowMemoryWarning { get; }
+
+        IAnalyticsEvent<string> PushInitiatedSyncFetch { get; }
+
+        IAnalyticsEvent<string> PushNotificationSyncStarted { get; }
+
+        IAnalyticsEvent<string> PushNotificationSyncFinished { get; }
+
+        IAnalyticsEvent<string, string, string, string> PushNotificationSyncFailed { get; }
+
+        IAnalyticsEvent<SuggestionProviderType> SuggestionStarted { get; }
+
+        IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; }
+
+        IAnalyticsEvent<string, string, string, string> DebugSchedulerError { get; }
+
+        IAnalyticsEvent<string, string> DebugNavigationError { get; }
+
+        IAnalyticsEvent<bool> AccessibilityEnabled { get; }
+
+        IAnalyticsEvent<bool> WatchPaired { get; }
+
+        void SetAppCenterUserId(long id);
+        void ResetAppCenterUserId();
 
         void Track(string eventName, Dictionary<string, string> parameters = null);
 

@@ -39,8 +39,8 @@ namespace Toggl.Shared.Extensions
         public static OutputAction<TElement> FromObservable(Func<IObservable<TElement>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
             => new OutputAction<TElement>(workFactory, mainScheduler, enabledIf);
     }
-    
-    public static class OutputActionExtensions 
+
+    public static class OutputActionExtensions
     {
         public static void Execute<TElement>(this OutputAction<TElement> action)
         {

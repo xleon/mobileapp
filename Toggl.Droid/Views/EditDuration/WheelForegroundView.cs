@@ -1,12 +1,13 @@
-using System;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.V7.App;
 using Android.Util;
 using Android.Views;
+using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core.Analytics;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Helper;
@@ -14,9 +15,10 @@ using Toggl.Droid.Views.EditDuration.Shapes;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Shared.Math;
-using Math = System.Math;
 using Color = Android.Graphics.Color;
-using FoundationColor = Toggl.Core.UI.Helper.Colors;
+using Math = System.Math;
+using static Toggl.Core.UI.Helper.Colors.EditDuration.Wheel;
+using System.Linq;
 
 namespace Toggl.Droid.Views.EditDuration
 {
@@ -56,14 +58,20 @@ namespace Toggl.Droid.Views.EditDuration
         private WheelUpdateType updateType;
         private double editBothAtOnceStartTimeAngleOffset;
 
-        private int numberOfFullLoops => (int) ((EndTime - StartTime).TotalMinutes / MinutesInAnHour);
+        private int numberOfFullLoops => (int)((EndTime - StartTime).TotalMinutes / MinutesInAnHour);
         private bool isFullCircle => numberOfFullLoops >= 1;
 
-        private Color backgroundColor
-            => FoundationColor.EditDuration.Wheel.Rainbow.GetPingPongIndexedItem(numberOfFullLoops).ToNativeColor();
+        private readonly Lazy<Color[]> rainbowColors = new Lazy<Color[]>(() =>
+            Rainbow
+                .Select(color => ActiveTheme.Is.DarkTheme ? color.WithAlpha(180) : color)
+                .Select(color => color.ToNativeColor())
+                .ToArray());
 
-        private Color foregroundColor
-            => FoundationColor.EditDuration.Wheel.Rainbow.GetPingPongIndexedItem(numberOfFullLoops + 1).ToNativeColor();
+        private Color backgroundColor => rainbowColors.Value
+            .GetPingPongIndexedItem(numberOfFullLoops);
+
+        private Color foregroundColor => rainbowColors.Value
+            .GetPingPongIndexedItem(numberOfFullLoops + 1);
 
         private readonly Subject<EditTimeSource> timeEditedSubject = new Subject<EditTimeSource>();
         private readonly Subject<DateTimeOffset> startTimeSubject = new Subject<DateTimeOffset>();
@@ -181,7 +189,7 @@ namespace Toggl.Droid.Views.EditDuration
             capShadowWidth = 2.DpToPixels(Context);
             capBorderStrokeWidth = 1.DpToPixels(Context);
             wheelHandleDotIndicatorRadius = 2.DpToPixels(Context);
-            hapticFeedbackProvider = (Vibrator) Context.GetSystemService(Context.VibratorService);
+            hapticFeedbackProvider = (Vibrator)Context.GetSystemService(Context.VibratorService);
         }
 
         #endregion
@@ -255,7 +263,7 @@ namespace Toggl.Droid.Views.EditDuration
         }
 
         #region Touch interaction
-        
+
         public override bool OnTouchEvent(MotionEvent motionEvent)
         {
             switch (motionEvent.Action)

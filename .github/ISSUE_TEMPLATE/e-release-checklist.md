@@ -12,7 +12,7 @@ about: A checklist before releasing to the AppStore and Play Store.
 - [ ] Create a release pull request, including the diff and write the user-facing changelog following [the guidelines][2], and add it to the release project
 - [ ] Link the release pull request in this issue
 - [ ] Have the changelog reviewed
-- [ ] When all changes are included in the release branch, create a new tag, name should be `daneel-X.Y` or `giskard-X.Y`
+- [ ] When all changes are included in the release branch, create a new tag, name should be `ios-X.Y` or `android-X.Y`
 - [ ] Create a GitHub release from the tag and include the user-facing changelog
 - [ ] Inform `@mobileteam` and `@support` in the `#mobile-support` channel that a new build is available for testing, include the user-facing changelog
 
@@ -30,7 +30,8 @@ about: A checklist before releasing to the AppStore and Play Store.
 ## Release phase
 
 - [ ] Create a new version on AppStore Connect or Google Play Console, include the reviewed changelog
-- [ ] Ask in the `#mobile-marketing` channel if any app metadata needs to be updated
+- [ ] Ask in the `#marketing-apps` channel if any app metadata needs to be updated
+- [ ] Make sure they translated the changelog into the languages that we support
 - [ ] Release to users with a phased rollout (send for review with automatic release to users selected in case of iOS)
 - [ ] Inform `@mobileteam` and `@support` in the `#mobile-support` channel that a phased rollout started
 
@@ -58,8 +59,8 @@ about: A checklist before releasing to the AppStore and Play Store.
 
 1. [Release flow documentation][1]
 2. [Changelog guidelines][2]
-3. Diff link example for new releases: `https://github.com/toggl/mobileapp/compare/develop...giskard-A.B-C`
-4. Diff link example for hotfix: `https://github.com/toggl/mobileapp/compare/giskard-A.B-C...giskard-X.Y-Z`
+3. Diff link example for new releases: `https://github.com/toggl/mobileapp/compare/develop...android-A.B-C`
+4. Diff link example for hotfix: `https://github.com/toggl/mobileapp/compare/android-A.B-C...android-X.Y-Z`
 
 [1]: https://github.com/toggl/mobile-docs/blob/develop/release-flow.md
 [2]: https://github.com/toggl/mobile-docs/blob/develop/release-flow.md#write-a-changelog-our-users-can-understand

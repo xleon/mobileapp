@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using Toggl.Networking.Serialization;
 using Toggl.Networking.Serialization.Converters;
 using Xunit;
@@ -60,7 +60,8 @@ namespace Toggl.Networking.Tests.Serialization
 
         private const string JsonArray = "{\"some_items\":[{\"some_name\":\"A\"},{\"some_name\":\"B\"}]}";
 
-        private static readonly OtherClass SomeItemsContainer = new OtherClass {
+        private static readonly OtherClass SomeItemsContainer = new OtherClass
+        {
             SomeItems = new List<ISomeInterface>
             {
                 new SomeClass { SomeName = "A" },

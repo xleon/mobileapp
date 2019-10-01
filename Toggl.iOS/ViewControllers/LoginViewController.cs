@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Foundation;
-using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;

@@ -1,13 +1,17 @@
-﻿using System;
-using System.Reactive.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using NSubstitute;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reactive.Linq;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks;
 using Toggl.Storage;
+using Toggl.Storage.Models;
 using Xunit;
 
 namespace Toggl.Core.Tests.Interactors
@@ -19,7 +23,7 @@ namespace Toggl.Core.Tests.Interactors
             [Theory, LogIfTooSlow]
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
-                bool useIdProvider, 
+                bool useIdProvider,
                 bool useTimeService,
                 bool useDataSource,
                 bool useTagName,
@@ -111,6 +115,28 @@ namespace Toggl.Core.Tests.Interactors
                 DataSource.Tags.Received().Create(
                     Arg.Is<IThreadSafeTag>(tag => tag.SyncStatus == SyncStatus.SyncNeeded)
                 ).Wait();
+            }
+
+            [Property]
+            public void DoesNotCreateTheTagIfItAlreadyExists(NonEmptyString name, NonZeroInt workspaceId)
+            {
+                var mockTag = new MockTag
+                {
+                    Name = name.Get,
+                    WorkspaceId = workspaceId.Get
+                };
+
+                DataSource.Tags
+                    .GetAll(Arg.Any<Func<IDatabaseTag, bool>>())
+                    .Returns(Observable.Return<IEnumerable<IThreadSafeTag>>(new[] { mockTag }));
+
+                var createdTag = createTagInteractor(name.Get, workspaceId.Get).Execute().Wait();
+
+                DataSource.Tags.DidNotReceive().Create(
+                    Arg.Is<IThreadSafeTag>(tag => tag.SyncStatus == SyncStatus.SyncNeeded)
+                ).Wait();
+
+                createdTag.Should().BeNull();
             }
         }
     }

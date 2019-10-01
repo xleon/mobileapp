@@ -1,22 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Toggl.Core.Diagnostics;
-using Toggl.Core.UI.Collections;
+using System;
+using System.Collections.Generic;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Toggl.Core;
+using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Droid.Extensions;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Droid.ViewHelpers;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
-using Toggl.Core;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Droid.ViewHelpers;
-using System.Reactive.Disposables;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
-using Toggl.Core.Analytics;
+using Android.Content;
+using Toggl.Core.UI.Helper;
 
 namespace Toggl.Droid.Adapters
 {
@@ -25,6 +22,7 @@ namespace Toggl.Droid.Adapters
         public const int SuggestionViewType = 2;
         public const int UserFeedbackViewType = 3;
 
+        private readonly Context context;
         private readonly ITimeService timeService;
 
         private bool isRatingViewVisible = false;
@@ -35,7 +33,7 @@ namespace Toggl.Droid.Adapters
         public IObservable<LogItemViewModel> TimeEntryTaps
             => timeEntryTappedSubject.Select(item => item.ViewModel).AsObservable();
 
-        public IObservable<(LogItemViewModel LogItem, ContinueTimeEntryMode ContinueMode)> ContinueTimeEntry
+        public IObservable<ContinueTimeEntryInfo> ContinueTimeEntry
             => continueTimeEntrySubject.AsObservable();
 
         public IObservable<LogItemViewModel> DeleteTimeEntrySubject
@@ -44,15 +42,14 @@ namespace Toggl.Droid.Adapters
         public SuggestionsViewModel SuggestionsViewModel { get; set; }
         public RatingViewModel RatingViewModel { get; set; }
 
-        public IStopwatchProvider StopwatchProvider { get; set; }
-
         private readonly Subject<GroupId> toggleGroupExpansionSubject = new Subject<GroupId>();
-        private readonly Subject<TimeEntryViewData> timeEntryTappedSubject = new Subject<TimeEntryViewData>();
-        private readonly Subject<(LogItemViewModel, ContinueTimeEntryMode)> continueTimeEntrySubject = new Subject<(LogItemViewModel, ContinueTimeEntryMode)>();
         private readonly Subject<LogItemViewModel> deleteTimeEntrySubject = new Subject<LogItemViewModel>();
+        private readonly Subject<TimeEntryViewData> timeEntryTappedSubject = new Subject<TimeEntryViewData>();
+        private readonly Subject<ContinueTimeEntryInfo> continueTimeEntrySubject = new Subject<ContinueTimeEntryInfo>();
 
-        public MainRecyclerAdapter(ITimeService timeService)
+        public MainRecyclerAdapter(Context context, ITimeService timeService)
         {
+            this.context = context;
             this.timeService = timeService;
         }
 
@@ -65,7 +62,7 @@ namespace Toggl.Droid.Adapters
                 ? ContinueTimeEntryMode.TimeEntriesGroupSwipe
                 : ContinueTimeEntryMode.SingleTimeEntrySwipe;
 
-            continueTimeEntrySubject.OnNext((continuedTimeEntry, continueMode));
+            continueTimeEntrySubject.OnNext(new ContinueTimeEntryInfo(continuedTimeEntry, continueMode));
         }
 
         public void DeleteTimeEntry(int position)
@@ -86,11 +83,8 @@ namespace Toggl.Droid.Adapters
         {
             if (viewType == SuggestionViewType)
             {
-                var mainLogSuggestionsStopwatch = StopwatchProvider.Create(MeasuredOperation.CreateMainLogSuggestionsViewHolder);
-                mainLogSuggestionsStopwatch.Start();
                 var suggestionsView = LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.MainSuggestions, parent, false);
                 var mainLogSuggestionsListViewHolder = new MainLogSuggestionsListViewHolder(suggestionsView, SuggestionsViewModel);
-                mainLogSuggestionsStopwatch.Stop();
                 return mainLogSuggestionsListViewHolder;
             }
 
@@ -102,32 +96,6 @@ namespace Toggl.Droid.Adapters
             }
 
             return base.OnCreateViewHolder(parent, viewType);
-        }
-
-        public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
-        {
-            if (holder is MainLogSectionViewHolder mainLogHeader)
-                mainLogHeader.Now = timeService.CurrentDateTime;
-
-            var stopwatchForViewHolder = createStopwatchFor(holder);
-            stopwatchForViewHolder?.Start();
-            base.OnBindViewHolder(holder, position);
-            stopwatchForViewHolder?.Stop();
-        }
-
-        private IStopwatch createStopwatchFor(RecyclerView.ViewHolder holder)
-        {
-            switch (holder)
-            {
-                case MainLogCellViewHolder _:
-                    return StopwatchProvider.MaybeCreateStopwatch(MeasuredOperation.BindMainLogItemVH, probability: 0.1F);
-
-                case MainLogSectionViewHolder _:
-                    return StopwatchProvider.MaybeCreateStopwatch(MeasuredOperation.BindMainLogSectionVH, probability: 0.5F);
-
-                default:
-                    return StopwatchProvider.Create(MeasuredOperation.BindMainLogSuggestionsVH);
-            }
         }
 
         public override int GetItemViewType(int position)
@@ -142,15 +110,8 @@ namespace Toggl.Droid.Adapters
         }
 
         protected override MainLogSectionViewHolder CreateHeaderViewHolder(ViewGroup parent)
-        {
-            var mainLogSectionStopwatch = StopwatchProvider.Create(MeasuredOperation.CreateMainLogSectionViewHolder);
-            mainLogSectionStopwatch.Start();
-            var mainLogSectionViewHolder = new MainLogSectionViewHolder(LayoutInflater.FromContext(parent.Context)
+            => new MainLogSectionViewHolder(LayoutInflater.FromContext(parent.Context)
                 .Inflate(Resource.Layout.MainLogHeader, parent, false));
-            mainLogSectionViewHolder.Now = timeService.CurrentDateTime;
-            mainLogSectionStopwatch.Stop();
-            return mainLogSectionViewHolder;
-        }
 
         public void SetupRatingViewVisibility(bool isVisible)
         {
@@ -163,8 +124,6 @@ namespace Toggl.Droid.Adapters
 
         protected override MainLogCellViewHolder CreateItemViewHolder(ViewGroup parent)
         {
-            var mainLogCellStopwatch = StopwatchProvider.Create(MeasuredOperation.CreateMainLogItemViewHolder);
-            mainLogCellStopwatch.Start();
             var mainLogCellViewHolder = new MainLogCellViewHolder(LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.MainLogCell, parent, false))
             {
                 TappedSubject = timeEntryTappedSubject,
@@ -172,7 +131,6 @@ namespace Toggl.Droid.Adapters
                 ToggleGroupExpansionSubject = toggleGroupExpansionSubject
             };
 
-            mainLogCellStopwatch.Stop();
             return mainLogCellViewHolder;
         }
 
@@ -183,7 +141,7 @@ namespace Toggl.Droid.Adapters
             => section.Identity;
 
         protected override TimeEntryViewData Wrap(LogItemViewModel item)
-            => new TimeEntryViewData(item);
+            => new TimeEntryViewData(context, item);
 
         protected override DaySummaryViewModel Wrap(DaySummaryViewModel section)
             => section;

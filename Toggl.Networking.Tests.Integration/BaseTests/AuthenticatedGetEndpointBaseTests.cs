@@ -13,7 +13,7 @@ namespace Toggl.Networking.Tests.Integration.BaseTests
         {
             var (passwordClient, user) = await SetupTestUser();
             var apiTokenClient = TogglApiWith(Credentials.WithApiToken(user.ApiToken));
-            
+
             var passwordReturn = await CallEndpointWith(passwordClient);
             var apiTokenReturn = await CallEndpointWith(apiTokenClient);
 

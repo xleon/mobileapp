@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Reactive;
 using System.Reactive.Disposables;
-using Foundation;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Transformations;
 using Toggl.Shared;
 using UIKit;
+using System.Reactive.Subjects;
+using System.Reactive.Linq;
 
 namespace Toggl.iOS.Views
 {
@@ -28,8 +29,11 @@ namespace Toggl.iOS.Views
         public IObservable<Unit> ContinueButtonTap
             => ContinueButton.Rx().Tap();
 
+        private ISubject<Unit> accessibilityToggleGroupSubject = new Subject<Unit>();
+
         public IObservable<Unit> ToggleGroup
-            => GroupSizeContainer.Rx().Tap();
+            => accessibilityToggleGroupSubject.AsObservable()
+                .Merge(GroupSizeContainer.Rx().Tap());
 
         static TimeEntriesLogViewCell()
         {
@@ -41,23 +45,13 @@ namespace Toggl.iOS.Views
         {
         }
 
-        public override string AccessibilityLabel
-        {
-            get
-            {
-                var accessibilityLabel = "Time entry, ";
-                if (Item.HasDescription)
-                    accessibilityLabel += $"Description: {Item.Description}, ";
-                if (Item.HasProject)
-                    accessibilityLabel += $"Project: {Item.ProjectName }";
-                return accessibilityLabel;
-            }
-            set => base.AccessibilityLabel = value;
-        }
-
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
+
+            IsAccessibilityElement = true;
+            AccessibilityTraits = UIAccessibilityTrait.Button;
+            AccessibilityHint = Resources.TimeEntryRowAccessibilityHint;
 
             DescriptionFadeView.FadeRight = true;
             ProjectTaskClientFadeView.FadeRight = true;
@@ -66,8 +60,7 @@ namespace Toggl.iOS.Views
 
             projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
                 ProjectTaskClientLabel.Font.CapHeight,
-                Colors.TimeEntriesLog.ClientColor.ToNativeColor(),
-                true
+                Colors.TimeEntriesLog.ClientColor.ToNativeColor()
             );
         }
 
@@ -83,10 +76,11 @@ namespace Toggl.iOS.Views
 
         protected override void UpdateView()
         {
+            updateAccessibilityProperties();
+
             // Text
-            var projectColor = new Color(Item.ProjectColor).ToNativeColor();
             DescriptionLabel.Text = Item.HasDescription ? Item.Description : Resources.AddDescription;
-            ProjectTaskClientLabel.AttributedText = projectTaskClientToAttributedString.Convert(Item.ProjectName, Item.TaskName, Item.ClientName, projectColor);
+            ProjectTaskClientLabel.AttributedText = projectTaskClientToAttributedString.Convert(Item);
             TimeLabel.Text = Item.Duration;
 
             // Colors
@@ -170,6 +164,53 @@ namespace Toggl.iOS.Views
             GroupSizeContainer.UserInteractionEnabled = false;
             GroupSizeBackground.Hidden = true;
             BackgroundColor = Colors.TimeEntriesLog.Grouping.GroupedTimeEntry.Background.ToNativeColor();
+        }
+
+        private void updateAccessibilityProperties()
+        {
+            updateAccessibilityActionToExpandGroup();
+            AccessibilityLabel = "";
+
+            if (Item.IsTimeEntryGroupHeader)
+                AccessibilityLabel += $"{Item.RepresentedTimeEntriesIds.Length} {Resources.TimeEntries}, ";
+
+            if (Item.HasDescription)
+                AccessibilityLabel += $"{Item.Description}, ";
+
+            if (Item.HasProject)
+                AccessibilityLabel += $"{Resources.Project}: {Item.ProjectName }, ";
+
+            if (string.IsNullOrEmpty(AccessibilityLabel))
+                AccessibilityLabel += $"{Resources.TimeEntry}, ";
+
+            AccessibilityLabel += $"{Item.Duration}, ";
+
+            if (Item.HasTags)
+                AccessibilityLabel += $"{Resources.HasTags}, ";
+
+            if (Item.IsBillable)
+                AccessibilityLabel += $"{Resources.IsBillable}, ";
+        }
+
+        private void updateAccessibilityActionToExpandGroup()
+        {
+            if (Item.VisualizationIntent == LogItemVisualizationIntent.GroupItem
+                || Item.VisualizationIntent == LogItemVisualizationIntent.SingleItem)
+            {
+                AccessibilityCustomActions = null;
+                return;
+            }
+
+            var actionName = Item.VisualizationIntent == LogItemVisualizationIntent.CollapsedGroupHeader
+                ? Resources.ExpandTimeEntryGroup
+                : Resources.CollapseTimeEntryGroup;
+            
+            var action = new UIAccessibilityCustomAction(actionName, probe: (x) =>
+            {
+                accessibilityToggleGroupSubject.OnNext(Unit.Default);
+                return true;
+            });
+            AccessibilityCustomActions = new[] { action };
         }
     }
 }

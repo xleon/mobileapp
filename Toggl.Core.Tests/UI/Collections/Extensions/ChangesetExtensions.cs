@@ -8,7 +8,8 @@ namespace Toggl.Core.Tests.UI.Collections.Extensions
 {
     public static class ChangesetExtensions
     {
-        public class ItemModelTypeWrapper<TItem> {
+        public class ItemModelTypeWrapper<TItem>
+        {
             public TItem Item { get; set; }
             public bool Deleted { get; set; } = false;
             public bool Updated { get; set; } = false;
@@ -206,7 +207,7 @@ namespace Toggl.Core.Tests.UI.Collections.Extensions
                 }
 
                 return nextUntouchedSourceSectionIndex < original.Count;
-            };
+            }
 
             var totalCount = original.Count + changeset.InsertedSections.Count;
 
@@ -214,7 +215,8 @@ namespace Toggl.Core.Tests.UI.Collections.Extensions
 
             for (int index = 0; index < totalCount; index++)
             {
-                if (insertedSectionsIndexes.Contains(index)) {
+                if (insertedSectionsIndexes.Contains(index))
+                {
                     results.Add(changeset.FinalSections[index]);
                 }
                 else

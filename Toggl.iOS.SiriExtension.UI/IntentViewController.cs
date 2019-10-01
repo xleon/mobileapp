@@ -1,16 +1,14 @@
-using System;
-using System.Globalization;
-using System.Resources;
+using CoreAnimation;
 using CoreGraphics;
 using Foundation;
 using Intents;
 using IntentsUI;
-using UIKit;
-using CoreFoundation;
-using CoreAnimation;
-using Toggl.iOS.ExtensionKit.Extensions;
+using System;
+using System.Globalization;
 using Toggl.iOS.Intents;
+using Toggl.iOS.ExtensionKit.Extensions;
 using Toggl.Shared;
+using UIKit;
 
 namespace Toggl.iOS.SiriExtension.UI
 {
@@ -175,7 +173,8 @@ namespace Toggl.iOS.SiriExtension.UI
             entryInfoView.DescriptionLabel.AttributedText = attributedString;
 
             var start = DateTimeOffset.Now;
-            var displayLink = CADisplayLink.Create(() => {
+            var displayLink = CADisplayLink.Create(() =>
+            {
                 var passed = DateTimeOffset.Now - start;
                 entryInfoView.TimeLabel.Text = secondsToString(passed.Seconds);
             });
@@ -217,8 +216,8 @@ namespace Toggl.iOS.SiriExtension.UI
 
             var startTime = DateTimeOffset.FromUnixTimeSeconds(response.EntryStart.LongValue).ToLocalTime();
             var endTime = DateTimeOffset.FromUnixTimeSeconds(response.EntryStart.LongValue + response.EntryDuration.LongValue).ToLocalTime();
-            var fromTime = startTime.ToString("HH:mm", CultureInfo.InvariantCulture);
-            var toTime = endTime.ToString("HH:mm", CultureInfo.InvariantCulture);
+            var fromTime = startTime.ToString("HH:mm", CultureInfo.CurrentCulture);
+            var toTime = endTime.ToString("HH:mm", CultureInfo.CurrentCulture);
             var timeFrameString = new NSAttributedString($"\n{fromTime} - {toTime}", regularAttributes);
 
             attributedString.Append(timeFrameString);
@@ -243,7 +242,7 @@ namespace Toggl.iOS.SiriExtension.UI
         private string secondsToString(Double seconds)
         {
             var timeSpan = TimeSpan.FromSeconds(seconds);
-            return timeSpan.ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture);
+            return timeSpan.ToString(@"hh\:mm\:ss", CultureInfo.CurrentCulture);
         }
     }
 }

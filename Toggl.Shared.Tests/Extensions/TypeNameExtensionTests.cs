@@ -1,8 +1,8 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Collections.Generic;
-using Xunit;
 using Toggl.Shared.Extensions;
-using FluentAssertions;
+using Xunit;
 
 namespace Toggl.Shared.Tests.Extensions
 {

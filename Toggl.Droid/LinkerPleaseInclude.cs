@@ -1,8 +1,9 @@
-﻿using System;
+using Android.Arch.Lifecycle;
 using Android.Support.Constraints;
 using Android.Support.V7.Widget;
 using Firebase.Provider;
 using Newtonsoft.Json.Converters;
+using System;
 using V4Space = Android.Support.V4.Widget.Space;
 
 namespace Toggl.Droid
@@ -23,7 +24,7 @@ namespace Toggl.Droid
             cardView = new CardView(null, null);
             cardView = new CardView(null, null, 0);
         }
- 
+
         public void Include(FitWindowsFrameLayout layout)
         {
             layout = new FitWindowsFrameLayout(null);
@@ -52,7 +53,7 @@ namespace Toggl.Droid
         {
             layout = new ButtonBarLayout(null, null);
         }
-      
+
         public void Include(StringEnumConverter converter)
         {
             converter = new StringEnumConverter(true);
@@ -85,6 +86,12 @@ namespace Toggl.Droid
             guideline = new Guideline(null, null);
             guideline = new Guideline(null, null, 1);
             guideline = new Guideline(null, null, 1, 1);
+        }
+
+        public void Include(ProcessLifecycleOwner processLifecycleOwner, ProcessLifecycleOwnerInitializer processLifecycleOwnerInitializer)
+        {
+            var proccessLifecycleOwner = ProcessLifecycleOwner.Get();
+            var initializer = new ProcessLifecycleOwnerInitializer();
         }
     }
 }

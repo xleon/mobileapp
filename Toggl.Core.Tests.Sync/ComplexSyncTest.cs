@@ -2,11 +2,11 @@ using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Sync;
-using Toggl.Core.Tests.Sync.Helpers;
 using Toggl.Core.Tests.Sync.Exceptions;
+using Toggl.Core.Tests.Sync.Helpers;
 using Toggl.Core.Tests.Sync.State;
-using Toggl.Shared.Extensions;
 using Toggl.Networking.Tests.Integration;
+using Toggl.Shared.Extensions;
 using Xunit;
 
 namespace Toggl.Core.Tests.Sync
@@ -44,7 +44,7 @@ namespace Toggl.Core.Tests.Sync
             await storage.Store(definedDatabaseState);
 
             // Act
-            await Act(appServices.SyncManager);
+            await Act(appServices.SyncManager, appServices);
 
             // Assert
             var finalDatabaseState = await storage.LoadCurrentState();
@@ -56,7 +56,7 @@ namespace Toggl.Core.Tests.Sync
         protected abstract ServerState ArrangeServerState(ServerState initialServerState);
         protected abstract DatabaseState ArrangeDatabaseState(ServerState serverState);
 
-        protected virtual async Task Act(ISyncManager syncManager)
+        protected virtual async Task Act(ISyncManager syncManager, AppServices services)
         {
             var progressMonitoring = MonitorProgress(syncManager);
             await syncManager.ForceFullSync();

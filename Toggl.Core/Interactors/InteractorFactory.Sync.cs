@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive;
 using Toggl.Core.Models;
-using Toggl.Core.Sync;
 
 namespace Toggl.Core.Interactors
 {
@@ -15,9 +13,21 @@ namespace Toggl.Core.Interactors
             => new HasFinsihedSyncBeforeInteractor(dataSource);
 
         public IInteractor<IObservable<SyncOutcome>> RunBackgroundSync()
-            => new RunBackgroundSyncInteractor(syncManager, analyticsService, stopwatchProvider);
+            => new RunBackgroundSyncInteractor(syncManager, analyticsService);
 
         public IInteractor<IObservable<bool>> ContainsPlaceholders()
             => new ContainsPlaceholdersInteractor(dataSource);
+
+        public IInteractor<IObservable<SyncOutcome>> RunPushNotificationInitiatedSyncInForeground()
+            => new RunSyncInteractor(
+                syncManager,
+                analyticsService,
+                PushNotificationSyncSourceState.Foreground);
+
+        public IInteractor<IObservable<SyncOutcome>> RunPushNotificationInitiatedSyncInBackground()
+            => new RunSyncInteractor(
+                syncManager,
+                analyticsService,
+                PushNotificationSyncSourceState.Background);
     }
 }

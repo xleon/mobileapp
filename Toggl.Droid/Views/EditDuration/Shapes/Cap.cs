@@ -1,5 +1,5 @@
-using System;
 using Android.Graphics;
+using System;
 
 namespace Toggl.Droid.Views.EditDuration.Shapes
 {
@@ -38,8 +38,8 @@ namespace Toggl.Droid.Views.EditDuration.Shapes
         {
             this.capBorderStrokeWidth = capBorderStrokeWidth;
             this.shadowWidth = shadowWidth;
-            this.radius  = radius;
-            capInnerSquareSide = (float) Math.Sqrt((radius - shadowWidth) * (radius - shadowWidth) * 2) * 0.5f;
+            this.radius = radius;
+            capInnerSquareSide = (float)Math.Sqrt((radius - shadowWidth) * (radius - shadowWidth) * 2) * 0.5f;
             arcRadius = arcWidth / 2f;
             arcPaint.Color = foregroundColor;
             capPaint.Color = capColor;
@@ -50,7 +50,7 @@ namespace Toggl.Droid.Views.EditDuration.Shapes
             iconPaint.SetColorFilter(new PorterDuffColorFilter(iconColor, PorterDuff.Mode.SrcIn));
             shadowPaint.SetMaskFilter(new BlurMaskFilter(shadowWidth, BlurMaskFilter.Blur.Normal));
             shadowPaint.SetStyle(Paint.Style.Fill);
-            shadowBitmap = Bitmap.CreateBitmap((int) (radius * 2f), (int) (radius * 2f), Bitmap.Config.Argb8888);
+            shadowBitmap = Bitmap.CreateBitmap((int)(radius * 2f), (int)(radius * 2f), Bitmap.Config.Argb8888);
             var shadowCanvas = new Canvas(shadowBitmap);
             shadowCanvas.DrawCircle(radius, radius, radius - shadowWidth, shadowPaint);
         }

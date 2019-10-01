@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Android.App;
 using Android.Content.PM;
-using Android.OS;
-using Android.Support.V7.Widget;
+using System;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
+using Toggl.Droid.Presentation;
+using Android.Runtime;
 
 namespace Toggl.Droid.Activities
 {
@@ -17,30 +15,20 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public partial class SelectClientActivity : ReactiveActivity<SelectClientViewModel>
     {
-        private SelectClientRecyclerAdapter selectClientRecyclerAdapter = new SelectClientRecyclerAdapter();
+        public SelectClientActivity() : base(
+            Resource.Layout.SelectClientActivity,
+            Resource.Style.AppTheme,
+            Transitions.SlideInFromBottom)
+        { }
 
-        protected override void OnCreate(Bundle bundle)
+        public SelectClientActivity(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
+        { }
+
+        protected override void InitializeBindings()
         {
-            SetTheme(Resource.Style.AppTheme_BlueStatusBar);
-            base.OnCreate(bundle);
-            if (ViewModelWasNotCached())
-            {
-                BailOutToSplashScreen();
-                return;
-            }
-            SetContentView(Resource.Layout.SelectClientActivity);
-            OverridePendingTransition(Resource.Animation.abc_slide_in_bottom, Resource.Animation.abc_fade_out);
-
-            InitializeViews();
-
-            setupLayoutManager(selectClientRecyclerAdapter);
-
             ViewModel.Clients
-                .Subscribe(replaceClients)
-                .DisposedBy(DisposeBag);
-
-            backImageView.Rx()
-                .BindAction(ViewModel.Close)
+                .Subscribe(selectClientRecyclerAdapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 
             filterEditText.Rx().Text()
@@ -50,26 +38,6 @@ namespace Toggl.Droid.Activities
             selectClientRecyclerAdapter.ItemTapObservable
                 .Subscribe(ViewModel.SelectClient.Inputs)
                 .DisposedBy(DisposeBag);
-        }
-
-        private void setupLayoutManager(SelectClientRecyclerAdapter adapter)
-        {
-            var layoutManager = new LinearLayoutManager(this);
-            layoutManager.ItemPrefetchEnabled = true;
-            layoutManager.InitialPrefetchItemCount = 4;
-            selectClientRecyclerView.SetLayoutManager(layoutManager);
-            selectClientRecyclerView.SetAdapter(adapter);
-        }
-
-        public override void Finish()
-        {
-            base.Finish();
-            OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_slide_out_bottom);
-        }
-
-        private void replaceClients(IEnumerable<SelectableClientBaseViewModel> clients)
-        {
-            selectClientRecyclerAdapter.Items = clients.ToList();
         }
     }
 }

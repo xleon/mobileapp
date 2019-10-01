@@ -1,13 +1,10 @@
-﻿using System;
-
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.Core.UI.Helper;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Extensions;
-using Toggl.iOS.Models;
 using Toggl.iOS.ViewControllers.Settings;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS.Views.Settings
@@ -33,7 +30,7 @@ namespace Toggl.iOS.Views.Settings
 
             if (Item.InvocationPhrase == null)
             {
-                DetailLabel.Text = "Add";
+                DetailLabel.Text = Resources.SiriShortcutCellAdd;
                 DetailLabel.TextColor = Colors.Siri.AddButton.ToNativeColor();
             }
             else

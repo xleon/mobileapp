@@ -1,5 +1,3 @@
-using Toggl.Shared;
-
 namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
 {
     internal sealed class TimeEntriesGroupKey : IMainLogKey

@@ -22,8 +22,6 @@ namespace Toggl.iOS.Presentation
             {
                 case AboutViewModel vm:
                     return new AboutViewController(vm);
-                case BrowserViewModel vm:
-                    return new BrowserViewController(vm);
                 case CalendarViewModel vm:
                     return new CalendarViewController(vm);
                 case CalendarPermissionDeniedViewModel vm:
@@ -50,8 +48,6 @@ namespace Toggl.iOS.Presentation
                     return new NotificationSettingsViewController(vm);
                 case NoWorkspaceViewModel vm:
                     return new NoWorkspaceViewController(vm);
-                case OnboardingViewModel vm:
-                    return new OnboardingViewController(vm);
                 case OutdatedAppViewModel vm:
                     return new OutdatedAppViewController(vm);
                 case PasteFromClipboardViewModel vm:
@@ -60,30 +56,22 @@ namespace Toggl.iOS.Presentation
                     return new ReportsViewController(vm);
                 case ReportsCalendarViewModel vm:
                     return new ReportsCalendarViewController(vm);
-                case SelectBeginningOfWeekViewModel vm:
-                    return new SelectBeginningOfWeekViewController(vm);
                 case SelectClientViewModel vm:
                     return new SelectClientViewController(vm);
                 case SelectColorViewModel vm:
                     return new SelectColorViewController(vm);
                 case SelectCountryViewModel vm:
                     return new SelectCountryViewController(vm);
-                case SelectDateFormatViewModel vm:
-                    return new SelectDateFormatViewController(vm);
                 case SelectDateTimeViewModel vm:
                     return new SelectDateTimeViewController(vm);
                 case SelectDefaultWorkspaceViewModel vm:
                     return new SelectDefaultWorkspaceViewController(vm);
-                case SelectDurationFormatViewModel vm:
-                    return new SelectDurationFormatViewController(vm);
                 case SelectProjectViewModel vm:
                     return new SelectProjectViewController(vm);
                 case SelectTagsViewModel vm:
                     return new SelectTagsViewController(vm);
                 case SelectUserCalendarsViewModel vm:
                     return new SelectUserCalendarsViewController(vm);
-                case SelectWorkspaceViewModel vm:
-                    return new SelectWorkspaceViewController(vm);
                 case SendFeedbackViewModel vm:
                     return new SendFeedbackViewController(vm);
                 case SettingsViewModel vm:
@@ -118,6 +106,6 @@ namespace Toggl.iOS.Presentation
             => GetViewController(viewModel).Apply(wrapInNavigationController);
 
         private static UIViewController wrapInNavigationController(UIViewController viewController)
-            => new UINavigationController(viewController);
+            => new ReactiveNavigationController(viewController);
     }
 }

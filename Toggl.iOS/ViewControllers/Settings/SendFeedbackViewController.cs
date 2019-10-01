@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
-using Toggl.Core;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
@@ -13,7 +12,7 @@ using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.iOS.ViewControllers.Settings
 {
-    public sealed partial class SendFeedbackViewController : KeyboardAwareViewController<SendFeedbackViewModel>, IDismissableViewController
+    public sealed partial class SendFeedbackViewController : KeyboardAwareViewController<SendFeedbackViewModel>
     {
 
         public SendFeedbackViewController(SendFeedbackViewModel viewModel)
@@ -27,15 +26,15 @@ namespace Toggl.iOS.ViewControllers.Settings
 
             TitleLabel.Text = Resources.ContactUs;
             FeedbackPlaceholderTextView.Text = Resources.FeedbackFieldPlaceholder;
-            ErrorTitleLabel.Text = Resources.Oops.ToUpper();
-            ErrorMessageLabel.Text = Resources.SomethingWentWrongTryAgain;
-            SendButton.SetTitle(Resources.Send, UIControlState.Normal);
+            ErrorTitleLabel.Text = Resources.ContactUs.ToUpper();
+            ErrorMessageLabel.Text = Resources.ContactUsSomethingWentWrongTryAgain;
+            SendButton.SetTitle(Resources.ContactUsSend, UIControlState.Normal);
 
             prepareViews();
             prepareIndicatorView();
 
-            CloseButton.Rx()
-                .BindAction(ViewModel.Close)
+            CloseButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             FeedbackTextView.Rx().Text()
@@ -100,12 +99,6 @@ namespace Toggl.iOS.ViewControllers.Settings
         {
             base.ViewWillAppear(animated);
             IndicatorView.StartSpinning();
-        }
-
-        public async Task<bool> Dismiss()
-        {
-            await ViewModel.Close.ExecuteWithCompletion();
-            return true;
         }
 
         private void prepareViews()

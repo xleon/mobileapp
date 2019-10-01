@@ -1,5 +1,5 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
+using System;
 using Toggl.Core.Extensions;
 using Toggl.Shared;
 using Xunit;

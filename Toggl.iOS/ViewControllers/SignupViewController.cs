@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using AdjustBindingsiOS;
-using Toggl.iOS.Extensions;
-using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 using static Toggl.iOS.Extensions.LoginSignupViewExtensions;
 using static Toggl.iOS.Extensions.ViewExtensions;
-
+using AdjustBindingsiOS;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -238,7 +236,8 @@ namespace Toggl.iOS.ViewControllers
                 UIControlState.Disabled
             );
 
-            EmailTextField.ShouldReturn += _ => {
+            EmailTextField.ShouldReturn += _ =>
+            {
                 PasswordTextField.BecomeFirstResponder();
                 return false;
             };
@@ -277,10 +276,11 @@ namespace Toggl.iOS.ViewControllers
 
         private void logAdjustSignupEvent()
         {
-            #if USE_ANALYTICS
-            var adjustEvent = ADJEvent.EventWithEventToken(adjustSignupEventToken);
-            Adjust.TrackEvent(adjustEvent);
-            #endif
+
+#if USE_ANALYTICS
+            var adjustEvent = AdjustBindingsiOS.ADJEvent.EventWithEventToken(adjustSignupEventToken);
+            AdjustBindingsiOS.Adjust.TrackEvent(adjustEvent);
+#endif
         }
     }
 }

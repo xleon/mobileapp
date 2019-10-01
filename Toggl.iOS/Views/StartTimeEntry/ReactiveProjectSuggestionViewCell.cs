@@ -1,13 +1,13 @@
-﻿using System;
-using Foundation;
-using Toggl.iOS.Extensions;
+﻿using Foundation;
+using System;
+using System.Reactive.Disposables;
 using Toggl.Core.Autocomplete.Suggestions;
-using Toggl.Shared;
+using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
-using System.Reactive.Disposables;
-using Toggl.iOS.Cells;
 
 namespace Toggl.iOS.Views.StartTimeEntry
 {
@@ -96,7 +96,9 @@ namespace Toggl.iOS.Views.StartTimeEntry
             if (count == 0)
                 return "";
 
-            return $"{count} Task{(count == 1 ? "" : "s")}";
+            return count == 1
+                ? string.Format(Resources.NumberOfTasksSingular, count)
+                : string.Format(Resources.NumberOfTasksPlural, count);
         }
     }
 }

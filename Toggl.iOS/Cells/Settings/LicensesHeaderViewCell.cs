@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.Shared;
 using UIKit;
 
@@ -22,7 +22,7 @@ namespace Toggl.iOS.Cells.Settings
 
         protected override void UpdateView()
         {
-            HeaderLabel.Text = Item.Subject;
+            HeaderLabel.Text = Item.LibraryName;
         }
 
 

@@ -1,6 +1,6 @@
 using System;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
+using CoreFoundation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 using Toggl.iOS.Extensions;
@@ -8,11 +8,9 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public abstract partial class ReactiveTableViewController<TViewModel> : UITableViewController, IView
+    public abstract partial class ReactiveTableViewController<TViewModel> : UITableViewController, IReactiveViewController, IView
         where TViewModel : IViewModel
     {
-        private bool hasFinished;
-
         public CompositeDisposable DisposeBag { get; private set; } = new CompositeDisposable();
 
         public TViewModel ViewModel { get; }
@@ -59,15 +57,8 @@ namespace Toggl.iOS.ViewControllers
         {
             base.DidMoveToParentViewController(parent);
 
-            // When this is removed from the parent controller (e.g: a pop action in a navigation controller)
-            // then the view is destroyed and the view model needs to be cancelled
             if (parent == null)
             {
-                if (!hasFinished)
-                {
-                    ViewModel?.Cancel();
-                }
-
                 ViewModel?.DetachView();
                 ViewModel?.ViewDestroyed();
             }
@@ -81,11 +72,14 @@ namespace Toggl.iOS.ViewControllers
             ViewModel?.ViewDestroyed();
         }
 
-        public Task Close()
+        public void DismissFromNavigationController()
         {
-            hasFinished = true;
-            UIApplication.SharedApplication.InvokeOnMainThread(this.Dismiss);
-            return Task.CompletedTask;
+            ViewModel.CloseWithDefaultResult();
+        }
+
+        public void Close()
+        {
+            DispatchQueue.MainQueue.DispatchAsync(this.Dismiss);
         }
 
         protected override void Dispose(bool disposing)

@@ -33,9 +33,13 @@ namespace Toggl.Core.Interactors.AutocompleteSuggestions
         private Func<IEnumerable<IThreadSafeTimeEntry>, IEnumerable<IThreadSafeTimeEntry>> filterByWord(string word)
             => timeEntries =>
                 timeEntries.Where(
-                    te => te.Description.ContainsIgnoringCase(word)
-                        || (te.Project != null && te.Project.Name.ContainsIgnoringCase(word) && te.Project.Active)
-                        || (te.Project?.Client != null && te.Project.Client.Name.ContainsIgnoringCase(word))
-                        || (te.Task != null && te.Task.Name.ContainsIgnoringCase(word)));
+                    te => projectIsNullOrActive(te)
+                        && (te.Description.ContainsIgnoringCase(word)
+                            || (te.Project?.Name.ContainsIgnoringCase(word) ?? false)
+                            || (te.Project?.Client != null && te.Project.Client.Name.ContainsIgnoringCase(word))
+                            || (te.Task != null && te.Task.Name.ContainsIgnoringCase(word))));
+
+        private bool projectIsNullOrActive(IThreadSafeTimeEntry te)
+            => te.Project == null || (te.Project != null && te.Project.Active);
     }
 }

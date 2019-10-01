@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Reactive.Linq;
-using Foundation;
 using Toggl.Core.UI.Reactive;
 using UIKit;
 

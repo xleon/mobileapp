@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using Realms;
+﻿using Realms;
+using System.Linq;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Models;
 using Toggl.Storage.Realm.Models;

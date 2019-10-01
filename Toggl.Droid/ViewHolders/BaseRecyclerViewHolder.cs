@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Subjects;
-using Android.Runtime;
+﻿using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
+using System.Reactive.Subjects;
 
 namespace Toggl.Droid.ViewHolders
 {

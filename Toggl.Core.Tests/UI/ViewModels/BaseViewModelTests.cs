@@ -1,17 +1,14 @@
-using Microsoft.Reactive.Testing;
+﻿using Microsoft.Reactive.Testing;
 using NSubstitute;
-using Toggl.Core.Diagnostics;
+using System.Reactive;
 using Toggl.Core.Login;
-using Toggl.Core.UI.Services;
 using Toggl.Core.Services;
-using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
-using Toggl.Storage;
-using Toggl.Storage.Settings;
-using Toggl.Networking;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
-using System.Reactive;
+using Toggl.Networking;
+using Toggl.Storage;
+using Toggl.Storage.Settings;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -24,18 +21,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
         protected ISyncManager SyncManager { get; } = Substitute.For<ISyncManager>();
         protected IUserAccessManager UserAccessManager { get; } = Substitute.For<IUserAccessManager>();
         protected IRatingService RatingService { get; } = Substitute.For<IRatingService>();
-        protected IBrowserService BrowserService { get; } = Substitute.For<IBrowserService>();
         protected ILicenseProvider LicenseProvider { get; } = Substitute.For<ILicenseProvider>();
         protected IBackgroundService BackgroundService { get; } = Substitute.For<IBackgroundService>();
         protected IPlatformInfo PlatformInfo { get; } = Substitute.For<IPlatformInfo>();
         protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
         protected IRemoteConfigService RemoteConfigService { get; } = Substitute.For<IRemoteConfigService>();
+        protected IAccessibilityService AccessibilityService { get; } = Substitute.For<IAccessibilityService>();
+        protected IUpdateRemoteConfigCacheService UpdateRemoteConfigCacheService { get; } = Substitute.For<IUpdateRemoteConfigCacheService>();
         protected IErrorHandlingService ErrorHandlingService { get; } = Substitute.For<IErrorHandlingService>();
-
-        protected ISuggestionProviderContainer SuggestionProviderContainer { get; } =
-            Substitute.For<ISuggestionProviderContainer>();
         protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
-        protected IStopwatchProvider StopwatchProvider { get; } = Substitute.For<IStopwatchProvider>();
 
         protected TestScheduler TestScheduler { get; }
         protected IRxActionFactory RxActionFactory { get; }

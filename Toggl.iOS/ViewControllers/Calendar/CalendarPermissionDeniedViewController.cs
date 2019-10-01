@@ -1,11 +1,13 @@
-﻿using Toggl.iOS.Extensions;
+﻿using CoreGraphics;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Calendar;
-using CoreGraphics;
-using Toggl.Core;
+using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
+using Foundation;
 using UIKit;
+using Toggl.Core.UI.Helper;
 
 namespace Toggl.iOS.ViewControllers.Calendar
 {
@@ -26,6 +28,21 @@ namespace Toggl.iOS.ViewControllers.Calendar
             MessageLabel.Text = Resources.EnableAccessLater;
             ContinueWithoutAccessButton.SetTitle(Resources.ContinueWithoutAccess, UIControlState.Normal);
 
+            var enableAccessString = string.Format(Resources.CalendarPermissionDeniedOr, Resources.CalendarPermissionDeniedEnableButton);
+
+            var rangeStart = enableAccessString.IndexOf(Resources.CalendarPermissionDeniedEnableButton, System.StringComparison.CurrentCulture);
+            var rangeEnd = Resources.CalendarPermissionDeniedEnableButton.Length;
+            var range = new NSRange(rangeStart, rangeEnd);
+
+            var attributedString = new NSMutableAttributedString(
+                enableAccessString,
+                new UIStringAttributes { ForegroundColor = UIColor.Black });
+            attributedString.AddAttributes(
+                new UIStringAttributes { ForegroundColor = Colors.Calendar.EnableCalendarAction.ToNativeColor() },
+                range);
+
+            EnableAccessButton.SetAttributedTitle(attributedString, UIControlState.Normal);
+
             var screenWidth = UIScreen.MainScreen.Bounds.Width;
             PreferredContentSize = new CGSize
             {
@@ -38,8 +55,8 @@ namespace Toggl.iOS.ViewControllers.Calendar
                 .BindAction(ViewModel.EnableAccess)
                 .DisposedBy(DisposeBag);
 
-            ContinueWithoutAccessButton.Rx()
-                .BindAction(ViewModel.Close)
+            ContinueWithoutAccessButton.Rx().Tap()
+                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
         }
     }

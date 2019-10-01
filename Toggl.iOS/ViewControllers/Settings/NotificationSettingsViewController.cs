@@ -1,8 +1,7 @@
 ﻿using System;
+using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core;
-using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -20,7 +19,7 @@ namespace Toggl.iOS.ViewControllers.Settings
         {
             base.ViewDidLoad();
 
-            NavigationItem.Title = Resources.NotificationSettingsTitle;
+            NavigationItem.Title = Resources.SmartReminders;
             NotificationDisabledLabel.Text = Resources.NotificationDisabledNotice;
             OpenSettingsButton.SetTitle(Resources.OpenSettingsApp, UIControlState.Normal);
             RowLabel.Text = Resources.UpcomingEvent;

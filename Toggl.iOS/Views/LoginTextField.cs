@@ -1,9 +1,9 @@
-﻿using System;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using CoreAnimation;
+﻿using CoreAnimation;
 using CoreGraphics;
 using Foundation;
+using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using UIKit;
@@ -35,9 +35,9 @@ namespace Toggl.iOS.Views
         private bool placeholderDrawn;
         private bool placeholderIsUp;
 
-        public LoginTextField(CGRect frame) : base(frame) {  }
+        public LoginTextField(CGRect frame) : base(frame) { }
 
-        public LoginTextField(IntPtr handle) : base(handle)  { }
+        public LoginTextField(IntPtr handle) : base(handle) { }
 
         public override string Text
         {
@@ -49,6 +49,17 @@ namespace Toggl.iOS.Views
                 if (string.IsNullOrEmpty(value) && !IsFirstResponder)
                     movePlaceholderDown();
                 base.Text = value;
+            }
+        }
+
+        public override string Placeholder
+        {
+            get => base.Placeholder;
+            set
+            {
+                base.Placeholder = value;
+                placeholderDrawn = false;
+                DrawPlaceholder(new CGRect());
             }
         }
 

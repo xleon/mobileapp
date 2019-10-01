@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Toggl.Core.UI.Parameters
+﻿namespace Toggl.Core.UI.Parameters
 {
     public sealed class SelectClientParameters
     {

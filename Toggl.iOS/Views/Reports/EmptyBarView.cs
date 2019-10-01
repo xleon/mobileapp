@@ -1,6 +1,6 @@
-﻿using UIKit;
-using Toggl.Core.UI.Helper;
+﻿using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
+using UIKit;
 
 namespace Toggl.iOS.Views.Reports
 {

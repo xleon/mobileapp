@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Threading.Tasks;
+﻿using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.Util;
 using Android.Support.V7.Widget;
 using Android.Views;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Threading.Tasks;
+using Toggl.Core.UI.Interfaces;
+using Toggl.Droid.Adapters.DiffingStrategies;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
-using Toggl.Core.UI.Interfaces;
 using Handler = Android.OS.Handler;
-using Toggl.Droid.Adapters.DiffingStrategies;
 
 namespace Toggl.Droid.Adapters
 {
@@ -24,18 +26,18 @@ namespace Toggl.Droid.Adapters
 
         private Subject<T> itemTapSubject = new Subject<T>();
 
-        private IList<T> items = new List<T>();
+        private IImmutableList<T> items = ImmutableList<T>.Empty;
 
-        private IList<T> nextUpdate;
+        private IImmutableList<T> nextUpdate;
 
         private bool isUpdateRunning;
 
         private readonly object updateLock = new object();
 
-        public virtual IList<T> Items
+        public virtual IImmutableList<T> Items
         {
             get => items;
-            set => SetItems(value ?? new List<T>());
+            set => SetItems(value ?? ImmutableList<T>.Empty);
         }
 
         protected BaseRecyclerAdapter(IDiffingStrategy<T> diffingStrategy = null)
@@ -89,7 +91,7 @@ namespace Toggl.Droid.Adapters
         public virtual T GetItem(int viewPosition)
             => items[viewPosition];
 
-        protected virtual void SetItems(IList<T> newItems)
+        protected virtual void SetItems(IImmutableList<T> newItems)
         {
             lock (updateLock)
             {
@@ -105,21 +107,18 @@ namespace Toggl.Droid.Adapters
             }
         }
 
-        private void processUpdate(IList<T> newItems)
+        private void processUpdate(IImmutableList<T> newItems)
         {
             var oldItems = items;
-            var handler = new Handler();
+            var handler = new Handler(Looper.MainLooper);
             Task.Run(() =>
             {
                 var diffResult = DiffUtil.CalculateDiff(new BaseDiffCallBack(oldItems, newItems, diffingStrategy));
-                handler.Post(() =>
-                {
-                    dispatchUpdates(newItems, diffResult);
-                });
+                handler.Post(() => dispatchUpdates(newItems, diffResult));
             });
         }
 
-        private void dispatchUpdates(IList<T> newItems, DiffUtil.DiffResult diffResult)
+        private void dispatchUpdates(IImmutableList<T> newItems, DiffUtil.DiffResult diffResult)
         {
             items = newItems;
             diffResult.DispatchUpdatesTo(this);
@@ -139,11 +138,11 @@ namespace Toggl.Droid.Adapters
 
         private sealed class BaseDiffCallBack : DiffUtil.Callback
         {
-            private IList<T> oldItems;
-            private IList<T> newItems;
+            private IImmutableList<T> oldItems;
+            private IImmutableList<T> newItems;
             private IDiffingStrategy<T> diffingStrategy;
 
-            public BaseDiffCallBack(IList<T> oldItems, IList<T> newItems, IDiffingStrategy<T> diffingStrategy)
+            public BaseDiffCallBack(IImmutableList<T> oldItems, IImmutableList<T> newItems, IDiffingStrategy<T> diffingStrategy)
             {
                 this.oldItems = oldItems;
                 this.newItems = newItems;

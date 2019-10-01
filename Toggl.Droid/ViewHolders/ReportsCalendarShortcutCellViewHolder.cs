@@ -1,9 +1,9 @@
-using System;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 
@@ -38,7 +38,7 @@ namespace Toggl.Droid.ViewHolders
 
         public void UpdateSelectionState(ReportsDateRangeParameter currentDateRange)
         {
-            backgroundDrawable.SetColor(Item.IsSelected(currentDateRange) ? Color.ParseColor("#328fff") : Color.ParseColor("#3e3e3e"));
+            backgroundDrawable.SetColor(Item.IsSelected(currentDateRange) ? Color.ParseColor("#328fff") : Color.ParseColor("#5E5B5B"));
             backgroundDrawable.InvalidateSelf();
         }
     }

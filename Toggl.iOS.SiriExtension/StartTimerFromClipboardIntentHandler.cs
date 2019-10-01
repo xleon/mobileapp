@@ -1,8 +1,8 @@
+using Foundation;
+using SiriExtension.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Foundation;
-using SiriExtension.Models;
 using Toggl.iOS.ExtensionKit;
 using Toggl.iOS.ExtensionKit.Analytics;
 using Toggl.iOS.ExtensionKit.Extensions;
@@ -14,7 +14,7 @@ using UIKit;
 
 namespace SiriExtension
 {
-    public class StartTimerFromClipboardIntentHandler: StartTimerFromClipboardIntentHandling
+    public class StartTimerFromClipboardIntentHandler : StartTimerFromClipboardIntentHandling
     {
         private ITogglApi togglAPI;
         private static string clipboardText;
@@ -23,8 +23,9 @@ namespace SiriExtension
         public StartTimerFromClipboardIntentHandler(ITogglApi togglApi)
         {
             togglAPI = togglApi;
-            InvokeOnMainThread(() => {
-                 clipboardText = UIPasteboard.General.String;
+            InvokeOnMainThread(() =>
+            {
+                clipboardText = UIPasteboard.General.String;
             });
         }
 

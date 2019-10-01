@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.Storage.Models;
 

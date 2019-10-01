@@ -1,17 +1,17 @@
-﻿using System;
+﻿using FluentAssertions;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NSubstitute;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared.Extensions;
 using Xunit;
 
@@ -26,14 +26,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
             protected override SelectTagsViewModel CreateViewModel()
                 => new SelectTagsViewModel(
                     NavigationService,
-                    StopwatchProvider,
                     InteractorFactory,
                     SchedulerProvider,
                     RxActionFactory
                 );
 
-            protected Task EnsureClosesTheViewModel()
-                => View.Received().Close();
+            protected void EnsureClosesTheViewModel()
+            {
+                View.Received().Close();
+            }
 
             protected bool EnsureExpectedTagsAreReturned(long[] actual, long[] expected)
             {
@@ -69,20 +70,17 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useNavigationService,
                 bool useInteractorFactory,
-                bool useStopwatchProvider,
                 bool useRxActionFactory,
                 bool useSchedulerProvider)
             {
                 var navigationService = useNavigationService ? NavigationService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
-                var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new SelectTagsViewModel(
                         navigationService,
-                        stopwatchProvider,
                         interactorFactory,
                         schedulerProvider,
                         rxActionFactory);
@@ -92,26 +90,26 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheCloseAction : SelectTagsViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : SelectTagsViewModelTest
         {
             [Fact, LogIfTooSlow]
             public async Task ClosesTheViewModel()
             {
                 await ViewModel.Initialize(DefaultParameter);
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
-                await EnsureClosesTheViewModel();
+                EnsureClosesTheViewModel();
             }
 
             [Fact, LogIfTooSlow]
             public async Task ReturnsTheSameTagsThatWerePassedToTheViewModel()
             {
                 var tagids = new long[] { 1, 4, 29, 2 };
-                await ViewModel.Initialize( new SelectTagsParameter(tagids, 0));
+                await ViewModel.Initialize(new SelectTagsParameter(tagids, 0));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();
 
                 (await ViewModel.Result).Should().BeSequenceEquivalentTo(tagids);
@@ -128,7 +126,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Save.Execute();
                 TestScheduler.Start();
 
-                await EnsureClosesTheViewModel();
+                EnsureClosesTheViewModel();
             }
 
             [Fact, LogIfTooSlow]
@@ -197,8 +195,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheIsEmptyProperty : SelectTagsViewModelTest
         {
-            const long workspaceId = 1;
-            const long irrelevantWorkspaceId = 2;
+            private const long workspaceId = 1;
+            private const long irrelevantWorkspaceId = 2;
 
             private void setup(Func<long, long> workspaceIdSelector)
             {
@@ -493,11 +491,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task AppendsTheTagIdToSelectedTagIdsIfNotSelectedAlready()
             {
-               var selectableTag = new SelectableTagViewModel(tagSuggestion.TagId, tagSuggestion.Name, true, 1);
+                var selectableTag = new SelectableTagViewModel(tagSuggestion.TagId, tagSuggestion.Name, true, 1);
 
-               ViewModel.SelectTag.Execute(selectableTag);
-               ViewModel.Save.Execute();
-               TestScheduler.Start();
+                ViewModel.SelectTag.Execute(selectableTag);
+                ViewModel.Save.Execute();
+                TestScheduler.Start();
 
                 var ids = await ViewModel.Result;
                 EnsureExpectedTagsAreReturned(ids, new[] { selectableTag.Id });
@@ -506,13 +504,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task RemovesTheTagIdFromSelectedTagIdsIfSelectedAlready()
             {
-               var selectableTag = new SelectableTagViewModel(tagSuggestion.TagId, tagSuggestion.Name, true, 1);
+                var selectableTag = new SelectableTagViewModel(tagSuggestion.TagId, tagSuggestion.Name, true, 1);
 
-               await ViewModel.Initialize(new SelectTagsParameter(new long[] { selectableTag.Id }, 0));
+                await ViewModel.Initialize(new SelectTagsParameter(new long[] { selectableTag.Id }, 0));
 
-               ViewModel.SelectTag.Execute(selectableTag);
-               ViewModel.Save.Execute();
-               TestScheduler.Start();
+                ViewModel.SelectTag.Execute(selectableTag);
+                ViewModel.Save.Execute();
+                TestScheduler.Start();
 
                 var ids = await ViewModel.Result;
                 EnsureExpectedTagsAreReturned(ids, new long[0]);

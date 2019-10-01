@@ -4,12 +4,12 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.Interactors;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels.Calendar;
-using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
@@ -28,8 +28,8 @@ namespace Toggl.Core.UI.ViewModels.Settings
         public bool PermissionGranted { get; private set; }
         public IObservable<bool> CalendarListVisible { get; }
 
-        public UIAction RequestAccess { get; }
-        public UIAction TogglCalendarIntegration { get; }
+        public ViewAction RequestAccess { get; }
+        public ViewAction TogglCalendarIntegration { get; }
 
         public CalendarSettingsViewModel(
             IUserPreferences userPreferences,
@@ -68,19 +68,19 @@ namespace Toggl.Core.UI.ViewModels.Settings
             calendarListVisibleSubject.OnNext(calendarListVisible);
         }
 
-        protected override async Task OnClose()
+        public override void CloseWithDefaultResult()
         {
             UserPreferences.SetEnabledCalendars(InitialSelectedCalendarIds.ToArray());
-            await base.OnClose();
+            base.CloseWithDefaultResult();
         }
 
-        protected override async Task OnDone()
+        protected override void Done()
         {
             if (!calendarListVisible)
                 SelectedCalendarIds.Clear();
 
             UserPreferences.SetEnabledCalendars(SelectedCalendarIds.ToArray());
-            await base.OnDone();
+            base.Done();
         }
 
         private void requestAccess()

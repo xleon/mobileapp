@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using Microsoft.Reactive.Testing;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
 using Xunit;
-using FsCheck.Xunit;
-using FsCheck;
 
 namespace Toggl.Core.Tests
 {
@@ -221,7 +221,7 @@ namespace Toggl.Core.Tests
                 var delay = TimeSpan.FromSeconds(delaySeconds.Get);
                 var actionWasInvoked = false;
                 Action action = () => actionWasInvoked = true;
-                
+
                 timeService.RunAfterDelay(delay, action);
                 scheduler.AdvanceBy(delay.Ticks);
 

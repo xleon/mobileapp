@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Toggl.Shared;
 using Toggl.Networking.Models;
+using Toggl.Shared;
 using Xunit;
 
 namespace Toggl.Networking.Tests.Models

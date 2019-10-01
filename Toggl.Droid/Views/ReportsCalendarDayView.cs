@@ -1,10 +1,10 @@
-﻿using System;
-using Android.Content;
+﻿using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Support.V4.Content;
 using Android.Util;
 using Android.Widget;
+using System;
 using Toggl.Droid.Extensions;
 using static Toggl.Core.UI.Helper.Colors;
 
@@ -66,6 +66,18 @@ namespace Toggl.Droid.Views
             }
         }
 
+        private bool isSingleDaySelection;
+
+        public bool IsSingleDaySelection
+        {
+            get => isSingleDaySelection;
+            set
+            {
+                isSingleDaySelection = value;
+                PostInvalidate();
+            }
+        }
+
         public ReportsCalendarDayView(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
@@ -84,18 +96,18 @@ namespace Toggl.Droid.Views
         public ReportsCalendarDayView(Context context, IAttributeSet attrs, int defStyle)
             : base(context, attrs, defStyle)
         {
-            cornerRadius = (int) 22.DpToPixels(context);
-            verticalPadding = (int) 6.DpToPixels(context);
+            cornerRadius = 23.DpToPixels(context);
+            verticalPadding = 6.DpToPixels(context);
             selectedPaint = new Paint
             {
                 Flags = PaintFlags.AntiAlias,
-                Color = new Color(ContextCompat.GetColor(context, Resource.Color.calendarSelected))
+                Color = context.SafeGetColor(Resource.Color.calendarSelected)
             };
 
             circlePaint = new Paint
             {
                 Flags = PaintFlags.AntiAlias,
-                Color = Reports.DayNotInMonth.ToNativeColor()
+                Color = context.SafeGetColor(Resource.Color.placeholderText)
             };
         }
 
@@ -111,24 +123,31 @@ namespace Toggl.Droid.Views
 
             if (IsSelected)
             {
-                var roundRect = new RectF(0, verticalPadding, width, height + verticalPadding);
-                canvas.DrawRoundRect(roundRect, cornerRadius, cornerRadius, selectedPaint);
+                drawCircle(canvas, width, height, selectedPaint);
 
-                var squareRectLeft = RoundLeft ? cornerRadius : 0;
-                var squareRectRight = width - (RoundRight ? cornerRadius : 0);
-                var squareRect = new RectF(squareRectLeft, verticalPadding, squareRectRight, height + verticalPadding);
-                canvas.DrawRect(squareRect, selectedPaint);
+                if (!IsSingleDaySelection)
+                {
+                    var squareRectLeft = RoundLeft ? cornerRadius : 0;
+                    var squareRectRight = width - (RoundRight ? cornerRadius : 0);
+                    var squareRect = new RectF(squareRectLeft, verticalPadding, squareRectRight, height + verticalPadding);
+                    canvas.DrawRect(squareRect, selectedPaint);
+                }
             }
             else if (IsToday)
             {
-                var centerX = width / 2;
-                var centerY = height / 2 + verticalPadding;
-                var radius = Math.Min(width, height) / 2;
-
-                canvas.DrawCircle(centerX, centerY, radius, circlePaint);
+                drawCircle(canvas, width, height, circlePaint);
             }
 
             base.Draw(canvas);
+        }
+
+        private void drawCircle(Canvas canvas, float width, float height, Paint paint)
+        {
+            var centerX = width / 2;
+            var centerY = height / 2 + verticalPadding;
+            var radius = Math.Min(width, height) / 2;
+
+            canvas.DrawCircle(centerX, centerY, radius, paint);
         }
     }
 }

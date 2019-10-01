@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 
 namespace Toggl.Shared.Extensions
@@ -32,6 +32,9 @@ namespace Toggl.Shared.Extensions
 
             public void OnNext(T value) { }
         }
+
+        public static IDisposable Subscribe<T1, T2>(this IObservable<(T1, T2)> observable, Action<T1, T2> action)
+            => observable.Subscribe(tuple => action(tuple.Item1, tuple.Item2));
 
         public static IDisposable SubscribeToErrorsAndCompletion<T>(this IObservable<T> observable, Action<Exception> onError, Action onCompleted)
         {
@@ -175,5 +178,14 @@ namespace Toggl.Shared.Extensions
 
         public static IObservable<TOther> SelectLatestFrom<TFirst, TOther>(this IObservable<TFirst> observable, IObservable<TOther> otherObservable)
             => observable.WithLatestFrom(otherObservable, (first, other) => other);
+
+        public static IObservable<T> Flatten<T>(this IObservable<IObservable<T>> observable)
+            => observable.SelectMany(CommonFunctions.Identity);
+
+        public static IObservable<T> Flatten<T>(this IObservable<IEnumerable<T>> observable)
+            => observable.SelectMany(CommonFunctions.Identity);
+
+        public static IObservable<T> OnErrorResumeEmpty<T>(this IObservable<T> observable)
+            => observable.OnErrorResumeNext(Observable.Empty<T>());
     }
 }

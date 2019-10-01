@@ -1,21 +1,21 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Autocomplete.Suggestions;
-using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Extensions;
-using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using Xunit;
 
@@ -28,7 +28,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             protected SelectProjectParameter DefaultParameter { get; } = new SelectProjectParameter(null, null, 1);
 
             protected override SelectProjectViewModel CreateViewModel()
-            => new SelectProjectViewModel(DataSource, RxActionFactory, InteractorFactory, NavigationService, SchedulerProvider, StopwatchProvider);
+            => new SelectProjectViewModel(DataSource, RxActionFactory, InteractorFactory, NavigationService, SchedulerProvider);
         }
 
         public sealed class TheConstructor : SelectProjectViewModelTest
@@ -40,32 +40,30 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useRxActionFactory,
                 bool useInteractorFactory,
                 bool useNavigationService,
-                bool useSchedulerProvider,
-                bool useStopwatchProvider)
+                bool useSchedulerProvider)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
-                var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
-
+              
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SelectProjectViewModel(dataSource, rxActionFactory, interactorFactory, navigationService, schedulerProvider, stopwatchProvider);
+                    () => new SelectProjectViewModel(dataSource, rxActionFactory, interactorFactory, navigationService, schedulerProvider);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
             }
         }
 
-        public sealed class TheCloseCommand : SelectProjectViewModelTest
+        public sealed class TheCloseWithDefaultResultMethod : SelectProjectViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Theory]
@@ -77,7 +75,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 await ViewModel.Initialize(new SelectProjectParameter(projectId, 10, 11));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 (await ViewModel.Result)
                     .ProjectId.Should().Be(projectId);
@@ -92,7 +90,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 await ViewModel.Initialize(new SelectProjectParameter(10, taskId, 11));
 
-                ViewModel.Close.Execute();
+                ViewModel.CloseWithDefaultResult();
 
                 (await ViewModel.Result)
                     .TaskId.Should().Be(taskId);
@@ -107,7 +105,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SelectProject
                     .Execute(ProjectSuggestion.NoProject(0, ""));
 
-                await View.Received().Close();
+                View.Received().Close();
             }
 
             [Fact, LogIfTooSlow]
@@ -314,7 +312,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     var projectName = "New project name";
                     var createProjectSuggestion = new CreateEntitySuggestion(Resources.CreateProject, projectName);
-                    setupProjectCreationResult(null );
+                    setupProjectCreationResult(null);
 
                     await ViewModel.Initialize(new SelectProjectParameter(null, null, 10));
 
@@ -323,14 +321,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.SelectProject.Execute(createProjectSuggestion);
                     TestScheduler.Start();
 
-                    await View.DidNotReceive().Close();
+                    View.DidNotReceive().Close();
                 }
 
                 [Fact, LogIfTooSlow]
                 public async Task ClosesTheViewModelReturningTheCreatedIdIfTheProjectIsCreated()
                 {
                     var workspace = new MockWorkspace { Id = 1, Name = "ws", Admin = true, OnlyAdminsMayCreateProjects = true };
-                    InteractorFactory.GetAllWorkspaces().Execute().Returns(Observable.Return(new[] { workspace } ));
+                    InteractorFactory.GetAllWorkspaces().Execute().Returns(Observable.Return(new[] { workspace }));
                     const long projectId = 10;
                     setupProjectCreationResult(projectId);
 
@@ -795,7 +793,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheIsEmptyProperty : SelectProjectViewModelTest
         {
-            const long workspaceId = 1;
+            private const long workspaceId = 1;
 
             private IThreadSafeProject createArbitraryProject(int id)
                 => new MockProject

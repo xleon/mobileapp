@@ -1,24 +1,24 @@
-﻿using System;
+﻿using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Helper;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Shared.Extensions;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
@@ -42,7 +42,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             protected TimeEntriesViewModel ViewModel { get; private set; }
 
             protected TimeEntriesViewModel CreateViewModel()
-                => new TimeEntriesViewModel(DataSource, SyncManager, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
+                => new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
 
             protected TimeEntriesViewModelTest()
             {
@@ -57,7 +57,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useDataSource,
-                bool useSyncManager,
                 bool useInteractorFactory,
                 bool useAnalyticsService,
                 bool useSchedulerProvider,
@@ -65,7 +64,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useTimeService)
             {
                 var dataSource = useDataSource ? DataSource : null;
-                var syncManager = useSyncManager ? SyncManager : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
@@ -73,7 +71,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var timeService = useTimeService ? TimeService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new TimeEntriesViewModel(dataSource, syncManager, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
+                    () => new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -137,7 +135,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             public TheDelayDeleteTimeEntryAction()
             {
-                viewModel = new TimeEntriesViewModel(DataSource, SyncManager, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
+                viewModel = new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
                 viewModel.TimeEntriesPendingDeletion.Subscribe(observer);
             }
 
@@ -246,6 +244,22 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 // 3 - undo bar hidden
                 observer.Messages.Should().HaveCount(3);
             }
+
+            [Fact]
+            public async ThreadingTask TracksTheDeleteOfSingleTimeEntryEvent()
+            {
+                viewModel.DelayDeleteTimeEntries.Execute(new[] { 123L });
+                SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks);
+                AnalyticsService.DeleteTimeEntry.Received().Track(DeleteTimeEntryOrigin.LogSwipe);
+            }
+
+            [Fact]
+            public async ThreadingTask TracksTheDeleteOfGroupedTimeEntriesEvent()
+            {
+                viewModel.DelayDeleteTimeEntries.Execute(new[] { 123L, 456L, 789L });
+                SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks);
+                AnalyticsService.DeleteTimeEntry.Received().Track(DeleteTimeEntryOrigin.GroupedLogSwipe);
+            }
         }
 
         public sealed class TheCancelDeleteTimeEntryAction : TimeEntriesViewModelTest
@@ -256,7 +270,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             public TheCancelDeleteTimeEntryAction()
             {
-                viewModel = new TimeEntriesViewModel(DataSource, SyncManager, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
+                viewModel = new TimeEntriesViewModel(DataSource, InteractorFactory, AnalyticsService, SchedulerProvider, RxActionFactory, TimeService);
                 viewModel.TimeEntriesPendingDeletion.Subscribe(observer);
             }
 

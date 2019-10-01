@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation;
+﻿using Foundation;
+using System;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Views.Interfaces;
 using UIKit;

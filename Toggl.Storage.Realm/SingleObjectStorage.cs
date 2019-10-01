@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Realms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using Realms;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Exceptions;
@@ -57,7 +57,7 @@ namespace Toggl.Storage.Realm
             where TRealmEntity : RealmObject, TModel, IUpdatesFrom<TModel>
             => new SingleObjectStorage<TModel>(new RealmAdapter<TRealmEntity, TModel>(
                 getRealmInstance,
-                convertToRealm, 
+                convertToRealm,
                 _ => __ => true,
                 _ => __ => true,
                 obj => fakeId));

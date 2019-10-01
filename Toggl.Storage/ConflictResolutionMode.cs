@@ -1,5 +1,4 @@
-﻿using System;
-namespace Toggl.Storage
+﻿namespace Toggl.Storage
 {
     public enum ConflictResolutionMode
     {

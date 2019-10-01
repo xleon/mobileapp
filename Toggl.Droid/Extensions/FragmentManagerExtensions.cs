@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using Android.Support.V4.App;
-using Toggl.Shared.Extensions;
+﻿using Android.Support.V4.App;
+using System.Linq;
 
 namespace Toggl.Droid.Extensions
 {

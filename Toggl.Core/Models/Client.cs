@@ -1,6 +1,5 @@
 ﻿using System;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;

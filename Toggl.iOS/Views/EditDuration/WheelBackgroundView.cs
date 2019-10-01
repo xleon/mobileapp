@@ -1,7 +1,7 @@
-﻿using System;
-using CoreAnimation;
+﻿using CoreAnimation;
 using CoreGraphics;
 using Foundation;
+using System;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Views.EditDuration.Shapes;
@@ -39,7 +39,7 @@ namespace Toggl.iOS.Views.EditDuration
 
         private CALayer backgroundLayer;
 
-        public WheelBackgroundView (IntPtr handle) : base (handle)
+        public WheelBackgroundView(IntPtr handle) : base(handle)
         {
         }
 

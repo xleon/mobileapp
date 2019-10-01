@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Android.Support.V7.Widget;
+using Android.Views;
+using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Android.Support.V7.Widget;
-using Android.Views;
 
 namespace Toggl.Droid.ViewHelpers
 {     public sealed class SuggestionsRecyclerViewSnapHelper : LinearSnapHelper

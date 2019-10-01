@@ -1,6 +1,6 @@
-﻿using System;
-using Android.Runtime;
+﻿using Android.Runtime;
 using Android.Views;
+using System;
 using Toggl.Core.Autocomplete.Suggestions;
 
 namespace Toggl.Droid.ViewHolders

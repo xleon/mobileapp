@@ -1,6 +1,5 @@
 using System;
 using System.Reactive.Linq;
-using Toggl.Core;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
@@ -136,41 +135,6 @@ namespace Toggl.iOS.ViewControllers
             ActivityIndicator.StartSpinning();
 
             ErrorLabel.Hidden = true;
-
-            prepareBackbutton();
-        }
-
-        private void prepareBackbutton()
-        {
-            var image = UIImage
-                .FromBundle("icBackNoPadding")
-                .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            var color = Core.UI.Helper.Colors.NavigationBar.BackButton.ToNativeColor();
-            var backButton = new UIButton();
-            backButton.TintColor = color;
-            backButton.SetImage(image, UIControlState.Normal);
-            backButton.SetTitleColor(color, UIControlState.Normal);
-            backButton.SetTitle(Resources.Back, UIControlState.Normal);
-            backButton.TitleLabel.Font = UIFont.SystemFontOfSize(backButtonFontSize, UIFontWeight.Medium);
-
-            backButton.Rx()
-                .BindAction(ViewModel.Close)
-                .DisposedBy(DisposeBag);
-
-            //Spacing between button image and title
-            var spacing = 6;
-            backButton.ImageEdgeInsets = new UIEdgeInsets(0, 0, 0, spacing);
-            backButton.TitleEdgeInsets = new UIEdgeInsets(0, spacing, 0, 0);
-
-            NavigationItem.HidesBackButton = true;
-            NavigationItem.LeftItemsSupplementBackButton = false;
-            NavigationItem.SetLeftBarButtonItem(new UIBarButtonItem(backButton), true);
-
-            //Otherwise title gets clipped
-            var frame = backButton.Frame;
-            frame.Width = 90;
-            backButton.Frame = frame;
-            backButton.HorizontalAlignment = UIControlContentHorizontalAlignment.Left;
         }
 
         private void resetPasswordButtonTapped()

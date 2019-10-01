@@ -1,9 +1,9 @@
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.Sync.Extensions;
@@ -72,7 +72,7 @@ namespace Toggl.Core.Tests.Sync.Scenarios.SyncLight
                 tasks: serverState.Tasks.ToSyncable(),
                 tags: serverState.Tags.ToSyncable());
 
-        protected override async Task Act(ISyncManager syncManager)
+        protected override async Task Act(ISyncManager syncManager, AppServices appServices)
         {
             await syncManager.PullTimeEntries();
         }

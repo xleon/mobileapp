@@ -1,8 +1,7 @@
-using System;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Toggl.Core;
+using System;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 

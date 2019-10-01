@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
 using Android.App;
 using Android.Content;
+using System;
+using System.Collections.Generic;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.Views;
@@ -17,13 +17,13 @@ namespace Toggl.Droid.Presentation
         protected override HashSet<Type> AcceptedViewModels { get; } = new HashSet<Type>
         {
             typeof(AboutViewModel),
-            typeof(BrowserViewModel),
             typeof(CalendarSettingsViewModel),
             typeof(EditDurationViewModel),
             typeof(EditProjectViewModel),
             typeof(EditTimeEntryViewModel),
             typeof(ForgotPasswordViewModel),
             typeof(LoginViewModel),
+            typeof(LicensesViewModel),
             typeof(MainTabBarViewModel),
             typeof(OutdatedAppViewModel),
             typeof(SelectClientViewModel),
@@ -36,16 +36,16 @@ namespace Toggl.Droid.Presentation
             typeof(TokenResetViewModel)
         };
 
-        private readonly Dictionary<Type, ActivityPresenterInfo> presentableActivitiesInfos = new Dictionary<Type,ActivityPresenterInfo>
+        private readonly Dictionary<Type, ActivityPresenterInfo> presentableActivitiesInfos = new Dictionary<Type, ActivityPresenterInfo>
         {
             [typeof(AboutViewModel)] = new ActivityPresenterInfo(typeof(AboutActivity)),
-            [typeof(BrowserViewModel)] = new ActivityPresenterInfo(typeof(BrowserActivity)),
             [typeof(CalendarSettingsViewModel)] = new ActivityPresenterInfo(typeof(CalendarSettingsActivity)),
             [typeof(EditDurationViewModel)] = new ActivityPresenterInfo(typeof(EditDurationActivity)),
             [typeof(EditProjectViewModel)] = new ActivityPresenterInfo(typeof(EditProjectActivity)),
             [typeof(EditTimeEntryViewModel)] = new ActivityPresenterInfo(typeof(EditTimeEntryActivity)),
             [typeof(ForgotPasswordViewModel)] = new ActivityPresenterInfo(typeof(ForgotPasswordActivity)),
             [typeof(LoginViewModel)] = new ActivityPresenterInfo(typeof(LoginActivity), clearBackStackFlags),
+            [typeof(LicensesViewModel)] = new ActivityPresenterInfo(typeof(LicensesActivity)),
             [typeof(MainTabBarViewModel)] = new ActivityPresenterInfo(typeof(MainTabBarActivity), clearBackStackFlags),
             [typeof(OutdatedAppViewModel)] = new ActivityPresenterInfo(typeof(OutdatedAppActivity), clearBackStackFlags),
             [typeof(SelectClientViewModel)] = new ActivityPresenterInfo(typeof(SelectClientActivity)),
@@ -64,7 +64,7 @@ namespace Toggl.Droid.Presentation
 
             if (!presentableActivitiesInfos.TryGetValue(viewModelType, out var presentableInfo))
                 throw new Exception($"Failed to start Activity for viewModel with type {viewModelType.Name}");
-            
+
             var intent = new Intent(Application.Context, presentableInfo.ActivityType).AddFlags(presentableInfo.Flags);
 
             if (presentableInfo.Flags == clearBackStackFlags)

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Android.OS;
+using System;
 using System.Reactive.Concurrency;
-using Android.OS;
 using Toggl.Core.Analytics;
 using Toggl.Shared;
 
@@ -14,67 +14,87 @@ namespace Toggl.Droid
 
         public AndroidSchedulerProvider(IAnalyticsService analyticsService)
         {
-            MainScheduler = new HandlerScheduler(new Handler(Looper.MainLooper), Looper.MainLooper.Thread.Id, analyticsService);
-            DefaultScheduler = new TrackedSchedulerWrapper(Scheduler.Default, analyticsService);
-            BackgroundScheduler = new TrackedSchedulerWrapper(NewThreadScheduler.Default, analyticsService);
+            MainScheduler = new HandlerScheduler(new Handler(Looper.MainLooper), analyticsService)
+                .ToTrackingScheduler(analyticsService);
+
+            DefaultScheduler = Scheduler.Default
+                .ToTrackingScheduler(analyticsService);
+
+            BackgroundScheduler = NewThreadScheduler.Default
+                .ToTrackingScheduler(analyticsService);
         }
-        
-        public sealed class TrackedSchedulerWrapper : IScheduler
+    }
+
+    public sealed class TrackedSchedulerWrapper : IScheduler
+    {
+        private readonly IScheduler innerScheduler;
+        private readonly IAnalyticsService analyticsService;
+        private readonly string analyticsEventName;
+
+        public TrackedSchedulerWrapper(IScheduler innerScheduler, IAnalyticsService analyticsService)
         {
-            private readonly string analyticsEventName;
-            private readonly IAnalyticsService analyticsService;
-            private readonly IScheduler innerScheduler;
+            analyticsEventName = innerScheduler.GetType().Name;
 
-            public TrackedSchedulerWrapper(IScheduler innerScheduler, IAnalyticsService analyticsService)
+            this.innerScheduler = innerScheduler;
+            this.analyticsService = analyticsService;
+        }
+
+        public DateTimeOffset Now => innerScheduler.Now;
+
+        private void performAnalytics(string cause, Exception exception)
+        {
+            analyticsService.DebugSchedulerError.Track(
+                analyticsEventName,
+                cause,
+                exception.GetType().Name,
+                exception.StackTrace);
+
+            analyticsService.Track(exception, exception.Message);
+        }
+
+        public IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
+        {
+            try
             {
-                this.innerScheduler = innerScheduler;
-                this.analyticsService = analyticsService;
-                analyticsEventName = this.innerScheduler.GetType().Name;
+                return innerScheduler.Schedule(state, action);
             }
-
-            public DateTimeOffset Now => innerScheduler.Now;
-
-            public IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
+            catch (Exception exception)
             {
-                try
-                {
-                    return innerScheduler.Schedule(state, action);
-                }
-                catch (Exception exception)
-                {
-                    analyticsService.DebugScheduleError.Track(analyticsEventName, "Schedule:1", exception.GetType().Name, exception.StackTrace);
-                    analyticsService.Track(exception, exception.Message);
-                    throw;
-                }
-            }
-
-            public IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
-            {
-                try
-                {
-                    return innerScheduler.Schedule(state, dueTime, action);
-                }
-                catch (Exception exception)
-                {
-                    analyticsService.DebugScheduleError.Track(analyticsEventName, "Schedule:2", exception.GetType().Name, exception.StackTrace);
-                    analyticsService.Track(exception, exception.Message);
-                    throw;
-                }
-            }
-
-            public IDisposable Schedule<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action)
-            {
-                try
-                {
-                    return innerScheduler.Schedule(state, dueTime, action);
-                }
-                catch (Exception exception)
-                {
-                    analyticsService.DebugScheduleError.Track(analyticsEventName, "Schedule:3", exception.GetType().Name, exception.StackTrace);
-                    analyticsService.Track(exception, exception.Message);
-                    throw;
-                }
+                performAnalytics("Schedule:1", exception);
+                throw;
             }
         }
+
+        public IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
+        {
+            try
+            {
+                return innerScheduler.Schedule(state, dueTime, action);
+            }
+            catch (Exception exception)
+            {
+                performAnalytics("Schedule:2", exception);
+                throw;
+            }
+        }
+
+        public IDisposable Schedule<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action)
+        {
+            try
+            {
+                return innerScheduler.Schedule(state, dueTime, action);
+            }
+            catch (Exception exception)
+            {
+                performAnalytics("Schedule:3", exception);
+                throw;
+            }
+        }
+    }
+
+    public static class SchedulerExtensions
+    {
+        public static IScheduler ToTrackingScheduler(this IScheduler scheduler, IAnalyticsService analyticsService)
+            => new TrackedSchedulerWrapper(scheduler, analyticsService);
     }
 }

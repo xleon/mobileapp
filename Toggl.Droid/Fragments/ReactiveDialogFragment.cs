@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Reactive;
-using System.Reactive.Disposables;
-using System.Threading.Tasks;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.App;
 using Android.Views;
+using System;
+using System.Collections.Generic;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 
@@ -30,7 +30,13 @@ namespace Toggl.Droid.Fragments
             : base(javaReference, transfer)
         {
         }
-        
+
+        public override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            SetStyle(StyleNoTitle, Theme);
+        }
+
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
@@ -81,41 +87,33 @@ namespace Toggl.Droid.Fragments
             if (!disposing) return;
             DisposeBag?.Dispose();
         }
-        
-        public Task Close()
+
+        public void Close()
         {
             AndroidDependencyContainer
                 .Instance
                 .ViewModelCache
                 .Clear<TViewModel>();
-            
+
             Dismiss();
-            return Task.CompletedTask;
         }
 
         public override void OnCancel(IDialogInterface dialog)
         {
-            base.OnCancel(dialog);
-            
-            AndroidDependencyContainer
-                .Instance
-                .ViewModelCache
-                .Clear<TViewModel>();
-            
-            ViewModel.Cancel();
+            ViewModel.CloseWithDefaultResult();
         }
 
         public void OpenAppSettings()
         {
-            if (IsDetached 
-                || Activity == null 
-                || Activity.IsFinishing 
+            if (IsDetached
+                || Activity == null
+                || Activity.IsFinishing
                 || !(Activity is IPermissionRequester permissionRequester))
                 return;
-            
+
             permissionRequester.OpenAppSettings();
         }
-        
+
         public IObservable<bool> Confirm(string title, string message, string confirmButtonText, string dismissButtonText)
             => throw new InvalidOperationException("You shouldn't be doing this from the Dialog. Use the parent activity/fragment");
 
@@ -127,6 +125,9 @@ namespace Toggl.Droid.Fragments
 
         public IObservable<T> Select<T>(string title, IEnumerable<SelectOption<T>> options, int initialSelectionIndex)
             => throw new InvalidOperationException("You shouldn't be doing this from the Dialog. Use the parent activity/fragment");
+        
+        public IObservable<T> SelectAction<T>(string title, IEnumerable<SelectOption<T>> options)
+            => throw new InvalidOperationException("This is not implemented for Android");
 
         public IObservable<bool> RequestCalendarAuthorization(bool force = false)
             => throw new InvalidOperationException("You shouldn't be doing this from the Dialog. Use the parent activity/fragment");

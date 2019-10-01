@@ -1,4 +1,7 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.Reactive.Testing;
+using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,25 +10,21 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Navigation;
-using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Shared.Models;
 using Toggl.Storage;
 using Xunit;
 using static Toggl.Core.Helper.Constants;
@@ -52,11 +51,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     InteractorFactory,
                     NavigationService,
                     RemoteConfigService,
-                    SuggestionProviderContainer,
+                    AccessibilityService,
+                    UpdateRemoteConfigCacheService,
                     AccessRestrictionStorage,
                     SchedulerProvider,
-                    StopwatchProvider,
-                    RxActionFactory);
+                    RxActionFactory,
+                    PermissionsChecker,
+                    BackgroundService,
+                    PlatformInfo);
 
                 vm.Initialize();
 
@@ -72,12 +74,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.None);
                 RemoteConfigService
-                    .RatingViewConfiguration
-                    .Returns(Observable.Return(defaultRemoteConfiguration));
-
-                var provider = Substitute.For<ISuggestionProvider>();
-                provider.GetSuggestions().Returns(Observable.Empty<Suggestion>());
-                SuggestionProviderContainer.Providers.Returns(new[] { provider }.ToList().AsReadOnly());
+                    .GetRatingViewConfiguration()
+                    .Returns(defaultRemoteConfiguration);
 
                 DataSource.Preferences.Current.Returns(Observable.Create<IThreadSafePreferences>(observer =>
                 {
@@ -105,11 +103,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useInteractorFactory,
                 bool useNavigationService,
                 bool useRemoteConfigService,
-                bool useSuggestionProviderContainer,
+                bool useAccessibilityService,
+                bool useRemoteConfigUpdateService,
                 bool useAccessRestrictionStorage,
                 bool useSchedulerProvider,
-                bool useStopwatchProvider,
-                bool useRxActionFactory)
+                bool useRxActionFactory,
+                bool usePermissionsChecker,
+                bool useBackgroundService,
+                bool usePlatformInfo)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
@@ -121,11 +122,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
-                var suggestionProviderContainer = useSuggestionProviderContainer ? SuggestionProviderContainer : null;
+                var accessibilityService = useAccessibilityService ? AccessibilityService : null;
+                var remoteConfigUpdateService = useRemoteConfigUpdateService ? UpdateRemoteConfigCacheService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
-                var stopwatchProvider = useStopwatchProvider ? StopwatchProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var permissionsChecker = usePermissionsChecker ? PermissionsChecker : null;
+                var backgroundService = useBackgroundService ? BackgroundService : null;
+                var platformInfo = usePlatformInfo ? PlatformInfo : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -139,11 +143,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         interactorFactory,
                         navigationService,
                         remoteConfigService,
-                        suggestionProviderContainer,
+                        accessibilityService,
+                        remoteConfigUpdateService,
                         accessRestrictionStorage,
                         schedulerProvider,
-                        stopwatchProvider,
-                        rxActionFactory);
+                        rxActionFactory,
+                        permissionsChecker,
+                        backgroundService,
+                        platformInfo);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -224,6 +231,18 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await ThreadingTask.Delay(200);
 
                 await NavigationService.Received(1).Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask DoesNotNavigateToSelectDefaultWorkspaceViewModelWhenTheresNoWorkspaceAvaialable()
+            {
+                AccessRestrictionStorage.HasNoWorkspace().Returns(true);
+                AccessRestrictionStorage.HasNoDefaultWorkspace().Returns(true);
+
+                await ViewModel.ViewAppearingAsync();
+
+                await NavigationService.Received().Navigate<NoWorkspaceViewModel, Unit>(View);
+                await NavigationService.DidNotReceive().Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
         }
 
@@ -611,12 +630,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 timeEntry.Start.Returns(DateTimeOffset.Now);
                 timeEntry.Duration.Returns((long?)null);
                 timeEntry.Description.Returns("something");
-                var suggestion = new Suggestion(timeEntry);
-                suggestionProvider.GetSuggestions().Returns(Observable.Return(suggestion));
-                var providers = new ReadOnlyCollection<ISuggestionProvider>(
-                    new List<ISuggestionProvider> { suggestionProvider }
-                );
-                SuggestionProviderContainer.Providers.Returns(providers);
+                var suggestion = new Suggestion(timeEntry, SuggestionProviderType.MostUsedTimeEntries);
+                InteractorFactory.GetSuggestions(Arg.Any<int>()).Execute().Returns(Observable.Return(new[] { suggestion }));
             }
 
             protected void PrepareTimeEntry()
@@ -760,8 +775,20 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheInitializeMethod
+        public sealed class TheInitializeMethod : MainViewModelTest
         {
+            [Fact, LogIfTooSlow]
+            public async void ReportsUserIdToAppCenter()
+            {
+                var userId = 1234567890L;
+                var user = Substitute.For<IThreadSafeUser>();
+                user.Id.Returns(userId);
+                InteractorFactory.GetCurrentUser().Execute().Returns(Observable.Return(user));
+                await ViewModel.Initialize();
+
+                AnalyticsService.Received().SetAppCenterUserId(userId);
+            }
+
             public sealed class WhenShowingTheRatingsView : MainViewModelTest
             {
                 [Fact, LogIfTooSlow]
@@ -781,8 +808,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.Start);
                     RemoteConfigService
-                        .RatingViewConfiguration
-                        .Returns(Observable.Return(defaultRemoteConfiguration));
+                        .GetRatingViewConfiguration()
+                        .Returns(defaultRemoteConfiguration);
 
                     var now = DateTimeOffset.Now;
                     var firstOpened = now - TimeSpan.FromDays(5);
@@ -803,8 +830,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.Start);
                     RemoteConfigService
-                        .RatingViewConfiguration
-                        .Returns(Observable.Return(defaultRemoteConfiguration));
+                        .GetRatingViewConfiguration()
+                        .Returns(defaultRemoteConfiguration);
 
                     var now = DateTimeOffset.Now;
                     var firstOpened = now - TimeSpan.FromDays(6);
@@ -827,8 +854,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 {
                     var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.Start);
                     RemoteConfigService
-                        .RatingViewConfiguration
-                        .Returns(Observable.Return(defaultRemoteConfiguration));
+                        .GetRatingViewConfiguration()
+                        .Returns(defaultRemoteConfiguration);
 
                     var now = DateTimeOffset.Now;
                     var firstOpened = now - TimeSpan.FromDays(6);
@@ -846,6 +873,27 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     TestScheduler.Start();
                     observer.LastEmittedValue().Should().BeFalse();
+                }
+
+                [Theory, LogIfTooSlow]
+                [InlineData(ApplicationInstallLocation.Internal, Platform.Giskard, true)]
+                [InlineData(ApplicationInstallLocation.External, Platform.Giskard, true)]
+                [InlineData(ApplicationInstallLocation.Unknown, Platform.Giskard, true)]
+                [InlineData(ApplicationInstallLocation.Internal, Platform.Daneel, false)]
+                [InlineData(ApplicationInstallLocation.External, Platform.Daneel, false)]
+                [InlineData(ApplicationInstallLocation.Unknown, Platform.Daneel, false)]
+                public async void TracksApplicationInstallLocation(ApplicationInstallLocation location, Platform platform, bool shouldTrack)
+                {
+                    PlatformInfo.InstallLocation.Returns(location);
+                    PlatformInfo.Platform.Returns(platform);
+
+                    await ViewModel.Initialize();
+                    TestScheduler.Start();
+
+                    if (shouldTrack)
+                        AnalyticsService.ApplicationInstallLocation.Received().Track(location);
+                    else
+                        AnalyticsService.ApplicationInstallLocation.DidNotReceive().Track(location);
                 }
             }
         }

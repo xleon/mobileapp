@@ -1,19 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Collections.Generic;
 using Toggl.Core.Analytics;
+using Toggl.Core.Exceptions;
+using Toggl.Core.Extensions;
 using Toggl.Core.Models;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Sync.ConflictResolution;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Models;
-using Toggl.Core.Extensions;
-using Toggl.Core.Models.Interfaces;
-using Toggl.Core.Sync.ConflictResolution;
-using Toggl.Core.Exceptions;
 
 namespace Toggl.Core.DataSources
 {
@@ -85,14 +85,13 @@ namespace Toggl.Core.DataSources
         }
 
         public override IObservable<IThreadSafeTimeEntry> Create(IThreadSafeTimeEntry entity)
-            => checkForOutOfBoundsDate(entity, "Create")
-                .SelectMany(_ => repository.UpdateWithConflictResolution(entity.Id, entity, alwaysCreate, RivalsResolver)  
-                    .ToThreadSafeResult(Convert)
-                    .SelectMany(CommonFunctions.Identity)
-                    .Do(HandleConflictResolutionResult)
-                    .OfType<CreateResult<IThreadSafeTimeEntry>>()
-                    .FirstAsync()
-                    .Select(result => result.Entity));
+            => repository.UpdateWithConflictResolution(entity.Id, entity, alwaysCreate, RivalsResolver)
+                .ToThreadSafeResult(Convert)
+                .Flatten()
+                .Do(HandleConflictResolutionResult)
+                .OfType<CreateResult<IThreadSafeTimeEntry>>()
+                .FirstAsync()
+                .Select(result => result.Entity);
 
         public void OnTimeEntryStopped(IThreadSafeTimeEntry timeEntry)
         {
@@ -123,61 +122,6 @@ namespace Toggl.Core.DataSources
             }
         }
 
-        public override IObservable<IEnumerable<IConflictResolutionResult<IThreadSafeTimeEntry>>> BatchUpdate(IEnumerable<IThreadSafeTimeEntry> entities)
-            => entities.Select(timeEntry => checkForOutOfBoundsDate(timeEntry, "BatchUpdate"))
-                .Merge()
-                .LastOrDefaultAsync()
-                .SelectMany(_ => base.BatchUpdate(entities));
-
-        public override IObservable<IThreadSafeTimeEntry> Update(IThreadSafeTimeEntry entity)
-            => checkForOutOfBoundsDate(entity, "Update")
-                .SelectMany(_ => base.Update(entity));
-
-        private IObservable<Unit> checkForOutOfBoundsDate(IThreadSafeTimeEntry timeEntry, string source)
-        {
-            if (timeEntry.IsDeleted == true)
-                return Observable.Return(Unit.Default);
-
-            var newStartTimeIsWithinLimits = timeEntry.Start.IsWithinTogglLimits();
-            var newEndTimeIsWithinLimits = timeEntry.StopTime()?.IsWithinTogglLimits() ?? true;
-
-            if (newStartTimeIsWithinLimits && newEndTimeIsWithinLimits)
-                return Observable.Return(Unit.Default);
-
-            return GetById(timeEntry.Id)
-                .Catch(Observable.Return<IThreadSafeTimeEntry>(null))
-                .Do(oldTimeEntry =>
-                {
-                    var oldStartTimeIsWithinLimits = oldTimeEntry == null
-                        ? true
-                        : oldTimeEntry.Start.IsWithinTogglLimits();
-
-                    var oldEndTimeIsWithinLimits = oldTimeEntry == null
-                        ? true
-                        : oldTimeEntry?.StopTime()?.IsWithinTogglLimits() ?? true;
-
-                    if (!newStartTimeIsWithinLimits && oldStartTimeIsWithinLimits)
-                        logOutOfBoundsDate(oldTimeEntry.Start, timeEntry.Start, "Start", source);
-
-                    if (!newEndTimeIsWithinLimits && oldEndTimeIsWithinLimits)
-                        logOutOfBoundsDate(oldTimeEntry.StopTime(), timeEntry.StopTime(), "Stop", source);
-                })
-                .SelectUnit();
-        }
-
-        private void logOutOfBoundsDate(DateTimeOffset? oldTime, DateTimeOffset? newTime, string startOrStopDate, string source)
-        {
-            var properties = new Dictionary<string, string>
-            {
-                { "Old Time", oldTime?.ToString() },
-                { "New Time", newTime?.ToString() },
-                { "Start or Stop", startOrStopDate },
-                { "Source", source }
-            };
-            var exception = new OutOfBoundsDateTimeCreatedException("An out of bounds date was created", Environment.StackTrace);
-            analyticsService.Track(exception, properties);
-        }
-
         protected override IThreadSafeTimeEntry Convert(IDatabaseTimeEntry entity)
             => TimeEntry.From(entity);
 
@@ -194,7 +138,7 @@ namespace Toggl.Core.DataSources
         private IObservable<IThreadSafeTimeEntry> getCurrentlyRunningTimeEntry()
             => stopMultipleRunningTimeEntries()
                 .SelectMany(_ => getAllRunning())
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .SingleOrDefaultAsync();
 
         private IObservable<Unit> stopMultipleRunningTimeEntries()

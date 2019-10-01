@@ -1,4 +1,3 @@
-using System;
 using Toggl.Core.Services;
 using Toggl.Shared;
 using Toggl.Storage.Settings;

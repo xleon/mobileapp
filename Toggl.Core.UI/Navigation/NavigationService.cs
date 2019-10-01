@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
@@ -29,8 +30,31 @@ namespace Toggl.Core.UI.Navigation
         public async Task<TOutput> Navigate<TViewModel, TInput, TOutput>(TInput payload, IView sourceView = null)
             where TViewModel : ViewModel<TInput, TOutput>
         {
-            var viewModel = await viewModelLocator.Load<TInput, TOutput>(typeof(TViewModel), payload);
-            await presenter.Present(viewModel, sourceView);
+            var viewModel = viewModelLocator.Load<TViewModel>();
+
+            try
+            {
+                await viewModel.Initialize(payload).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                var name = viewModel?.GetType().Name ?? "";
+                analyticsService.Track(exception, $"{name}.Initialize :: {exception.Message}");
+                analyticsService.DebugNavigationError.Track("Initialize", name);
+                throw;
+            }
+
+            try
+            {
+                await presenter.Present(viewModel, sourceView).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                var name = viewModel?.GetType().Name ?? "";
+                analyticsService.Track(exception, $"{name}.Present :: {exception.Message}");
+                analyticsService.DebugNavigationError.Track("Present", name);
+                throw;
+            }
 
             analyticsService.CurrentPage.Track(typeof(TViewModel));
 

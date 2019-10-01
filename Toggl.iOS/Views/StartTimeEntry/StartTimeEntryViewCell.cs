@@ -1,9 +1,9 @@
-﻿using System;
-using Foundation;
-using Toggl.iOS.Extensions;
+﻿using Foundation;
+using System;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
 using Toggl.iOS.Transformations;
 using Toggl.Shared;
 using UIKit;
@@ -36,8 +36,7 @@ namespace Toggl.iOS.Views
 
             projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
                 ProjectLabel.Font.CapHeight,
-                Colors.Suggestions.ClientColor.ToNativeColor(),
-                true);
+                Colors.Suggestions.ClientColor.ToNativeColor());
         }
 
         protected override void UpdateView()

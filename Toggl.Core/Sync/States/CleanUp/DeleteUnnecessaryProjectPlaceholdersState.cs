@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.Core.DataSources;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
@@ -30,7 +29,7 @@ namespace Toggl.Core.Sync.States.CleanUp
 
         public IObservable<ITransition> Start()
             => projectsDataSource.GetAll(project => project.SyncStatus == SyncStatus.RefetchingNeeded)
-                .SelectMany(CommonFunctions.Identity)
+                .Flatten()
                 .SelectMany(notReferencedByAnyTimeEntryOrNull)
                 .Where(project => project != null)
                 .ToList()

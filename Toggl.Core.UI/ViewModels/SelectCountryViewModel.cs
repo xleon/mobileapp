@@ -1,36 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Toggl.Core.Interactors;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Navigation;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Core.Interactors;
-using Toggl.Core.Services;
 
 namespace Toggl.Core.UI.ViewModels
 {
     [Preserve(AllMembers = true)]
     public sealed class SelectCountryViewModel : ViewModel<long?, long?>
     {
-        private readonly IRxActionFactory rxActionFactory;
-
-        public IObservable<IEnumerable<SelectableCountryViewModel>> Countries { get; private set; }
+        public IObservable<IImmutableList<SelectableCountryViewModel>> Countries { get; private set; }
         public ISubject<string> FilterText { get; } = new BehaviorSubject<string>(string.Empty);
         public InputAction<SelectableCountryViewModel> SelectCountry { get; }
-        public UIAction Close { get; }
 
         public SelectCountryViewModel(INavigationService navigationService, IRxActionFactory rxActionFactory)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            this.rxActionFactory = rxActionFactory;
-
-            SelectCountry = rxActionFactory.FromAsync<SelectableCountryViewModel>(selectCountry);
-            Close = rxActionFactory.FromAsync(close);
+            SelectCountry = rxActionFactory.FromAction<SelectableCountryViewModel>(selectCountry);
         }
 
         public override async Task Initialize(long? selectedCountryId)
@@ -50,17 +45,15 @@ namespace Toggl.Core.UI.ViewModels
                 .Select(text => text?.Trim() ?? string.Empty)
                 .DistinctUntilChanged()
                 .Select(trimmedText =>
-                {
-                    return allCountries
+                    allCountries
                         .Where(c => c.Name.ContainsIgnoringCase(trimmedText))
-                        .Select(c => new SelectableCountryViewModel(c, c.Id == selectedCountryId));
-                });
+                        .Select(c => new SelectableCountryViewModel(c, c.Id == selectedCountryId))
+                        .ToImmutableList());
         }
 
-        private Task close()
-            => Finish(null);
-
-        private async Task selectCountry(SelectableCountryViewModel selectedCountry)
-            => await Finish(selectedCountry.Country.Id);
+        private void selectCountry(SelectableCountryViewModel selectedCountry)
+        {
+            Close(selectedCountry.Country.Id);
+        }
     }
 }
