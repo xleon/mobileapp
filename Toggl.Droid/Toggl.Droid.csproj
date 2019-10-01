@@ -665,10 +665,8 @@
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\color\FlatButtonTextColor.xml" />
     <AndroidResource Include="Resources\color\ToolbarButtonTextColor.xml" />
-    <AndroidResource Include="Resources\drawable\toolbar_close.xml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_settings.xml" />
+    <AndroidResource Include="Resources\drawable\toolbar_close.xml" />
     <AndroidResource Include="Resources\drawable\Dot.xml" />
     <AndroidResource Include="Resources\drawable\ic_archived.xml" />
     <AndroidResource Include="Resources\drawable\Splash.xml" />
@@ -686,6 +684,7 @@
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
+    <AndroidResource Include="Resources\menu\CalendarFragmentMenu.xml" />
     <AndroidResource Include="Resources\menu\DoneOrClearMenu.xml" />
     <AndroidResource Include="Resources\menu\OneButtonMenu.xml" />
     <AndroidResource Include="Resources\values\Strings.xml" />

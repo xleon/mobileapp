@@ -113,6 +113,16 @@ namespace Toggl.Droid.Views.Calendar
         partial void initEventDrawingBackingFields();
         partial void initEventEditionBackingFields();
 
+        public override bool CanScrollHorizontally(int direction)
+            => false;
+        
+        public override bool CanScrollVertically(int direction)
+        {
+            if (direction < 0)
+                return scrollOffset > 0;
+            return scrollOffset < maxHeight - Height;
+        }
+
         protected override void OnDraw(Canvas canvas)
         {
             base.OnDraw(canvas);
@@ -156,6 +166,7 @@ namespace Toggl.Droid.Views.Calendar
                 return;
             }
 
+            var oldScrollOffset = scrollOffset;
             scrollOffset = scroller.CurrY;
 
             if (scrollOffset < 0)
@@ -166,6 +177,8 @@ namespace Toggl.Droid.Views.Calendar
             {
                 scrollOffset = maxHeight - Height;
             }
+            
+            OnScrollChanged(0, scrollOffset, 0, oldScrollOffset);
 
             handler.Post(continueScroll);
             Invalidate();
@@ -287,6 +300,7 @@ namespace Toggl.Droid.Views.Calendar
             if (handleDragInEditMode(e1, e2, deltaX, deltaY)) 
                 return;
 
+            var oldScrollOffset = scrollOffset;
             scrollOffset += (int) deltaY;
 
             if (scrollOffset < 0)
@@ -297,6 +311,8 @@ namespace Toggl.Droid.Views.Calendar
             {
                 scrollOffset = maxHeight - Height;
             }
+            
+            OnScrollChanged(0, scrollOffset, 0, oldScrollOffset);
 
             isScrolling = true;
             PostInvalidate();

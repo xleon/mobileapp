@@ -3,16 +3,11 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using System;
-using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Core.Calendar;
 using Toggl.Core.UI.ViewModels.Calendar;
-using Toggl.Droid.Adapters.Calendar;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Presentation;
-using Toggl.Droid.Views.Calendar;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
@@ -23,6 +18,7 @@ namespace Toggl.Droid.Fragments
         {
             var view = inflater.Inflate(Resource.Layout.CalendarFragment, container, false);
             InitializeViews(view);
+            calendarDayView.AttachMaterialScrollBehaviour(appBarLayout);
             return view;
         }
 
@@ -48,32 +44,11 @@ namespace Toggl.Droid.Fragments
             ViewModel.CalendarItems.CollectionChange
                 .Subscribe(_ => calendarDayView.UpdateItems(ViewModel.CalendarItems))
                 .DisposedBy(DisposeBag);
-
-            ViewModel.HasCalendarsLinked
-                .Subscribe(headerCalendarEventsView.Rx().IsVisible())
-                .DisposedBy(DisposeBag);
-
-            ViewModel.CalendarItems.CollectionChange
-                .SelectUnit()
-                .StartWith(Unit.Default)
-                .Select(_ => calculateCalendarEventsCount())
-                .ObserveOn(schedulerProvider.MainScheduler)
-                .Subscribe(updateCalendarEventsCount)
-                .DisposedBy(DisposeBag);
-
+            
             ViewModel.TimeTrackedToday
-                .Subscribe(headerTimeEntriesTextView.Rx().TextObserver())
+                .Subscribe(headerTimeEntriesDurationTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
-
-            ViewModel.HasCalendarsLinked
-                .Invert()
-                .Subscribe(headerLinkCalendarsButton.Rx().IsVisible())
-                .DisposedBy(DisposeBag);
-
-            headerLinkCalendarsButton.Rx().Tap()
-                .Subscribe(ViewModel.LinkCalendars.Inputs)
-                .DisposedBy(DisposeBag);
-
+            
             calendarDayView.CalendarItemTappedObservable
                 .Subscribe(ViewModel.OnItemTapped.Inputs)
                 .DisposedBy(DisposeBag);
@@ -142,25 +117,10 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
         }
 
-        private void updateCalendarEventsCount(int count)
-        {
-            var text = string.Format(Shared.Resources.TotalEvents, count.ToString());
-            headerCalendarEventsTextView.Text = text;
-        }
-
-        private int calculateCalendarEventsCount()
-        {
-            return ViewModel
-                .CalendarItems
-                .SelectMany(group => group.Where(item => item.Source == CalendarItemSource.Calendar))
-                .Count();
-        }
-
         private void configureHeaderDate(DateTimeOffset offset)
         {
-            var day = offset.Day.ToString();
-            headerDayTextView.Text = day;
-            headerWeekdayTextView.Text = offset.ToString("ddd");
+            var dayText = offset.ToString(Shared.Resources.CalendarToolbarDateFormat);
+            headerDateTextView.Text = dayText;
         }
     }
 }
