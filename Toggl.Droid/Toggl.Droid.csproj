@@ -15,7 +15,8 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidLinkSkip>Toggl.Giskard</AndroidLinkSkip>
+    <AndroidLinkMode>Full</AndroidLinkMode>
+    <AndroidLinkSkip>Toggl.Giskard;Toggl.Storage.Realm</AndroidLinkSkip>
     <EnableProguard>true</EnableProguard>
     <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
@@ -46,15 +47,12 @@
     <AndroidSigningStorePass>{KEYSTORE_PASSWORD}</AndroidSigningStorePass>
     <AndroidSigningKeyAlias>{KEYSTORE_ALIAS}</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>{KEYSTORE_ALIAS_PASSWORD}</AndroidSigningKeyPass>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.PlayStore|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>bin\Release.PlayStore</OutputPath>
     <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API</DefineConstants>
     <WarningLevel>4</WarningLevel>
-    <AndroidLinkSkip>
-    </AndroidLinkSkip>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
