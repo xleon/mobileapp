@@ -12,6 +12,7 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Core;
 using Toggl.Core.Calendar;
+using Toggl.Core.Extensions;
 using Toggl.Core.UI.Calendar;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
@@ -303,6 +304,8 @@ namespace Toggl.Droid.Views.Calendar
 
         private void flingView(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
         {
+            if (editAction != EditAction.None) return;
+            
             scroller.ForceFinished(true);
 
             flingWasCalled = true;
@@ -317,12 +320,15 @@ namespace Toggl.Droid.Views.Calendar
             switch (e.Action)
             {
                 case MotionEventActions.Down:
+                    shouldTryToAutoScrollToEvent = false;
                     gestureDetector.OnTouchEvent(e);
                     return true;
 
                 case MotionEventActions.Up:
                     gestureDetector.OnTouchEvent(e);
                     updateLayoutIfNeededDuringEdition();
+                    if (scrollFrameToDisplayItemInEditModeIfNeeded())
+                        return true;
                     if (flingWasCalled)
                         return true;
                     if (!isScrolling)
@@ -344,6 +350,38 @@ namespace Toggl.Droid.Views.Calendar
                 default:
                     return gestureDetector.OnTouchEvent(e) || base.OnTouchEvent(e);
             }
+        }
+
+        bool scrollFrameToDisplayItemInEditModeIfNeeded()
+        {
+            var currentItemInEditMode = itemEditInEditMode;
+            if (!currentItemInEditMode.IsValid || !shouldTryToAutoScrollToEvent) return false;
+            
+            var startTime = currentItemInEditMode.CalendarItem.StartTime.ToLocalTime();
+            var durationInPx = currentItemInEditMode.CalendarItem.Duration(timeService.CurrentDateTime.LocalDateTime).TotalHours * hourHeight;
+            var eventTop = calculateHourOffsetFrom(startTime, hourHeight);
+            var eventBottom = eventTop + durationInPx;
+            
+            var frameTop = scrollOffset;
+            var frameBottom = Height + scrollOffset;
+
+            if (eventTop < frameTop)
+            {
+                scroller.ForceFinished(true);
+                isScrolling = false;
+                autoScroll((int)-(Math.Abs(frameTop - eventTop) + autoScrollExtraDelta), true);
+                return true;
+            }
+
+            if (eventBottom > frameBottom)
+            {
+                scroller.ForceFinished(true);
+                isScrolling = false;
+                autoScroll((int)Math.Abs(frameBottom - eventBottom) + autoScrollExtraDelta, true);
+                return true;
+            }
+
+            return false;
         }
 
         void updateLayoutIfNeededDuringEdition()
