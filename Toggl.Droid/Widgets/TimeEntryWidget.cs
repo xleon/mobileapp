@@ -2,6 +2,7 @@ using Android.App;
 using Android.Appwidget;
 using Android.Content;
 using Android.OS;
+using Android.Provider;
 using Android.Widget;
 using Toggl.Droid.Services;
 using Toggl.Droid.Widgets.Services;
@@ -50,13 +51,19 @@ namespace Toggl.Droid.Widgets
             base.OnAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
             var minWidth = newOptions.GetInt(AppWidgetManager.OptionAppwidgetMinWidth);
             appWidgetManager.UpdateAppWidget(appWidgetId, getRemoteViews(context, minWidth));
+
+            var intent = new Intent(context, typeof(WidgetsAnalyticsService));
+            intent.SetAction(WidgetsAnalyticsService.TimerWidgetResizeAction);
+            intent.PutExtra(WidgetsAnalyticsService.TimerWidgetSizeParameter, getColumnsCount(minWidth));
+            WidgetsAnalyticsService.EnqueueTrackTimerWidgetResize(context, intent);
         }
 
         private void reportInstallationState(Context context, bool installed)
         {
-            var intent = new Intent(context, typeof(InstallationStateReportService));
-            intent.PutExtra(InstallationStateReportService.StateParameterName, installed);
-            InstallationStateReportService.EnqueueWork(context, intent);
+            var intent = new Intent(context, typeof(WidgetsAnalyticsService));
+            intent.SetAction(WidgetsAnalyticsService.TimerWidgetInstallAction);
+            intent.PutExtra(WidgetsAnalyticsService.TimerWidgetInstallStateParameter, installed);
+            WidgetsAnalyticsService.EnqueueTrackTimerWidgetInstallState(context, intent);
         }
 
         private RemoteViews getRemoteViews(Context context, int minWidth)
@@ -84,5 +91,13 @@ namespace Toggl.Droid.Widgets
             intent.SetAction(TimerBackgroundService.StopRunningTimeEntryAction);
             return PendingIntent.GetBroadcast(context, 0, intent, PendingIntentFlags.UpdateCurrent);
         }
+
+        /// <summary>
+        /// Calculates the number of columns used by the widget based on the given width
+        /// </summary>
+        /// <remarks>
+        /// Magic numbers in this method come from https://developer.android.com/guide/practices/ui_guidelines/widget_design.html#anatomy_determining_size
+        /// </remarks>
+        private int getColumnsCount(int width) => (width + 30) / 70;
     }
 }
