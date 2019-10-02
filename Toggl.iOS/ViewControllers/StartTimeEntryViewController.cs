@@ -212,7 +212,7 @@ namespace Toggl.iOS.ViewControllers
             DescriptionTextView.InputDelegate = emptyInputDelegate;
             DescriptionTextView.AttributedText = attributedText;
 
-            DescriptionTextView.rejectAutocorrect();
+            DescriptionTextView.RejectAutocorrect();
 
             updatePlaceholder();
         }
