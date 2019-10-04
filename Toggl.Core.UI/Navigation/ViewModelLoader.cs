@@ -317,15 +317,13 @@ namespace Toggl.Core.UI.Navigation
                 return new CalendarViewModel(
                     dependencyContainer.DataSource,
                     dependencyContainer.TimeService,
+                    dependencyContainer.RxActionFactory,
                     dependencyContainer.UserPreferences,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.BackgroundService,
                     dependencyContainer.InteractorFactory,
-                    dependencyContainer.OnboardingStorage,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.PermissionsChecker,
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.NavigationService);
             }
 
             if (viewModelType == typeof(SelectUserCalendarsViewModel))

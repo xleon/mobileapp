@@ -1037,12 +1037,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\calendar_light.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\calendar_light.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\calendar_light.png" />
-    <AndroidResource Include="Resources\layout\CalendarOnboardingView.axml" />
-    <AndroidResource Include="Resources\drawable-hdpi\calendar_onboarding.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\calendar_onboarding.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\calendar_onboarding.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\calendar_onboarding.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\calendar_onboarding.png" />
     <AndroidResource Include="Resources\drawable\RaisedButton.axml" />
     <AndroidResource Include="Resources\layout\CalendarPermissionDeniedFragment.axml" />
     <AndroidResource Include="Resources\layout\UpcomingEventsNotificationSettingsFragment.axml" />

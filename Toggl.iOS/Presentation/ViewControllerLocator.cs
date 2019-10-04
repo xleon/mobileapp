@@ -106,6 +106,11 @@ namespace Toggl.iOS.Presentation
             => GetViewController(viewModel).Apply(wrapInNavigationController);
 
         private static UIViewController wrapInNavigationController(UIViewController viewController)
-            => new ReactiveNavigationController(viewController);
+        {
+            if (viewController is CalendarViewController)
+                return viewController;
+
+            return  new ReactiveNavigationController(viewController);
+        }
     }
 }

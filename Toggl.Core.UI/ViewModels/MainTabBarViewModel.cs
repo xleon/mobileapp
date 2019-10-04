@@ -112,15 +112,13 @@ namespace Toggl.Core.UI.ViewModels
             calendarViewModel = new CalendarViewModel(
                 dataSource,
                 timeService,
+                rxActionFactory,
                 userPreferences,
                 analyticsService,
                 backgroundService,
                 interactorFactory,
-                onboardingStorage,
                 schedulerProvider,
-                permissionsChecker,
-                navigationService,
-                rxActionFactory);
+                navigationService);
 
             settingsViewModel = new SettingsViewModel(
                 dataSource,
