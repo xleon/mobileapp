@@ -135,6 +135,7 @@
     <Compile Include="TodayViewController.designer.cs">
       <DependentUpon>TodayViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="NetworkingHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.iOS.ExtensionKit\Toggl.iOS.ExtensionKit.csproj">
