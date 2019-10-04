@@ -50,12 +50,15 @@ namespace Toggl.iOS
             var accessLevel = app.GetAccessLevel();
             loginWithCredentialsIfNecessary(accessLevel);
             navigateAccordingToAccessLevel(accessLevel, app);
-            
+
             var accessibilityEnabled = UIAccessibility.IsVoiceOverRunning;
             IosDependencyContainer.Instance.AnalyticsService.AccessibilityEnabled.Track(accessibilityEnabled);
 
             var watchservice = new WatchService();
             watchservice.TryLogWatchConnectivity();
+
+            var dataSource = IosDependencyContainer.Instance.DataSource;
+            IosDependencyContainer.Instance.TimerWidgetService.Start(dataSource);
 
 #if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();

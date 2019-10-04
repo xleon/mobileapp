@@ -70,11 +70,16 @@
     <Compile Include="Analytics\SiriTrackingEvent.cs" />
     <Compile Include="Exceptions\NoRunningEntryException.cs" />
     <Compile Include="Extensions\DateExtensions.cs" />
+    <Compile Include="Extensions\NSDictionaryExtensions.cs" />
     <Compile Include="Helper\APIHelper.cs" />
     <Compile Include="Models\TimeEntry.cs" />
+    <Compile Include="Models\TimeEntryViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharedStorage.cs" />
     <Compile Include="Extensions\UserActivityExtensions.cs" />
+    <Compile Include="SharedStorage.TimeEntries.cs">
+      <DependentUpon>SharedStorage.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="..\Toggl.iOS.IntentCodeGen\Toggl.iOS.IntentCodeGen\en.lproj\Intents.strings">

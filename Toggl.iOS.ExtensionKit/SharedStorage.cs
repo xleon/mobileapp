@@ -2,10 +2,12 @@
 using Foundation;
 using Toggl.iOS.ExtensionKit.Analytics;
 using Toggl.iOS.ExtensionKit.Extensions;
+using Toggl.iOS.ExtensionKit.Models;
+using Toggl.Shared.Models;
 
 namespace Toggl.iOS.ExtensionKit
 {
-    public class SharedStorage
+    public sealed partial class SharedStorage
     {
         private const string apiTokenKey = "APITokenKey";
         private const string needsSyncKey = "NeedsSyncKey";
@@ -14,6 +16,7 @@ namespace Toggl.iOS.ExtensionKit
         private const string defaultWorkspaceId = "DefaultWorkspaceId";
         private const string widgetUpdatedDateKey = "WidgetUpdatedDate";
         private const string widgetInstalledKey = "WidgetInstalled";
+        private const string runningTimeEntry = "RunningTimeEntry";
 
         private NSUserDefaults userDefaults;
 
@@ -85,6 +88,7 @@ namespace Toggl.iOS.ExtensionKit
             userDefaults.RemoveObject(siriTrackingEventsKey);
             userDefaults.RemoveObject(widgetUpdatedDateKey);
             userDefaults.RemoveObject(widgetInstalledKey);
+            userDefaults.RemoveObject(runningTimeEntry);
             userDefaults.Synchronize();
         }
 
