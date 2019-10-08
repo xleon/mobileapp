@@ -8,7 +8,9 @@ using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
+using Toggl.Droid.Extensions;
 using static Toggl.Droid.Services.JobServicesConstants;
+using static Toggl.Droid.Widgets.WidgetsConstants;
 
 namespace Toggl.Droid.Services
 {
@@ -19,22 +21,13 @@ namespace Toggl.Droid.Services
     )]
     public class TimerBackgroundService : JobIntentService
     {
-        public const string StartTimeEntryAction = nameof(StartTimeEntryAction);
-        public const string StopRunningTimeEntryAction = nameof(StopRunningTimeEntryAction);
-
         private IInteractorFactory interactorFactory => AndroidDependencyContainer.Instance.InteractorFactory;
         private ITimeService timeService => AndroidDependencyContainer.Instance.TimeService;
 
-        public static void EnqueueStartTimeEntry(Context context, Intent intent)
+        public static void EnqueueWork(Context context, Intent intent)
         {
-            var serviceClass = Java.Lang.Class.FromType(typeof(TimerBackgroundService));
-            EnqueueWork(context, serviceClass, TimerWidgetStartTimeEntryJobId, intent);
-        }
-
-        public static void EnqueueStopTimeEntry(Context context, Intent intent)
-        {
-            var serviceClass = Java.Lang.Class.FromType(typeof(TimerBackgroundService));
-            EnqueueWork(context, serviceClass, TimerWidgetStopRunningTimeEntryJobId, intent);
+            var serviceClass = JavaUtils.ToClass<TimerBackgroundService>();
+            EnqueueWork(context, serviceClass, TimerWidgetBackgroundServiceJobId, intent);
         }
 
         protected override void OnHandleWork(Intent intent)

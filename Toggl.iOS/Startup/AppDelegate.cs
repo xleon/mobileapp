@@ -57,9 +57,6 @@ namespace Toggl.iOS
             var watchservice = new WatchService();
             watchservice.TryLogWatchConnectivity();
 
-            var dataSource = IosDependencyContainer.Instance.DataSource;
-            IosDependencyContainer.Instance.TimerWidgetService.Start(dataSource);
-
 #if ENABLE_TEST_CLOUD
             Xamarin.Calabash.Start();
 #endif

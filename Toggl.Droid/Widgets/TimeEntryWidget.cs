@@ -2,10 +2,16 @@ using Android.App;
 using Android.Appwidget;
 using Android.Content;
 using Android.OS;
-using Android.Provider;
+using Android.Views;
 using Android.Widget;
-using Toggl.Droid.Services;
+using System;
+using Toggl.Droid.Extensions;
 using Toggl.Droid.Widgets.Services;
+using Toggl.Shared;
+using static Toggl.Droid.Services.TimerBackgroundService;
+using static Toggl.Droid.Widgets.TimerWidgetFormFactor;
+using static Toggl.Droid.Widgets.WidgetsConstants;
+using Color = Android.Graphics.Color;
 
 namespace Toggl.Droid.Widgets
 {
@@ -18,14 +24,15 @@ namespace Toggl.Droid.Widgets
         {
             base.OnReceive(context, intent);
 
-            var action = intent.Action;
-            if (action == TimerBackgroundService.StartTimeEntryAction)
+            switch (intent.Action)
             {
-                TimerBackgroundService.EnqueueStartTimeEntry(context, intent);
-            }
-            else if (action == TimerBackgroundService.StopRunningTimeEntryAction)
-            {
-                TimerBackgroundService.EnqueueStopTimeEntry(context, intent);
+                case StartTimeEntryAction:
+                    EnqueueWork(context, intent);
+                    break;
+
+                case StopRunningTimeEntryAction:
+                    EnqueueWork(context, intent);
+                    break;
             }
         }
 
@@ -44,18 +51,84 @@ namespace Toggl.Droid.Widgets
         public override void OnUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
         {
             base.OnUpdate(context, appWidgetManager, appWidgetIds);
+
+            foreach (var widgetId in appWidgetIds)
+            {
+                var widgetOptions = appWidgetManager.GetAppWidgetOptions(widgetId);
+                var widgetContext = WidgetContext.From(widgetOptions);
+                var view = setupRemoteViews(context, widgetContext);
+
+                var widgetInfo = TimeEntryWidgetInfo.FromSharedPreferences();
+
+                if (widgetInfo.IsRunning)
+                {
+                    view.SetViewVisibility(Resource.Id.StartButton, ViewStates.Gone);
+                    view.SetViewVisibility(Resource.Id.StopButton, ViewStates.Visible);
+
+                    var duration = (DateTimeOffset.Now - widgetInfo.StartTime).TotalMilliseconds;
+                    view.SetChronometerCountDown(Resource.Id.DurationTextView, false);
+                    view.SetChronometer(Resource.Id.DurationTextView, SystemClock.ElapsedRealtime() - (long)duration, "%s", true);
+
+                    if (string.IsNullOrEmpty(widgetInfo.Description))
+                    {
+                        view.SetTextViewText(Resource.Id.DescriptionTextView, Resources.NoDescription);
+                        view.SetTextColor(Resource.Id.DescriptionTextView, context.SafeGetColor(Resource.Color.secondaryText));
+                    }
+                    else
+                    {
+                        view.SetTextViewText(Resource.Id.DescriptionTextView, widgetInfo.Description);
+                        view.SetTextColor(Resource.Id.DescriptionTextView, context.SafeGetColor(Resource.Color.primaryText));
+                    }
+
+                    view.SetViewVisibility(Resource.Id.DotView, widgetInfo.HasProject.ToVisibility());
+                    view.SetViewVisibility(Resource.Id.ProjectTextView, widgetInfo.HasProject.ToVisibility());
+                    if (widgetInfo.HasProject)
+                    {
+                        var projectColor = widgetInfo.ProjectColor != null ? Color.ParseColor(widgetInfo.ProjectColor) : Color.Black;
+                        // Dot
+                        view.SetInt(Resource.Id.DotView, "setBackgroundColor", projectColor);
+
+                        // Project
+                        view.SetTextViewText(Resource.Id.ProjectTextView, widgetInfo.ProjectName ?? "");
+                        view.SetTextColor(Resource.Id.ProjectTextView, projectColor);
+
+                        // Client
+                        view.SetViewVisibility(Resource.Id.ClientTextView, widgetInfo.HasClient.ToVisibility());
+                        if (widgetInfo.HasClient)
+                            view.SetTextViewText(Resource.Id.ClientTextView, widgetInfo.ClientName);
+                    }
+                }
+                else
+                {
+                    view.SetViewVisibility(Resource.Id.StartButton, ViewStates.Visible);
+                    view.SetViewVisibility(Resource.Id.StopButton, ViewStates.Gone);
+
+                    view.SetChronometerCountDown(Resource.Id.DurationTextView, false);
+                    view.SetChronometer(Resource.Id.DurationTextView, SystemClock.ElapsedRealtime(), "%s", false);
+
+                    view.SetTextViewText(Resource.Id.DescriptionTextView, Resources.NoDescription);
+                    view.SetTextColor(Resource.Id.DescriptionTextView, context.SafeGetColor(Resource.Color.secondaryText));
+
+                    view.SetViewVisibility(Resource.Id.DotView, false.ToVisibility());
+                    view.SetViewVisibility(Resource.Id.ProjectTextView, false.ToVisibility());
+                    view.SetViewVisibility(Resource.Id.ClientTextView, false.ToVisibility());
+                }
+
+                appWidgetManager.UpdateAppWidget(widgetId, view);
+            }
         }
 
         public override void OnAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions)
         {
             base.OnAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
-            var minWidth = newOptions.GetInt(AppWidgetManager.OptionAppwidgetMinWidth);
-            appWidgetManager.UpdateAppWidget(appWidgetId, getRemoteViews(context, minWidth));
+            var widgetContext = WidgetContext.From(newOptions);
+            var remoteViews = setupRemoteViews(context, widgetContext);
+            appWidgetManager.UpdateAppWidget(appWidgetId, remoteViews);
 
             var intent = new Intent(context, typeof(WidgetsAnalyticsService));
             intent.SetAction(WidgetsAnalyticsService.TimerWidgetResizeAction);
-            intent.PutExtra(WidgetsAnalyticsService.TimerWidgetSizeParameter, getColumnsCount(minWidth));
-            WidgetsAnalyticsService.EnqueueTrackTimerWidgetResize(context, intent);
+            intent.PutExtra(WidgetsAnalyticsService.TimerWidgetSizeParameter, widgetContext.ColumnsCount);
+            WidgetsAnalyticsService.EnqueueWork(context, intent);
         }
 
         private void reportInstallationState(Context context, bool installed)
@@ -63,41 +136,53 @@ namespace Toggl.Droid.Widgets
             var intent = new Intent(context, typeof(WidgetsAnalyticsService));
             intent.SetAction(WidgetsAnalyticsService.TimerWidgetInstallAction);
             intent.PutExtra(WidgetsAnalyticsService.TimerWidgetInstallStateParameter, installed);
-            WidgetsAnalyticsService.EnqueueTrackTimerWidgetInstallState(context, intent);
+            WidgetsAnalyticsService.EnqueueWork(context, intent);
         }
 
-        private RemoteViews getRemoteViews(Context context, int minWidth)
+        private RemoteViews setupRemoteViews(Context context, WidgetContext widgetContext)
         {
-            var remoteViews = minWidth < 110
-                ? new RemoteViews(context.PackageName, Resource.Layout.TimeEntryWidgetSmall)
-                : new RemoteViews(context.PackageName, Resource.Layout.TimeEntryWidget);
+            switch (widgetContext.FormFactor)
+            {
+                case ButtonOnly:
+                    return setupButtonOnlyRemoteViews(context);
 
-            remoteViews.SetOnClickPendingIntent(Resource.Id.StartButton, startTimeEntryPendingIntent(context));
-            remoteViews.SetOnClickPendingIntent(Resource.Id.StopButton, stopTimeEntryPendingIntent(context));
+                case FullWidget:
+                    return setupFullWidgetRemoteViews(context);
+
+                default:
+                    throw new InvalidOperationException("Invalid form factor.");
+            }
+        }
+
+        private RemoteViews setupButtonOnlyRemoteViews(Context context)
+        {
+            var remoteViews = new RemoteViews(context.PackageName, Resource.Layout.TimeEntryWidgetSmall);
+            remoteViews.SetOnClickPendingIntent(Resource.Id.StartButton, getStartTimeEntryPendingIntent(context));
+            remoteViews.SetOnClickPendingIntent(Resource.Id.StopButton, getStopTimeEntryPendingIntent(context));
 
             return remoteViews;
         }
 
-        private PendingIntent startTimeEntryPendingIntent(Context context)
+        private RemoteViews setupFullWidgetRemoteViews(Context context)
+        {
+            var remoteViews = new RemoteViews(context.PackageName, Resource.Layout.TimeEntryWidget);
+            remoteViews.SetOnClickPendingIntent(Resource.Id.StartButton, getStartTimeEntryPendingIntent(context));
+            remoteViews.SetOnClickPendingIntent(Resource.Id.StopButton, getStopTimeEntryPendingIntent(context));
+            return remoteViews;
+        }
+
+        private PendingIntent getStartTimeEntryPendingIntent(Context context)
         {
             var intent = new Intent(context, typeof(TimeEntryWidget));
-            intent.SetAction(TimerBackgroundService.StartTimeEntryAction);
+            intent.SetAction(StartTimeEntryAction);
             return PendingIntent.GetBroadcast(context, 0, intent, PendingIntentFlags.UpdateCurrent);
         }
 
-        private PendingIntent stopTimeEntryPendingIntent(Context context)
+        private PendingIntent getStopTimeEntryPendingIntent(Context context)
         {
             var intent = new Intent(context, typeof(TimeEntryWidget));
-            intent.SetAction(TimerBackgroundService.StopRunningTimeEntryAction);
+            intent.SetAction(StopRunningTimeEntryAction);
             return PendingIntent.GetBroadcast(context, 0, intent, PendingIntentFlags.UpdateCurrent);
         }
-
-        /// <summary>
-        /// Calculates the number of columns used by the widget based on the given width
-        /// </summary>
-        /// <remarks>
-        /// Magic numbers in this method come from https://developer.android.com/guide/practices/ui_guidelines/widget_design.html#anatomy_determining_size
-        /// </remarks>
-        private int getColumnsCount(int width) => (width + 30) / 70;
     }
 }

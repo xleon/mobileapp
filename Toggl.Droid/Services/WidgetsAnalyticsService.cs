@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content;
 using Android.Runtime;
 using Android.Support.V4.App;
+using Toggl.Droid.Extensions;
 using static Toggl.Droid.Services.JobServicesConstants;
 
 namespace Toggl.Droid.Widgets.Services
@@ -16,16 +17,10 @@ namespace Toggl.Droid.Widgets.Services
         public const string TimerWidgetResizeAction = nameof(TimerWidgetResizeAction);
         public const string TimerWidgetSizeParameter = nameof(TimerWidgetSizeParameter);
 
-        public static void EnqueueTrackTimerWidgetInstallState(Context context, Intent intent)
+        public static void EnqueueWork(Context context, Intent intent)
         {
-            var serviceClass = Java.Lang.Class.FromType(typeof(WidgetsAnalyticsService));
-            EnqueueWork(context, serviceClass, TimerWidgetInstallStateReportingJobId, intent);
-        }
-
-        public static void EnqueueTrackTimerWidgetResize(Context context, Intent intent)
-        {
-            var serviceClass = Java.Lang.Class.FromType(typeof(WidgetsAnalyticsService));
-            EnqueueWork(context, serviceClass, TimerWidgetResizeReportingJobId, intent);
+            var serviceClass = JavaUtils.ToClass<WidgetsAnalyticsService>();
+            EnqueueWork(context, serviceClass, TimerWidgetAnalyticsServiceJobId, intent);
         }
 
         protected override void OnHandleWork(Intent intent)

@@ -41,7 +41,7 @@ namespace Toggl.Droid.Extensions
 
         public static JobInfo CreateBackgroundSyncJobInfo(this Context context, long periodicity)
         {
-            var javaClass = Java.Lang.Class.FromType(typeof(BackgroundSyncJobSchedulerService));
+            var javaClass = JavaUtils.ToClass<BackgroundSyncJobSchedulerService>();
             var component = new ComponentName(context, javaClass);
 
             var builder = new JobInfo.Builder(JobServicesConstants.BackgroundSyncJobServiceJobId, component)

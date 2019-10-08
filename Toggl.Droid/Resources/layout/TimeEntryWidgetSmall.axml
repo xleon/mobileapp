@@ -8,16 +8,21 @@
             android:id="@+id/StopButton"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_gravity="center"
+            android:padding="17dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/stop_white"
             android:background="@drawable/RoundedButton"
-            android:backgroundTint="@android:color/holo_red_light"/>
+            android:backgroundTint="@color/stopTimeEntryButtonBackground"/>
     <ImageButton
             android:id="@+id/StartButton"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_gravity="center"
+            android:paddingTop="17dp"
+            android:paddingBottom="17dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="16dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/play_white"
             android:background="@drawable/RoundedButton"
-            android:backgroundTint="@android:color/holo_green_dark"/>
+            android:backgroundTint="@color/startTimeEntryButtonBackground"/>
 </FrameLayout>

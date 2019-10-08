@@ -33,7 +33,6 @@ namespace Toggl.iOS
 
         public CompositePresenter ViewPresenter { get; }
         public IntentDonationService IntentDonationService { get; }
-        public TimerWidgetService TimerWidgetService { get; }
 
         public new static IosDependencyContainer Instance { get; private set; }
 
@@ -60,7 +59,6 @@ namespace Toggl.iOS
         {
             ViewPresenter = viewPresenter;
             IntentDonationService = new IntentDonationService(AnalyticsService);
-            TimerWidgetService = new TimerWidgetService();
 
             var appVersion = Version.Parse(version);
 
@@ -129,5 +127,8 @@ namespace Toggl.iOS
 
         protected override IAccessibilityService CreateAccessibilityService()
             => new AccessibilityServiceIos();
+
+        protected override TimerWidgetService CreateTimerWidgetService()
+            => new TimerWidgetServiceIos(DataSource);
     }
 }

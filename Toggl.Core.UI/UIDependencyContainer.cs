@@ -13,6 +13,7 @@ namespace Toggl.Core.UI
         private readonly Lazy<ViewModelLoader> viewModelLoader;
         private readonly Lazy<INavigationService> navigationService;
         private readonly Lazy<IPermissionsChecker> permissionsService;
+        private TimerWidgetService timerWidgetService;
 
         public IDeeplinkParser DeeplinkParser => deeplinkParser.Value;
         public ViewModelLoader ViewModelLoader => viewModelLoader.Value;
@@ -35,6 +36,7 @@ namespace Toggl.Core.UI
 
         protected abstract INavigationService CreateNavigationService();
         protected abstract IPermissionsChecker CreatePermissionsChecker();
+        protected abstract TimerWidgetService CreateTimerWidgetService();
 
         protected virtual ViewModelLoader CreateViewModelLoader() => new ViewModelLoader(this);
         protected override IErrorHandlingService CreateErrorHandlingService()
@@ -42,5 +44,15 @@ namespace Toggl.Core.UI
 
         protected override IRemoteConfigService CreateRemoteConfigService()
             => new RemoteConfigService(KeyValueStorage);
+
+        protected override void RecreateLazyUIDependenciesForLogin()
+        {
+            timerWidgetService = CreateTimerWidgetService();
+        }
+
+        protected override void RecreateLazyUIDependenciesForLogout()
+        {
+            timerWidgetService = CreateTimerWidgetService();
+        }
     }
 }

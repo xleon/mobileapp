@@ -110,7 +110,7 @@ namespace Toggl.Core.UI
         internal IApplicationShortcutCreator MockShortcutCreator { get; set; }
         protected override IApplicationShortcutCreator CreateShortcutCreator()
             => MockShortcutCreator;
-        
+
         internal IPushNotificationsTokenService MockPushNotificationsTokenService { get; set; }
         protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
             => MockPushNotificationsTokenService;
@@ -140,7 +140,9 @@ namespace Toggl.Core.UI
             => MockAccessibilityService;
 
         internal IPushNotificationsTokenStorage MockPushNotificationsTokenStorage { get; set; }
-        protected override IPushNotificationsTokenStorage CreatePushNotificationsTokenStorage()
-            => MockPushNotificationsTokenStorage;
+
+        internal TimerWidgetService MockTimerWidgetService { get; set; }
+        protected override TimerWidgetService CreateTimerWidgetService()
+            => MockTimerWidgetService;
     }
 }

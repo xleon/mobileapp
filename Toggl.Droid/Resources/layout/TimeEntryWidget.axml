@@ -13,8 +13,8 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent">
-        <TextView
-                android:id="@+id/DescriptionTextView"
+        <Chronometer
+                android:id="@+id/DurationTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -25,63 +25,60 @@
                 android:textColor="@color/accent"
                 android:lineSpacingExtra="4sp"
                 android:singleLine="true"
-                android:ellipsize="marquee"
-                android:text="0:00:00"/>
+                android:ellipsize="marquee"/>
+        <TextView
+            android:id="@+id/DescriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_marginLeft="12dp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="@android:color/black"
+            android:lineSpacingExtra="5sp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            tools:text="Description"/>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:gravity="center_vertical">
-            <TextView
-                    android:id="@+id/DescriptionTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="normal"
-                    android:textColor="@android:color/black"
-                    android:lineSpacingExtra="5sp"
-                    android:singleLine="true"
-                    android:ellipsize="marquee"
-                    tools:text="Description"/>
             <ImageView
                     android:id="@+id/DotView"
                     android:background="@drawable/SmallDot"
                     android:layout_width="4dp"
                     android:layout_height="4dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_gravity="center" />
+                    android:layout_marginLeft="2dp"
+                    android:layout_gravity="center_vertical" />
             <TextView
                     android:id="@+id/ProjectTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginLeft="4dp"
                     android:textSize="15sp"
                     android:fontFamily="sans-serif-medium"
                     android:textStyle="normal"
                     android:lineSpacingExtra="5sp"
                     android:singleLine="true"
-                    android:ellipsize="marquee"
+                    android:ellipsize="end"
                     tools:textColor="#c56bff"
-                    tools:text="Widgets"/>
-            <TextView
-                    android:id="@+id/ClientTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="4dp"
-                    android:textSize="15sp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textStyle="normal"
-                    android:lineSpacingExtra="5sp"
-                    android:singleLine="true"
-                    android:ellipsize="marquee"
-                    tools:textColor="#5e5b5b"
-                    tools:text="Toggl"/>
+                    tools:text="A very long project with stuff there, much more longer than this"/>
         </LinearLayout>
+        <TextView
+            android:id="@+id/ClientTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:textSize="15sp"
+            android:fontFamily="sans-serif-medium"
+            android:textStyle="normal"
+            android:lineSpacingExtra="5sp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            tools:textColor="#5e5b5b"
+            tools:text="A big fat client Shia La boeuf"/>
     </LinearLayout>
     <FrameLayout
             android:layout_width="wrap_content"
@@ -92,15 +89,22 @@
                 android:id="@+id/StopButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:padding="13dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/stop_white"
                 android:background="@drawable/RoundedButton"
-                android:backgroundTint="@android:color/holo_red_light"/>
+                android:backgroundTint="@color/stopTimeEntryButtonBackground"/>
         <ImageButton
                 android:id="@+id/StartButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:paddingTop="13dp"
+                android:paddingBottom="13dp"
+                android:paddingLeft="14dp"
+                android:paddingRight="12dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/play_white"
                 android:background="@drawable/RoundedButton"
-                android:backgroundTint="@android:color/holo_green_dark"/>
+                android:backgroundTint="@color/startTimeEntryButtonBackground"/>
     </FrameLayout>
 </LinearLayout>

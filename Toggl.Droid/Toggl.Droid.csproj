@@ -372,6 +372,7 @@
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
+    <Compile Include="Extensions\JavaExtensions.cs" />
     <Compile Include="Fragments\ReportsCalendarFragment.cs" />
     <Compile Include="Helper\ActiveTheme.cs" />
     <Compile Include="Presentation\ActivityTransitions.cs" />
@@ -379,6 +380,7 @@
     <Compile Include="Services\JobServicesConstants.cs" />
     <Compile Include="Services\FetchRemoteConfigServiceAndroid.cs" />
     <Compile Include="Services\SyncJobService.cs" />
+    <Compile Include="Services\TimerWidgetServiceAndroid.cs" />
     <Compile Include="Services\TogglFirebaseIIDService.cs" />
     <Compile Include="Services\TogglFirebaseMessagingService.cs" />
     <Compile Include="Services\PushNotificationsTokenServiceAndroid.cs" />
@@ -657,9 +659,13 @@
     <Compile Include="BroadcastReceivers\BootCompletedBroadcastReceiver.cs" />
     <Compile Include="Services\ScheduleEventNotificationsService.cs" />
     <Compile Include="Views\VerticallyCenteredImageSpan.cs" />
+    <Compile Include="Widgets\TimeEntryWidgetInfo.cs" />
+    <Compile Include="Widgets\WidgetContext.cs" />
     <Compile Include="Widgets\TimeEntryWidget.cs" />
     <Compile Include="Services\AccessibilityServiceAndroid.cs" />
     <Compile Include="Services\TimerBackgroundService.cs" />
+    <Compile Include="Widgets\TimerWidgetFormFactor.cs" />
+    <Compile Include="Widgets\WidgetsConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
