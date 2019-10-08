@@ -54,67 +54,7 @@ namespace Toggl.Droid.Widgets
 
             foreach (var widgetId in appWidgetIds)
             {
-                var widgetOptions = appWidgetManager.GetAppWidgetOptions(widgetId);
-                var widgetContext = WidgetContext.From(widgetOptions);
-                var view = setupRemoteViews(context, widgetContext);
-
-                var widgetInfo = TimeEntryWidgetInfo.FromSharedPreferences();
-
-                if (widgetInfo.IsRunning)
-                {
-                    view.SetViewVisibility(Resource.Id.StartButton, ViewStates.Gone);
-                    view.SetViewVisibility(Resource.Id.StopButton, ViewStates.Visible);
-
-                    var duration = (DateTimeOffset.Now - widgetInfo.StartTime).TotalMilliseconds;
-                    view.SetChronometerCountDown(Resource.Id.DurationTextView, false);
-                    view.SetChronometer(Resource.Id.DurationTextView, SystemClock.ElapsedRealtime() - (long)duration, "%s", true);
-
-                    if (string.IsNullOrEmpty(widgetInfo.Description))
-                    {
-                        view.SetTextViewText(Resource.Id.DescriptionTextView, Resources.NoDescription);
-                        view.SetTextColor(Resource.Id.DescriptionTextView, context.SafeGetColor(Resource.Color.secondaryText));
-                    }
-                    else
-                    {
-                        view.SetTextViewText(Resource.Id.DescriptionTextView, widgetInfo.Description);
-                        view.SetTextColor(Resource.Id.DescriptionTextView, context.SafeGetColor(Resource.Color.primaryText));
-                    }
-
-                    view.SetViewVisibility(Resource.Id.DotView, widgetInfo.HasProject.ToVisibility());
-                    view.SetViewVisibility(Resource.Id.ProjectTextView, widgetInfo.HasProject.ToVisibility());
-                    if (widgetInfo.HasProject)
-                    {
-                        var projectColor = widgetInfo.ProjectColor != null ? Color.ParseColor(widgetInfo.ProjectColor) : Color.Black;
-                        // Dot
-                        view.SetInt(Resource.Id.DotView, "setBackgroundColor", projectColor);
-
-                        // Project
-                        view.SetTextViewText(Resource.Id.ProjectTextView, widgetInfo.ProjectName ?? "");
-                        view.SetTextColor(Resource.Id.ProjectTextView, projectColor);
-
-                        // Client
-                        view.SetViewVisibility(Resource.Id.ClientTextView, widgetInfo.HasClient.ToVisibility());
-                        if (widgetInfo.HasClient)
-                            view.SetTextViewText(Resource.Id.ClientTextView, widgetInfo.ClientName);
-                    }
-                }
-                else
-                {
-                    view.SetViewVisibility(Resource.Id.StartButton, ViewStates.Visible);
-                    view.SetViewVisibility(Resource.Id.StopButton, ViewStates.Gone);
-
-                    view.SetChronometerCountDown(Resource.Id.DurationTextView, false);
-                    view.SetChronometer(Resource.Id.DurationTextView, SystemClock.ElapsedRealtime(), "%s", false);
-
-                    view.SetTextViewText(Resource.Id.DescriptionTextView, Resources.NoDescription);
-                    view.SetTextColor(Resource.Id.DescriptionTextView, context.SafeGetColor(Resource.Color.secondaryText));
-
-                    view.SetViewVisibility(Resource.Id.DotView, false.ToVisibility());
-                    view.SetViewVisibility(Resource.Id.ProjectTextView, false.ToVisibility());
-                    view.SetViewVisibility(Resource.Id.ClientTextView, false.ToVisibility());
-                }
-
-                appWidgetManager.UpdateAppWidget(widgetId, view);
+                updateWidget(context, appWidgetManager, widgetId);
             }
         }
 
@@ -122,13 +62,77 @@ namespace Toggl.Droid.Widgets
         {
             base.OnAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
             var widgetContext = WidgetContext.From(newOptions);
-            var remoteViews = setupRemoteViews(context, widgetContext);
-            appWidgetManager.UpdateAppWidget(appWidgetId, remoteViews);
+            updateWidget(context, appWidgetManager, appWidgetId);
 
             var intent = new Intent(context, typeof(WidgetsAnalyticsService));
             intent.SetAction(WidgetsAnalyticsService.TimerWidgetResizeAction);
             intent.PutExtra(WidgetsAnalyticsService.TimerWidgetSizeParameter, widgetContext.ColumnsCount);
             WidgetsAnalyticsService.EnqueueWork(context, intent);
+        }
+
+        private void updateWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId)
+        {
+            var widgetOptions = appWidgetManager.GetAppWidgetOptions(appWidgetId);
+            var widgetContext = WidgetContext.From(widgetOptions);
+            var view = setupRemoteViews(context, widgetContext);
+
+            var widgetInfo = TimeEntryWidgetInfo.FromSharedPreferences();
+
+            if (widgetInfo.IsRunning)
+            {
+                view.SetViewVisibility(Resource.Id.StartButton, ViewStates.Gone);
+                view.SetViewVisibility(Resource.Id.StopButton, ViewStates.Visible);
+
+                var duration = (DateTimeOffset.Now - widgetInfo.StartTime).TotalMilliseconds;
+                view.SetChronometerCountDown(Resource.Id.DurationTextView, false);
+                view.SetChronometer(Resource.Id.DurationTextView, SystemClock.ElapsedRealtime() - (long)duration, "%s", true);
+
+                if (string.IsNullOrEmpty(widgetInfo.Description))
+                {
+                    view.SetTextViewText(Resource.Id.DescriptionTextView, Resources.NoDescription);
+                    view.SetTextColor(Resource.Id.DescriptionTextView, context.SafeGetColor(Resource.Color.secondaryText));
+                }
+                else
+                {
+                    view.SetTextViewText(Resource.Id.DescriptionTextView, widgetInfo.Description);
+                    view.SetTextColor(Resource.Id.DescriptionTextView, context.SafeGetColor(Resource.Color.primaryText));
+                }
+
+                view.SetViewVisibility(Resource.Id.DotView, widgetInfo.HasProject.ToVisibility());
+                view.SetViewVisibility(Resource.Id.ProjectTextView, widgetInfo.HasProject.ToVisibility());
+                if (widgetInfo.HasProject)
+                {
+                    var projectColor = widgetInfo.ProjectColor != null ? Color.ParseColor(widgetInfo.ProjectColor) : Color.Black;
+                    // Dot
+                    view.SetInt(Resource.Id.DotView, "setBackgroundColor", projectColor);
+
+                    // Project
+                    view.SetTextViewText(Resource.Id.ProjectTextView, widgetInfo.ProjectName ?? "");
+                    view.SetTextColor(Resource.Id.ProjectTextView, projectColor);
+
+                    // Client
+                    view.SetViewVisibility(Resource.Id.ClientTextView, widgetInfo.HasClient.ToVisibility());
+                    if (widgetInfo.HasClient)
+                        view.SetTextViewText(Resource.Id.ClientTextView, widgetInfo.ClientName);
+                }
+            }
+            else
+            {
+                view.SetViewVisibility(Resource.Id.StartButton, ViewStates.Visible);
+                view.SetViewVisibility(Resource.Id.StopButton, ViewStates.Gone);
+
+                view.SetChronometerCountDown(Resource.Id.DurationTextView, false);
+                view.SetChronometer(Resource.Id.DurationTextView, SystemClock.ElapsedRealtime(), "%s", false);
+
+                view.SetTextViewText(Resource.Id.DescriptionTextView, Resources.NoDescription);
+                view.SetTextColor(Resource.Id.DescriptionTextView, context.SafeGetColor(Resource.Color.secondaryText));
+
+                view.SetViewVisibility(Resource.Id.DotView, false.ToVisibility());
+                view.SetViewVisibility(Resource.Id.ProjectTextView, false.ToVisibility());
+                view.SetViewVisibility(Resource.Id.ClientTextView, false.ToVisibility());
+            }
+
+            appWidgetManager.UpdateAppWidget(appWidgetId, view);
         }
 
         private void reportInstallationState(Context context, bool installed)

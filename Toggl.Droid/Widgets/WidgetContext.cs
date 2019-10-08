@@ -7,8 +7,8 @@ namespace Toggl.Droid.Widgets
 {
     internal struct WidgetContext
     {
-        private static int defaultMinWidth = 144;
-        private static int defaultMinHeight = 72;
+        private static int defaultMinWidth = 250;
+        private static int defaultMinHeight = 40;
 
         public TimerWidgetFormFactor FormFactor { get; private set; }
         public int ColumnsCount { get; private set; }
@@ -22,19 +22,12 @@ namespace Toggl.Droid.Widgets
         public static WidgetContext From(Bundle bundle)
         {
             var minWidth = bundle.GetInt(AppWidgetManager.OptionAppwidgetMinWidth);
-            var minHeight = bundle.GetInt(AppWidgetManager.OptionAppwidgetMinHeight);
-
-            var formFactor = determineFormFactor(minWidth, minHeight);
-
+            var formFactor = determineFormFactor(minWidth);
             return new WidgetContext(formFactor, getColumnsCount(minWidth));
         }
 
-        private static TimerWidgetFormFactor determineFormFactor(int minWidth, int minHeight)
-        {
-            return minHeight < defaultMinHeight || minWidth < defaultMinWidth
-                ? ButtonOnly
-                : FullWidget;
-        }
+        private static TimerWidgetFormFactor determineFormFactor(int minWidth)
+            => getColumnsCount(minWidth) == 1 ? ButtonOnly : FullWidget;
 
         /// <summary>
         /// Calculates the number of columns used by the widget based on the given width
