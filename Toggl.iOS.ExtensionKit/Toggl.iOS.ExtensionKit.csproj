@@ -80,6 +80,7 @@
     <Compile Include="SharedStorage.TimeEntries.cs">
       <DependentUpon>SharedStorage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\ColorExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="..\Toggl.iOS.IntentCodeGen\Toggl.iOS.IntentCodeGen\en.lproj\Intents.strings">

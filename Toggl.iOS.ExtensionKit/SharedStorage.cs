@@ -17,6 +17,7 @@ namespace Toggl.iOS.ExtensionKit
         private const string widgetUpdatedDateKey = "WidgetUpdatedDate";
         private const string widgetInstalledKey = "WidgetInstalled";
         private const string runningTimeEntry = "RunningTimeEntry";
+        private const string durationFormatKey = "DurationFormat";
 
         private NSUserDefaults userDefaults;
 
@@ -56,6 +57,12 @@ namespace Toggl.iOS.ExtensionKit
             userDefaults.Synchronize();
         }
 
+        public void SetDurationFormat(int durationFormat)
+        {
+            userDefaults.SetInt(durationFormat, durationFormatKey);
+            userDefaults.Synchronize();
+        }
+
         public void AddSiriTrackingEvent(SiriTrackingEvent e)
         {
             var currentEvents = (NSMutableArray)getTrackableEvents().MutableCopy();
@@ -80,6 +87,8 @@ namespace Toggl.iOS.ExtensionKit
 
         public long GetDefaultWorkspaceId() => (long)userDefaults.DoubleForKey(defaultWorkspaceId);
 
+        public int GetDurationFormat() => (int) userDefaults.IntForKey(durationFormatKey);
+
         public void DeleteEverything()
         {
             userDefaults.RemoveObject(apiTokenKey);
@@ -89,6 +98,7 @@ namespace Toggl.iOS.ExtensionKit
             userDefaults.RemoveObject(widgetUpdatedDateKey);
             userDefaults.RemoveObject(widgetInstalledKey);
             userDefaults.RemoveObject(runningTimeEntry);
+            userDefaults.RemoveObject(durationFormatKey);
             userDefaults.Synchronize();
         }
 

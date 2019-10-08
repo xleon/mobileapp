@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using System;
-using Toggl.Core.Extensions;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Xunit;
 
-namespace Toggl.Core.Tests.Extensions
+namespace Toggl.Shared.Tests.Extensions
 {
     public sealed class TimeSpanExtensionsTests
     {

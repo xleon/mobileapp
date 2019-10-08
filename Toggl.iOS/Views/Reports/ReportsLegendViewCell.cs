@@ -2,11 +2,11 @@
 using CoreGraphics;
 using Foundation;
 using System;
-using Toggl.Core.Extensions;
 using Toggl.Core.Reports;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views.Reports

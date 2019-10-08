@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Globalization;
 using Toggl.Shared;
 using static System.FormattableString;
 
-namespace Toggl.Core.Extensions
+namespace Toggl.Shared.Extensions
 {
     public static class TimeSpanExtensions
     {
