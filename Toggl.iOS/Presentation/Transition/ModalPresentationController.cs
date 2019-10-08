@@ -24,6 +24,8 @@ namespace Toggl.iOS.Presentation.Transition
         private const double iPadTopMarginLarge = 76;
         private const double iPadStackModalViewSpacing = 40;
 
+        private const double keyboardMargin = 10;
+
         private double topiPadMargin
             => UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeLeft
                || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeRight
@@ -151,7 +153,7 @@ namespace Toggl.iOS.Presentation.Transition
                 return new CGSize(width, height);
             }
 
-            var maxHeight = PresentingViewController.View.Bounds.Height - PresentingViewController.View.SafeAreaInsets.Top;
+            var maxHeight = ContainerView.Bounds.Height - ContainerView.SafeAreaInsets.Top;
             var preferredHeight = Min(maxHeight, PresentedViewController.PreferredContentSize.Height);
             return new CGSize(parentContainerSize.Width, preferredHeight == 0 ? maxHeight : preferredHeight);
         }
@@ -172,7 +174,7 @@ namespace Toggl.iOS.Presentation.Transition
                     frame.X = (containerSize.Width - frame.Size.Width) / 2;
                     frame.Y = (containerSize.Height - frame.Size.Height) / 2 + (nfloat)iPadStackModalViewSpacing * levelsOfModalViews();
 
-                    if (isKeyboardVisible || PresentingViewController.PresentingViewController != null)
+                    if (isKeyboardVisible)
                     {
                         frame.Y = (nfloat)topiPadMargin + (nfloat)iPadStackModalViewSpacing * levelsOfModalViews();
                     }
@@ -189,7 +191,7 @@ namespace Toggl.iOS.Presentation.Transition
                         {
                             var firstResponderFrame =
                                 firstResponder.ConvertRectToView(firstResponder.Frame, PresentedView);
-                            var newY = containerSize.Height - keyboardHeight - firstResponderFrame.Y - firstResponderFrame.Height;
+                            var newY = containerSize.Height - keyboardHeight - firstResponderFrame.Y - firstResponderFrame.Height - keyboardMargin;
                             frame.Y = (nfloat)Min(frame.Y, newY);
                         }
                     }

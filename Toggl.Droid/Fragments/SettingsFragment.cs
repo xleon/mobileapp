@@ -2,6 +2,8 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using System;
+using System.Reactive.Linq;
+using Toggl.Core.Sync;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
@@ -10,6 +12,7 @@ using Toggl.Droid.Helper;
 using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
+using Xamarin.Essentials;
 using static Android.Support.V7.App.AppCompatDelegate;
 using static Toggl.Shared.Resources;
 
@@ -188,6 +191,20 @@ namespace Toggl.Droid.Fragments
             smartRemindersView.Rx().Tap()
                 .Subscribe(ViewModel.OpenCalendarSmartReminders.Inputs)
                 .DisposedBy(DisposeBag);
+
+            ViewModel.CurrentSyncStatus
+                .Subscribe(setSyncStatusView)
+                .DisposedBy(DisposeBag);
+        }
+
+        private void setSyncStatusView(PresentableSyncStatus status)
+        {
+            syncStateViews.Values.ForEach(view => view.Visibility = ViewStates.Gone);
+
+            txtStateInProgress.Text = status == PresentableSyncStatus.Syncing ? Syncing : LoggingOutSecurely;
+
+            var visibleView = syncStateViews[status];
+            visibleView.Visibility = ViewStates.Visible;
         }
 
         public void ScrollToStart()
