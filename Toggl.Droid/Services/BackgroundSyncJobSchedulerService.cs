@@ -23,7 +23,7 @@ namespace Toggl.Droid.Services
             if (QApis.AreAvailable)
             {
                 JobFinished(@params, false);
-                return true;
+                return false;
             }
 
             AndroidDependencyContainer.EnsureInitialized(ApplicationContext);
