@@ -30,7 +30,8 @@ namespace Toggl.Droid.Views.Calendar
         private Handler handler;
         private ITimeService timeService;
         private CalendarLayoutCalculator calendarLayoutCalculator;
-        private DateTime currentDate;
+        private DateTime currentDate = DateTime.Now;
+        private bool shouldDrawCurrentHourIndicator = false;
 
         private int scrollOffset;
         private bool isScrolling;
@@ -59,6 +60,11 @@ namespace Toggl.Droid.Views.Calendar
 
         public IObservable<DateTimeOffset> EmptySpansTouchedObservable
             => emptySpansTouchedObservable.AsObservable();
+        
+        private readonly ISubject<int> scrollOffsetSubject = new Subject<int>();
+
+        public IObservable<int> ScrollOffsetObservable
+            => scrollOffsetSubject.AsObservable();
 
         #region Constructors
 
@@ -91,7 +97,6 @@ namespace Toggl.Droid.Views.Calendar
         private void init()
         {
             timeService = AndroidDependencyContainer.Instance.TimeService;
-            currentDate = timeService.CurrentDateTime.LocalDateTime.Date; 
             calendarLayoutCalculator = new CalendarLayoutCalculator(timeService);
             hapticFeedbackProvider = (Vibrator)Context.GetSystemService(Context.VibratorService);
             var calendarGestureListener = new CalendarGestureListener(
@@ -113,6 +118,13 @@ namespace Toggl.Droid.Views.Calendar
             initBackgroundBackingFields();
             initEventDrawingBackingFields();
             initEventEditionBackingFields();
+        }
+        
+        public void SetCurrentDate(DateTimeOffset dateOnView)
+        {
+            currentDate = dateOnView.LocalDateTime.Date;
+            var today = timeService.CurrentDateTime.LocalDateTime.Date;
+            shouldDrawCurrentHourIndicator = currentDate == today;
         }
 
         partial void initBackgroundBackingFields();
@@ -164,6 +176,8 @@ namespace Toggl.Droid.Views.Calendar
 
         private void drawCurrentHourIndicator(Canvas canvas)
         {
+            if (!shouldDrawCurrentHourIndicator) return;
+            
             var currentHourY = calculateCurrentHourOffset();
             canvas.DrawLine(timeSliceStartX, currentHourY, Width, currentHourY, currentHourPaint);
             canvas.DrawCircle(timeSliceStartX, currentHourY, 4.DpToPixels(Context), currentHourPaint);
@@ -180,6 +194,19 @@ namespace Toggl.Droid.Views.Calendar
             processEventsOnLayout(changed, left, top, right, bottom);
         }
 
+        public void SetOffset(int offset)
+        {
+            if (offset == scrollOffset) return;
+            
+            scrollOffset = offset;
+            Invalidate();
+        }
+
+        public int GetOffset()
+        {
+            return scrollOffset;
+        }
+        
         partial void processBackgroundOnLayout(bool changed, int left, int top, int right, int bottom);
         partial void processEventsOnLayout(bool changed, int left, int top, int right, int bottom);
 
@@ -210,6 +237,7 @@ namespace Toggl.Droid.Views.Calendar
                 scrollOffset = maxHeight - Height;
             }
             
+            scrollOffsetSubject.OnNext(scrollOffset);
             OnScrollChanged(0, scrollOffset, 0, oldScrollOffset);
 
             handler.Post(continueScroll);
@@ -272,7 +300,11 @@ namespace Toggl.Droid.Views.Calendar
                 return;
             }
 
-            if (touchedEmptySpace) return;
+            if (touchedEmptySpace)
+            {
+                emptySpansTouchedObservable.OnNext(dateAtYOffset(touchY + scrollOffset));
+                return;
+            }
             if (calendarItemInfo.CalendarItem.Source == CalendarItemSource.Calendar)
             {
                 calendarItemTappedSubject.OnNext(calendarItemInfo.CalendarItem);
@@ -344,6 +376,7 @@ namespace Toggl.Droid.Views.Calendar
                 scrollOffset = maxHeight - Height;
             }
             
+            scrollOffsetSubject.OnNext(scrollOffset);
             OnScrollChanged(0, scrollOffset, 0, oldScrollOffset);
 
             isScrolling = true;

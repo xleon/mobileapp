@@ -1,27 +1,38 @@
 using Android.OS;
-using Android.Util;
 using Android.Views;
-using Android.Widget;
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Android.Runtime;
+using Android.Support.V4.App;
+using Android.Support.V4.View;
+using Toggl.Core;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Droid.Extensions;
-using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.Fragments.Calendar;
+using Toggl.Droid.Helper;
 using Toggl.Droid.Presentation;
+using Toggl.Droid.Views.Calendar;
 using Toggl.Shared.Extensions;
+using Toggl.Shared.Extensions.Reactive;
 
 namespace Toggl.Droid.Fragments
 {
     public partial class CalendarFragment : ReactiveTabFragment<CalendarViewModel>, IScrollableToStart
     {
-        private readonly TimeSpan defaultTimeEntryDurationForCreation = TimeSpan.FromMinutes(30);
-        private CalendarDayViewModel calendarDayViewModel;
+        private const int calendarPagesCount = 14;
+        private readonly Subject<bool> scrollToStartSignaler = new Subject<bool>();
+        private CalendarDayFragmentAdapter calendarDayAdapter;
+        private ITimeService timeService;
+        private int defaultToolbarElevationInDPs;
+        private bool hasResumedOnce = false;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(Resource.Layout.CalendarFragment, container, false);
             InitializeViews(view);
-            calendarDayView.AttachMaterialScrollBehaviour(appBarLayout);
+            timeService = AndroidDependencyContainer.Instance.TimeService;
+            defaultToolbarElevationInDPs = 4.DpToPixels(Context);
             return view;
         }
 
@@ -29,55 +40,115 @@ namespace Toggl.Droid.Fragments
         {
             base.OnViewCreated(view, savedInstanceState);
 
-            var timeService = AndroidDependencyContainer.Instance.TimeService;
-            var schedulerProvider = AndroidDependencyContainer.Instance.SchedulerProvider;
-            calendarDayViewModel = ViewModel.DayViewModelAt(0);
-
-            var displayMetrics = new DisplayMetrics();
-            Activity.WindowManager.DefaultDisplay.GetMetrics(displayMetrics);
-
-            timeService
-                .CurrentDateTimeObservable
-                .DistinctUntilChanged(offset => offset.Day)
-                .ObserveOn(schedulerProvider.MainScheduler)
+            calendarDayAdapter = new CalendarDayFragmentAdapter(ViewModel, scrollToStartSignaler, ChildFragmentManager);
+            calendarViewPager.Adapter = calendarDayAdapter;
+            calendarViewPager.AddOnPageChangeListener(calendarDayAdapter);
+            calendarViewPager.SetPageTransformer(false, new VerticalOffsetPageTransformer(calendarDayAdapter.OffsetRelay));
+            calendarDayAdapter.CurrentPageRelay
+                .Select(getDateAtAdapterPosition)
                 .Subscribe(configureHeaderDate)
                 .DisposedBy(DisposeBag);
 
-            calendarDayView.UpdateItems(calendarDayViewModel.CalendarItems);
-
-            calendarDayViewModel.CalendarItems.CollectionChange
-                .Subscribe(_ => calendarDayView.UpdateItems(calendarDayViewModel.CalendarItems))
+            calendarDayAdapter.OffsetRelay
+                .Select(offset => offset == 0)
+                .DistinctUntilChanged()
+                .Subscribe(updateAppbarElevation)
                 .DisposedBy(DisposeBag);
-
-            calendarDayView.CalendarItemTappedObservable
-                .Subscribe(calendarDayViewModel.OnItemTapped.Inputs)
-                .DisposedBy(DisposeBag);
-
-            calendarDayView.EmptySpansTouchedObservable
-                .Select(emptySpan => (emptySpan, defaultTimeEntrySize: defaultTimeEntryDurationForCreation))
-                .Subscribe(calendarDayViewModel.OnDurationSelected.Inputs)
-                .DisposedBy(DisposeBag);
-
-            calendarDayView.EditCalendarItem
-                .Subscribe(calendarDayViewModel.OnTimeEntryEdited.Inputs)
-                .DisposedBy(DisposeBag);
+            
+            calendarViewPager.SetCurrentItem(calendarPagesCount - 1, false);
         }
 
         public void ScrollToStart()
         {
-            calendarDayView?.ScrollToCurrentHour(true);
+            scrollToStartSignaler.OnNext(true);
+            calendarViewPager.SetCurrentItem(calendarPagesCount - 1, true);
         }
 
         public override void OnResume()
         {
             base.OnResume();
-            calendarDayView?.ScrollToCurrentHour();
+            if (hasResumedOnce) 
+                return;
+            hasResumedOnce = true;
+            
+            scrollToStartSignaler.OnNext(false);
         }
 
         private void configureHeaderDate(DateTimeOffset offset)
         {
             var dayText = offset.ToString(Shared.Resources.CalendarToolbarDateFormat);
             headerDateTextView.Text = dayText;
+        }
+
+        private DateTimeOffset getDateAtAdapterPosition(int position)
+        {
+            var currentDate = timeService.CurrentDateTime.ToLocalTime().Date;
+            return currentDate.AddDays(-(calendarDayAdapter.Count - 1 - position));
+        }
+
+        private void updateAppbarElevation(bool isAtTop)
+        {
+            if (MarshmallowApis.AreNotAvailable)
+                return;
+            
+            var targetElevation = isAtTop ? 0f : defaultToolbarElevationInDPs;
+            appBarLayout.Elevation = targetElevation;
+        }
+        
+        private class VerticalOffsetPageTransformer : Java.Lang.Object, ViewPager.IPageTransformer
+        {
+            private BehaviorRelay<int> verticalOffsetProvider { get; }
+
+            public VerticalOffsetPageTransformer(BehaviorRelay<int> verticalOffsetProvider)
+            {
+                this.verticalOffsetProvider = verticalOffsetProvider;
+            }
+
+            public void TransformPage(View page, float position)
+            {
+                ((CalendarDayView) page).SetOffset(verticalOffsetProvider.Value);
+            }
+        }
+
+        private class CalendarDayFragmentAdapter : FragmentStatePagerAdapter, ViewPager.IOnPageChangeListener
+        {
+            private readonly CalendarViewModel calendarViewModel;
+            private readonly IObservable<bool> scrollToTopSign;
+            public BehaviorRelay<int> OffsetRelay { get; } = new BehaviorRelay<int>(0);
+            public BehaviorRelay<int> CurrentPageRelay { get; } = new BehaviorRelay<int>(0);
+
+            public CalendarDayFragmentAdapter(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+            {
+            }
+
+            public CalendarDayFragmentAdapter(CalendarViewModel calendarViewModel, IObservable<bool> scrollToTopSign, FragmentManager fm) : base(fm)
+            {
+                this.calendarViewModel = calendarViewModel;
+                this.scrollToTopSign = scrollToTopSign;
+            }
+
+            public override int Count { get; } = calendarPagesCount;
+
+            public override Fragment GetItem(int position)
+                => new CalendarDayViewPageFragment
+                {
+                    ViewModel = calendarViewModel.DayViewModelAt(-(Count - 1 - position)),
+                    ScrollOffsetRelay = OffsetRelay,
+                    CurrentPageRelay = CurrentPageRelay,
+                    PageNumber = position,
+                    ScrollToStartSign = scrollToTopSign
+                };
+
+            public void OnPageSelected(int position)
+                => CurrentPageRelay.Accept(position);
+
+            public void OnPageScrollStateChanged(int state)
+            {
+            }
+
+            public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
+            }
         }
     }
 }

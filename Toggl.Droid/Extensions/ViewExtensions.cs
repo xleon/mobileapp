@@ -59,7 +59,7 @@ namespace Toggl.Droid.Extensions
 
             scrollView.SetOnScrollChangeListener(new MaterialScrollBehaviorListener(appBarLayout));
 
-            if (scrollView is NestedScrollView || scrollView is CalendarDayView)
+            if (scrollView is NestedScrollView)
             {
                 appBarLayout.Post(() => appBarLayout.Elevation = 0);
             }

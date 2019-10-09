@@ -39,7 +39,7 @@
 
   <!--Calendar page-->
   <color name="calendarHeaderBackground">#FF959595</color>
-  <color name="currentHourColor">#323232</color>
+  <color name="currentHourColor">#FF328FFF</color>
 
   <!-- Start Time entry page-->
   <color name="billable">#FF328FFF</color>

@@ -372,6 +372,13 @@
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
+    <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.cs" />
+    <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.DialogProvider.cs">
+      <DependentUpon>CalendarDayViewPageFragment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.PermissionHandler.cs">
+      <DependentUpon>CalendarDayViewPageFragment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fragments\ReportsCalendarFragment.cs" />
     <Compile Include="Helper\ActiveTheme.cs" />
     <Compile Include="Presentation\ActivityTransitions.cs" />

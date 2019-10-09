@@ -1,4 +1,5 @@
 using Android.Support.Design.Widget;
+using Android.Support.V4.View;
 using Android.Views;
 using Android.Widget;
 using Toggl.Droid.Views.Calendar;
@@ -8,9 +9,9 @@ namespace Toggl.Droid.Fragments
 {
     public partial class CalendarFragment
     {
-        private TextView headerDateTextView;
         private TextView headerTimeEntriesDurationTextView;
-        private CalendarDayView calendarDayView;
+        private TextView headerDateTextView;
+        private ViewPager calendarViewPager;
         private AppBarLayout appBarLayout;
         private Toolbar toolbar;
 
@@ -18,8 +19,8 @@ namespace Toggl.Droid.Fragments
         {
             headerDateTextView = view.FindViewById<TextView>(Resource.Id.HeaderDateTextView);
             headerTimeEntriesDurationTextView = view.FindViewById<TextView>(Resource.Id.HeaderTimeEntriesDurationTextView);
-            calendarDayView = view.FindViewById<CalendarDayView>(Resource.Id.calendarDayView);
             appBarLayout = view.FindViewById<AppBarLayout>(Resource.Id.HeaderView);
+            calendarViewPager = view.FindViewById<ViewPager>(Resource.Id.Pager);
             toolbar = view.FindViewById<Toolbar>(Resource.Id.Toolbar);
         }
 
