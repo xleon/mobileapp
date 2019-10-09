@@ -63,6 +63,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.TimeService,
                     dependencyContainer.UserAccessManager,
                     dependencyContainer.AnalyticsService,
+                    dependencyContainer.SchedulerProvider,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RxActionFactory);
             }
