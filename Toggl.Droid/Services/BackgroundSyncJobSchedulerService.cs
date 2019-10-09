@@ -18,7 +18,7 @@ namespace Toggl.Droid.Services
 
         public override bool OnStartJob(JobParameters @params)
         {
-            // Background sync is temporary disabled due to a crash on Android 10 that is hard to reproduce
+            // Background sync for Android 10 is temporary disabled due to a crash on Android 10 that is hard to reproduce
             // Calling JobFinished and returning early here stops the background job from running
             if (QApis.AreAvailable)
             {
