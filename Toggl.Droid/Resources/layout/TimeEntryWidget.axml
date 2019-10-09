@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:background="@drawable/EmptyViewRoundedRectangle"
-    android:backgroundTint="@android:color/white">
+    android:background="@drawable/TimerWidgetBackground">
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="0dp"
