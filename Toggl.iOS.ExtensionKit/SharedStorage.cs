@@ -95,6 +95,7 @@ namespace Toggl.iOS.ExtensionKit
             userDefaults.RemoveObject(needsSyncKey);
             userDefaults.RemoveObject(userIdKey);
             userDefaults.RemoveObject(siriTrackingEventsKey);
+            userDefaults.RemoveObject(defaultWorkspaceId);
             userDefaults.RemoveObject(widgetUpdatedDateKey);
             userDefaults.RemoveObject(widgetInstalledKey);
             userDefaults.RemoveObject(runningTimeEntry);
