@@ -15,7 +15,8 @@ namespace Toggl.Core.Tests.Generators
         private readonly HashSet<Type> exceptionViewModels = new HashSet<Type>()
         {
             typeof(ReportsBarChartViewModel),
-            typeof(CalendarDayViewModel)
+            typeof(CalendarDayViewModel),
+            typeof(CalendarContextualMenuViewModel)
         };
 
         public override IEnumerable<object[]> GetData(MethodInfo testMethod)

@@ -1368,4 +1368,7 @@ to project members</value>
     <data name="No" xml:space="preserve">
         <value>No</value>
     </data>
+    <data name="Now" xml:space="preserve">
+        <value>now</value>
+    </data>
 </root>

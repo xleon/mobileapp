@@ -10,7 +10,6 @@
 
 namespace Toggl.Shared {
     using System;
-    using System.Reflection;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
@@ -2512,22 +2511,28 @@ namespace Toggl.Shared {
                 return ResourceManager.GetString("RestartNeededMessage", resourceCulture);
             }
         }
-
+        
         public static string AppTheme {
             get {
                 return ResourceManager.GetString("AppTheme", resourceCulture);
             }
         }
-
+        
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
-
+        
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        public static string Now {
+            get {
+                return ResourceManager.GetString("Now", resourceCulture);
             }
         }
     }
