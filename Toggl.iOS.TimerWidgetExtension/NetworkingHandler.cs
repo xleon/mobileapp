@@ -10,6 +10,7 @@ using Toggl.Shared.Models;
 using Toggl.Shared.Extensions;
 using System.Threading.Tasks;
 using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.ExtensionKit.Analytics;
 
 namespace Toggl.iOS.TimerWidgetExtension
 {
@@ -28,7 +29,15 @@ namespace Toggl.iOS.TimerWidgetExtension
         {
             await togglApi.TimeEntries
                 .Create(timeEntry)
-                .Do(_ => SharedStorage.Instance.SetNeedsSync(true))
+                .Do(_ =>
+                {
+                    SharedStorage.Instance.SetNeedsSync(true);
+                    SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.StartTimer());
+                },
+                exception =>
+                {
+                    SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.Error(exception.Message));
+                })
                 .FirstAsync();
         }
 
@@ -38,7 +47,15 @@ namespace Toggl.iOS.TimerWidgetExtension
                 .GetAll()
                 .Select(getRunningTimeEntry)
                 .Select(stopTimeEntry)
-                .Do(_ => SharedStorage.Instance.SetNeedsSync(true))
+                .Do(_ =>
+                {
+                    SharedStorage.Instance.SetNeedsSync(true);
+                    SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.StopTimer());
+                },
+                exception =>
+                {
+                    SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.Error(exception.Message));
+                })
                 .FirstAsync();
         }
 

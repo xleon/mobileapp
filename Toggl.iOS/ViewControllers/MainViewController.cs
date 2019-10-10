@@ -429,7 +429,17 @@ namespace Toggl.iOS.ViewControllers
 
         private void trackSiriEvents()
         {
-            var events = SharedStorage.Instance.PopTrackableEvents();
+            var events = SharedStorage.Instance.PopSiriTrackableEvents();
+
+            events?
+                .Select(e => e?.ToTrackableEvent())
+                .Where(e => e != null)
+                .Do(ViewModel.Track);
+        }
+
+        private void trackWidgetEvents()
+        {
+            var events = SharedStorage.Instance.PopWidgetTrackableEvents();
 
             events?
                 .Select(e => e?.ToTrackableEvent())
@@ -445,6 +455,7 @@ namespace Toggl.iOS.ViewControllers
                 ViewModel.Refresh.Execute();
             }
             trackSiriEvents();
+            trackWidgetEvents();
         }
 
         private void toggleUndoDeletion(int? numberOfTimeEntriesPendingDeletion)

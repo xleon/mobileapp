@@ -1977,6 +1977,8 @@
     <Compile Include="ViewSources\Generic\Common\SelectorTableViewSource.cs" />
     <Compile Include="Helper\Handoff.cs" />
     <Compile Include="Extensions\TextViewExtensions.cs" />
+    <Compile Include="Analytics\WidgetTrackingEventExtensions.cs" />
+    <Compile Include="Analytics\WidgetErrorTrackingEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">

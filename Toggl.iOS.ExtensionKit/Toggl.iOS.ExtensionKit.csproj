@@ -81,6 +81,7 @@
       <DependentUpon>SharedStorage.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Analytics\WidgetTrackingEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="..\Toggl.iOS.IntentCodeGen\Toggl.iOS.IntentCodeGen\en.lproj\Intents.strings">

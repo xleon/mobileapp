@@ -13,6 +13,7 @@ namespace Toggl.iOS.ExtensionKit
         private const string needsSyncKey = "NeedsSyncKey";
         private const string userIdKey = "UserId";
         private const string siriTrackingEventsKey = "SiriTrackingEventsKey";
+        private const string widgetTrackingEventsKey = "WidgetTrackingEventsKey";
         private const string defaultWorkspaceId = "DefaultWorkspaceId";
         private const string widgetUpdatedDateKey = "WidgetUpdatedDate";
         private const string widgetInstalledKey = "WidgetInstalled";
@@ -65,18 +66,34 @@ namespace Toggl.iOS.ExtensionKit
 
         public void AddSiriTrackingEvent(SiriTrackingEvent e)
         {
-            var currentEvents = (NSMutableArray)getTrackableEvents().MutableCopy();
+            var currentEvents = (NSMutableArray) getTrackableEvents(siriTrackingEventsKey).MutableCopy();
             currentEvents.Add(e);
 
             userDefaults[siriTrackingEventsKey] = NSKeyedArchiver.ArchivedDataWithRootObject(currentEvents);
             userDefaults.Synchronize();
         }
 
-        public SiriTrackingEvent[] PopTrackableEvents()
+        public void AddWidgetTrackingEvent(WidgetTrackingEvent e)
         {
-            var eventArrays = getTrackableEvents();
+            var currentEvents = (NSMutableArray) getTrackableEvents(widgetInstalledKey).MutableCopy();
+            currentEvents.Add(e);
+
+            userDefaults[siriTrackingEventsKey] = NSKeyedArchiver.ArchivedDataWithRootObject(currentEvents);
+            userDefaults.Synchronize();
+        }
+
+        public SiriTrackingEvent[] PopSiriTrackableEvents()
+        {
+            var eventArrays = getTrackableEvents(siriTrackingEventsKey);
             userDefaults.RemoveObject(siriTrackingEventsKey);
             return NSArray.FromArrayNative<SiriTrackingEvent>(eventArrays);
+        }
+
+        public WidgetTrackingEvent[] PopWidgetTrackableEvents()
+        {
+            var eventArrays = getTrackableEvents(widgetTrackingEventsKey);
+            userDefaults.RemoveObject(widgetTrackingEventsKey);
+            return NSArray.FromArrayNative<WidgetTrackingEvent>(eventArrays);
         }
 
         public double GetUserId() => userDefaults.DoubleForKey(userIdKey);
@@ -95,6 +112,7 @@ namespace Toggl.iOS.ExtensionKit
             userDefaults.RemoveObject(needsSyncKey);
             userDefaults.RemoveObject(userIdKey);
             userDefaults.RemoveObject(siriTrackingEventsKey);
+            userDefaults.RemoveObject(widgetTrackingEventsKey);
             userDefaults.RemoveObject(defaultWorkspaceId);
             userDefaults.RemoveObject(widgetUpdatedDateKey);
             userDefaults.RemoveObject(widgetInstalledKey);
@@ -135,9 +153,9 @@ namespace Toggl.iOS.ExtensionKit
 
         public bool GetWidgetInstalled() => userDefaults.BoolForKey(widgetInstalledKey);
 
-        private NSArray getTrackableEvents()
+        private NSArray getTrackableEvents(string key)
         {
-            var eventArrayData = userDefaults.ValueForKey(new NSString(siriTrackingEventsKey)) as NSData;
+            var eventArrayData = userDefaults.ValueForKey(new NSString(key)) as NSData;
 
             if (eventArrayData == null)
             {
