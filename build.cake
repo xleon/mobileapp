@@ -1,6 +1,9 @@
 #tool "nuget:?package=xunit.runner.console&version=2.2.0"
 #tool "nuget:?package=NUnit.Runners&version=2.6.3"
 
+using System.Text.RegularExpressions;
+using System;
+
 public class TemporaryFileTransformation
 {
     public string Path { get; set; }
@@ -105,12 +108,12 @@ private string GetVersionNumberFromTag()
     var tagName = redirectedOutput.Last();
     
     var p = Regex.Match(tagName, @"(?<platform>(android|ios))-(?<major>\d{1,2})\.(?<minor>\d{1,2})\.(?<build>\d{1,2})(-(?<rev>\d{1,2}))?");
-    var major = Int.parse(p.Groups["major"]) * 10000000;
-    var minor = Int.parse(p.Groups["minor"]) * 100000;
-    var build = Int.parse(p.Groups["build"]) * 1000;
-    var rev = string.IsNullOrEmpty(p.Groups["rev"]) ? Int.parse(p.Groups["rev"]) : 0;
+    var major = Int32.Parse(p.Groups["major"].Value) * 10000000;
+    var minor = Int32.Parse(p.Groups["minor"].Value) * 100000;
+    var build = Int32.Parse(p.Groups["build"].Value) * 1000;
+    var rev = string.IsNullOrEmpty(p.Groups["rev"].Value) ? Int32.Parse(p.Groups["rev"].Value) : 0;
     
-    return major + minor + build + rev;
+    return (major + minor + build + rev).ToString();
 }
 
 private TemporaryFileTransformation GetAndroidProjectConfigurationTransformation()
@@ -263,7 +266,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
         bundleId = "com.toggl.daneel";
         appName = "Toggl";
         iconSet = "Assets.xcassets/AppIcon.appiconset";
-        bundleVersion = GetVersionNumberFromTag()
+        bundleVersion = GetVersionNumberFromTag();
     }
 
     var filePath = GetFiles(path).Single();
@@ -301,7 +304,7 @@ private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransfor
     {
         bundleId = "com.toggl.daneel.SiriExtension";
         appName = "Siri Extension";
-        bundleVersion = GetVersionNumberFromTag()
+        bundleVersion = GetVersionNumberFromTag();
     }
 
     var filePath = GetFiles(path).Single();
