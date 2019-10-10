@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Calendar.ContextualMenu;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Shared.Extensions;
 using Xunit.Sdk;

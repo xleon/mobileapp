@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using FluentAssertions;
-using FluentAssertions.Equivalency;
 using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.Calendar;
@@ -14,10 +13,9 @@ using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.Calendar.ContextualMenu;
 using Toggl.Core.UI.Views;
 using Xunit;
-using static Toggl.Core.UI.ViewModels.Calendar.CalendarContextualMenuViewModel;
 using ColorHelper = Toggl.Core.Helper.Colors;
 
 namespace Toggl.Core.Tests.UI.ViewModels
@@ -91,6 +89,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.CurrentMenu.Subscribe(menuObserver);
                 ViewModel.MenuVisible.Subscribe(visibilityObserver);
                 
+                TestScheduler.Start();
+
                 menuObserver.Messages.Should().HaveCount(1);
                 menuObserver.Messages.First().Value.Value.Actions.Should().BeEmpty();
                 visibilityObserver.Messages.Should().HaveCount(1);
@@ -104,10 +104,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var calendarItem = CreateEmptyCalendarItem();
                 ViewModel.CurrentMenu.Subscribe(observer);
                 
-                ViewModel.OnItemSelected.Inputs.OnNext(calendarItem);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(calendarItem);
+                TestScheduler.Start();
 
                 observer.Messages.Should().HaveCount(2);
-                var kinds = observer.Messages[1].Value.Value.Actions.Select(action => action.Kind);
+                
+                var kinds = observer.Messages[1].Value.Value.Actions.Select(action => action.ActionKind);
                 kinds.Should().ContainInOrder(
                     CalendarMenuActionKind.Discard,
                     CalendarMenuActionKind.Edit,
@@ -121,10 +123,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var calendarItem = CreateDummyTimeEntryCalendarItem(isRunning: false);
                 ViewModel.CurrentMenu.Subscribe(observer);
                 
-                ViewModel.OnItemSelected.Inputs.OnNext(calendarItem);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(calendarItem);
+                TestScheduler.Start();
 
                 observer.Messages.Should().HaveCount(2);
-                var kinds = observer.Messages[1].Value.Value.Actions.Select(action => action.Kind);
+                var kinds = observer.Messages[1].Value.Value.Actions.Select(action => action.ActionKind);
                 kinds.Should().ContainInOrder(
                     CalendarMenuActionKind.Delete,
                     CalendarMenuActionKind.Edit,
@@ -139,10 +142,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var calendarItem = CreateDummyTimeEntryCalendarItem(isRunning: true);
                 ViewModel.CurrentMenu.Subscribe(observer);
                 
-                ViewModel.OnItemSelected.Inputs.OnNext(calendarItem);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(calendarItem);
+                TestScheduler.Start();
 
                 observer.Messages.Should().HaveCount(2);
-                var kinds = observer.Messages[1].Value.Value.Actions.Select(action => action.Kind);
+                var kinds = observer.Messages[1].Value.Value.Actions.Select(action => action.ActionKind);
                 kinds.Should().ContainInOrder(
                     CalendarMenuActionKind.Discard,
                     CalendarMenuActionKind.Edit,
@@ -157,14 +161,48 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var calendarItem = CreateDummyCalendarEventCalendarItem(duration: TimeSpan.FromMinutes(30));
                 ViewModel.CurrentMenu.Subscribe(observer);
                 
-                ViewModel.OnItemSelected.Inputs.OnNext(calendarItem);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(calendarItem);
+                TestScheduler.Start();
 
                 observer.Messages.Should().HaveCount(2);
-                var kinds = observer.Messages[1].Value.Value.Actions.Select(action => action.Kind);
+                var kinds = observer.Messages[1].Value.Value.Actions.Select(action => action.ActionKind);
                 kinds.Should().ContainInOrder(
                     CalendarMenuActionKind.Copy,
                     CalendarMenuActionKind.Start);
             }
+            
+            [Fact]
+            public void DoesNotEmitWhenTheCalendarItemBeingUpdatedIsntDifferent()
+            {
+                var observer = TestScheduler.CreateObserver<CalendarContextualMenu>();
+                var startTime = new DateTimeOffset(2019, 10, 10, 10, 10, 10, TimeSpan.Zero);
+                var calendarItem = CreateDummyTimeEntryCalendarItem(duration: TimeSpan.FromMinutes(30), startTime: startTime);
+                ViewModel.CurrentMenu.Subscribe(observer);
+                
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(calendarItem);
+                TestScheduler.Start();
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(calendarItem.WithStartTime(DateTimeOffset.Now));
+                TestScheduler.Start();
+
+                observer.Messages.Should().HaveCount(2);
+            }
+
+            [Fact]
+            public void EmitsClosedMenuWhenItemIsUpdatedWithNull()
+            {
+                var observer = TestScheduler.CreateObserver<CalendarContextualMenu>();
+                var startTime = new DateTimeOffset(2019, 10, 10, 10, 10, 10, TimeSpan.Zero);
+                var calendarItem = CreateDummyTimeEntryCalendarItem(duration: TimeSpan.FromMinutes(30), startTime: startTime);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(calendarItem);
+                TestScheduler.Start();
+                ViewModel.CurrentMenu.Subscribe(observer);
+                
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(null);
+                TestScheduler.Start();
+
+                observer.Messages.Should().HaveCount(2);
+                observer.Messages.Last().Value.Value.Type.Should().Be(ContextualMenuType.Closed);
+            } 
         }
 
         public abstract class TheMenuActionTests : CalendarContextualMenuViewModelTest
@@ -176,7 +214,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<CalendarContextualMenu>();
                 var calendarItem = CreateMenuTypeCalendarItemTrigger();
                 ViewModel.CurrentMenu.Subscribe(observer);
-                ViewModel.OnItemSelected.Inputs.OnNext(calendarItem);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(calendarItem);
+                TestScheduler.Start();
 
                 ContextualMenu = observer.Messages.Last().Value.Value;
             }
@@ -230,14 +269,16 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void TheCopyActionCreatesATimeEntryWithTheDetailsFromTheCalendarEvent()
             {
-                var copyAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Copy);
+                var copyAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Copy);
                 var expectedDescription = "X";
                 var expectedStartTime = new DateTimeOffset(2019, 10, 10, 10, 10, 10, TimeSpan.Zero);
                 var expectedDuration = TimeSpan.FromHours(1);
                 var calendarEventBeingEdited = CreateDummyCalendarEventCalendarItem(expectedDescription, expectedStartTime, expectedDuration);
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(new MockWorkspace(1)));
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(calendarEventBeingEdited);
+                TestScheduler.Start();
                 
-                copyAction.MenuItemAction.Inputs.OnNext(calendarEventBeingEdited);
+                copyAction.MenuItemAction.Execute();
 
                 var prototypeArg = Arg.Is<ITimeEntryPrototype>(te =>
                         te.Description == expectedDescription
@@ -255,15 +296,17 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void TheStartActionCreatesARunningTimeEntryWithTheDetailsFromTheCalendarEvent()
             {
-                var startAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Start);
+                var startAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Start);
                 var expectedDescription = "X";
                 var originalStartTime = new DateTimeOffset(2019, 10, 10, 10, 10, 10, TimeSpan.Zero);
                 var calendarEventBeingEdited = CreateDummyCalendarEventCalendarItem(expectedDescription, originalStartTime);
                 var now = DateTimeOffset.Now;
                 TimeService.CurrentDateTime.Returns(now);
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(new MockWorkspace(1)));
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(calendarEventBeingEdited);
+                TestScheduler.Start();
                 
-                startAction.MenuItemAction.Inputs.OnNext(calendarEventBeingEdited);
+                startAction.MenuItemAction.Execute();
 
                 var prototypeArg = Arg.Is<ITimeEntryPrototype>(te =>
                     te.Description == expectedDescription
@@ -296,7 +339,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var observer = TestScheduler.CreateObserver<Unit>();
                 ViewModel.DiscardChanges.Subscribe(observer);
-                var discardAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Discard);
+                var discardAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Discard);
                 var expectedStartTime = new DateTimeOffset(2019, 10, 10, 10, 10, 10, TimeSpan.Zero);
                 var expectedDuration = TimeSpan.FromMinutes(30);
                 var expectedDescription = "whatever";
@@ -308,10 +351,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     expectedDescription,
                     CalendarIconKind.None);
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(new MockWorkspace(1)));
+                TestScheduler.Start();
                 observer.Messages.Should().HaveCount(0);
-                
-                discardAction.MenuItemAction.Inputs.OnNext(newCalendarItem);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(newCalendarItem);
+                TestScheduler.Start();
 
+                discardAction.MenuItemAction.Execute();
+
+                TestScheduler.Start();
                 observer.Messages.Should().HaveCount(1);
             }
             
@@ -322,7 +369,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void TheEditActionNavigatesToTheStartTimeEntryViewModelWithProperParameters()
             {
-                var editAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Edit);
+                var editAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Edit);
 
                 var expectedStartTime = new DateTimeOffset(2019, 10, 10, 10, 10, 10, TimeSpan.Zero);
                 var expectedDuration = TimeSpan.FromMinutes(30);
@@ -336,8 +383,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(new MockWorkspace(1)));
                 var view = Substitute.For<IView>();
                 ViewModel.AttachView(view);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(newCalendarItem);
+                TestScheduler.Start();
                 
-                editAction.MenuItemAction.Inputs.OnNext(newCalendarItem);
+                editAction.MenuItemAction.Execute();
 
                 var startTimeEntryArg = Arg.Is<StartTimeEntryParameters>(param =>
                     param.StartTime == expectedStartTime
@@ -345,7 +394,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     && param.EntryDescription == string.Empty
                     && param.WorkspaceId == 1
                 );
-                
+                TestScheduler.Start();
                 NavigationService.Received().Navigate<StartTimeEntryViewModel, StartTimeEntryParameters, Unit>(startTimeEntryArg, view);
             }
             
@@ -356,7 +405,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void TheSaveActionCreatesATimeEntryWithNoDescriptionWithTheRightStartTimeAndDuration()
             {
-                var saveAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Save);
+                var saveAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Save);
                 var expectedStartTime = new DateTimeOffset(2019, 10, 10, 10, 10, 10, TimeSpan.Zero);
                 var expectedDuration = TimeSpan.FromMinutes(30);
                 var expectedDescription = "whatever";
@@ -368,8 +417,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     expectedDescription,
                     CalendarIconKind.None);
                 InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(new MockWorkspace(1)));
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(newCalendarItem);
+                TestScheduler.Start();
                 
-                saveAction.MenuItemAction.Inputs.OnNext(newCalendarItem);
+                saveAction.MenuItemAction.Execute();
                 
                 var prototypeArg = Arg.Is<ITimeEntryPrototype>(te =>
                     te.Description == expectedDescription
@@ -377,6 +428,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     && te.Duration == expectedDuration
                     && te.WorkspaceId == 1
                 );
+                TestScheduler.Start();
                 InteractorFactory.Received().CreateTimeEntry(prototypeArg, TimeEntryStartOrigin.CalendarEvent);
             }
             
@@ -399,12 +451,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void TheDiscardActionDeletesTheRunningTimeEntry()
             {
-                var discardAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Discard);
+                var discardAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Discard);
                 var runningTimeEntryId = 10;
                 var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: true, timeEntryId: runningTimeEntryId);
-                
-                discardAction.MenuItemAction.Inputs.OnNext(runningTimeEntry);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(runningTimeEntry);
+                TestScheduler.Start();
 
+                discardAction.MenuItemAction.Execute();
+                
+                TestScheduler.Start();
                 InteractorFactory.Received().DeleteTimeEntry(runningTimeEntryId);
             }
             
@@ -415,15 +470,18 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void TheEditActionNavigatesToTheEditTimeEntryViewModelWithTheRightId()
             {
-                var editAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Edit);
+                var editAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Edit);
                 var runningTimeEntryId = 10L;
                 var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: true, timeEntryId: runningTimeEntryId);
                 var view = Substitute.For<IView>();
                 ViewModel.AttachView(view);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(runningTimeEntry);
+                TestScheduler.Start();
                 
-                editAction.MenuItemAction.Inputs.OnNext(runningTimeEntry);
+                editAction.MenuItemAction.Execute();
 
                 var idArg = Arg.Is<long[]>(ids => ids[0] == runningTimeEntryId);
+                TestScheduler.Start();
                 NavigationService.Received().Navigate<EditTimeEntryViewModel, long[], Unit>(idArg, view);
             }
             
@@ -434,7 +492,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void TheSaveActionUpdatesTheRunningTimeEntry()
             {
-                var saveAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Save);
+                var saveAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Save);
                 var runningTimeEntryId = 10L;
                 var newStartTime = new DateTimeOffset(2019, 10, 10, 10, 10, 10, TimeSpan.Zero);
                 var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: true, timeEntryId: runningTimeEntryId, newStartTime);
@@ -442,8 +500,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var mockWorkspace = new MockWorkspace(1);
                 var timeEntryMock = new MockTimeEntry(runningTimeEntryId, mockWorkspace, originalStartTime);
                 InteractorFactory.GetTimeEntryById(runningTimeEntryId).Execute().Returns(Observable.Return(timeEntryMock));
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(runningTimeEntry);
+                TestScheduler.Start();
                 
-                saveAction.MenuItemAction.Inputs.OnNext(runningTimeEntry);
+                saveAction.MenuItemAction.Execute();
 
                 var dtoArg = Arg.Is<EditTimeEntryDto>(dto 
                     => dto.Id == runningTimeEntryId
@@ -451,6 +511,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                        && dto.StartTime != originalStartTime
                        && dto.WorkspaceId == mockWorkspace.Id
                        && !dto.StopTime.HasValue);
+                TestScheduler.Start();
                 InteractorFactory.Received().UpdateTimeEntry(dtoArg);
             }
             
@@ -461,14 +522,17 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void TheStopActionStopsTheRunningTimeEntry()
             {
-                var stopAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Stop);
+                var stopAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Stop);
                 var runningTimeEntryId = 10L;
                 var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: true, timeEntryId: runningTimeEntryId);
                 var now = DateTimeOffset.Now;
                 TimeService.CurrentDateTime.Returns(now);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(runningTimeEntry);
+                TestScheduler.Start();
                 
-                stopAction.MenuItemAction.Inputs.OnNext(runningTimeEntry);
+                stopAction.MenuItemAction.Execute();
 
+                TestScheduler.Start();
                 InteractorFactory.Received().StopTimeEntry(now, TimeEntryStopOrigin.CalendarContextualMenu);
             }
             
@@ -491,13 +555,16 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void TheDeleteActionDeletesTheRunningTimeEntry()
             {
-                var deleteAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Delete);
-                var runningTimeEntryId = 10;
-                var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: runningTimeEntryId);
+                var deleteAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Delete);
+                var stoppedTimeEntryId = 10;
+                var stoppedTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: stoppedTimeEntryId);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(stoppedTimeEntry);
+                TestScheduler.Start();
                 
-                deleteAction.MenuItemAction.Inputs.OnNext(runningTimeEntry);
+                deleteAction.MenuItemAction.Execute();
 
-                InteractorFactory.Received().DeleteTimeEntry(runningTimeEntryId);
+                TestScheduler.Start();
+                InteractorFactory.Received().DeleteTimeEntry(stoppedTimeEntryId);
             }
             
             [Fact]
@@ -507,15 +574,18 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void TheEditActionNavigatesToTheEditTimeEntryViewModelWithTheRightId()
             {
-                var editAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Edit);
-                var runningTimeEntryId = 10L;
-                var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: runningTimeEntryId);
+                var editAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Edit);
+                var stoppedTimeEntryId = 10L;
+                var stoppedTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: stoppedTimeEntryId);
                 var view = Substitute.For<IView>();
                 ViewModel.AttachView(view);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(stoppedTimeEntry);
+                TestScheduler.Start();
                 
-                editAction.MenuItemAction.Inputs.OnNext(runningTimeEntry);
-
-                var idArg = Arg.Is<long[]>(ids => ids[0] == runningTimeEntryId);
+                editAction.MenuItemAction.Execute();
+                
+                TestScheduler.Start();
+                var idArg = Arg.Is<long[]>(ids => ids[0] == stoppedTimeEntryId);
                 NavigationService.Received().Navigate<EditTimeEntryViewModel, long[], Unit>(idArg, view);
             }
             
@@ -526,27 +596,30 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void TheSaveActionUpdatesTheRunningTimeEntry()
             {
-                var saveAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Save);
-                var runningTimeEntryId = 10L;
+                var saveAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Save);
+                var stoppedTimeEntryId = 10L;
                 var newStartTime = new DateTimeOffset(2019, 10, 10, 10, 10, 10, TimeSpan.Zero);
                 var newEndTime = new DateTimeOffset(2019, 10, 10, 10, 30, 10, TimeSpan.Zero);
-                var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: runningTimeEntryId, newStartTime, newEndTime - newStartTime);
+                var stoppedTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: stoppedTimeEntryId, newStartTime, newEndTime - newStartTime);
                 var originalStartTime = new DateTimeOffset(2019, 10, 10, 11, 10, 10, TimeSpan.Zero);
                 var originalEndTime = new DateTimeOffset(2019, 10, 10, 11, 30, 10, TimeSpan.Zero);
                 var mockWorkspace = new MockWorkspace(1);
-                var timeEntryMock = new MockTimeEntry(runningTimeEntryId, mockWorkspace, originalStartTime, (long)(originalEndTime - originalStartTime).TotalSeconds);
-                InteractorFactory.GetTimeEntryById(runningTimeEntryId).Execute().Returns(Observable.Return(timeEntryMock));
+                var timeEntryMock = new MockTimeEntry(stoppedTimeEntryId, mockWorkspace, originalStartTime, (long)(originalEndTime - originalStartTime).TotalSeconds);
+                InteractorFactory.GetTimeEntryById(stoppedTimeEntryId).Execute().Returns(Observable.Return(timeEntryMock));
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(stoppedTimeEntry);
+                TestScheduler.Start();
                 
-                saveAction.MenuItemAction.Inputs.OnNext(runningTimeEntry);
+                saveAction.MenuItemAction.Execute();
 
                 var dtoArg = Arg.Is<EditTimeEntryDto>(dto 
-                    => dto.Id == runningTimeEntryId
+                    => dto.Id == stoppedTimeEntryId
                        && dto.StartTime == newStartTime
                        && dto.StartTime != originalStartTime
                        && dto.WorkspaceId == mockWorkspace.Id
                        && dto.StopTime.HasValue
                        && dto.StopTime.Value == newEndTime
                        && dto.StopTime.Value != originalEndTime);
+                TestScheduler.Start();
                 InteractorFactory.Received().UpdateTimeEntry(dtoArg);
             }
             
@@ -557,9 +630,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact]
             public void TheContinueActionStartsANewTheRunningTimeEntryWithTheDetailsFromTheCalendarItemCalledFromTheMenuAction()
             {
-                var continueAction = ContextualMenu.Actions.First(action => action.Kind == CalendarMenuActionKind.Continue);
-                var runningTimeEntryId = 10L;
-                var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: runningTimeEntryId);
+                var continueAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Continue);
+                var stoppedTimeEntryId = 10L;
+                var stoppedTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: stoppedTimeEntryId);
                 var mockWorkspace = new MockWorkspace(1);
                 var mockProject = new MockProject(1, mockWorkspace);
                 var mockTask = new MockTask(1, mockWorkspace, mockProject);
@@ -567,18 +640,21 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 expectedTimeEntryToContinue.WorkspaceId.Returns(1);
                 expectedTimeEntryToContinue.Description.Returns("");
                 expectedTimeEntryToContinue.Duration.Returns(100);
-                expectedTimeEntryToContinue.Start.Returns(runningTimeEntry.StartTime);
+                expectedTimeEntryToContinue.Start.Returns(stoppedTimeEntry.StartTime);
                 expectedTimeEntryToContinue.Project.Returns(mockProject);
                 expectedTimeEntryToContinue.Task.Returns(mockTask);
                 expectedTimeEntryToContinue.TagIds.Returns(Array.Empty<long>());
                 expectedTimeEntryToContinue.Billable.Returns(false);
-                InteractorFactory.GetTimeEntryById(runningTimeEntryId).Execute().Returns(Observable.Return(expectedTimeEntryToContinue));
+                InteractorFactory.GetTimeEntryById(stoppedTimeEntryId).Execute().Returns(Observable.Return(expectedTimeEntryToContinue));
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(stoppedTimeEntry);
+                TestScheduler.Start();
                 
-                continueAction.MenuItemAction.Inputs.OnNext(runningTimeEntry);
+                continueAction.MenuItemAction.Execute();
 
                 var continuePrototype = Arg.Is<ITimeEntryPrototype>(prot =>
                     prot.WorkspaceId == mockWorkspace.Id);
-                
+
+                TestScheduler.Start();
                 InteractorFactory.Received().ContinueTimeEntry(continuePrototype, ContinueTimeEntryMode.CalendarContextualMenu);
             }
             
@@ -596,7 +672,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheTimeEntryInfoObservable : CalendarContextualMenuViewModelTest
         {
             [Fact]
-            public void StartsWithTheTimeEntryInfoFromPassedThroughOnItemSelected()
+            public void StartsWithTheTimeEntryInfoFromPassedFirstThroughOnCalendarItemUpdated()
             {
                 var observer = TestScheduler.CreateObserver<TimeEntryDisplayInfo>();
                 var calendarItem = new CalendarItem(
@@ -613,7 +689,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.TimeEntryInfo.Subscribe(observer);
                 TestScheduler.Start();
                 
-                ViewModel.OnItemSelected.Execute(calendarItem);
+                ViewModel.OnCalendarItemUpdated.Execute(calendarItem);
                 TestScheduler.Start();
 
                 observer.Messages.First().Value.Value
@@ -655,11 +731,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     client: "New Client");
                 ViewModel.TimeEntryInfo.Subscribe(observer);
                 TestScheduler.Start();
-                ViewModel.OnItemSelected.Execute(startingCalendarItem);
-                
-                ViewModel.OnItemUpdated.Execute(updatedCalendarItem);
+                ViewModel.OnCalendarItemUpdated.Execute(startingCalendarItem);
                 TestScheduler.Start();
 
+                ViewModel.OnCalendarItemUpdated.Execute(updatedCalendarItem);
+
+                TestScheduler.Start();
                 observer.Messages[0].Value.Value
                     .Should()
                     .Match<TimeEntryDisplayInfo>(e => 
@@ -708,9 +785,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     client: "client");
                 ViewModel.TimeEntryInfo.Subscribe(observer);
                 TestScheduler.Start();
-                ViewModel.OnItemSelected.Execute(startingCalendarItem);
-                
-                ViewModel.OnItemUpdated.Execute(updatedCalendarItem);
+                ViewModel.OnCalendarItemUpdated.Execute(startingCalendarItem);
+                TestScheduler.Start();
+
+                ViewModel.OnCalendarItemUpdated.Execute(updatedCalendarItem);
                 TestScheduler.Start();
 
                 observer.Messages.Should().HaveCount(1);
@@ -730,11 +808,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var observer = TestScheduler.CreateObserver<CalendarContextualMenu>();
                 var startingCalendarItem = new CalendarItem("", CalendarItemSource.TimeEntry, DateTimeOffset.Now, TimeSpan.FromMinutes(30), "Old description", CalendarIconKind.None, "#c2c2c2", project: "Old Project", task: "Old Task", client: "Old Client");
                 var updatedCalendarItem = new CalendarItem("", CalendarItemSource.TimeEntry, DateTimeOffset.Now, TimeSpan.FromMinutes(30), "New description", CalendarIconKind.None, "#f2f2f2", project: "New Project", task: "New Task", client: "New Client");
+                ViewModel.OnCalendarItemUpdated.Execute(startingCalendarItem);
                 TestScheduler.Start();
-                ViewModel.OnItemSelected.Execute(startingCalendarItem);
                 ViewModel.CurrentMenu.Subscribe(observer);
-                
-                ViewModel.OnItemUpdated.Execute(updatedCalendarItem);
+
+                ViewModel.OnCalendarItemUpdated.Execute(updatedCalendarItem);
                 TestScheduler.Start();
 
                 observer.Messages.Should().HaveCount(1);
@@ -744,7 +822,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheTimeEntryPeriodObservable : CalendarContextualMenuViewModelTest
         {
             [Fact]
-            public void StartsWithThePeriodFromCalendarItemPassedThroughOnItemSelected()
+            public void StartsWithThePeriodFromCalendarItemPassedFirstOnCalendarItemUpdated()
             {
                 var observer = TestScheduler.CreateObserver<string>();
                 var startTime = new DateTimeOffset(2019, 10, 10, 10, 10, 0, TimeSpan.Zero);
@@ -763,7 +841,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.TimeEntryPeriod.Subscribe(observer);
                 TestScheduler.Start();
                 
-                ViewModel.OnItemSelected.Execute(calendarItem);
+                ViewModel.OnCalendarItemUpdated.Execute(calendarItem);
                 TestScheduler.Start();
 
                 observer.Messages.Should().HaveCount(1);
@@ -790,12 +868,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     task: "Such Task",
                     client: "Such Client");
                 ViewModel.TimeEntryPeriod.Subscribe(observer);
-                ViewModel.OnItemSelected.Execute(calendarItem);
+                ViewModel.OnCalendarItemUpdated.Execute(calendarItem);
                 var newStartTime = startTime.AddHours(1);
                 var newCalendarItem = calendarItem.WithStartTime(newStartTime);
                 TestScheduler.Start();
                 
-                ViewModel.OnItemUpdated.Execute(newCalendarItem);
+                ViewModel.OnCalendarItemUpdated.Execute(newCalendarItem);
                 TestScheduler.Start();
 
                 observer.Messages.Should().HaveCount(2);
@@ -822,12 +900,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     task: "Such Task",
                     client: "Such Client");
                 ViewModel.TimeEntryPeriod.Subscribe(observer);
-                ViewModel.OnItemSelected.Execute(calendarItem);
+                ViewModel.OnCalendarItemUpdated.Execute(calendarItem);
                 var newDuration = TimeSpan.FromMinutes(10);
                 var newCalendarItem = calendarItem.WithDuration(newDuration);
                 TestScheduler.Start();
                 
-                ViewModel.OnItemUpdated.Execute(newCalendarItem);
+                ViewModel.OnCalendarItemUpdated.Execute(newCalendarItem);
                 TestScheduler.Start();
 
                 observer.Messages.Should().HaveCount(2);
@@ -865,10 +943,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     task: "New Task",
                     client: "New Client");
                 ViewModel.TimeEntryPeriod.Subscribe(observer);
-                ViewModel.OnItemSelected.Execute(calendarItem);
+                ViewModel.OnCalendarItemUpdated.Execute(calendarItem);
                 TestScheduler.Start();
                 
-                ViewModel.OnItemUpdated.Execute(newCalendarItem);
+                ViewModel.OnCalendarItemUpdated.Execute(newCalendarItem);
                 TestScheduler.Start();
 
                 observer.Messages.Should().HaveCount(1);
@@ -892,12 +970,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     task: "Such Task",
                     client: "Such Client");
                 ViewModel.TimeEntryPeriod.Subscribe(observer);
-                ViewModel.OnItemSelected.Execute(calendarItem);
+                ViewModel.OnCalendarItemUpdated.Execute(calendarItem);
                 
                 var newCalendarItem = calendarItem.WithDuration(null);
                 TestScheduler.Start();
                 
-                ViewModel.OnItemUpdated.Execute(newCalendarItem);
+                ViewModel.OnCalendarItemUpdated.Execute(newCalendarItem);
                 TestScheduler.Start();
 
                 observer.Messages.Should().HaveCount(2);
