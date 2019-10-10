@@ -19,7 +19,7 @@ namespace Toggl.Droid.Widgets
         public const string HasClientKey = "HasClient";
         public const string ClientNameKey = "ClientName";
 
-        public DateTimeOffset StartTime {get; private set; }
+        public DateTimeOffset StartTime { get; private set; }
         public string Description { get; private set; }
         public bool HasProject { get; private set; }
         public string ProjectName { get; private set; }
@@ -60,6 +60,21 @@ namespace Toggl.Droid.Widgets
             editor.PutBoolean(HasClientKey, timeEntry?.Project?.ClientId.HasValue ?? false);
             editor.PutString(ClientNameKey, timeEntry?.Project?.Client?.Name ?? "");
             editor.Apply();
+        }
+
+        public static void Clear()
+        {
+            var sharedPreferences = Application.Context.GetSharedPreferences(WidgetInfoSharedPreferencesName, FileCreationMode.Private);
+            var editor = sharedPreferences.Edit();
+            editor.Remove(IsRunningKey);
+            editor.Remove(StartTimeKey);
+            editor.Remove(DescriptionKey);
+            editor.Remove(HasProjectKey);
+            editor.Remove(ProjectNameKey);
+            editor.Remove(ProjectColorKey);
+            editor.Remove(HasClientKey);
+            editor.Remove(ClientNameKey);
+            editor.Commit();
         }
     }
 }
