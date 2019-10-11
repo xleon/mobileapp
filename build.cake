@@ -112,16 +112,15 @@ private string GetVersionNumberFromTag()
         throw new InvalidOperationException($"Unable to get version number from this type of build target: {target}");
     }
     
-    IEnumerable<string> redirectedOutput;
     StartProcess("git", new ProcessSettings
     {
-        Arguments = "describe --tags",
+        Arguments = "tag --list '" + platform + "-*'",
         RedirectStandardOutput = true
-    }, out redirectedOutput);
+    }, out var redirectedOutput);
 
     var tagName = redirectedOutput.Last();
-        
-    var p = Regex.Match(tagName, $@"(?<platform>({platform}))-(?<major>\d{1,2})\.(?<minor>\d{1,2})\.(?<build>\d{1,2})(-(?<rev>\d{1,2}))?");
+         
+    var p = Regex.Match(tagName, @"(?<platform>(android|ios))-(?<major>\d{1,2})\.(?<minor>\d{1,2})\.(?<build>\d{1,2})(-(?<rev>\d{1,2}))?");
     if (!p.Success) 
     {
         throw new InvalidOperationException($"Unsupported release tag format: {tagName}");
@@ -130,7 +129,7 @@ private string GetVersionNumberFromTag()
     var minor = Int32.Parse(p.Groups["minor"].Value) * 100000;
     var build = Int32.Parse(p.Groups["build"].Value) * 1000;
     var rev = string.IsNullOrEmpty(p.Groups["rev"].Value) ? Int32.Parse(p.Groups["rev"].Value) : 0;
-    
+
     return (major + minor + build + rev).ToString();
 }
 
