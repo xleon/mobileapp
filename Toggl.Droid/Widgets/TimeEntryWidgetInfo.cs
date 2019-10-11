@@ -6,7 +6,7 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Widgets
 {
-    public class TimeEntryWidgetInfo
+    public sealed class TimeEntryWidgetInfo
     {
         public static string WidgetInfoSharedPreferencesName = "WidgetInfo";
 

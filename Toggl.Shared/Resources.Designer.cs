@@ -2524,5 +2524,11 @@ namespace Toggl.Shared {
                 return ResourceManager.GetString("No", resourceCulture);
             }
         }
+        
+        public static string LoginToTrack {
+            get {
+                return ResourceManager.GetString("LoginToTrack", resourceCulture);
+            }
+        }
     }
 }

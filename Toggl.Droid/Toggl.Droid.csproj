@@ -659,13 +659,18 @@
     <Compile Include="BroadcastReceivers\BootCompletedBroadcastReceiver.cs" />
     <Compile Include="Services\ScheduleEventNotificationsService.cs" />
     <Compile Include="Views\VerticallyCenteredImageSpan.cs" />
+    <Compile Include="Widgets\TimeEntryWidgetButtonOnlyFormFactor.cs" />
+    <Compile Include="Widgets\ITimeEntryWidgetFormFactor.cs" />
+    <Compile Include="Widgets\TimeEntryWidgetStartStopButtonFormFactor.cs" />
     <Compile Include="Widgets\TimeEntryWidgetInfo.cs" />
-    <Compile Include="Widgets\WidgetContext.cs" />
+    <Compile Include="Widgets\WidgetDimensions.cs" />
     <Compile Include="Widgets\TimeEntryWidget.cs" />
     <Compile Include="Services\AccessibilityServiceAndroid.cs" />
     <Compile Include="Services\TimerBackgroundService.cs" />
-    <Compile Include="Widgets\TimerWidgetFormFactor.cs" />
+    <Compile Include="Widgets\TimeEntryWidgetFactory.cs" />
+    <Compile Include="Widgets\TimeEntryWidgetNotLoggedInFormFactor.cs" />
     <Compile Include="Widgets\WidgetsConstants.cs" />
+    <Compile Include="Widgets\TimeEntryWidgetDefaultFormFactor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -697,6 +702,7 @@
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
     <AndroidResource Include="Resources\layout\TimeEntryWidgetSmall.axml" />
+    <AndroidResource Include="Resources\layout\TimeEntryWidgetNotLoggedIn.axml" />
     <AndroidResource Include="Resources\menu\GenericSaveMenu.xml" />
     <AndroidResource Include="Resources\menu\DoneOrClearMenu.xml" />
     <AndroidResource Include="Resources\menu\OneButtonMenu.xml" />

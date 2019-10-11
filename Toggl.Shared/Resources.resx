@@ -1365,4 +1365,7 @@ to project members</value>
     <data name="No" xml:space="preserve">
         <value>No</value>
     </data>
+    <data name="LoginToTrack" xml:space="preserve">
+        <value>Log in to track time</value>
+    </data>
 </root>
