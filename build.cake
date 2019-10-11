@@ -98,6 +98,20 @@ private string GetCommitCount()
 
 private string GetVersionNumberFromTag()
 {
+    var platform = "";
+    if (target == "Build.Release.iOS.AppStore") 
+    {
+        platform = "ios";
+    } 
+    else if (target == "Build.Release.Android.PlayStore") 
+    {
+        platform = "android";
+    } 
+    else 
+    {
+        throw new InvalidOperationException($"Unable to get version number from this type of build target: {target}");
+    }
+    
     IEnumerable<string> redirectedOutput;
     StartProcess("git", new ProcessSettings
     {
@@ -106,8 +120,12 @@ private string GetVersionNumberFromTag()
     }, out redirectedOutput);
 
     var tagName = redirectedOutput.Last();
-    
-    var p = Regex.Match(tagName, @"(?<platform>(android|ios))-(?<major>\d{1,2})\.(?<minor>\d{1,2})\.(?<build>\d{1,2})(-(?<rev>\d{1,2}))?");
+        
+    var p = Regex.Match(tagName, $@"(?<platform>({platform}))-(?<major>\d{1,2})\.(?<minor>\d{1,2})\.(?<build>\d{1,2})(-(?<rev>\d{1,2}))?");
+    if (!p.Success) 
+    {
+        throw new InvalidOperationException($"Unsupported release tag format: {tagName}");
+    } 
     var major = Int32.Parse(p.Groups["major"].Value) * 10000000;
     var minor = Int32.Parse(p.Groups["minor"].Value) * 100000;
     var build = Int32.Parse(p.Groups["build"].Value) * 1000;
