@@ -659,6 +659,7 @@
     <Compile Include="BroadcastReceivers\BootCompletedBroadcastReceiver.cs" />
     <Compile Include="Services\ScheduleEventNotificationsService.cs" />
     <Compile Include="Views\VerticallyCenteredImageSpan.cs" />
+    <Compile Include="Widgets\SuggestionsWidget.cs" />
     <Compile Include="Widgets\TimeEntryWidgetButtonOnlyFormFactor.cs" />
     <Compile Include="Widgets\ITimeEntryWidgetFormFactor.cs" />
     <Compile Include="Widgets\TimeEntryWidgetStartStopButtonFormFactor.cs" />
@@ -701,6 +702,7 @@
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
+    <AndroidResource Include="Resources\layout\SuggestionsWidget.axml" />
     <AndroidResource Include="Resources\layout\TimeEntryWidgetSmall.axml" />
     <AndroidResource Include="Resources\layout\TimeEntryWidgetNotLoggedIn.axml" />
     <AndroidResource Include="Resources\menu\GenericSaveMenu.xml" />
@@ -1201,6 +1203,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\xml\SuggestionsWidgetProvider.xml" />
     <AndroidResource Include="Resources\xml\TimeEntryWidgetProvider.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>

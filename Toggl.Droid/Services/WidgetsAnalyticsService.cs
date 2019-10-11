@@ -17,6 +17,9 @@ namespace Toggl.Droid.Widgets.Services
         public const string TimerWidgetResizeAction = nameof(TimerWidgetResizeAction);
         public const string TimerWidgetSizeParameter = nameof(TimerWidgetSizeParameter);
 
+        public const string SuggestionsWidgetInstallAction = nameof(SuggestionsWidgetInstallAction);
+        public const string SuggestionsWidgetInstallStateParameter = nameof(SuggestionsWidgetInstallStateParameter);
+
         public static void EnqueueWork(Context context, Intent intent)
         {
             var serviceClass = JavaUtils.ToClass<WidgetsAnalyticsService>();
@@ -33,6 +36,9 @@ namespace Toggl.Droid.Widgets.Services
                     break;
                 case TimerWidgetResizeAction:
                     handleTrackTimerWidgetResize(intent);
+                    break;
+                case SuggestionsWidgetInstallAction:
+                    handleTrackSuggestionsWidgetInstallState(intent);
                     break;
                 default:
                     throw new InvalidOperationException($"Cannot handle intent with action {action}");
@@ -52,5 +58,13 @@ namespace Toggl.Droid.Widgets.Services
             var analyticsService = AndroidDependencyContainer.Instance.AnalyticsService;
             analyticsService.TimerWidgetSizeChanged.Track(widgetSize);
         }
+
+        private void handleTrackSuggestionsWidgetInstallState(Intent intent)
+        {
+            var installationState = intent.GetBooleanExtra(SuggestionsWidgetInstallStateParameter, false);
+            var analyticsService = AndroidDependencyContainer.Instance.AnalyticsService;
+            analyticsService.SuggestionsWidgetInstallStateChange.Track(installationState);
+        }
+
     }
 }
