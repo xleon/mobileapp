@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="M4Y-Lb-cyx">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="M4Y-Lb-cyx">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,6 +19,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login to track time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ga5-pU-ZGk" userLabel="Error Message Label">
+                                <rect key="frame" x="89" y="40" width="142.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Cx-Gg-MBs">
                                 <rect key="frame" x="105.5" y="22" width="109" height="36"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
@@ -86,6 +90,8 @@
                             <constraint firstItem="D74-iM-mqi" firstAttribute="centerY" secondItem="3Cx-Gg-MBs" secondAttribute="centerY" id="ghA-YH-mad"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3GY-9D-O8q" secondAttribute="trailing" id="kug-ZZ-bK6"/>
                             <constraint firstItem="kNT-Bi-5OD" firstAttribute="top" secondItem="3Cx-Gg-MBs" secondAttribute="bottom" constant="21" id="lFM-66-oi2"/>
+                            <constraint firstItem="Ga5-pU-ZGk" firstAttribute="centerX" secondItem="S3S-Oj-5AN" secondAttribute="centerX" id="r8N-eZ-LW8"/>
+                            <constraint firstItem="Ga5-pU-ZGk" firstAttribute="centerY" secondItem="S3S-Oj-5AN" secondAttribute="centerY" constant="-10" id="u2j-ih-ANz"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
@@ -98,6 +104,7 @@
                         <outlet property="DescriptionLabel" destination="qJF-NA-4cF" id="x9G-4h-tcr"/>
                         <outlet property="DotView" destination="2I7-BQ-Ae5" id="xGB-3Z-fMo"/>
                         <outlet property="DurationLabel" destination="3Cx-Gg-MBs" id="fq7-RP-ZtD"/>
+                        <outlet property="ErrorMessageLabel" destination="Ga5-pU-ZGk" id="g9j-vg-bOT"/>
                         <outlet property="ProjectNameLabel" destination="PwM-bS-bNq" id="Axe-WR-h6c"/>
                         <outlet property="RunningTimerContainerView" destination="kNT-Bi-5OD" id="BPg-vx-gVq"/>
                         <outlet property="StartButton" destination="3GY-9D-O8q" id="F2I-N7-ir8"/>

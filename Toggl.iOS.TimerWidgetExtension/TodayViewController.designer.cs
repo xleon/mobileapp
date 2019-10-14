@@ -22,6 +22,9 @@ namespace Toggl.iOS.TimerWidgetExtension
 		UIKit.UILabel DurationLabel { get; set; }
 
 		[Outlet]
+		UIKit.UILabel ErrorMessageLabel { get; set; }
+
+		[Outlet]
 		UIKit.UILabel ProjectNameLabel { get; set; }
 
 		[Outlet]
@@ -35,19 +38,19 @@ namespace Toggl.iOS.TimerWidgetExtension
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (DurationLabel != null) {
-				DurationLabel.Dispose ();
-				DurationLabel = null;
-			}
-
-			if (RunningTimerContainerView != null) {
-				RunningTimerContainerView.Dispose ();
-				RunningTimerContainerView = null;
-			}
-
 			if (DescriptionLabel != null) {
 				DescriptionLabel.Dispose ();
 				DescriptionLabel = null;
+			}
+
+			if (DotView != null) {
+				DotView.Dispose ();
+				DotView = null;
+			}
+
+			if (DurationLabel != null) {
+				DurationLabel.Dispose ();
+				DurationLabel = null;
 			}
 
 			if (ProjectNameLabel != null) {
@@ -55,9 +58,9 @@ namespace Toggl.iOS.TimerWidgetExtension
 				ProjectNameLabel = null;
 			}
 
-			if (DotView != null) {
-				DotView.Dispose ();
-				DotView = null;
+			if (RunningTimerContainerView != null) {
+				RunningTimerContainerView.Dispose ();
+				RunningTimerContainerView = null;
 			}
 
 			if (StartButton != null) {
@@ -68,6 +71,11 @@ namespace Toggl.iOS.TimerWidgetExtension
 			if (StopButton != null) {
 				StopButton.Dispose ();
 				StopButton = null;
+			}
+
+			if (ErrorMessageLabel != null) {
+				ErrorMessageLabel.Dispose ();
+				ErrorMessageLabel = null;
 			}
 		}
 	}

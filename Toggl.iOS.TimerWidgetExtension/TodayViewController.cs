@@ -13,10 +13,10 @@ namespace Toggl.iOS.TimerWidgetExtension
     public partial class TodayViewController : UIViewController, INCWidgetProviding
     {
 
-        private readonly NetworkingHandler networkingHandler
-            = new NetworkingHandler(APIHelper.GetTogglAPI());
+        private NetworkingHandler networkingHandler;
 
         private NSTimer elapsedTimeTimer;
+        private UITapGestureRecognizer tapGestureRecognizer;
 
         protected TodayViewController(IntPtr handle) : base(handle)
         {
@@ -25,20 +25,39 @@ namespace Toggl.iOS.TimerWidgetExtension
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
             StartButton.AddTarget(startTimeEntry, UIControlEvent.TouchUpInside);
             StopButton.AddTarget(stopTimeEntry, UIControlEvent.TouchUpInside);
+
+            tapGestureRecognizer = new UITapGestureRecognizer(() =>
+            {
+                ExtensionContext?.OpenUrl(new Uri(ApplicationUrls.Main.Default), null);
+            });
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            if (SharedStorage.Instance.GetApiToken() == null)
+            {
+                renderErrorState(Resources.WidgetLogInToTrackTime);
+            }
+            else
+            {
+                networkingHandler = new NetworkingHandler(APIHelper.GetTogglAPI());
+                var timeEntry = SharedStorage.Instance.GetRunningTimeEntryViewModel();
+                if (timeEntry == null)
+                    renderEmptyTimeEntry();
+                else
+                    renderRunningTimeEntry(timeEntry);
+            }
+
+            base.ViewWillAppear(animated);
         }
 
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
             SharedStorage.Instance.SetWidgetUpdatedDate(DateTimeOffset.Now);
-
-            var timeEntry = SharedStorage.Instance.GetRunningTimeEntryViewModel();
-            if (timeEntry == null)
-                renderEmptyTimeEntry();
-            else
-                renderRunningTimeEntry(timeEntry);
         }
 
         public override void ViewDidDisappear(bool animated)
@@ -87,6 +106,8 @@ namespace Toggl.iOS.TimerWidgetExtension
 
         private void renderEmptyTimeEntry()
         {
+            View.RemoveGestureRecognizer(tapGestureRecognizer);
+            ErrorMessageLabel.Hidden = true;
             DescriptionLabel.Text = Resources.NoDescription;
             ProjectNameLabel.Text = string.Empty;
             ProjectNameLabel.Hidden = DotView.Hidden = true;
@@ -100,6 +121,8 @@ namespace Toggl.iOS.TimerWidgetExtension
 
         private void renderRunningTimeEntry(TimeEntryViewModel timeEntry)
         {
+            View.RemoveGestureRecognizer(tapGestureRecognizer);
+            ErrorMessageLabel.Hidden = true;
             StartButton.Hidden = true;
             StopButton.Hidden = false;
             DescriptionLabel.Text = timeEntry.Description == string.Empty
@@ -130,6 +153,24 @@ namespace Toggl.iOS.TimerWidgetExtension
                 var time = DateTime.Now - timeEntry.StartTime;
                 DurationLabel.Text = time.ToFormattedString(durationFormat);
             }
+        }
+
+        private void renderErrorState(string error)
+        {
+            ErrorMessageLabel.Hidden = false;
+            ErrorMessageLabel.Text = error;
+
+            View.AddGestureRecognizer(tapGestureRecognizer);
+
+            StopButton.Hidden = true;
+            StartButton.Hidden = true;
+            DurationLabel.Hidden = true;
+            DescriptionLabel.Hidden = true;
+            ProjectNameLabel.Hidden = true;
+            DotView.Hidden = true;
+
+            elapsedTimeTimer?.Invalidate();
+            elapsedTimeTimer = null;
         }
 
         [Export("widgetPerformUpdateWithCompletionHandler:")]

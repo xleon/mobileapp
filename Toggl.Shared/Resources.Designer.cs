@@ -2027,6 +2027,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string WidgetLogInToTrackTime {
+            get {
+                return ResourceManager.GetString("WidgetLogInToTrackTime", resourceCulture);
+            }
+        }
+        
         public static string Heading {
             get {
                 return ResourceManager.GetString("Heading", resourceCulture);

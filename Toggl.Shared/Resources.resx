@@ -1114,6 +1114,9 @@ Use them to add keywords to your time entries.</value>
     <data name="SiriNoCurrentEntryRunning" xml:space="preserve">
         <value>There's no entry currently running.</value>
     </data>
+    <data name="WidgetLogInToTrackTime" xml:space="preserve">
+        <value>Log in to track time.</value>
+    </data>
     <data name="Heading" xml:space="preserve">
         <value>Heading</value>
     </data>

@@ -2,13 +2,13 @@
 using Intents;
 using System;
 using System.Linq;
-using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Intents;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS

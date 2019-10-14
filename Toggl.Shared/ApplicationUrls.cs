@@ -1,4 +1,4 @@
-namespace Toggl.Core
+namespace Toggl.Shared
 {
     public static class ApplicationUrls
     {
