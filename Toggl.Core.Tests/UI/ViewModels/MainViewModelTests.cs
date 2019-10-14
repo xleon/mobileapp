@@ -58,7 +58,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     RxActionFactory,
                     PermissionsChecker,
                     BackgroundService,
-                    PlatformInfo);
+                    PlatformInfo,
+                    TimerWidgetService);
 
                 vm.Initialize();
 
@@ -110,7 +111,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useRxActionFactory,
                 bool usePermissionsChecker,
                 bool useBackgroundService,
-                bool usePlatformInfo)
+                bool usePlatformInfo,
+                bool useTimerWidgetService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
@@ -130,6 +132,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var permissionsChecker = usePermissionsChecker ? PermissionsChecker : null;
                 var backgroundService = useBackgroundService ? BackgroundService : null;
                 var platformInfo = usePlatformInfo ? PlatformInfo : null;
+                var timerWidgetService = useTimerWidgetService ? TimerWidgetService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -150,7 +153,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         rxActionFactory,
                         permissionsChecker,
                         backgroundService,
-                        platformInfo);
+                        platformInfo,
+                        timerWidgetService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -895,6 +899,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     else
                         AnalyticsService.ApplicationInstallLocation.DidNotReceive().Track(location);
                 }
+            }
+
+            [Fact]
+            public async void StartsTheWidgetService()
+            {
+                await ViewModel.Initialize();
+                TimerWidgetService.Received().Start();
             }
         }
     }

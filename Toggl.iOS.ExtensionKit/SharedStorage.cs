@@ -19,6 +19,7 @@ namespace Toggl.iOS.ExtensionKit
         private const string widgetInstalledKey = "WidgetInstalled";
         private const string runningTimeEntry = "RunningTimeEntry";
         private const string durationFormatKey = "DurationFormat";
+        private const string suggestionsKey = "Suggestions";
 
         private NSUserDefaults userDefaults;
 
@@ -118,6 +119,7 @@ namespace Toggl.iOS.ExtensionKit
             userDefaults.RemoveObject(widgetInstalledKey);
             userDefaults.RemoveObject(runningTimeEntry);
             userDefaults.RemoveObject(durationFormatKey);
+            userDefaults.RemoveObject(suggestionsKey);
             userDefaults.Synchronize();
         }
 

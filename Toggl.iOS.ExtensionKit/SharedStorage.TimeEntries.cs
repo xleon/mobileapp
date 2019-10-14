@@ -1,4 +1,3 @@
-using System;
 using Foundation;
 using Toggl.iOS.ExtensionKit.Extensions;
 using Toggl.iOS.ExtensionKit.Models;
@@ -50,13 +49,14 @@ namespace Toggl.iOS.ExtensionKit
                 dict.SetLongForKey(timeEntry.ProjectId.Value, timeEntryProjectId);
                 dict.SetStringForKey(projectName, timeEntryProjectName);
                 dict.SetStringForKey(projectColor, timeEntryProjectColor);
+                dict.SetStringForKey(clientName, timeEntryClientName);
             }
+
             if (timeEntry.TaskId.HasValue)
             {
                 dict.SetLongForKey(timeEntry.TaskId.Value, timeEntryTaskId);
                 dict.SetStringForKey(taskName, timeEntryTaskName);
             }
-            dict.SetStringForKey(clientName, clientName);
 
             if (timeEntry.ServerDeletedAt.HasValue)
                 dict.SetDateTimeOffsetForKey(timeEntry.ServerDeletedAt.Value, timeEntryServerDeletedAt);

@@ -1,8 +1,10 @@
+using System.Collections.Immutable;
 using Android.App;
 using Android.Appwidget;
 using Android.Content;
 using Toggl.Core.DataSources;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Suggestions;
 using Toggl.Core.UI.Services;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Widgets;
@@ -15,7 +17,7 @@ namespace Toggl.Droid.Services
         {
         }
 
-        protected override void OnRunningTimeEntryChanged(IThreadSafeTimeEntry timeEntry)
+        public override void OnRunningTimeEntryChanged(IThreadSafeTimeEntry timeEntry)
         {
             TimeEntryWidgetInfo.Save(timeEntry);
 
@@ -31,6 +33,11 @@ namespace Toggl.Droid.Services
             intent.PutExtra(AppWidgetManager.ExtraAppwidgetIds, widgetIds);
 
             context.SendBroadcast(intent);
+        }
+
+        public override void OnSuggestionsUpdated(IImmutableList<Suggestion> suggestions)
+        {
+            // TODO: Update the widget
         }
     }
 }

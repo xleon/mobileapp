@@ -68,7 +68,8 @@ namespace Toggl.Core.Tests.UI
                 MockTimeService = Substitute.For<ITimeService>(),
                 MockSyncManager = Substitute.For<ISyncManager>(),
                 MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>(),
-                MockUpdateRemoteConfigCacheService = Substitute.For<IUpdateRemoteConfigCacheService>()
+                MockUpdateRemoteConfigCacheService = Substitute.For<IUpdateRemoteConfigCacheService>(),
+                MockTimerWidgetService = Substitute.For<ITimerWidgetService>()
             };
 
             container.MockLicenseProvider.GetAppLicenses().Returns(new Dictionary<string, string>());
