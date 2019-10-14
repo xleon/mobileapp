@@ -25,9 +25,9 @@ namespace Toggl.iOS.TimerWidgetExtension
            this.togglApi = togglApi;
         }
 
-        public async Task StartTimeEntry(TimeEntry timeEntry)
+        public async Task<ITimeEntry> StartTimeEntry(TimeEntry timeEntry)
         {
-            await togglApi.TimeEntries
+            var createdTimeEntry = await togglApi.TimeEntries
                 .Create(timeEntry)
                 .Do(_ =>
                 {
@@ -39,6 +39,7 @@ namespace Toggl.iOS.TimerWidgetExtension
                     SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.Error(exception.Message));
                 })
                 .FirstAsync();
+            return createdTimeEntry;
         }
 
         public async Task StopRunningTimeEntry()

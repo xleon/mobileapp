@@ -83,21 +83,16 @@ namespace Toggl.iOS.TimerWidgetExtension
                 id: 0,
                 serverDeletedAt: null,
                 at: DateTimeOffset.Now);
-            var timeEntryViewModel = new TimeEntryViewModel(
-                timeEntry: timeEntry,
-                projectName: null,
-                projectColor: null,
-                taskName: null,
-                clientName: null
-            );
-            await networkingHandler.StartTimeEntry(timeEntry);
-            SharedStorage.Instance.SetRunningTimeEntry(timeEntry);
+            var createdTimeEntry = await networkingHandler.StartTimeEntry(timeEntry);
+            SharedStorage.Instance.SetRunningTimeEntry(createdTimeEntry);
+            var timeEntryViewModel = SharedStorage.Instance.GetRunningTimeEntryViewModel();
             renderRunningTimeEntry(timeEntryViewModel);
         }
 
         private async void stopTimeEntry(object sender, EventArgs e)
         {
             await networkingHandler.StopRunningTimeEntry();
+            SharedStorage.Instance.SetRunningTimeEntry(null);
 
             elapsedTimeTimer?.Invalidate();
             elapsedTimeTimer = null;
