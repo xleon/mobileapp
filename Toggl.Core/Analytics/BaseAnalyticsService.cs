@@ -126,6 +126,10 @@ namespace Toggl.Core.Analytics
 
         public IAnalyticsEvent CalendarOnboardingStarted { get; }
 
+        public IAnalyticsEvent<int> NumberOfLinkedCalendarsChanged { get; }
+
+        public IAnalyticsEvent<int> NumberOfLinkedCalendarsNewUser { get; }
+
         public IAnalyticsEvent EditViewOpenedFromCalendar { get; }
 
         public IAnalyticsEvent<CalendarChangeEvent> TimeEntryChangedFromCalendar { get; }
@@ -261,6 +265,8 @@ namespace Toggl.Core.Analytics
             EntitySynced = new AnalyticsEvent<PushSyncOperation, string>(this, nameof(EntitySynced), "Method", "Entity");
             EntitySyncStatus = new AnalyticsEvent<string, string>(this, nameof(EntitySyncStatus), "Entity", "Status");
             CalendarOnboardingStarted = new AnalyticsEvent(this, nameof(CalendarOnboardingStarted));
+            NumberOfLinkedCalendarsChanged = new AnalyticsEvent<int>(this, nameof(NumberOfLinkedCalendarsChanged), "Count");
+            NumberOfLinkedCalendarsNewUser = new AnalyticsEvent<int>(this, nameof(NumberOfLinkedCalendarsNewUser), "Count");
             EditViewOpenedFromCalendar = new AnalyticsEvent(this, nameof(EditViewOpenedFromCalendar));
             TimeEntryChangedFromCalendar = new AnalyticsEvent<CalendarChangeEvent>(this, nameof(TimeEntryChangedFromCalendar), "ChangeEvent");
             ProjectsInaccesibleAfterCleanUp = new AnalyticsEvent<int>(this, nameof(ProjectsInaccesibleAfterCleanUp), "NumberOfProjectsInaccesibleAfterCleanUp");
