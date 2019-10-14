@@ -99,11 +99,11 @@ private string GetCommitCount()
 private string GetVersionNumberFromTag()
 {
     var platform = "";
-    if (target == "Build.Release.iOS.AppStore.Upload") 
+    if (target == "Build.Release.iOS.AppStore") 
     {
         platform = "ios";
     } 
-    else if (target == "Build.Release.Android.PlayStore.Upload") 
+    else if (target == "Build.Release.Android.PlayStore") 
     {
         platform = "android";
     } 
@@ -278,7 +278,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
         appName = "Toggl for Tests";
         iconSet = "Assets.xcassets/AppIcon-adhoc.appiconset";
     }
-    else if (target == "Build.Release.iOS.AppStore.Upload")
+    else if (target == "Build.Release.iOS.AppStore")
     {
         bundleId = "com.toggl.daneel";
         appName = "Toggl";
@@ -317,7 +317,7 @@ private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransfor
         bundleId = "com.toggl.daneel.adhoc.SiriExtension";
         appName = "Siri Extension Development";
     }
-    else if (target == "Build.Release.iOS.AppStore.Upload")
+    else if (target == "Build.Release.iOS.AppStore")
     {
         bundleId = "com.toggl.daneel.SiriExtension";
         appName = "Siri Extension";
@@ -353,7 +353,7 @@ private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransf
         bundleId = "com.toggl.daneel.adhoc.SiriUIExtension";
         appName = "Siri UI Extension Development";
     }
-    else if (target == "Build.Release.iOS.AppStore.Upload")
+    else if (target == "Build.Release.iOS.AppStore")
     {
         bundleId = "com.toggl.daneel.SiriUIExtension";
         appName = "Siri UI Extension";
@@ -447,7 +447,7 @@ private TemporaryFileTransformation GetAndroidManifestTransformation()
         packageName = "com.toggl.giskard.adhoc";
         appName = "Toggl for Tests";
     }
-    else if (target == "Build.Release.Android.PlayStore.Upload")
+    else if (target == "Build.Release.Android.PlayStore")
     {
         packageName = "com.toggl.giskard";
         appName = "Toggl";
