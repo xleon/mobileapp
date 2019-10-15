@@ -62,9 +62,6 @@ namespace Toggl.iOS.TimerWidgetExtension
 
         private async Task stopTimeEntry(ITimeEntry timeEntry)
         {
-            if (timeEntry == null)
-                return;
-
             var duration = (long)(DateTime.Now - timeEntry.Start).TotalSeconds;
             await togglApi.TimeEntries.Update(
                 TimeEntry.from(timeEntry).with(duration)
@@ -80,7 +77,7 @@ namespace Toggl.iOS.TimerWidgetExtension
             }
             catch
             {
-                return null;
+                throw new NoRunningEntryException();
             }
         }
     }

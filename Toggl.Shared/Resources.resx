@@ -1117,6 +1117,18 @@ Use them to add keywords to your time entries.</value>
     <data name="WidgetLogInToTrackTime" xml:space="preserve">
         <value>Log in to track time.</value>
     </data>
+    <data name="WidgetApiError" xml:space="preserve">
+        <value>Network connection failed.
+Open app to track offline.</value>
+    </data>
+    <data name="WidgetNoRunningTimeEntryError" xml:space="preserve">
+        <value>No running time entry found.
+Open app to start a new one.</value>
+    </data>
+    <data name="WidgetGenericError" xml:space="preserve">
+        <value>An error occured.
+Open app to track time.</value>
+    </data>
     <data name="Heading" xml:space="preserve">
         <value>Heading</value>
     </data>

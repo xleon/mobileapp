@@ -86,6 +86,7 @@
     </Compile>
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Analytics\WidgetTrackingEvent.cs" />
+    <Compile Include="Extensions\UILabelExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="..\Toggl.iOS.IntentCodeGen\Toggl.iOS.IntentCodeGen\en.lproj\Intents.strings">

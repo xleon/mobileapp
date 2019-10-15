@@ -2,8 +2,10 @@
 using Foundation;
 using NotificationCenter;
 using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.ExtensionKit.Exceptions;
 using Toggl.iOS.ExtensionKit.Extensions;
 using Toggl.iOS.ExtensionKit.Models;
+using Toggl.Networking.Exceptions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -12,6 +14,7 @@ namespace Toggl.iOS.TimerWidgetExtension
 {
     public partial class TodayViewController : UIViewController, INCWidgetProviding
     {
+        private const int errorMessageLineSpacing = 2;
 
         private NetworkingHandler networkingHandler;
 
@@ -69,34 +72,60 @@ namespace Toggl.iOS.TimerWidgetExtension
 
         private async void startTimeEntry(object sender, EventArgs e)
         {
-            var workspaceId = SharedStorage.Instance.GetDefaultWorkspaceId();
-            var timeEntry = new TimeEntry(
-                workspaceId: workspaceId,
-                projectId: null,
-                taskId: null,
-                billable: false,
-                start: DateTimeOffset.Now,
-                duration: null,
-                description: "",
-                tagIds: new long[0],
-                userId: (long)SharedStorage.Instance.GetUserId(),
-                id: 0,
-                serverDeletedAt: null,
-                at: DateTimeOffset.Now);
-            var createdTimeEntry = await networkingHandler.StartTimeEntry(timeEntry);
-            SharedStorage.Instance.SetRunningTimeEntry(createdTimeEntry);
-            var timeEntryViewModel = SharedStorage.Instance.GetRunningTimeEntryViewModel();
-            renderRunningTimeEntry(timeEntryViewModel);
+            try
+            {
+                var workspaceId = SharedStorage.Instance.GetDefaultWorkspaceId();
+                var timeEntry = new TimeEntry(
+                    workspaceId: workspaceId,
+                    projectId: null,
+                    taskId: null,
+                    billable: false,
+                    start: DateTimeOffset.Now,
+                    duration: null,
+                    description: "",
+                    tagIds: new long[0],
+                    userId: (long)SharedStorage.Instance.GetUserId(),
+                    id: 0,
+                    serverDeletedAt: null,
+                    at: DateTimeOffset.Now);
+                var createdTimeEntry = await networkingHandler.StartTimeEntry(timeEntry);
+                SharedStorage.Instance.SetRunningTimeEntry(createdTimeEntry);
+                var timeEntryViewModel = SharedStorage.Instance.GetRunningTimeEntryViewModel();
+                renderRunningTimeEntry(timeEntryViewModel);
+            }
+            catch (ApiException)
+            {
+                renderErrorState(Resources.WidgetApiError);
+            }
+            catch
+            {
+                renderErrorState(Resources.WidgetGenericError);
+            }
         }
 
         private async void stopTimeEntry(object sender, EventArgs e)
         {
-            await networkingHandler.StopRunningTimeEntry();
-            SharedStorage.Instance.SetRunningTimeEntry(null);
+            try
+            {
+                await networkingHandler.StopRunningTimeEntry();
+                SharedStorage.Instance.SetRunningTimeEntry(null);
 
-            elapsedTimeTimer?.Invalidate();
-            elapsedTimeTimer = null;
-            renderEmptyTimeEntry();
+                elapsedTimeTimer?.Invalidate();
+                elapsedTimeTimer = null;
+                renderEmptyTimeEntry();
+            }
+            catch (ApiException)
+            {
+                renderErrorState(Resources.WidgetApiError);
+            }
+            catch (NoRunningEntryException)
+            {
+                renderErrorState(Resources.WidgetNoRunningTimeEntryError);
+            }
+            catch
+            {
+                renderErrorState(Resources.WidgetGenericError);
+            }
         }
 
         private void renderEmptyTimeEntry()
@@ -154,6 +183,7 @@ namespace Toggl.iOS.TimerWidgetExtension
         {
             ErrorMessageLabel.Hidden = false;
             ErrorMessageLabel.Text = error;
+            ErrorMessageLabel.SetLineSpacing(errorMessageLineSpacing, UITextAlignment.Center);
 
             View.AddGestureRecognizer(tapGestureRecognizer);
 
