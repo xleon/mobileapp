@@ -1345,7 +1345,6 @@
     <InterfaceDefinition Include="Cells\Calendar\CurrentTimeSupplementaryView.xib" />
     <InterfaceDefinition Include="Cells\Calendar\HourSupplementaryView.xib" />
     <InterfaceDefinition Include="Views\SnackBar.xib" />
-    <InterfaceDefinition Include="ViewControllers\Calendar\SelectUserCalendarsViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\SelectableUserCalendarViewCell.xib" />
     <InterfaceDefinition Include="Cells\Calendar\UserCalendarListHeaderViewCell.xib" />
     <InterfaceDefinition Include="Views\Settings\CalendarSettingsTableViewHeader.xib" />
@@ -1795,10 +1794,6 @@
     <Compile Include="ViewControllers\NoWorkspaceViewController.cs" />
     <Compile Include="ViewControllers\NoWorkspaceViewController.designer.cs">
       <DependentUpon>NoWorkspaceViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\Calendar\SelectUserCalendarsViewController.cs" />
-    <Compile Include="ViewControllers\Calendar\SelectUserCalendarsViewController.designer.cs">
-      <DependentUpon>SelectUserCalendarsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\SelectUserCalendarsTableViewSource.cs" />
     <Compile Include="Cells\Calendar\SelectableUserCalendarViewCell.cs" />

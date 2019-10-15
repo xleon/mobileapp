@@ -631,10 +631,6 @@
     <Compile Include="Fragments\MainFragment.Onboardings.cs">
       <DependentUpon>MainFragment.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fragments\SelectUserCalendarsFragment.cs" />
-    <Compile Include="Fragments\SelectUserCalendarsFragment.ViewBinds.cs">
-      <DependentUpon>SelectUserCalendarsFragment.cs</DependentUpon>
-    </Compile>
     <Compile Include="Adapters\UserCalendarsRecyclerAdapter.cs" />
     <Compile Include="ViewHolders\UserCalendarViewHolder.cs" />
     <Compile Include="ViewHolders\UserCalendarHeaderViewHolder.cs" />
@@ -1032,7 +1028,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\toggl_spider.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\toggl_spider.png" />
     <AndroidResource Include="Resources\layout\WelcomeBackPlaceholder.axml" />
-    <AndroidResource Include="Resources\layout\SelectUserCalendarsFragment.axml" />
     <AndroidResource Include="Resources\layout\UserCalendarItem.axml" />
     <AndroidResource Include="Resources\layout\UserCalendarHeader.axml" />
     <AndroidResource Include="Resources\color\LinkTextColor.xml" />

@@ -42,7 +42,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly IPlatformInfo platformInfo;
-        private readonly IOnboardingStorage onboardingStorage;
         private readonly IInteractorFactory interactorFactory;
         private readonly IPermissionsChecker permissionsChecker;
 
@@ -52,9 +51,8 @@ namespace Toggl.Core.UI.ViewModels
         private IThreadSafePreferences currentPreferences;
 
         public string Title { get; private set; } = Resources.Settings;
-        public bool CalendarSettingsEnabled => onboardingStorage.CompletedCalendarOnboarding();
         public string Version => $"{platformInfo.Version} ({platformInfo.BuildNumber})";
-        
+
         public IObservable<string> Name { get; }
         public IObservable<string> Email { get; }
         public IObservable<bool> IsSynced { get; }
@@ -100,7 +98,6 @@ namespace Toggl.Core.UI.ViewModels
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
             IInteractorFactory interactorFactory,
-            IOnboardingStorage onboardingStorage,
             INavigationService navigationService,
             IRxActionFactory rxActionFactory,
             IPermissionsChecker permissionsChecker,
@@ -112,7 +109,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
-            Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
@@ -124,7 +120,6 @@ namespace Toggl.Core.UI.ViewModels
             this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
             this.interactorFactory = interactorFactory;
-            this.onboardingStorage = onboardingStorage;
             this.permissionsChecker = permissionsChecker;
 
             IsSynced =
@@ -215,7 +210,7 @@ namespace Toggl.Core.UI.ViewModels
                 {
                     return PresentableSyncStatus.LoggingOut;
                 }
-                
+
                 return syncing ? PresentableSyncStatus.Syncing : PresentableSyncStatus.Synced;
             }
 

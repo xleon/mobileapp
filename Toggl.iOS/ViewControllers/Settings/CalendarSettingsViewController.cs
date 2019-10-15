@@ -1,3 +1,4 @@
+using System;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
@@ -29,7 +30,6 @@ namespace Toggl.iOS.ViewControllers.Settings
             header.TranslatesAutoresizingMaskIntoConstraints = false;
             header.HeightAnchor.ConstraintEqualTo(tableViewHeaderHeight).Active = true;
             header.WidthAnchor.ConstraintEqualTo(UserCalendarsTableView.WidthAnchor).Active = true;
-            header.SetCalendarPermissionStatus(ViewModel.PermissionGranted);
 
             var source = new SelectUserCalendarsTableViewSource(UserCalendarsTableView);
             source.SectionHeaderBackgroundColor = Colors.Settings.Background.ToNativeColor();
@@ -39,6 +39,10 @@ namespace Toggl.iOS.ViewControllers.Settings
                 .Subscribe(UserCalendarsTableView.Rx().ReloadSections(source))
                 .DisposedBy(DisposeBag);
 
+            ViewModel.PermissionGranted
+                .Subscribe(header.SetCalendarPermissionStatus)
+                .DisposedBy(DisposeBag);
+
             header.EnableCalendarAccessTapped
                 .Subscribe(ViewModel.RequestAccess.Inputs)
                 .DisposedBy(DisposeBag);
@@ -46,6 +50,8 @@ namespace Toggl.iOS.ViewControllers.Settings
             source.Rx().ModelSelected()
                 .Subscribe(ViewModel.SelectCalendar.Inputs)
                 .DisposedBy(DisposeBag);
+
+            ViewModel.RequestCalendarPermissionsIfNeeded.Execute();
         }
 
         public override void DidMoveToParentViewController(UIViewController parent)
