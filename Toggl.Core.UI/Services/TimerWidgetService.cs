@@ -22,11 +22,14 @@ namespace Toggl.Core.UI.Services
         {
             if (runningTimeEntryDisposable != null)
             {
-                runningTimeEntryDisposable = dataSource
-                    .TimeEntries
-                    .CurrentlyRunningTimeEntry
-                    .Subscribe(OnRunningTimeEntryChanged);
+                runningTimeEntryDisposable?.Dispose();
+                runningTimeEntryDisposable = null;
             }
+
+            runningTimeEntryDisposable = dataSource
+                .TimeEntries
+                .CurrentlyRunningTimeEntry
+                .Subscribe(OnRunningTimeEntryChanged);
         }
 
         public abstract void OnRunningTimeEntryChanged(IThreadSafeTimeEntry timeEntry);
