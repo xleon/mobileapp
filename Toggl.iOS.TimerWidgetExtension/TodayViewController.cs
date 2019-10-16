@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
 using NotificationCenter;
@@ -108,22 +109,46 @@ namespace Toggl.iOS.TimerWidgetExtension
 
         private async void startTimeEntry(object sender, EventArgs e)
         {
+            var workspaceId = SharedStorage.Instance.GetDefaultWorkspaceId();
+            var timeEntry = new TimeEntry(
+                workspaceId: workspaceId,
+                projectId: null,
+                taskId: null,
+                billable: false,
+                start: DateTimeOffset.Now,
+                duration: null,
+                description: "",
+                tagIds: new long[0],
+                userId: (long)SharedStorage.Instance.GetUserId(),
+                id: 0,
+                serverDeletedAt: null,
+                at: DateTimeOffset.Now);
+            await createTimeEntry(timeEntry);
+        }
+
+        private async void continueSuggestion(Suggestion suggestion)
+        {
+            var timeEntry = new TimeEntry(
+                suggestion.WorkspaceId,
+                suggestion.ProjectId,
+                suggestion.TaskId,
+                suggestion.IsBillable,
+                DateTimeOffset.Now,
+                null,
+                suggestion.Description,
+                suggestion.TagIds ?? new long[0],
+                (long)SharedStorage.Instance.GetUserId(),
+                id: 0,
+                serverDeletedAt: null,
+                at: DateTimeOffset.Now);
+
+            await createTimeEntry(timeEntry);
+        }
+
+        private async Task createTimeEntry(TimeEntry timeEntry)
+        {
             try
             {
-                var workspaceId = SharedStorage.Instance.GetDefaultWorkspaceId();
-                var timeEntry = new TimeEntry(
-                    workspaceId: workspaceId,
-                    projectId: null,
-                    taskId: null,
-                    billable: false,
-                    start: DateTimeOffset.Now,
-                    duration: null,
-                    description: "",
-                    tagIds: new long[0],
-                    userId: (long)SharedStorage.Instance.GetUserId(),
-                    id: 0,
-                    serverDeletedAt: null,
-                    at: DateTimeOffset.Now);
                 var createdTimeEntry = await networkingHandler.StartTimeEntry(timeEntry);
                 SharedStorage.Instance.SetRunningTimeEntry(createdTimeEntry);
                 var timeEntryViewModel = SharedStorage.Instance.GetRunningTimeEntryViewModel();
