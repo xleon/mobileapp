@@ -28,13 +28,34 @@ namespace Toggl.iOS.TimerWidgetExtension
 		UIKit.UILabel ProjectNameLabel { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint RunningTimerContainerCompactBottomConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIView RunningTimerContainerView { get; set; }
+
+		[Outlet]
+		UIKit.UIButton ShowAllTimeEntriesButton { get; set; }
 
 		[Outlet]
 		UIKit.UIButton StartButton { get; set; }
 
 		[Outlet]
 		UIKit.UIButton StopButton { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint SuggestionsContainerExpandedBottomConstraint { get; set; }
+
+		[Outlet]
+		UIKit.UIView SuggestionsContainerView { get; set; }
+
+		[Outlet]
+		UIKit.UILabel SuggestionsLabel { get; set; }
+
+		[Outlet]
+		UIKit.UITableView SuggestionsTableView { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint SuggestionsTableViewHeightConstraint { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -53,14 +74,29 @@ namespace Toggl.iOS.TimerWidgetExtension
 				DurationLabel = null;
 			}
 
+			if (ErrorMessageLabel != null) {
+				ErrorMessageLabel.Dispose ();
+				ErrorMessageLabel = null;
+			}
+
 			if (ProjectNameLabel != null) {
 				ProjectNameLabel.Dispose ();
 				ProjectNameLabel = null;
 			}
 
+			if (RunningTimerContainerCompactBottomConstraint != null) {
+				RunningTimerContainerCompactBottomConstraint.Dispose ();
+				RunningTimerContainerCompactBottomConstraint = null;
+			}
+
 			if (RunningTimerContainerView != null) {
 				RunningTimerContainerView.Dispose ();
 				RunningTimerContainerView = null;
+			}
+
+			if (ShowAllTimeEntriesButton != null) {
+				ShowAllTimeEntriesButton.Dispose ();
+				ShowAllTimeEntriesButton = null;
 			}
 
 			if (StartButton != null) {
@@ -73,9 +109,29 @@ namespace Toggl.iOS.TimerWidgetExtension
 				StopButton = null;
 			}
 
-			if (ErrorMessageLabel != null) {
-				ErrorMessageLabel.Dispose ();
-				ErrorMessageLabel = null;
+			if (SuggestionsContainerExpandedBottomConstraint != null) {
+				SuggestionsContainerExpandedBottomConstraint.Dispose ();
+				SuggestionsContainerExpandedBottomConstraint = null;
+			}
+
+			if (SuggestionsContainerView != null) {
+				SuggestionsContainerView.Dispose ();
+				SuggestionsContainerView = null;
+			}
+
+			if (SuggestionsLabel != null) {
+				SuggestionsLabel.Dispose ();
+				SuggestionsLabel = null;
+			}
+
+			if (SuggestionsTableView != null) {
+				SuggestionsTableView.Dispose ();
+				SuggestionsTableView = null;
+			}
+
+			if (SuggestionsTableViewHeightConstraint != null) {
+				SuggestionsTableViewHeightConstraint.Dispose ();
+				SuggestionsTableViewHeightConstraint = null;
 			}
 		}
 	}

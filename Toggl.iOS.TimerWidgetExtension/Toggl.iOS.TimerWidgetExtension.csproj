@@ -124,6 +124,7 @@
     <Folder Include="Resources\" />
     <Folder Include="Resources\Images.xcassets\icStop.imageset\" />
     <Folder Include="Resources\Images.xcassets\icStart.imageset\" />
+    <Folder Include="Resources\Images.xcassets\icContinue.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -138,6 +139,11 @@
       <DependentUpon>TodayViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="NetworkingHandler.cs" />
+    <Compile Include="SuggestionTableViewCell.cs" />
+    <Compile Include="SuggestionTableViewCell.designer.cs">
+      <DependentUpon>SuggestionTableViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SuggestionsDataSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.iOS.ExtensionKit\Toggl.iOS.ExtensionKit.csproj">
@@ -163,6 +169,10 @@
     <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\stop.png" />
     <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\stop%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icStop.imageset\stop%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icContinue.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icContinue.imageset\continue.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icContinue.imageset\continue%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icContinue.imageset\continue%403x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />
 </Project>

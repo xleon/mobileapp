@@ -1,4 +1,5 @@
 ﻿using System;
+using CoreGraphics;
 using Foundation;
 using NotificationCenter;
 using Toggl.iOS.ExtensionKit;
@@ -14,12 +15,16 @@ namespace Toggl.iOS.TimerWidgetExtension
 {
     public partial class TodayViewController : UIViewController, INCWidgetProviding
     {
+        private const double compactModeHeight = 112;
+        private const double suggestionCellHeight = 60;
+        private const double extraLabelsHeight = 51;
         private const int errorMessageLineSpacing = 2;
 
         private NetworkingHandler networkingHandler;
 
         private NSTimer elapsedTimeTimer;
         private UITapGestureRecognizer tapGestureRecognizer;
+        private SuggestionsDataSource dataSource;
 
         protected TodayViewController(IntPtr handle) : base(handle)
         {
@@ -36,10 +41,15 @@ namespace Toggl.iOS.TimerWidgetExtension
             {
                 ExtensionContext?.OpenUrl(new Uri(ApplicationUrls.Main.Default), null);
             });
+
+            dataSource = new SuggestionsDataSource();
+            SuggestionsTableView.DataSource = dataSource;
         }
 
         public override void ViewWillAppear(bool animated)
         {
+
+            ExtensionContext.SetWidgetLargestAvailableDisplayMode(NCWidgetDisplayMode.Expanded);
             if (SharedStorage.Instance.GetApiToken() == null)
             {
                 renderErrorState(Resources.WidgetLogInToTrackTime);
@@ -68,6 +78,32 @@ namespace Toggl.iOS.TimerWidgetExtension
             base.ViewDidDisappear(animated);
             elapsedTimeTimer?.Invalidate();
             elapsedTimeTimer = null;
+        }
+
+        [Export("widgetActiveDisplayModeDidChange:withMaximumSize:")]
+        public void WidgetActiveDisplayModeDidChange(NCWidgetDisplayMode activeDisplayMode, CGSize maxSize)
+        {
+            var suggestionsCount = 3;
+            PreferredContentSize = activeDisplayMode == NCWidgetDisplayMode.Compact
+                ? maxSize
+                : new CGSize(maxSize.Width, compactModeHeight + suggestionsCount * suggestionCellHeight + extraLabelsHeight);
+            setConstraintsForDisplayMode(activeDisplayMode, suggestionsCount);
+        }
+
+        private void setConstraintsForDisplayMode(NCWidgetDisplayMode activeDisplayMode, int suggestionsCount)
+        {
+            switch (activeDisplayMode)
+            {
+                case NCWidgetDisplayMode.Compact:
+                    RunningTimerContainerCompactBottomConstraint.Active = true;
+                    SuggestionsContainerExpandedBottomConstraint.Active = false;
+                    break;
+                case NCWidgetDisplayMode.Expanded:
+                    RunningTimerContainerCompactBottomConstraint.Active = false;
+                    SuggestionsContainerExpandedBottomConstraint.Active = true;
+                    break;
+            }
+            SuggestionsTableViewHeightConstraint.Constant = 60 * suggestionsCount;
         }
 
         private async void startTimeEntry(object sender, EventArgs e)
@@ -181,6 +217,7 @@ namespace Toggl.iOS.TimerWidgetExtension
 
         private void renderErrorState(string error)
         {
+            ExtensionContext.SetWidgetLargestAvailableDisplayMode(NCWidgetDisplayMode.Compact);
             ErrorMessageLabel.Hidden = false;
             ErrorMessageLabel.Text = error;
             ErrorMessageLabel.SetLineSpacing(errorMessageLineSpacing, UITextAlignment.Center);
