@@ -53,7 +53,9 @@ namespace Toggl.Droid.Widgets
 
             foreach (var widgetId in appWidgetIds)
             {
-                updateWidget(context, appWidgetManager, widgetId);
+                var options = appWidgetManager.GetAppWidgetOptions(widgetId);
+                var dimensions = WidgetDimensions.FromBundle(options);
+                updateWidget(context, appWidgetManager, widgetId, dimensions);
             }
         }
 
