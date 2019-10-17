@@ -16,19 +16,6 @@ namespace Toggl.iOS.Cells.Settings
         public static readonly UINib Nib;
 
         private CompositeDisposable disposeBag = new CompositeDisposable();
-        private UIView separator;
-
-        private bool isLast;
-
-        public bool IsLast
-        {
-            get => isLast;
-            set
-            {
-                isLast = value;
-                separator.Hidden =!value;
-            }
-        }
 
         static SettingCell()
         {
@@ -44,7 +31,7 @@ namespace Toggl.iOS.Cells.Settings
         {
             TitleLabel.TextColor = ColorAssets.Text;
             DetailLabel.TextColor = ColorAssets.Text2;
-            separator = ContentView.InsertSeparator();
+            ContentView.InsertSeparator();
         }
 
         public override void PrepareForReuse()
