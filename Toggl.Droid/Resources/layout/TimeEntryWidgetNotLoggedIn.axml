@@ -34,7 +34,7 @@
         android:layout_marginRight="16dp"
         android:fontFamily="sans-serif"
         android:textStyle="normal"
-        android:textColor="@android:color/black"
+        android:textColor="@color/primaryText"
         android:lineSpacingExtra="5sp"
         android:singleLine="true"
         android:ellipsize="marquee"
