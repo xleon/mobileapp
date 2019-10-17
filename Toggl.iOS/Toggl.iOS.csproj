@@ -1317,6 +1317,8 @@
     <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark.png" />
     <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark%403x.png" />
+    <ImageAsset Include="Resources\Colors.xcassets\ErrorText.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ErrorBackground.colorset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -2106,6 +2108,8 @@
     <Folder Include="Resources\Colors.xcassets\InverseBackground.colorset\" />
     <Folder Include="Resources\Colors.xcassets\Text1.colorset\" />
     <Folder Include="Resources\Colors.xcassets\Spider.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ErrorText.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ErrorBackground.colorset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />
