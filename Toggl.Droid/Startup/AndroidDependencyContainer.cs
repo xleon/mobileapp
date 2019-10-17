@@ -127,7 +127,9 @@ namespace Toggl.Droid
         protected override IAccessibilityService CreateAccessibilityService()
             => new AccessibilityServiceAndroid();
 
-        protected override ITimerWidgetService CreateTimerWidgetService()
-            => new TimerWidgetServiceAndroid(DataSource);
+        protected override IWidgetsService CreateWidgetsService()
+        {
+            return new WidgetsServiceAndroid(DataSource);
+        }
     }
 }

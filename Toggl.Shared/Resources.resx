@@ -1383,4 +1383,10 @@ to project members</value>
     <data name="LoginToTrack" xml:space="preserve">
         <value>Log in to track time</value>
     </data>
+    <data name="NoSuggestionsAvailable" xml:space="preserve">
+        <value>No suggestions available</value>
+    </data>
+    <data name="ShowAllTimEntries" xml:space="preserve">
+        <value>Show all time entries</value>
+    </data>
 </root>

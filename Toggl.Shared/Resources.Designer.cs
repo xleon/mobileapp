@@ -2554,5 +2554,17 @@ namespace Toggl.Shared {
                 return ResourceManager.GetString("LoginToTrack", resourceCulture);
             }
         }
+
+        public static string NoSuggestionsAvailable {
+            get {
+                return ResourceManager.GetString("NoSuggestionsAvailable", resourceCulture);
+            }
+        }
+        
+        public static string ShowAllTimEntries {
+            get {
+                return ResourceManager.GetString("ShowAllTimEntries", resourceCulture);
+            }
+        }
     }
 }

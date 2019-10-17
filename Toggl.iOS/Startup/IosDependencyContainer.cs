@@ -128,7 +128,7 @@ namespace Toggl.iOS
         protected override IAccessibilityService CreateAccessibilityService()
             => new AccessibilityServiceIos();
 
-        protected override ITimerWidgetService CreateTimerWidgetService()
-            => new TimerWidgetServiceIos(DataSource);
+        protected override IWidgetsService CreateWidgetsService()
+            => new WidgetsServiceIos(DataSource);
     }
 }

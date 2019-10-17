@@ -38,7 +38,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IBackgroundService backgroundService;
         private readonly IUserPreferences userPreferences;
         private readonly ISyncManager syncManager;
-        private readonly ITimerWidgetService timerWidgetService;
+        private readonly IWidgetsService timerWidgetService;
 
         public IObservable<IImmutableList<Suggestion>> Suggestions { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
@@ -56,7 +56,7 @@ namespace Toggl.Core.UI.ViewModels
             IBackgroundService backgroundService,
             IUserPreferences userPreferences,
             ISyncManager syncManager,
-            ITimerWidgetService timerWidgetService)
+            IWidgetsService timerWidgetService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));

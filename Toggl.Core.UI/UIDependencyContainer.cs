@@ -13,13 +13,13 @@ namespace Toggl.Core.UI
         private readonly Lazy<ViewModelLoader> viewModelLoader;
         private readonly Lazy<INavigationService> navigationService;
         private readonly Lazy<IPermissionsChecker> permissionsService;
-        private Lazy<ITimerWidgetService> timerWidgetService;
+        private Lazy<IWidgetsService> widgetsService;
 
         public IDeeplinkParser DeeplinkParser => deeplinkParser.Value;
         public ViewModelLoader ViewModelLoader => viewModelLoader.Value;
         public INavigationService NavigationService => navigationService.Value;
         public IPermissionsChecker PermissionsChecker => permissionsService.Value;
-        public ITimerWidgetService TimerWidgetService => timerWidgetService.Value;
+        public IWidgetsService WidgetsService => widgetsService.Value;
 
         public static UIDependencyContainer Instance { get; protected set; }
 
@@ -30,7 +30,7 @@ namespace Toggl.Core.UI
             viewModelLoader = new Lazy<ViewModelLoader>(CreateViewModelLoader);
             navigationService = new Lazy<INavigationService>(CreateNavigationService);
             permissionsService = new Lazy<IPermissionsChecker>(CreatePermissionsChecker);
-            timerWidgetService = new Lazy<ITimerWidgetService>(CreateTimerWidgetService);
+            widgetsService = new Lazy<IWidgetsService>(CreateWidgetsService);
         }
 
         private IDeeplinkParser createDeeplinkParser()
@@ -38,7 +38,7 @@ namespace Toggl.Core.UI
 
         protected abstract INavigationService CreateNavigationService();
         protected abstract IPermissionsChecker CreatePermissionsChecker();
-        protected abstract ITimerWidgetService CreateTimerWidgetService();
+        protected abstract IWidgetsService CreateWidgetsService();
 
         protected virtual ViewModelLoader CreateViewModelLoader() => new ViewModelLoader(this);
         protected override IErrorHandlingService CreateErrorHandlingService()
@@ -49,12 +49,14 @@ namespace Toggl.Core.UI
 
         protected override void RecreateLazyUIDependenciesForLogin()
         {
-            timerWidgetService = new Lazy<ITimerWidgetService>(CreateTimerWidgetService);
+            WidgetsService?.Dispose();
+            widgetsService = new Lazy<IWidgetsService>(CreateWidgetsService);
         }
 
         protected override void RecreateLazyUIDependenciesForLogout()
         {
-            timerWidgetService = new Lazy<ITimerWidgetService>(CreateTimerWidgetService);
+            WidgetsService?.Dispose();
+            widgetsService = new Lazy<IWidgetsService>(CreateWidgetsService);
         }
     }
 }

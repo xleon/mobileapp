@@ -1425,7 +1425,7 @@
     <Compile Include="Services\PushNotificationsTokenServiceIos.cs" />
     <Compile Include="Services\IntentDonationService.cs" />
     <Compile Include="Services\FetchRemoteConfigServiceIos.cs" />
-    <Compile Include="Services\TimerWidgetServiceIos.cs" />
+    <Compile Include="Services\WidgetsServiceIos.cs" />
     <Compile Include="Services\UserDefaultsStorageIos.cs" />
     <Compile Include="Services\WatchService.cs" />
     <Compile Include="Startup\AppDelegate.Deeplink.cs">

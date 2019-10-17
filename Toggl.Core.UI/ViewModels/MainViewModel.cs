@@ -55,7 +55,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly IAccessibilityService accessibilityService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
-        private readonly ITimerWidgetService timerWidgetService;
+        private readonly IWidgetsService timerWidgetService;
 
         private readonly RatingViewExperiment ratingViewExperiment;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
@@ -115,7 +115,7 @@ namespace Toggl.Core.UI.ViewModels
             IPermissionsChecker permissionsChecker,
             IBackgroundService backgroundService,
             IPlatformInfo platformInfo,
-            ITimerWidgetService timerWidgetService)
+            IWidgetsService timerWidgetService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));

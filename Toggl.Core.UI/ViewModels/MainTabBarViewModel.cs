@@ -54,7 +54,7 @@ namespace Toggl.Core.UI.ViewModels
             IUserAccessManager userAccessManager,
             IPrivateSharedStorageService privateSharedStorageService,
             IPlatformInfo platformInfo,
-            ITimerWidgetService timerWidgetService)
+            IWidgetsService timerWidgetService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));

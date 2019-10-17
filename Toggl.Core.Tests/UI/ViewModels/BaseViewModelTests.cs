@@ -32,7 +32,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         protected IErrorHandlingService ErrorHandlingService { get; } = Substitute.For<IErrorHandlingService>();
         protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
 
-        protected ITimerWidgetService TimerWidgetService { get; } = Substitute.For<ITimerWidgetService>();
+        protected IWidgetsService TimerWidgetService { get; } = Substitute.For<IWidgetsService>();
 
         protected TestScheduler TestScheduler { get; }
         protected IRxActionFactory RxActionFactory { get; }

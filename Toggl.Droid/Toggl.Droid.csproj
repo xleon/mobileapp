@@ -373,6 +373,7 @@
     <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
     <Compile Include="Extensions\JavaExtensions.cs" />
+    <Compile Include="Extensions\WidgetsExtensions.cs" />
     <Compile Include="Fragments\ReportsCalendarFragment.cs" />
     <Compile Include="Helper\ActiveTheme.cs" />
     <Compile Include="Helper\AppWidgetProviderUtils.cs" />
@@ -381,7 +382,7 @@
     <Compile Include="Services\JobServicesConstants.cs" />
     <Compile Include="Services\FetchRemoteConfigServiceAndroid.cs" />
     <Compile Include="Services\SyncJobService.cs" />
-    <Compile Include="Services\TimerWidgetServiceAndroid.cs" />
+    <Compile Include="Services\WidgetsServiceAndroid.cs" />
     <Compile Include="Services\TogglFirebaseIIDService.cs" />
     <Compile Include="Services\TogglFirebaseMessagingService.cs" />
     <Compile Include="Services\PushNotificationsTokenServiceAndroid.cs" />
@@ -661,6 +662,8 @@
     <Compile Include="Services\ScheduleEventNotificationsService.cs" />
     <Compile Include="Views\VerticallyCenteredImageSpan.cs" />
     <Compile Include="Widgets\SuggestionsWidget.cs" />
+    <Compile Include="Widgets\SuggestionsWidgetFactory.cs" />
+    <Compile Include="Widgets\SuggestionsWidgetService.cs" />
     <Compile Include="Widgets\TimeEntryWidgetButtonOnlyFormFactor.cs" />
     <Compile Include="Widgets\ITimeEntryWidgetFormFactor.cs" />
     <Compile Include="Widgets\TimeEntryWidgetStartStopButtonFormFactor.cs" />
@@ -673,6 +676,7 @@
     <Compile Include="Widgets\TimeEntryWidgetNotLoggedInFormFactor.cs" />
     <Compile Include="Widgets\WidgetsConstants.cs" />
     <Compile Include="Widgets\TimeEntryWidgetDefaultFormFactor.cs" />
+    <Compile Include="Widgets\WidgetSuggestionItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -704,6 +708,7 @@
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
     <AndroidResource Include="Resources\layout\SuggestionsWidget.axml" />
+    <AndroidResource Include="Resources\layout\SuggestionsWidgetItem.axml" />
     <AndroidResource Include="Resources\layout\TimeEntryWidgetSmall.axml" />
     <AndroidResource Include="Resources\layout\TimeEntryWidgetNotLoggedIn.axml" />
     <AndroidResource Include="Resources\menu\GenericSaveMenu.xml" />

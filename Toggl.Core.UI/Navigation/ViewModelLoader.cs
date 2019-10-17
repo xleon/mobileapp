@@ -107,7 +107,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.UserAccessManager,
                     dependencyContainer.PrivateSharedStorageService,
                     dependencyContainer.PlatformInfo,
-                    dependencyContainer.TimerWidgetService);
+                    dependencyContainer.WidgetsService);
             }
 
             if (viewModelType == typeof(MainViewModel))
@@ -131,7 +131,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.BackgroundService,
                     dependencyContainer.PlatformInfo,
-                    dependencyContainer.TimerWidgetService);
+                    dependencyContainer.WidgetsService);
             }
 
             if (viewModelType == typeof(NoWorkspaceViewModel))
@@ -279,7 +279,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.BackgroundService,
                     dependencyContainer.UserPreferences,
                     dependencyContainer.SyncManager,
-                    dependencyContainer.TimerWidgetService);
+                    dependencyContainer.WidgetsService);
             }
 
             if (viewModelType == typeof(SyncFailuresViewModel))

@@ -13,11 +13,11 @@ using Toggl.Shared;
 
 namespace Toggl.iOS.Services
 {
-    public sealed class TimerWidgetServiceIos : TimerWidgetService
+    public sealed class WidgetsServiceIos : WidgetsService
     {
         private IDisposable durationFormatDisposable;
 
-        public TimerWidgetServiceIos(ITogglDataSource dataSource) : base(dataSource)
+        public WidgetsServiceIos(ITogglDataSource dataSource) : base(dataSource)
         {
             durationFormatDisposable = dataSource
                 .Preferences
@@ -26,7 +26,7 @@ namespace Toggl.iOS.Services
                 .Subscribe(onDurationFormat);
         }
 
-        public override void OnRunningTimeEntryChanged(IThreadSafeTimeEntry timeEntry)
+        protected override void OnRunningTimeEntryChanged(IThreadSafeTimeEntry timeEntry)
         {
             if (timeEntry == null)
             {
