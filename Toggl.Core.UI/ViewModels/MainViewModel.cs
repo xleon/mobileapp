@@ -82,10 +82,9 @@ namespace Toggl.Core.UI.ViewModels
         public SuggestionsViewModel SuggestionsViewModel { get; }
         public IOnboardingStorage OnboardingStorage { get; }
 
-        public UIAction Refresh { get; private set; }
-        public UIAction OpenReports { get; private set; }
-        public UIAction OpenSettings { get; private set; }
-        public UIAction OpenSyncFailures { get; private set; }
+        public ViewAction Refresh { get; private set; }
+        public ViewAction OpenSettings { get; private set; }
+        public ViewAction OpenSyncFailures { get; private set; }
         public InputAction<bool> StartTimeEntry { get; private set; }
         public InputAction<EditTimeEntryInfo> SelectTimeEntry { get; private set; }
         public InputAction<TimeEntryStopOrigin> StopTimeEntry { get; private set; }
@@ -160,7 +159,7 @@ namespace Toggl.Core.UI.ViewModels
             TimeEntriesCount = TimeEntriesViewModel.Count.AsDriver(schedulerProvider);
 
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService, updateRemoteConfigCacheService);
-            
+
             SwipeActionsEnabled = userPreferences.SwipeActionsEnabled.AsDriver(schedulerProvider);
         }
 
@@ -240,7 +239,6 @@ namespace Toggl.Core.UI.ViewModels
                 .AsDriver(schedulerProvider);
 
             Refresh = rxActionFactory.FromAsync(refresh);
-            OpenReports = rxActionFactory.FromAsync(openReports);
             OpenSettings = rxActionFactory.FromAsync(openSettings);
             OpenSyncFailures = rxActionFactory.FromAsync(openSyncFailures);
             SelectTimeEntry = rxActionFactory.FromAsync<EditTimeEntryInfo>(timeEntrySelected);
@@ -384,10 +382,9 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task openSettings()
-            => navigate<SettingsViewModel>();
-
-        private Task openReports()
-            => navigate<ReportsViewModel>();
+        {
+            return navigate<SettingsViewModel>();
+        }
 
         private Task openSyncFailures()
             => navigate<SyncFailuresViewModel>();

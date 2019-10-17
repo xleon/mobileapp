@@ -5,6 +5,7 @@ using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using Colors = Toggl.Core.UI.Helper.Colors;
 using Toggl.Shared;
+using UIKit;
 
 namespace Toggl.iOS.ViewControllers.Settings
 {
@@ -31,7 +32,6 @@ namespace Toggl.iOS.ViewControllers.Settings
             header.SetCalendarPermissionStatus(ViewModel.PermissionGranted);
 
             var source = new SelectUserCalendarsTableViewSource(UserCalendarsTableView);
-            source.SectionHeaderBackgroundColor = Colors.Settings.Background.ToNativeColor();
             UserCalendarsTableView.Source = source;
 
             ViewModel.Calendars
@@ -45,6 +45,16 @@ namespace Toggl.iOS.ViewControllers.Settings
             source.Rx().ModelSelected()
                 .Subscribe(ViewModel.SelectCalendar.Inputs)
                 .DisposedBy(DisposeBag);
+        }
+
+        public override void DidMoveToParentViewController(UIViewController parent)
+        {
+            base.DidMoveToParentViewController(parent);
+
+            if (parent == null)
+            {
+                ViewModel.Save.Execute();
+            }
         }
     }
 }

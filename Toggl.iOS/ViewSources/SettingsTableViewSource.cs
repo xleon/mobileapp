@@ -1,5 +1,6 @@
 using System;
 using Foundation;
+using Toggl.Core.Sync;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Cells.Settings;
@@ -10,13 +11,6 @@ using UIKit;
 namespace Toggl.iOS.ViewSources
 {
     using SettingsSection = SectionModel<string, ISettingRow>;
-
-    public enum SyncStatus
-    {
-        Synced,
-        Syncing,
-        LoggingOut
-    }
 
     public class SettingsTableViewSource: BaseTableViewSource<SettingsSection, string, ISettingRow>
     {
@@ -47,7 +41,7 @@ namespace Toggl.iOS.ViewSources
                     return cell;
                 }
 
-                case CustomRow<SyncStatus> customRow:
+                case CustomRow<PresentableSyncStatus> customRow:
                 {
                     var cell = (SettingsSyncCell) tableView.DequeueReusableCell(
                         SettingsSyncCell.Identifier,
@@ -95,7 +89,7 @@ namespace Toggl.iOS.ViewSources
             if (string.IsNullOrEmpty(title))
             {
                 var view = new UIView();
-                view.BackgroundColor = Colors.Settings.Background.ToNativeColor();
+                view.BackgroundColor = ColorAssets.TableBackground;
                 return view;
             }
 
