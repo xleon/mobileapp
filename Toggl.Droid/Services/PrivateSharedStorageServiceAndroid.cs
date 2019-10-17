@@ -1,4 +1,5 @@
 using Toggl.Core.Services;
+using Toggl.Droid.Helper;
 using Toggl.Droid.Widgets;
 using Toggl.Shared;
 using Toggl.Storage.Settings;
@@ -38,7 +39,7 @@ namespace Toggl.Droid.Services
         {
             keyValueStorage.Remove(apiTokenKey);
             keyValueStorage.Remove(userIdKey);
-            TimeEntryWidgetInfo.Clear();
+            clearWidgets();
         }
 
         public bool HasUserDataStored()
@@ -47,5 +48,11 @@ namespace Toggl.Droid.Services
 
         public string GetApiToken()
             => keyValueStorage.GetString(apiTokenKey);
+
+        private void clearWidgets()
+        {
+            TimeEntryWidgetInfo.Clear();
+            AppWidgetProviderUtils.UpdateAllInstances<TimeEntryWidget>();
+        }
     }
 }
