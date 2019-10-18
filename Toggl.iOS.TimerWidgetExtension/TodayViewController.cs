@@ -37,14 +37,24 @@ namespace Toggl.iOS.TimerWidgetExtension
 
             StartButton.AddTarget(startTimeEntry, UIControlEvent.TouchUpInside);
             StopButton.AddTarget(stopTimeEntry, UIControlEvent.TouchUpInside);
+            ShowAllTimeEntriesButton.AddTarget((s, e) => openApp() , UIControlEvent.TouchUpInside);
 
-            tapGestureRecognizer = new UITapGestureRecognizer(() =>
+            tapGestureRecognizer = new UITapGestureRecognizer(openApp);
+
+            SuggestionsTableView.RegisterNibForCellReuse(SuggestionTableViewCell.Nib, SuggestionTableViewCell.Identifier);
+
+            var suggestions = SharedStorage.Instance.GetCurrentSuggestions();
+            if (suggestions != null)
             {
-                ExtensionContext?.OpenUrl(new Uri(ApplicationUrls.Main.Default), null);
-            });
-
-            dataSource = new SuggestionsDataSource();
-            SuggestionsTableView.DataSource = dataSource;
+                dataSource = new SuggestionsDataSource();
+                dataSource.Suggestions = suggestions;
+                dataSource.Callback = continueSuggestion;
+                SuggestionsTableView.Source = dataSource;
+            }
+            else
+            {
+                ExtensionContext?.SetWidgetLargestAvailableDisplayMode(NCWidgetDisplayMode.Compact);
+            }
         }
 
         public override void ViewWillAppear(bool animated)
@@ -264,6 +274,11 @@ namespace Toggl.iOS.TimerWidgetExtension
         public void WidgetPerformUpdate(Action<NCUpdateResult> completionHandler)
         {
             completionHandler(NCUpdateResult.NewData);
+        }
+
+        private void openApp()
+        {
+            ExtensionContext?.OpenUrl(new Uri(ApplicationUrls.Main.Default), null);
         }
     }
 }

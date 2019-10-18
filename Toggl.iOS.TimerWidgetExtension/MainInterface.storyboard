@@ -107,66 +107,6 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="220" id="SZO-BU-bGH"/>
                                         </constraints>
-                                        <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SuggestionCell" rowHeight="60" id="IDU-O7-MpN" customClass="SuggestionTableViewCell">
-                                                <rect key="frame" x="0.0" y="28" width="320" height="60"/>
-                                                <autoresizingMask key="autoresizingMask"/>
-                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="IDU-O7-MpN" id="g1N-1F-4Vs">
-                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DE9-Gk-K2D">
-                                                            <rect key="frame" x="10" y="13" width="280" height="34"/>
-                                                            <subviews>
-                                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="Zr5-WJ-YZs">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="269" height="34"/>
-                                                                    <subviews>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VzY-It-ds1">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="269" height="16"/>
-                                                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                                            <nil key="textColor"/>
-                                                                            <nil key="highlightedColor"/>
-                                                                        </label>
-                                                                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="OHh-72-9nY">
-                                                                            <rect key="frame" x="0.0" y="18" width="269" height="16"/>
-                                                                            <subviews>
-                                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WeP-hv-SNQ">
-                                                                                    <rect key="frame" x="0.0" y="5" width="6" height="6"/>
-                                                                                    <color key="backgroundColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                    <constraints>
-                                                                                        <constraint firstAttribute="width" constant="6" id="TRS-8j-icn"/>
-                                                                                        <constraint firstAttribute="height" constant="6" id="g6w-JX-ziW"/>
-                                                                                    </constraints>
-                                                                                    <userDefinedRuntimeAttributes>
-                                                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                                            <integer key="value" value="3"/>
-                                                                                        </userDefinedRuntimeAttribute>
-                                                                                    </userDefinedRuntimeAttributes>
-                                                                                </view>
-                                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Project" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4wL-mE-RyK">
-                                                                                    <rect key="frame" x="13" y="0.0" width="256" height="16"/>
-                                                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                                                    <nil key="textColor"/>
-                                                                                    <nil key="highlightedColor"/>
-                                                                                </label>
-                                                                            </subviews>
-                                                                        </stackView>
-                                                                    </subviews>
-                                                                </stackView>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="icContinue" translatesAutoresizingMaskIntoConstraints="NO" id="CIZ-ru-Z1J">
-                                                                    <rect key="frame" x="269" y="0.0" width="11" height="34"/>
-                                                                </imageView>
-                                                            </subviews>
-                                                        </stackView>
-                                                    </subviews>
-                                                    <constraints>
-                                                        <constraint firstItem="DE9-Gk-K2D" firstAttribute="centerY" secondItem="g1N-1F-4Vs" secondAttribute="centerY" id="RFF-nA-sev"/>
-                                                        <constraint firstAttribute="trailing" secondItem="DE9-Gk-K2D" secondAttribute="trailing" constant="30" id="d96-f0-ZfO"/>
-                                                        <constraint firstItem="DE9-Gk-K2D" firstAttribute="leading" secondItem="g1N-1F-4Vs" secondAttribute="leading" constant="10" id="uXZ-wg-dqW"/>
-                                                    </constraints>
-                                                </tableViewCellContentView>
-                                            </tableViewCell>
-                                        </prototypes>
                                     </tableView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qo0-Gx-2KV">
                                         <rect key="frame" x="10" y="237" width="300" height="26"/>
@@ -233,7 +173,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="icContinue" width="11" height="13"/>
         <image name="icStart" width="56" height="56"/>
         <image name="icStop" width="34" height="34"/>
     </resources>

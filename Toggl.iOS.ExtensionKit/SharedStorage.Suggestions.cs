@@ -28,7 +28,7 @@ namespace Toggl.iOS.ExtensionKit
         public IList<Suggestion> GetCurrentSuggestions()
         {
             var array = userDefaults.ArrayForKey(suggestionsKey);
-            return array.Cast<NSDictionary>().Select(fromDictionary).ToList();
+            return array?.Cast<NSDictionary>().Select(fromDictionary).ToList();
         }
 
         private NSDictionary toDictionary(Suggestion suggestion)

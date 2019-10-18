@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainInterface.storyboard" />
+    <InterfaceDefinition Include="SuggestionTableViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TodayViewController.cs" />
