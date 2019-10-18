@@ -144,7 +144,6 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" name="Background"/>
             <constraints>
                 <constraint firstItem="OxT-vM-sJG" firstAttribute="top" secondItem="1" secondAttribute="top" constant="16" id="1CD-a3-leH"/>
                 <constraint firstAttribute="bottom" secondItem="GcE-sU-iW3" secondAttribute="bottom" constant="16" id="ApI-CR-sBH"/>
