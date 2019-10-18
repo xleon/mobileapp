@@ -117,6 +117,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             CalendarCollectionView.LayoutIfNeeded();
+            View.BackgroundColor = ColorAssets.TableBackground;
         }
 
         public override void ViewWillAppear(bool animated)
