@@ -17,7 +17,7 @@ using Toggl.Core.UI.Onboarding.MainView;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
-using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.AppExtensions;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Helper;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Foundation;
-using Toggl.iOS.ExtensionKit.Models;
+using Toggl.iOS.AppExtensions.Models;
 using UIKit;
 
 namespace Toggl.iOS.TimerWidgetExtension

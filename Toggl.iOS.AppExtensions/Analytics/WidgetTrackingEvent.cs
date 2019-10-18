@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Toggl.Shared.Models;
 
-namespace Toggl.iOS.ExtensionKit.Analytics
+namespace Toggl.iOS.AppExtensions.Analytics
 {
     public enum WidgetTrackingEventType
     {

@@ -1,5 +1,5 @@
 ﻿using Toggl.Core.Services;
-using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.AppExtensions;
 
 namespace Toggl.iOS.Services
 {

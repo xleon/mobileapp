@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.AppExtensions;
 using Toggl.Shared.Extensions;
 using UIKit;
 

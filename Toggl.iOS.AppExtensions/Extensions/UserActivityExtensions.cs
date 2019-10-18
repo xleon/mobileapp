@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace Toggl.iOS.ExtensionKit.Extensions
+namespace Toggl.iOS.AppExtensions.Extensions
 {
     public static class UserActivityExtensions
     {

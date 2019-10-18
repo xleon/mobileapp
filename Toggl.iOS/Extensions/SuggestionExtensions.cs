@@ -1,5 +1,5 @@
 using Toggl.Core.Suggestions;
-using SharedSuggestion = Toggl.iOS.ExtensionKit.Models.Suggestion;
+using SharedSuggestion = Toggl.iOS.AppExtensions.Models.Suggestion;
 
 namespace Toggl.iOS.Extensions
 {

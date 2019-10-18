@@ -1,7 +1,7 @@
 using Foundation;
 using UIKit;
 
-namespace Toggl.iOS.ExtensionKit
+namespace Toggl.iOS.AppExtensions
 {
     public static class UILabelExtensions
     {

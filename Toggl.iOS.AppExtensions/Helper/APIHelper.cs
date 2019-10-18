@@ -1,9 +1,9 @@
 using Foundation;
-using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.AppExtensions;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 
-namespace Toggl.iOS.ExtensionKit
+namespace Toggl.iOS.AppExtensions
 {
     public class APIHelper
     {

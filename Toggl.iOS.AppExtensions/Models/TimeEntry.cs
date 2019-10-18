@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Toggl.Shared.Models;
 
-namespace Toggl.iOS.ExtensionKit.Models
+namespace Toggl.iOS.AppExtensions.Models
 {
     public class TimeEntry : ITimeEntry
     {

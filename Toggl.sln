@@ -49,7 +49,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.iOS.IntentBinding", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.iOS.SiriExtension", "Toggl.iOS.SiriExtension\Toggl.iOS.SiriExtension.csproj", "{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.iOS.ExtensionKit", "Toggl.iOS.ExtensionKit\Toggl.iOS.ExtensionKit.csproj", "{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.iOS.AppExtensions", "Toggl.iOS.AppExtensions\Toggl.iOS.AppExtensions.csproj", "{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toggl.iOS.SiriExtension.UI", "Toggl.iOS.SiriExtension.UI\Toggl.iOS.SiriExtension.UI.csproj", "{BC329A24-95D6-4D02-95B5-2AA699D8873A}"
 EndProject

@@ -2,7 +2,7 @@ using CoreGraphics;
 using Toggl.Shared;
 using UIKit;
 
-namespace Toggl.iOS.ExtensionKit.Extensions
+namespace Toggl.iOS.AppExtensions.Extensions
 {
     public static class ColorExtensions
     {

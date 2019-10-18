@@ -1,6 +1,6 @@
 using System;
 
-namespace Toggl.iOS.ExtensionKit.Models
+namespace Toggl.iOS.AppExtensions.Models
 {
     public sealed class Suggestion
     {

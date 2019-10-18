@@ -147,9 +147,9 @@
     <Compile Include="SuggestionsDataSource.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Toggl.iOS.ExtensionKit\Toggl.iOS.ExtensionKit.csproj">
+    <ProjectReference Include="..\Toggl.iOS.AppExtensions\Toggl.iOS.AppExtensions.csproj">
       <Project>{aca2821e-0ff9-4036-bff6-e775bb4e6732}</Project>
-      <Name>Toggl.iOS.ExtensionKit</Name>
+      <Name>Toggl.iOS.AppExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Toggl.Shared\Toggl.Shared.csproj">
       <Project>{6AF7BE5E-AF9D-4EA7-AF7F-28D07B8DEF24}</Project>

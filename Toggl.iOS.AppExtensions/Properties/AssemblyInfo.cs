@@ -3,7 +3,7 @@
 // Information about this assembly is defined by the following attributes.
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle("Toggl.iOS.ExtensionKit")]
+[assembly: AssemblyTitle("Toggl.iOS.AppExtensions")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]

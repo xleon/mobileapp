@@ -8,7 +8,7 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Suggestions;
 using Toggl.Core.UI.Services;
 using Toggl.iOS.Extensions;
-using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.AppExtensions;
 using Toggl.Shared;
 
 namespace Toggl.iOS.Services

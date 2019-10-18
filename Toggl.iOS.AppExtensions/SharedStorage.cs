@@ -1,11 +1,11 @@
 ﻿using System;
 using Foundation;
-using Toggl.iOS.ExtensionKit.Analytics;
-using Toggl.iOS.ExtensionKit.Extensions;
-using Toggl.iOS.ExtensionKit.Models;
+using Toggl.iOS.AppExtensions.Analytics;
+using Toggl.iOS.AppExtensions.Extensions;
+using Toggl.iOS.AppExtensions.Models;
 using Toggl.Shared.Models;
 
-namespace Toggl.iOS.ExtensionKit
+namespace Toggl.iOS.AppExtensions
 {
     public sealed partial class SharedStorage
     {

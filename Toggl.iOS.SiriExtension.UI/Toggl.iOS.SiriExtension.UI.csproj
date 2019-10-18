@@ -143,13 +143,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Toggl.iOS.AppExtensions\Toggl.iOS.AppExtensions.csproj">
+      <Project>{aca2821e-0ff9-4036-bff6-e775bb4e6732}</Project>
+      <Name>Toggl.iOS.AppExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Toggl.iOS.IntentBinding\Toggl.iOS.IntentBinding.csproj">
       <Project>{A1BBF640-E712-4E35-8E3F-AE07C7C7EDB0}</Project>
       <Name>Toggl.iOS.IntentBinding</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Toggl.iOS.ExtensionKit\Toggl.iOS.ExtensionKit.csproj">
-      <Project>{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}</Project>
-      <Name>Toggl.iOS.ExtensionKit</Name>
     </ProjectReference>
     <ProjectReference Include="..\Toggl.Networking\Toggl.Networking.csproj">
       <Project>{5aceb155-9dd4-4309-bcc9-997a09950393}</Project>

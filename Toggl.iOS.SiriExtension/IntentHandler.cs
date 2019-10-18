@@ -2,7 +2,7 @@
 using Intents;
 using Toggl.iOS.Intents;
 using System;
-using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.AppExtensions;
 
 namespace SiriExtension
 {
