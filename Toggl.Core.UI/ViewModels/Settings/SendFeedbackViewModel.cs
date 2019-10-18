@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using Toggl.Core.Interactors;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
@@ -68,21 +69,20 @@ namespace Toggl.Core.UI.ViewModels
             currentErrorSubject.OnNext(null);
         }
 
-        public override async void CloseWithDefaultResult()
+        public override async Task<bool> ConfirmCloseRequest()
         {
             var feedbackText = await FeedbackText.FirstAsync();
             if (!string.IsNullOrEmpty(feedbackText))
             {
                 var view = View;
-                if (view != null)
-                {
-                    var shouldDiscard = await View.ConfirmDestructiveAction(ActionType.DiscardFeedback);
-                    if (!shouldDiscard)
-                        return;
-                }
+                if (view == null)
+                    return true;
+
+                return await view
+                    .ConfirmDestructiveAction(ActionType.DiscardFeedback);
             }
 
-            base.CloseWithDefaultResult();
+            return true;
         }
 
         private IObservable<Unit> sendFeedback()

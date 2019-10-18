@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI.ViewModels
@@ -15,6 +16,6 @@ namespace Toggl.Core.UI.ViewModels
         void ViewDisappeared();
         void ViewDestroyed();
 
-        void CloseWithDefaultResult();
+        Task<bool> CloseWithDefaultResult();
     }
 }

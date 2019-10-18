@@ -151,7 +151,7 @@ namespace Toggl.iOS.ViewControllers
 
             // Actions
             CloseButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             DoneButton.Rx()

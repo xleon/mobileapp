@@ -48,7 +48,7 @@ namespace Toggl.iOS.ViewControllers.Settings
             TableView.Source = source;
 
             CloseButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
         }
     }

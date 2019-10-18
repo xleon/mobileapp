@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using CoreFoundation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
@@ -80,10 +81,8 @@ namespace Toggl.iOS.ViewControllers
             ViewModel?.ViewDestroyed();
         }
 
-        public void DismissFromNavigationController()
-        {
-            ViewModel.CloseWithDefaultResult();
-        }
+        public Task<bool> DismissFromNavigationController()
+            => ViewModel.CloseWithDefaultResult();
 
         public void Close()
         {

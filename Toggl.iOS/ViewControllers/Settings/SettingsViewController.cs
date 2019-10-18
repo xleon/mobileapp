@@ -41,7 +41,7 @@ namespace Toggl.iOS.ViewControllers
 
             NavigationItem.RightBarButtonItem = ReactiveNavigationController.CreateSystemItem(
                 UIBarButtonSystemItem.Done,
-                ViewModel.Close
+                () => ViewModel.Close()
             );
 
             var source = new SettingsTableViewSource(tableView);

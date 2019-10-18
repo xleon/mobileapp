@@ -97,9 +97,10 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        public override void CloseWithDefaultResult()
+        public override Task<bool> CloseWithDefaultResult()
         {
             Close(defaultResult);
+            return Task.FromResult(true);
         }
 
         private SelectableTagBaseViewModel toSelectableTagViewModel(TagSuggestion tagSuggestion)

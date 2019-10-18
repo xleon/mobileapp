@@ -1736,6 +1736,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task AsksForDestructiveActionConfirmationForSingleTimeEntry()
             {
+                await ViewModel.Initialize(new[] { 1L });
+
                 ViewModel.Delete.Execute();
                 TestScheduler.Start();
 
