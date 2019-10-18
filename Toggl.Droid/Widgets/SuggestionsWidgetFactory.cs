@@ -7,6 +7,10 @@ using System.Linq;
 using Toggl.Shared;
 using Color = Android.Graphics.Color;
 using Toggl.Droid.Extensions;
+using Android.App;
+using static Toggl.Droid.Widgets.WidgetsConstants;
+using static Android.App.PendingIntentFlags;
+using static Android.Content.ActivityFlags;
 
 namespace Toggl.Droid.Widgets
 {
@@ -60,6 +64,10 @@ namespace Toggl.Droid.Widgets
             var bottomBorderVisibility = (position != Count - 1).ToVisibility();
             view.SetViewVisibility(Resource.Id.BottomSeparator, bottomBorderVisibility);
 
+            var intent = new Intent();
+            intent.PutExtra(TappedSuggestionIndex, position);
+            view.SetOnClickFillInIntent(Resource.Id.RootLayout, intent);
+
             return view;
         }
 
@@ -92,9 +100,19 @@ namespace Toggl.Droid.Widgets
             view.SetRemoteAdapter(Resource.Id.SuggestionsList, intent);
             view.SetEmptyView(Resource.Id.SuggestionsList, Resource.Id.NoData);
 
+            var tapIntent = new Intent(context, JavaUtils.ToClass<SuggestionsWidget>());
+            tapIntent.SetAction(SuggestionTapped);
+            tapIntent.PutExtra(AppWidgetManager.ExtraAppwidgetId, widgetId);
+            var tapPendingIntent = PendingIntent.GetBroadcast(context, 0, tapIntent, UpdateCurrent);
+            view.SetPendingIntentTemplate(Resource.Id.SuggestionsList, tapPendingIntent);
+
             view.SetTextViewText(Resource.Id.Title, Resources.WorkingOnThese);
-            view.SetTextViewText(Resource.Id.ShowAllTimeEntriesLabel, Resources.ShowAllTimEntries);
             view.SetTextViewText(Resource.Id.NoData, Resources.NoSuggestionsAvailable);
+            view.SetTextViewText(Resource.Id.ShowAllTimeEntriesLabel, Resources.ShowAllTimEntries);
+
+            var openAppIntent = new Intent(context, typeof(SplashScreen)).SetFlags(TaskOnHome);
+            var openAppPendingIntent = PendingIntent.GetActivity(context, 0, openAppIntent, UpdateCurrent);
+            view.SetOnClickPendingIntent(Resource.Id.ShowAllTimeEntriesLabel, openAppPendingIntent);
 
             return view;
         }

@@ -373,7 +373,6 @@
     <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
     <Compile Include="Extensions\JavaExtensions.cs" />
-    <Compile Include="Extensions\WidgetsExtensions.cs" />
     <Compile Include="Fragments\ReportsCalendarFragment.cs" />
     <Compile Include="Helper\ActiveTheme.cs" />
     <Compile Include="Helper\AppWidgetProviderUtils.cs" />
@@ -382,6 +381,7 @@
     <Compile Include="Services\JobServicesConstants.cs" />
     <Compile Include="Services\FetchRemoteConfigServiceAndroid.cs" />
     <Compile Include="Services\SyncJobService.cs" />
+    <Compile Include="Services\WidgetsBackgroundService.cs" />
     <Compile Include="Services\WidgetsServiceAndroid.cs" />
     <Compile Include="Services\TogglFirebaseIIDService.cs" />
     <Compile Include="Services\TogglFirebaseMessagingService.cs" />
@@ -671,7 +671,6 @@
     <Compile Include="Widgets\WidgetDimensions.cs" />
     <Compile Include="Widgets\TimeEntryWidget.cs" />
     <Compile Include="Services\AccessibilityServiceAndroid.cs" />
-    <Compile Include="Services\TimerBackgroundService.cs" />
     <Compile Include="Widgets\TimeEntryWidgetFactory.cs" />
     <Compile Include="Widgets\TimeEntryWidgetNotLoggedInFormFactor.cs" />
     <Compile Include="Widgets\WidgetsConstants.cs" />

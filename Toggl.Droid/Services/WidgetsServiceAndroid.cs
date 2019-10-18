@@ -7,8 +7,8 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Suggestions;
 using Toggl.Core.UI.Services;
 using Toggl.Droid.Extensions;
+using Toggl.Droid.Helper;
 using Toggl.Droid.Widgets;
-using static Android.Appwidget.AppWidgetManager;
 
 namespace Toggl.Droid.Services
 {
@@ -21,13 +21,13 @@ namespace Toggl.Droid.Services
         protected override void OnRunningTimeEntryChanged(IThreadSafeTimeEntry timeEntry)
         {
             TimeEntryWidgetInfo.Save(timeEntry);
-            Application.Context.RequestActionFromWidget<TimeEntryWidget>(ActionAppwidgetUpdate);
+            AppWidgetProviderUtils.UpdateAllInstances<TimeEntryWidget>();
         }
 
         public override void OnSuggestionsUpdated(IImmutableList<Suggestion> suggestions)
         {
             WidgetSuggestionItem.SaveSuggestions(suggestions);
-            Application.Context.RequestActionFromWidget<SuggestionsWidget>(ActionAppwidgetUpdate);
+            AppWidgetProviderUtils.UpdateAllInstances<SuggestionsWidget>();
         }
     }
 }

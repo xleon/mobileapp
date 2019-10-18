@@ -15,6 +15,7 @@ namespace Toggl.Droid.Widgets
     {
         private const string prefix = "Suggestion";
 
+        public long WorkspaceId { get; private set; }
         public string Description { get; private set; }
         public long? ProjectId { get; private set; }
         public string ProjectName { get; private set; }
@@ -44,6 +45,7 @@ namespace Toggl.Droid.Widgets
             return new WidgetSuggestionItem
             {
                 ProjectId = projectId,
+                WorkspaceId = sharedPreferences.GetLong($"{prefix}{nameof(WorkspaceId)}{index}", 0),
                 Description = sharedPreferences.GetString($"{prefix}{nameof(Description)}{index}", ""),
                 ProjectName = sharedPreferences.GetString($"{prefix}{nameof(ProjectName)}{index}", ""),
                 ProjectColor = sharedPreferences.GetString($"{prefix}{nameof(ProjectColor)}{index}", null) ?? Colors.Black.ToHexString(),
@@ -65,6 +67,7 @@ namespace Toggl.Droid.Widgets
                 if (suggestion.ProjectId.HasValue)
                     prefsEditor.PutLong($"{prefix}{nameof(ProjectId)}{index}", suggestion.ProjectId.Value);
 
+                prefsEditor.PutLong($"{prefix}{nameof(WorkspaceId)}{index}", suggestion.WorkspaceId);
                 prefsEditor.PutString($"{prefix}{nameof(Description)}{index}", suggestion.Description);
                 prefsEditor.PutString($"{prefix}{nameof(ProjectName)}{index}", suggestion.ProjectName);
                 prefsEditor.PutString($"{prefix}{nameof(ProjectColor)}{index}", suggestion.ProjectColor);

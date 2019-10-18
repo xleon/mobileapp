@@ -22,5 +22,12 @@ namespace Toggl.Droid.Helper
 
             context.SendBroadcast(intent);
         }
+
+        public static PendingIntent ToBroadcastIntent<TWidgetProvider>(this string action, Context context) where TWidgetProvider : AppWidgetProvider
+        {
+            var intent = new Intent(context, typeof(TWidgetProvider));
+            intent.SetAction(action);
+            return PendingIntent.GetBroadcast(context, 0, intent, PendingIntentFlags.UpdateCurrent);
+        }
     }
 }

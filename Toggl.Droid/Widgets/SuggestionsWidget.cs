@@ -5,8 +5,11 @@ using Android.Content;
 using Android.OS;
 using Android.Widget;
 using Toggl.Droid.Extensions;
+using Toggl.Droid.Services;
 using Toggl.Droid.Widgets.Services;
 using Toggl.Shared;
+using static Toggl.Droid.Services.WidgetsBackgroundService;
+using static Toggl.Droid.Widgets.WidgetsConstants;
 
 namespace Toggl.Droid.Widgets
 {
@@ -15,6 +18,14 @@ namespace Toggl.Droid.Widgets
     [MetaData("android.appwidget.provider", Resource = "@xml/suggestionswidgetprovider")]
     public class SuggestionsWidget : AppWidgetProvider
     {
+        public override void OnReceive(Context context, Intent intent)
+        {
+            base.OnReceive(context, intent);
+
+            if (intent.Action == SuggestionTapped)
+                EnqueueWork(context, intent);
+        }
+
         public override void OnDeleted(Context context, int[] appWidgetIds)
         {
             reportInstallationState(context, false);

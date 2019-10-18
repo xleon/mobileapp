@@ -8,7 +8,7 @@ using System;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Widgets.Services;
 using Toggl.Shared;
-using static Toggl.Droid.Services.TimerBackgroundService;
+using static Toggl.Droid.Services.WidgetsBackgroundService;
 using static Toggl.Droid.Widgets.WidgetsConstants;
 using Color = Android.Graphics.Color;
 
