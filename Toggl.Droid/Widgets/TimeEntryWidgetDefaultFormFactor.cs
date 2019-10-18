@@ -2,6 +2,7 @@ using Android.Content;
 using Android.OS;
 using Android.Widget;
 using System;
+using Android.App;
 using static Android.Views.ViewStates;
 using Toggl.Droid.Extensions;
 using Android.Graphics;
@@ -17,6 +18,7 @@ namespace Toggl.Droid.Widgets
             var view = new RemoteViews(context.PackageName, Resource.Layout.TimeEntryWidget);
 
             SetupActionsForStartAndStopButtons(context, view);
+            view.SetOnClickPendingIntent(Resource.Id.RootLayout, getOpenAppToLoginPendingIntent(context));
 
             if (widgetInfo.IsRunning)
             {
@@ -73,6 +75,12 @@ namespace Toggl.Droid.Widgets
             }
 
             return view;
+        }
+
+        private PendingIntent getOpenAppToLoginPendingIntent(Context context)
+        {
+            var intent = new Intent(context, typeof(SplashScreen)).AddFlags(ActivityFlags.TaskOnHome);
+            return PendingIntent.GetActivity(context, 0, intent, PendingIntentFlags.UpdateCurrent);
         }
     }
 }
