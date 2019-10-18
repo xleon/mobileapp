@@ -280,7 +280,11 @@ namespace Toggl.iOS.ViewControllers
 
             ViewModel.SuggestionsViewModel.Suggestions
                 .ReemitWhen(traitCollectionSubject)
-                .Subscribe(suggestionsView.OnSuggestions)
+                .Subscribe(suggestions =>
+                {
+                    suggestionsView.OnSuggestions(suggestions);
+                    layoutTableHeader();
+                })
                 .DisposedBy(DisposeBag);
 
             // Intent Donation
@@ -371,6 +375,21 @@ namespace Toggl.iOS.ViewControllers
 
             suggestionsContaier.AddSubview(suggestionsView);
             suggestionsView.ConstrainInView(suggestionsContaier);
+
+            layoutTableHeader();
+        }
+
+        private void layoutTableHeader()
+        {
+            // This method makes little to no sense, but it works, and it comes from this accepted StackOverflow answer:
+            // https://stackoverflow.com/questions/16471846/is-it-possible-to-use-autolayout-with-uitableviews-tableheaderview
+            TimeEntriesLogTableView.TableHeaderView = tableHeader;
+            tableHeader.SetNeedsLayout();
+            tableHeader.LayoutIfNeeded();
+            var frame = tableHeader.Frame;
+            frame.Size = tableHeader.SystemLayoutSizeFittingSize(UIView.UILayoutFittingCompressedSize);
+            tableHeader.Frame = frame;
+            TimeEntriesLogTableView.TableHeaderView = tableHeader;
         }
 
         private EditTimeEntryInfo editEventInfo(LogItemViewModel item)
@@ -498,25 +517,6 @@ namespace Toggl.iOS.ViewControllers
 
             TimeEntriesLogTableView.BringSubviewToFront(TimeEntriesLogTableView.TableHeaderView);
 
-            if (TimeEntriesLogTableView.TableHeaderView != null)
-            {
-                var header = TimeEntriesLogTableView.TableHeaderView;
-                var size = header.SystemLayoutSizeFittingSize(UIView.UILayoutFittingCompressedSize);
-                if (header.Frame.Size.Height != size.Height)
-                {
-                    var headerRect = new CGRect
-                    {
-                        X = header.Frame.X,
-                        Y = header.Frame.Y,
-                        Width = header.Frame.Width,
-                        Height = size.Height
-                    };
-                    header.Frame = headerRect;
-                }
-                TimeEntriesLogTableView.TableHeaderView = header;
-                TimeEntriesLogTableView.SetNeedsLayout();
-            }
-
             if (viewInitialized) return;
 
             viewInitialized = true;
@@ -546,6 +546,7 @@ namespace Toggl.iOS.ViewControllers
             }
 
             hideRatingView();
+            layoutTableHeader();
         }
 
         private void showRatingView()
