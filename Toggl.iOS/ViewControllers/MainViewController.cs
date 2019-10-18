@@ -92,6 +92,13 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            TableShadow.Layer.MasksToBounds = false;
+            TableShadow.Layer.ShadowColor = UIColor.Black.CGColor;
+            TableShadow.Layer.ShadowOffset = new CGSize(0, 0);
+            TableShadow.Layer.ShadowOpacity = 0.1f;
+            TableShadow.Layer.ShadowRadius = 4;
+            TableShadow.Hidden = TraitCollection.HorizontalSizeClass != UIUserInterfaceSizeClass.Regular;
+
             var separator = NavigationController.NavigationBar.InsertSeparator();
             separator.BackgroundColor = ColorAssets.OpaqueSeparator;
 
@@ -449,6 +456,8 @@ namespace Toggl.iOS.ViewControllers
             base.TraitCollectionDidChange(previousTraitCollection);
             traitCollectionSubject.OnNext(Unit.Default);
             TimeEntriesLogTableView.ReloadData();
+
+            TableShadow.Hidden = TraitCollection.HorizontalSizeClass != UIUserInterfaceSizeClass.Regular;
         }
 
         private void trackSiriEvents()
