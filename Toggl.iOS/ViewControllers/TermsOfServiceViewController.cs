@@ -23,7 +23,8 @@ namespace Toggl.iOS.ViewControllers
 
         private readonly UIStringAttributes normalTextAttributes = new UIStringAttributes
         {
-            Font = UIFont.SystemFontOfSize(fontSize)
+            Font = UIFont.SystemFontOfSize(fontSize),
+            ForegroundColor = ColorAssets.Text
         };
 
         private readonly UIStringAttributes highlitedTextAttributes = new UIStringAttributes
