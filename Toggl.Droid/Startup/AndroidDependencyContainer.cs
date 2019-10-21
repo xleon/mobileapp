@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using System;
+using Com.Microsoft.Appcenter.Ingestion.Models.One;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Services;
@@ -125,5 +126,10 @@ namespace Toggl.Droid
 
         protected override IAccessibilityService CreateAccessibilityService()
             => new AccessibilityServiceAndroid();
+
+        protected override IWidgetsService CreateWidgetsService()
+        {
+            return new WidgetsServiceAndroid(DataSource);
+        }
     }
 }

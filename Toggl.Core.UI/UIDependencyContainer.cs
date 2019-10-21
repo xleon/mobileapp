@@ -13,11 +13,13 @@ namespace Toggl.Core.UI
         private readonly Lazy<ViewModelLoader> viewModelLoader;
         private readonly Lazy<INavigationService> navigationService;
         private readonly Lazy<IPermissionsChecker> permissionsService;
+        private Lazy<IWidgetsService> widgetsService;
 
         public IDeeplinkParser DeeplinkParser => deeplinkParser.Value;
         public ViewModelLoader ViewModelLoader => viewModelLoader.Value;
         public INavigationService NavigationService => navigationService.Value;
         public IPermissionsChecker PermissionsChecker => permissionsService.Value;
+        public IWidgetsService WidgetsService => widgetsService.Value;
 
         public static UIDependencyContainer Instance { get; protected set; }
 
@@ -28,6 +30,7 @@ namespace Toggl.Core.UI
             viewModelLoader = new Lazy<ViewModelLoader>(CreateViewModelLoader);
             navigationService = new Lazy<INavigationService>(CreateNavigationService);
             permissionsService = new Lazy<IPermissionsChecker>(CreatePermissionsChecker);
+            widgetsService = new Lazy<IWidgetsService>(CreateWidgetsService);
         }
 
         private IDeeplinkParser createDeeplinkParser()
@@ -35,6 +38,7 @@ namespace Toggl.Core.UI
 
         protected abstract INavigationService CreateNavigationService();
         protected abstract IPermissionsChecker CreatePermissionsChecker();
+        protected abstract IWidgetsService CreateWidgetsService();
 
         protected virtual ViewModelLoader CreateViewModelLoader() => new ViewModelLoader(this);
         protected override IErrorHandlingService CreateErrorHandlingService()
@@ -42,5 +46,17 @@ namespace Toggl.Core.UI
 
         protected override IRemoteConfigService CreateRemoteConfigService()
             => new RemoteConfigService(KeyValueStorage);
+
+        protected override void RecreateLazyUIDependenciesForLogin()
+        {
+            WidgetsService?.Dispose();
+            widgetsService = new Lazy<IWidgetsService>(CreateWidgetsService);
+        }
+
+        protected override void RecreateLazyUIDependenciesForLogout()
+        {
+            WidgetsService?.Dispose();
+            widgetsService = new Lazy<IWidgetsService>(CreateWidgetsService);
+        }
     }
 }

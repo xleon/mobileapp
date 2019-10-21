@@ -6,7 +6,7 @@ using IntentsUI;
 using System;
 using System.Globalization;
 using Toggl.iOS.Intents;
-using Toggl.iOS.ExtensionKit.Extensions;
+using Toggl.iOS.AppExtensions.Extensions;
 using Toggl.Shared;
 using UIKit;
 

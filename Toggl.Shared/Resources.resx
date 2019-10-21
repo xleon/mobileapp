@@ -1114,6 +1114,21 @@ Use them to add keywords to your time entries.</value>
     <data name="SiriNoCurrentEntryRunning" xml:space="preserve">
         <value>There's no entry currently running.</value>
     </data>
+    <data name="WidgetLogInToTrackTime" xml:space="preserve">
+        <value>Log in to track time.</value>
+    </data>
+    <data name="WidgetApiError" xml:space="preserve">
+        <value>Network connection failed.
+Open app to track offline.</value>
+    </data>
+    <data name="WidgetNoRunningTimeEntryError" xml:space="preserve">
+        <value>No running time entry found.
+Open app to start a new one.</value>
+    </data>
+    <data name="WidgetGenericError" xml:space="preserve">
+        <value>An error occured.
+Open app to track time.</value>
+    </data>
     <data name="Heading" xml:space="preserve">
         <value>Heading</value>
     </data>
@@ -1364,5 +1379,14 @@ to project members</value>
     </data>
     <data name="No" xml:space="preserve">
         <value>No</value>
+    </data>
+    <data name="LoginToTrack" xml:space="preserve">
+        <value>Log in to track time</value>
+    </data>
+    <data name="NoSuggestionsAvailable" xml:space="preserve">
+        <value>No suggestions available</value>
+    </data>
+    <data name="ShowAllTimEntries" xml:space="preserve">
+        <value>Show all time entries</value>
     </data>
 </root>

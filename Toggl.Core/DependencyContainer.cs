@@ -252,7 +252,11 @@ namespace Toggl.Core
                 Task.Run(() => creator.OnLogin(factory));
                 return factory;
             });
+
+            RecreateLazyUIDependenciesForLogin();
         }
+
+        protected abstract void RecreateLazyUIDependenciesForLogin();
 
         private void recreateLazyDependenciesForLogout()
         {
@@ -261,6 +265,10 @@ namespace Toggl.Core
             dataSource = new Lazy<ITogglDataSource>(CreateDataSource);
             syncManager = new Lazy<ISyncManager>(CreateSyncManager);
             interactorFactory = new Lazy<IInteractorFactory>(CreateInteractorFactory);
+
+            RecreateLazyUIDependenciesForLogout();
         }
+
+        protected abstract void RecreateLazyUIDependenciesForLogout();
     }
 }

@@ -1,0 +1,84 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
+using Toggl.iOS.AppExtensions.Exceptions;
+using Toggl.iOS.AppExtensions.Models;
+using Toggl.Networking;
+using Toggl.Shared;
+using Toggl.Shared.Models;
+using Toggl.Shared.Extensions;
+using System.Threading.Tasks;
+using Toggl.iOS.AppExtensions;
+using Toggl.iOS.AppExtensions.Analytics;
+
+namespace Toggl.iOS.TimerWidgetExtension
+{
+    internal class NetworkingHandler
+    {
+        private readonly ITogglApi togglApi;
+
+        public NetworkingHandler(ITogglApi togglApi)
+        {
+           Ensure.Argument.IsNotNull(togglApi, nameof(togglApi));
+
+           this.togglApi = togglApi;
+        }
+
+        public async Task<ITimeEntry> StartTimeEntry(TimeEntry timeEntry)
+        {
+            var createdTimeEntry = await togglApi.TimeEntries
+                .Create(timeEntry)
+                .Do(_ =>
+                {
+                    SharedStorage.Instance.SetNeedsSync(true);
+                    SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.StartTimer());
+                },
+                exception =>
+                {
+                    SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.Error(exception.Message));
+                })
+                .FirstAsync();
+            return createdTimeEntry;
+        }
+
+        public async Task StopRunningTimeEntry()
+        {
+            await togglApi.TimeEntries
+                .GetAll()
+                .Select(getRunningTimeEntry)
+                .Select(stopTimeEntry)
+                .Do(_ =>
+                {
+                    SharedStorage.Instance.SetNeedsSync(true);
+                    SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.StopTimer());
+                },
+                exception =>
+                {
+                    SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.Error(exception.Message));
+                })
+                .FirstAsync();
+        }
+
+        private async Task stopTimeEntry(ITimeEntry timeEntry)
+        {
+            var duration = (long)(DateTime.Now - timeEntry.Start).TotalSeconds;
+            await togglApi.TimeEntries.Update(
+                TimeEntry.from(timeEntry).with(duration)
+            );
+        }
+
+        private ITimeEntry getRunningTimeEntry(IList<ITimeEntry> timeEntries)
+        {
+            try
+            {
+                var runningTE = timeEntries.Where(te => te.Duration == null).First();
+                return runningTE;
+            }
+            catch
+            {
+                throw new NoRunningEntryException();
+            }
+        }
+    }
+}

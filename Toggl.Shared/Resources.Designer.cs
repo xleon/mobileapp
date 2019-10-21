@@ -2027,6 +2027,30 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string WidgetLogInToTrackTime {
+            get {
+                return ResourceManager.GetString("WidgetLogInToTrackTime", resourceCulture);
+            }
+        }
+        
+        public static string WidgetApiError {
+            get {
+                return ResourceManager.GetString("WidgetApiError", resourceCulture);
+            }
+        }
+        
+        public static string WidgetNoRunningTimeEntryError {
+            get {
+                return ResourceManager.GetString("WidgetNoRunningTimeEntryError", resourceCulture);
+            }
+        }
+        
+        public static string WidgetGenericError {
+            get {
+                return ResourceManager.GetString("WidgetGenericError", resourceCulture);
+            }
+        }
+        
         public static string Heading {
             get {
                 return ResourceManager.GetString("Heading", resourceCulture);
@@ -2506,22 +2530,40 @@ namespace Toggl.Shared {
                 return ResourceManager.GetString("RestartNeededMessage", resourceCulture);
             }
         }
-
+        
         public static string AppTheme {
             get {
                 return ResourceManager.GetString("AppTheme", resourceCulture);
             }
         }
-
+        
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
-
+        
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        public static string LoginToTrack {
+            get {
+                return ResourceManager.GetString("LoginToTrack", resourceCulture);
+            }
+        }
+
+        public static string NoSuggestionsAvailable {
+            get {
+                return ResourceManager.GetString("NoSuggestionsAvailable", resourceCulture);
+            }
+        }
+        
+        public static string ShowAllTimEntries {
+            get {
+                return ResourceManager.GetString("ShowAllTimEntries", resourceCulture);
             }
         }
     }

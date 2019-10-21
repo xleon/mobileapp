@@ -38,6 +38,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IBackgroundService backgroundService;
         private readonly IUserPreferences userPreferences;
         private readonly ISyncManager syncManager;
+        private readonly IWidgetsService timerWidgetService;
 
         public IObservable<IImmutableList<Suggestion>> Suggestions { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
@@ -54,7 +55,8 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             IBackgroundService backgroundService,
             IUserPreferences userPreferences,
-            ISyncManager syncManager)
+            ISyncManager syncManager,
+            IWidgetsService timerWidgetService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
@@ -67,6 +69,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
+            Ensure.Argument.IsNotNull(timerWidgetService, nameof(timerWidgetService));
 
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
@@ -78,6 +81,7 @@ namespace Toggl.Core.UI.ViewModels
             this.backgroundService = backgroundService;
             this.userPreferences = userPreferences;
             this.syncManager = syncManager;
+            this.timerWidgetService = timerWidgetService;
         }
 
         public override Task Initialize()
@@ -109,6 +113,7 @@ namespace Toggl.Core.UI.ViewModels
                 .SelectMany(isCalendarAuthorized => getSuggestions()
                     .Do(suggestions => trackPresentedSuggestions(suggestions, isCalendarAuthorized)))
                 .DistinctUntilChanged(suggestionsComparer)
+                .Do(timerWidgetService.OnSuggestionsUpdated)
                 .ObserveOn(schedulerProvider.BackgroundScheduler)
                 .AsDriver(onErrorJustReturn: ImmutableList.Create<Suggestion>(), schedulerProvider: schedulerProvider);
 

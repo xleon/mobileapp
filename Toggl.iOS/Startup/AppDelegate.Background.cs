@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Toggl.iOS.AppExtensions;
 using Toggl.Shared.Extensions;
 using UIKit;
 
@@ -10,6 +11,7 @@ namespace Toggl.iOS
     public partial class AppDelegate
     {
         private CompositeDisposable lastUpdateDateDisposable = new CompositeDisposable();
+        private readonly TimeSpan widgetInstallChangedInterval = TimeSpan.FromDays(3);
 
         public override void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
         {
@@ -24,6 +26,7 @@ namespace Toggl.iOS
         public override void OnActivated(UIApplication application)
         {
             observeAndStoreProperties();
+            detectTimerWidgetInstallStateChanged();
         }
 
         public override void WillEnterForeground(UIApplication application)
@@ -68,6 +71,29 @@ namespace Toggl.iOS
             catch (Exception)
             {
                 // Ignore errors when logged out
+            }
+        }
+
+        private void detectTimerWidgetInstallStateChanged()
+        {
+            var timeService = IosDependencyContainer.Instance.TimeService;
+            var analyticsService = IosDependencyContainer.Instance.AnalyticsService;
+            var isCurrentlyInstalled = SharedStorage.Instance.GetWidgetInstalled();
+            var lastUpdated = SharedStorage.Instance.GetWidgetUpdatedDate();
+
+            if (!lastUpdated.HasValue)
+                return;
+
+            if (isCurrentlyInstalled && timeService.CurrentDateTime - lastUpdated.Value >= widgetInstallChangedInterval)
+            {
+                SharedStorage.Instance.SetWidgetUpdatedDate(null);
+                SharedStorage.Instance.SetWidgetInstalled(false);
+                analyticsService.TimerWidgetInstallStateChange.Track(false);
+            }
+            else if (!isCurrentlyInstalled)
+            {
+                SharedStorage.Instance.SetWidgetInstalled(true);
+                analyticsService.TimerWidgetInstallStateChange.Track(true);
             }
         }
     }

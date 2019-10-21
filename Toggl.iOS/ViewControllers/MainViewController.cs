@@ -18,7 +18,7 @@ using Toggl.Core.UI.Onboarding.MainView;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
-using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.AppExtensions;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Helper;
@@ -434,7 +434,17 @@ namespace Toggl.iOS.ViewControllers
 
         private void trackSiriEvents()
         {
-            var events = SharedStorage.instance.PopTrackableEvents();
+            var events = SharedStorage.Instance.PopSiriTrackableEvents();
+
+            events?
+                .Select(e => e?.ToTrackableEvent())
+                .Where(e => e != null)
+                .Do(ViewModel.Track);
+        }
+
+        private void trackWidgetEvents()
+        {
+            var events = SharedStorage.Instance.PopWidgetTrackableEvents();
 
             events?
                 .Select(e => e?.ToTrackableEvent())
@@ -444,12 +454,13 @@ namespace Toggl.iOS.ViewControllers
 
         private void onApplicationDidBecomeActive(NSNotification notification)
         {
-            if (SharedStorage.instance.GetNeedsSync())
+            if (SharedStorage.Instance.GetNeedsSync())
             {
-                SharedStorage.instance.SetNeedsSync(false);
+                SharedStorage.Instance.SetNeedsSync(false);
                 ViewModel.Refresh.Execute();
             }
             trackSiriEvents();
+            trackWidgetEvents();
         }
 
         private void toggleUndoDeletion(int? numberOfTimeEntriesPendingDeletion)

@@ -33,6 +33,10 @@ using static Toggl.Core.Sync.SyncProgress;
 using static Toggl.Core.Analytics.EditTimeEntryOrigin;
 using FoundationResources = Toggl.Shared.Resources;
 using System.Linq;
+using Android.Content;
+using Toggl.Droid.Widgets;
+using Android.Appwidget;
+using Toggl.Droid.Services;
 
 namespace Toggl.Droid.Fragments
 {

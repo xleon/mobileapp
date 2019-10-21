@@ -4,6 +4,7 @@ using System.Reactive;
 using Toggl.Core.Login;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
+using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 using Toggl.Networking;
@@ -30,6 +31,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
         protected IUpdateRemoteConfigCacheService UpdateRemoteConfigCacheService { get; } = Substitute.For<IUpdateRemoteConfigCacheService>();
         protected IErrorHandlingService ErrorHandlingService { get; } = Substitute.For<IErrorHandlingService>();
         protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
+
+        protected IWidgetsService TimerWidgetService { get; } = Substitute.For<IWidgetsService>();
 
         protected TestScheduler TestScheduler { get; }
         protected IRxActionFactory RxActionFactory { get; }

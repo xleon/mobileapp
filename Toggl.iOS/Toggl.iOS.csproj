@@ -1426,6 +1426,7 @@
     <Compile Include="Extensions\Reactive\UISliderExtensions.cs" />
     <Compile Include="Extensions\Reactive\WheelForegroundViewExtensions.cs" />
     <Compile Include="Extensions\SectionedIndexExtensions.cs" />
+    <Compile Include="Extensions\SuggestionExtensions.cs" />
     <Compile Include="Extensions\ViewControllerExtensions.cs" />
     <Compile Include="Helper\PermissionsHelper.cs" />
     <Compile Include="Presentation\IosPresenter.cs" />
@@ -1450,6 +1451,7 @@
     <Compile Include="Services\PushNotificationsTokenServiceIos.cs" />
     <Compile Include="Services\IntentDonationService.cs" />
     <Compile Include="Services\FetchRemoteConfigServiceIos.cs" />
+    <Compile Include="Services\WidgetsServiceIos.cs" />
     <Compile Include="Services\UserDefaultsStorageIos.cs" />
     <Compile Include="Services\WatchService.cs" />
     <Compile Include="Startup\AppDelegate.Deeplink.cs">
@@ -1998,6 +2000,8 @@
     <Compile Include="ViewSources\Generic\Common\SelectorTableViewSource.cs" />
     <Compile Include="Helper\Handoff.cs" />
     <Compile Include="Extensions\TextViewExtensions.cs" />
+    <Compile Include="Analytics\WidgetTrackingEventExtensions.cs" />
+    <Compile Include="Analytics\WidgetErrorTrackingEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">
@@ -2007,6 +2011,10 @@
     <ProjectReference Include="..\Toggl.Core\Toggl.Core.csproj">
       <Project>{09D75C0B-3367-4678-97EF-6EADE64AF09C}</Project>
       <Name>Toggl.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Toggl.iOS.AppExtensions\Toggl.iOS.AppExtensions.csproj">
+      <Project>{aca2821e-0ff9-4036-bff6-e775bb4e6732}</Project>
+      <Name>Toggl.iOS.AppExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Toggl.Storage\Toggl.Storage.csproj">
       <Project>{3A603451-31B2-4975-9366-3212BEA78F57}</Project>
@@ -2033,14 +2041,15 @@
       <Project>{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}</Project>
       <Name>Toggl.iOS.SiriExtension</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.iOS.ExtensionKit\Toggl.iOS.ExtensionKit.csproj">
-      <Project>{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}</Project>
-      <Name>Toggl.iOS.ExtensionKit</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Toggl.iOS.SiriExtension.UI\Toggl.iOS.SiriExtension.UI.csproj">
       <IsAppExtension>true</IsAppExtension>
       <Project>{BC329A24-95D6-4D02-95B5-2AA699D8873A}</Project>
       <Name>Toggl.iOS.SiriExtension.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Toggl.iOS.TimerWidgetExtension\Toggl.iOS.TimerWidgetExtension.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Project>{0C219958-CAD1-4B1B-BBCB-D12CC6E11F49}</Project>
+      <Name>Toggl.iOS.TimerWidgetExtension</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
