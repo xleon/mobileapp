@@ -35,6 +35,7 @@ namespace Toggl.iOS.ViewControllers.Settings
             TableView.TableFooterView = new UIView(CGRect.Empty);
             TableView.RegisterNibForCellReuse(UpcomingEventsOptionCell.Nib, UpcomingEventsOptionCell.Identifier);
             TableView.RowHeight = rowHeight;
+            TableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
             var source = new CustomTableViewSource<CalendarSectionModel, Unit, SelectableCalendarNotificationsOptionViewModel>(
                 UpcomingEventsOptionCell.CellConfiguration(UpcomingEventsOptionCell.Identifier),
