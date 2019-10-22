@@ -114,13 +114,6 @@ namespace Toggl.iOS.ViewControllers
             viewInitialized = true;
         }
 
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-
-            EmailTextField.BecomeFirstResponder();
-        }
-
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
         {
             ResetPasswordButtonBottomConstraint.Constant = e.FrameEnd.Height + resetButtonBottomSpacing;
@@ -142,6 +135,7 @@ namespace Toggl.iOS.ViewControllers
                 UIControlState.Disabled
             );
 
+            EmailTextField.BecomeFirstResponder();
             EmailTextField.Rx().ShouldReturn()
                 .Subscribe(ViewModel.Reset.Inputs)
                 .DisposedBy(DisposeBag);
