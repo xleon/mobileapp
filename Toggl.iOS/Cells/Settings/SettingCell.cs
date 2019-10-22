@@ -31,7 +31,7 @@ namespace Toggl.iOS.Cells.Settings
         {
             TitleLabel.TextColor = ColorAssets.Text;
             DetailLabel.TextColor = ColorAssets.Text2;
-            ContentView.InsertSeparator();
+            this.InsertSeparator();
         }
 
         public override void PrepareForReuse()
