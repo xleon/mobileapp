@@ -8,6 +8,7 @@ namespace Toggl.iOS.AppExtensions
 {
     public partial class SharedStorage
     {
+        private const string tagsSeparator = ",";
         private const string suggestionWorkspaceId = "WorkspaceId";
         private const string suggestionDescription = "Description";
         private const string suggestionProjectId = "ProjectId";
@@ -51,6 +52,8 @@ namespace Toggl.iOS.AppExtensions
                 dict.SetStringForKey(suggestion.TaskName, suggesitonTaskName);
             }
 
+            var tagIds = string.Join(tagsSeparator, suggestion.TagIds.ToArray());
+            dict.SetStringForKey(tagIds, suggestionTagIds);
             dict.SetBoolForKey(suggestion.IsBillable, suggestionIsBillable);
 
             return dict;
@@ -71,6 +74,11 @@ namespace Toggl.iOS.AppExtensions
             var clientName = dict.GetStringForKey(suggestionClientName);
             var isBillable = dict.GetBoolForKey(suggestionIsBillable).Value;
 
+            var tagIdsString = dict.GetStringForKey(suggestionTagIds);
+            var tagIds = string.IsNullOrEmpty(tagIdsString)
+                ? new long[0]
+                : tagIdsString.Split(tagsSeparator).Select(long.Parse).ToArray();
+
             return new Suggestion(
                 workspaceId,
                 description,
@@ -80,7 +88,8 @@ namespace Toggl.iOS.AppExtensions
                 taskId,
                 taskName,
                 clientName,
-                isBillable);
+                isBillable,
+                tagIds);
         }
     }
 }
