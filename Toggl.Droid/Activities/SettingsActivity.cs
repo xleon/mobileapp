@@ -34,6 +34,7 @@ namespace Toggl.Droid.Activities
         protected override void InitializeBindings()
         {
             scrollView.AttachMaterialScrollBehaviour(appBarLayout);
+            measureLayoutWith(scrollView);
 
             versionTextView.Text = ViewModel.Version;
 

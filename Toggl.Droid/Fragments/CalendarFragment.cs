@@ -50,6 +50,7 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
+            measureLayoutWith(calendarViewPager);
 
             calendarDayAdapter = new CalendarDayFragmentAdapter(ViewModel, scrollToStartSignaler, ChildFragmentManager);
             calendarViewPager.Adapter = calendarDayAdapter;

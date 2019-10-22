@@ -6,7 +6,9 @@ using AndroidX.AppCompat.App;
 using AndroidX.AppCompat.Widget;
 using Android.Views;
 using System;
+using System.Diagnostics;
 using System.Reactive.Disposables;
+using Android.Util;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Extensions;
@@ -26,6 +28,26 @@ namespace Toggl.Droid.Activities
         protected abstract void InitializeBindings();
         protected CompositeDisposable DisposeBag { get; private set; } = new CompositeDisposable();
 
+        private Stopwatch stopwatch;
+        private bool hasMeasured = false;
+        private void layoutHandler (object sender, EventArgs args)
+        {
+            if (hasMeasured) return;
+            Log.Error("xxaa", $"{this.Class.SimpleName} layout: {stopwatch.ElapsedMilliseconds}");
+
+            var viewTreeObs = (ViewTreeObserver)sender;
+            if(viewTreeObs.IsAlive)
+                viewTreeObs.GlobalLayout -= layoutHandler;
+            
+            hasMeasured = true;
+        }
+
+        protected void measureLayoutWith(View view)
+        {
+            hasMeasured = false;
+            stopwatch = Stopwatch.StartNew();
+            view.ViewTreeObserver.GlobalLayout += layoutHandler;
+        }
         public TViewModel ViewModel { get; private set; }
 
         protected ReactiveActivity(
