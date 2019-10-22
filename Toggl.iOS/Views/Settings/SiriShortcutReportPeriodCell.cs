@@ -3,6 +3,7 @@ using System;
 using Toggl.Core.Models;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views.Settings
@@ -28,6 +29,7 @@ namespace Toggl.iOS.Views.Settings
             TextLabel.Text = string.Empty;
             SelectedImageView.Hidden = true;
             SelectionStyle = UITableViewCellSelectionStyle.None;
+            ContentView.InsertSeparator();
         }
 
         protected override void UpdateView()

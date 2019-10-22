@@ -1319,6 +1319,8 @@
     <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark%403x.png" />
     <ImageAsset Include="Resources\Colors.xcassets\ErrorText.colorset\Contents.json" />
     <ImageAsset Include="Resources\Colors.xcassets\ErrorBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboard.imageset\pasteFromClipboard_Dark.pdf" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboardEnabled.imageset\pasteFromClipboardEnabled_Dark.pdf" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationProject.imageset\icIllustrationProjects_Dark.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationProject.imageset\icIllustrationProjects_Dark%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationProject.imageset\icIllustrationProjects_Dark%403x.png" />

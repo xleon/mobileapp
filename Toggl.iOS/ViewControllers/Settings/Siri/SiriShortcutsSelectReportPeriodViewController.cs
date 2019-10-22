@@ -39,6 +39,7 @@ namespace Toggl.iOS.ViewControllers.Settings
             NavigationItem.Title = Resources.ReportPeriod;
             SelectWorkspaceCellLabel.Text = Resources.SelectWorkspace;
 
+            TableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             TableView.RegisterNibForCellReuse(SiriShortcutReportPeriodCell.Nib, SiriShortcutReportPeriodCell.Identifier);
 
             TableView.RowHeight = rowHeight;
