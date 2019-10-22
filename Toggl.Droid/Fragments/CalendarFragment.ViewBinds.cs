@@ -1,8 +1,11 @@
+using System;
+using System.Linq;
+using Android.Support.Constraints;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
 using Android.Views;
 using Android.Widget;
-using Toggl.Droid.Views.Calendar;
+using Toggl.Droid.Extensions;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace Toggl.Droid.Fragments
@@ -12,6 +15,9 @@ namespace Toggl.Droid.Fragments
         private TextView headerTimeEntriesDurationTextView;
         private TextView headerDateTextView;
         private ViewPager calendarViewPager;
+        private ViewPager calendarWeekStripePager;
+        private ConstraintLayout calendarWeekStripeLabelsContainer;
+        private TextView[] calendarWeekStripeHeaders;
         private AppBarLayout appBarLayout;
         private Toolbar toolbar;
 
@@ -21,6 +27,14 @@ namespace Toggl.Droid.Fragments
             headerTimeEntriesDurationTextView = view.FindViewById<TextView>(Resource.Id.HeaderTimeEntriesDurationTextView);
             appBarLayout = view.FindViewById<AppBarLayout>(Resource.Id.HeaderView);
             calendarViewPager = view.FindViewById<ViewPager>(Resource.Id.Pager);
+            calendarWeekStripePager = view.FindViewById<ViewPager>(Resource.Id.WeekStripePager);
+            calendarWeekStripeLabelsContainer = view.FindViewById<ConstraintLayout>(Resource.Id.CalendarWeekStripeLabels);
+            calendarWeekStripeHeaders = calendarWeekStripeLabelsContainer.GetChildren().Cast<TextView>().ToArray();
+                
+            if (calendarWeekStripeHeaders.Length != NumberOfDaysInTheWeek) {
+                throw new ArgumentOutOfRangeException($"Week headers should contain exactly {NumberOfDaysInTheWeek} text views");
+            }
+            
             toolbar = view.FindViewById<Toolbar>(Resource.Id.Toolbar);
         }
 
