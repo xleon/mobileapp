@@ -3,6 +3,7 @@ using System.Linq;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Cells.Settings;
+using Toggl.iOS.Extensions;
 using Toggl.iOS.ViewSources.Generic.TableView;
 using Toggl.Shared;
 using UIKit;
@@ -41,6 +42,7 @@ namespace Toggl.iOS.ViewControllers
             );
 
             TableView.Source = source;
+            TableView.BackgroundColor = ColorAssets.TableBackground;
         }
     }
 }
