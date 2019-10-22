@@ -1,6 +1,7 @@
 using Android.OS;
 using Android.Views;
 using System;
+using System.Reactive;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -12,6 +13,7 @@ using Android.Support.V4.App;
 using Android.Support.V4.View;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Droid.Activities;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Fragments.Calendar;
@@ -24,7 +26,7 @@ using Toggl.Shared.Extensions.Reactive;
 
 namespace Toggl.Droid.Fragments
 {
-    public partial class CalendarFragment : ReactiveTabFragment<CalendarViewModel>, IScrollableToStart
+    public partial class CalendarFragment : ReactiveTabFragment<CalendarViewModel>, IScrollableToStart, IBackPressHandler
     {
         public static int NumberOfDaysInTheWeek = 7;
         private const int calendarPagesCount = 14;
@@ -63,6 +65,10 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(updateAppbarElevation)
                 .DisposedBy(DisposeBag);
 
+            calendarDayAdapter.MenuVisibilityRelay
+                .Subscribe(swipeIsLocked => calendarViewPager.IsLocked = swipeIsLocked)
+                .DisposedBy(DisposeBag);
+
             var startingCalendarDayViewPage = calculateDayViewPage(ViewModel.CurrentlyShownDate.Value);
             calendarViewPager.SetCurrentItem(startingCalendarDayViewPage, false);
             
@@ -87,6 +93,12 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(calendarWeekStripeAdapter.UpdateSelectedDay)
                 .DisposedBy(DisposeBag);
             
+            calendarDayAdapter.MenuVisibilityRelay
+                .Select(CommonFunctions.Invert)
+                .Subscribe(hideBottomBar)
+                .DisposedBy(DisposeBag);
+
+            calendarViewPager.SetCurrentItem(calendarPagesCount - 1, false);
             ViewModel.CurrentlyShownDate
                 .Select(calculateDayViewPage)
                 .Subscribe(page => calendarViewPager.SetCurrentItem(page, true))
@@ -133,8 +145,29 @@ namespace Toggl.Droid.Fragments
                 .ForEach((textView, day) => textView.Text = days[day].Initial());
         }
 
+        public bool HandledBackPress()
+        {
+            if (calendarDayAdapter?.MenuVisibilityRelay.Value == true)
+            {
+                calendarDayAdapter?.OnBackPressed();   
+                return true;
+            }
+
+            return false;
+        }
+
+        private void hideBottomBar(bool bottomBarShouldBeHidden)
+        {
+            (Activity as MainTabBarActivity)?.ChangeBottomBarVisibility(bottomBarShouldBeHidden);
+            calendarViewPager.PostInvalidateOnAnimation();
+            calendarDayAdapter?.InvalidateCurrentPage();
+        }
+
         public void ScrollToStart()
         {
+            if (calendarDayAdapter?.MenuVisibilityRelay.Value == true)
+                return;
+            
             scrollToStartSignaler.OnNext(true);
             calendarViewPager.SetCurrentItem(calendarPagesCount - 1, true);
         }
@@ -145,6 +178,9 @@ namespace Toggl.Droid.Fragments
             if (hasResumedOnce) 
                 return;
             hasResumedOnce = true;
+            
+            if (calendarDayAdapter?.MenuVisibilityRelay.Value == true)
+                return;
             
             scrollToStartSignaler.OnNext(false);
         }
@@ -181,7 +217,8 @@ namespace Toggl.Droid.Fragments
 
             public void TransformPage(View page, float position)
             {
-                ((CalendarDayView) page).SetOffset(verticalOffsetProvider.Value);
+                var calendarDayView = page.FindViewById<CalendarDayView>(Resource.Id.CalendarDayView);
+                calendarDayView?.SetOffset(verticalOffsetProvider.Value);
             }
         }
 
@@ -189,8 +226,11 @@ namespace Toggl.Droid.Fragments
         {
             private readonly CalendarViewModel calendarViewModel;
             private readonly IObservable<bool> scrollToTopSign;
+            private readonly ISubject<Unit> pageNeedsToBeInvalidated = new Subject<Unit>();
+            private readonly ISubject<Unit> backPressSubject = new Subject<Unit>();
             public BehaviorRelay<int> OffsetRelay { get; } = new BehaviorRelay<int>(0);
             public BehaviorRelay<int> CurrentPageRelay { get; } = new BehaviorRelay<int>(0);
+            public BehaviorRelay<bool> MenuVisibilityRelay { get; } = new BehaviorRelay<bool>(false);
 
             public CalendarDayFragmentAdapter(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
             {
@@ -210,10 +250,23 @@ namespace Toggl.Droid.Fragments
                     ViewModel = calendarViewModel.DayViewModelAt(-(Count - 1 - position)),
                     ScrollOffsetRelay = OffsetRelay,
                     CurrentPageRelay = CurrentPageRelay,
+                    MenuVisibilityRelay =  MenuVisibilityRelay,
                     PageNumber = position,
-                    ScrollToStartSign = scrollToTopSign
+                    ScrollToStartSign = scrollToTopSign,
+                    InvalidationListener = pageNeedsToBeInvalidated.AsObservable(),
+                    BackPressListener = backPressSubject.AsObservable()
                 };
 
+            public void InvalidateCurrentPage()
+            {
+                pageNeedsToBeInvalidated.OnNext(Unit.Default);
+            }
+
+            public void OnBackPressed()
+            {
+                backPressSubject.OnNext(Unit.Default);
+            }
+            
             public void OnPageSelected(int position)
                 => CurrentPageRelay.Accept(position);
 

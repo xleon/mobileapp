@@ -14,7 +14,7 @@ namespace Toggl.Droid.Fragments
     {
         private TextView headerTimeEntriesDurationTextView;
         private TextView headerDateTextView;
-        private ViewPager calendarViewPager;
+        private LockableViewPager calendarViewPager;
         private ViewPager calendarWeekStripePager;
         private ConstraintLayout calendarWeekStripeLabelsContainer;
         private TextView[] calendarWeekStripeHeaders;
@@ -26,7 +26,7 @@ namespace Toggl.Droid.Fragments
             headerDateTextView = view.FindViewById<TextView>(Resource.Id.HeaderDateTextView);
             headerTimeEntriesDurationTextView = view.FindViewById<TextView>(Resource.Id.HeaderTimeEntriesDurationTextView);
             appBarLayout = view.FindViewById<AppBarLayout>(Resource.Id.HeaderView);
-            calendarViewPager = view.FindViewById<ViewPager>(Resource.Id.Pager);
+            calendarViewPager = view.FindViewById<LockableViewPager>(Resource.Id.Pager);
             calendarWeekStripePager = view.FindViewById<ViewPager>(Resource.Id.WeekStripePager);
             calendarWeekStripeLabelsContainer = view.FindViewById<ConstraintLayout>(Resource.Id.CalendarWeekStripeLabels);
             calendarWeekStripeHeaders = calendarWeekStripeLabelsContainer.GetChildren().Cast<TextView>().ToArray();
