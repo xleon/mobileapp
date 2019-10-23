@@ -1,6 +1,6 @@
 using System;
 using Toggl.Core.Analytics;
-using Toggl.iOS.AppExtensions.Analytics;
+using Toggl.iOS.Shared.Analytics;
 
 namespace Toggl.iOS
 {

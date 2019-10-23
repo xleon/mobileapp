@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation;
-using Toggl.iOS.AppExtensions.Extensions;
-using Toggl.iOS.AppExtensions.Models;
+using Toggl.iOS.Shared.Extensions;
+using Toggl.iOS.Shared.Models;
 using Toggl.Shared;
 using UIKit;
 
@@ -19,6 +19,13 @@ namespace Toggl.iOS.TimerWidgetExtension
 
         protected SuggestionTableViewCell(IntPtr handle) : base(handle)
         {
+        }
+
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+
+            StartView.SetTemplateColor(ColorAssets.Text1);
         }
 
         public void PopulateCell(Suggestion suggestion)

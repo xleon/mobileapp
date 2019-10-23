@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.iOS.AppExtensions.Exceptions;
-using Toggl.iOS.AppExtensions.Models;
+using Toggl.iOS.Shared.Exceptions;
+using Toggl.iOS.Shared.Models;
 using Toggl.Networking;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.Shared.Extensions;
 using System.Threading.Tasks;
-using Toggl.iOS.AppExtensions;
-using Toggl.iOS.AppExtensions.Analytics;
+using Toggl.iOS.Shared;
+using Toggl.iOS.Shared.Analytics;
 
 namespace Toggl.iOS.TimerWidgetExtension
 {

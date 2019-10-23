@@ -143,9 +143,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Toggl.iOS.AppExtensions\Toggl.iOS.AppExtensions.csproj">
+    <ProjectReference Include="..\Toggl.iOS.Shared\Toggl.iOS.Shared.csproj">
       <Project>{aca2821e-0ff9-4036-bff6-e775bb4e6732}</Project>
-      <Name>Toggl.iOS.AppExtensions</Name>
+      <Name>Toggl.iOS.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\Toggl.iOS.IntentBinding\Toggl.iOS.IntentBinding.csproj">
       <Project>{A1BBF640-E712-4E35-8E3F-AE07C7C7EDB0}</Project>

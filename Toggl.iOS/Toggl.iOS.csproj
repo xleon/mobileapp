@@ -1268,25 +1268,8 @@
     <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_1024pt.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\Colors.xcassets\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\Background.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\Text.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\Text2.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\Separator.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\OpaqueSeparator.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\TableBackground.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CellBackground.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\Text3.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\Text4.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CustomGray.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CustomGray2.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CustomGray3.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CustomGray4.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CustomGray5.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CustomGray6.colorset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo%402x.png" />
-    <ImageAsset Include="Resources\Colors.xcassets\InverseText.colorset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpiderDark.png" />
     <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpiderDark%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpiderDark%403x.png" />
@@ -1296,17 +1279,34 @@
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorSpider.imageset\icIllustrationErrorSpiderDark.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorSpider.imageset\icIllustrationErrorSpiderDark%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorSpider.imageset\icIllustrationErrorSpiderDark%403x.png" />
-    <ImageAsset Include="Resources\Colors.xcassets\Text1.colorset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogoDark-1.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogoDark%402x-1.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogoDark%403x-1.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogoBig.imageset\logoBigDark-1.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogoBig.imageset\logoBigDark%402x-1.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogoBig.imageset\logoBigDark%403x-1.png" />
-    <ImageAsset Include="Resources\Colors.xcassets\Spider.colorset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark.png" />
     <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark%403x.png" />
+    <ImageAsset Include="Resources\Colors.xcassets\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Spider.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text4.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\TableBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CellBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Background.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text2.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text3.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray6.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Separator.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray2.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray3.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\InverseText.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray5.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray4.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\OpaqueSeparator.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text1.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text.colorset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -2012,9 +2012,9 @@
       <Project>{09D75C0B-3367-4678-97EF-6EADE64AF09C}</Project>
       <Name>Toggl.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.iOS.AppExtensions\Toggl.iOS.AppExtensions.csproj">
+    <ProjectReference Include="..\Toggl.iOS.Shared\Toggl.iOS.Shared.csproj">
       <Project>{aca2821e-0ff9-4036-bff6-e775bb4e6732}</Project>
-      <Name>Toggl.iOS.AppExtensions</Name>
+      <Name>Toggl.iOS.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\Toggl.Storage\Toggl.Storage.csproj">
       <Project>{3A603451-31B2-4975-9366-3212BEA78F57}</Project>
@@ -2085,26 +2085,6 @@
     <Folder Include="Resources\Images.xcassets\thumbsdown.imageset\" />
     <Folder Include="Resources\Images.xcassets\thumbsup.imageset\" />
     <Folder Include="Resources\Images.xcassets\togglLogoBig.imageset\" />
-    <Folder Include="Resources\Colors.xcassets\Background.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\Text.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\Text2.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\Separator.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\NavigationBarShadow.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\OpaqueSeparator.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\TableBackground.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\CellBackground.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\Text3.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\Text4.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\CustomGray.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\CustomGray2.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\CustomGray3.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\CustomGray4.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\CustomGray5.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\CustomGray6.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\InverseText.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\InverseBackground.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\Text1.colorset\" />
-    <Folder Include="Resources\Colors.xcassets\Spider.colorset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />
