@@ -43,7 +43,7 @@ namespace Toggl.iOS.Views.Settings
             else
             {
                 DetailLabel.Text = $"\"{Item.InvocationPhrase}\"";
-                DetailLabel.TextColor = Colors.Siri.InvocationPhrase.ToNativeColor();
+                DetailLabel.TextColor = ColorAssets.Text2;
             }
         }
     }
