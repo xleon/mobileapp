@@ -701,6 +701,7 @@
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\color\FlatButtonTextColor.xml" />
     <AndroidResource Include="Resources\color\ToolbarButtonTextColor.xml" />
+    <AndroidResource Include="Resources\drawable\ic_calendar.xml" />
     <AndroidResource Include="Resources\drawable\ic_copy.xml" />
     <AndroidResource Include="Resources\drawable\ic_delete.xml" />
     <AndroidResource Include="Resources\drawable\ic_edit.xml" />
