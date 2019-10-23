@@ -75,6 +75,12 @@ namespace Toggl.Core.UI.ViewModels
         {
         }
 
+        public void ViewWasClosed()
+        {
+            resultCompletionSource.TrySetResult(default);
+            View = null;
+        }
+
         public Task<TNavigationOutput> Navigate<TViewModel, TNavigationInput, TNavigationOutput>(TNavigationInput payload)
             where TViewModel : ViewModel<TNavigationInput, TNavigationOutput>
             => navigationService.Navigate<TViewModel, TNavigationInput, TNavigationOutput>(payload, View);

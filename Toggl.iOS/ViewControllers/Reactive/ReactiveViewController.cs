@@ -84,6 +84,11 @@ namespace Toggl.iOS.ViewControllers
         public Task<bool> DismissFromNavigationController()
             => ViewModel.CloseWithDefaultResult();
 
+        public void ViewcontrollerWasPopped()
+        {
+            ViewModel.ViewWasClosed();
+        }
+
         public void Close()
         {
             DispatchQueue.MainQueue.DispatchAsync(this.Dismiss);

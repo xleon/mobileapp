@@ -17,5 +17,6 @@ namespace Toggl.Core.UI.ViewModels
         void ViewDestroyed();
 
         Task<bool> CloseWithDefaultResult();
+        void ViewWasClosed();
     }
 }
