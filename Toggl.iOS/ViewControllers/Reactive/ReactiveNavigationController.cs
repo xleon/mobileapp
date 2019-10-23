@@ -43,17 +43,6 @@ namespace Toggl.iOS.ViewControllers
             setupAppearance();
         }
 
-        public override UIViewController PopViewController(bool animated)
-        {
-            var viewControllerToPop = ViewControllers.Last();
-            if (viewControllerToPop is IReactiveViewController reactiveViewController)
-            {
-                reactiveViewController.DismissFromNavigationController();
-            }
-
-            return base.PopViewController(animated);
-        }
-
         public override void PushViewController(UIViewController viewController, bool animated)
         {
             base.PushViewController(viewController, animated);
