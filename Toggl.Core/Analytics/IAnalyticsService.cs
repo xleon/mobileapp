@@ -205,6 +205,8 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<CalendarTimeEntryCreatedType, int, string> CalendarTimeEntryCreated { get; }
 
+        IAnalyticsEvent<int, string> CalendarWeeklyDatePickerSelectionChanged { get; }
+
         IAnalyticsEvent<CalendarSwipeDirection, int, string> CalendarSingleSwipe { get; }
 
         void SetAppCenterUserId(long id);
