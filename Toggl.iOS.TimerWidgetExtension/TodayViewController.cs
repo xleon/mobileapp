@@ -27,6 +27,9 @@ namespace Toggl.iOS.TimerWidgetExtension
         private UITapGestureRecognizer tapGestureRecognizer;
         private SuggestionsDataSource dataSource;
 
+        private NCWidgetDisplayMode currentDisplayMode;
+        private int suggestionsCount;
+
         protected TodayViewController(IntPtr handle) : base(handle)
         {
         }
@@ -46,6 +49,8 @@ namespace Toggl.iOS.TimerWidgetExtension
             var suggestions = SharedStorage.Instance.GetCurrentSuggestions();
             if (suggestions != null)
             {
+                suggestionsCount = suggestions.Count;
+                SuggestionsTableViewHeightConstraint.Constant = 60 * suggestionsCount;
                 dataSource = new SuggestionsDataSource();
                 dataSource.Suggestions = suggestions;
                 dataSource.Callback = continueSuggestion;
@@ -94,27 +99,19 @@ namespace Toggl.iOS.TimerWidgetExtension
         [Export("widgetActiveDisplayModeDidChange:withMaximumSize:")]
         public void WidgetActiveDisplayModeDidChange(NCWidgetDisplayMode activeDisplayMode, CGSize maxSize)
         {
-            var suggestionsCount = 3;
+            currentDisplayMode = activeDisplayMode;
             PreferredContentSize = activeDisplayMode == NCWidgetDisplayMode.Compact
                 ? maxSize
                 : new CGSize(maxSize.Width, compactModeHeight + suggestionsCount * suggestionCellHeight + extraLabelsHeight);
-            setConstraintsForDisplayMode(activeDisplayMode, suggestionsCount);
         }
 
-        private void setConstraintsForDisplayMode(NCWidgetDisplayMode activeDisplayMode, int suggestionsCount)
+        public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
         {
-            switch (activeDisplayMode)
+            coordinator.AnimateAlongsideTransition(context =>
             {
-                case NCWidgetDisplayMode.Compact:
-                    RunningTimerContainerCompactBottomConstraint.Active = true;
-                    SuggestionsContainerExpandedBottomConstraint.Active = false;
-                    break;
-                case NCWidgetDisplayMode.Expanded:
-                    RunningTimerContainerCompactBottomConstraint.Active = false;
-                    SuggestionsContainerExpandedBottomConstraint.Active = true;
-                    break;
-            }
-            SuggestionsTableViewHeightConstraint.Constant = 60 * suggestionsCount;
+                SuggestionsContainerView.Layer.Opacity = currentDisplayMode == NCWidgetDisplayMode.Compact ? 0 : 1;
+            }, null);
+            base.ViewWillTransitionToSize(toSize, coordinator);
         }
 
         private async void startTimeEntry(object sender, EventArgs e)

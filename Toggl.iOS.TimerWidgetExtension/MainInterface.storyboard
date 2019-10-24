@@ -48,16 +48,16 @@
                                 <state key="normal" image="icStop"/>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="kNT-Bi-5OD">
-                                <rect key="frame" x="41" y="84" width="238" height="33"/>
+                                <rect key="frame" x="41" y="84" width="238" height="18"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DESCRIPTION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qJF-NA-4cF">
-                                        <rect key="frame" x="0.0" y="7.5" width="97.5" height="18"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="97.5" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2I7-BQ-Ae5">
-                                        <rect key="frame" x="107.5" y="13.5" width="6" height="6"/>
+                                        <rect key="frame" x="107.5" y="6" width="6" height="6"/>
                                         <color key="backgroundColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="6" id="P6h-EG-K8y"/>
@@ -70,7 +70,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PROJECT_NAME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PwM-bS-bNq">
-                                        <rect key="frame" x="123.5" y="7.5" width="114.5" height="18"/>
+                                        <rect key="frame" x="123.5" y="0.0" width="114.5" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -78,7 +78,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="bCz-q8-PkE">
-                                <rect key="frame" x="0.0" y="137" width="320" height="263"/>
+                                <rect key="frame" x="0.0" y="163" width="320" height="263"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PDR-Q5-XZf">
                                         <rect key="frame" x="10" y="0.0" width="300" height="17"/>
@@ -125,20 +125,18 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="3GY-9D-O8q" firstAttribute="centerY" secondItem="3Cx-Gg-MBs" secondAttribute="centerY" id="3eC-Xg-TxY"/>
-                            <constraint firstItem="bCz-q8-PkE" firstAttribute="top" secondItem="kNT-Bi-5OD" secondAttribute="bottom" priority="750" constant="20" id="64a-Y8-h05"/>
                             <constraint firstItem="kNT-Bi-5OD" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="S3S-Oj-5AN" secondAttribute="leadingMargin" id="8XN-uf-nqD"/>
                             <constraint firstItem="3Cx-Gg-MBs" firstAttribute="centerX" secondItem="S3S-Oj-5AN" secondAttribute="centerX" id="N44-Ff-Hdg"/>
                             <constraint firstItem="3Cx-Gg-MBs" firstAttribute="top" secondItem="S3S-Oj-5AN" secondAttribute="top" constant="22" id="V3d-sX-KO5"/>
                             <constraint firstItem="bCz-q8-PkE" firstAttribute="leading" secondItem="S3S-Oj-5AN" secondAttribute="leading" id="chO-wv-KPb"/>
                             <constraint firstItem="D74-iM-mqi" firstAttribute="trailing" secondItem="S3S-Oj-5AN" secondAttribute="trailingMargin" id="dc4-Ld-OQL"/>
                             <constraint firstItem="kNT-Bi-5OD" firstAttribute="centerX" secondItem="S3S-Oj-5AN" secondAttribute="centerX" id="eMk-PV-y43"/>
-                            <constraint firstAttribute="bottom" secondItem="kNT-Bi-5OD" secondAttribute="bottom" priority="700" constant="20" id="fB1-d9-txU"/>
                             <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="kNT-Bi-5OD" secondAttribute="trailing" id="gSw-bd-vdF"/>
                             <constraint firstItem="D74-iM-mqi" firstAttribute="centerY" secondItem="3Cx-Gg-MBs" secondAttribute="centerY" id="ghA-YH-mad"/>
-                            <constraint firstAttribute="bottom" secondItem="bCz-q8-PkE" secondAttribute="bottom" id="jWW-2d-S3v"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3GY-9D-O8q" secondAttribute="trailing" id="kug-ZZ-bK6"/>
                             <constraint firstItem="kNT-Bi-5OD" firstAttribute="top" secondItem="3Cx-Gg-MBs" secondAttribute="bottom" constant="21" id="lFM-66-oi2"/>
                             <constraint firstItem="Ga5-pU-ZGk" firstAttribute="centerX" secondItem="S3S-Oj-5AN" secondAttribute="centerX" id="r8N-eZ-LW8"/>
+                            <constraint firstItem="bCz-q8-PkE" firstAttribute="top" secondItem="Ft6-oW-KC0" secondAttribute="bottom" constant="119" id="rBs-na-L3z"/>
                             <constraint firstItem="Ga5-pU-ZGk" firstAttribute="centerY" secondItem="S3S-Oj-5AN" secondAttribute="centerY" constant="-10" id="u2j-ih-ANz"/>
                             <constraint firstAttribute="trailing" secondItem="bCz-q8-PkE" secondAttribute="trailing" id="yJJ-dj-qMB"/>
                         </constraints>
@@ -155,12 +153,10 @@
                         <outlet property="DurationLabel" destination="3Cx-Gg-MBs" id="fq7-RP-ZtD"/>
                         <outlet property="ErrorMessageLabel" destination="Ga5-pU-ZGk" id="g9j-vg-bOT"/>
                         <outlet property="ProjectNameLabel" destination="PwM-bS-bNq" id="Axe-WR-h6c"/>
-                        <outlet property="RunningTimerContainerCompactBottomConstraint" destination="fB1-d9-txU" id="wKj-ai-1u8"/>
                         <outlet property="RunningTimerContainerView" destination="kNT-Bi-5OD" id="BPg-vx-gVq"/>
                         <outlet property="ShowAllTimeEntriesButton" destination="Qo0-Gx-2KV" id="UGH-gL-f32"/>
                         <outlet property="StartButton" destination="3GY-9D-O8q" id="F2I-N7-ir8"/>
                         <outlet property="StopButton" destination="D74-iM-mqi" id="jvg-GA-pdn"/>
-                        <outlet property="SuggestionsContainerExpandedBottomConstraint" destination="jWW-2d-S3v" id="tfB-gU-zNr"/>
                         <outlet property="SuggestionsContainerView" destination="bCz-q8-PkE" id="nBf-9V-tnO"/>
                         <outlet property="SuggestionsLabel" destination="9nU-xE-3Eo" id="YOw-bg-xPX"/>
                         <outlet property="SuggestionsTableView" destination="btO-z7-AVS" id="uNQ-IM-BJd"/>
