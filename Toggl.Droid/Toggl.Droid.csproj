@@ -402,12 +402,13 @@
     <Compile Include="Helper\ActiveTheme.cs" />
     <Compile Include="LayoutManagers\UnpredictiveLinearLayoutManager.cs" />
     <Compile Include="Helper\AppWidgetProviderUtils.cs" />
+    <Compile Include="Helper\NotificationsConstants.cs" />
     <Compile Include="Presentation\ActivityTransitions.cs" />
     <Compile Include="Presentation\RunningTimeEntrySheetBehavior.cs" />
     <Compile Include="Services\JobServicesConstants.cs" />
     <Compile Include="Services\FetchRemoteConfigServiceAndroid.cs" />
     <Compile Include="Services\SyncJobService.cs" />
-    <Compile Include="Services\WidgetsBackgroundService.cs" />
+    <Compile Include="Services\WidgetsForegroundService.cs" />
     <Compile Include="Services\WidgetsServiceAndroid.cs" />
     <Compile Include="Services\TogglFirebaseIIDService.cs" />
     <Compile Include="Services\TogglFirebaseMessagingService.cs" />

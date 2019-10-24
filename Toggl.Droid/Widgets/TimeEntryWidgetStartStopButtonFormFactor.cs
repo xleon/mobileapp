@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content;
 using Android.Widget;
 using Toggl.Droid.Helper;
+using Toggl.Droid.Services;
 using static Toggl.Droid.Widgets.WidgetsConstants;
 
 namespace Toggl.Droid.Widgets
@@ -14,10 +15,10 @@ namespace Toggl.Droid.Widgets
         protected void SetupActionsForStartAndStopButtons(Context context, RemoteViews remoteViews)
         {
             remoteViews.SetOnClickPendingIntent(Resource.Id.StartButton,
-                StartTimeEntryAction.ToBroadcastIntent<TimeEntryWidget>(context));
+                StartTimeEntryAction.ToForegroundService<WidgetsForegroundService>(context));
 
             remoteViews.SetOnClickPendingIntent(Resource.Id.StopButton,
-                StopRunningTimeEntryAction.ToBroadcastIntent<TimeEntryWidget>(context));
+                StopRunningTimeEntryAction.ToForegroundService<WidgetsForegroundService>(context));
         }
     }
 }

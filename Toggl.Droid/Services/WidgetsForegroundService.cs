@@ -3,54 +3,69 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Appwidget;
 using Android.Content;
 using Android.Support.V4.App;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
-using Toggl.Droid.Extensions;
+using Toggl.Droid.Helper;
 using Toggl.Droid.Widgets;
 using static Toggl.Droid.Services.JobServicesConstants;
+using static Toggl.Droid.Helper.NotificationsConstants;
 using static Toggl.Droid.Widgets.WidgetsConstants;
-using static Android.Appwidget.AppWidgetManager;
-using Toggl.Droid.Helper;
 
 namespace Toggl.Droid.Services
 {
     [Service(Permission = "android.permission.BIND_JOB_SERVICE", Exported = true)]
-    public sealed class WidgetsBackgroundService : JobIntentService
-    { 
+    public sealed class WidgetsForegroundService : IntentService
+    {
         private IInteractorFactory interactorFactory => AndroidDependencyContainer.Instance.InteractorFactory;
         private ITimeService timeService => AndroidDependencyContainer.Instance.TimeService;
 
-        public static void EnqueueWork(Context context, Intent intent)
+        protected override void OnHandleIntent(Intent intent)
         {
-            var serviceClass = JavaUtils.ToClass<WidgetsBackgroundService>();
-            EnqueueWork(context, serviceClass, TimerWidgetBackgroundServiceJobId, intent);
+            if (OreoApis.AreAvailable)
+            {
+                var notificationManager = GetSystemService(NotificationService) as NotificationManager;
+                var channel = new NotificationChannel(DefaultChannelId, DefaultChannelName, NotificationImportance.Low);
+                channel.Description = DefaultChannelDescription;
+                channel.EnableVibration(false);
+                channel.SetVibrationPattern(NoNotificationVibrationPattern);
+                notificationManager.CreateNotificationChannel(channel);
+            }
+
+            var notificationBuilder = new NotificationCompat.Builder(this, DefaultChannelId);
+            notificationBuilder.SetVibrate(NoNotificationVibrationPattern);
+
+            StartForeground(WidgetForegroundServiceJobId, notificationBuilder.Build());
+
+            onHandleIntentAsync(intent);
         }
 
-        protected override void OnHandleWork(Intent intent)
+        private async void onHandleIntentAsync(Intent intent)
         {
-            var action = intent.Action;
-
             AndroidDependencyContainer.EnsureInitialized(Application.Context);
+            AndroidDependencyContainer.Instance.WidgetsService.Start();
+
+            var action = intent.Action;
 
             switch (action)
             {
                 case StartTimeEntryAction:
-                    _ = handleStartTimeEntry();
+                    await handleStartTimeEntry();
                     break;
                 case StopRunningTimeEntryAction:
-                    _ = handleStopRunningTimeEntry();
+                    await handleStopRunningTimeEntry();
                     break;
                 case SuggestionTapped:
-                    _ = continueTimeEntryFromSuggestion(intent);
+                    await continueTimeEntryFromSuggestion(intent);
                     break;
                 default:
                     throw new InvalidOperationException($"Cannot handle intent with action {action}");
             }
+
+            StopForeground(true);
         }
 
         private async Task handleStartTimeEntry()

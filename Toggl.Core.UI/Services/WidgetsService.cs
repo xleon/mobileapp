@@ -27,10 +27,7 @@ namespace Toggl.Core.UI.Services
         public void Start()
         {
             if (runningTimeEntryDisposable != null)
-            {
-                runningTimeEntryDisposable?.Dispose();
-                runningTimeEntryDisposable = null;
-            }
+                return;
 
             runningTimeEntryDisposable = dataSource
                 .TimeEntries

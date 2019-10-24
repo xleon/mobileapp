@@ -23,7 +23,7 @@ namespace Toggl.Droid.Widgets.Services
         public static void EnqueueWork(Context context, Intent intent)
         {
             var serviceClass = JavaUtils.ToClass<WidgetsAnalyticsService>();
-            EnqueueWork(context, serviceClass, TimerWidgetAnalyticsServiceJobId, intent);
+            EnqueueWork(context, serviceClass, WidgetAnalyticsServiceJobId, intent);
         }
 
         protected override void OnHandleWork(Intent intent)
