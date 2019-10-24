@@ -114,11 +114,11 @@ namespace Toggl.iOS.ViewControllers
             StartTimeEntryButton.AccessibilityLabel = Resources.StartTimeEntry;
             StopTimeEntryButton.AccessibilityLabel = Resources.StopCurrentlyRunningTimeEntry;
 
+            tableViewSource = new TimeEntriesLogViewSource();
+
             prepareViews();
             prepareOnboarding();
             setupTableViewHeader();
-
-            tableViewSource = new TimeEntriesLogViewSource();
 
             ViewModel.SwipeActionsEnabled
                 .Subscribe(tableViewSource.SetSwipeActionsEnabled)
@@ -141,11 +141,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(disposeBag);
 
             tableViewSource.FirstCell
-                .Subscribe(f =>
-                {
-                    onFirstTimeEntryChanged(f);
-                    firstTimeEntryCell = f;
-                })
+                .Subscribe(onFirstTimeEntryChanged)
                 .DisposedBy(DisposeBag);
 
             tableViewSource.Rx().Scrolled()
@@ -170,6 +166,10 @@ namespace Toggl.iOS.ViewControllers
             tableViewSource.Rx().ModelSelected()
                 .Select(editEventInfo)
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
+                .DisposedBy(DisposeBag);
+
+            tableViewSource.Rx().ItemsChanged()
+                .Subscribe(updateTooltipPositions)
                 .DisposedBy(DisposeBag);
 
             ViewModel.TimeEntriesViewModel.TimeEntriesPendingDeletion
@@ -384,6 +384,7 @@ namespace Toggl.iOS.ViewControllers
             suggestionsView.ConstrainInView(suggestionsContaier);
 
             layoutTableHeader();
+            updateTooltipPositions();
         }
 
         private void layoutTableHeader()
@@ -740,7 +741,10 @@ namespace Toggl.iOS.ViewControllers
         {
             var storage = ViewModel.OnboardingStorage;
 
-            var timelineIsEmpty = ViewModel.LogEmpty;
+            var timelineIsEmpty = Observable.CombineLatest(
+                tableViewSource.FirstCell.Select(cell => cell == null),
+                ViewModel.LogEmpty,
+                CommonFunctions.Or);
 
             new StartTimeEntryOnboardingStep(storage)
                 .ManageDismissableTooltip(StartTimeEntryOnboardingBubbleView, storage)
