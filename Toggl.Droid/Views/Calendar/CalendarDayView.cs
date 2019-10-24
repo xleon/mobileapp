@@ -25,6 +25,15 @@ namespace Toggl.Droid.Views.Calendar
     public partial class CalendarDayView : View
     {
         private const int hoursPerDay = Constants.HoursPerDay;
+        private const int vibrationDurationInMilliseconds = 5;
+        private const int vibrationAmplitude = 7;
+        private const int scrollAnimationDurationInMillis = 300;
+        
+        private readonly ISubject<CalendarItem?> calendarItemTappedSubject = new Subject<CalendarItem?>();
+        private readonly ISubject<DateTimeOffset> emptySpansTouchedObservable = new Subject<DateTimeOffset>();
+        private readonly ISubject<int> scrollOffsetSubject = new Subject<int>();
+        private readonly RectF tapCheckRectF = new RectF();
+        private readonly TimeSpan defaultDuration = TimeSpan.FromMinutes(30);
 
         private GestureDetector gestureDetector;
         private OverScroller scroller;
@@ -32,39 +41,25 @@ namespace Toggl.Droid.Views.Calendar
         private ITimeService timeService;
         private CalendarLayoutCalculator calendarLayoutCalculator;
         private DateTime currentDate = DateTime.Now;
+        private Paint currentHourPaint;
+        private Vibrator hapticFeedbackProvider;
         private bool shouldDrawCurrentHourIndicator = false;
-
         private int scrollOffset;
         private bool isScrolling;
         private bool flingWasCalled;
-
         private float availableWidth;
         private int hourHeight;
         private int maxHeight;
-        private Paint currentHourPaint;
-        private readonly RectF tapCheckRectF = new RectF();
-        
-        private Vibrator hapticFeedbackProvider;
-        private int vibrationDurationInMilliseconds = 5;
-        private int vibrationAmplitude = 7;
-        private int scrollAnimationDurationInMillis = 300;
 
-        private TimeSpan defaultDuration = TimeSpan.FromMinutes(30);
-
+        private ImmutableList<CalendarItem> originalCalendarItems = ImmutableList<CalendarItem>.Empty;
         private ImmutableList<CalendarItem> calendarItems = ImmutableList<CalendarItem>.Empty;
         private ImmutableList<CalendarItemRectAttributes> calendarItemLayoutAttributes = ImmutableList<CalendarItemRectAttributes>.Empty;
-
-        private readonly ISubject<CalendarItem?> calendarItemTappedSubject = new Subject<CalendarItem?>();
-
+        
         public IObservable<CalendarItem?> CalendarItemTappedObservable
             => calendarItemTappedSubject.AsObservable();
 
-        private readonly ISubject<DateTimeOffset> emptySpansTouchedObservable = new Subject<DateTimeOffset>();
-
         public IObservable<DateTimeOffset> EmptySpansTouchedObservable
             => emptySpansTouchedObservable.AsObservable();
-        
-        private readonly ISubject<int> scrollOffsetSubject = new Subject<int>();
 
         public IObservable<int> ScrollOffsetObservable
             => scrollOffsetSubject.AsObservable();

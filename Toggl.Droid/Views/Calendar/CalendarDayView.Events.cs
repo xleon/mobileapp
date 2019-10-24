@@ -17,8 +17,17 @@ namespace Toggl.Droid.Views.Calendar
     public partial class CalendarDayView
     {
         private readonly Dictionary<string, StaticLayout> textLayouts = new Dictionary<string, StaticLayout>();
-
         private readonly float calendarItemColorAlpha = 0.25f;
+        private readonly double minimumTextContrast = 1.6;
+        private readonly RectF eventRect = new RectF();
+        private readonly RectF stripeRect = new RectF();
+        private readonly Paint eventsPaint = new Paint(PaintFlags.AntiAlias);
+        private readonly Paint textEventsPaint = new Paint(PaintFlags.AntiAlias);
+        private readonly Paint editingHoursLabelPaint = new Paint(PaintFlags.AntiAlias);
+        private readonly Paint calendarIconPaint = new Paint(PaintFlags.AntiAlias);
+        private readonly PathEffect dashEffect = new DashPathEffect(new []{ 10f, 10f }, 0f);
+        private readonly CalendarItemStartTimeComparer calendarItemComparer = new CalendarItemStartTimeComparer();
+
         private float leftMargin;
         private float leftPadding;
         private float rightPadding;
@@ -26,7 +35,6 @@ namespace Toggl.Droid.Views.Calendar
         private float minHourHeight;
         private float runningTimeEntryStripesSpacing;
         private float runningTimeEntryThinStripeWidth;
-
         private int shortCalendarItemHeight;
         private int regularCalendarItemVerticalPadding;
         private int regularCalendarItemHorizontalPadding;
@@ -34,28 +42,17 @@ namespace Toggl.Droid.Views.Calendar
         private int shortCalendarItemHorizontalPadding;
         private int regularCalendarItemFontSize;
         private int shortCalendarItemFontSize;
-        
-        private readonly RectF eventRect = new RectF();
-        private readonly RectF stripeRect = new RectF();
-        private readonly Paint eventsPaint = new Paint(PaintFlags.AntiAlias);
-        private readonly Paint textEventsPaint = new Paint(PaintFlags.AntiAlias);
-        private readonly Paint editingHoursLabelPaint = new Paint(PaintFlags.AntiAlias);
-        private readonly PathEffect dashEffect = new DashPathEffect(new []{ 10f, 10f }, 0f);
-
-        private CalendarItemEditInfo itemEditInEditMode = CalendarItemEditInfo.None;
-        private readonly CalendarItemStartTimeComparer calendarItemComparer = new CalendarItemStartTimeComparer();
         private int? runningTimeEntryIndex = null;
         private int editingHandlesHorizontalMargins;
         private int editingHandlesRadius;
-
-        private ImmutableList<CalendarItem> originalCalendarItems = ImmutableList<CalendarItem>.Empty;
-        private readonly Paint calendarIconPaint = new Paint(PaintFlags.AntiAlias);
+        private Bitmap calendarIconBitmap;
         private int runningTimeEntryDashedHourTopPadding;
         private int calendarEventBottomLineHeight;
         private int calendarIconRightInsetMargin;
         private float commonRoundRectRadius;
-        private Bitmap calendarIconBitmap;
         private int calendarIconSize;
+        private Color lastCalendarItemBackgroundColor;
+        private CalendarItemEditInfo itemEditInEditMode = CalendarItemEditInfo.None;
 
         public void UpdateItems(ObservableGroupedOrderedCollection<CalendarItem> calendarItems)
         {
@@ -248,6 +245,7 @@ namespace Toggl.Droid.Views.Calendar
             fadedColor = new Color(ColorUtils.CompositeColors(fadedColor, ColorObject.White));
             eventsPaint.SetStyle(Paint.Style.FillAndStroke);
             eventsPaint.Color = fadedColor;
+            lastCalendarItemBackgroundColor = fadedColor;
             canvas.DrawRoundRect(calendarItemRect, commonRoundRectRadius, commonRoundRectRadius, eventsPaint);
 
             eventsPaint.Color = originalColor;
@@ -262,6 +260,7 @@ namespace Toggl.Droid.Views.Calendar
             var color = Color.ParseColor(item.Color);
             eventsPaint.SetStyle(Paint.Style.FillAndStroke);
             eventsPaint.Color = color;
+            lastCalendarItemBackgroundColor = color;
             canvas.DrawRoundRect(calendarItemRect, commonRoundRectRadius, commonRoundRectRadius, eventsPaint);
         }
 
@@ -276,6 +275,7 @@ namespace Toggl.Droid.Views.Calendar
             var calendarStripeColor = new Color(itemColor);
             calendarStripeColor.A = (byte) (calendarStripeColor.A * 0.1f);
 
+            lastCalendarItemBackgroundColor = calendarFillColor;
             drawShapeBaseBackgroundFilling(calendarItemRect, calendarFillColor);
             drawShapeBackgroundStripes(calendarItemRect, calendarStripeColor);
             drawSolidBorder(calendarItemRect, itemColor);
@@ -376,6 +376,11 @@ namespace Toggl.Droid.Views.Calendar
             var color = item.Source == CalendarItemSource.Calendar || isRunning
                 ? Color.ParseColor(item.Color) 
                 : Color.White;
+
+            var primaryTextColor = Context.SafeGetColor(Resource.Color.primaryText);
+            var itemColorContrast = ColorUtils.CalculateContrast(color, lastCalendarItemBackgroundColor);
+            color = itemColorContrast >= minimumTextContrast ? color : primaryTextColor;
+            
             textEventsPaint.Color = color;
             textEventsPaint.TextSize = fontSize;
             
