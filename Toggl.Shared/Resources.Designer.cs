@@ -53,57 +53,9 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string OnboardingTrackPageCopy {
-            get {
-                return ResourceManager.GetString("OnboardingTrackPageCopy", resourceCulture);
-            }
-        }
-        
-        public static string OnboardingMostUsedPageCopy {
-            get {
-                return ResourceManager.GetString("OnboardingMostUsedPageCopy", resourceCulture);
-            }
-        }
-        
-        public static string OnboardingReportsPageCopy {
-            get {
-                return ResourceManager.GetString("OnboardingReportsPageCopy", resourceCulture);
-            }
-        }
-        
         public static string LoginTitle {
             get {
                 return ResourceManager.GetString("LoginTitle", resourceCulture);
-            }
-        }
-        
-        public static string LoginSignUpEmailPlaceholder {
-            get {
-                return ResourceManager.GetString("LoginSignUpEmailPlaceholder", resourceCulture);
-            }
-        }
-        
-        public static string LoginSignUpPasswordPlaceholder {
-            get {
-                return ResourceManager.GetString("LoginSignUpPasswordPlaceholder", resourceCulture);
-            }
-        }
-        
-        public static string SignUpPasswordRequirements {
-            get {
-                return ResourceManager.GetString("SignUpPasswordRequirements", resourceCulture);
-            }
-        }
-        
-        public static string LoginNextButton {
-            get {
-                return ResourceManager.GetString("LoginNextButton", resourceCulture);
-            }
-        }
-        
-        public static string Back {
-            get {
-                return ResourceManager.GetString("Back", resourceCulture);
             }
         }
         
@@ -467,12 +419,6 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string Workspaces {
-            get {
-                return ResourceManager.GetString("Workspaces", resourceCulture);
-            }
-        }
-        
         public static string WorkspacePossesive {
             get {
                 return ResourceManager.GetString("WorkspacePossesive", resourceCulture);
@@ -482,12 +428,6 @@ namespace Toggl.Shared {
         public static string SetDefaultWorkspace {
             get {
                 return ResourceManager.GetString("SetDefaultWorkspace", resourceCulture);
-            }
-        }
-        
-        public static string EnterTag {
-            get {
-                return ResourceManager.GetString("EnterTag", resourceCulture);
             }
         }
         
@@ -629,12 +569,6 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string Of {
-            get {
-                return ResourceManager.GetString("Of", resourceCulture);
-            }
-        }
-        
         public static string NoTagsInfoMessage {
             get {
                 return ResourceManager.GetString("NoTagsInfoMessage", resourceCulture);
@@ -725,21 +659,9 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string MostRecentEntry {
-            get {
-                return ResourceManager.GetString("MostRecentEntry", resourceCulture);
-            }
-        }
-        
         public static string Continue {
             get {
                 return ResourceManager.GetString("Continue", resourceCulture);
-            }
-        }
-        
-        public static string Loading {
-            get {
-                return ResourceManager.GetString("Loading", resourceCulture);
             }
         }
         
@@ -809,21 +731,9 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string TimeEntrySuggestion {
-            get {
-                return ResourceManager.GetString("TimeEntrySuggestion", resourceCulture);
-            }
-        }
-        
         public static string EmailIsAlreadyUsedError {
             get {
                 return ResourceManager.GetString("EmailIsAlreadyUsedError", resourceCulture);
-            }
-        }
-        
-        public static string TryLoggingInInstead {
-            get {
-                return ResourceManager.GetString("TryLoggingInInstead", resourceCulture);
             }
         }
         
@@ -848,12 +758,6 @@ namespace Toggl.Shared {
         public static string Done {
             get {
                 return ResourceManager.GetString("Done", resourceCulture);
-            }
-        }
-        
-        public static string SignUpCountryRequired {
-            get {
-                return ResourceManager.GetString("SignUpCountryRequired", resourceCulture);
             }
         }
         
@@ -1373,18 +1277,6 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string SwipeRightToContinue {
-            get {
-                return ResourceManager.GetString("SwipeRightToContinue", resourceCulture);
-            }
-        }
-        
-        public static string SwipeLeftToDelete {
-            get {
-                return ResourceManager.GetString("SwipeLeftToDelete", resourceCulture);
-            }
-        }
-        
         public static string YouHaveCreatedYourFirstTimeEntry {
             get {
                 return ResourceManager.GetString("YouHaveCreatedYourFirstTimeEntry", resourceCulture);
@@ -1466,12 +1358,6 @@ namespace Toggl.Shared {
         public static string Skip {
             get {
                 return ResourceManager.GetString("Skip", resourceCulture);
-            }
-        }
-        
-        public static string Next {
-            get {
-                return ResourceManager.GetString("Next", resourceCulture);
             }
         }
         
@@ -1631,12 +1517,6 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string ContactUsOops {
-            get {
-                return ResourceManager.GetString("ContactUsOops", resourceCulture);
-            }
-        }
-        
         public static string ContactUsSomethingWentWrongTryAgain {
             get {
                 return ResourceManager.GetString("ContactUsSomethingWentWrongTryAgain", resourceCulture);
@@ -1697,12 +1577,6 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string FormatSettings {
-            get {
-                return ResourceManager.GetString("FormatSettings", resourceCulture);
-            }
-        }
-        
         public static string Use24HourClock {
             get {
                 return ResourceManager.GetString("Use24HourClock", resourceCulture);
@@ -1712,18 +1586,6 @@ namespace Toggl.Shared {
         public static string SwipeActions {
             get {
                 return ResourceManager.GetString("SwipeActions", resourceCulture);
-            }
-        }
-        
-        public static string TimerSettings {
-            get {
-                return ResourceManager.GetString("TimerSettings", resourceCulture);
-            }
-        }
-        
-        public static string SiriSettings {
-            get {
-                return ResourceManager.GetString("SiriSettings", resourceCulture);
             }
         }
         
@@ -2027,12 +1889,6 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string Heading {
-            get {
-                return ResourceManager.GetString("Heading", resourceCulture);
-            }
-        }
-        
         public static string SuggestionAccessibilityHint {
             get {
                 return ResourceManager.GetString("SuggestionAccessibilityHint", resourceCulture);
@@ -2054,12 +1910,6 @@ namespace Toggl.Shared {
         public static string TrackedTime {
             get {
                 return ResourceManager.GetString("TrackedTime", resourceCulture);
-            }
-        }
-        
-        public static string Description {
-            get {
-                return ResourceManager.GetString("Description", resourceCulture);
             }
         }
         
@@ -2474,54 +2324,6 @@ namespace Toggl.Shared {
         public static string SiriWorkflowFocusModeDescription {
             get {
                 return ResourceManager.GetString("SiriWorkflowFocusModeDescription", resourceCulture);
-            }
-        }
-        
-        public static string SystemDefault {
-            get {
-                return ResourceManager.GetString("SystemDefault", resourceCulture);
-            }
-        }
-        
-        public static string Light {
-            get {
-                return ResourceManager.GetString("Light", resourceCulture);
-            }
-        }
-        
-        public static string Dark {
-            get {
-                return ResourceManager.GetString("Dark", resourceCulture);
-            }
-        }
-        
-        public static string RestartNeeded {
-            get {
-                return ResourceManager.GetString("RestartNeeded", resourceCulture);
-            }
-        }
-        
-        public static string RestartNeededMessage {
-            get {
-                return ResourceManager.GetString("RestartNeededMessage", resourceCulture);
-            }
-        }
-
-        public static string AppTheme {
-            get {
-                return ResourceManager.GetString("AppTheme", resourceCulture);
-            }
-        }
-
-        public static string Yes {
-            get {
-                return ResourceManager.GetString("Yes", resourceCulture);
-            }
-        }
-
-        public static string No {
-            get {
-                return ResourceManager.GetString("No", resourceCulture);
             }
         }
     }
