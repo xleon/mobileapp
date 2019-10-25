@@ -48,7 +48,7 @@
                                 <state key="normal" image="icStop"/>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="kNT-Bi-5OD">
-                                <rect key="frame" x="41" y="84" width="238" height="18"/>
+                                <rect key="frame" x="41" y="72" width="238" height="18"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DESCRIPTION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qJF-NA-4cF">
                                         <rect key="frame" x="0.0" y="0.0" width="97.5" height="18"/>
@@ -134,7 +134,7 @@
                             <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="kNT-Bi-5OD" secondAttribute="trailing" id="gSw-bd-vdF"/>
                             <constraint firstItem="D74-iM-mqi" firstAttribute="centerY" secondItem="3Cx-Gg-MBs" secondAttribute="centerY" id="ghA-YH-mad"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3GY-9D-O8q" secondAttribute="trailing" id="kug-ZZ-bK6"/>
-                            <constraint firstItem="kNT-Bi-5OD" firstAttribute="top" secondItem="3Cx-Gg-MBs" secondAttribute="bottom" constant="21" id="lFM-66-oi2"/>
+                            <constraint firstItem="kNT-Bi-5OD" firstAttribute="top" secondItem="3Cx-Gg-MBs" secondAttribute="bottom" constant="9" id="lFM-66-oi2"/>
                             <constraint firstItem="Ga5-pU-ZGk" firstAttribute="centerX" secondItem="S3S-Oj-5AN" secondAttribute="centerX" id="r8N-eZ-LW8"/>
                             <constraint firstItem="bCz-q8-PkE" firstAttribute="top" secondItem="Ft6-oW-KC0" secondAttribute="bottom" constant="119" id="rBs-na-L3z"/>
                             <constraint firstItem="Ga5-pU-ZGk" firstAttribute="centerY" secondItem="S3S-Oj-5AN" secondAttribute="centerY" constant="-10" id="u2j-ih-ANz"/>
