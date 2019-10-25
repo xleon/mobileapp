@@ -799,6 +799,7 @@ Global
 		{CEB93402-CEAE-4D6F-8169-3ACA1F792DF4}.Debug.iOS.Fast|iPhoneSimulator.ActiveCfg = Debug|Any CPU
 		{CEB93402-CEAE-4D6F-8169-3ACA1F792DF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CEB93402-CEAE-4D6F-8169-3ACA1F792DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEB93402-CEAE-4D6F-8169-3ACA1F792DF4}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{CEB93402-CEAE-4D6F-8169-3ACA1F792DF4}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{CEB93402-CEAE-4D6F-8169-3ACA1F792DF4}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
 		{CEB93402-CEAE-4D6F-8169-3ACA1F792DF4}.Release.AdHoc.Giskard|Any CPU.ActiveCfg = Release|Any CPU
