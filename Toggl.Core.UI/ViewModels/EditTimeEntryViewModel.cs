@@ -427,6 +427,8 @@ namespace Toggl.Core.UI.ViewModels
 
         private void stopTimeEntry()
         {
+            analyticsService.TimeEntryStopped.Track(TimeEntryStopOrigin.EditView);
+            analyticsService.EditViewTapped.Track(EditViewTapSource.StopTimeLabel);
             var duration = timeService.CurrentDateTime - startTimeSubject.Value;
             durationSubject.OnNext(duration);
         }

@@ -1151,6 +1151,35 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 observer.LastEmittedValue().Should().BeFalse();
             }
+
+            [Fact, LogIfTooSlow]
+            public async Task TracksTimeEntryStoppedEvent()
+            {
+                AdjustTimeEntries(SingleTimeEntryId, te =>
+                {
+                    te.Duration = null;
+                    return te;
+                });
+                await ViewModel.Initialize(SingleTimeEntryId);
+                ViewModel.StopTimeEntry.Execute();
+                TestScheduler.Start();
+
+                AnalyticsService.Received().TimeEntryStopped.Track(TimeEntryStopOrigin.EditView);
+            }
+
+            public async Task TracksEditViewTappedEvent()
+            {
+                AdjustTimeEntries(SingleTimeEntryId, te =>
+                {
+                    te.Duration = null;
+                    return te;
+                });
+                await ViewModel.Initialize(SingleTimeEntryId);
+                ViewModel.StopTimeEntry.Execute();
+                TestScheduler.Start();
+
+                AnalyticsService.Received().EditViewTapped.Track(EditViewTapSource.StopTimeLabel);
+            }
         }
 
         public sealed class TheSelectProjectAction : InitializableEditTimeEntryViewModelTest

@@ -212,6 +212,7 @@ namespace Toggl.Core.UI.ViewModels
             stopTime.OnNext(timeService.CurrentDateTime);
             isRunning.OnNext(false);
             analyticsEvent = analyticsEvent.With(stoppedRunningEntry: true);
+            analyticsService.TimeEntryStopped.Track(TimeEntryStopOrigin.Wheel);
         }
 
         private void editStartTime()
