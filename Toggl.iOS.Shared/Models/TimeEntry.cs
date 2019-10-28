@@ -36,7 +36,7 @@ namespace Toggl.iOS.Shared.Models
             At = at;
         }
 
-        public static TimeEntry from(ITimeEntry entry)
+        public static TimeEntry From(ITimeEntry entry)
         {
             return new TimeEntry(
                 entry.WorkspaceId,
@@ -54,7 +54,7 @@ namespace Toggl.iOS.Shared.Models
             );
         }
 
-        public TimeEntry with(long duration)
+        public TimeEntry With(long duration)
         {
             return new TimeEntry(
                 this.WorkspaceId,

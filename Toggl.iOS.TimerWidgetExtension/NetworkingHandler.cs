@@ -7,7 +7,6 @@ using Toggl.iOS.Shared.Models;
 using Toggl.Networking;
 using Toggl.Shared;
 using Toggl.Shared.Models;
-using Toggl.Shared.Extensions;
 using System.Threading.Tasks;
 using Toggl.iOS.Shared;
 using Toggl.iOS.Shared.Analytics;
@@ -27,58 +26,53 @@ namespace Toggl.iOS.TimerWidgetExtension
 
         public async Task<ITimeEntry> StartTimeEntry(TimeEntry timeEntry)
         {
-            var createdTimeEntry = await togglApi.TimeEntries
-                .Create(timeEntry)
-                .Do(_ =>
-                {
-                    SharedStorage.Instance.SetNeedsSync(true);
-                    SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.StartTimer());
-                },
-                exception =>
-                {
-                    SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.Error(exception.Message));
-                })
-                .FirstAsync();
-            return createdTimeEntry;
+            try
+            {
+                var createdTimeEntry = await togglApi.TimeEntries
+                    .Create(timeEntry)
+                    .FirstAsync();
+
+                SharedStorage.Instance.SetNeedsSync(true);
+                SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.StartTimer());
+
+                return createdTimeEntry;
+            }
+            catch (Exception e)
+            {
+                SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.Error(e.Message));
+                throw;
+            }
         }
 
         public async Task StopRunningTimeEntry()
         {
-            await togglApi.TimeEntries
-                .GetAll()
-                .Select(getRunningTimeEntry)
-                .Select(stopTimeEntry)
-                .Do(_ =>
-                {
-                    SharedStorage.Instance.SetNeedsSync(true);
-                    SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.StopTimer());
-                },
-                exception =>
-                {
-                    SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.Error(exception.Message));
-                })
-                .FirstAsync();
+            try
+            {
+                await togglApi.TimeEntries
+                    .GetAll()
+                    .Select(getRunningTimeEntry)
+                    .Select(stopTimeEntry)
+                    .FirstAsync();
+
+                SharedStorage.Instance.SetNeedsSync(true);
+                SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.StopTimer());
+            }
+            catch (Exception e)
+            {
+                SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.Error(e.Message));
+                throw;
+            }
         }
 
         private async Task stopTimeEntry(ITimeEntry timeEntry)
         {
             var duration = (long)(DateTime.Now - timeEntry.Start).TotalSeconds;
             await togglApi.TimeEntries.Update(
-                TimeEntry.from(timeEntry).with(duration)
+                TimeEntry.From(timeEntry).With(duration)
             );
         }
 
         private ITimeEntry getRunningTimeEntry(IList<ITimeEntry> timeEntries)
-        {
-            try
-            {
-                var runningTE = timeEntries.Where(te => te.Duration == null).First();
-                return runningTE;
-            }
-            catch
-            {
-                throw new NoRunningEntryException();
-            }
-        }
+            => timeEntries.FirstOrDefault(te => te.Duration == null) ?? throw new NoRunningEntryException();
     }
 }

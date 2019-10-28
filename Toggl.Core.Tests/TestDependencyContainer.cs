@@ -141,8 +141,8 @@ namespace Toggl.Core.UI
 
         internal IPushNotificationsTokenStorage MockPushNotificationsTokenStorage { get; set; }
 
-        internal IWidgetsService MockTimerWidgetService { get; set; }
+        internal IWidgetsService MockWidgetsService { get; set; }
         protected override IWidgetsService CreateWidgetsService()
-            => MockTimerWidgetService;
+            => MockWidgetsService;
     }
 }

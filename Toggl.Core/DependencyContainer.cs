@@ -143,12 +143,12 @@ namespace Toggl.Core
 
             UserAccessManager
                 .UserLoggedIn
-                .Subscribe(recreateLazyDependenciesForLogin)
+                .Subscribe(RecreateLazyDependenciesForLogin)
                 .DisposedBy(disposeBag);
 
             UserAccessManager
                 .UserLoggedOut
-                .Subscribe(_ => recreateLazyDependenciesForLogout())
+                .Subscribe(_ => RecreateLazyDependenciesForLogout())
                 .DisposedBy(disposeBag);
         }
 
@@ -240,7 +240,7 @@ namespace Toggl.Core
             pushNotificationsTokenStorage
         );
 
-        private void recreateLazyDependenciesForLogin(ITogglApi api)
+        protected virtual void RecreateLazyDependenciesForLogin(ITogglApi api)
         {
             this.api = new Lazy<ITogglApi>(() => api);
 
@@ -252,23 +252,15 @@ namespace Toggl.Core
                 Task.Run(() => creator.OnLogin(factory));
                 return factory;
             });
-
-            RecreateLazyUIDependenciesForLogin();
         }
 
-        protected abstract void RecreateLazyUIDependenciesForLogin();
-
-        private void recreateLazyDependenciesForLogout()
+        protected virtual void RecreateLazyDependenciesForLogout()
         {
             api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
 
             dataSource = new Lazy<ITogglDataSource>(CreateDataSource);
             syncManager = new Lazy<ISyncManager>(CreateSyncManager);
             interactorFactory = new Lazy<IInteractorFactory>(CreateInteractorFactory);
-
-            RecreateLazyUIDependenciesForLogout();
         }
-
-        protected abstract void RecreateLazyUIDependenciesForLogout();
     }
 }

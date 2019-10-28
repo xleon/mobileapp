@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Transactions;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
@@ -47,14 +48,16 @@ namespace Toggl.Core.UI
         protected override IRemoteConfigService CreateRemoteConfigService()
             => new RemoteConfigService(KeyValueStorage);
 
-        protected override void RecreateLazyUIDependenciesForLogin()
+        protected override void RecreateLazyDependenciesForLogin(ITogglApi togglApi)
         {
+            base.RecreateLazyDependenciesForLogin(togglApi);
             WidgetsService?.Dispose();
             widgetsService = new Lazy<IWidgetsService>(CreateWidgetsService);
         }
 
-        protected override void RecreateLazyUIDependenciesForLogout()
+        protected override void RecreateLazyDependenciesForLogout()
         {
+            base.RecreateLazyDependenciesForLogout();
             WidgetsService?.Dispose();
             widgetsService = new Lazy<IWidgetsService>(CreateWidgetsService);
         }

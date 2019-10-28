@@ -160,9 +160,7 @@ namespace Toggl.iOS.Shared
             var eventArrayData = userDefaults.ValueForKey(new NSString(key)) as NSData;
 
             if (eventArrayData == null)
-            {
                 return new NSArray();
-            }
 
             return NSKeyedUnarchiver.UnarchiveObject(eventArrayData) as NSArray;
         }

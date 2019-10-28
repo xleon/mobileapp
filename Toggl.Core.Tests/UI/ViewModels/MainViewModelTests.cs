@@ -59,7 +59,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     PermissionsChecker,
                     BackgroundService,
                     PlatformInfo,
-                    TimerWidgetService);
+                    WidgetsService);
 
                 vm.Initialize();
 
@@ -112,7 +112,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool usePermissionsChecker,
                 bool useBackgroundService,
                 bool usePlatformInfo,
-                bool useTimerWidgetService)
+                bool useWidgetsService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
@@ -132,7 +132,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var permissionsChecker = usePermissionsChecker ? PermissionsChecker : null;
                 var backgroundService = useBackgroundService ? BackgroundService : null;
                 var platformInfo = usePlatformInfo ? PlatformInfo : null;
-                var timerWidgetService = useTimerWidgetService ? TimerWidgetService : null;
+                var widgetsService = useWidgetsService ? WidgetsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -154,7 +154,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         permissionsChecker,
                         backgroundService,
                         platformInfo,
-                        timerWidgetService);
+                        widgetsService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -851,10 +851,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact]
-            public async void StartsTheWidgetService()
+            public async void StartsTheWidgetsService()
             {
                 await ViewModel.Initialize();
-                TimerWidgetService.Received().Start();
+                WidgetsService.Received().Start();
             }
         }
     }

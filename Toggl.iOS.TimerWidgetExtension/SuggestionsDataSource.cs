@@ -10,7 +10,7 @@ namespace Toggl.iOS.TimerWidgetExtension
     {
         private const string identifier = "SuggestionCell";
         public IList<Suggestion> Suggestions { private get; set; }
-        public Action<Suggestion> Callback;
+        public Action<Suggestion> Callback { private get; set; }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {

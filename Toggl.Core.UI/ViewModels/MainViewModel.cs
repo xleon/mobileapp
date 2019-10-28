@@ -55,7 +55,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly IAccessibilityService accessibilityService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
-        private readonly IWidgetsService timerWidgetService;
+        private readonly IWidgetsService widgetsService;
 
         private readonly RatingViewExperiment ratingViewExperiment;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
@@ -114,7 +114,7 @@ namespace Toggl.Core.UI.ViewModels
             IPermissionsChecker permissionsChecker,
             IBackgroundService backgroundService,
             IPlatformInfo platformInfo,
-            IWidgetsService timerWidgetService)
+            IWidgetsService widgetsService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -134,7 +134,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
-            Ensure.Argument.IsNotNull(timerWidgetService, nameof(timerWidgetService));
+            Ensure.Argument.IsNotNull(widgetsService, nameof(widgetsService));
 
             this.dataSource = dataSource;
             this.syncManager = syncManager;
@@ -146,12 +146,12 @@ namespace Toggl.Core.UI.ViewModels
             this.schedulerProvider = schedulerProvider;
             this.accessibilityService = accessibilityService;
             this.accessRestrictionStorage = accessRestrictionStorage;
-            this.timerWidgetService = timerWidgetService;
+            this.widgetsService = widgetsService;
 
             TimeService = timeService;
             OnboardingStorage = onboardingStorage;
 
-            SuggestionsViewModel = new SuggestionsViewModel(interactorFactory, OnboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager, timerWidgetService);
+            SuggestionsViewModel = new SuggestionsViewModel(interactorFactory, OnboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager, widgetsService);
             RatingViewModel = new RatingViewModel(timeService, ratingService, analyticsService, OnboardingStorage, navigationService, schedulerProvider, rxActionFactory);
             TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 
@@ -177,7 +177,7 @@ namespace Toggl.Core.UI.ViewModels
 
             await SuggestionsViewModel.Initialize();
             await RatingViewModel.Initialize();
-            timerWidgetService.Start();
+            widgetsService.Start();
 
             SyncProgressState = syncManager.ProgressObservable
                 .AsDriver(schedulerProvider);

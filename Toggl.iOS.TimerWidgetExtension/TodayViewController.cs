@@ -47,19 +47,18 @@ namespace Toggl.iOS.TimerWidgetExtension
             SuggestionsTableView.RegisterNibForCellReuse(SuggestionTableViewCell.Nib, SuggestionTableViewCell.Identifier);
 
             var suggestions = SharedStorage.Instance.GetCurrentSuggestions();
-            if (suggestions != null)
-            {
-                suggestionsCount = suggestions.Count;
-                SuggestionsTableViewHeightConstraint.Constant = 60 * suggestionsCount;
-                dataSource = new SuggestionsDataSource();
-                dataSource.Suggestions = suggestions;
-                dataSource.Callback = continueSuggestion;
-                SuggestionsTableView.Source = dataSource;
-            }
-            else
+            if (suggestions == null)
             {
                 ExtensionContext?.SetWidgetLargestAvailableDisplayMode(NCWidgetDisplayMode.Compact);
+                return;
             }
+
+            suggestionsCount = suggestions.Count;
+            SuggestionsTableViewHeightConstraint.Constant = 60 * suggestionsCount;
+            dataSource = new SuggestionsDataSource();
+            dataSource.Suggestions = suggestions;
+            dataSource.Callback = continueSuggestion;
+            SuggestionsTableView.Source = dataSource;
         }
 
         public override void ViewWillAppear(bool animated)
@@ -75,9 +74,13 @@ namespace Toggl.iOS.TimerWidgetExtension
                 networkingHandler = new NetworkingHandler(APIHelper.GetTogglAPI());
                 var timeEntry = SharedStorage.Instance.GetRunningTimeEntryViewModel();
                 if (timeEntry == null)
+                {
                     renderEmptyTimeEntry();
+                }
                 else
+                {
                     renderRunningTimeEntry(timeEntry);
+                }
             }
 
             base.ViewWillAppear(animated);

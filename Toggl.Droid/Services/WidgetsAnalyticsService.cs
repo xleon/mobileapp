@@ -9,7 +9,7 @@ using static Toggl.Droid.Services.JobServicesConstants;
 namespace Toggl.Droid.Widgets.Services
 {
     [Service(Permission = "android.permission.BIND_JOB_SERVICE", Exported = true)]
-    class WidgetsAnalyticsService : JobIntentService
+    public sealed class WidgetsAnalyticsService : JobIntentService
     {
         public const string TimerWidgetInstallAction = nameof(TimerWidgetInstallAction);
         public const string TimerWidgetInstallStateParameter = nameof(TimerWidgetInstallStateParameter);
@@ -40,8 +40,6 @@ namespace Toggl.Droid.Widgets.Services
                 case SuggestionsWidgetInstallAction:
                     handleTrackSuggestionsWidgetInstallState(intent);
                     break;
-                default:
-                    throw new InvalidOperationException($"Cannot handle intent with action {action}");
             }
         }
 

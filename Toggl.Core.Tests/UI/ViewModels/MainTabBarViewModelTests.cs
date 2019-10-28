@@ -36,7 +36,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     UserAccessManager,
                     PrivateSharedStorageService,
                     PlatformInfo,
-                    TimerWidgetService
+                    WidgetsService
                 );
         }
 
@@ -65,7 +65,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool useUserAccessManager,
                     bool usePrivateSharedStorageService,
                     bool usePlatformInfo,
-                    bool useTimerWidgetService)
+                    bool useWidgetsService)
             {
                 var timeService = useTimeService ? TimeService : null;
                 var dataSource = useDataSource ? DataSource : null;
@@ -87,7 +87,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var userAccessManager = useUserAccessManager ? UserAccessManager : null;
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
                 var platformInfo = usePlatformInfo ? PlatformInfo : null;
-                var timerWidgetService = useTimerWidgetService ? TimerWidgetService : null;
+                var widgetsService = useWidgetsService ? WidgetsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainTabBarViewModel(
@@ -111,7 +111,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         userAccessManager,
                         privateSharedStorageService,
                         platformInfo,
-                        timerWidgetService
+                        widgetsService
                     );
 
                 tryingToConstructWithEmptyParameters

@@ -7,7 +7,8 @@ namespace Toggl.Droid.Helper
 {
     public static class AppWidgetProviderUtils
     {
-        public static void UpdateAllInstances<TWidgetProvider>() where TWidgetProvider : AppWidgetProvider
+        public static void UpdateAllInstances<TWidgetProvider>()
+            where TWidgetProvider : AppWidgetProvider
         {
             var context = Application.Context;
             var widgetClass = JavaUtils.ToClass<TWidgetProvider>();
@@ -23,7 +24,8 @@ namespace Toggl.Droid.Helper
             context.SendBroadcast(intent);
         }
 
-        public static PendingIntent ToForegroundService<TService>(this string action, Context context) where TService : Service
+        public static PendingIntent ToForegroundService<TService>(this string action, Context context)
+            where TService : Service
         {
             var intent = new Intent(context, typeof(TService));
             intent.SetAction(action);

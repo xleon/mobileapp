@@ -54,7 +54,7 @@ namespace Toggl.Core.UI.ViewModels
             IUserAccessManager userAccessManager,
             IPrivateSharedStorageService privateSharedStorageService,
             IPlatformInfo platformInfo,
-            IWidgetsService timerWidgetService)
+            IWidgetsService widgetsService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -77,7 +77,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
-            Ensure.Argument.IsNotNull(timerWidgetService, nameof(timerWidgetService));
+            Ensure.Argument.IsNotNull(widgetsService, nameof(widgetsService));
 
             this.remoteConfigService = remoteConfigService;
             this.platformInfo = platformInfo;
@@ -101,7 +101,7 @@ namespace Toggl.Core.UI.ViewModels
                 permissionsChecker,
                 backgroundService,
                 platformInfo,
-                timerWidgetService);
+                widgetsService);
 
             reportsViewModel = new ReportsViewModel(
                 dataSource,

@@ -29,7 +29,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class SuggestionsViewModelTest : BaseViewModelTests<SuggestionsViewModel>
         {
             protected override SuggestionsViewModel CreateViewModel()
-                => new SuggestionsViewModel(InteractorFactory, OnboardingStorage, SchedulerProvider, RxActionFactory, AnalyticsService, TimeService, PermissionsChecker, NavigationService, BackgroundService, UserPreferences, SyncManager, TimerWidgetService);
+                => new SuggestionsViewModel(InteractorFactory, OnboardingStorage, SchedulerProvider, RxActionFactory, AnalyticsService, TimeService, PermissionsChecker, NavigationService, BackgroundService, UserPreferences, SyncManager, WidgetsService);
 
             protected override void AdditionalViewModelSetup()
             {
@@ -56,7 +56,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useBackgroundService,
                 bool useUserPreferences,
                 bool useSyncManager,
-                bool useTimerWidgetService)
+                bool useWidgetsService)
             {
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
@@ -69,10 +69,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var backgroundService = useBackgroundService ? BackgroundService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var syncManager = useSyncManager ? SyncManager : null;
-                var timerWidgetService = useTimerWidgetService ? TimerWidgetService : null;
+                var widgetsService = useWidgetsService ? WidgetsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SuggestionsViewModel(interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager, timerWidgetService);
+                    () => new SuggestionsViewModel(interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager, widgetsService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();

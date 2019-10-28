@@ -121,7 +121,7 @@ namespace SiriExtension
         {
             var duration = (long)(DateTime.Now - timeEntry.Start).TotalSeconds;
             return togglAPI.TimeEntries.Update(
-                TimeEntry.from(timeEntry).with(duration)
+                TimeEntry.From(timeEntry).With(duration)
             );
         }
 

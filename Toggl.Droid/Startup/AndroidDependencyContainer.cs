@@ -128,8 +128,6 @@ namespace Toggl.Droid
             => new AccessibilityServiceAndroid();
 
         protected override IWidgetsService CreateWidgetsService()
-        {
-            return new WidgetsServiceAndroid(DataSource);
-        }
+            => new WidgetsServiceAndroid(DataSource);
     }
 }

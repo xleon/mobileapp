@@ -26,29 +26,23 @@ namespace Toggl.iOS.Shared.Analytics
         public readonly WidgetTrackingEventType EventType;
         public readonly Dictionary<string, string> Parameters;
 
-        public WidgetTrackingEvent(WidgetTrackingEventType eventType, Dictionary<string, string> parameters)
+        private WidgetTrackingEvent(WidgetTrackingEventType eventType, Dictionary<string, string> parameters)
         {
             EventType = eventType;
             Parameters = parameters;
         }
 
         public static WidgetTrackingEvent Error(string message)
-        {
-            return new WidgetTrackingEvent(WidgetTrackingEventType.Error, new Dictionary<string, string>
+            => new WidgetTrackingEvent(WidgetTrackingEventType.Error, new Dictionary<string, string>
             {
                 [WidgetErrorEventKeys.Message] = message
             });
-        }
 
         public static WidgetTrackingEvent StartTimer()
-        {
-            return new WidgetTrackingEvent(WidgetTrackingEventType.StartTimer, null);
-        }
+            => new WidgetTrackingEvent(WidgetTrackingEventType.StartTimer, null);
 
         public static WidgetTrackingEvent StopTimer()
-        {
-            return new WidgetTrackingEvent(WidgetTrackingEventType.StopTimer, null);
-        }
+            => new WidgetTrackingEvent(WidgetTrackingEventType.StopTimer, null);
 
         #region INSCoding
         [Export("initWithCoder:")]
