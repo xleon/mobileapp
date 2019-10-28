@@ -12,8 +12,7 @@
             android:scaleType="fitCenter"
             android:layout_gravity="center"
             android:src="@drawable/stop_white"
-            android:background="@drawable/RoundedButton"
-            android:backgroundTint="@color/stopTimeEntryButtonBackground"/>
+            android:background="@drawable/WidgetStopButton"/>
     <ImageButton
             android:id="@+id/StartButton"
             android:layout_width="60dp"
@@ -25,6 +24,5 @@
             android:scaleType="fitCenter"
             android:layout_gravity="center"
             android:src="@drawable/play_white"
-            android:background="@drawable/RoundedButton"
-            android:backgroundTint="@color/startTimeEntryButtonBackground"/>
+            android:background="@drawable/WidgetStartButton"/>
 </FrameLayout>

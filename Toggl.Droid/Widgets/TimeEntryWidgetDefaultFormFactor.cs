@@ -26,7 +26,6 @@ namespace Toggl.Droid.Widgets
                 view.SetViewVisibility(Resource.Id.StopButton, Visible);
 
                 var duration = (DateTimeOffset.Now - widgetInfo.StartTime).TotalMilliseconds;
-                view.SetChronometerCountDown(Resource.Id.DurationTextView, false);
                 view.SetChronometer(Resource.Id.DurationTextView, SystemClock.ElapsedRealtime() - (long)duration, "%s", true);
 
                 if (string.IsNullOrEmpty(widgetInfo.Description))
@@ -63,7 +62,6 @@ namespace Toggl.Droid.Widgets
                 view.SetViewVisibility(Resource.Id.StartButton, Visible);
                 view.SetViewVisibility(Resource.Id.StopButton, Gone);
 
-                view.SetChronometerCountDown(Resource.Id.DurationTextView, false);
                 view.SetChronometer(Resource.Id.DurationTextView, SystemClock.ElapsedRealtime(), "%s", false);
 
                 view.SetTextViewText(Resource.Id.DescriptionTextView, Resources.NoDescription);

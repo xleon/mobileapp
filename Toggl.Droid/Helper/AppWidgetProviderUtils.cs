@@ -27,7 +27,8 @@ namespace Toggl.Droid.Helper
         {
             var intent = new Intent(context, typeof(TService));
             intent.SetAction(action);
-            return PendingIntent.GetForegroundService(context, 0, intent, 0);
+
+            return context.SafeGetForegroundService(0, intent, 0);
         }
     }
 }

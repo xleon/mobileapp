@@ -3,6 +3,7 @@ using Android.Appwidget;
 using Android.Content;
 using Android.Widget;
 using Toggl.Droid.Extensions;
+using Toggl.Droid.Helper;
 using Toggl.Droid.Services;
 using Toggl.Shared;
 using static Android.App.PendingIntentFlags;
@@ -28,7 +29,7 @@ namespace Toggl.Droid.Widgets
             var tapIntent = new Intent(context, JavaUtils.ToClass<WidgetsForegroundService>());
             tapIntent.SetAction(SuggestionTapped);
             tapIntent.PutExtra(AppWidgetManager.ExtraAppwidgetId, widgetId);
-            var tapPendingIntent = PendingIntent.GetForegroundService(context, 0, tapIntent, UpdateCurrent);
+            var tapPendingIntent = context.SafeGetForegroundService(0, tapIntent, UpdateCurrent);
             view.SetPendingIntentTemplate(Resource.Id.SuggestionsList, tapPendingIntent);
 
             view.SetTextViewText(Resource.Id.Title, Resources.WorkingOnThese);

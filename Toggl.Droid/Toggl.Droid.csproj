@@ -721,7 +721,6 @@
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\Dot.xml" />
-    <AndroidResource Include="Resources\drawable\RoundedButton.xml" />
     <AndroidResource Include="Resources\drawable\ic_archived.xml" />
     <AndroidResource Include="Resources\drawable\Splash.xml" />
     <AndroidResource Include="Resources\drawable\text_placeholder.xml" />
@@ -1110,6 +1109,8 @@
     <AndroidResource Include="Resources\menu\CalendarSettingsMenu.xml" />
     <AndroidResource Include="Resources\layout\CalendarHeaderView.axml" />
     <AndroidResource Include="Resources\drawable\CalendarHeaderDayBackground.xml" />
+    <AndroidResource Include="Resources\drawable\WidgetStartButton.xml" />
+    <AndroidResource Include="Resources\drawable\WidgetStopButton.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core\Toggl.Core.csproj">
