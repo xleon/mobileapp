@@ -7,5 +7,5 @@
         android:minResizeWidth="180dp"
         android:minResizeHeight="110dp"
         android:updatePeriodMillis="1800000"
-        android:initialLayout="@layout/SuggestionsWidget"
+        android:initialLayout="@layout/WidgetLoading"
         android:previewImage="@drawable/ic_toggl_logo"/>

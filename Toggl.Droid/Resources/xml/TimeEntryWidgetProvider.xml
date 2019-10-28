@@ -7,5 +7,5 @@
     android:minResizeWidth="40dp"
     android:minResizeHeight="40dp"
     android:updatePeriodMillis="1800000"
-    android:initialLayout="@layout/TimeEntryWidget"
+    android:initialLayout="@layout/WidgetLoading"
     android:previewImage="@drawable/ic_toggl_logo"/>
