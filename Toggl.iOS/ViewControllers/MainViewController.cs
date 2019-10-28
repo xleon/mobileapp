@@ -92,6 +92,13 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            TableShadow.Layer.MasksToBounds = false;
+            TableShadow.Layer.ShadowColor = UIColor.Black.CGColor;
+            TableShadow.Layer.ShadowOffset = new CGSize(0, 0);
+            TableShadow.Layer.ShadowOpacity = 0.1f;
+            TableShadow.Layer.ShadowRadius = 4;
+            TableShadow.Hidden = TraitCollection.HorizontalSizeClass != UIUserInterfaceSizeClass.Regular;
+
             var separator = NavigationController.NavigationBar.InsertSeparator();
             separator.BackgroundColor = ColorAssets.OpaqueSeparator;
 
@@ -107,11 +114,11 @@ namespace Toggl.iOS.ViewControllers
             StartTimeEntryButton.AccessibilityLabel = Resources.StartTimeEntry;
             StopTimeEntryButton.AccessibilityLabel = Resources.StopCurrentlyRunningTimeEntry;
 
+            tableViewSource = new TimeEntriesLogViewSource();
+
             prepareViews();
             prepareOnboarding();
             setupTableViewHeader();
-
-            tableViewSource = new TimeEntriesLogViewSource();
 
             ViewModel.SwipeActionsEnabled
                 .Subscribe(tableViewSource.SetSwipeActionsEnabled)
@@ -134,11 +141,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(disposeBag);
 
             tableViewSource.FirstCell
-                .Subscribe(f =>
-                {
-                    onFirstTimeEntryChanged(f);
-                    firstTimeEntryCell = f;
-                })
+                .Subscribe(onFirstTimeEntryChanged)
                 .DisposedBy(DisposeBag);
 
             tableViewSource.Rx().Scrolled()
@@ -163,6 +166,10 @@ namespace Toggl.iOS.ViewControllers
             tableViewSource.Rx().ModelSelected()
                 .Select(editEventInfo)
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
+                .DisposedBy(DisposeBag);
+
+            tableViewSource.Rx().ItemsChanged()
+                .Subscribe(updateTooltipPositions)
                 .DisposedBy(DisposeBag);
 
             ViewModel.TimeEntriesViewModel.TimeEntriesPendingDeletion
@@ -280,7 +287,11 @@ namespace Toggl.iOS.ViewControllers
 
             ViewModel.SuggestionsViewModel.Suggestions
                 .ReemitWhen(traitCollectionSubject)
-                .Subscribe(suggestionsView.OnSuggestions)
+                .Subscribe(suggestions =>
+                {
+                    suggestionsView.OnSuggestions(suggestions);
+                    layoutTableHeader();
+                })
                 .DisposedBy(DisposeBag);
 
             // Intent Donation
@@ -371,6 +382,22 @@ namespace Toggl.iOS.ViewControllers
 
             suggestionsContaier.AddSubview(suggestionsView);
             suggestionsView.ConstrainInView(suggestionsContaier);
+
+            layoutTableHeader();
+            updateTooltipPositions();
+        }
+
+        private void layoutTableHeader()
+        {
+            // This method makes little to no sense, but it works, and it comes from this accepted StackOverflow answer:
+            // https://stackoverflow.com/questions/16471846/is-it-possible-to-use-autolayout-with-uitableviews-tableheaderview
+            TimeEntriesLogTableView.TableHeaderView = tableHeader;
+            tableHeader.SetNeedsLayout();
+            tableHeader.LayoutIfNeeded();
+            var frame = tableHeader.Frame;
+            frame.Size = tableHeader.SystemLayoutSizeFittingSize(UIView.UILayoutFittingCompressedSize);
+            tableHeader.Frame = frame;
+            TimeEntriesLogTableView.TableHeaderView = tableHeader;
         }
 
         private EditTimeEntryInfo editEventInfo(LogItemViewModel item)
@@ -430,6 +457,8 @@ namespace Toggl.iOS.ViewControllers
             base.TraitCollectionDidChange(previousTraitCollection);
             traitCollectionSubject.OnNext(Unit.Default);
             TimeEntriesLogTableView.ReloadData();
+
+            TableShadow.Hidden = TraitCollection.HorizontalSizeClass != UIUserInterfaceSizeClass.Regular;
         }
 
         private void trackSiriEvents()
@@ -498,25 +527,6 @@ namespace Toggl.iOS.ViewControllers
 
             TimeEntriesLogTableView.BringSubviewToFront(TimeEntriesLogTableView.TableHeaderView);
 
-            if (TimeEntriesLogTableView.TableHeaderView != null)
-            {
-                var header = TimeEntriesLogTableView.TableHeaderView;
-                var size = header.SystemLayoutSizeFittingSize(UIView.UILayoutFittingCompressedSize);
-                if (header.Frame.Size.Height != size.Height)
-                {
-                    var headerRect = new CGRect
-                    {
-                        X = header.Frame.X,
-                        Y = header.Frame.Y,
-                        Width = header.Frame.Width,
-                        Height = size.Height
-                    };
-                    header.Frame = headerRect;
-                }
-                TimeEntriesLogTableView.TableHeaderView = header;
-                TimeEntriesLogTableView.SetNeedsLayout();
-            }
-
             if (viewInitialized) return;
 
             viewInitialized = true;
@@ -546,6 +556,7 @@ namespace Toggl.iOS.ViewControllers
             }
 
             hideRatingView();
+            layoutTableHeader();
         }
 
         private void showRatingView()
@@ -730,7 +741,10 @@ namespace Toggl.iOS.ViewControllers
         {
             var storage = ViewModel.OnboardingStorage;
 
-            var timelineIsEmpty = ViewModel.LogEmpty;
+            var timelineIsEmpty = Observable.CombineLatest(
+                tableViewSource.FirstCell.Select(cell => cell == null),
+                ViewModel.LogEmpty,
+                CommonFunctions.Or);
 
             new StartTimeEntryOnboardingStep(storage)
                 .ManageDismissableTooltip(StartTimeEntryOnboardingBubbleView, storage)

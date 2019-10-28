@@ -34,7 +34,7 @@ namespace Toggl.iOS.ViewControllers.Settings
             prepareIndicatorView();
 
             CloseButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             FeedbackTextView.Rx().Text()

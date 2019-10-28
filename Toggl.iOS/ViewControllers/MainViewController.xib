@@ -25,6 +25,7 @@
                 <outlet property="StartTimerBubbleLabel" destination="LCs-H0-PO4" id="bdv-dz-y3n"/>
                 <outlet property="StopTimeEntryButton" destination="Ddo-IW-xE3" id="name-outlet-Ddo-IW-xE3"/>
                 <outlet property="StopTimeEntryOnboardingBubbleView" destination="0wI-i0-MgR" id="7ci-ti-Pzx"/>
+                <outlet property="TableShadow" destination="u8c-SR-wNL" id="722-jk-BL5"/>
                 <outlet property="TapToEditBubbleView" destination="r2K-j0-0fe" id="5NI-TL-kin"/>
                 <outlet property="TapToEditBubbleViewTopConstraint" destination="ont-yx-MAU" id="QCK-PQ-IXf"/>
                 <outlet property="TapToEditItLabel" destination="UiD-si-fSa" id="hAZ-EM-lj9"/>
@@ -73,6 +74,10 @@ time entries will appear here.</string>
                                 <constraint firstItem="sWl-8H-c8B" firstAttribute="top" secondItem="Xqe-XF-nVb" secondAttribute="top" id="H2i-Lw-ZNQ"/>
                                 <constraint firstAttribute="trailing" secondItem="o5G-e2-nYj" secondAttribute="trailing" id="jfQ-UO-KJe"/>
                             </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u8c-SR-wNL">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         </view>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="64" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hoP-Tg-vBM" customClass="TimeEntriesLogTableView">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
@@ -161,8 +166,12 @@ time entries will appear here.</string>
                         <constraint firstItem="Xqe-XF-nVb" firstAttribute="centerX" secondItem="Jhd-oR-xIN" secondAttribute="centerX" placeholder="YES" id="00e-VD-Qmg"/>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hoP-Tg-vBM" secondAttribute="trailing" id="1QU-tG-qGu"/>
                         <constraint firstItem="Xqe-XF-nVb" firstAttribute="top" secondItem="Jhd-oR-xIN" secondAttribute="top" constant="239" placeholder="YES" id="62i-O9-M2r"/>
+                        <constraint firstItem="u8c-SR-wNL" firstAttribute="top" secondItem="hoP-Tg-vBM" secondAttribute="top" id="BGs-0b-J4R"/>
                         <constraint firstAttribute="bottom" secondItem="hoP-Tg-vBM" secondAttribute="bottom" id="E1H-dm-543"/>
+                        <constraint firstItem="u8c-SR-wNL" firstAttribute="trailing" secondItem="hoP-Tg-vBM" secondAttribute="trailing" id="GUp-gz-h6A"/>
+                        <constraint firstItem="u8c-SR-wNL" firstAttribute="bottom" secondItem="hoP-Tg-vBM" secondAttribute="bottom" id="OVq-uT-NuN"/>
                         <constraint firstItem="hoP-Tg-vBM" firstAttribute="leading" secondItem="Jhd-oR-xIN" secondAttribute="leading" priority="750" id="b5K-aJ-504"/>
+                        <constraint firstItem="u8c-SR-wNL" firstAttribute="leading" secondItem="hoP-Tg-vBM" secondAttribute="leading" id="dNK-Dd-ech"/>
                         <constraint firstItem="hoP-Tg-vBM" firstAttribute="top" secondItem="Jhd-oR-xIN" secondAttribute="top" id="kGY-lz-B5m"/>
                         <constraint firstAttribute="trailing" secondItem="hoP-Tg-vBM" secondAttribute="trailing" priority="750" id="l5Y-zT-bpE"/>
                         <constraint firstAttribute="trailing" secondItem="r2K-j0-0fe" secondAttribute="trailing" priority="750" constant="16" id="oPZ-Aa-oZE"/>
@@ -427,7 +436,7 @@ time entries will appear here.</string>
                     <exclude reference="oMA-0v-07i"/>
                 </mask>
             </variation>
-            <point key="canvasLocation" x="103.5" y="23.5"/>
+            <point key="canvasLocation" x="103.2" y="22.938530734632685"/>
         </view>
     </objects>
     <resources>

@@ -16,7 +16,12 @@ namespace Toggl.iOS.Extensions
     {
         internal static void Dismiss(this UIViewController viewController)
         {
-            if (viewController.PresentingViewController != null)
+            if (viewController.NavigationController != null &&
+                !viewController.NavigationController.ViewControllers[0].Equals(viewController))
+            {
+                viewController.NavigationController.PopViewController(true);
+            }
+            else if (viewController.PresentingViewController != null)
             {
                 viewController.DismissViewController(true, null);
             }

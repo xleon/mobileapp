@@ -102,12 +102,13 @@ namespace Toggl.Core.UI.ViewModels
 
         private void closeWithDelay()
         {
-            timeService.RunAfterDelay(delayAfterPassordReset, CloseWithDefaultResult);
+            timeService.RunAfterDelay(delayAfterPassordReset, () => { CloseWithDefaultResult(); });
         }
 
-        public override void CloseWithDefaultResult()
+        public override Task<bool> CloseWithDefaultResult()
         {
             Close(EmailParameter.With(Email.Value));
+            return Task.FromResult(true);
         }
 
         private string toErrorString(Exception exception)

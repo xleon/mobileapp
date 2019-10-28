@@ -182,6 +182,7 @@ namespace Toggl.iOS.Autocomplete
         private static UIStringAttributes createBasicAttributes()
             => new UIStringAttributes
             {
+                ForegroundColor = ColorAssets.Text,
                 Font = regularFont,
                 ParagraphStyle = paragraphStyle
             };
