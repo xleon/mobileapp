@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="SignUpTitle" xml:space="preserve">
+    <value>Cadastre-se gratuitamente</value>
+  </data>
+  <data name="LoginTitle" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LoginForgotPassword" xml:space="preserve">
+    <value>Esqueceu sua senha?</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Hoje</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Ontem</value>
+  </data>
+  <data name="IncorrectEmailOrPassword" xml:space="preserve">
+    <value>Email ou senha incorretos. Por favor, tente novamente.</value>
+  </data>
+  <data name="LoginGetHelpLoggingIn" xml:space="preserve">
+    <value>Obtenha ajuda para entrar</value>
+  </data>
+  <data name="MondayInitial" xml:space="preserve">
+    <value>S</value>
+  </data>
+  <data name="TuesdayInitial" xml:space="preserve">
+    <value>T</value>
+  </data>
+  <data name="WednesdayInitial" xml:space="preserve">
+    <value>Q</value>
+  </data>
+  <data name="ThursdayInitial" xml:space="preserve">
+    <value>Q</value>
+  </data>
+  <data name="FridayInitial" xml:space="preserve">
+    <value>S</value>
+  </data>
+  <data name="SaturdayInitial" xml:space="preserve">
+    <value>S</value>
+  </data>
+  <data name="SundayInitial" xml:space="preserve">
+    <value>D</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Ajuda</value>
+  </data>
+  <data name="StartTimeEntryPlaceholder" xml:space="preserve">
+    <value>Em que você está trabalhando?</value>
+  </data>
+  <data name="ManualTimeEntryPlaceholder" xml:space="preserve">
+    <value>O que você fez?</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="SettingsSyncInProgressTitle" xml:space="preserve">
+    <value>Estamos sincronizando os seus dados</value>
+  </data>
+  <data name="SettingsSyncInProgressMessage" xml:space="preserve">
+    <value>Você pode perder seus dados caso tente sair antes da sincronização dos dados terminar.</value>
+  </data>
+  <data name="GenericLoginError" xml:space="preserve">
+    <value>Foi mal, parece que estamos tendo algum problema ao tentar autentica-lo. Por favor, tente novamente.</value>
+  </data>
+  <data name="GenericSignUpError" xml:space="preserve">
+    <value>Foi mal, parece que estamos tendo algum problema ao tentar criar sua conta. Por favor, tente novamente.</value>
+  </data>
+  <data name="SettingsUnsyncedTitle" xml:space="preserve">
+    <value>Dados não sincronizados</value>
+  </data>
+  <data name="SettingsUnsyncedMessage" xml:space="preserve">
+    <value>Alguns dos seus dados ainda não foram sincronizadosdata e serão perdidos caso você saia.</value>
+  </data>
+  <data name="SettingsDialogButtonSignOut" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="UnitSecond" xml:space="preserve">
+    <value>seg</value>
+  </data>
+  <data name="UnitHour" xml:space="preserve">
+    <value>h</value>
+  </data>
+  <data name="UnitMin" xml:space="preserve">
+    <value>min</value>
+  </data>
+  <data name="AddDescription" xml:space="preserve">
+    <value>Adicionar descrição</value>
+  </data>
+  <data name="NoProject" xml:space="preserve">
+    <value>Sem Projeto</value>
+  </data>
+  <data name="NoDescription" xml:space="preserve">
+    <value>Sem Descrição</value>
+  </data>
+  <data name="InaccessibleProject" xml:space="preserve">
+    <value>(projeto inacessível)</value>
+  </data>
+  <data name="WorkspacePlaceholder" xml:space="preserve">
+    <value>(workspace não sincronizado)</value>
+  </data>
+  <data name="ProjectPlaceholder" xml:space="preserve">
+    <value>(projeto não sincronizado)</value>
+  </data>
+  <data name="TaskPlaceholder" xml:space="preserve">
+    <value>(tarefa não sincronizada)</value>
+  </data>
+  <data name="TagPlaceholder" xml:space="preserve">
+    <value>(tag nao sincronizada)</value>
+  </data>
+  <data name="Syncing" xml:space="preserve">
+    <value>Sincronizando...</value>
+  </data>
+  <data name="Offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="PullDownToRefresh" xml:space="preserve">
+    <value>Puxe para atualizar</value>
+  </data>
+  <data name="ReleaseToRefresh" xml:space="preserve">
+    <value>Solte para atualizar</value>
+  </data>
+  <data name="LogEmptyStateTitle" xml:space="preserve">
+    <value>Bem-vindo de volta!</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="ConfirmDeleteNewTETitle" xml:space="preserve">
+    <value>Gostaria de descartar esse registro de tempo?</value>
+  </data>
+  <data name="ContinueEditing" xml:space="preserve">
+    <value>Continuar editando</value>
+  </data>
+  <data name="Discard" xml:space="preserve">
+    <value>Descartar</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Politica de privacidade</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Termos de serviço</value>
+  </data>
+  <data name="And" xml:space="preserve">
+    <value>e</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Deletar</value>
+  </data>
+  <data name="NewProject" xml:space="preserve">
+    <value>Novo Projeto</value>
+  </data>
+  <data name="PrivateProject" xml:space="preserve">
+    <value>Projeto Privado</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Criar</value>
+  </data>
+  <data name="AddClient" xml:space="preserve">
+    <value>Adicionar Cliente</value>
+  </data>
+  <data name="NoClient" xml:space="preserve">
+    <value>Sem Cliente</value>
+  </data>
+  <data name="AddFilterTags" xml:space="preserve">
+    <value>Adicionar/filtrar tags</value>
+  </data>
+  <data name="AddFilterProjects" xml:space="preserve">
+    <value>Adicionar/filtrar projetos</value>
+  </data>
+  <data name="AddFilterClients" xml:space="preserve">
+    <value>Adicionar/filtrar clientes</value>
+  </data>
+  <data name="CreateTag" xml:space="preserve">
+    <value>Criar tag</value>
+  </data>
+  <data name="CreateProject" xml:space="preserve">
+    <value>Criar projeto</value>
+  </data>
+  <data name="Workspace" xml:space="preserve">
+    <value>Workspace</value>
+  </data>
+  <data name="WorkspacePossesive" xml:space="preserve">
+    <value>Workspace de {0}</value>
+  </data>
+  <data name="SetDefaultWorkspace" xml:space="preserve">
+    <value>Selecionar como workspace padrão</value>
+  </data>
+  <data name="EnterProject" xml:space="preserve">
+    <value>Digite o nome do projeto</value>
+  </data>
+  <data name="PasswordResetExplanation" xml:space="preserve">
+    <value>Por favor digite seu email para resetar sua senha.</value>
+  </data>
+  <data name="PasswordResetSuccess" xml:space="preserve">
+    <value>Link enviado. Por favor verifique seu email para mudar sua senha.</value>
+  </data>
+  <data name="PasswordResetEmailDoesNotExistError" xml:space="preserve">
+    <value>Email desconhecido. Certifique-se de que o email está correto e tente novamente</value>
+  </data>
+  <data name="PasswordResetGeneralError" xml:space="preserve">
+    <value>Pedimos desculpas, ocorreu um problem ao tentar mudar sua senha. Tente novamente.</value>
+  </data>
+  <data name="PasswordResetOfflineError" xml:space="preserve">
+    <value>Você está offline. Por favor conecte-se a internet e tente novamente.</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Tem certeza?</value>
+  </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Senha incorreta. Por favor, tente novamente.</value>
+  </data>
+  <data name="GoogleLogin" xml:space="preserve">
+    <value>Entrar usando o Google</value>
+  </data>
+  <data name="GoogleSignUp" xml:space="preserve">
+    <value>Cadastrar-se usando o Google</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>Semana atual</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>Semana passada</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>Mês atual</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Mês passado</value>
+  </data>
+  <data name="ThisYear" xml:space="preserve">
+    <value>Ano atual</value>
+  </data>
+  <data name="LastYear" xml:space="preserve">
+    <value>Ano passado</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Desconhecido</value>
+  </data>
+  <data name="ReportPeriod" xml:space="preserve">
+    <value>Periodo do relatório</value>
+  </data>
+</root>
