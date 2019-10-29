@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
@@ -63,10 +64,8 @@ namespace Toggl.iOS.ViewControllers.Settings
             }
         }
 
-        public override void DismissFromNavigationController()
-        {
-            //Empty override to prevent ViewModel.CloseWithDefaultResult() call
-        }
+        public override Task<bool> DismissFromNavigationController() 
+            => Task.FromResult(true);
     }
 }
 
