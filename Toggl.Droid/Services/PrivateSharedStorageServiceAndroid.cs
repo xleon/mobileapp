@@ -1,4 +1,6 @@
 using Toggl.Core.Services;
+using Toggl.Droid.Helper;
+using Toggl.Droid.Widgets;
 using Toggl.Shared;
 using Toggl.Storage.Settings;
 
@@ -21,6 +23,7 @@ namespace Toggl.Droid.Services
         public void SaveApiToken(string apiToken)
         {
             keyValueStorage.SetString(apiTokenKey, apiToken);
+            updateWidgets();
         }
 
         public void SaveUserId(long userId)
@@ -37,6 +40,7 @@ namespace Toggl.Droid.Services
         {
             keyValueStorage.Remove(apiTokenKey);
             keyValueStorage.Remove(userIdKey);
+            clearWidgets();
         }
 
         public bool HasUserDataStored()
@@ -45,5 +49,17 @@ namespace Toggl.Droid.Services
 
         public string GetApiToken()
             => keyValueStorage.GetString(apiTokenKey);
+
+        private void clearWidgets()
+        {
+            TimeEntryWidgetInfo.Clear();
+            updateWidgets();
+        }
+
+        private void updateWidgets()
+        {
+            AppWidgetProviderUtils.UpdateAllInstances<TimeEntryWidget>();
+            AppWidgetProviderUtils.UpdateAllInstances<SuggestionsWidget>();
+        }
     }
 }

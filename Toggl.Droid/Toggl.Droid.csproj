@@ -397,14 +397,19 @@
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
+    <Compile Include="Extensions\JavaExtensions.cs" />
     <Compile Include="Fragments\ReportsCalendarFragment.cs" />
     <Compile Include="Helper\ActiveTheme.cs" />
     <Compile Include="LayoutManagers\UnpredictiveLinearLayoutManager.cs" />
+    <Compile Include="Helper\AppWidgetProviderUtils.cs" />
+    <Compile Include="Helper\NotificationsConstants.cs" />
     <Compile Include="Presentation\ActivityTransitions.cs" />
     <Compile Include="Presentation\RunningTimeEntrySheetBehavior.cs" />
     <Compile Include="Services\JobServicesConstants.cs" />
     <Compile Include="Services\FetchRemoteConfigServiceAndroid.cs" />
     <Compile Include="Services\SyncJobService.cs" />
+    <Compile Include="Services\WidgetsForegroundService.cs" />
+    <Compile Include="Services\WidgetsServiceAndroid.cs" />
     <Compile Include="Services\TogglFirebaseIIDService.cs" />
     <Compile Include="Services\TogglFirebaseMessagingService.cs" />
     <Compile Include="Services\PushNotificationsTokenServiceAndroid.cs" />
@@ -414,6 +419,7 @@
     <Compile Include="Presentation\AndroidPresenter.cs" />
     <Compile Include="Presentation\DialogFragmentPresenter.cs" />
     <Compile Include="Presentation\ViewModelCache.cs" />
+    <Compile Include="Services\WidgetsAnalyticsService.cs" />
     <Compile Include="Startup\AndroidDependencyContainer.cs" />
     <Compile Include="Extensions\FloatingActionButtonExtensions.cs" />
     <Compile Include="Presentation\IScrollableToTop.cs" />
@@ -682,7 +688,26 @@
     <Compile Include="BroadcastReceivers\BootCompletedBroadcastReceiver.cs" />
     <Compile Include="Services\ScheduleEventNotificationsService.cs" />
     <Compile Include="Views\VerticallyCenteredImageSpan.cs" />
+    <Compile Include="Widgets\ISuggestionsWidgetFormFactor.cs" />
+    <Compile Include="Widgets\SuggestionsWidget.cs" />
+    <Compile Include="Widgets\SuggestionsWidgetFactory.cs" />
+    <Compile Include="Widgets\SuggestionsWidgetNotLoggedInFormFactor.cs" />
+    <Compile Include="Widgets\SuggestionsWidgetListFormFactor.cs" />
+    <Compile Include="Widgets\SuggestionsWidgetService.cs" />
+    <Compile Include="Widgets\SuggestionsWidgetViewsFactory.cs" />
+    <Compile Include="Widgets\TimeEntryWidgetButtonOnlyFormFactor.cs" />
+    <Compile Include="Widgets\ITimeEntryWidgetFormFactor.cs" />
+    <Compile Include="Widgets\TimeEntryWidgetStartStopButtonFormFactor.cs" />
+    <Compile Include="Widgets\TimeEntryWidgetInfo.cs" />
+    <Compile Include="Widgets\WidgetDimensions.cs" />
+    <Compile Include="Widgets\TimeEntryWidget.cs" />
     <Compile Include="Services\AccessibilityServiceAndroid.cs" />
+    <Compile Include="Widgets\TimeEntryWidgetFactory.cs" />
+    <Compile Include="Widgets\TimeEntryWidgetNotLoggedInFormFactor.cs" />
+    <Compile Include="Widgets\WidgetNotLoggedInFormFactor.cs" />
+    <Compile Include="Widgets\WidgetsConstants.cs" />
+    <Compile Include="Widgets\TimeEntryWidgetDefaultFormFactor.cs" />
+    <Compile Include="Widgets\WidgetSuggestionItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -690,6 +715,7 @@
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\color\FlatButtonTextColor.xml" />
     <AndroidResource Include="Resources\color\ToolbarButtonTextColor.xml" />
+    <AndroidResource Include="Resources\drawable\TimerWidgetBackground.xml" />
     <AndroidResource Include="Resources\drawable\toolbar_close.xml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
@@ -699,6 +725,7 @@
     <AndroidResource Include="Resources\drawable\Splash.xml" />
     <AndroidResource Include="Resources\drawable\text_placeholder.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
+    <AndroidResource Include="Resources\layout\WidgetLoading.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendar.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
@@ -711,6 +738,11 @@
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
+    <AndroidResource Include="Resources\layout\SuggestionsWidget.axml" />
+    <AndroidResource Include="Resources\layout\SuggestionsWidgetItem.axml" />
+    <AndroidResource Include="Resources\layout\TimeEntryWidgetSmall.axml" />
+    <AndroidResource Include="Resources\layout\WidgetNotLoggedIn.axml" />
+    <AndroidResource Include="Resources\menu\GenericSaveMenu.xml" />
     <AndroidResource Include="Resources\menu\DoneOrClearMenu.xml" />
     <AndroidResource Include="Resources\menu\OneButtonMenu.xml" />
     <AndroidResource Include="Resources\values\Strings.xml" />
@@ -1078,6 +1110,8 @@
     <AndroidResource Include="Resources\menu\CalendarSettingsMenu.xml" />
     <AndroidResource Include="Resources\layout\CalendarHeaderView.axml" />
     <AndroidResource Include="Resources\drawable\CalendarHeaderDayBackground.xml" />
+    <AndroidResource Include="Resources\drawable\WidgetStartButton.xml" />
+    <AndroidResource Include="Resources\drawable\WidgetStopButton.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core\Toggl.Core.csproj">
@@ -1151,6 +1185,11 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\layout\TimeEntryWidget.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
     <AndroidResource Include="Resources\drawable\ic_toggl_logo.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
@@ -1200,6 +1239,12 @@
     <AndroidResource Include="Resources\values-night\Styles.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\xml\SuggestionsWidgetProvider.xml" />
+    <AndroidResource Include="Resources\xml\TimeEntryWidgetProvider.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>

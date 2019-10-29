@@ -1,14 +1,14 @@
 using Foundation;
-using SiriExtension.Exceptions;
-using SiriExtension.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using Toggl.iOS.Shared;
+using Toggl.iOS.Shared.Analytics;
+using Toggl.iOS.Shared.Exceptions;
+using Toggl.iOS.Shared.Extensions;
+using Toggl.iOS.Shared.Models;
 using System.Reactive.Threading.Tasks;
-using Toggl.iOS.ExtensionKit;
-using Toggl.iOS.ExtensionKit.Analytics;
-using Toggl.iOS.ExtensionKit.Extensions;
 using Toggl.iOS.Intents;
 using Toggl.Networking;
 using Toggl.Shared;
@@ -50,14 +50,14 @@ namespace SiriExtension
                     },
                     exception =>
                     {
-                        SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
+                        SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
                         completion(responseFromException(exception));
                     });
         }
 
         public override void HandleStopTimer(StopTimerIntent intent, Action<StopTimerIntentResponse> completion)
         {
-            SharedStorage.instance.SetNeedsSync(true);
+            SharedStorage.Instance.SetNeedsSync(true);
 
             stopTimeEntry(runningEntry)
                 .Subscribe(
@@ -74,13 +74,13 @@ namespace SiriExtension
                         response.EntryStart = stoppedTimeEntry.Start.ToUnixTimeSeconds();
                         response.EntryDuration = stoppedTimeEntry.Duration;
 
-                        SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.StopTimer());
+                        SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.StopTimer());
 
                         completion(response);
                     },
                     exception =>
                     {
-                        SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
+                        SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
                         completion(responseFromException(exception));
                     }
                 );
@@ -123,7 +123,7 @@ namespace SiriExtension
         {
             var duration = (long)(DateTime.Now - timeEntry.Start).TotalSeconds;
             return togglAPI.TimeEntries.Update(
-                TimeEntry.from(timeEntry).with(duration)
+                TimeEntry.From(timeEntry).With(duration)
             ).ToObservable();
         }
 

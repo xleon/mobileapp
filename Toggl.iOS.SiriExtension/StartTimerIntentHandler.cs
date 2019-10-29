@@ -1,13 +1,12 @@
 using Foundation;
-using SiriExtension.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
+using Toggl.iOS.Shared;
+using Toggl.iOS.Shared.Analytics;
+using Toggl.iOS.Shared.Extensions;
+using Toggl.iOS.Shared.Models;
 using System.Reactive.Threading.Tasks;
-using Toggl.iOS.ExtensionKit;
-using Toggl.iOS.ExtensionKit.Analytics;
-using Toggl.iOS.ExtensionKit.Extensions;
 using Toggl.iOS.Intents;
 using Toggl.Networking;
 using Toggl.Shared;
@@ -42,14 +41,14 @@ namespace SiriExtension
             var timeEntry = createTimeEntry(intent);
             togglAPI.TimeEntries.Create(timeEntry).ToObservable().Subscribe(te =>
             {
-                SharedStorage.instance.SetNeedsSync(true);
-                SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.StartTimer(te));
+                SharedStorage.Instance.SetNeedsSync(true);
+                SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.StartTimer(te));
 
                 var response = new StartTimerIntentResponse(StartTimerIntentResponseCode.Success, null);
                 completion(response);
             }, exception =>
             {
-                SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
+                SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
                 var userActivity = new NSUserActivity(startTimerActivityType);
                 userActivity.SetResponseText(Resources.SomethingWentWrongTryAgain);
                 completion(new StartTimerIntentResponse(StartTimerIntentResponseCode.Failure, userActivity));
@@ -58,11 +57,11 @@ namespace SiriExtension
 
         private TimeEntry createTimeEntry(StartTimerIntent intent)
         {
-            var workspaceId = intent.Workspace == null ? SharedStorage.instance.GetDefaultWorkspaceId() : (long)Convert.ToDouble(intent.Workspace.Identifier);
+            var workspaceId = intent.Workspace == null ? SharedStorage.Instance.GetDefaultWorkspaceId() : (long)Convert.ToDouble(intent.Workspace.Identifier);
 
             if (string.IsNullOrEmpty(intent.EntryDescription))
             {
-                return new TimeEntry(workspaceId, null, null, false, DateTimeOffset.Now, null, "", new long[0], (long)SharedStorage.instance.GetUserId(), 0, null, DateTimeOffset.Now);
+                return new TimeEntry(workspaceId, null, null, false, DateTimeOffset.Now, null, "", new long[0], (long)SharedStorage.Instance.GetUserId(), 0, null, DateTimeOffset.Now);
             }
 
             return new TimeEntry(
@@ -74,7 +73,7 @@ namespace SiriExtension
                 null,
                 intent.EntryDescription,
                 intent.Tags == null ? new long[0] : stringToLongCollection(intent.Tags.Select(tag => tag.Identifier)),
-                (long)SharedStorage.instance.GetUserId(),
+                (long)SharedStorage.Instance.GetUserId(),
                 0,
                 null,
                 DateTimeOffset.Now

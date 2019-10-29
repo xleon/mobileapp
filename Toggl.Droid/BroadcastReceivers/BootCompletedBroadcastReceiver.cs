@@ -1,6 +1,8 @@
 ﻿using Android.App;
 using Android.Content;
+using Toggl.Droid.Helper;
 using Toggl.Droid.Services;
+using Toggl.Droid.Widgets;
 
 namespace Toggl.Droid.BroadcastReceivers
 {
@@ -14,6 +16,8 @@ namespace Toggl.Droid.BroadcastReceivers
         public override void OnReceive(Context context, Intent intent)
         {
             ScheduleEventNotificationsService.EnqueueWork(context, intent);
+            AppWidgetProviderUtils.UpdateAllInstances<TimeEntryWidget>();
+            AppWidgetProviderUtils.UpdateAllInstances<SuggestionsWidget>();
         }
     }
 }

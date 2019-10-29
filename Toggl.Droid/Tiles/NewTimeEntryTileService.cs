@@ -2,7 +2,7 @@
 using Android.Content;
 using Android.Net;
 using Android.Service.QuickSettings;
-using Toggl.Core;
+using Toggl.Shared;
 
 namespace Toggl.Droid.Tiles
 {
