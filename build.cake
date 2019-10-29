@@ -11,7 +11,14 @@ public class TemporaryFileTransformation
     public string Temporary { get; set; }
 }
 
+private HashSet<string> stagingTargets = new HashSet<string>
+{
+    "Build.Release.iOS.AdHoc",
+    "Build.Release.Android.AdHoc"
+};
+
 var target = Argument("target", "Default");
+var isStaging = stagingTargets.Contains(target);
 var buildAll = Argument("buildall", Bitrise.IsRunningOnBitrise);
 
 private void FormatAndroidAxml()
@@ -153,18 +160,24 @@ private TemporaryFileTransformation GetAndroidProjectConfigurationTransformation
     };
 }
 
+private string GetStagingAwareEnvironmentVariable(string varName)
+{
+    return isStaging ? EnvironmentVariable(varName + "_STAGING") : EnvironmentVariable(varName);
+}
+
 private TemporaryFileTransformation GetIosAnalyticsServicesConfigurationTransformation()
 {
     const string path = "Toggl.iOS/GoogleService-Info.plist";
     var adUnitForBannerTest = EnvironmentVariable("TOGGL_AD_UNIT_ID_FOR_BANNER_TEST");
     var adUnitIdForInterstitialTest = EnvironmentVariable("TOGGL_AD_UNIT_ID_FOR_INTERSTITIAL_TEST");
-    var clientId = EnvironmentVariable("TOGGL_CLIENT_ID");
-    var reversedClientId = EnvironmentVariable("TOGGL_REVERSED_CLIENT_ID");
-    var apiKey = EnvironmentVariable("TOGGL_API_KEY");
-    var gcmSenderId = EnvironmentVariable("TOGGL_GCM_SENDER_ID");
-    var projectId = EnvironmentVariable("TOGGL_PROJECT_ID");
-    var storageBucket = EnvironmentVariable("TOGGL_STORAGE_BUCKET");
-    var googleAppId = EnvironmentVariable("TOGGL_GOOGLE_APP_ID");
+    
+    var clientId = GetStagingAwareEnvironmentVariable("TOGGL_CLIENT_ID");
+    var reversedClientId = GetStagingAwareEnvironmentVariable("TOGGL_REVERSED_CLIENT_ID");
+    var apiKey = GetStagingAwareEnvironmentVariable("TOGGL_API_KEY");
+    var gcmSenderId = GetStagingAwareEnvironmentVariable("TOGGL_GCM_SENDER_ID");
+    var projectId = GetStagingAwareEnvironmentVariable("TOGGL_PROJECT_ID");
+    var storageBucket = GetStagingAwareEnvironmentVariable("TOGGL_STORAGE_BUCKET");
+    var googleAppId = GetStagingAwareEnvironmentVariable("TOGGL_GOOGLE_APP_ID");
 
     var filePath = GetFiles(path).Single();
     var file = TransformTextFile(filePath).ToString();
@@ -215,14 +228,17 @@ private TemporaryFileTransformation GetIosAppDelegateTransformation()
 private TemporaryFileTransformation GetAndroidGoogleServicesTransformation()
 {
     const string path = "Toggl.Droid/google-services.json";
-    var gcmSenderId = EnvironmentVariable("TOGGL_GCM_SENDER_ID");
-    var databaseUrl = EnvironmentVariable("TOGGL_DATABASE_URL");
-    var projectId = EnvironmentVariable("TOGGL_PROJECT_ID");
-    var storageBucket = EnvironmentVariable("TOGGL_STORAGE_BUCKET");
+    var gcmSenderId = GetStagingAwareEnvironmentVariable("TOGGL_GCM_SENDER_ID");
+    var databaseUrl = GetStagingAwareEnvironmentVariable("TOGGL_DATABASE_URL");
+    var projectId = GetStagingAwareEnvironmentVariable("TOGGL_PROJECT_ID");
+    var storageBucket = GetStagingAwareEnvironmentVariable("TOGGL_STORAGE_BUCKET");
+    var apiKey = GetStagingAwareEnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_API_KEY");
+    
     var mobileSdkAppId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_MOBILE_SDK_APP_ID");
     var mobileSdkAdhocAppId = EnvironmentVariable("TOGGL_DROID_ADHOC_GOOGLE_SERVICES_MOBILE_SDK_APP_ID");
+    var mobileSdkAdhocAppIdStaging = EnvironmentVariable("TOGGL_DROID_ADHOC_GOOGLE_SERVICES_MOBILE_SDK_APP_ID_STAGING");
+
     var clientId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID");
-    var apiKey = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_API_KEY");
 
     var filePath = GetFiles(path).Single();
     var file = TransformTextFile(filePath).ToString();
@@ -237,6 +253,7 @@ private TemporaryFileTransformation GetAndroidGoogleServicesTransformation()
                         .Replace("{TOGGL_STORAGE_BUCKET}", storageBucket)
                         .Replace("{TOGGL_DROID_GOOGLE_SERVICES_MOBILE_SDK_APP_ID}", mobileSdkAppId)
                         .Replace("{TOGGL_DROID_ADHOC_GOOGLE_SERVICES_MOBILE_SDK_APP_ID}", mobileSdkAdhocAppId)
+                        .Replace("{TOGGL_DROID_ADHOC_GOOGLE_SERVICES_MOBILE_SDK_APP_ID_STAGING}", mobileSdkAdhocAppIdStaging)
                         .Replace("{TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID}", clientId)
                         .Replace("{TOGGL_DROID_GOOGLE_SERVICES_API_KEY}", apiKey)
     };
