@@ -80,7 +80,7 @@ namespace Toggl.iOS.ViewControllers
             ViewModel?.ViewDestroyed();
         }
 
-        public void DismissFromNavigationController()
+        public virtual void DismissFromNavigationController()
         {
             ViewModel.CloseWithDefaultResult();
         }

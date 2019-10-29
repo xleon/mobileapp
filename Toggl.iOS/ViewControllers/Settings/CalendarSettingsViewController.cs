@@ -62,6 +62,11 @@ namespace Toggl.iOS.ViewControllers.Settings
                 ViewModel.Save.Execute();
             }
         }
+
+        public override void DismissFromNavigationController()
+        {
+            //Empty override to prevent ViewModel.CloseWithDefaultResult() call
+        }
     }
 }
 
