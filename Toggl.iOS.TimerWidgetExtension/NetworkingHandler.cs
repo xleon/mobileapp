@@ -30,7 +30,8 @@ namespace Toggl.iOS.TimerWidgetExtension
             try
             {
                 var createdTimeEntry = await togglApi.TimeEntries
-                    .Create(timeEntry);
+                    .Create(timeEntry)
+                    .ConfigureAwait(false);
 
                 SharedStorage.Instance.SetNeedsSync(true);
                 SharedStorage.Instance.AddWidgetTrackingEvent(WidgetTrackingEvent.StartTimer());
