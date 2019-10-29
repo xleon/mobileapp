@@ -31,7 +31,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
             );
 
             OkayButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             DoNotShowAgainButton.Rx()

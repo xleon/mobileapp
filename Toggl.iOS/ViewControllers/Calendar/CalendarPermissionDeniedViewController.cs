@@ -56,7 +56,7 @@ namespace Toggl.iOS.ViewControllers.Calendar
                 .DisposedBy(DisposeBag);
 
             ContinueWithoutAccessButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => { ViewModel.CloseWithDefaultResult(); })
                 .DisposedBy(DisposeBag);
         }
     }

@@ -31,7 +31,7 @@ namespace Toggl.Droid.Fragments
             base.OnViewCreated(view, savedInstanceState);
 
             cancelButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             doneButton

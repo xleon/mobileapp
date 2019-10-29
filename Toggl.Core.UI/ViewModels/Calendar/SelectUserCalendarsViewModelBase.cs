@@ -126,9 +126,10 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             calendar.Selected = !calendar.Selected;
         }
 
-        public override void CloseWithDefaultResult()
+        public override Task<bool> CloseWithDefaultResult()
         {
             Close(InitialSelectedCalendarIds.ToArray());
+            return Task.FromResult(true);
         }
 
         protected virtual void Done()

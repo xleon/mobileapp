@@ -8,6 +8,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public class ReactiveNavigationController : UINavigationController
     {
+        private UIColor barBackgroundColor = ColorAssets.Background;
+
         private static UITextAttributes barButtonTextAttributes = new UITextAttributes
         {
             Font = UIFont.SystemFontOfSize(14, UIFontWeight.Medium),
@@ -48,7 +50,7 @@ namespace Toggl.iOS.ViewControllers
             var viewControllerToPop = ViewControllers.Last();
             if (viewControllerToPop is IReactiveViewController reactiveViewController)
             {
-                reactiveViewController.DismissFromNavigationController();
+                reactiveViewController.ViewcontrollerWasPopped();
             }
 
             return base.PopViewController(animated);
@@ -73,6 +75,12 @@ namespace Toggl.iOS.ViewControllers
             viewController.NavigationItem.BackBarButtonItem?.SetBackgroundVerticalPositionAdjustment(6, UIBarMetrics.Default);
         }
 
+        public void SetBackgroundColor(UIColor color)
+        {
+            barBackgroundColor = color;
+            setupAppearance();
+        }
+
         public override void TraitCollectionDidChange(UITraitCollection previousTraitCollection)
         {
             base.TraitCollectionDidChange(previousTraitCollection);
@@ -81,7 +89,6 @@ namespace Toggl.iOS.ViewControllers
 
         private void setupAppearance()
         {
-            var barBackgroundColor = ColorAssets.Background;
             NavigationBar.ShadowImage = new UIImage();
             NavigationBar.BarTintColor = barBackgroundColor;
             NavigationBar.BackgroundColor = barBackgroundColor;

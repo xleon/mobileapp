@@ -1,5 +1,7 @@
 using Foundation;
 using System;
+using System.Linq;
+using Toggl.iOS.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views
@@ -15,11 +17,8 @@ namespace Toggl.iOS.Views
         private const int minDescriptionWidth = 74;
         private const int maxDescriptionWidth = 110;
 
-        private static readonly UIColor[] Colors =
-        {
-            UIColor.FromRGB(237f / 255f, 210f / 255f, 255f / 255f),
-            UIColor.FromRGB(198f / 255f, 237f / 255f, 245f / 255f)
-        };
+        private readonly UIColor[] Colors =
+            Core.UI.Helper.Colors.DefaultProjectColors.Select(c => c.ToNativeColor()).ToArray();
 
         public TimeEntryMockView(IntPtr handle) : base(handle)
         {
@@ -44,6 +43,8 @@ namespace Toggl.iOS.Views
             ProjectWidthConstraint.Constant = Random.Next(minProjectWidth, maxProjectWidth);
             ProjectView.BackgroundColor = Colors[Random.Next(0, Colors.Length)];
             DescriptionWidthConstraint.Constant = Random.Next(minDescriptionWidth, maxDescriptionWidth);
+
+            this.InsertSeparator();
 
             SetNeedsLayout();
             SetNeedsUpdateConstraints();

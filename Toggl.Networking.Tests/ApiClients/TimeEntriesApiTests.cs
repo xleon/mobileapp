@@ -47,9 +47,7 @@ namespace Toggl.Networking.Tests.ApiClients
                     HttpStatusCode.NotFound);
                 apiClient.Send(Arg.Any<IRequest>()).Returns(notFoundResponse);
 
-                var result = await api.Delete(new TimeEntry { Id = 123 });
-
-                result.Should().Be(Unit.Default);
+                await api.Delete(new TimeEntry { Id = 123 });
             }
 
             [Theory]

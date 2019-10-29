@@ -23,7 +23,9 @@ namespace Toggl.iOS
             var navigationService = IosDependencyContainer.Instance.NavigationService;
 
             var interaction = userActivity.GetInteraction();
-            if (interaction == null || interaction.IntentHandlingStatus != INIntentHandlingStatus.DeferredToApplication)
+            if (interaction == null ||
+                (interaction.IntentHandlingStatus != INIntentHandlingStatus.DeferredToApplication
+                && interaction.IntentHandlingStatus != INIntentHandlingStatus.Unspecified))
             {
                 return false;
             }

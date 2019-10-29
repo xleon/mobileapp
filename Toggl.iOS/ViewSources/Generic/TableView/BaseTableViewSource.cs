@@ -17,6 +17,9 @@ namespace Toggl.iOS.ViewSources
         public EventHandler<CGPoint> OnScrolled { get; set; }
         public EventHandler OnDragStarted { get; set; }
 
+        // This one is emitted from UITableViewExtensions whenever the datasource changes are applied
+        public EventHandler OnItemsChanged { get; set; }
+
         public BaseTableViewSource()
             : this(ImmutableList<TModel>.Empty)
         {
