@@ -405,14 +405,14 @@ namespace Toggl.Networking.Tests.Integration
             [Theory, LogTestInfo]
             [InlineData("x.y.z")]
             [InlineData("asdkjasdkhjdsadhkda")]
-            public void FailsWithServiceUnavailableErrorWhenTheGoogleTokenIsARandomNonEmptyString(string notAToken)
+            public void FailsWhenTheGoogleTokenIsARandomNonEmptyString(string notAToken)
             {
                 Action signUp = () => unauthenticatedTogglApi
                     .User
                     .SignUpWithGoogle(notAToken, true, 237, null)
                     .Wait();
 
-                signUp.Should().Throw<ServiceUnavailableException>();
+                signUp.Should().Throw<UnauthorizedException>();
             }
 
             [Fact, LogTestInfo]
@@ -425,7 +425,7 @@ namespace Toggl.Networking.Tests.Integration
                     .SignUpWithGoogle(jwt, true, 237, null)
                     .Wait();
 
-                signUp.Should().Throw<ServiceUnavailableException>();
+                signUp.Should().Throw<UnauthorizedException>();
             }
         }
 

@@ -53,7 +53,8 @@ namespace Toggl.Core.UI.ViewModels
             IRxActionFactory rxActionFactory,
             IUserAccessManager userAccessManager,
             IPrivateSharedStorageService privateSharedStorageService,
-            IPlatformInfo platformInfo)
+            IPlatformInfo platformInfo,
+            IWidgetsService widgetsService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -76,6 +77,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
+            Ensure.Argument.IsNotNull(widgetsService, nameof(widgetsService));
 
             this.remoteConfigService = remoteConfigService;
             this.platformInfo = platformInfo;
@@ -98,7 +100,8 @@ namespace Toggl.Core.UI.ViewModels
                 rxActionFactory,
                 permissionsChecker,
                 backgroundService,
-                platformInfo);
+                platformInfo,
+                widgetsService);
 
             reportsViewModel = new ReportsViewModel(
                 dataSource,

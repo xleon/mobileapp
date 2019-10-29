@@ -19,6 +19,9 @@ using Toggl.Shared.Extensions;
 using TogglResources = Toggl.Shared.Resources;
 using Toggl.Droid.Extensions.Reactive;
 using System.Linq;
+using Toggl.Droid.Widgets;
+using Android.Appwidget;
+using Android.App;
 
 namespace Toggl.Droid.ViewHolders
 {
@@ -95,6 +98,5 @@ namespace Toggl.Droid.ViewHolders
 
             DisposeBag.Dispose();
         }
-
     }
 }

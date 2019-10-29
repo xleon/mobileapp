@@ -373,6 +373,42 @@ private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransf
     };
 }
 
+private TemporaryFileTransformation GetIosTimerWidgetExtensionInfoConfigurationTransformation()
+{
+    const string path = "Toggl.iOS.TimerWidgetExtension/Info.plist";
+    const string bundleIdToReplace = "com.toggl.daneel.debug.TimerWidgetExtension";
+    const string appNameToReplace = "Toggl for Devs";
+
+    var commitCount = GetCommitCount();
+
+    var bundleId = bundleIdToReplace;
+    var appName = appNameToReplace;
+
+    if (target == "Build.Release.iOS.AdHoc")
+    {
+        bundleId = "com.toggl.daneel.adhoc.TimerWidgetExtension";
+        appName = "Toggl for Tests";
+    }
+    else if (target == "Build.Release.iOS.AppStore")
+    {
+        bundleId = "com.toggl.daneel.TimerWidgetExtension";
+        appName = "Toggl";
+    }
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    {
+        Path = path,
+        Original = file,
+        Temporary = file.Replace("IOS_BUNDLE_VERSION", commitCount)
+                        .Replace(bundleIdToReplace, bundleId)
+                        .Replace(appNameToReplace, appName)
+    };
+}
+
+
 private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformation()
 {
     const string path = "Toggl.iOS/Entitlements.plist";
@@ -404,9 +440,36 @@ private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformatio
     };
 }
 
-private TemporaryFileTransformation GetIosExtensionEntitlementsConfigurationTransformation()
+private TemporaryFileTransformation GetIosSiriExtensionEntitlementsConfigurationTransformation()
 {
     const string path = "Toggl.iOS.SiriExtension/Entitlements.plist";
+    const string groupIdToReplace = "group.com.toggl.daneel.debug.extensions";
+
+    var groupId = groupIdToReplace;
+
+    if (target == "Build.Release.iOS.AdHoc")
+    {
+        groupId = "group.com.toggl.daneel.adhoc.extensions";
+    }
+    else if (target == "Build.Release.iOS.AppStore")
+    {
+        groupId = "group.com.toggl.daneel.extensions";
+    }
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    {
+        Path = path,
+        Original = file,
+        Temporary = file.Replace(groupIdToReplace, groupId)
+    };
+}
+
+private TemporaryFileTransformation GetIosTimerWidgetExtensionEntitlementsConfigurationTransformation()
+{
+    const string path = "Toggl.iOS.TimerWidgetExtension/Entitlements.plist";
     const string groupIdToReplace = "group.com.toggl.daneel.debug.extensions";
 
     var groupId = groupIdToReplace;
@@ -565,11 +628,13 @@ var transformations = new List<TemporaryFileTransformation>
     GetIosInfoConfigurationTransformation(),
     GetIosSiriExtensionInfoConfigurationTransformation(),
     GetIosSiriUIExtensionInfoConfigurationTransformation(),
+    GetIosTimerWidgetExtensionInfoConfigurationTransformation(),
     GetIosAppDelegateTransformation(),
     GetIntegrationTestsConfigurationTransformation(),
     GetIosAnalyticsServicesConfigurationTransformation(),
     GetIosEntitlementsConfigurationTransformation(),
-    GetIosExtensionEntitlementsConfigurationTransformation(),
+    GetIosSiriExtensionEntitlementsConfigurationTransformation(),
+    GetIosTimerWidgetExtensionEntitlementsConfigurationTransformation(),
     GetAndroidProjectConfigurationTransformation(),
     GetAndroidGoogleServicesTransformation(),
     GetAndroidGoogleLoginTransformation(),
@@ -618,6 +683,7 @@ Task("Clean")
             CleanDirectory("./Toggl.iOS/obj");
             CleanDirectory("./Toggl.iOS.SiriExtension/obj");
             CleanDirectory("./Toggl.iOS.SiriExtension.UI/obj");
+            CleanDirectory("./Toggl.iOS.TimerWidgetExtension/obj");
             CleanDirectory("./Toggl.iOS.Tests/obj");
             CleanDirectory("./Toggl.iOS.Tests.UI/obj");
             CleanDirectory("./Toggl.Droid/obj");

@@ -106,7 +106,7 @@ namespace Toggl.iOS
 
         protected override IApplicationShortcutCreator CreateShortcutCreator()
             => new ApplicationShortcutCreator();
-        
+
         protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
             => new PushNotificationsTokenServiceIos();
 
@@ -127,5 +127,8 @@ namespace Toggl.iOS
 
         protected override IAccessibilityService CreateAccessibilityService()
             => new AccessibilityServiceIos();
+
+        protected override IWidgetsService CreateWidgetsService()
+            => new WidgetsServiceIos(DataSource);
     }
 }

@@ -108,22 +108,22 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.2.1.1\lib\Xamarin.iOS10\Microsoft.AppCenter.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.2.5.0\lib\Xamarin.iOS10\Microsoft.AppCenter.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Analytics, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.1.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Analytics.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.5.0\lib\Xamarin.iOS10\Microsoft.AppCenter.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Analytics.iOS.Bindings, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.1.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Analytics.iOS.Bindings.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.5.0\lib\Xamarin.iOS10\Microsoft.AppCenter.Analytics.iOS.Bindings.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Crashes, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.1.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Crashes.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.5.0\lib\Xamarin.iOS10\Microsoft.AppCenter.Crashes.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Crashes.iOS.Bindings, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.1.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Crashes.iOS.Bindings.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.5.0\lib\Xamarin.iOS10\Microsoft.AppCenter.Crashes.iOS.Bindings.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.iOS.Bindings, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.2.1.1\lib\Xamarin.iOS10\Microsoft.AppCenter.iOS.Bindings.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.2.5.0\lib\Xamarin.iOS10\Microsoft.AppCenter.iOS.Bindings.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
@@ -1267,25 +1267,8 @@
     <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_1024pt.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\Colors.xcassets\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\Background.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\Text.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\Text2.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\Separator.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\OpaqueSeparator.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\TableBackground.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CellBackground.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\Text3.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\Text4.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CustomGray.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CustomGray2.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CustomGray3.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CustomGray4.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CustomGray5.colorset\Contents.json" />
-    <ImageAsset Include="Resources\Colors.xcassets\CustomGray6.colorset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo%402x.png" />
-    <ImageAsset Include="Resources\Colors.xcassets\InverseText.colorset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpiderDark.png" />
     <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpiderDark%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpiderDark%403x.png" />
@@ -1295,17 +1278,34 @@
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorSpider.imageset\icIllustrationErrorSpiderDark.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorSpider.imageset\icIllustrationErrorSpiderDark%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorSpider.imageset\icIllustrationErrorSpiderDark%403x.png" />
-    <ImageAsset Include="Resources\Colors.xcassets\Text1.colorset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogoDark-1.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogoDark%402x-1.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogoDark%403x-1.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogoBig.imageset\logoBigDark-1.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogoBig.imageset\logoBigDark%402x-1.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogoBig.imageset\logoBigDark%403x-1.png" />
-    <ImageAsset Include="Resources\Colors.xcassets\Spider.colorset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark.png" />
     <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark%403x.png" />
+    <ImageAsset Include="Resources\Colors.xcassets\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Spider.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text4.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\TableBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CellBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Background.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text2.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text3.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray6.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Separator.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray2.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray3.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\InverseText.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray5.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray4.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\OpaqueSeparator.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text1.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text.colorset\Contents.json" />
     <ImageAsset Include="Resources\Colors.xcassets\ErrorText.colorset\Contents.json" />
     <ImageAsset Include="Resources\Colors.xcassets\ErrorBackground.colorset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboard.imageset\pasteFromClipboard_Dark.pdf" />
@@ -1435,6 +1435,7 @@
     <Compile Include="Extensions\Reactive\UISliderExtensions.cs" />
     <Compile Include="Extensions\Reactive\WheelForegroundViewExtensions.cs" />
     <Compile Include="Extensions\SectionedIndexExtensions.cs" />
+    <Compile Include="Extensions\SuggestionExtensions.cs" />
     <Compile Include="Extensions\ViewControllerExtensions.cs" />
     <Compile Include="Helper\PermissionsHelper.cs" />
     <Compile Include="Presentation\IosPresenter.cs" />
@@ -1459,6 +1460,7 @@
     <Compile Include="Services\PushNotificationsTokenServiceIos.cs" />
     <Compile Include="Services\IntentDonationService.cs" />
     <Compile Include="Services\FetchRemoteConfigServiceIos.cs" />
+    <Compile Include="Services\WidgetsServiceIos.cs" />
     <Compile Include="Services\UserDefaultsStorageIos.cs" />
     <Compile Include="Services\WatchService.cs" />
     <Compile Include="Startup\AppDelegate.Deeplink.cs">
@@ -2007,6 +2009,8 @@
     <Compile Include="ViewSources\Generic\Common\SelectorTableViewSource.cs" />
     <Compile Include="Helper\Handoff.cs" />
     <Compile Include="Extensions\TextViewExtensions.cs" />
+    <Compile Include="Analytics\WidgetTrackingEventExtensions.cs" />
+    <Compile Include="Analytics\WidgetErrorTrackingEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">
@@ -2016,6 +2020,10 @@
     <ProjectReference Include="..\Toggl.Core\Toggl.Core.csproj">
       <Project>{09D75C0B-3367-4678-97EF-6EADE64AF09C}</Project>
       <Name>Toggl.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Toggl.iOS.Shared\Toggl.iOS.Shared.csproj">
+      <Project>{aca2821e-0ff9-4036-bff6-e775bb4e6732}</Project>
+      <Name>Toggl.iOS.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\Toggl.Storage\Toggl.Storage.csproj">
       <Project>{3A603451-31B2-4975-9366-3212BEA78F57}</Project>
@@ -2042,14 +2050,15 @@
       <Project>{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}</Project>
       <Name>Toggl.iOS.SiriExtension</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.iOS.ExtensionKit\Toggl.iOS.ExtensionKit.csproj">
-      <Project>{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}</Project>
-      <Name>Toggl.iOS.ExtensionKit</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Toggl.iOS.SiriExtension.UI\Toggl.iOS.SiriExtension.UI.csproj">
       <IsAppExtension>true</IsAppExtension>
       <Project>{BC329A24-95D6-4D02-95B5-2AA699D8873A}</Project>
       <Name>Toggl.iOS.SiriExtension.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Toggl.iOS.TimerWidgetExtension\Toggl.iOS.TimerWidgetExtension.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Project>{0C219958-CAD1-4B1B-BBCB-D12CC6E11F49}</Project>
+      <Name>Toggl.iOS.TimerWidgetExtension</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
