@@ -58,13 +58,12 @@
     <OutputPath>bin\Release.AppStore</OutputPath>
     <DefineConstants>__UNIFIED__;__MOBILE__;__IOS__;USE_PRODUCTION_API;USE_ANALYTICS;USE_APPCENTER</DefineConstants>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Distribution: Toggl OU (B227VTMZ94)</CodesignKey>
+    <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchExtraArgs>--linkskip Toggl.iOS --linkskip=Toggl.Storage.Realm --registrar:static</MtouchExtraArgs>
     <MtouchFloat32>true</MtouchFloat32>
     <MtouchLink>Full</MtouchLink>
     <MtouchArch>ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <CodesignProvision>Daneel AppStore</CodesignProvision>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -1307,6 +1306,16 @@
     <ImageAsset Include="Resources\Colors.xcassets\OpaqueSeparator.colorset\Contents.json" />
     <ImageAsset Include="Resources\Colors.xcassets\Text1.colorset\Contents.json" />
     <ImageAsset Include="Resources\Colors.xcassets\Text.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ErrorText.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ErrorBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboard.imageset\pasteFromClipboard_Dark.pdf" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboardEnabled.imageset\pasteFromClipboardEnabled_Dark.pdf" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationProject.imageset\icIllustrationProjects_Dark.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationProject.imageset\icIllustrationProjects_Dark%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationProject.imageset\icIllustrationProjects_Dark%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationProjects_Dark.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationProjects_Dark%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationProjects_Dark%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -2085,6 +2094,28 @@
     <Folder Include="Resources\Images.xcassets\thumbsdown.imageset\" />
     <Folder Include="Resources\Images.xcassets\thumbsup.imageset\" />
     <Folder Include="Resources\Images.xcassets\togglLogoBig.imageset\" />
+    <Folder Include="Resources\Colors.xcassets\Background.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Text.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Text2.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Separator.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\NavigationBarShadow.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\OpaqueSeparator.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\TableBackground.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CellBackground.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Text3.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Text4.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CustomGray.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CustomGray2.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CustomGray3.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CustomGray4.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CustomGray5.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CustomGray6.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\InverseText.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\InverseBackground.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Text1.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Spider.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ErrorText.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ErrorBackground.colorset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

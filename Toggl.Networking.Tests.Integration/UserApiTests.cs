@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Models;
 using Toggl.Networking.Network;
@@ -21,7 +22,7 @@ namespace Toggl.Networking.Tests.Integration
     {
         public sealed class TheGetMethod : AuthenticatedEndpointBaseTests<IUser>
         {
-            protected override IObservable<IUser> CallEndpointWith(ITogglApi togglApi)
+            protected override Task<IUser> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.User.Get();
 
             [Fact, LogTestInfo]
@@ -343,7 +344,7 @@ namespace Toggl.Networking.Tests.Integration
                 var email = RandomEmail.GenerateValid();
                 var password = "s3cr3tzzz".ToPassword();
 
-                var timezones = unauthenticatedTogglApi.Timezones.GetAll().Wait();
+                var timezones = await unauthenticatedTogglApi.Timezones.GetAll();
                 var aRandomSupportTimezone = timezones.OrderBy(s => Guid.NewGuid()).First();
 
                 var user = await unauthenticatedTogglApi
@@ -404,14 +405,14 @@ namespace Toggl.Networking.Tests.Integration
             [Theory, LogTestInfo]
             [InlineData("x.y.z")]
             [InlineData("asdkjasdkhjdsadhkda")]
-            public void FailsWithServiceUnavailableErrorWhenTheGoogleTokenIsARandomNonEmptyString(string notAToken)
+            public void FailsWhenTheGoogleTokenIsARandomNonEmptyString(string notAToken)
             {
                 Action signUp = () => unauthenticatedTogglApi
                     .User
                     .SignUpWithGoogle(notAToken, true, 237, null)
                     .Wait();
 
-                signUp.Should().Throw<ServiceUnavailableException>();
+                signUp.Should().Throw<UnauthorizedException>();
             }
 
             [Fact, LogTestInfo]
@@ -424,7 +425,7 @@ namespace Toggl.Networking.Tests.Integration
                     .SignUpWithGoogle(jwt, true, 237, null)
                     .Wait();
 
-                signUp.Should().Throw<ServiceUnavailableException>();
+                signUp.Should().Throw<UnauthorizedException>();
             }
         }
 
@@ -461,10 +462,10 @@ namespace Toggl.Networking.Tests.Integration
                 updatedUser.DefaultWorkspaceId.Should().Be(user.DefaultWorkspaceId);
             }
 
-            protected override IObservable<IUser> PrepareForCallingUpdateEndpoint(ITogglApi api)
+            protected override Task<IUser> PrepareForCallingUpdateEndpoint(ITogglApi api)
                 => api.User.Get();
 
-            protected override IObservable<IUser> CallUpdateEndpoint(ITogglApi api, IUser entityToUpdate)
+            protected override Task<IUser> CallUpdateEndpoint(ITogglApi api, IUser entityToUpdate)
             {
                 var entityWithUpdates = new Models.User(entityToUpdate);
                 entityWithUpdates.Fullname = entityToUpdate.Fullname == "Test" ? "Different name" : "Test";

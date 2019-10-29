@@ -37,11 +37,11 @@ namespace Toggl.iOS.ViewControllers
             base.ViewDidLoad();
 
             View.BackgroundColor = ColorAssets.TableBackground;
-            NavigationController.NavigationBar.SetBackgroundImage(ImageExtension.ImageWithColor(ColorAssets.TableBackground), UIBarMetrics.Default);
+            ((ReactiveNavigationController)NavigationController).SetBackgroundColor(ColorAssets.TableBackground);
 
             NavigationItem.RightBarButtonItem = ReactiveNavigationController.CreateSystemItem(
                 UIBarButtonSystemItem.Done,
-                ViewModel.Close
+                () => ViewModel.Close()
             );
 
             var source = new SettingsTableViewSource(tableView);

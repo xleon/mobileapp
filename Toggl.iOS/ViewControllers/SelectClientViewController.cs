@@ -49,7 +49,7 @@ namespace Toggl.iOS.ViewControllers
             clientsReplay.Connect();
 
             CloseButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             SearchTextField.Rx().Text()

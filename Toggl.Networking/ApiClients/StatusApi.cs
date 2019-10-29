@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Toggl.Networking.Helpers;
 using Toggl.Networking.Network;
 
@@ -18,33 +16,16 @@ namespace Toggl.Networking.ApiClients
             this.apiClient = apiClient;
         }
 
-        public IObservable<Unit> IsAvailable()
+        public async Task IsAvailable()
         {
-            return Observable.Create<Unit>(async observer =>
-            {
-                try
-                {
-                    var endpoint = endpoints.Get;
-                    var request = new Request("", endpoint.Url, Enumerable.Empty<HttpHeader>(), endpoint.Method);
-                    var response = await apiClient.Send(request).ConfigureAwait(false);
+            var endpoint = endpoints.Get;
+            var request = new Request("", endpoint.Url, Enumerable.Empty<HttpHeader>(), endpoint.Method);
+            var response = await apiClient.Send(request).ConfigureAwait(false);
 
-                    if (response.IsSuccess)
-                    {
-                        observer.OnNext(Unit.Default);
-                    }
-                    else
-                    {
-                        var error = ApiExceptions.For(request, response);
-                        observer.OnError(error);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    observer.OnError(exception);
-                }
+            if (response.IsSuccess)
+                return;
 
-                observer.OnCompleted();
-            });
+            throw ApiExceptions.For(request, response);
         }
     }
 }

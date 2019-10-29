@@ -28,14 +28,12 @@ namespace Toggl.iOS.SiriExtension.UI
         static readonly UIStringAttributes boldAttributes = new UIStringAttributes
         {
             Font = UIFont.BoldSystemFontOfSize(15),
-            ForegroundColor = UIColor.Black,
             ParagraphStyle = paragraphStyle
         };
 
         static readonly UIStringAttributes regularAttributes = new UIStringAttributes
         {
             Font = UIFont.SystemFontOfSize(15),
-            ForegroundColor = UIColor.Black,
             ParagraphStyle = paragraphStyle
         };
 

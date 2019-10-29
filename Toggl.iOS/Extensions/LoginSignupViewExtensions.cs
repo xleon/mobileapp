@@ -40,7 +40,7 @@ namespace Toggl.iOS.Extensions
                 .FromBundle("icPassword")
                 .ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
             button.SetImage(image, UIControlState.Normal);
-            button.TintColor = UIColor.Black;
+            button.TintColor = ColorAssets.Text;
         }
     }
 }

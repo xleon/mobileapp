@@ -23,7 +23,8 @@ namespace Toggl.iOS.Presentation
             UIViewController viewController = ViewControllerLocator.GetNavigationViewController(viewModel);
 
             viewController.ModalPresentationStyle = UIModalPresentationStyle.PageSheet;
-            viewController.PresentationController.Delegate = new PresentationControllerDelegate(viewModel.CloseWithDefaultResult);
+            viewController.PresentationController.Delegate = new PresentationControllerDelegate(
+                () => viewModel.CloseWithDefaultResult());
 
             UIViewController topmostViewController = FindPresentedViewController();
             topmostViewController.PresentViewController(viewController, true, null);

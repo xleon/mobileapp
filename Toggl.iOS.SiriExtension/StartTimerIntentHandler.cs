@@ -2,11 +2,11 @@ using Foundation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
 using Toggl.iOS.Shared;
 using Toggl.iOS.Shared.Analytics;
 using Toggl.iOS.Shared.Extensions;
 using Toggl.iOS.Shared.Models;
+using System.Reactive.Threading.Tasks;
 using Toggl.iOS.Intents;
 using Toggl.Networking;
 using Toggl.Shared;
@@ -39,7 +39,7 @@ namespace SiriExtension
         public override void HandleStartTimer(StartTimerIntent intent, Action<StartTimerIntentResponse> completion)
         {
             var timeEntry = createTimeEntry(intent);
-            togglAPI.TimeEntries.Create(timeEntry).Subscribe(te =>
+            togglAPI.TimeEntries.Create(timeEntry).ToObservable().Subscribe(te =>
             {
                 SharedStorage.Instance.SetNeedsSync(true);
                 SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.StartTimer(te));

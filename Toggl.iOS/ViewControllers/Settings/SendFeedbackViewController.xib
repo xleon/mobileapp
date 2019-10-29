@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -31,13 +30,14 @@
             <subviews>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" text="Let us know what you think. Send us your feedback and questions." textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NUk-3H-XEo">
                     <rect key="frame" x="16" y="48.5" width="343" height="603.5"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <color key="textColor" red="0.80784313725490198" green="0.80784313725490198" blue="0.80784313725490198" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="Background"/>
+                    <color key="textColor" name="Text3"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rX9-61-EAj">
                     <rect key="frame" x="16" y="48.5" width="343" height="603.5"/>
+                    <color key="textColor" name="Text"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
@@ -52,7 +52,7 @@
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact us" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ueR-h2-ydk">
                     <rect key="frame" x="151.5" y="11.5" width="72" height="17"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                    <nil key="textColor"/>
+                    <color key="textColor" name="Text"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iaj-3U-kvy">
@@ -74,44 +74,28 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D75-Zy-M1b">
                     <rect key="frame" x="16" y="559" width="343" height="69"/>
                     <subviews>
-                        <visualEffectView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Xq-9L-cWh">
-                            <rect key="frame" x="0.0" y="0.0" width="343" height="69"/>
-                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="S0c-hb-Kx5">
-                                <rect key="frame" x="0.0" y="0.0" width="343" height="69"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </view>
-                            <color key="backgroundColor" red="1" green="0.96470588235294119" blue="0.96470588235294119" alpha="0.82999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
-                            <blurEffect style="light"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                    <integer key="value" value="8"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </visualEffectView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icErrorEdit" translatesAutoresizingMaskIntoConstraints="NO" id="yTl-fg-bHQ">
                             <rect key="frame" x="14" y="14" width="16" height="16"/>
+                            <color key="tintColor" name="ErrorText"/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OOPS!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zPo-nF-ozs">
                             <rect key="frame" x="42" y="13" width="44.5" height="17"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                            <color key="textColor" red="0.96862745098039216" green="0.25098039215686274" blue="0.28627450980392155" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="textColor" name="ErrorText"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Something went wrong. Please try again" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mle-AX-ZTG">
                             <rect key="frame" x="42" y="36" width="289" height="17"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <color key="textColor" red="0.96862745098039216" green="0.25098039215686274" blue="0.28627450980392155" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="textColor" name="ErrorText"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
+                    <color key="backgroundColor" name="ErrorBackground"/>
                     <constraints>
                         <constraint firstItem="mle-AX-ZTG" firstAttribute="top" secondItem="zPo-nF-ozs" secondAttribute="bottom" constant="6" id="5qz-i6-xYe"/>
-                        <constraint firstAttribute="trailing" secondItem="9Xq-9L-cWh" secondAttribute="trailing" id="DIG-mU-k8R"/>
                         <constraint firstItem="zPo-nF-ozs" firstAttribute="top" secondItem="D75-Zy-M1b" secondAttribute="top" constant="13" id="ItK-zU-vBV"/>
-                        <constraint firstItem="9Xq-9L-cWh" firstAttribute="top" secondItem="D75-Zy-M1b" secondAttribute="top" id="Iwv-Ud-O0v"/>
-                        <constraint firstAttribute="bottom" secondItem="9Xq-9L-cWh" secondAttribute="bottom" id="MPO-HQ-zzM"/>
                         <constraint firstAttribute="trailing" secondItem="mle-AX-ZTG" secondAttribute="trailing" constant="12" id="Ruk-Qx-tge"/>
-                        <constraint firstItem="9Xq-9L-cWh" firstAttribute="leading" secondItem="D75-Zy-M1b" secondAttribute="leading" id="VQe-mE-iOe"/>
                         <constraint firstAttribute="bottom" secondItem="mle-AX-ZTG" secondAttribute="bottom" constant="16" id="ZzE-Gk-6B9"/>
                         <constraint firstItem="mle-AX-ZTG" firstAttribute="leading" secondItem="D75-Zy-M1b" secondAttribute="leading" constant="42" id="d98-7x-4N1"/>
                         <constraint firstItem="yTl-fg-bHQ" firstAttribute="leading" secondItem="D75-Zy-M1b" secondAttribute="leading" constant="14" id="neR-5U-JRY"/>
@@ -125,7 +109,7 @@
                     </userDefinedRuntimeAttributes>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" name="Background"/>
             <constraints>
                 <constraint firstItem="NUk-3H-XEo" firstAttribute="top" secondItem="rX9-61-EAj" secondAttribute="top" id="33F-lf-J9R"/>
                 <constraint firstItem="NUk-3H-XEo" firstAttribute="trailing" secondItem="rX9-61-EAj" secondAttribute="trailing" id="4Ad-8A-kUV"/>
@@ -160,5 +144,20 @@
         <image name="icClose" width="10" height="10"/>
         <image name="icErrorEdit" width="16" height="16"/>
         <image name="icLoader" width="24" height="24"/>
+        <namedColor name="Background">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ErrorBackground">
+            <color red="0.9686274528503418" green="0.25098040699958801" blue="0.28627452254295349" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ErrorText">
+            <color red="1" green="0.96470588445663452" blue="0.96470588445663452" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Text">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Text3">
+            <color red="0.92156863212585449" green="0.92156863212585449" blue="0.96078431606292725" alpha="0.30196079611778259" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

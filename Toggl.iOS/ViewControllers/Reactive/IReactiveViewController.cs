@@ -1,7 +1,10 @@
-﻿namespace Toggl.iOS.ViewControllers
+﻿using System.Threading.Tasks;
+
+namespace Toggl.iOS.ViewControllers
 {
     public interface IReactiveViewController
     {
-        void DismissFromNavigationController();
+        Task<bool> DismissFromNavigationController();
+        void ViewcontrollerWasPopped();
     }
 }

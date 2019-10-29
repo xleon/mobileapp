@@ -246,20 +246,19 @@ namespace Toggl.Core.UI.ViewModels
             disposeBag?.Dispose();
         }
 
-        public override async void CloseWithDefaultResult()
+        public override async Task<bool> ConfirmCloseRequest()
         {
             if (isDirty)
             {
                 var view = View;
-                if (view != null)
-                {
-                    var shouldDiscard = await view.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
-                    if (!shouldDiscard)
-                        return;
-                }
+                if (view == null)
+                    return true;
+
+                return await view
+                    .ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
             }
 
-            Close();
+            return true;
         }
 
         private void setTextSpans(IImmutableList<ISpan> spans)
