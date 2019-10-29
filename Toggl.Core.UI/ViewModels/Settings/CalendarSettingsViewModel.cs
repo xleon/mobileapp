@@ -50,10 +50,10 @@ namespace Toggl.Core.UI.ViewModels.Settings
             this.permissionsChecker = permissionsChecker;
 
             RequestAccess = rxActionFactory.FromAction(requestAccess);
-            TogglCalendarIntegration = rxActionFactory.FromAsync(togglCalendarIntegration);
+            TogglCalendarIntegration = rxActionFactory.FromAsync(toggleCalendarIntegration);
             RequestCalendarPermissionsIfNeeded = rxActionFactory.FromAsync(requestCalendarPermissionsIfNeeded);
 
-            CalendarListVisible = calendarListVisibleSubject.AsObservable().DistinctUntilChanged();
+            CalendarListVisible = calendarListVisibleSubject.AsObservable();
             PermissionGranted = permissionGrantedSubject.AsObservable().DistinctUntilChanged().AsDriver(schedulerProvider);
         }
 
@@ -68,7 +68,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
             await base.Initialize(forceItemSelection);
 
-            var calendarListVisible = permissionGrantedSubject.Value && SelectedCalendarIds.Any();
+            var calendarListVisible = permissionGrantedSubject.Value;
             calendarListVisibleSubject.OnNext(calendarListVisible);
         }
 
@@ -106,12 +106,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
             }
         }
 
-        private void onCalendarSelected()
-        {
-            UserPreferences.SetEnabledCalendars(SelectedCalendarIds.ToArray());
-        }
-
-        private async Task togglCalendarIntegration()
+        private async Task toggleCalendarIntegration()
         {
             var calendarListVisible = calendarListVisibleSubject.Value;
 
@@ -121,7 +116,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
             }
             else
             {
-                requestCalendarPermissionsIfNeeded();
+                await requestCalendarPermissionsIfNeeded();
                 var authorized = await permissionsChecker.CalendarPermissionGranted;
                 if (authorized)
                 {
