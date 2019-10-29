@@ -42,9 +42,10 @@ namespace Toggl.Core.UI.ViewModels
             return base.Initialize(dateTimePicker);
         }
 
-        public override void CloseWithDefaultResult()
+        public override Task<bool> CloseWithDefaultResult()
         {
             Close(defaultResult);
+            return Task.FromResult(true);
         }
 
         private DateTimeOffset sanitizeBasedOnMode(DateTimeOffset dateTime)

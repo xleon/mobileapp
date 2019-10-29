@@ -72,10 +72,10 @@ namespace Toggl.Core.UI.ViewModels.Settings
             calendarListVisibleSubject.OnNext(calendarListVisible);
         }
 
-        public override void CloseWithDefaultResult()
+        public override Task<bool> CloseWithDefaultResult()
         {
             UserPreferences.SetEnabledCalendars(InitialSelectedCalendarIds.ToArray());
-            base.CloseWithDefaultResult();
+            return base.CloseWithDefaultResult();
         }
 
         protected override void Done()

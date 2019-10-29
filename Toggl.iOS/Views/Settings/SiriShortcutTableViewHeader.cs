@@ -28,8 +28,7 @@ namespace Toggl.iOS.Views.Settings
         {
             base.AwakeFromNib();
 
-            ContentView.BackgroundColor = Colors.Siri.HeaderBackground.ToNativeColor();
-            TitleLabel.TextColor = Colors.Siri.HeaderLabel.ToNativeColor();
+            ContentView.InsertSeparator();
         }
 
         protected override void UpdateView()

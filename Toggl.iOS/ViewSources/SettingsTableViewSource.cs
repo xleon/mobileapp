@@ -19,6 +19,7 @@ namespace Toggl.iOS.ViewSources
 
         public SettingsTableViewSource(UITableView tableView)
         {
+            tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             tableView.RegisterNibForCellReuse(SettingCell.Nib, SettingCell.Identifier);
             tableView.RegisterNibForCellReuse(SettingsAnnotationCell.Nib, SettingsAnnotationCell.Identifier);
             tableView.RegisterNibForCellReuse(SettingsSyncCell.Nib, SettingsSyncCell.Identifier);
@@ -63,8 +64,6 @@ namespace Toggl.iOS.ViewSources
                 {
                     var cell = (SettingCell)tableView.DequeueReusableCell(SettingCell.Identifier, indexPath);
                     cell.Item = model;
-                    cell.IsLast = indexPath.Row == Sections[indexPath.Section].Items.Count - 1
-                                  || Sections[indexPath.Section].Items[indexPath.Row + 1] is AnnotationRow;
                     return cell;
                 }
             }

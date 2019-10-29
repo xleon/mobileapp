@@ -106,7 +106,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.UserAccessManager,
                     dependencyContainer.PrivateSharedStorageService,
-                    dependencyContainer.PlatformInfo);
+                    dependencyContainer.PlatformInfo,
+                    dependencyContainer.WidgetsService);
             }
 
             if (viewModelType == typeof(MainViewModel))
@@ -129,7 +130,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.BackgroundService,
-                    dependencyContainer.PlatformInfo);
+                    dependencyContainer.PlatformInfo,
+                    dependencyContainer.WidgetsService);
             }
 
             if (viewModelType == typeof(NoWorkspaceViewModel))
@@ -276,7 +278,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.BackgroundService,
                     dependencyContainer.UserPreferences,
-                    dependencyContainer.SyncManager);
+                    dependencyContainer.SyncManager,
+                    dependencyContainer.WidgetsService);
             }
 
             if (viewModelType == typeof(SyncFailuresViewModel))

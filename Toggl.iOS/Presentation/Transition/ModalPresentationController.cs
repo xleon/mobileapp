@@ -192,7 +192,7 @@ namespace Toggl.iOS.Presentation.Transition
                             var firstResponderFrame =
                                 firstResponder.ConvertRectToView(firstResponder.Frame, PresentedView);
                             var newY = containerSize.Height - keyboardHeight - firstResponderFrame.Y - firstResponderFrame.Height - keyboardMargin;
-                            frame.Y = (nfloat)Min(frame.Y, newY);
+                            frame.Y = (nfloat)Clamp(newY, UIApplication.SharedApplication.StatusBarFrame.Height, frame.Y);
                         }
                     }
                 }
@@ -233,9 +233,8 @@ namespace Toggl.iOS.Presentation.Transition
                     break;
                 case UIGestureRecognizerState.Ended:
                 case UIGestureRecognizerState.Cancelled:
-                    if (percent > impactThreshold)
+                    if (percent > impactThreshold && await dismiss())
                     {
-                        dismiss();
                         feedbackGenerator.ImpactOccurred();
                     }
                     else
@@ -246,15 +245,15 @@ namespace Toggl.iOS.Presentation.Transition
             }
         }
 
-        private void dismiss()
+        private async Task<bool> dismiss()
         {
             if (PresentedViewController is IReactiveViewController reactiveViewController)
             {
-                reactiveViewController.DismissFromNavigationController();
-                return;
+                return await reactiveViewController.DismissFromNavigationController();
             }
 
             PresentedViewController.DismissViewController(true, null);
+            return true;
         }
 
         private void resetPosition(UIGestureRecognizer recognizer)

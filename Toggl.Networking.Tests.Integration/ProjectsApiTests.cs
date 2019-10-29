@@ -17,7 +17,7 @@ namespace Toggl.Networking.Tests.Integration
     {
         public sealed class TheGetAllMethod : AuthenticatedGetAllEndpointBaseTests<IProject>
         {
-            protected override IObservable<List<IProject>> CallEndpointWith(ITogglApi togglApi)
+            protected override Task<List<IProject>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Projects.GetAll();
 
             [Fact, LogTestInfo]
@@ -79,7 +79,7 @@ namespace Toggl.Networking.Tests.Integration
 
         public sealed class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<IProject>
         {
-            protected override IObservable<List<IProject>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
+            protected override Task<List<IProject>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
                 => togglApi.Projects.GetAllSince(threshold);
 
             protected override DateTimeOffset AtDateOf(IProject model)
@@ -88,7 +88,7 @@ namespace Toggl.Networking.Tests.Integration
             protected override IProject MakeUniqueModel(ITogglApi api, IUser user)
                 => new Project { Active = true, Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId.Value };
 
-            protected override IObservable<IProject> PostModelToApi(ITogglApi api, IProject model)
+            protected override Task<IProject> PostModelToApi(ITogglApi api, IProject model)
                 => api.Projects.Create(model);
 
             protected override Expression<Func<IProject, bool>> ModelWithSameAttributesAs(IProject model)
@@ -117,15 +117,14 @@ namespace Toggl.Networking.Tests.Integration
 
         public sealed class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IProject>
             {
-                protected override IObservable<IProject> CallEndpointWith(ITogglApi togglApi)
-                    => Observable.Defer(async () =>
-                    {
-                        var user = await togglApi.User.Get();
-                        var project = await createNewProject(togglApi, user.DefaultWorkspaceId.Value);
-                        return CallEndpointWith(togglApi, project);
-                    });
+                protected override async Task<IProject> CallEndpointWith(ITogglApi togglApi)
+                {
+                    var user = await togglApi.User.Get();
+                    var project = await createNewProject(togglApi, user.DefaultWorkspaceId.Value);
+                    return await CallEndpointWith(togglApi, project);
+                }
 
-                private IObservable<IProject> CallEndpointWith(ITogglApi togglApi, IProject project)
+                private Task<IProject> CallEndpointWith(ITogglApi togglApi, IProject project)
                     => togglApi.Projects.Create(project);
 
                 [Fact, LogTestInfo]
@@ -216,9 +215,11 @@ namespace Toggl.Networking.Tests.Integration
                 projects.Should().Contain(p => p.Id == projectA.Id);
             }
 
-            protected override IObservable<List<IProject>> CallEndpointWith(ITogglApi togglApi)
-                => togglApi.User.Get()
-                    .SelectMany(user => togglApi.Projects.Search(user.DefaultWorkspaceId.Value, new[] { -1L }));
+            protected override async Task<List<IProject>> CallEndpointWith(ITogglApi togglApi)
+            {
+                var user = await togglApi.User.Get();
+                return await togglApi.Projects.Search(user.DefaultWorkspaceId.Value, new[] { -1L });
+            }
         }
 
         private static async Task<Project> createNewProject(ITogglApi togglClient, long workspaceID, bool isActive = true, bool createClient = false)

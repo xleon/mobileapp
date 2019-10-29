@@ -6,6 +6,7 @@ using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Services;
+using Toggl.Shared;
 using UIKit;
 using UserNotifications;
 using Firebase.CloudMessaging;

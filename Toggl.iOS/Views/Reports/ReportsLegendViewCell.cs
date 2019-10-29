@@ -2,11 +2,11 @@
 using CoreGraphics;
 using Foundation;
 using System;
-using Toggl.Core.Extensions;
 using Toggl.Core.Reports;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views.Reports
@@ -17,8 +17,8 @@ namespace Toggl.iOS.Views.Reports
         public static readonly NSString Key = new NSString(nameof(ReportsLegendViewCell));
         public static readonly UINib Nib;
 
-        private CAShapeLayer borderLayer = new CAShapeLayer();
         private CAShapeLayer mask = new CAShapeLayer();
+        private UIView bottomSeparator;
         private bool isLast = false;
 
         static ReportsLegendViewCell()
@@ -36,7 +36,8 @@ namespace Toggl.iOS.Views.Reports
             base.AwakeFromNib();
 
             FadeView.FadeRight = true;
-            ContentView.InsertSeparator();
+            bottomSeparator = ContentView.InsertSeparator();
+            ContentView.InsertSeparator(UIRectEdge.Top);
         }
 
         public void SetIsLast(bool last)
@@ -69,24 +70,28 @@ namespace Toggl.iOS.Views.Reports
         {
             base.LayoutSubviews();
 
-            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular && isLast)
+            Layer.Mask = null;
+            bottomSeparator.Hidden = true;
+
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
-                var cornerRadius = 8;
-                var cornersToRound = UIRectCorner.BottomLeft | UIRectCorner.BottomRight;
+                Layer.ShadowColor = UIColor.Black.CGColor;
+                Layer.ShadowRadius = 8;
+                Layer.ShadowOffset = new CGSize(0, 2);
+                Layer.ShadowOpacity = 0.1f;
 
-                mask.Path = UIBezierPath.FromRoundedRect(Bounds, cornersToRound, new CGSize(cornerRadius, cornerRadius)).CGPath;
-                Layer.Mask = mask;
+                if (isLast)
+                {
+                    var cornerRadius = 8;
+                    var cornersToRound = UIRectCorner.BottomLeft | UIRectCorner.BottomRight;
 
-                borderLayer.FillColor = UIColor.Clear.CGColor;
-                borderLayer.LineWidth = 1;
-                borderLayer.StrokeColor = ColorAssets.Separator.CGColor;
-                borderLayer.Path = UIBezierPath.FromRoundedRect(new CGRect(0, -1, Bounds.Width, Bounds.Height + 1), cornersToRound, new CGSize(cornerRadius + 1, cornerRadius + 1)).CGPath;
-                Layer.AddSublayer(borderLayer);
+                    mask.Path = UIBezierPath.FromRoundedRect(Bounds, cornersToRound, new CGSize(cornerRadius, cornerRadius)).CGPath;
+                    Layer.Mask = mask;
+                }
             }
-            else
+            else if (isLast)
             {
-                Layer.Mask = null;
-                borderLayer.RemoveFromSuperLayer();
+                bottomSeparator.Hidden = false;
             }
         }
     }

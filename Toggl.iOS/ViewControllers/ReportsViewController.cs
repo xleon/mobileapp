@@ -355,6 +355,8 @@ namespace Toggl.iOS.ViewControllers
             WorkspaceButton.Layer.ShadowOpacity = 0.10f;
             WorkspaceButton.Layer.BorderColor = ColorAssets.Separator.CGColor;
             WorkspaceButton.Layer.BorderWidth = 0.35f;
+
+            View.BackgroundColor = ColorAssets.TableBackground;
         }
 
         private void onCalendarSizeChanged(NSObservedChange change)

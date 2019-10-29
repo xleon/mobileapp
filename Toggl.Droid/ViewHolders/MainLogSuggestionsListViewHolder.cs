@@ -19,6 +19,9 @@ using Toggl.Shared.Extensions;
 using TogglResources = Toggl.Shared.Resources;
 using Toggl.Droid.Extensions.Reactive;
 using System.Linq;
+using Toggl.Droid.Widgets;
+using Android.Appwidget;
+using Android.App;
 
 namespace Toggl.Droid.ViewHolders
 {
@@ -48,7 +51,7 @@ namespace Toggl.Droid.ViewHolders
             suggestionsRecyclerView.SetLayoutManager(new LinearLayoutManager(ItemView.Context));
             suggestionsRecyclerView.SetAdapter(adapter);
 
-            hintTextView.Text = Shared.Resources.WorkingOnThese;
+            hintTextView.Text = TogglResources.WorkingOnThese;
 
             adapter.ItemTapObservable
                 .Subscribe(suggestionsViewModel.StartTimeEntry.Inputs)
@@ -56,6 +59,14 @@ namespace Toggl.Droid.ViewHolders
 
             suggestionsViewModel.Suggestions
                 .Subscribe(adapter.Rx().Items())
+                .DisposedBy(DisposeBag);
+
+            suggestionsViewModel.Suggestions
+                .Where(items => items.Any())
+                .Select(items => items.Count == 1
+                    ? TogglResources.WorkingOnThis
+                    : TogglResources.WorkingOnThese)
+                .Subscribe(hintTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
             suggestionsViewModel.IsEmpty
@@ -87,6 +98,5 @@ namespace Toggl.Droid.ViewHolders
 
             DisposeBag.Dispose();
         }
-
     }
 }

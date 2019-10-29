@@ -61,6 +61,9 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UIView StopTimeEntryOnboardingBubbleView { get; set; }
 
 		[Outlet]
+		UIKit.UIView TableShadow { get; set; }
+
+		[Outlet]
 		UIKit.UIView TapToEditBubbleView { get; set; }
 
 		[Outlet]
@@ -78,7 +81,7 @@ namespace Toggl.iOS.ViewControllers
 		[Outlet]
 		UIKit.NSLayoutConstraint TopConstraint { get; set; }
 
-        [Outlet]
+		[Outlet]
 		UIKit.UILabel WelcomeBackDescriptionLabel { get; set; }
 
 		[Outlet]
@@ -86,17 +89,17 @@ namespace Toggl.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UIView WelcomeBackView { get; set; }
-
+		
 		void ReleaseDesignerOutlets ()
 		{
-			if (CurrentTimeEntryCard != null) {
-				CurrentTimeEntryCard.Dispose ();
-				CurrentTimeEntryCard = null;
-			}
-
 			if (CreatedFirstTimeEntryLabel != null) {
 				CreatedFirstTimeEntryLabel.Dispose ();
 				CreatedFirstTimeEntryLabel = null;
+			}
+
+			if (CurrentTimeEntryCard != null) {
+				CurrentTimeEntryCard.Dispose ();
+				CurrentTimeEntryCard = null;
 			}
 
 			if (CurrentTimeEntryDescriptionLabel != null) {
@@ -189,7 +192,7 @@ namespace Toggl.iOS.ViewControllers
 				TopConstraint = null;
 			}
 
-            if (WelcomeBackDescriptionLabel != null) {
+			if (WelcomeBackDescriptionLabel != null) {
 				WelcomeBackDescriptionLabel.Dispose ();
 				WelcomeBackDescriptionLabel = null;
 			}
@@ -202,6 +205,11 @@ namespace Toggl.iOS.ViewControllers
 			if (WelcomeBackView != null) {
 				WelcomeBackView.Dispose ();
 				WelcomeBackView = null;
+			}
+
+			if (TableShadow != null) {
+				TableShadow.Dispose ();
+				TableShadow = null;
 			}
 		}
 	}
