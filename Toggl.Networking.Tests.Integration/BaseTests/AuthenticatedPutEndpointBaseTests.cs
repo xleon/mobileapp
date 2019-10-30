@@ -1,30 +1,29 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Networking.Exceptions;
 
 namespace Toggl.Networking.Tests.Integration.BaseTests
 {
     public abstract class AuthenticatedPutEndpointBaseTests<T> : AuthenticatedEndpointBaseTests<T>
     {
-        protected sealed override IObservable<T> CallEndpointWith(ITogglApi api)
-            => Observable.Defer(async () =>
+        protected sealed override async Task<T> CallEndpointWith(ITogglApi api)
+        {
+            T entityToUpdate;
+            try
             {
-                T entityToUpdate;
+                entityToUpdate = await PrepareForCallingUpdateEndpoint(ValidApi);
+            }
+            catch (ApiException e)
+            {
+                throw new InvalidOperationException("Preparation for calling the update endpoint itself failed.", e);
+            }
 
-                try
-                {
-                    entityToUpdate = await PrepareForCallingUpdateEndpoint(ValidApi);
-                }
-                catch (ApiException e)
-                {
-                    throw new InvalidOperationException("Preparation for calling the update endpoint itself failed.", e);
-                }
+            return await CallUpdateEndpoint(api, entityToUpdate);
+        }
 
-                return CallUpdateEndpoint(api, entityToUpdate);
-            });
+        protected abstract Task<T> PrepareForCallingUpdateEndpoint(ITogglApi api);
 
-        protected abstract IObservable<T> PrepareForCallingUpdateEndpoint(ITogglApi api);
-
-        protected abstract IObservable<T> CallUpdateEndpoint(ITogglApi api, T entityToUpdate);
+        protected abstract Task<T> CallUpdateEndpoint(ITogglApi api, T entityToUpdate);
     }
 }

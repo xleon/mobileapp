@@ -21,7 +21,7 @@ namespace Toggl.Droid.Fragments
             base.OnViewCreated(view, savedInstanceState);
 
             continueButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             allowAccessButton.Rx().Tap()

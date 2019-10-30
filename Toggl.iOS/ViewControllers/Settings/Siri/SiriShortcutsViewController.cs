@@ -10,7 +10,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
@@ -40,12 +39,12 @@ namespace Toggl.iOS.ViewControllers.Settings
 
             DescriptionLabel.Text = Resources.SiriShortcutsDescription;
             HeaderView.RemoveFromSuperview();
-            HeaderView.BackgroundColor = Colors.Siri.HeaderBackground.ToNativeColor();
             TableView.TableHeaderView = HeaderView;
             HeaderView.TranslatesAutoresizingMaskIntoConstraints = false;
             HeaderView.WidthAnchor.ConstraintEqualTo(TableView.WidthAnchor).Active = true;
 
-            TableView.BackgroundColor = Colors.Siri.HeaderBackground.ToNativeColor();
+            HeaderView.InsertSeparator();
+
             TableView.TableFooterView = new UIView();
 
             var tableViewSource = new SiriShortcutsTableViewSource(TableView);

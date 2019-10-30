@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -93,26 +93,27 @@
                                             <rect key="frame" x="16" y="0.0" width="288" height="128"/>
                                             <subviews>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="icErrorEdit" translatesAutoresizingMaskIntoConstraints="NO" id="XMp-gb-9QQ">
-                                                    <rect key="frame" x="14" y="14" width="16" height="16"/>
+                                                    <rect key="frame" x="14" y="14" width="32" height="32"/>
+                                                    <color key="tintColor" name="ErrorText"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OOPS!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="20o-iH-vm8">
-                                                    <rect key="frame" x="42" y="16" width="40" height="14"/>
+                                                    <rect key="frame" x="58" y="16" width="40" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="A3g-3r-4kU"/>
                                                         <constraint firstAttribute="width" constant="40" id="pQz-Rm-MY5"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
-                                                    <color key="textColor" red="0.96862745098039216" green="0.25098039215686274" blue="0.28627450980392155" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" name="ErrorText"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The error message which could be potentially split across multiple lines." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uu4-30-FWz">
                                                     <rect key="frame" x="42" y="36" width="234" height="76"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <color key="textColor" red="0.96862745100000003" green="0.25098039220000001" blue="0.28627450980000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" name="ErrorText"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" red="1" green="0.96470588235294119" blue="0.96470588235294119" alpha="0.82999999999999996" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" name="ErrorBackground"/>
                                             <constraints>
                                                 <constraint firstItem="20o-iH-vm8" firstAttribute="leading" secondItem="XMp-gb-9QQ" secondAttribute="trailing" constant="12" id="6W1-Ng-kOr"/>
                                                 <constraint firstItem="uu4-30-FWz" firstAttribute="top" secondItem="20o-iH-vm8" secondAttribute="bottom" constant="6" id="MWe-MH-QwW"/>
@@ -165,13 +166,13 @@
                                             <rect key="frame" x="16" y="0.0" width="288" height="48"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="tvM-Um-8oM" userLabel="Container">
-                                                    <rect key="frame" x="0.0" y="14.000000000000028" width="122.66666666666667" height="20"/>
+                                                    <rect key="frame" x="0.0" y="14.000000000000028" width="132.66666666666666" height="20"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" image="icAdd" translatesAutoresizingMaskIntoConstraints="NO" id="oHS-Wc-X7K">
-                                                            <rect key="frame" x="0.0" y="5" width="10" height="10"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Add project/task" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FIb-bL-aFc">
-                                                            <rect key="frame" x="16.000000000000007" y="0.0" width="106.66666666666669" height="20"/>
+                                                            <rect key="frame" x="26.000000000000007" y="0.0" width="106.66666666666669" height="20"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="20" id="BSL-Yc-3qN"/>
                                                             </constraints>
@@ -233,13 +234,13 @@
                                             <rect key="frame" x="16" y="0.0" width="288" height="56"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="Bfv-6Q-oRL" userLabel="Container">
-                                                    <rect key="frame" x="0.0" y="19.666666666666629" width="73.666666666666671" height="17"/>
+                                                    <rect key="frame" x="0.0" y="18" width="83.666666666666671" height="20"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="icAdd" translatesAutoresizingMaskIntoConstraints="NO" id="mQV-X8-uuW">
-                                                            <rect key="frame" x="0.0" y="3.3333333333333712" width="10" height="10"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Add tags" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZqB-O4-PPQ">
-                                                            <rect key="frame" x="15.999999999999996" y="0.0" width="57.666666666666657" height="17"/>
+                                                            <rect key="frame" x="25.999999999999996" y="1.6666666666666288" width="57.666666666666657" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" name="Text2"/>
                                                             <nil key="highlightedColor"/>
@@ -331,7 +332,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="160" height="56"/>
                                             <subviews>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="icDatetime" translatesAutoresizingMaskIntoConstraints="NO" id="YYk-QX-vIG">
-                                                    <rect key="frame" x="16" y="21" width="14" height="14"/>
+                                                    <rect key="frame" x="16" y="14" width="14" height="28"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="14" id="Tg3-v9-Kho"/>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="qwj-QB-B8c"/>
@@ -451,7 +452,7 @@
                                     <rect key="frame" x="0.0" y="351.66666666666669" width="320" height="56"/>
                                     <subviews>
                                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="duration" translatesAutoresizingMaskIntoConstraints="NO" id="jnP-Xa-oSt">
-                                            <rect key="frame" x="16" y="20" width="14" height="16"/>
+                                            <rect key="frame" x="16" y="12" width="14" height="32"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="14" id="zff-PO-lPn"/>
                                             </constraints>
@@ -505,7 +506,7 @@
                                     <rect key="frame" x="0.0" y="407.66666666666669" width="320" height="56"/>
                                     <subviews>
                                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="date" translatesAutoresizingMaskIntoConstraints="NO" id="Mte-6C-eNT">
-                                            <rect key="frame" x="16" y="20.666666666666629" width="14" height="15"/>
+                                            <rect key="frame" x="16" y="13" width="14" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="14" id="T1h-lv-FPX"/>
                                             </constraints>
@@ -580,7 +581,7 @@
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1KW-6P-BHL" userLabel="Scroll view bottom padding">
                                     <rect key="frame" x="0.0" y="519.66666666666663" width="320" height="0.0"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" id="W2k-cp-z3I">
                                             <variation key="heightClass=regular-widthClass=regular" constant="72"/>
@@ -629,7 +630,7 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1PY-gD-iJQ">
                             <rect key="frame" x="128" y="0.0" width="176" height="40"/>
-                            <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <accessibility key="accessibilityConfiguration" label="EditTimeEntryConfirm"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="lxq-zY-9wH"/>
@@ -714,14 +715,20 @@
         <namedColor name="CustomGray4">
             <color red="0.22745098173618317" green="0.22745098173618317" blue="0.23529411852359772" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="ErrorBackground">
+            <color red="0.9686274528503418" green="0.25098040699958801" blue="0.28627452254295349" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ErrorText">
+            <color red="1" green="0.96470588445663452" blue="0.96470588445663452" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="Text">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Text2">
-            <color red="0.92156862745098034" green="0.92156862745098034" blue="0.96078431372549022" alpha="0.60000002384185791" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.92156863212585449" green="0.92156863212585449" blue="0.96078431606292725" alpha="0.60000002384185791" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Text3">
-            <color red="0.92156862745098034" green="0.92156862745098034" blue="0.96078431372549022" alpha="0.30000001192092896" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.92156863212585449" green="0.92156863212585449" blue="0.96078431606292725" alpha="0.30196079611778259" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

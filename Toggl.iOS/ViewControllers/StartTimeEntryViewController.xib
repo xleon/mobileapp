@@ -99,15 +99,22 @@
                                 <constraint firstAttribute="height" constant="31" id="VqD-SE-6aL"/>
                             </constraints>
                         </view>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" text="￼" translatesAutoresizingMaskIntoConstraints="NO" id="R8W-w1-sEf">
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R8W-w1-sEf">
                             <rect key="frame" x="16" y="0.0" width="343" height="68"/>
                             <color key="backgroundColor" name="Background"/>
                             <accessibility key="accessibilityConfiguration" label="DescriptionTextField"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="68" id="u0i-Qv-oYj"/>
                             </constraints>
-                            <color key="textColor" name="Text"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <attributedString key="attributedText">
+                                <fragment content="￼">
+                                    <attributes>
+                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <font key="NSFont" metaFont="system" size="16"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" minimumLineHeight="24" maximumLineHeight="24" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                            </attributedString>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="no" keyboardType="twitter"/>
                         </textView>
                     </subviews>

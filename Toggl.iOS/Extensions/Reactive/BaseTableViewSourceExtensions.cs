@@ -31,5 +31,12 @@ namespace Toggl.iOS.Extensions.Reactive
             => Observable
                 .FromEventPattern(e => reactive.Base.OnDragStarted += e, e => reactive.Base.OnDragStarted -= e)
                 .SelectUnit();
+
+        public static IObservable<Unit> ItemsChanged<TSection, THeader, TModel>(
+            this IReactive<BaseTableViewSource<TSection, THeader, TModel>> reactive)
+            where TSection : ISectionModel<THeader, TModel>, new()
+            => Observable
+                .FromEventPattern(e => reactive.Base.OnItemsChanged += e, e => reactive.Base.OnItemsChanged -= e)
+                .SelectUnit();
     }
 }

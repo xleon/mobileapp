@@ -23,6 +23,11 @@ namespace Toggl.iOS.ViewControllers
             TermsOfServiceLabel.Text = Resources.TermsOfService;
             LicensesLabel.Text = Resources.Licenses;
 
+            PrivacyPolicyView.InsertSeparator(UIKit.UIRectEdge.Top);
+            PrivacyPolicyView.InsertSeparator();
+            TermsOfServiceView.InsertSeparator();
+            LicensesView.InsertSeparator();
+
             LicensesView.Rx()
                 .BindAction(ViewModel.OpenLicensesView)
                 .DisposedBy(DisposeBag);

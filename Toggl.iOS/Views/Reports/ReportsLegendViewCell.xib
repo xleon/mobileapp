@@ -70,33 +70,11 @@
                         <color key="textColor" name="CustomGray"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M3a-WE-b76">
-                        <rect key="frame" x="319" y="0.0" width="1" height="44"/>
-                        <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="1" id="TAp-CP-MCb"/>
-                        </constraints>
-                        <variation key="widthClass=compact" hidden="YES"/>
-                    </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KUk-2g-xY1">
-                        <rect key="frame" x="0.0" y="0.0" width="1" height="44"/>
-                        <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="1" id="fOI-3p-jWy"/>
-                        </constraints>
-                        <variation key="widthClass=compact" hidden="YES"/>
-                    </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="KUk-2g-xY1" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" id="8ES-il-du7"/>
                     <constraint firstItem="pSS-L9-KKB" firstAttribute="leading" secondItem="Bkl-is-Byu" secondAttribute="trailing" constant="16" id="BcV-DU-ieb"/>
                     <constraint firstItem="Bkl-is-Byu" firstAttribute="leading" secondItem="QhD-hJ-VOY" secondAttribute="trailing" constant="16" id="C6g-vs-Xfn"/>
                     <constraint firstItem="Bkl-is-Byu" firstAttribute="centerY" secondItem="pSS-L9-KKB" secondAttribute="centerY" id="Dj2-z0-WsW"/>
-                    <constraint firstAttribute="bottom" secondItem="M3a-WE-b76" secondAttribute="bottom" id="EBU-mT-4UX"/>
-                    <constraint firstItem="M3a-WE-b76" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" id="acz-7w-EOC"/>
-                    <constraint firstAttribute="bottom" secondItem="KUk-2g-xY1" secondAttribute="bottom" id="fpx-Mf-C0g"/>
-                    <constraint firstAttribute="trailing" secondItem="M3a-WE-b76" secondAttribute="trailing" id="l0C-tF-7FZ"/>
-                    <constraint firstItem="KUk-2g-xY1" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" id="pOR-VQ-gUa"/>
                     <constraint firstItem="QhD-hJ-VOY" firstAttribute="centerY" secondItem="49P-Ko-VVc" secondAttribute="centerY" id="pj1-gI-we1"/>
                     <constraint firstItem="QhD-hJ-VOY" firstAttribute="leading" secondItem="49P-Ko-VVc" secondAttribute="trailing" constant="6" id="tAl-qf-GOK"/>
                 </constraints>

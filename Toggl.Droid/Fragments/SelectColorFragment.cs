@@ -83,7 +83,7 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             closeButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             ViewModel.SelectableColors

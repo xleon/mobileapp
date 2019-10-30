@@ -14,6 +14,7 @@ namespace Toggl.iOS.ViewSources
     {
         public SiriShortcutsTableViewSource(UITableView tableView)
         {
+            tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             tableView.RegisterNibForCellReuse(SiriShortcutCell.Nib, SiriShortcutCell.Identifier);
             tableView.RegisterNibForCellReuse(CustomSiriShortcutCell.Nib, CustomSiriShortcutCell.Identifier);
             tableView.RegisterNibForHeaderFooterViewReuse(SiriShortcutTableViewHeader.Nib, SiriShortcutTableViewHeader.Identifier);
@@ -37,7 +38,6 @@ namespace Toggl.iOS.ViewSources
         {
             var header = (SiriShortcutTableViewHeader)tableView.DequeueReusableHeaderFooterView(SiriShortcutTableViewHeader.Identifier);
             header.Item = HeaderOf(section);
-            header.TopSeparator.Hidden = section == 0;
             return header;
         }
 

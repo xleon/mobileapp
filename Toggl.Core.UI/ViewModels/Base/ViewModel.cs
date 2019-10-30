@@ -27,9 +27,17 @@ namespace Toggl.Core.UI.ViewModels
         public virtual Task Initialize(TInput payload)
             => Task.CompletedTask;
 
-        public virtual void CloseWithDefaultResult()
+        public virtual Task<bool> ConfirmCloseRequest()
+            => Task.FromResult(true);
+
+        public virtual async Task<bool> CloseWithDefaultResult()
         {
-            Close(default(TOutput));
+            var shouldClose = await ConfirmCloseRequest();
+            if (!shouldClose)
+                return false;
+
+            Close(default);
+            return true;
         }
 
         public virtual void Close(TOutput output)
@@ -68,6 +76,12 @@ namespace Toggl.Core.UI.ViewModels
         {
         }
 
+        public void ViewWasClosed()
+        {
+            resultCompletionSource.TrySetResult(default);
+            View = null;
+        }
+
         public Task<TNavigationOutput> Navigate<TViewModel, TNavigationInput, TNavigationOutput>(TNavigationInput payload)
             where TViewModel : ViewModel<TNavigationInput, TNavigationOutput>
             => NavigationService.Navigate<TViewModel, TNavigationInput, TNavigationOutput>(payload, View);
@@ -91,7 +105,10 @@ namespace Toggl.Core.UI.ViewModels
         {
         }
 
-        public virtual void Close() => base.Close(Unit.Default);
+        public virtual void Close()
+        {
+            base.Close(Unit.Default);
+        }
 
         public virtual Task Initialize()
             => Task.CompletedTask;

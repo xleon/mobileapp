@@ -10,11 +10,11 @@ using Android.Widget;
 using System;
 using System.Reactive;
 using System.Reactive.Subjects;
-using Toggl.Core.Extensions;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Droid.Views;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Color = Android.Graphics.Color;
 
 namespace Toggl.Droid.ViewHolders

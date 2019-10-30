@@ -200,6 +200,12 @@ namespace Toggl.Core.Analytics
 
         public IAnalyticsEvent<bool> WatchPaired { get; }
 
+        public IAnalyticsEvent<bool> TimerWidgetInstallStateChange { get; }
+
+        public IAnalyticsEvent<bool> SuggestionsWidgetInstallStateChange { get; }
+
+        public IAnalyticsEvent<int> TimerWidgetSizeChanged { get; }
+
         public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarEventContextualMenu { get; }
 
         public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarNewTimeEntryContextualMenu { get; }
@@ -284,8 +290,8 @@ namespace Toggl.Core.Analytics
             TimeEntriesInaccesibleAfterCleanUp = new AnalyticsEvent<int>(this, nameof(TimeEntriesInaccesibleAfterCleanUp), "NumberOfTimeEntriesInaccesibleAfterCleanUp");
             WorkspacesInaccesibleAfterCleanUp = new AnalyticsEvent<int>(this, nameof(WorkspacesInaccesibleAfterCleanUp), "NumberOfWorkspacesInaccesibleAfterCleanUp");
             BackgroundSyncStarted = new AnalyticsEvent(this, nameof(BackgroundSyncStarted));
-            BackgroundSyncFinished = new AnalyticsEvent<string>(this, nameof(BackgroundSyncStarted), "BackgroundSyncFinishedWithOutcome");
-            BackgroundSyncFailed = new AnalyticsEvent<string, string, string>(this, nameof(BackgroundSyncStarted), "Type", "Message", "StackTrace");
+            BackgroundSyncFinished = new AnalyticsEvent<string>(this, nameof(BackgroundSyncFinished), "BackgroundSyncFinishedWithOutcome");
+            BackgroundSyncFailed = new AnalyticsEvent<string, string, string>(this, nameof(BackgroundSyncFailed), "Type", "Message", "StackTrace");
             BackgroundSyncMustStopExcecution = new AnalyticsEvent(this, nameof(BackgroundSyncMustStopExcecution));
             UnknownLoginFailure = new AnalyticsEvent<string, string>(this, nameof(UnknownLoginFailure), "Type", "Message");
             UnknownSignUpFailure = new AnalyticsEvent<string, string>(this, nameof(UnknownSignUpFailure), "Type", "Message");
@@ -306,6 +312,9 @@ namespace Toggl.Core.Analytics
             DebugNavigationError = new AnalyticsEvent<string, string>(this, nameof(DebugNavigationError), "Action", "Type");
             AccessibilityEnabled = new AnalyticsEvent<bool>(this, nameof(AccessibilityEnabled), "Enabled");
             WatchPaired = new AnalyticsEvent<bool>(this, nameof(WatchPaired), "Installed");
+            TimerWidgetInstallStateChange = new AnalyticsEvent<bool>(this, nameof(TimerWidgetInstallStateChange), "Installed");
+            SuggestionsWidgetInstallStateChange = new AnalyticsEvent<bool>(this, nameof(SuggestionsWidgetInstallStateChange), "Installed");
+            TimerWidgetSizeChanged = new AnalyticsEvent<int>(this, nameof(TimerWidgetSizeChanged), "Columns");
             PushInitiatedSyncFetch = new AnalyticsEvent<string>(this, nameof(PushInitiatedSyncFetch), "NumberOfEntitiesFetched");
             PushNotificationSyncStarted = new AnalyticsEvent<string>(this, nameof(PushNotificationSyncStarted), "Source");
             PushNotificationSyncFinished = new AnalyticsEvent<string>(this, nameof(PushNotificationSyncFinished), "Source");

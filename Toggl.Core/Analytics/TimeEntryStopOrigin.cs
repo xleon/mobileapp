@@ -5,6 +5,9 @@ namespace Toggl.Core.Analytics
         Manual,
         Deeplink,
         Siri,
+        Widget,
+        EditView,
+        Wheel,
         CalendarContextualMenu
     }
 }

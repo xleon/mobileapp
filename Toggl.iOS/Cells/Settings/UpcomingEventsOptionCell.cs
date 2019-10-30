@@ -2,6 +2,7 @@
 using System;
 using Toggl.Core.Extensions;
 using Toggl.Core.UI.ViewModels.Selectable;
+using Toggl.iOS.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Cells.Settings
@@ -25,6 +26,7 @@ namespace Toggl.iOS.Cells.Settings
         {
             base.AwakeFromNib();
             SelectionStyle = UITableViewCellSelectionStyle.None;
+            this.InsertSeparator();
         }
 
         protected override void UpdateView()
