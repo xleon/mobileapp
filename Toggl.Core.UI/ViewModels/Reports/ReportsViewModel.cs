@@ -74,25 +74,24 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public IObservable<bool> IsLoadingObservable { get; }
 
-        public IObservable<TimeSpan> TotalTimeObservable
-            => totalTimeSubject.AsObservable();
+        public IObservable<TimeSpan> TotalTimeObservable { get; }
 
         public IObservable<bool> TotalTimeIsZeroObservable
             => TotalTimeObservable.Select(time => time.Ticks == 0);
 
-        public IObservable<DurationFormat> DurationFormatObservable { get; private set; }
+        public IObservable<DurationFormat> DurationFormatObservable { get; }
 
-        public IObservable<float?> BillablePercentageObservable => billablePercentageSubject.AsObservable();
+        public IObservable<float?> BillablePercentageObservable { get; }
 
         public ReportsBarChartViewModel BarChartViewModel { get; }
 
         public ReportsCalendarViewModel CalendarViewModel { get; }
 
-        public IObservable<IImmutableList<ChartSegment>> SegmentsObservable { get; private set; }
+        public IObservable<IImmutableList<ChartSegment>> SegmentsObservable { get; }
 
-        public IObservable<IImmutableList<ChartSegment>> GroupedSegmentsObservable { get; private set; }
+        public IObservable<IImmutableList<ChartSegment>> GroupedSegmentsObservable { get; }
 
-        public IObservable<bool> ShowEmptyStateObservable { get; private set; }
+        public IObservable<bool> ShowEmptyStateObservable { get; }
 
         public IObservable<string> CurrentDateRange { get; }
 
@@ -139,6 +138,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
             IsLoadingObservable = isLoading.AsObservable().AsDriver(schedulerProvider);
             StartDate = startDateSubject.AsObservable().AsDriver(schedulerProvider);
             EndDate = endDateSubject.AsObservable().AsDriver(schedulerProvider);
+            TotalTimeObservable = totalTimeSubject.AsObservable().AsDriver(schedulerProvider);
+            BillablePercentageObservable = billablePercentageSubject.AsObservable().AsDriver(schedulerProvider);
 
             SelectWorkspace = rxActionFactory.FromAsync(selectWorkspace);
 
@@ -176,9 +177,17 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Select(prefs => prefs.DurationFormat)
                 .AsDriver(schedulerProvider);
 
-            SegmentsObservable = segmentsSubject.CombineLatest(DurationFormatObservable, applyDurationFormat);
-            GroupedSegmentsObservable = SegmentsObservable.CombineLatest(DurationFormatObservable, groupSegments);
-            ShowEmptyStateObservable = SegmentsObservable.CombineLatest(IsLoadingObservable, shouldShowEmptyState);
+            var segmentsObservable = segmentsSubject.CombineLatest(DurationFormatObservable, applyDurationFormat);
+
+            SegmentsObservable = segmentsObservable.AsDriver(schedulerProvider);
+
+            GroupedSegmentsObservable = segmentsObservable
+                .CombineLatest(DurationFormatObservable, groupSegments)
+                .AsDriver(schedulerProvider);
+
+            ShowEmptyStateObservable = segmentsObservable
+                .CombineLatest(IsLoadingObservable, shouldShowEmptyState)
+                .AsDriver(schedulerProvider);
         }
 
         public override async Task Initialize()
