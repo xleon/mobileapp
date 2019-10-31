@@ -1,15 +1,17 @@
-using System;
+﻿using System;
 using System.Linq;
 using Foundation;
 using Toggl.Core.Analytics;
 using CoreGraphics;
 using System.Collections.Immutable;
+using System.Reactive.Linq;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
+using Toggl.Shared.Extensions.Reactive;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
@@ -21,6 +23,7 @@ namespace Toggl.iOS.ViewControllers
         private const int minAllowedPageIndex = -13;
         private const int weekViewHeaderFontSize = 12;
 
+        private readonly BehaviorRelay<bool> contextualMenuVisible = new BehaviorRelay<bool>(false);
         private readonly UIPageViewController pageViewController;
         private readonly UILabel[] weekViewHeaderLabels;
         private readonly UICollectionViewFlowLayout weekViewCollectionViewLayout;
@@ -59,6 +62,8 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            ExtendedLayoutIncludesOpaqueBars = true;
+
             weekViewCollectionViewSource = new CalendarWeeklyViewDayCollectionViewSource(WeekViewCollectionView);
             currentlyShownDate = ViewModel.CurrentlyShownDate.Value;
 
@@ -91,6 +96,24 @@ namespace Toggl.iOS.ViewControllers
             SettingsButton.Rx()
                 .BindAction(ViewModel.OpenSettings)
                 .DisposedBy(DisposeBag);
+
+            contextualMenuVisible
+                .Select(CommonFunctions.Invert)
+                .Subscribe(setPageViewControllerEnabled)
+                .DisposedBy(DisposeBag);
+
+            contextualMenuVisible
+                .Subscribe(contextualMenuVisible => WeekViewCollectionView.UserInteractionEnabled = !contextualMenuVisible)
+                .DisposedBy(DisposeBag);
+
+            contextualMenuVisible
+                .Subscribe(toggleTabBar)
+                .DisposedBy(DisposeBag);
+        }
+
+        private void toggleTabBar(bool hidden)
+        {
+            TabBarController.TabBar.Hidden = hidden;
         }
 
         private void setupViews()
@@ -111,6 +134,12 @@ namespace Toggl.iOS.ViewControllers
             WeekViewCollectionView.ShowsHorizontalScrollIndicator = false;
             WeekViewCollectionView.CollectionViewLayout = weekViewCollectionViewLayout;
             WeekViewCollectionView.DecelerationRate = UIScrollView.DecelerationRateFast;
+        }
+
+        private void setPageViewControllerEnabled(bool enabled)
+        {
+            pageViewController.DataSource = enabled ? this : null;
+            pageViewController.Delegate = enabled ? this : null;
         }
 
         private void updateCurrentlyShownViewController(DateTime newDate)
@@ -180,10 +209,18 @@ namespace Toggl.iOS.ViewControllers
 
         private CalendarDayViewController viewControllerAtIndex(nint index)
         {
-            var viewModel = ViewModel.DayViewModelAt((int)index);
-            var viewController = new CalendarDayViewController(viewModel);
-            viewController.View.Tag = index;
-            return viewController;
+            try
+            {
+                var viewModel = ViewModel.DayViewModelAt((int) index);
+                var viewController = new CalendarDayViewController(viewModel, contextualMenuVisible);
+                viewController.View.Tag = index;
+                return viewController;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
         }
 
         [Export("pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:")]
