@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -18,6 +20,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels.Calendar.ContextualMenu;
 
 namespace Toggl.Core.UI.ViewModels.Calendar
@@ -30,10 +33,13 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private readonly IInteractorFactory interactorFactory;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
-
+        private readonly IObservable<TimeSpan> timeTrackedOnDaySubject;
+        
         public DateTimeOffset Date { get; }
         public ObservableGroupedOrderedCollection<CalendarItem> CalendarItems { get; }
         public IObservable<TimeFormat> TimeOfDayFormat { get; }
+        public IObservable<string> TimeTrackedOnDay { get; }
+
         public InputAction<CalendarItem> OnTimeEntryEdited { get; }
         public InputAction<(DateTimeOffset, TimeSpan)> OnDurationSelected { get; }
         public CalendarContextualMenuViewModel ContextualMenuViewModel { get; }
@@ -87,6 +93,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 orderingKey: item => item.StartTime,
                 groupingKey: _ => 0);
 
+            var durationFormat = preferences.Select(current => current.DurationFormat);
             var selectedCalendarsChanged = userPreferences
                 .EnabledCalendars
                 .SelectUnit();
@@ -101,7 +108,42 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 .ObserveOn(schedulerProvider.MainScheduler)
                 .Subscribe(CalendarItems.ReplaceWith)
                 .DisposedBy(disposeBag);
+
+            var timeTrackedToday = interactorFactory.ObserveTimeTrackedToday()
+                .Execute()
+                .ObserveOn(schedulerProvider.BackgroundScheduler)
+                .StartWith(TimeSpan.Zero);
+            
+            var timeTrackedOnDay = CalendarItems
+                .CollectionChange
+                .ObserveOn(schedulerProvider.BackgroundScheduler)
+                .Select(_ => CalendarItems.IsEmpty ? ImmutableList<CalendarItem>.Empty : CalendarItems[0])
+                .Select(items => items
+                        .Where(item => item.Source == CalendarItemSource.TimeEntry)
+                        .Sum(item => item.Duration(timeService.CurrentDateTime)))
+                .StartWith(TimeSpan.Zero);
+
+            if (timeService.CurrentDateTime.LocalDateTime.Date == Date)
+            {
+                timeTrackedOnDaySubject = timeTrackedOnDay
+                    .CombineLatest(timeTrackedToday.ReemitWhen(timeService.MidnightObservable.SelectUnit()), 
+                        selectTrackedTimeSource);
+            }
+            else
+            {
+                timeTrackedOnDaySubject = timeTrackedOnDay;
+            }
+            
+            TimeTrackedOnDay = timeTrackedOnDaySubject
+                .CombineLatest(durationFormat, DurationAndFormatToString.Convert)
+                .DistinctUntilChanged()
+                .AsDriver(schedulerProvider);
         }
+
+        private TimeSpan selectTrackedTimeSource(TimeSpan timeTrackedOnDay, TimeSpan timeTrackedToday) 
+            => timeService.CurrentDateTime.LocalDateTime.Date == Date 
+                ? timeTrackedToday
+                : timeTrackedOnDay;
 
         private IObservable<IEnumerable<CalendarItem>> reloadData()
         {

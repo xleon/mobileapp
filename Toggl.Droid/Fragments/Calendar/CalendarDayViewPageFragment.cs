@@ -30,6 +30,7 @@ namespace Toggl.Droid.Fragments.Calendar
         public BehaviorRelay<int> CurrentPageRelay { get; set; }
         public BehaviorRelay<int> ScrollOffsetRelay { get; set; }
         public BehaviorRelay<bool> MenuVisibilityRelay { get; set; }
+        public BehaviorRelay<string> TimeTrackedOnDay { get; set; }
         public IObservable<bool> ScrollToStartSign { get; set; }
         public IObservable<Unit> InvalidationListener { get; set; }
         public IObservable<Unit> BackPressListener { get; set; }
@@ -120,6 +121,11 @@ namespace Toggl.Droid.Fragments.Calendar
                 .Select(convertTimeEntryInfoToSpannable)
                 .Subscribe(timeEntryDetails.Rx().TextFormattedObserver())
                 .DisposedBy(DisposeBag);
+            
+            ViewModel.TimeTrackedOnDay
+                .CombineLatest(CurrentPageRelay, CommonFunctions.First)
+                .Subscribe(notifyTotalDurationIfCurrentPage)
+                .DisposedBy(DisposeBag);
 
             InvalidationListener?
                 .Subscribe(_ => invalidatePage())
@@ -155,6 +161,14 @@ namespace Toggl.Droid.Fragments.Calendar
             if (CurrentPageRelay?.Value == PageNumber)
             {
                 MenuVisibilityRelay?.Accept(menuIsVisible);
+            }
+        }
+
+        private void notifyTotalDurationIfCurrentPage(string durationString)
+        {
+            if (CurrentPageRelay?.Value == PageNumber)
+            {
+                TimeTrackedOnDay?.Accept(durationString);
             }
         }
 

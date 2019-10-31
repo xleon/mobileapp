@@ -14,7 +14,9 @@ using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.Views;
@@ -347,6 +349,78 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 AnalyticsService.TimeEntryChangedFromCalendar.Received().Track(CalendarChangeEvent.Duration);
                 AnalyticsService.TimeEntryChangedFromCalendar.Received().Track(CalendarChangeEvent.StartTime);
+            }
+        }
+        
+        public sealed class TheTimeTrackedOnDayObservable : CalendarDayViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public async Task ContainsTheSumOfDurationsInTheTimeEntryCalendarItems()
+            {
+                var now = new DateTimeOffset(2018, 8, 9, 12, 0, 0, TimeSpan.Zero);
+                TimeService.CurrentDateTime.Returns(now);
+
+                var items = new List<CalendarItem>
+                {
+                    new CalendarItem("id", CalendarItemSource.TimeEntry, now.AddMinutes(30), TimeSpan.FromMinutes(30), "Weekly meeting", CalendarIconKind.Event, "#ff0000"),
+                    new CalendarItem("id", CalendarItemSource.TimeEntry, now.AddHours(-3), TimeSpan.FromMinutes(30), "Bug fixes", CalendarIconKind.None, "#00ff00"),
+                    new CalendarItem("id", CalendarItemSource.TimeEntry, now.AddHours(2), TimeSpan.FromMinutes(30), "F**** timesheets", CalendarIconKind.Event, "#ff0000"),
+                    new CalendarItem("id", CalendarItemSource.Calendar, now.AddHours(2), TimeSpan.FromMinutes(30), "F**** timesheets", CalendarIconKind.Event, "#ff0000")
+                };
+                var interactor = Substitute.For<IInteractor<IObservable<IEnumerable<CalendarItem>>>>();
+                interactor.Execute().Returns(Observable.Return(items));
+                InteractorFactory.GetCalendarItemsForDate(Arg.Any<DateTime>()).Returns(interactor);
+                var preferences = Substitute.For<IThreadSafePreferences>();
+                preferences.DurationFormat.Returns(DurationFormat.Classic);
+                this.DataSource.Preferences.Current.Returns(Observable.Return(preferences));
+                var timeOnDayObserver = TestScheduler.CreateObserver<string>();
+                ViewModel.TimeTrackedOnDay.Subscribe(timeOnDayObserver);
+                
+                await ViewModel.Initialize();
+
+                TestScheduler.Start();
+
+                timeOnDayObserver.LastEmittedValue().Should().Be(DurationAndFormatToString.Convert(TimeSpan.FromMinutes(90), DurationFormat.Classic));
+            }
+            
+            [Fact, LogIfTooSlow]
+            public async Task ItsTheSameAsTheTimeEntriesTodayIfTheCalendarDayInFactToday()
+            {
+                var now = new DateTimeOffset(2018, 8, 9, 0, 0, 0, DateTimeOffset.Now.Offset);
+                TimeService.CurrentDateTime.Returns(now);
+                var yesterday = now.AddDays(-1);
+                var yesterdayItems = new List<CalendarItem>
+                {
+                    new CalendarItem("id", CalendarItemSource.TimeEntry, yesterday.AddMinutes(30), TimeSpan.FromMinutes(30), "Weekly meeting", CalendarIconKind.Event, "#ff0000"),
+                    new CalendarItem("id", CalendarItemSource.TimeEntry, yesterday.AddHours(3), TimeSpan.FromMinutes(30), "Bug fixes", CalendarIconKind.None, "#00ff00"),
+                    new CalendarItem("id", CalendarItemSource.TimeEntry, yesterday.AddHours(2), TimeSpan.FromMinutes(30), "F**** timesheets", CalendarIconKind.Event, "#ff0000"),
+                    new CalendarItem("id", CalendarItemSource.Calendar, yesterday.AddHours(2), TimeSpan.FromMinutes(30), "F**** timesheets", CalendarIconKind.Event, "#ff0000")
+                };
+                var calendarItemsInteractor = Substitute.For<IInteractor<IObservable<IEnumerable<CalendarItem>>>>();
+                calendarItemsInteractor.Execute().Returns(Observable.Return(yesterdayItems));
+                InteractorFactory.GetCalendarItemsForDate(Arg.Any<DateTime>()).Returns(calendarItemsInteractor);
+                InteractorFactory.ObserveTimeTrackedToday().Execute().Returns(Observable.Return(TimeSpan.FromMinutes(10)));
+                var viewModel = new CalendarDayViewModel(
+                    now.Date,
+                    TimeService,
+                    DataSource,
+                    RxActionFactory,
+                    UserPreferences,
+                    AnalyticsService,
+                    BackgroundService,
+                    InteractorFactory,
+                    SchedulerProvider,
+                    NavigationService);
+                var preferences = Substitute.For<IThreadSafePreferences>();
+                preferences.DurationFormat.Returns(DurationFormat.Classic);
+                this.DataSource.Preferences.Current.Returns(Observable.Return(preferences));
+                var timeOnDayObserver = TestScheduler.CreateObserver<string>();
+                viewModel.TimeTrackedOnDay.Subscribe(timeOnDayObserver);
+
+                await viewModel.Initialize();
+
+                TestScheduler.Start();
+                timeOnDayObserver.LastEmittedValue().Should().Be(DurationAndFormatToString.Convert(TimeSpan.FromMinutes(10), DurationFormat.Classic));
             }
         }
     }

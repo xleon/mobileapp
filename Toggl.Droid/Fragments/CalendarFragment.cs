@@ -118,6 +118,11 @@ namespace Toggl.Droid.Fragments
                 .Select(calculateDayForCalendarDayPage)
                 .Subscribe(ViewModel.CurrentlyShownDate.Accept)
                 .DisposedBy(DisposeBag);
+            
+            calendarDayAdapter.TimeTrackedOnDay
+                .DistinctUntilChanged()
+                .Subscribe(headerTimeEntriesDurationTextView.Rx().TextObserver())
+                .DisposedBy(DisposeBag);
 
             calendarWeekStripeLabelsContainer.Rx().TouchEvents()
                 .Subscribe(touch => calendarWeekStripePager.OnTouchEvent(touch))
@@ -232,7 +237,8 @@ namespace Toggl.Droid.Fragments
             public BehaviorRelay<int> OffsetRelay { get; } = new BehaviorRelay<int>(0);
             public BehaviorRelay<int> CurrentPageRelay { get; } = new BehaviorRelay<int>(0);
             public BehaviorRelay<bool> MenuVisibilityRelay { get; } = new BehaviorRelay<bool>(false);
-
+            public BehaviorRelay<string> TimeTrackedOnDay { get; } = new BehaviorRelay<string>(string.Empty);
+            
             public CalendarDayFragmentAdapter(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
             {
             }
@@ -255,7 +261,8 @@ namespace Toggl.Droid.Fragments
                     PageNumber = position,
                     ScrollToStartSign = scrollToTopSign,
                     InvalidationListener = pageNeedsToBeInvalidated.AsObservable(),
-                    BackPressListener = backPressSubject.AsObservable()
+                    BackPressListener = backPressSubject.AsObservable(),
+                    TimeTrackedOnDay = TimeTrackedOnDay
                 };
 
             public void InvalidateCurrentPage()
