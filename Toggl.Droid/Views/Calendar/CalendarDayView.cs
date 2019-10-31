@@ -254,6 +254,12 @@ namespace Toggl.Droid.Views.Calendar
         {
             base.OnLayout(changed, left, top, right, bottom);
             availableWidth = Width - leftMargin;
+            if (scrollOffsetIsPastBottomFrame())
+            {
+                scrollOffset = maxHeight - Height;
+                scrollOffsetSubject.OnNext(scrollOffset);
+            }
+            availableWidth = Width - leftMargin;
             processBackgroundOnLayout(changed, left, top, right, bottom);
             processEventsOnLayout(changed, left, top, right, bottom);
         }
@@ -296,17 +302,20 @@ namespace Toggl.Droid.Views.Calendar
             {
                 scrollOffset = 0;
             }
-            else if (maxHeight - scrollOffset < Height)
+            else if (scrollOffsetIsPastBottomFrame())
             {
                 scrollOffset = maxHeight - Height;
             }
-            
+
             scrollOffsetSubject.OnNext(scrollOffset);
             OnScrollChanged(0, scrollOffset, 0, oldScrollOffset);
 
             handler.Post(continueScroll);
             Invalidate();
         }
+
+        private bool scrollOffsetIsPastBottomFrame()
+            => scrollOffset >= maxHeight - Height;
 
         private void onTouchDown(MotionEvent e1)
         {
@@ -413,7 +422,7 @@ namespace Toggl.Droid.Views.Calendar
             {
                 scrollOffset = 0;
             }
-            else if (maxHeight - scrollOffset < Height)
+            else if (scrollOffsetIsPastBottomFrame())
             {
                 scrollOffset = maxHeight - Height;
             }

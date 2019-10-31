@@ -47,6 +47,9 @@ namespace Toggl.Droid.Views.Calendar
 
         partial void processBackgroundOnLayout(bool changed, int left, int top, int right, int bottom)
         {
+            if (!changed) 
+                return;
+            
             timeLinesYs = createTimeLinesYPositions();
             hoursYs = timeLinesYs.Select(lineY => lineY + hoursLabelPaint.Descent()).ToImmutableArray();
         }
