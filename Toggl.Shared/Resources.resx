@@ -663,12 +663,6 @@ understand and agree to Toggl's</value>
     <data name="CalendarAccessExplanation" xml:space="preserve">
         <value>Toggl needs access to your calendar in order to display events. Events are visible to you only and won’t appear in Reports.</value>
     </data>
-    <data name="Welcome" xml:space="preserve">
-        <value>Welcome</value>
-    </data>
-    <data name="GetStarted" xml:space="preserve">
-        <value>Get started</value>
-    </data>
     <data name="Start" xml:space="preserve">
         <value>Start</value>
     </data>
@@ -1122,9 +1116,6 @@ Open app to track time.</value>
     </data>
     <data name="UndoDeletedTimeEntry" xml:space="preserve">
         <value>Undo deleted time entry</value>
-    </data>
-    <data name="CalendarFeatureDescription" xml:space="preserve">
-        <value>Calendar feature links to calendars on your device so that you can see events and turn these to time entries.</value>
     </data>
     <data name="CalendarPermissionDeniedOr" xml:space="preserve">
         <value>or {0}</value>

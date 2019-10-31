@@ -43,10 +43,6 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
-            TitleLabel.Text = Resources.Welcome;
-            DescriptionLabel.Text = Resources.CalendarFeatureDescription;
-            GetStartedButton.SetTitle(Resources.GetStarted, UIControlState.Normal);
-
             dataSource = new CalendarCollectionViewSource(
                 timeService,
                 CalendarCollectionView,
