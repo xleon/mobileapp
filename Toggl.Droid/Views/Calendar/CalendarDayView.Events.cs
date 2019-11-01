@@ -343,8 +343,11 @@ namespace Toggl.Droid.Views.Calendar
             var textVerticalPadding = eventHeight <= shortCalendarItemHeight ? shortCalendarItemVerticalPadding : regularCalendarItemVerticalPadding;
             textVerticalPadding = (int) Math.Min((eventHeight - fontSize) / 2f, textVerticalPadding);
             var textHorizontalPadding = eventHeight <= shortCalendarItemHeight ? shortCalendarItemHorizontalPadding : regularCalendarItemHorizontalPadding;
-
-            var eventTextLayout = getCalendarItemTextLayout(calendarItem, eventWidth - textHorizontalPadding * 2, fontSize, isRunning);
+            
+            var textWidth = eventWidth - textHorizontalPadding * 2;
+            if (textWidth <= 0) return;
+            
+            var eventTextLayout = getCalendarItemTextLayout(calendarItem, textWidth, fontSize, isRunning);
             var totalLineHeight = calculateLineHeight(eventHeight, eventTextLayout);
 
             canvas.Save();
