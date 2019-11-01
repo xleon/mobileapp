@@ -311,6 +311,7 @@ namespace Toggl.Droid.Fragments
 
                 pages[position] = weekSectionViewHolder;
                 
+                weekStripe.Tag = position;
                 container.AddView(weekStripe);
                 return weekStripe;
             }
@@ -319,7 +320,21 @@ namespace Toggl.Droid.Fragments
             {
                 pages.TryGetValue(position, out var page);
                 page?.Destroy();
-                container.RemoveView(@object as View);
+                var view = (View)@object;
+                view.Tag = null;
+                container.RemoveView(view);
+            }
+
+            public override int GetItemPosition(Java.Lang.Object @object)
+            {
+                var tag = ((View) @object).Tag;
+                if (tag == null)
+                    return PositionNone;
+                
+                var positionFromTag = (int)tag;
+                return positionFromTag == Count
+                    ? PositionNone
+                    : positionFromTag;
             }
 
             public override bool IsViewFromObject(View view, Java.Lang.Object @object) 
