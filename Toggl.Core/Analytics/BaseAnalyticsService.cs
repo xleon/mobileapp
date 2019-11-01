@@ -90,7 +90,9 @@ namespace Toggl.Core.Analytics
 
         public IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; }
 
-        public IAnalyticsEvent NoDefaultWorkspace { get; }
+        public IAnalyticsEvent<int> NoDefaultWorkspace { get; }
+
+        public IAnalyticsEvent NoWorkspaces { get; }
 
         public IAnalyticsEvent<TimeEntryStartOrigin> TimeEntryStarted { get; }
 
@@ -261,7 +263,8 @@ namespace Toggl.Core.Analytics
             HandledException = new AnalyticsEvent<string, string>(this, nameof(HandledException), "ExceptionType", "ExceptionMessage");
             TwoRunningTimeEntriesInconsistencyFixed = new AnalyticsEvent(this, nameof(TwoRunningTimeEntriesInconsistencyFixed));
             StartViewTapped = new AnalyticsEvent<StartViewTapSource>(this, nameof(StartViewTapped), "TapSource");
-            NoDefaultWorkspace = new AnalyticsEvent(this, nameof(NoDefaultWorkspace));
+            NoDefaultWorkspace = new AnalyticsEvent<int>(this, nameof(NoDefaultWorkspace), "NumberOfWorkspaces");
+            NoWorkspaces = new AnalyticsEvent(this, nameof(NoWorkspaces));
             TimeEntryStarted = new AnalyticsEvent<TimeEntryStartOrigin>(this, nameof(TimeEntryStarted), "Origin");
             TimeEntryStopped = new AnalyticsEvent<TimeEntryStopOrigin>(this, nameof(TimeEntryStopped), "Origin");
             TimeEntryContinued = new AnalyticsEvent<ContinueTimeEntryOrigin, int, int, int>(this, nameof(TimeEntryContinued), "Origin", "IndexInLog", "DayInLog", "DaysInThePast");

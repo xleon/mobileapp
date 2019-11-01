@@ -4,6 +4,7 @@ using Android.Graphics;
 using Toggl.Shared;
 using System.Globalization;
 using System.Linq;
+using Toggl.Core.UI.Helper;
 using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Views.Calendar
@@ -30,7 +31,7 @@ namespace Toggl.Droid.Views.Calendar
             hoursDistanceFromTimeLine = 12.DpToPixels(Context);
             hoursX = timeSliceStartX - hoursDistanceFromTimeLine;
             hours = createHours();
-            
+
             linesPaint = new Paint(PaintFlags.AntiAlias)
             {
                 Color = Context.SafeGetColor(Resource.Color.separator),
@@ -65,17 +66,17 @@ namespace Toggl.Droid.Views.Calendar
                 var hourTop = hourLabelYsToDraw[hour] + linesPaint.Ascent();
                 var hourBottom = hourLabelYsToDraw[hour] + linesPaint.Descent();
                 if (!(hourBottom > scrollOffset) || !(hourTop - scrollOffset < Height)) continue;
-                
+
                 canvas.DrawLine(timeSliceStartX, timeLinesYsToDraw[hour], Width, timeLinesYsToDraw[hour], linesPaint);
                 canvas.DrawText(hours[hour], hoursX, hourLabelYsToDraw[hour], hoursLabelPaint);
             }
         }
-        
+
         private ImmutableArray<float> createTimeLinesYPositions()
             => Enumerable.Range(0, hoursPerDay)
                 .Select(line => line * hourHeight + timeSlicesTopPadding)
                 .ToImmutableArray();
-        
+
         private ImmutableArray<string> createHours()
         {
             var date = new DateTime();
@@ -84,13 +85,13 @@ namespace Toggl.Droid.Views.Calendar
                 .Select(formatHour)
                 .ToImmutableArray();
         }
-        
+
         private string formatHour(DateTime hour)
-            => hour.ToString(fixedHoursFormat(), CultureInfo.CurrentCulture);
+            => hour.ToString(fixedHoursFormat(), DateFormatCultureInfo.CurrentCulture);
 
         private string fixedHoursFormat()
-            => timeOfDayFormat.IsTwentyFourHoursFormat 
-                ? Shared.Resources.TwentyFourHoursFormat 
+            => timeOfDayFormat.IsTwentyFourHoursFormat
+                ? Shared.Resources.TwentyFourHoursFormat
                 : Shared.Resources.TwelveHoursFormat;
     }
 }
