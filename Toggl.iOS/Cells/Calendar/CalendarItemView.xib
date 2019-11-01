@@ -68,7 +68,7 @@
                     </label>
                 </subviews>
             </view>
-            <color key="backgroundColor" red="0.86420355900000001" green="0.7443847656" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" name="CellBackground"/>
             <constraints>
                 <constraint firstItem="BRg-DN-wNT" firstAttribute="baseline" secondItem="sob-Bq-eUc" secondAttribute="firstBaseline" id="20g-ZE-uFH"/>
                 <constraint firstItem="sob-Bq-eUc" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="24" id="5hY-Qw-D80"/>

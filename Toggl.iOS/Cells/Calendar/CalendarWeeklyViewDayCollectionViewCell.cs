@@ -40,7 +40,7 @@ namespace Toggl.iOS.Cells.Calendar
         private UIColor colorForDayOfMonthLabel()
         {
             if (isSelected)
-                return Colors.Calendar.WeekView.SelectedDayTextColor.ToNativeColor();
+                return ColorAssets.InverseText;
 
             if (Item.IsToday)
                 return Colors.Calendar.WeekView.UnselectedTodayTextColor.ToNativeColor();
@@ -48,7 +48,7 @@ namespace Toggl.iOS.Cells.Calendar
             if (!Item.Enabled)
                 return Colors.Calendar.WeekView.UnavailableDayTextColor.ToNativeColor();
 
-            return Colors.Calendar.WeekView.DefaultDayTextColor.ToNativeColor();
+            return ColorAssets.Text;
         }
 
         private UIColor isSelectedDayBackgroundViewColor()
@@ -56,7 +56,7 @@ namespace Toggl.iOS.Cells.Calendar
             if (Item.IsToday)
                 return Colors.Calendar.WeekView.SelectedTodayBackgroundColor.ToNativeColor();
 
-            return Colors.Calendar.WeekView.SelectedDayBackgroundColor.ToNativeColor();
+            return ColorAssets.Text;
         }
 
         public void UpdateSelectedDate(DateTime date)
