@@ -266,9 +266,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
                 .TrackException<InvalidOperationException, IThreadSafeWorkspace>("CalendarContextualMenuViewModel.createTimeEntryFromCalendarItem")
                 .Execute();
             var prototype = calendarItem.AsTimeEntryPrototype(workspace.Id);
-            await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarEvent)
-                .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler);
+            await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarEvent).Execute();
             closeMenuWithCommittedChanges();
         }
 
@@ -282,9 +280,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
                 .TrackException<InvalidOperationException, IThreadSafeWorkspace>("CalendarContextualMenuViewModel.startTimeEntryFromCalendarItem")
                 .Execute();
             var prototype = timeEntryToStart.AsTimeEntryPrototype(workspace.Id);
-            await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarEvent)
-                .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler);
+            await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarEvent).Execute();
             closeMenuWithCommittedChanges();
         }
 
@@ -306,9 +302,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             if (!calendarItem.TimeEntryId.HasValue)
                 return;
 
-            await interactorFactory.DeleteTimeEntry(calendarItem.TimeEntryId.Value)
-                .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler);
+            await interactorFactory.DeleteTimeEntry(calendarItem.TimeEntryId.Value).Execute();
             closeMenuWithCommittedChanges();
         }
 
@@ -342,18 +336,14 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
                 TagIds = timeEntry.TagIds
             };
 
-            await interactorFactory.UpdateTimeEntry(dto)
-                .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler);
+            await interactorFactory.UpdateTimeEntry(dto).Execute();
             closeMenuWithCommittedChanges();
         }
 
         private async Task stopTimeEntry(CalendarItem calendarItem)
         {
             var currentDateTime = timeService.CurrentDateTime;
-            await interactorFactory.StopTimeEntry(currentDateTime, TimeEntryStopOrigin.CalendarContextualMenu)
-                .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler);
+            await interactorFactory.StopTimeEntry(currentDateTime, TimeEntryStopOrigin.CalendarContextualMenu).Execute();
 
             closeMenuWithCommittedChanges();
         }
@@ -376,14 +366,10 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             if (!calendarItem.TimeEntryId.HasValue)
                 return;
 
-            var timeEntry = await interactorFactory.GetTimeEntryById(calendarItem.TimeEntryId.Value)
-                .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler);
+            var timeEntry = await interactorFactory.GetTimeEntryById(calendarItem.TimeEntryId.Value).Execute();
 
             var prototype = timeEntry.AsTimeEntryPrototype();
-            await interactorFactory.ContinueTimeEntry(prototype, ContinueTimeEntryMode.CalendarContextualMenu)
-                .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler);
+            await interactorFactory.ContinueTimeEntry(prototype, ContinueTimeEntryMode.CalendarContextualMenu).Execute();
 
             closeMenuWithCommittedChanges();
         }
