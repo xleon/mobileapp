@@ -27,19 +27,18 @@ namespace Toggl.iOS.ViewSources
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            base.RowSelected(tableView, indexPath);
-
-            var cell = (SelectableUserCalendarViewCell)tableView.CellAt(indexPath);
-            cell.ToggleSwitch();
-
             tableView.DeselectRow(indexPath, true);
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = (BaseTableViewCell<SelectableUserCalendarViewModel>)tableView.DequeueReusableCell(
+            var cell = (SelectableUserCalendarViewCell)tableView.DequeueReusableCell(
                 SelectableUserCalendarViewCell.Identifier, indexPath);
             cell.Item = ModelAt(indexPath);
+            cell.Callback = () =>
+            {
+                OnItemTapped?.Invoke(this, ModelAt(indexPath));
+            };
             return cell;
         }
 

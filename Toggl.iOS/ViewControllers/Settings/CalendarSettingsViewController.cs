@@ -43,6 +43,7 @@ namespace Toggl.iOS.ViewControllers.Settings
                 .DisposedBy(DisposeBag);
 
             source.Rx().ModelSelected()
+                .Debug("CalendarSettingsViewController")
                 .Subscribe(ViewModel.SelectCalendar.Inputs)
                 .DisposedBy(DisposeBag);
         }

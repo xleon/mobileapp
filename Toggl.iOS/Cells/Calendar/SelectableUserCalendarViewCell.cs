@@ -1,7 +1,11 @@
 ﻿using Foundation;
 using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Cells.Calendar
@@ -11,6 +15,9 @@ namespace Toggl.iOS.Cells.Calendar
         public static readonly string Identifier = nameof(SelectableUserCalendarViewCell);
         public static readonly NSString Key = new NSString(nameof(SelectableUserCalendarViewCell));
         public static readonly UINib Nib;
+
+        public Action Callback;
+        public CompositeDisposable DisposeBag = new CompositeDisposable();
 
         static SelectableUserCalendarViewCell()
         {
@@ -25,12 +32,15 @@ namespace Toggl.iOS.Cells.Calendar
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
-
-            //This way the tap "goes through" the UISwitch
-            //and we only have to handle the tap event on the whole cell.
-            IsSelectedSwitch.UserInteractionEnabled = false;
             FadeView.FadeRight = true;
             ContentView.InsertSeparator();
+        }
+
+        public override void PrepareForReuse()
+        {
+            base.PrepareForReuse();
+            DisposeBag.Dispose();
+            DisposeBag = new CompositeDisposable();
         }
 
         public void ToggleSwitch()
@@ -42,6 +52,12 @@ namespace Toggl.iOS.Cells.Calendar
         {
             CalendarNameLabel.Text = Item.Name;
             IsSelectedSwitch.SetState(Item.Selected, animated: false);
+            IsSelectedSwitch.Rx().Changed()
+                            .Delay(TimeSpan.FromSeconds(0.5)) // This is so the switch animation has time to finish before refresh
+                            .Subscribe(_ => {
+                                Callback();
+                            })
+                            .DisposedBy(DisposeBag);
         }
     }
 }

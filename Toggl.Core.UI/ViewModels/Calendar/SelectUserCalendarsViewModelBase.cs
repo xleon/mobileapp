@@ -85,6 +85,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
             var enabledObservable = ForceItemSelection
                 ? SelectCalendar.Elements
+                    .Debug("SelectCalendar")
                     .Select(_ => SelectedCalendarIds.Any())
                     .DistinctUntilChanged()
                 : Observable.Return(true);
