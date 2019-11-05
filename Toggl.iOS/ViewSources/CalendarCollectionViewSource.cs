@@ -236,8 +236,10 @@ namespace Toggl.iOS.ViewSources
             layoutAttributes = calculateLayoutAttributes();
             layout.InvalidateLayout();
             var itemsToReload = new[] {editingItemIndexPath};
-            editingItemIndexPath = null;
             collectionView.ReloadItems(itemsToReload);
+            editingItemIndexPath = null;
+
+            onCollectionChanges();
         }
 
         public NSIndexPath InsertItemView(DateTimeOffset startTime, TimeSpan duration)
@@ -246,7 +248,7 @@ namespace Toggl.iOS.ViewSources
                 throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
 
             editingItemIndexPath = insertCalendarItem(startTime, duration);
-            collectionView.InsertItems(new NSIndexPath[] { editingItemIndexPath });
+            collectionView.ReloadData();
             return editingItemIndexPath;
         }
 
@@ -277,6 +279,10 @@ namespace Toggl.iOS.ViewSources
 
         public override void Scrolled(UIScrollView scrollView)
         {
+            if (!IsEditing)
+                return;
+
+            layoutAttributes = calculateLayoutAttributes();
             layout.InvalidateLayoutForVisibleItems();
         }
 
@@ -297,6 +303,9 @@ namespace Toggl.iOS.ViewSources
 
         private void onCollectionChanges()
         {
+            if (IsEditing)
+                return;
+
             long? originalId = null;
             if (IsEditing && editingItemIndexPath != null)
             {
