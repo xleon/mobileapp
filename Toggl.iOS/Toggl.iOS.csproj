@@ -1267,7 +1267,6 @@
     <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_1024pt.png">
       <Visible>false</Visible>
     </ImageAsset>
-
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x.png" />
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%402x.png" />
@@ -1606,6 +1605,7 @@
       <DependentUpon>SelectTagsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\SelectTagsTableViewSource.cs" />
+    <Compile Include="Views\Calendar\CalendarCollectionViewContextualMenuDismissHelper.cs" />
     <Compile Include="Views\Calendar\CalendarCollectionViewLayout.cs" />
     <Compile Include="Views\Calendar\CalendarContextualMenuActionView.cs" />
     <Compile Include="Views\Client\ClientViewCell.cs" />

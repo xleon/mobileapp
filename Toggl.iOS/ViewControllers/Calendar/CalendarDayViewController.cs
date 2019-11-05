@@ -41,6 +41,7 @@ namespace Toggl.iOS.ViewControllers
         private CalendarCollectionViewEditItemHelper editItemHelper;
         private CalendarCollectionViewCreateFromSpanHelper createFromSpanHelper;
         private CalendarCollectionViewZoomHelper zoomHelper;
+        private CalendarCollectionViewContextualMenuDismissHelper tapToDismissHelper;
 
         public float ScrollOffset => (float)CalendarCollectionView.ContentOffset.Y;
 
@@ -90,6 +91,7 @@ namespace Toggl.iOS.ViewControllers
             editItemHelper = new CalendarCollectionViewEditItemHelper(CalendarCollectionView, timeService, rxActionFactory, dataSource, layout);
             createFromSpanHelper = new CalendarCollectionViewCreateFromSpanHelper(CalendarCollectionView, dataSource, layout);
             zoomHelper = new CalendarCollectionViewZoomHelper(CalendarCollectionView, layout);
+            tapToDismissHelper = new CalendarCollectionViewContextualMenuDismissHelper(CalendarCollectionView, dataSource);
 
             CalendarCollectionView.SetCollectionViewLayout(layout, false);
             CalendarCollectionView.Delegate = dataSource;
@@ -140,6 +142,10 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ContextualMenuCloseButton.Rx().Tap()
+                .Subscribe(_ => ViewModel.ContextualMenuViewModel.OnCalendarItemUpdated.Execute(null))
+                .DisposedBy(DisposeBag);
+
+            tapToDismissHelper.DidTapOnEmptySpace
                 .Subscribe(_ => ViewModel.ContextualMenuViewModel.OnCalendarItemUpdated.Execute(null))
                 .DisposedBy(DisposeBag);
 
