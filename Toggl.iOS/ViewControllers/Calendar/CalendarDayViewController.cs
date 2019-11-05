@@ -13,6 +13,7 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive;
+using Toggl.Core.Extensions;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Calendar.ContextualMenu;
@@ -46,16 +47,26 @@ namespace Toggl.iOS.ViewControllers
         public float ScrollOffset => (float)CalendarCollectionView.ContentOffset.Y;
 
         private readonly BehaviorRelay<bool> contextualMenuVisible;
+        private readonly BehaviorRelay<string> timeTrackedOnDay;
+        private readonly BehaviorRelay<int> currentPageRelay;
 
-        public CalendarDayViewController(CalendarDayViewModel viewModel, BehaviorRelay<bool> contextualMenuVisible)
+        public CalendarDayViewController(
+            CalendarDayViewModel viewModel,
+            BehaviorRelay<int> currentPageRelay,
+            BehaviorRelay<string> timeTrackedOnDay,
+            BehaviorRelay<bool> contextualMenuVisible)
             : base(viewModel, nameof(CalendarDayViewController))
         {
             Ensure.Argument.IsNotNull(ViewModel, nameof(ViewModel));
+            Ensure.Argument.IsNotNull(currentPageRelay, nameof(currentPageRelay));
+            Ensure.Argument.IsNotNull(timeTrackedOnDay, nameof(timeTrackedOnDay));
             Ensure.Argument.IsNotNull(contextualMenuVisible, nameof(contextualMenuVisible));
 
             timeService = IosDependencyContainer.Instance.TimeService;
             rxActionFactory = IosDependencyContainer.Instance.RxActionFactory;
 
+            this.currentPageRelay = currentPageRelay;
+            this.timeTrackedOnDay = timeTrackedOnDay;
             this.contextualMenuVisible = contextualMenuVisible;
         }
 
@@ -153,7 +164,20 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(ContextualMenuTimeEntryDescriptionProjectTaskClientLabel.Rx().AttributedText())
                 .DisposedBy(DisposeBag);
 
+            ViewModel.TimeTrackedOnDay
+                .ReemitWhen(currentPageRelay.SelectUnit())
+                .Subscribe(notifyTotalDurationIfCurrentPage)
+                .DisposedBy(DisposeBag);
+
             CalendarCollectionView.LayoutIfNeeded();
+        }
+
+        private void notifyTotalDurationIfCurrentPage(string durationString)
+        {
+            if (currentPageRelay.Value == View.Tag)
+            {
+                timeTrackedOnDay.Accept(durationString);
+            }
         }
 
         public override void ViewDidLayoutSubviews()

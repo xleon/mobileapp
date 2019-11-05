@@ -24,6 +24,8 @@ namespace Toggl.iOS.ViewControllers
         private const int weekViewHeaderFontSize = 12;
 
         private readonly BehaviorRelay<bool> contextualMenuVisible = new BehaviorRelay<bool>(false);
+        private readonly BehaviorRelay<string> timeTrackedOnDay = new BehaviorRelay<string>("");
+        private readonly BehaviorRelay<int> currentPageRelay = new BehaviorRelay<int>(0);
         private readonly UIPageViewController pageViewController;
         private readonly UILabel[] weekViewHeaderLabels;
         private readonly UICollectionViewFlowLayout weekViewCollectionViewLayout;
@@ -109,6 +111,10 @@ namespace Toggl.iOS.ViewControllers
             contextualMenuVisible
                 .Subscribe(toggleTabBar)
                 .DisposedBy(DisposeBag);
+
+            timeTrackedOnDay
+                .Subscribe(DailyTrackedTimeLabel.Rx().Text())
+                .DisposedBy(DisposeBag);
         }
 
         private void toggleTabBar(bool hidden)
@@ -160,6 +166,7 @@ namespace Toggl.iOS.ViewControllers
             if (currentViewController != null)
                 newViewController.SetScrollOffset(currentViewController.ScrollOffset);
             pageViewController.SetViewControllers(new[] {newViewController},  direction, true, null);
+            currentPageRelay.Accept(index);
         }
 
         public override void ViewDidLayoutSubviews()
@@ -209,18 +216,10 @@ namespace Toggl.iOS.ViewControllers
 
         private CalendarDayViewController viewControllerAtIndex(nint index)
         {
-            try
-            {
-                var viewModel = ViewModel.DayViewModelAt((int) index);
-                var viewController = new CalendarDayViewController(viewModel, contextualMenuVisible);
-                viewController.View.Tag = index;
-                return viewController;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
+            var viewModel = ViewModel.DayViewModelAt((int) index);
+            var viewController = new CalendarDayViewController(viewModel, currentPageRelay, timeTrackedOnDay, contextualMenuVisible);
+            viewController.View.Tag = index;
+            return viewController;
         }
 
         [Export("pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:")]
@@ -234,6 +233,7 @@ namespace Toggl.iOS.ViewControllers
             var newDate = ViewModel.IndexToDate((int)newIndex.Value);
 
             currentlyShownDate = newDate;
+            currentPageRelay.Accept((int)newIndex);
             ViewModel.CurrentlyShownDate.Accept(newDate);
 
             var previousIndex = previousViewControllers.FirstOrDefault()?.View?.Tag;
