@@ -260,6 +260,15 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             analyticsService.CalendarTimeEntryCreated.Track(eventCreationType, daysSinceToday, dayOfTheWeek.ToString());
         }
 
+        private void trackLongPressCreation(CalendarItem item, CalendarTimeEntryCreatedType eventCreationType, CalendarContextualMenuActionType menuType)
+        {
+            var today = timeService.CurrentDateTime;
+            var daysSinceToday = (int)(item.StartTime - today).TotalDays;
+            var dayOfTheWeek = item.StartTime.DayOfWeek;
+            analyticsService.CalendarNewTimeEntryContextualMenu.Track(menuType);
+            analyticsService.CalendarTimeEntryCreated.Track(eventCreationType, daysSinceToday, dayOfTheWeek.ToString());
+        }
+
         private async Task createTimeEntryFromCalendarItem(CalendarItem calendarItem)
         {
             var workspace = await interactorFactory.GetDefaultWorkspace()
@@ -380,7 +389,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             var actions = ImmutableList.Create(
                 createCalendarMenuDiscardAction(ContextualMenuType.NewTimeEntry, trackThenRun(analyticsEvent, CalendarContextualMenuActionType.Discard, discardCurrentItemInEditMode)),
                 createCalendarMenuEditAction(ContextualMenuType.NewTimeEntry, trackThenRunAsync(analyticsEvent, CalendarContextualMenuActionType.Edit, startTimeEntryFrom)),
-                createCalendarMenuSaveAction(ContextualMenuType.NewTimeEntry, trackThenRunAsync(analyticsEvent, CalendarContextualMenuActionType.Save, createTimeEntryFromCalendarItem))
+                createCalendarMenuSaveAction(ContextualMenuType.NewTimeEntry, trackThenRunManualCreationAsync(CalendarTimeEntryCreatedType.LongPress, CalendarContextualMenuActionType.Save, createTimeEntryFromCalendarItem))
             );
 
             return new CalendarContextualMenu(ContextualMenuType.NewTimeEntry, actions, trackThenDismiss(analyticsEvent));
@@ -454,6 +463,13 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             => rxActionFactory.FromAsync(() =>
             {
                 trackCalendarEventCreation(currentCalendarItem, eventCreationType, menuType);
+                return action(currentCalendarItem);
+            });
+
+        private ViewAction trackThenRunManualCreationAsync(CalendarTimeEntryCreatedType eventCreationType, CalendarContextualMenuActionType menuType, Func<CalendarItem, Task> action)
+            => rxActionFactory.FromAsync(() =>
+            {
+                trackLongPressCreation(currentCalendarItem, eventCreationType, menuType);
                 return action(currentCalendarItem);
             });
 
