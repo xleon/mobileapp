@@ -126,6 +126,9 @@ namespace Toggl.iOS.Views.Calendar
             if (!isActive)
                 return;
 
+            if (string.IsNullOrEmpty(originalCalendarItem.Id))
+                return;
+
             itemUpdatedSubject.OnNext(originalCalendarItem);
         }
 

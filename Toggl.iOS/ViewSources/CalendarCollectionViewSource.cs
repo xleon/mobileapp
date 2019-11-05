@@ -249,6 +249,13 @@ namespace Toggl.iOS.ViewSources
 
             editingItemIndexPath = insertCalendarItem(startTime, duration);
             collectionView.ReloadData();
+
+            var item = calendarItems[editingItemIndexPath.Row];
+            if (string.IsNullOrEmpty(item.Id))
+            {
+                itemTappedSubject.OnNext(item);
+            }
+
             return editingItemIndexPath;
         }
 

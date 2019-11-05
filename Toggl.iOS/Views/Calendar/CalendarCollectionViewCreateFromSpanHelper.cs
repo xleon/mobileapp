@@ -27,10 +27,6 @@ namespace Toggl.iOS.Views.Calendar
         private TimeSpan previousDuration;
         private DateTimeOffset previousStart;
 
-        private readonly ISubject<(DateTimeOffset, TimeSpan)> createFromSpanSuject = new Subject<(DateTimeOffset, TimeSpan)>();
-
-        public IObservable<(DateTimeOffset, TimeSpan)> CreateFromSpan => createFromSpanSuject.AsObservable();
-
         private List<DateTimeOffset> allItemsStartAndEndTime;
 
         public CalendarCollectionViewCreateFromSpanHelper(
@@ -96,8 +92,6 @@ namespace Toggl.iOS.Views.Calendar
                     break;
 
                 case UIGestureRecognizerState.Cancelled:
-                    dataSource.RemoveItemView();
-                    dataSource.StopEditing();
                     break;
             }
         }
@@ -180,8 +174,6 @@ namespace Toggl.iOS.Views.Calendar
 
         private void longPressEnded(CGPoint point)
         {
-            createFromSpanSuject.OnNext((previousStart, previousDuration));
-
             dataSource.StopEditing();
             StopAutoScroll();
 
