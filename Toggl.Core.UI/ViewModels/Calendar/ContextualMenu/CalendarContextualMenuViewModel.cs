@@ -29,6 +29,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
         private readonly ISubject<TimeEntryDisplayInfo> timeEntryInfoSubject = new Subject<TimeEntryDisplayInfo>();
         private readonly ISubject<string> timeEntryPeriodSubject = new Subject<string>();
         private readonly ISubject<CalendarItem?> calendarItemInEditMode = new Subject<CalendarItem?>();
+        private readonly ISubject<CalendarItem> calendarItemRemoved = new Subject<CalendarItem>();
 
         private readonly IInteractorFactory interactorFactory;
         private readonly ISchedulerProvider schedulerProvider;
@@ -54,6 +55,8 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
         public IObservable<string> TimeEntryPeriod { get; }
 
         public IObservable<CalendarItem?> CalendarItemInEditMode { get; }
+
+        public IObservable<CalendarItem> CalendarItemRemoved { get; }
 
         public InputAction<CalendarItem?> OnCalendarItemUpdated { get; }
 
@@ -96,6 +99,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             MenuVisible = menuVisibilitySubject.AsDriver(schedulerProvider);
             TimeEntryPeriod = timeEntryPeriodSubject.AsDriver(schedulerProvider);
             CalendarItemInEditMode = calendarItemInEditMode.AsDriver(schedulerProvider);
+            CalendarItemRemoved = calendarItemRemoved.AsDriver(schedulerProvider);
         }
 
         private async Task handleCalendarItemInput(CalendarItem? calendarItem)
@@ -311,6 +315,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             if (!calendarItem.TimeEntryId.HasValue)
                 return;
 
+            calendarItemRemoved.OnNext(calendarItem);
             await interactorFactory.DeleteTimeEntry(calendarItem.TimeEntryId.Value).Execute();
             closeMenuWithCommittedChanges();
         }

@@ -119,7 +119,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             editItemHelper.ItemUpdated
-                .Subscribe(item => dataSource.UpdateItemView(item))
+                .Subscribe(dataSource.UpdateItemView)
                 .DisposedBy(DisposeBag);
 
             editItemHelper.ItemUpdated
@@ -145,6 +145,10 @@ namespace Toggl.iOS.ViewControllers
             ViewModel.ContextualMenuViewModel.MenuVisible
                 .Where(isVisible => !isVisible)
                 .Subscribe(_ => dismissContextualMenu())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.ContextualMenuViewModel.CalendarItemRemoved
+                .Subscribe(dataSource.RemoveItemView)
                 .DisposedBy(DisposeBag);
 
             ContextualMenuCloseButton.Rx().Tap()

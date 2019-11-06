@@ -257,7 +257,7 @@ namespace Toggl.iOS.ViewSources
             return editingItemIndexPath;
         }
 
-        public NSIndexPath UpdateItemView(DateTimeOffset startTime, TimeSpan? duration)
+        public void UpdateItemView(DateTimeOffset startTime, TimeSpan? duration)
         {
             if (!IsEditing)
                 throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
@@ -266,20 +266,23 @@ namespace Toggl.iOS.ViewSources
 
             updateEditingHours();
             layout.InvalidateLayoutForVisibleItems();
-
-            return editingItemIndexPath;
         }
 
-        public NSIndexPath UpdateItemView(CalendarItem calendarItem)
+        public void UpdateItemView(CalendarItem calendarItem)
             => UpdateItemView(calendarItem.StartTime, calendarItem.Duration);
 
-        public void RemoveItemView()
+        public void RemoveItemView(CalendarItem calendarItem)
         {
             if (!IsEditing)
                 throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
 
-            removeCalendarItem(editingItemIndexPath);
-            collectionView.DeleteItems(new NSIndexPath[] { editingItemIndexPath });
+            var indexToRemove = calendarItems.IndexOf(calendarItem);
+            if (indexToRemove == -1)
+                return;
+
+            var indexPathToRemove = NSIndexPath.FromItemSection(indexToRemove, 0);
+            removeCalendarItem(indexPathToRemove);
+            collectionView.ReloadData();
         }
 
         public override void Scrolled(UIScrollView scrollView)
