@@ -2,7 +2,6 @@
 using Foundation;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -12,7 +11,6 @@ using Toggl.Core.Calendar;
 using Toggl.Core.Extensions;
 using Toggl.Core.UI.Calendar;
 using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Cells.Calendar;
 using Toggl.iOS.Views.Calendar;
@@ -323,6 +321,8 @@ namespace Toggl.iOS.ViewSources
             calendarItems = collection.IsEmpty ? new List<CalendarItem>() : collection[0].ToList();
             layoutAttributes = calculateLayoutAttributes();
 
+            reloadRunningEntryIfNeeded();
+
             var runningIndex = calendarItems.IndexOf(item => item.Duration == null);
             runningTimeEntryIndexPath = runningIndex >= 0 ? NSIndexPath.FromItemSection(runningIndex, 0) : null;
 
@@ -333,6 +333,15 @@ namespace Toggl.iOS.ViewSources
             }
 
             collectionView.ReloadData();
+        }
+
+        private void reloadRunningEntryIfNeeded()
+        {
+            var runningIndex = calendarItems.IndexOf(item => item.Duration == null);
+            if (runningIndex == -1 && runningTimeEntryIndexPath != null)
+            {
+                collectionView.ReloadItems(new[] { runningTimeEntryIndexPath });
+            }
         }
 
         private void dateChanged(DateTimeOffset dateTimeOffset)
