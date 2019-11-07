@@ -105,9 +105,9 @@ namespace Toggl.Droid.Activities
 
         public override void OnBackPressed()
         {
-            if (ViewModel.IsLoginInProgress())
+            if (ViewModel.IsLoginInProgress)
             {
-                ViewModel.TryToCancelLogin();
+                ViewModel.CancelLoginAtEarliestOpportunity();
             }
             else
             {
