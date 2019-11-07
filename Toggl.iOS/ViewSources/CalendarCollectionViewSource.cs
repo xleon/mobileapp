@@ -233,8 +233,6 @@ namespace Toggl.iOS.ViewSources
             layout.IsEditing = false;
             layoutAttributes = calculateLayoutAttributes();
             layout.InvalidateLayout();
-            var itemsToReload = new[] {editingItemIndexPath};
-            collectionView.ReloadItems(itemsToReload);
             editingItemIndexPath = null;
 
             onCollectionChanges();
@@ -324,8 +322,6 @@ namespace Toggl.iOS.ViewSources
             calendarItems = collection.IsEmpty ? new List<CalendarItem>() : collection[0].ToList();
             layoutAttributes = calculateLayoutAttributes();
 
-            reloadRunningEntryIfNeeded();
-
             var runningIndex = calendarItems.IndexOf(item => item.Duration == null);
             runningTimeEntryIndexPath = runningIndex >= 0 ? NSIndexPath.FromItemSection(runningIndex, 0) : null;
 
@@ -336,15 +332,6 @@ namespace Toggl.iOS.ViewSources
             }
 
             collectionView.ReloadData();
-        }
-
-        private void reloadRunningEntryIfNeeded()
-        {
-            var runningIndex = calendarItems.IndexOf(item => item.Duration == null);
-            if (runningIndex == -1 && runningTimeEntryIndexPath != null)
-            {
-                collectionView.ReloadItems(new[] { runningTimeEntryIndexPath });
-            }
         }
 
         private void dateChanged(DateTimeOffset dateTimeOffset)
