@@ -180,10 +180,11 @@ namespace Toggl.Core.UI.ViewModels
             errorMessageSubject.OnNext("");
             shouldCancelLogin = false;
 
-            loginDisposable = userAccessManager
-                .Login(emailSubject.Value, passwordSubject.Value)
-                .Track(analyticsService.Login, AuthenticationMethod.EmailAndPassword)
-                .Subscribe(_ => onAuthenticated(), onError, onCompleted);
+            loginDisposable =
+                userAccessManager
+                    .Login(emailSubject.Value, passwordSubject.Value)
+                    .Track(analyticsService.Login, AuthenticationMethod.EmailAndPassword)
+                    .Subscribe(_ => onAuthenticated(), onError, onCompleted);
         }
 
         public void TogglePasswordVisibility()
@@ -196,7 +197,8 @@ namespace Toggl.Core.UI.ViewModels
             isLoadingSubject.OnNext(true);
             shouldCancelLogin = false;
 
-            loginDisposable = View?.GetGoogleToken()
+            loginDisposable = View?
+                .GetGoogleToken()
                 .SelectMany(userAccessManager.LoginWithGoogle)
                 .Track(analyticsService.Login, AuthenticationMethod.Google)
                 .Subscribe(_ => onAuthenticated(), onError, onCompleted);
