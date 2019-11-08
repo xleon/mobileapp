@@ -13,8 +13,8 @@ namespace Toggl.Core.UI.Calendar
 {
     public sealed class CalendarLayoutCalculator
     {
-        private const long NSPerSecond = 10000000;
-        private const long maxGapDuration = 2 * 60 * 60 * NSPerSecond;
+        private const long NanosecondPerSecond = 10000000;
+        private const long maxGapDuration = 2 * 60 * 60 * NanosecondPerSecond;
 
         private static readonly TimeSpan offsetFromNow = TimeSpan.FromMinutes(7);
         private static readonly List<CalendarItemLayoutAttributes> emptyAttributes = new List<CalendarItemLayoutAttributes>();
@@ -54,8 +54,15 @@ namespace Toggl.Core.UI.Calendar
             var nextGapStart = dayStart;
             var gaps = new List<(DateTimeOffset, TimeSpan)>();
 
+            DateTimeOffset? lastTeEndTime = null;
+
             foreach (var te in calendarItems)
             {
+                if (!lastTeEndTime.HasValue || te.EndTime.HasValue && te.EndTime > lastTeEndTime)
+                {
+                    lastTeEndTime = te.EndTime;
+                }
+
                 var startOfGap = nextGapStart;
 
                 if (te.StartTime < startOfGap)
@@ -76,16 +83,9 @@ namespace Toggl.Core.UI.Calendar
                 nextGapStart = te.EndTime ?? now;
             }
 
-            var lastTeEndTime = calendarItems
-                                    .Where(te => te.EndTime.HasValue)
-                                    .OrderBy(te => te.EndTime)
-                                    .ToList()
-                                    .LastOrDefault()
-                                    .EndTime ?? now;
-
-            if (lastTeEndTime < dayEnd)
+            if (lastTeEndTime.HasValue && lastTeEndTime < dayEnd)
             {
-                gaps.Add((lastTeEndTime, dayEnd - lastTeEndTime));
+                gaps.Add((lastTeEndTime.Value, dayEnd - lastTeEndTime.Value));
             }
 
             return gaps
@@ -216,7 +216,7 @@ namespace Toggl.Core.UI.Calendar
         {
             var duration = calendarItem.Duration(now, offsetFromNow);
             return duration <= minimumDurationForUIPurposes
-                ? calendarItem.StartTime.LocalDateTime + TimeSpan.FromMinutes(15)
+                ? calendarItem.StartTime.LocalDateTime + minimumDurationForUIPurposes
                 : calendarItem.EndTime(now, offsetFromNow);
         }
 

@@ -131,9 +131,8 @@ namespace Toggl.iOS.Views.Calendar
         private void longPressChanged(CGPoint point)
         {
             if (Math.Sqrt(Math.Pow(point.X - firstPoint.X, 2) + Math.Pow(point.Y - firstPoint.Y, 2)) < 30)
-            {
                 return;
-            }
+            
             LastPoint = point;
 
             DateTimeOffset startTime;
