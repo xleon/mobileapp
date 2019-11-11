@@ -168,7 +168,7 @@ namespace Toggl.Core.UI.ViewModels
                 dataSource.User.Current
                     .Select(user => user.BeginningOfWeek)
                     .DistinctUntilChanged()
-                    .Select(beginningOfWeek => beginningOfWeek.ToLocalizedString(DateFormatCultureInfo.CurrentCulture))
+                    .Select(beginningOfWeek => beginningOfWeek.ToLocalizedString())
                     .AsDriver(schedulerProvider);
 
             DateFormat =
@@ -480,7 +480,7 @@ namespace Toggl.Core.UI.ViewModels
             syncManager.InitiatePushSync();
 
             SelectOption<BeginningOfWeek> selectOptionFromBeginningOfWeek(BeginningOfWeek beginningOfWeek)
-                => new SelectOption<BeginningOfWeek>(beginningOfWeek, beginningOfWeek.ToLocalizedString(DateFormatCultureInfo.CurrentCulture));
+                => new SelectOption<BeginningOfWeek>(beginningOfWeek, beginningOfWeek.ToLocalizedString());
         }
 
         private void checkCalendarPermissions()
