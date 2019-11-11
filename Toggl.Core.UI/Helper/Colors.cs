@@ -348,30 +348,6 @@ namespace Toggl.Core.UI.Helper
         public static class Calendar
         {
             public static readonly Color EnableCalendarAction = lightishGreen;
-
-            public static class WeekView
-            {
-                public static readonly Color SelectedDayBackgroundColor = new Color(50, 50, 50);
-                public static readonly Color SelectedTodayBackgroundColor = azure;
-
-                public static readonly Color DefaultDayTextColor = new Color(0, 0, 0);
-                public static readonly Color SelectedDayTextColor = White;
-                public static readonly Color UnavailableDayTextColor = new Color(163, 163, 163);
-                public static readonly Color UnselectedTodayTextColor = azure;
-                public static readonly Color HeaderLabelColor = silver;
-            }
-
-            public static class ContextualMenuAction
-            {
-                public static readonly Color Delete = new Color(248, 202, 202);
-                public static readonly Color Edit = new Color(195, 230, 246);
-                public static readonly Color Save = new Color(243, 226, 176);
-                public static readonly Color Continue = new Color(212, 246, 218);
-                public static readonly Color Discard = new Color(224, 224, 224);
-                public static readonly Color Stop = Delete;
-                public static readonly Color Copy = new Color(236, 216, 248);
-                public static readonly Color Start = Continue;
-            }
         }
 
         public static readonly Color[] DefaultProjectColors =

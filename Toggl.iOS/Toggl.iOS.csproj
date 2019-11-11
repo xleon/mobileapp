@@ -1366,6 +1366,18 @@
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationProjects_Dark.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationProjects_Dark%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationProjects_Dark%403x.png" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarDeleteAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarEditAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarSaveAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarContinueAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarDiscardAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarStopAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarCopyAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarStartAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarSelectedTodayBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarUnavailableDayText.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarUnselectedTodayText.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarHeaderLabel.colorset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -2182,6 +2194,18 @@
     <Folder Include="Resources\Colors.xcassets\Spider.colorset\" />
     <Folder Include="Resources\Colors.xcassets\ErrorText.colorset\" />
     <Folder Include="Resources\Colors.xcassets\ErrorBackground.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarDeleteAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarEditAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarSaveAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarContinueAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarDiscardAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarStopAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarCopyAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarStartAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarSelectedTodayBackground.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarUnavailableDayText.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarUnselectedTodayText.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarHeaderLabel.colorset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

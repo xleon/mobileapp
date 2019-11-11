@@ -43,7 +43,7 @@ namespace Toggl.iOS.ViewControllers
                     TextAlignment = UITextAlignment.Center,
                     TranslatesAutoresizingMaskIntoConstraints = false,
                     Font = UIFont.SystemFontOfSize(weekViewHeaderFontSize, UIFontWeight.Medium),
-                    TextColor = Colors.Calendar.WeekView.HeaderLabelColor.ToNativeColor()
+                    TextColor = ColorAssets.CalendarHeaderLabel
                 })
                 .ToArray();
 

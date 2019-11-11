@@ -43,10 +43,10 @@ namespace Toggl.iOS.Cells.Calendar
                 return ColorAssets.InverseText;
 
             if (Item.IsToday)
-                return Colors.Calendar.WeekView.UnselectedTodayTextColor.ToNativeColor();
+                return ColorAssets.CalendarUnselectedTodayText;
 
             if (!Item.Enabled)
-                return Colors.Calendar.WeekView.UnavailableDayTextColor.ToNativeColor();
+                return ColorAssets.CalendarUnavailableDayText;
 
             return ColorAssets.Text;
         }
@@ -54,7 +54,7 @@ namespace Toggl.iOS.Cells.Calendar
         private UIColor isSelectedDayBackgroundViewColor()
         {
             if (Item.IsToday)
-                return Colors.Calendar.WeekView.SelectedTodayBackgroundColor.ToNativeColor();
+                return ColorAssets.CalendarSelectedTodayBackground;
 
             return ColorAssets.Text;
         }

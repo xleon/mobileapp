@@ -88,21 +88,29 @@ namespace Toggl.iOS.Views.Calendar
             switch (action.ActionKind)
             {
                 case CalendarMenuActionKind.Continue:
-                    return Colors.Calendar.ContextualMenuAction.Continue.ToNativeColor();
+                    return ColorAssets.CalendarContinueAction;
+
                 case CalendarMenuActionKind.Copy:
-                    return Colors.Calendar.ContextualMenuAction.Copy.ToNativeColor();
+                    return ColorAssets.CalendarCopyAction;
+
                 case CalendarMenuActionKind.Delete:
-                    return Colors.Calendar.ContextualMenuAction.Delete.ToNativeColor();
+                    return ColorAssets.CalendarDeleteAction;
+
                 case CalendarMenuActionKind.Discard:
-                    return Colors.Calendar.ContextualMenuAction.Discard.ToNativeColor();
+                    return ColorAssets.CalendarDiscardAction;
+
                 case CalendarMenuActionKind.Edit:
-                    return Colors.Calendar.ContextualMenuAction.Edit.ToNativeColor();
+                    return ColorAssets.CalendarEditAction;
+
                 case CalendarMenuActionKind.Save:
-                    return Colors.Calendar.ContextualMenuAction.Save.ToNativeColor();
+                    return ColorAssets.CalendarSaveAction;
+
                 case CalendarMenuActionKind.Start:
-                    return Colors.Calendar.ContextualMenuAction.Start.ToNativeColor();
+                    return ColorAssets.CalendarStartAction;
+
                 case CalendarMenuActionKind.Stop:
-                    return Colors.Calendar.ContextualMenuAction.Stop.ToNativeColor();
+                    return ColorAssets.CalendarStopAction;
+
                 default:
                     throw new ArgumentException($"Unsupported value of {nameof(CalendarMenuAction)}");
             }
