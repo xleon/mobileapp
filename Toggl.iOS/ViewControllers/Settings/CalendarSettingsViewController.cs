@@ -28,11 +28,12 @@ namespace Toggl.iOS.ViewControllers.Settings
 
             var header = CalendarSettingsTableViewHeader.Create();
             UserCalendarsTableView.TableHeaderView = header;
+            UserCalendarsTableView.AllowsSelection = false;
             header.TranslatesAutoresizingMaskIntoConstraints = false;
             header.HeightAnchor.ConstraintEqualTo(tableViewHeaderHeight).Active = true;
             header.WidthAnchor.ConstraintEqualTo(UserCalendarsTableView.WidthAnchor).Active = true;
 
-            var source = new SelectUserCalendarsTableViewSource(UserCalendarsTableView);
+            var source = new SelectUserCalendarsTableViewSource(UserCalendarsTableView, ViewModel.SelectCalendar);
             UserCalendarsTableView.Source = source;
 
             ViewModel.Calendars
@@ -64,8 +65,7 @@ namespace Toggl.iOS.ViewControllers.Settings
             }
         }
 
-        public override Task<bool> DismissFromNavigationController() 
+        public override Task<bool> DismissFromNavigationController()
             => Task.FromResult(true);
     }
 }
-
