@@ -23,7 +23,7 @@ namespace Toggl.Droid.Activities
         public SettingsActivity() : base(
             Resource.Layout.SettingsFragment,
             Resource.Style.AppTheme,
-            Transitions.SlideInFromRight)
+            Transitions.SlideInFromBottom)
         {
         }
 
