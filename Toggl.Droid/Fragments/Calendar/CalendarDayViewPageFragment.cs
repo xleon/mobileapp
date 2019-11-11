@@ -54,6 +54,10 @@ namespace Toggl.Droid.Fragments.Calendar
             calendarDayView.SetCurrentDate(ViewModel.Date);
             calendarDayView.SetOffset(ScrollOffsetRelay?.Value ?? 0);
             calendarDayView.UpdateItems(ViewModel.CalendarItems);
+            
+            ViewModel.TimeOfDayFormat
+                .Subscribe(calendarDayView.UpdateCalendarHoursFormat)
+                .DisposedBy(DisposeBag);
 
             ViewModel.CalendarItems.CollectionChange
                 .Subscribe(_ => calendarDayView.UpdateItems(ViewModel.CalendarItems))

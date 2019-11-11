@@ -61,6 +61,7 @@ namespace Toggl.Droid.Views.Calendar
 
             var timeLinesYsToDraw = timeLinesYs;
             var hourLabelYsToDraw = hoursYs;
+            var hoursToDraw = hours;
             for (var hour = 1; hour < timeLinesYsToDraw.Length; hour++)
             {
                 var hourTop = hourLabelYsToDraw[hour] + linesPaint.Ascent();
@@ -68,7 +69,7 @@ namespace Toggl.Droid.Views.Calendar
                 if (!(hourBottom > scrollOffset) || !(hourTop - scrollOffset < Height)) continue;
 
                 canvas.DrawLine(timeSliceStartX, timeLinesYsToDraw[hour], Width, timeLinesYsToDraw[hour], linesPaint);
-                canvas.DrawText(hours[hour], hoursX, hourLabelYsToDraw[hour], hoursLabelPaint);
+                canvas.DrawText(hoursToDraw[hour], hoursX, hourLabelYsToDraw[hour], hoursLabelPaint);
             }
         }
 

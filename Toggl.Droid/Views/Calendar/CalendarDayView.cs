@@ -16,7 +16,9 @@ using Toggl.Core.Extensions;
 using Toggl.Core.UI.Calendar;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
+using Toggl.Shared;
 using Constants = Toggl.Core.Helper.Constants;
+using Math = System.Math;
 
 namespace Toggl.Droid.Views.Calendar
 {
@@ -134,6 +136,14 @@ namespace Toggl.Droid.Views.Calendar
             currentDate = dateOnView.LocalDateTime.Date;
             var today = timeService.CurrentDateTime.LocalDateTime.Date;
             shouldDrawCurrentHourIndicator = currentDate == today;
+        }
+
+        public void UpdateCalendarHoursFormat(TimeFormat timeFormat)
+        {
+            timeOfDayFormat = timeFormat;
+            var newHours = createHours();
+            hours = newHours;
+            Invalidate();
         }
 
         public void SetCurrentItemInEditMode(CalendarItem? calendarItemInEditMode)
@@ -329,7 +339,7 @@ namespace Toggl.Droid.Views.Calendar
         }
 
         private ImmutableList<DateTimeOffset> allItemsStartAndEndTime = ImmutableList<DateTimeOffset>.Empty;
-        
+
         private void onLongPress(MotionEvent e1)
         {
             var touchX = e1.GetX();
