@@ -14,7 +14,9 @@ using Toggl.Shared;
 using Color = Toggl.Shared.Color;
 using AndroidColor = Android.Graphics.Color;
 using Android.App;
+using Android.Util;
 using Toggl.Droid.Helper;
+using Toggl.Droid.Views.Calendar;
 
 namespace Toggl.Droid.Extensions
 {
@@ -76,17 +78,8 @@ namespace Toggl.Droid.Extensions
 
             public void OnScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY)
             {
-                if (v is RecyclerView recyclerView)
-                {
-                    var targetElevation = recyclerView.CanScrollVertically(-1) ?  defaultToolbarElevationInDPs.DpToPixels(appBarLayout.Context) : 0f;
-                    appBarLayout.Elevation = targetElevation;
-                }
-
-                if (v is NestedScrollView scrollView)
-                {
-                    var targetElevation = scrollView.CanScrollVertically(-1) ? defaultToolbarElevationInDPs.DpToPixels(appBarLayout.Context) : 0f;
-                    appBarLayout.Elevation = targetElevation;
-                }
+                var targetElevation = v.CanScrollVertically(-1) ?  defaultToolbarElevationInDPs.DpToPixels(appBarLayout.Context) : 0f;
+                appBarLayout.Elevation = targetElevation;
             }
         }
 

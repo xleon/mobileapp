@@ -381,6 +381,10 @@
     <Compile Include="Activities\SendFeedbackActivity.ViewBinds.cs">
       <DependentUpon>SendFeedbackActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Activities\SettingsActivity.cs" />
+    <Compile Include="Activities\SettingsActivity.ViewBinds.cs">
+      <DependentUpon>SettingsActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Adapters\Calendar\Anchor.cs" />
     <Compile Include="Adapters\Calendar\AnchorData.cs" />
     <Compile Include="Adapters\Calendar\CalendarAdapter.cs" />
@@ -397,12 +401,24 @@
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
+    <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.cs" />
+    <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.DialogProvider.cs">
+      <DependentUpon>CalendarDayViewPageFragment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.PermissionHandler.cs">
+      <DependentUpon>CalendarDayViewPageFragment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.ViewBinds.cs">
+      <DependentUpon>CalendarDayViewPageFragment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fragments\LockableViewPager.cs" />
     <Compile Include="Extensions\JavaExtensions.cs" />
     <Compile Include="Fragments\ReportsCalendarFragment.cs" />
     <Compile Include="Helper\ActiveTheme.cs" />
     <Compile Include="LayoutManagers\UnpredictiveLinearLayoutManager.cs" />
     <Compile Include="Helper\AppWidgetProviderUtils.cs" />
     <Compile Include="Helper\NotificationsConstants.cs" />
+    <Compile Include="Helper\IBackPressHandler.cs" />
     <Compile Include="Presentation\ActivityTransitions.cs" />
     <Compile Include="Presentation\RunningTimeEntrySheetBehavior.cs" />
     <Compile Include="Services\JobServicesConstants.cs" />
@@ -422,8 +438,10 @@
     <Compile Include="Services\WidgetsAnalyticsService.cs" />
     <Compile Include="Startup\AndroidDependencyContainer.cs" />
     <Compile Include="Extensions\FloatingActionButtonExtensions.cs" />
-    <Compile Include="Presentation\IScrollableToTop.cs" />
+    <Compile Include="Presentation\IScrollableToStart.cs" />
     <Compile Include="ViewHelpers\CalendarItemRectAttributes.cs" />
+    <Compile Include="ViewHolders\CalendarMenuActionCellViewHolder.cs" />
+    <Compile Include="ViewHolders\CalendarWeekSectionViewHolder.cs" />
     <Compile Include="ViewHolders\LicenseViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\SuggestionRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\ProjectSuggestionViewHolder.cs" />
@@ -498,6 +516,7 @@
     <Compile Include="Views\CalendarRecyclerView.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.Background.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.cs" />
+    <Compile Include="Views\Calendar\CalendarDayView.EditItem.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.Events.cs" />
     <Compile Include="Views\Calendar\CalendarLayoutManager.cs" />
     <Compile Include="Views\Calendar\CalendarLayoutManager.AnchorInfo.cs">
@@ -633,10 +652,6 @@
     <Compile Include="Views\EditDuration\WheelDurationInput.InputFilter.cs">
       <DependentUpon>WheelDurationInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fragments\SettingsFragment.cs" />
-    <Compile Include="Fragments\SettingsFragment.ViewBinds.cs">
-      <DependentUpon>SettingsFragment.cs</DependentUpon>
-    </Compile>
     <Compile Include="Fragments\ReactiveTabFragment.cs" />
     <Compile Include="Fragments\ReactiveTabFragment.DialogProvider.cs">
       <DependentUpon>ReactiveTabFragment.cs</DependentUpon>
@@ -654,10 +669,6 @@
     </Compile>
     <Compile Include="Fragments\MainFragment.Onboardings.cs">
       <DependentUpon>MainFragment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Fragments\SelectUserCalendarsFragment.cs" />
-    <Compile Include="Fragments\SelectUserCalendarsFragment.ViewBinds.cs">
-      <DependentUpon>SelectUserCalendarsFragment.cs</DependentUpon>
     </Compile>
     <Compile Include="Adapters\UserCalendarsRecyclerAdapter.cs" />
     <Compile Include="ViewHolders\UserCalendarViewHolder.cs" />
@@ -715,17 +726,25 @@
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\color\FlatButtonTextColor.xml" />
     <AndroidResource Include="Resources\color\ToolbarButtonTextColor.xml" />
+    <AndroidResource Include="Resources\drawable\ic_calendar.xml" />
+    <AndroidResource Include="Resources\drawable\ic_copy.xml" />
+    <AndroidResource Include="Resources\drawable\ic_delete.xml" />
+    <AndroidResource Include="Resources\drawable\ic_edit.xml" />
+    <AndroidResource Include="Resources\drawable\ic_save.xml" />
+    <AndroidResource Include="Resources\drawable\ic_settings.xml" />
+    <AndroidResource Include="Resources\drawable\toolbar_close.xml" />
     <AndroidResource Include="Resources\drawable\TimerWidgetBackground.xml" />
-    <AndroidResource Include="Resources\drawable\toolbar_close.xml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\toolbar_close.xml" />
     <AndroidResource Include="Resources\drawable\Dot.xml" />
     <AndroidResource Include="Resources\drawable\ic_archived.xml" />
     <AndroidResource Include="Resources\drawable\Splash.xml" />
     <AndroidResource Include="Resources\drawable\text_placeholder.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
     <AndroidResource Include="Resources\layout\WidgetLoading.axml" />
+    <AndroidResource Include="Resources\layout\CalendarDayFragmentPage.axml" />
+    <AndroidResource Include="Resources\layout\ContextualMenuActionCell.axml" />
+    <AndroidResource Include="Resources\layout\CalendarWeekStripeLabelsView.axml" />
+    <AndroidResource Include="Resources\layout\CalendarWeekStripeDaysView.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendar.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
@@ -743,6 +762,7 @@
     <AndroidResource Include="Resources\layout\TimeEntryWidgetSmall.axml" />
     <AndroidResource Include="Resources\layout\WidgetNotLoggedIn.axml" />
     <AndroidResource Include="Resources\menu\GenericSaveMenu.xml" />
+    <AndroidResource Include="Resources\menu\SettingsMenu.xml" />
     <AndroidResource Include="Resources\menu\DoneOrClearMenu.xml" />
     <AndroidResource Include="Resources\menu\OneButtonMenu.xml" />
     <AndroidResource Include="Resources\values-night\Environment.xml">
@@ -1099,7 +1119,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\toggl_spider.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\toggl_spider.png" />
     <AndroidResource Include="Resources\layout\WelcomeBackPlaceholder.axml" />
-    <AndroidResource Include="Resources\layout\SelectUserCalendarsFragment.axml" />
     <AndroidResource Include="Resources\layout\UserCalendarItem.axml" />
     <AndroidResource Include="Resources\layout\UserCalendarHeader.axml" />
     <AndroidResource Include="Resources\color\LinkTextColor.xml" />
@@ -1111,12 +1130,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\calendar_light.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\calendar_light.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\calendar_light.png" />
-    <AndroidResource Include="Resources\layout\CalendarOnboardingView.axml" />
-    <AndroidResource Include="Resources\drawable-hdpi\calendar_onboarding.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\calendar_onboarding.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\calendar_onboarding.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\calendar_onboarding.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\calendar_onboarding.png" />
     <AndroidResource Include="Resources\drawable\RaisedButton.axml" />
     <AndroidResource Include="Resources\layout\CalendarPermissionDeniedFragment.axml" />
     <AndroidResource Include="Resources\layout\UpcomingEventsNotificationSettingsFragment.axml" />

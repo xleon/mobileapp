@@ -22,9 +22,6 @@ namespace Toggl.Droid.Activities
 
             var calendarTab = menu.FindItem(Resource.Id.MainTabCalendarItem);
             calendarTab.SetTitle(Shared.Resources.Calendar);
-
-            var settingsTab = menu.FindItem(Resource.Id.MainTabSettinsItem);
-            settingsTab.SetTitle(Shared.Resources.Settings);
         }
     }
 }
