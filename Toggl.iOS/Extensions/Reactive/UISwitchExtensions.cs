@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Toggl.Core.UI.Reactive;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
 
@@ -10,19 +10,6 @@ namespace Toggl.iOS.Extensions.Reactive
 {
     public static class UISwitchExtensions
     {
-        public static IObservable<Unit> Changed(this IReactive<UISwitch> reactive)
-            => Observable.Create<Unit>(observer =>
-            {
-                void changed(object sender, EventArgs args)
-                {
-                    observer.OnNext(Unit.Default);
-                }
-
-                reactive.Base.ValueChanged += changed;
-
-                return Disposable.Create(() => reactive.Base.ValueChanged -= changed);
-            });
-
         public static IDisposable BindToggleAction<TElement>(this IReactive<UISwitch> reactive, RxAction<bool, TElement> action)
             => reactive.BindAction(action, s => s.On);
 
@@ -40,6 +27,13 @@ namespace Toggl.iOS.Extensions.Reactive
                 )
                 .Select(_ => inputTransform(reactive.Base))
                 .Subscribe(action.Inputs);
+        }
+
+        public static IDisposable BindAction(this IReactive<UISwitch> reactive, Action action)
+        {
+            Ensure.Argument.IsNotNull(action, nameof(action));
+
+            return reactive.Base.Rx().Changed().Subscribe(_ => action());
         }
 
         public static Action<bool> CheckedObserver(this IReactive<UISwitch> reactive)

@@ -4,6 +4,10 @@ namespace Toggl.Core.Analytics
     {
         Manual,
         Deeplink,
-        Siri
+        Siri,
+        Widget,
+        EditView,
+        Wheel,
+        CalendarContextualMenu
     }
 }

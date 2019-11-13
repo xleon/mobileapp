@@ -1,6 +1,7 @@
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
+using Android.Support.V4.Content;
 using Android.Util;
 using Android.Views;
 using System;
@@ -17,13 +18,6 @@ namespace Toggl.Droid.Views
         private const float barDrawingYTranslationAdjustmentInPixels = 1f;
         private const float defaultBarSpacingRatio = 0.2f;
         private const float minHeightForBarsWithPercentages = 1f;
-
-        private static readonly Color nonBillableColor = Color.ParseColor("#1e328fff");
-        private static readonly Color billableColor = Color.ParseColor("#328fff");
-        private static readonly Color horizontalLineColor = Color.ParseColor("#e5e5e5");
-        private static readonly Color hoursTextColor = Color.ParseColor("#cecece");
-        private static readonly Color primaryTextColor = Color.ParseColor("#757575");
-        private static readonly Color emptyBarColor = Color.ParseColor("#252525");
 
         private readonly Paint billablePaint = new Paint();
         private readonly Paint nonBillablePaint = new Paint();
@@ -96,6 +90,11 @@ namespace Toggl.Droid.Views
         {
         }
 
+        private Color horizontalLineColor;
+        private Color hoursTextColor;
+        private Color primaryTextColor;
+        private Color emptyBarColor;
+
         private void initialize(Context context)
         {
             maxWidth = 48.DpToPixels(context);
@@ -111,10 +110,15 @@ namespace Toggl.Droid.Views
             dateTopPadding = 4.DpToPixels(context);
 
             othersPaint.TextSize = textSize;
-            billablePaint.Color = billableColor;
-            nonBillablePaint.Color = nonBillableColor;
+            billablePaint.Color = context.SafeGetColor(Resource.Color.billableChartBar);
+            nonBillablePaint.Color = context.SafeGetColor(Resource.Color.nonBillableChartBar);
             nonBillablePaint.SetStyle(Paint.Style.FillAndStroke);
             billablePaint.SetStyle(Paint.Style.FillAndStroke);
+
+            emptyBarColor = context.SafeGetColor(Resource.Color.placeholderText);
+            primaryTextColor = context.SafeGetColor(Resource.Color.primaryText);
+            horizontalLineColor = context.SafeGetColor(Resource.Color.separator);
+            hoursTextColor = context.SafeGetColor(Resource.Color.placeholderText);
         }
 
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
@@ -199,9 +203,13 @@ namespace Toggl.Droid.Views
             othersPaint.TextAlign = Paint.Align.Center;
             var originalTextSize = othersPaint.TextSize;
 
-            for (var barIndex = 0; barIndex < bars.Count; barIndex++)
+            var barsToRender = bars;
+            var labelsToRender = horizontalLabels;
+            var numberOfLabels = labelsToRender.Count;
+
+            for (var i = 0; i < barsToRender.Count; i++)
             {
-                var bar = bars[barIndex];
+                var bar = barsToRender[i];
                 var barRight = left + actualBarWidth;
                 var barHasBillablePercentage = bar.BillablePercent > 0f;
                 var barHasNonBillablePercentage = bar.NonBillablePercent > 0f;
@@ -221,14 +229,16 @@ namespace Toggl.Droid.Views
                     canvas.DrawRect(left, nonBillableTop, barRight, billableTop, nonBillablePaint);
                 }
 
-                if (willDrawDayLabels)
+                if (willDrawDayLabels && i < numberOfLabels)
                 {
+                    var horizontalLabel = labelsToRender[i];
+
                     var middleOfTheBar = left + (barRight - left) / 2f;
-                    var dayOfWeekText = horizontalLabels[barIndex].DayOfWeek;
+                    var dayOfWeekText = horizontalLabel.DayOfWeek;
                     othersPaint.TextSize = originalTextSize;
                     canvas.DrawText(dayOfWeekText, middleOfTheBar, dayLabelsY, othersPaint);
 
-                    var dateText = horizontalLabels[barIndex].Date;
+                    var dateText = horizontalLabel.Date;
                     setTextSizeFromWidth(dateText, othersPaint, othersPaint.TextSize, actualBarWidth);
                     othersPaint.GetTextBounds(dateText, 0, dateText.Length, bounds);
                     canvas.DrawText(dateText, middleOfTheBar, dayLabelsY + bounds.Height() + dateTopPadding, othersPaint);

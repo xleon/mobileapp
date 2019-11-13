@@ -27,6 +27,8 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            CloseButton.SetTemplateColor(ColorAssets.Text2);
+
             TitleLabel.Text = Resources.NewProject;
             NameTextField.Placeholder = Resources.ProjectName;
             ErrorLabel.Text = Resources.ProjectNameTakenError;
@@ -63,7 +65,7 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(ProjectNameUsedErrorTextHeight.Rx().Constant())
                 .DisposedBy(DisposeBag);
 
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
                 ViewModel.Error
                     .Select(e => string.IsNullOrEmpty(e) ? desiredIpadHeight : errorVisibleHeight + desiredIpadHeight)
@@ -93,13 +95,13 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             // Is Private
-            PrivateProjectSwitchContainer.Rx().Tap()
+            PrivateProjectSwitch.Rx().Changed()
                 .Select(_ => PrivateProjectSwitch.On)
                 .Subscribe(ViewModel.IsPrivate.Accept)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.IsPrivate
-                .Subscribe(PrivateProjectSwitch.Rx().On())
+            ViewModel.CanCreatePublicProjects
+                .Subscribe(PrivateProjectSwitchContainer.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
             // Save
@@ -108,7 +110,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             CloseButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             NSAttributedString attributedClientName(string clientName)
@@ -118,6 +120,11 @@ namespace Toggl.iOS.ViewControllers
 
                 return new NSAttributedString(clientName);
             }
+
+            NameView.InsertSeparator();
+            WorkspaceView.InsertSeparator();
+            ClientView.InsertSeparator();
+            PrivateProjectSwitchContainer.InsertSeparator();
         }
     }
 }

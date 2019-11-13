@@ -35,6 +35,8 @@ namespace Toggl.iOS.Views.Settings
                 DetailsLabel.Font.CapHeight,
                 Colors.TimeEntriesLog.ClientColor.ToNativeColor()
             );
+
+            ContentView.InsertSeparator();
         }
 
         protected override void UpdateView()
@@ -42,7 +44,7 @@ namespace Toggl.iOS.Views.Settings
             var projectColor = new Color(Item.ProjectColor).ToNativeColor();
 
             TitleLabel.Text = Item.Title;
-            DetailsLabel.TextColor = Colors.Siri.InvocationPhrase.ToNativeColor();
+            DetailsLabel.TextColor = ColorAssets.Text2;
 
             if (Item.ProjectName == null)
                 DetailsLabel.Text = string.Format(Resources.CustomSiriShortcutCellIn, Item.WorkspaceName);
@@ -50,7 +52,7 @@ namespace Toggl.iOS.Views.Settings
                 DetailsLabel.AttributedText = projectTaskClientToAttributedString.Convert(Item.ProjectName, null, Item.ClientName, projectColor);
 
             InvocationLabel.Text = $"\"{Item.InvocationPhrase}\"";
-            InvocationLabel.TextColor = Colors.Siri.InvocationPhrase.ToNativeColor();
+            InvocationLabel.TextColor = ColorAssets.Text2;
 
             BillableIcon.Hidden = !Item.IsBillable;
             TagsIcon.Hidden = !Item.HasTags;

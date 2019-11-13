@@ -138,11 +138,11 @@ namespace Toggl.Core.UI.ViewModels
             });
         }
 
-        public override void CloseWithDefaultResult()
+        public override Task<bool> CloseWithDefaultResult()
         {
             Close(new SelectProjectParameter(projectId, taskId, workspaceId));
+            return Task.FromResult(true);
         }
-
 
         private SectionModel<string, AutocompleteSuggestion> collectionSection(IEnumerable<ProjectSuggestion> suggestions, bool prependNoProject)
         {

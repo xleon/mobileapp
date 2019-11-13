@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:importantForAutofill="noExcludeDescendants">
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/SuggestionsRecyclerView"
         tools:visibility="gone"
@@ -14,17 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/expandedToolbarHeight" />
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/DurationCard"
-        android:background="@android:color/white"
+        android:background="@color/cardBackground"
         android:layout_height="64dp"
         android:layout_gravity="bottom"
         android:layout_width="match_parent">
-        <ImageView
-            android:src="@drawable/TopShadow"
-            android:layout_height="8dp"
-            android:layout_width="match_parent"
-            app:layout_constraintTop_toTopOf="parent"/>
         <TextView
             android:id="@+id/DurationText"
             tools:text="999:00:00"
@@ -40,7 +37,8 @@
             android:layout_height="match_parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/ButtonsHolder"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
+
         <LinearLayout
             android:id="@+id/ButtonsHolder"
             android:layout_width="wrap_content"
@@ -50,6 +48,7 @@
             android:layout_marginLeft="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/DurationText">
+
             <ImageView
                 android:id="@+id/ToolbarProjectButton"
                 android:paddingTop="16dp"
@@ -60,7 +59,8 @@
                 android:src="@drawable/project"
                 android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 android:layout_width="40dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
+
             <ImageView
                 android:id="@+id/ToolbarTagButton"
                 android:paddingTop="16dp"
@@ -71,7 +71,8 @@
                 android:paddingBottom="16dp"
                 android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 android:layout_width="40dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
+
             <ImageView
                 android:id="@+id/ToolbarBillableButton"
                 android:paddingTop="16dp"
@@ -82,51 +83,39 @@
                 android:src="@drawable/billable"
                 android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 android:layout_width="40dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
-    <RelativeLayout
-        android:id="@+id/Toolbar"
-        android:elevation="4dp"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/expandedToolbarHeight">
-        <ImageView
-            android:id="@+id/CloseButton"
-            android:padding="16dp"
-            android:clickable="true"
-            android:src="@drawable/close"
-            android:tint="@android:color/black"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize" />
+        android:layout_height="@dimen/expandedToolbarHeight"
+        android:elevation="@dimen/toolbarElevation">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/Toolbar"
+            style="@style/ToolbarStyle"
+            android:layout_height="match_parent" />
+
         <toggl.droid.views.AutocompleteEditText
             android:id="@+id/DescriptionTextField"
             android:maxLines="1"
             android:gravity="left"
+            android:elevation="@dimen/toolbarElevation"
+            android:layout_gravity="bottom"
             android:textSize="19sp"
             android:singleLine="true"
             android:letterSpacing="-0.01"
             android:lineSpacingExtra="5sp"
             android:scrollHorizontally="true"
-            android:textColor="@android:color/black"
+            android:textColor="@color/primaryText"
             android:background="@null"
             android:textCursorDrawable="@drawable/EditTextCursor"
             android:textColorHint="@color/placeholderText"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
-        <Button
-            android:id="@+id/DoneButton"
-            android:paddingLeft="16dp"
-            tools:text="Save"
-            android:paddingRight="16dp"
-            android:textColor="@android:color/black"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_height="46dp"
-            android:layout_width="wrap_content"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="17dp" />
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

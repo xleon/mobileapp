@@ -17,7 +17,7 @@ namespace Toggl.Droid.Activities
     {
         public SelectCountryActivity() : base(
             Resource.Layout.SelectCountryActivity,
-            Resource.Style.AppTheme_Light,
+            Resource.Style.AppTheme,
             Transitions.SlideInFromRight)
         { }
 
@@ -30,10 +30,6 @@ namespace Toggl.Droid.Activities
         {
             ViewModel.Countries
                 .Subscribe(recyclerAdapter.Rx().Items())
-                .DisposedBy(DisposeBag);
-
-            backImageView.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             filterEditText.Rx().Text()

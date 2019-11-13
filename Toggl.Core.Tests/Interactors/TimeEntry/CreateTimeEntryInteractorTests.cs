@@ -3,6 +3,7 @@ using Microsoft.Reactive.Testing;
 using NSubstitute;
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Models.Interfaces;
@@ -53,14 +54,14 @@ namespace Toggl.Core.Tests.Interactors
             protected BaseCreateTimeEntryInteractorTest()
             {
                 var user = new MockUser { Id = UserId, DefaultWorkspaceId = WorkspaceId };
-                DataSource.User.Current.Returns(Observable.Return(user));
+                DataSource.User.Get().Returns(Observable.Return(user));
 
                 DataSource.TimeEntries
                     .Create(Arg.Any<IThreadSafeTimeEntry>())
                     .Returns(callInfo => Observable.Return(callInfo.Arg<IThreadSafeTimeEntry>()));
             }
 
-            protected abstract IObservable<IDatabaseTimeEntry> CallInteractor(ITimeEntryPrototype prototype);
+            protected abstract Task<IDatabaseTimeEntry> CallInteractor(ITimeEntryPrototype prototype);
 
             [Fact, LogIfTooSlow]
             public async Task CreatesANewTimeEntryInTheDatabase()
@@ -177,54 +178,9 @@ namespace Toggl.Core.Tests.Interactors
             }
         }
 
-        public sealed class TheContinueTimeEntryInteractor : BaseCreateTimeEntryInteractorTest
-        {
-            protected override IObservable<IDatabaseTimeEntry> CallInteractor(ITimeEntryPrototype prototype)
-                => InteractorFactory.ContinueTimeEntry(prototype, ContinueTimeEntryMode.SingleTimeEntryContinueButton).Execute();
-
-            public TheContinueTimeEntryInteractor()
-            {
-                TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task RegistersTheEventAsATimerEventIfManualModeIsDisabled()
-            {
-                await CallInteractor(CreatePrototype(ValidTime, ValidDescription, true, ProjectId));
-
-                AnalyticsService.Received().Track(Arg.Is<StartTimeEntryEvent>(
-                    startTimeEntryEvent => startTimeEntryEvent.Origin == TimeEntryStartOrigin.SingleTimeEntryContinueButton));
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task CreatesATimeEntryWithTheCurrentTimeProvidedByTheTimeService()
-            {
-                await CallInteractor(CreatePrototype(ValidTime, ValidDescription, true, ProjectId));
-
-                await DataSource.TimeEntries.Received().Create(Arg.Is<IThreadSafeTimeEntry>(
-                    te => te.Start == TimeService.CurrentDateTime
-                ));
-            }
-
-            [Theory, LogIfTooSlow]
-            [InlineData(ContinueTimeEntryMode.SingleTimeEntryContinueButton)]
-            [InlineData(ContinueTimeEntryMode.SingleTimeEntrySwipe)]
-            [InlineData(ContinueTimeEntryMode.TimeEntriesGroupContinueButton)]
-            [InlineData(ContinueTimeEntryMode.TimeEntriesGroupSwipe)]
-            public async Task PropagatesCorrectTimeEntryStartOriginToAnalytics(ContinueTimeEntryMode continueMode)
-            {
-                var prototype = CreatePrototype(ValidTime, ValidDescription, true, ProjectId);
-
-                await InteractorFactory.ContinueTimeEntry(prototype, continueMode).Execute();
-
-                AnalyticsService.Received().Track(Arg.Is<StartTimeEntryEvent>(
-                    ev => (int)ev.Origin == (int)continueMode && ev.Origin.ToString() == continueMode.ToString()));
-            }
-        }
-
         public sealed class TheStartSuggestionInteractor : BaseCreateTimeEntryInteractorTest
         {
-            protected override IObservable<IDatabaseTimeEntry> CallInteractor(ITimeEntryPrototype prototype)
+            protected override async Task<IDatabaseTimeEntry> CallInteractor(ITimeEntryPrototype prototype)
             {
                 var suggestion = new Suggestion(new MockTimeEntry
                 {
@@ -238,7 +194,7 @@ namespace Toggl.Core.Tests.Interactors
                     TagIds = prototype.TagIds
                 }, SuggestionProviderType.MostUsedTimeEntries);
 
-                return InteractorFactory.StartSuggestion(suggestion).Execute();
+                return await InteractorFactory.StartSuggestion(suggestion).Execute();
             }
 
             public TheStartSuggestionInteractor()
@@ -268,8 +224,8 @@ namespace Toggl.Core.Tests.Interactors
 
         public sealed class TheCreateTimeEntryInteractor : BaseCreateTimeEntryInteractorTest
         {
-            protected override IObservable<IDatabaseTimeEntry> CallInteractor(ITimeEntryPrototype prototype)
-                => InteractorFactory.CreateTimeEntry(prototype, prototype.Duration.HasValue ? TimeEntryStartOrigin.Manual : TimeEntryStartOrigin.Timer).Execute();
+            protected override async Task<IDatabaseTimeEntry> CallInteractor(ITimeEntryPrototype prototype)
+                => await InteractorFactory.CreateTimeEntry(prototype, prototype.Duration.HasValue ? TimeEntryStartOrigin.Manual : TimeEntryStartOrigin.Timer).Execute();
 
             [Fact, LogIfTooSlow]
             public async Task RegistersTheEventAsATimerEventIfManualModeIsDisabled()

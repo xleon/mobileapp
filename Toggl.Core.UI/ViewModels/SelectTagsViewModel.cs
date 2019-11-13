@@ -31,7 +31,7 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<IImmutableList<SelectableTagBaseViewModel>> Tags { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
         public BehaviorSubject<string> FilterText { get; } = new BehaviorSubject<string>(string.Empty);
-        public UIAction Save { get; }
+        public ViewAction Save { get; }
 
         public InputAction<SelectableTagBaseViewModel> SelectTag { get; }
 
@@ -64,7 +64,7 @@ namespace Toggl.Core.UI.ViewModels
                 .StartWith(string.Empty)
                 .Select(text => text?.Trim() ?? string.Empty)
                 .SelectMany(getSuggestions)
-                .Select(selectableTagNameViewModel)
+                .Select(convertToSelectableTagNameViewModel)
                 .ShareReplay();
 
             Tags = filteredTags
@@ -78,39 +78,29 @@ namespace Toggl.Core.UI.ViewModels
 
             return base.Initialize(parameter);
 
-            IImmutableList<SelectableTagBaseViewModel> selectableTagNameViewModel((string, IEnumerable<AutocompleteSuggestion>) pair)
+            IImmutableList<SelectableTagBaseViewModel> convertToSelectableTagNameViewModel(TagsFilteringContext context)
             {
-                var queryText = pair.Item1;
-                var suggestions = pair.Item2;
-
-                var tagSuggestionInWorkspace = suggestions
-                    .Cast<TagSuggestion>()
+                var tagSuggestionInWorkspace = context.TagSuggestions
                     .Where(s => s.WorkspaceId == workspaceId);
 
-                var suggestCreation = creationEnabled && !string.IsNullOrEmpty(queryText)
-                                        && tagSuggestionInWorkspace.None(tag
-                                            => tag.Name.IsSameCaseInsensitiveTrimedTextAs(queryText))
-                                        && queryText.IsAllowedTagByteSize();
+                var shouldSuggestCreation = creationEnabled
+                    && !string.IsNullOrEmpty(context.Query)
+                    && tagSuggestionInWorkspace.None(tag => tag.Name.IsSameCaseInsensitiveTrimedTextAs(context.Query))
+                    && context.Query.IsAllowedTagByteSize();
 
-                var selectableViewModels = tagSuggestionInWorkspace
+                return tagSuggestionInWorkspace
                     .OrderByDescending(tag => defaultResult.Contains(tag.TagId))
                     .ThenBy(tag => tag.Name)
-                    .Select(toSelectableTagViewModel);
-
-                if (suggestCreation)
-                {
-                    return selectableViewModels
-                        .Prepend(new SelectableTagCreationViewModel(queryText, workspaceId))
-                        .ToImmutableList();
-                }
-
-                return selectableViewModels.ToImmutableList();
+                    .Select(toSelectableTagViewModel)
+                    .PrependIf(shouldSuggestCreation, () => new SelectableTagCreationViewModel(context.Query, workspaceId))
+                    .ToImmutableList();
             }
         }
 
-        public override void CloseWithDefaultResult()
+        public override Task<bool> CloseWithDefaultResult()
         {
             Close(defaultResult);
+            return Task.FromResult(true);
         }
 
         private SelectableTagBaseViewModel toSelectableTagViewModel(TagSuggestion tagSuggestion)
@@ -120,12 +110,12 @@ namespace Toggl.Core.UI.ViewModels
                 selectedTagIds.Contains(tagSuggestion.TagId),
                 workspaceId);
 
-        private IObservable<(string, IEnumerable<AutocompleteSuggestion>)> getSuggestions(string text)
+        private IObservable<TagsFilteringContext> getSuggestions(string text)
         {
             var wordsToQuery = text.SplitToQueryWords();
             return interactorFactory
                 .GetTagsAutocompleteSuggestions(wordsToQuery).Execute()
-                .Select(suggestions => (text, suggestions));
+                .Select(suggestions => new TagsFilteringContext(text, suggestions));
         }
 
         private async Task selectTag(SelectableTagBaseViewModel tag)
@@ -154,6 +144,21 @@ namespace Toggl.Core.UI.ViewModels
         private void save()
         {
             Close(selectedTagIds.ToArray());
+        }
+
+        private struct TagsFilteringContext
+        {
+            public string Query { get; private set; }
+            public ImmutableArray<TagSuggestion> TagSuggestions { get; private set; }
+
+            public TagsFilteringContext(string query, IEnumerable<AutocompleteSuggestion> suggestions)
+            {
+                Query = query;
+
+                TagSuggestions = suggestions
+                    .Cast<TagSuggestion>()
+                    .ToImmutableArray();
+            }
         }
     }
 }

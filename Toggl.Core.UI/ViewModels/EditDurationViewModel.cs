@@ -39,11 +39,11 @@ namespace Toggl.Core.UI.ViewModels
         private BehaviorSubject<DateTimeOffset> minimumDateTime = new BehaviorSubject<DateTimeOffset>(default(DateTimeOffset));
         private BehaviorSubject<DateTimeOffset> maximumDateTime = new BehaviorSubject<DateTimeOffset>(default(DateTimeOffset));
 
-        public UIAction Save { get; }
-        public UIAction EditStartTime { get; }
-        public UIAction EditStopTime { get; }
-        public UIAction StopEditingTime { get; }
-        public UIAction StopTimeEntry { get; }
+        public ViewAction Save { get; }
+        public ViewAction EditStartTime { get; }
+        public ViewAction EditStopTime { get; }
+        public ViewAction StopEditingTime { get; }
+        public ViewAction StopTimeEntry { get; }
         public InputAction<DateTimeOffset> ChangeStartTime { get; }
         public InputAction<DateTimeOffset> ChangeStopTime { get; }
         public InputAction<DateTimeOffset> ChangeActiveTime { get; }
@@ -140,11 +140,12 @@ namespace Toggl.Core.UI.ViewModels
             MaximumStopTime = startTime.Select(v => v.AddHours(MaxTimeEntryDurationInHours)).AsDriver(schedulerProvider);
         }
 
-        public override void CloseWithDefaultResult()
+        public override Task<bool> CloseWithDefaultResult()
         {
             analyticsEvent = analyticsEvent.With(result: EditDurationEvent.Result.Cancel);
             analyticsService.Track(analyticsEvent);
             Close(defaultResult);
+            return Task.FromResult(true);
         }
 
         private void updateStopTime(DateTimeOffset stopTime)
@@ -211,6 +212,7 @@ namespace Toggl.Core.UI.ViewModels
             stopTime.OnNext(timeService.CurrentDateTime);
             isRunning.OnNext(false);
             analyticsEvent = analyticsEvent.With(stoppedRunningEntry: true);
+            analyticsService.TimeEntryStopped.Track(TimeEntryStopOrigin.Wheel);
         }
 
         private void editStartTime()

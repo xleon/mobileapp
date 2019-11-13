@@ -9,13 +9,14 @@ using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.LayoutManagers;
 using Toggl.Droid.Presentation;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    public sealed partial class ReportsFragment : ReactiveTabFragment<ReportsViewModel>, IScrollableToTop
+    public sealed partial class ReportsFragment : ReactiveTabFragment<ReportsViewModel>, IScrollableToStart
     {
         private static readonly TimeSpan toggleCalendarThrottleDuration = TimeSpan.FromMilliseconds(300);
         private ReportsRecyclerAdapter reportsRecyclerAdapter;
@@ -110,7 +111,7 @@ namespace Toggl.Droid.Fragments
                 ViewModel.CalendarViewModel.ViewAppeared();
         }
 
-        public void ScrollToTop()
+        public void ScrollToStart()
         {
             reportsRecyclerView?.SmoothScrollToPosition(0);
         }
@@ -118,7 +119,7 @@ namespace Toggl.Droid.Fragments
         private void setupReportsRecyclerView()
         {
             reportsRecyclerAdapter = new ReportsRecyclerAdapter(Context);
-            reportsRecyclerView.SetLayoutManager(new LinearLayoutManager(Context));
+            reportsRecyclerView.SetLayoutManager(new UnpredictiveLinearLayoutManager(Context));
             reportsRecyclerView.SetAdapter(reportsRecyclerAdapter);
         }
 

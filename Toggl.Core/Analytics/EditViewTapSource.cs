@@ -8,6 +8,7 @@
         StartTime,
         StartDate,
         StopTime,
+        StopTimeLabel,
         Duration,
         Billable
     }

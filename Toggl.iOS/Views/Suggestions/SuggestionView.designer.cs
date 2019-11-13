@@ -6,7 +6,6 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
-using Toggl.iOS.Views;
 
 namespace Toggl.iOS
 {
@@ -14,36 +13,28 @@ namespace Toggl.iOS
 	partial class SuggestionView
 	{
 		[Outlet]
-		UIKit.UILabel ClientLabel { get; set; }
+		UIKit.UIImageView ArrowImage { get; set; }
 
 		[Outlet]
-		FadeView DescriptionFadeView { get; set; }
+		Toggl.iOS.Views.FadeView DescriptionFadeView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel DescriptionLabel { get; set; }
 
 		[Outlet]
-		UIKit.UIImageView ProjectDot { get; set; }
+		UIKit.UILabel NoDescriptionLabel { get; set; }
 
 		[Outlet]
-		FadeView ProjectFadeView { get; set; }
+		Toggl.iOS.Views.FadeView ProjectFadeView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel ProjectLabel { get; set; }
-
-		[Outlet]
-		UIKit.UIView ProjectView { get; set; }
-
+		
 		void ReleaseDesignerOutlets ()
 		{
-			if (ClientLabel != null) {
-				ClientLabel.Dispose ();
-				ClientLabel = null;
-			}
-
-			if (DescriptionLabel != null) {
-				DescriptionLabel.Dispose ();
-				DescriptionLabel = null;
+			if (ArrowImage != null) {
+				ArrowImage.Dispose ();
+				ArrowImage = null;
 			}
 
 			if (DescriptionFadeView != null) {
@@ -51,24 +42,24 @@ namespace Toggl.iOS
 				DescriptionFadeView = null;
 			}
 
+			if (DescriptionLabel != null) {
+				DescriptionLabel.Dispose ();
+				DescriptionLabel = null;
+			}
+
+			if (NoDescriptionLabel != null) {
+				NoDescriptionLabel.Dispose ();
+				NoDescriptionLabel = null;
+			}
+
 			if (ProjectFadeView != null) {
 				ProjectFadeView.Dispose ();
 				ProjectFadeView = null;
 			}
 
-			if (ProjectDot != null) {
-				ProjectDot.Dispose ();
-				ProjectDot = null;
-			}
-
 			if (ProjectLabel != null) {
 				ProjectLabel.Dispose ();
 				ProjectLabel = null;
-			}
-
-			if (ProjectView != null) {
-				ProjectView.Dispose ();
-				ProjectView = null;
 			}
 		}
 	}

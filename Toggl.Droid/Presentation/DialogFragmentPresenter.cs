@@ -18,15 +18,10 @@ namespace Toggl.Droid.Presentation
         {
             typeof(CalendarPermissionDeniedViewModel),
             typeof(NoWorkspaceViewModel),
-            typeof(SelectBeginningOfWeekViewModel),
             typeof(SelectColorViewModel),
-            typeof(SelectDateFormatViewModel),
             typeof(SelectDefaultWorkspaceViewModel),
-            typeof(SelectDurationFormatViewModel),
-            typeof(SelectUserCalendarsViewModel),
             typeof(TermsOfServiceViewModel),
-            typeof(UpcomingEventsNotificationSettingsViewModel),
-            typeof(SelectWorkspaceViewModel)
+            typeof(UpcomingEventsNotificationSettingsViewModel)
         };
 
         protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView)
@@ -54,32 +49,17 @@ namespace Toggl.Droid.Presentation
                 case NoWorkspaceViewModel _:
                     return new NoWorkspaceFragment { Cancelable = false };
 
-                case SelectBeginningOfWeekViewModel _:
-                    return new SelectBeginningOfWeekFragment();
-
                 case SelectColorViewModel _:
                     return new SelectColorFragment();
 
-                case SelectDateFormatViewModel _:
-                    return new SelectDateFormatFragment();
-
                 case SelectDefaultWorkspaceViewModel _:
                     return new SelectDefaultWorkspaceFragment { Cancelable = false };
-
-                case SelectDurationFormatViewModel _:
-                    return new SelectDurationFormatFragment();
-
-                case SelectUserCalendarsViewModel _:
-                    return new SelectUserCalendarsFragment();
 
                 case TermsOfServiceViewModel _:
                     return new TermsOfServiceFragment();
 
                 case UpcomingEventsNotificationSettingsViewModel _:
                     return new UpcomingEventsNotificationSettingsFragment();
-
-                case SelectWorkspaceViewModel _:
-                    return new SelectWorkspaceFragment();
             }
 
             throw new InvalidOperationException($"There's no reactive dialog implementation for {viewModel.GetType().Name}");

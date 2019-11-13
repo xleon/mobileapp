@@ -7,6 +7,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
+using CoreAnimation;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
@@ -17,9 +18,10 @@ using Toggl.Core.UI.Onboarding.MainView;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
-using Toggl.iOS.ExtensionKit;
+using Toggl.iOS.Shared;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.iOS.Helper;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Suggestions;
 using Toggl.iOS.Views;
@@ -30,6 +32,7 @@ using Toggl.Storage.Extensions;
 using Toggl.Storage.Onboarding;
 using Toggl.Storage.Settings;
 using UIKit;
+using static Toggl.Core.Analytics.EditTimeEntryOrigin;
 using static Toggl.Core.UI.Helper.Animation;
 
 namespace Toggl.iOS.ViewControllers
@@ -89,6 +92,16 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            TableShadow.Layer.MasksToBounds = false;
+            TableShadow.Layer.ShadowColor = UIColor.Black.CGColor;
+            TableShadow.Layer.ShadowOffset = new CGSize(0, 0);
+            TableShadow.Layer.ShadowOpacity = 0.1f;
+            TableShadow.Layer.ShadowRadius = 4;
+            TableShadow.Hidden = TraitCollection.HorizontalSizeClass != UIUserInterfaceSizeClass.Regular;
+
+            var separator = NavigationController.NavigationBar.InsertSeparator();
+            separator.BackgroundColor = ColorAssets.OpaqueSeparator;
+
             WelcomeBackLabel.Text = Resources.LogEmptyStateTitle;
             WelcomeBackDescriptionLabel.Text = Resources.LogEmptyStateText;
             CreatedFirstTimeEntryLabel.Text = Resources.YouHaveCreatedYourFirstTimeEntry;
@@ -101,17 +114,18 @@ namespace Toggl.iOS.ViewControllers
             StartTimeEntryButton.AccessibilityLabel = Resources.StartTimeEntry;
             StopTimeEntryButton.AccessibilityLabel = Resources.StopCurrentlyRunningTimeEntry;
 
+            tableViewSource = new TimeEntriesLogViewSource();
+
             prepareViews();
             prepareOnboarding();
             setupTableViewHeader();
-
-            tableViewSource = new TimeEntriesLogViewSource();
 
             ViewModel.SwipeActionsEnabled
                 .Subscribe(tableViewSource.SetSwipeActionsEnabled)
                 .DisposedBy(disposeBag);
 
             TimeEntriesLogTableView.Source = tableViewSource;
+            TimeEntriesLogTableView.BackgroundColor = ColorAssets.TableBackground;
 
             ViewModel.TimeEntries
                 .Subscribe(TimeEntriesLogTableView.Rx().AnimateSections<MainLogSection, DaySummaryViewModel, LogItemViewModel, IMainLogKey>(tableViewSource))
@@ -127,11 +141,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(disposeBag);
 
             tableViewSource.FirstCell
-                .Subscribe(f =>
-                {
-                    onFirstTimeEntryChanged(f);
-                    firstTimeEntryCell = f;
-                })
+                .Subscribe(onFirstTimeEntryChanged)
                 .DisposedBy(DisposeBag);
 
             tableViewSource.Rx().Scrolled()
@@ -156,6 +166,10 @@ namespace Toggl.iOS.ViewControllers
             tableViewSource.Rx().ModelSelected()
                 .Select(editEventInfo)
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
+                .DisposedBy(DisposeBag);
+
+            tableViewSource.Rx().ItemsChanged()
+                .Subscribe(updateTooltipPositions)
                 .DisposedBy(DisposeBag);
 
             ViewModel.TimeEntriesViewModel.TimeEntriesPendingDeletion
@@ -183,7 +197,7 @@ namespace Toggl.iOS.ViewControllers
             CurrentTimeEntryCard.Rx().Tap()
                 .WithLatestFrom(ViewModel.CurrentRunningTimeEntry, (_, te) => te)
                 .Where(te => te != null)
-                .Select(te => (new[] { te.Id }, EditTimeEntryOrigin.RunningTimeEntryCard))
+                .Select(te => new EditTimeEntryInfo(EditTimeEntryOrigin.RunningTimeEntryCard, te.Id))
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
@@ -223,7 +237,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             var capHeight = CurrentTimeEntryProjectTaskClientLabel.Font.CapHeight;
-            var clientColor = Colors.Main.CurrentTimeEntryClientColor.ToNativeColor();
+            var clientColor = ColorAssets.Text3;
             ViewModel.CurrentRunningTimeEntry
                 .Select(te => te?.ToFormattedTimeEntryString(capHeight, clientColor, shouldColorProject: true))
                 .Subscribe(CurrentTimeEntryProjectTaskClientLabel.Rx().AttributedText())
@@ -273,7 +287,11 @@ namespace Toggl.iOS.ViewControllers
 
             ViewModel.SuggestionsViewModel.Suggestions
                 .ReemitWhen(traitCollectionSubject)
-                .Subscribe(suggestionsView.OnSuggestions)
+                .Subscribe(suggestions =>
+                {
+                    suggestionsView.OnSuggestions(suggestions);
+                    layoutTableHeader();
+                })
                 .DisposedBy(DisposeBag);
 
             // Intent Donation
@@ -294,6 +312,17 @@ namespace Toggl.iOS.ViewControllers
             View.LayoutIfNeeded();
 
             NSNotificationCenter.DefaultCenter.AddObserver(UIApplication.DidBecomeActiveNotification, onApplicationDidBecomeActive);
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            var activity = new NSUserActivity(Handoff.Action.Log);
+            activity.EligibleForHandoff = true;
+            activity.WebPageUrl = Handoff.Url.Log;
+            UserActivity = activity;
+            activity.BecomeCurrent();
         }
 
         public override void ViewDidDisappear(bool animated)
@@ -353,17 +382,33 @@ namespace Toggl.iOS.ViewControllers
 
             suggestionsContaier.AddSubview(suggestionsView);
             suggestionsView.ConstrainInView(suggestionsContaier);
+
+            layoutTableHeader();
+            updateTooltipPositions();
         }
 
-        private (long[], EditTimeEntryOrigin) editEventInfo(LogItemViewModel item)
+        private void layoutTableHeader()
+        {
+            // This method makes little to no sense, but it works, and it comes from this accepted StackOverflow answer:
+            // https://stackoverflow.com/questions/16471846/is-it-possible-to-use-autolayout-with-uitableviews-tableheaderview
+            TimeEntriesLogTableView.TableHeaderView = tableHeader;
+            tableHeader.SetNeedsLayout();
+            tableHeader.LayoutIfNeeded();
+            var frame = tableHeader.Frame;
+            frame.Size = tableHeader.SystemLayoutSizeFittingSize(UIView.UILayoutFittingCompressedSize);
+            tableHeader.Frame = frame;
+            TimeEntriesLogTableView.TableHeaderView = tableHeader;
+        }
+
+        private EditTimeEntryInfo editEventInfo(LogItemViewModel item)
         {
             var origin = item.IsTimeEntryGroupHeader
-                ? EditTimeEntryOrigin.GroupHeader
+                ? GroupHeader
                 : item.BelongsToGroup
-                    ? EditTimeEntryOrigin.GroupTimeEntry
-                    : EditTimeEntryOrigin.SingleTimeEntry;
+                    ? GroupTimeEntry
+                    : SingleTimeEntry;
 
-            return (item.RepresentedTimeEntriesIds, origin);
+            return new EditTimeEntryInfo(origin, item.RepresentedTimeEntriesIds);
         }
 
         private ContinueTimeEntryInfo timeEntryContinuation(LogItemViewModel itemViewModel, bool isSwipe)
@@ -412,11 +457,23 @@ namespace Toggl.iOS.ViewControllers
             base.TraitCollectionDidChange(previousTraitCollection);
             traitCollectionSubject.OnNext(Unit.Default);
             TimeEntriesLogTableView.ReloadData();
+
+            TableShadow.Hidden = TraitCollection.HorizontalSizeClass != UIUserInterfaceSizeClass.Regular;
         }
 
         private void trackSiriEvents()
         {
-            var events = SharedStorage.instance.PopTrackableEvents();
+            var events = SharedStorage.Instance.PopSiriTrackableEvents();
+
+            events?
+                .Select(e => e?.ToTrackableEvent())
+                .Where(e => e != null)
+                .Do(ViewModel.Track);
+        }
+
+        private void trackWidgetEvents()
+        {
+            var events = SharedStorage.Instance.PopWidgetTrackableEvents();
 
             events?
                 .Select(e => e?.ToTrackableEvent())
@@ -426,12 +483,13 @@ namespace Toggl.iOS.ViewControllers
 
         private void onApplicationDidBecomeActive(NSNotification notification)
         {
-            if (SharedStorage.instance.GetNeedsSync())
+            if (SharedStorage.Instance.GetNeedsSync())
             {
-                SharedStorage.instance.SetNeedsSync(false);
+                SharedStorage.Instance.SetNeedsSync(false);
                 ViewModel.Refresh.Execute();
             }
             trackSiriEvents();
+            trackWidgetEvents();
         }
 
         private void toggleUndoDeletion(int? numberOfTimeEntriesPendingDeletion)
@@ -472,28 +530,13 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLayoutSubviews();
 
-            TimeEntriesLogTableView.ContentInset = new UIEdgeInsets(-TimeEntriesLogViewSource.SpaceBetweenSections, 0,
-                StartTimeEntryButton.Frame.Height, 0);
-            TimeEntriesLogTableView.BringSubviewToFront(TimeEntriesLogTableView.TableHeaderView);
+            TimeEntriesLogTableView.ContentInset = new UIEdgeInsets(
+                top: -TimeEntriesLogViewSource.SpaceBetweenSections,
+                left: 0,
+                bottom: (nfloat)System.Math.Max(CurrentTimeEntryCard.Frame.Height, StartTimeEntryButton.Frame.Height),
+                right: 0);
 
-            if (TimeEntriesLogTableView.TableHeaderView != null)
-            {
-                var header = TimeEntriesLogTableView.TableHeaderView;
-                var size = header.SystemLayoutSizeFittingSize(UIView.UILayoutFittingCompressedSize);
-                if (header.Frame.Size.Height != size.Height)
-                {
-                    var headerRect = new CGRect
-                    {
-                        X = header.Frame.X,
-                        Y = header.Frame.Y,
-                        Width = header.Frame.Width,
-                        Height = size.Height
-                    };
-                    header.Frame = headerRect;
-                }
-                TimeEntriesLogTableView.TableHeaderView = header;
-                TimeEntriesLogTableView.SetNeedsLayout();
-            }
+            TimeEntriesLogTableView.BringSubviewToFront(TimeEntriesLogTableView.TableHeaderView);
 
             if (viewInitialized) return;
 
@@ -524,6 +567,7 @@ namespace Toggl.iOS.ViewControllers
             }
 
             hideRatingView();
+            layoutTableHeader();
         }
 
         private void showRatingView()
@@ -553,7 +597,9 @@ namespace Toggl.iOS.ViewControllers
             AutomaticallyAdjustsScrollViewInsets = false;
 
             //Card border
+            CurrentTimeEntryCard.Opaque = false;
             CurrentTimeEntryCard.Layer.CornerRadius = 8;
+            CurrentTimeEntryCard.Layer.MaskedCorners = (CACornerMask)3;
             CurrentTimeEntryCard.Layer.ShadowColor = UIColor.Black.CGColor;
             CurrentTimeEntryCard.Layer.ShadowOffset = new CGSize(0, -2);
             CurrentTimeEntryCard.Layer.ShadowOpacity = 0.1f;
@@ -586,7 +632,7 @@ namespace Toggl.iOS.ViewControllers
                 if (currentlyRunningTimeEntry == null)
                     return;
 
-                var selectTimeEntryData = (new[] { currentlyRunningTimeEntry.Id }, EditTimeEntryOrigin.RunningTimeEntryCard);
+                var selectTimeEntryData = new EditTimeEntryInfo(RunningTimeEntryCard, currentlyRunningTimeEntry.Id);
                 await ViewModel.SelectTimeEntry.ExecuteWithCompletion(selectTimeEntryData);
             });
             swipeUpRunningCardGesture.Direction = UISwipeGestureRecognizerDirection.Up;
@@ -600,8 +646,6 @@ namespace Toggl.iOS.ViewControllers
 
             cardAnimationCancellation?.Cancel();
             cardAnimationCancellation = new CancellationTokenSource();
-
-            TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint.Active = true;
 
             AnimationExtensions.Animate(Timings.EnterTiming, showCardDelay, Curves.EaseOut,
                 () => StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f),
@@ -622,8 +666,6 @@ namespace Toggl.iOS.ViewControllers
         {
             cardAnimationCancellation?.Cancel();
             cardAnimationCancellation = new CancellationTokenSource();
-
-            TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint.Active = false;
 
             AnimationExtensions.Animate(Timings.LeaveTimingFaster, Curves.EaseIn,
                 () => StopTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f),
@@ -665,7 +707,7 @@ namespace Toggl.iOS.ViewControllers
 
             spiderHinge.Layer.CornerRadius = spiderHingeCornerRadius;
             spiderHinge.TranslatesAutoresizingMaskIntoConstraints = false;
-            spiderHinge.BackgroundColor = Colors.Main.SpiderHinge.ToNativeColor();
+            spiderHinge.BackgroundColor = ColorAssets.Spider;
             spiderContainerView.TranslatesAutoresizingMaskIntoConstraints = false;
             spiderBroView.TranslatesAutoresizingMaskIntoConstraints = false;
             spiderContainerView.BackgroundColor = UIColor.Clear;
@@ -710,7 +752,10 @@ namespace Toggl.iOS.ViewControllers
         {
             var storage = ViewModel.OnboardingStorage;
 
-            var timelineIsEmpty = ViewModel.LogEmpty;
+            var timelineIsEmpty = Observable.CombineLatest(
+                tableViewSource.FirstCell.Select(cell => cell == null),
+                ViewModel.LogEmpty,
+                CommonFunctions.Or);
 
             new StartTimeEntryOnboardingStep(storage)
                 .ManageDismissableTooltip(StartTimeEntryOnboardingBubbleView, storage)

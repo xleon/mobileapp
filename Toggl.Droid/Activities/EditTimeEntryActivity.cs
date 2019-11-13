@@ -5,6 +5,7 @@ using Android.Runtime;
 using Android.Text;
 using System;
 using System.Reactive.Linq;
+using Android.Views;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.UI.Extensions;
@@ -25,9 +26,10 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class EditTimeEntryActivity : ReactiveActivity<EditTimeEntryViewModel>
     {
+        private IMenuItem saveMenuItem;
         public EditTimeEntryActivity() : base(
             Resource.Layout.EditTimeEntryActivity,
-            Resource.Style.AppTheme_Light_WhiteBackground,
+            Resource.Style.AppTheme,
             Transitions.SlideInFromBottom)
         { }
 
@@ -73,18 +75,10 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeBindings()
         {
-            closeButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
-                .DisposedBy(DisposeBag);
-
-            confirmButton.Rx().Tap()
-                .Select(_ => descriptionEditText.HasFocus)
-                .Subscribe(handleConfirmClick)
-                .DisposedBy(DisposeBag);
 
             descriptionEditText.Rx().FocusChanged()
                 .Select(isFocused => isFocused ? TextResources.Done : TextResources.Save)
-                .Subscribe(confirmButton.Rx().TextObserver());
+                .Subscribe(textResource => saveMenuItem?.SetTitle(textResource));
 
             descriptionEditText.Rx().Text()
                 .Subscribe(ViewModel.Description.Accept)
@@ -147,15 +141,15 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsBillable
-                .Subscribe(billableSwitch.Rx().CheckedObserver())
+                .Subscribe(billableSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
             billableSwitch.Rx()
                 .BindAction(ViewModel.ToggleBillable)
                 .DisposedBy(DisposeBag);
 
-            billableButton.Rx().Tap()
-                .Subscribe(ViewModel.ToggleBillable.Inputs)
+            billableButton.Rx()
+                .BindAction(ViewModel.ToggleBillable)
                 .DisposedBy(DisposeBag);
 
             ViewModel.StartTime
@@ -228,6 +222,24 @@ namespace Toggl.Droid.Activities
             deleteButton.Rx().Tap()
                 .Subscribe(ViewModel.Delete.Inputs)
                 .DisposedBy(DisposeBag);
+        }
+        
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.OneButtonMenu, menu);
+            saveMenuItem = menu.FindItem(Resource.Id.ButtonMenuItem);
+            saveMenuItem.SetTitle(Shared.Resources.Save);
+            return true;
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (item.ItemId == Resource.Id.ButtonMenuItem)
+            {
+                handleConfirmClick(descriptionEditText.HasFocus);
+                return true;
+            }
+            return base.OnOptionsItemSelected(item);
         }
 
         private void adjustUIForInaccessibleTimeEntry(bool isInaccessible)

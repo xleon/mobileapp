@@ -6,6 +6,7 @@ using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Services;
+using Toggl.Shared;
 using UIKit;
 using UserNotifications;
 using Firebase.CloudMessaging;
@@ -36,10 +37,7 @@ namespace Toggl.iOS
 
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
             Window.MakeKeyAndVisible();
-
-            setupNavigationBar();
-            setupTabBar();
-
+            
             IosDependencyContainer.EnsureInitialized(Window, this);
             var app = new AppStart(IosDependencyContainer.Instance);
             app.LoadLocalizationConfiguration();
@@ -50,16 +48,12 @@ namespace Toggl.iOS
             var accessLevel = app.GetAccessLevel();
             loginWithCredentialsIfNecessary(accessLevel);
             navigateAccordingToAccessLevel(accessLevel, app);
-            
+
             var accessibilityEnabled = UIAccessibility.IsVoiceOverRunning;
             IosDependencyContainer.Instance.AnalyticsService.AccessibilityEnabled.Track(accessibilityEnabled);
 
             var watchservice = new WatchService();
             watchservice.TryLogWatchConnectivity();
-
-#if ENABLE_TEST_CLOUD
-            Xamarin.Calabash.Start();
-#endif
 
             return true;
         }

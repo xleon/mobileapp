@@ -6,7 +6,7 @@ using IntentsUI;
 using System;
 using System.Globalization;
 using Toggl.iOS.Intents;
-using Toggl.iOS.ExtensionKit.Extensions;
+using Toggl.iOS.Shared.Extensions;
 using Toggl.Shared;
 using UIKit;
 
@@ -28,14 +28,12 @@ namespace Toggl.iOS.SiriExtension.UI
         static readonly UIStringAttributes boldAttributes = new UIStringAttributes
         {
             Font = UIFont.BoldSystemFontOfSize(15),
-            ForegroundColor = UIColor.Black,
             ParagraphStyle = paragraphStyle
         };
 
         static readonly UIStringAttributes regularAttributes = new UIStringAttributes
         {
             Font = UIFont.SystemFontOfSize(15),
-            ForegroundColor = UIColor.Black,
             ParagraphStyle = paragraphStyle
         };
 

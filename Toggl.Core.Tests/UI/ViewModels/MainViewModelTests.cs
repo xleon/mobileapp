@@ -3,7 +3,6 @@ using Microsoft.Reactive.Testing;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -22,7 +21,6 @@ using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
@@ -58,7 +56,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     RxActionFactory,
                     PermissionsChecker,
                     BackgroundService,
-                    PlatformInfo);
+                    PlatformInfo,
+                    WidgetsService);
 
                 vm.Initialize();
 
@@ -110,7 +109,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useRxActionFactory,
                 bool usePermissionsChecker,
                 bool useBackgroundService,
-                bool usePlatformInfo)
+                bool usePlatformInfo,
+                bool useWidgetsService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
@@ -130,6 +130,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var permissionsChecker = usePermissionsChecker ? PermissionsChecker : null;
                 var backgroundService = useBackgroundService ? BackgroundService : null;
                 var platformInfo = usePlatformInfo ? PlatformInfo : null;
+                var widgetsService = useWidgetsService ? WidgetsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -150,7 +151,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         rxActionFactory,
                         permissionsChecker,
                         backgroundService,
-                        platformInfo);
+                        platformInfo,
+                        widgetsService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -445,57 +447,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheOpenReportsCommand : MainViewModelTest
-        {
-            [Fact, LogIfTooSlow]
-            public async ThreadingTask NavigatesToTheReportsViewModel()
-            {
-                const long workspaceId = 10;
-                var workspace = Substitute.For<IThreadSafeWorkspace>();
-                workspace.Id.Returns(workspaceId);
-                InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
-                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(false));
-                ViewModel.Initialize().Wait();
-
-                ViewModel.OpenReports.Execute();
-
-                TestScheduler.Start();
-                await NavigationService.Received().Navigate<ReportsViewModel>(View);
-            }
-
-            [Fact, LogIfTooSlow]
-            public void MarksTheActionBeforeStopButtonForOnboardingPurposes()
-            {
-                const long workspaceId = 10;
-                var workspace = Substitute.For<IThreadSafeWorkspace>();
-                workspace.Id.Returns(workspaceId);
-                InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
-                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(false));
-                ViewModel.Initialize().Wait();
-
-                ViewModel.OpenReports.Execute();
-
-                TestScheduler.Start();
-                OnboardingStorage.DidNotReceive().SetNavigatedAwayFromMainViewAfterStopButton();
-            }
-
-            [Fact, LogIfTooSlow]
-            public void MarksTheActionAfterStopButtonForOnboardingPurposes()
-            {
-                const long workspaceId = 10;
-                var workspace = Substitute.For<IThreadSafeWorkspace>();
-                workspace.Id.Returns(workspaceId);
-                InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
-                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(true));
-                ViewModel.Initialize().Wait();
-
-                ViewModel.OpenReports.Execute();
-
-                TestScheduler.Start();
-                OnboardingStorage.Received().SetNavigatedAwayFromMainViewAfterStopButton();
-            }
-        }
-
         public sealed class TheOpenSyncFailuresCommand : MainViewModelTest
         {
             [Fact, LogIfTooSlow]
@@ -560,7 +511,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory
                     .StopTimeEntry(Arg.Any<DateTimeOffset>(), Arg.Any<TimeEntryStopOrigin>())
                     .Execute()
-                    .Returns(Observable.Throw<IThreadSafeTimeEntry>(new Exception()));
+                    .Returns(ThreadingTask.FromException<IThreadSafeTimeEntry>(new Exception()));
 
                 var errors = TestScheduler.CreateObserver<Exception>();
                 ViewModel.StopTimeEntry.Errors.Subscribe(errors);
@@ -895,6 +846,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     else
                         AnalyticsService.ApplicationInstallLocation.DidNotReceive().Track(location);
                 }
+            }
+
+            [Fact]
+            public async void StartsTheWidgetsService()
+            {
+                await ViewModel.Initialize();
+                WidgetsService.Received().Start();
             }
         }
     }

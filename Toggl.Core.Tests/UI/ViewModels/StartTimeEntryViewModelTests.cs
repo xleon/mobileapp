@@ -28,6 +28,7 @@ using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Xunit;
 using static Toggl.Core.Helper.Constants;
 using CollectionSections = System.Collections.Generic.IEnumerable<Toggl.Core.UI.Collections.SectionModel<string, Toggl.Core.Autocomplete.Suggestions.AutocompleteSuggestion>>;
@@ -1254,7 +1255,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ExecutesTheCreateTimeEntryInteractor()
             {
-                var mockedInteractor = Substitute.For<IInteractor<IObservable<IThreadSafeTimeEntry>>>();
+                var mockedInteractor = Substitute.For<IInteractor<Task<IThreadSafeTimeEntry>>>();
                 InteractorFactory.CreateTimeEntry(Arg.Any<ITimeEntryPrototype>(), TimeEntryStartOrigin.Timer).Returns(mockedInteractor);
 
                 ViewModel.Done.Execute(Unit.Default);

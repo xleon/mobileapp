@@ -1,7 +1,6 @@
 ﻿using Android.App;
 using Android.App.Job;
 using Android.Content;
-using Android.Graphics;
 using Android.Support.V4.App;
 using Android.Util;
 using Android.Views;
@@ -14,17 +13,12 @@ using Toggl.Droid.Helper;
 using Toggl.Droid.Services;
 using Toggl.Droid.Views;
 using Toggl.Shared.Extensions;
+using static Toggl.Droid.Helper.NotificationsConstants;
 
 namespace Toggl.Droid.Extensions
 {
     public static class ActivityExtensions
     {
-        private static readonly Color lollipopFallbackStatusBarColor = Color.ParseColor("#2C2C2C");
-        private static readonly long[] noNotificationVibrationPattern = { 0L, 0L };
-        private static readonly string defaultChannelId = "Toggl";
-        private static readonly string defaultChannelName = "Toggl";
-        private static readonly string defaultChannelDescription = "Toggl notifications";
-
         public static (int widthPixels, int heightPixels, bool isLargeScreen) GetMetrics(this Activity activity, Context context = null)
         {
             const int largeScreenThreshold = 360;
@@ -41,7 +35,7 @@ namespace Toggl.Droid.Extensions
 
         public static JobInfo CreateBackgroundSyncJobInfo(this Context context, long periodicity)
         {
-            var javaClass = Java.Lang.Class.FromType(typeof(BackgroundSyncJobSchedulerService));
+            var javaClass = JavaUtils.ToClass<BackgroundSyncJobSchedulerService>();
             var component = new ComponentName(context, javaClass);
 
             var builder = new JobInfo.Builder(JobServicesConstants.BackgroundSyncJobServiceJobId, component)
@@ -76,15 +70,15 @@ namespace Toggl.Droid.Extensions
         {
             if (OreoApis.AreAvailable)
             {
-                var channel = new NotificationChannel(defaultChannelId, defaultChannelName, NotificationImportance.Low);
-                channel.Description = defaultChannelDescription;
+                var channel = new NotificationChannel(DefaultChannelId, DefaultChannelName, NotificationImportance.Low);
+                channel.Description = DefaultChannelDescription;
                 channel.EnableVibration(false);
-                channel.SetVibrationPattern(noNotificationVibrationPattern);
+                channel.SetVibrationPattern(NoNotificationVibrationPattern);
                 notificationManager.CreateNotificationChannel(channel);
             }
 
-            var notificationBuilder = new NotificationCompat.Builder(context, defaultChannelId);
-            notificationBuilder.SetVibrate(noNotificationVibrationPattern);
+            var notificationBuilder = new NotificationCompat.Builder(context, DefaultChannelId);
+            notificationBuilder.SetVibrate(NoNotificationVibrationPattern);
 
             return notificationBuilder;
         }
@@ -107,7 +101,8 @@ namespace Toggl.Droid.Extensions
                         return;
                     }
 
-                    var builder = new AlertDialog.Builder(activity, Resource.Style.TogglDialog).SetMessage(message)
+                    var builder = new AlertDialog.Builder(activity)
+                        .SetMessage(message)
                         .SetPositiveButton(confirmButtonText, (s, e) => observer.CompleteWith(true));
 
                     if (!string.IsNullOrWhiteSpace(title))
@@ -121,9 +116,9 @@ namespace Toggl.Droid.Extensions
                     }
 
                     var dialog = builder.Create();
-                    dialog.CancelEvent += (s, e) => observer.CompleteWith(false);
-
                     dialog.Show();
+
+                    dialog.CancelEvent += (s, e) => observer.CompleteWith(false);
                 }
 
                 activity.RunOnUiThread(showDialogIfActivityIsThere);
@@ -159,6 +154,20 @@ namespace Toggl.Droid.Extensions
             }
 
             throw new ArgumentOutOfRangeException(nameof(type));
+        }
+
+        public static void SetQFlags(this Activity activity)
+        {
+            if (QApis.AreAvailable)
+            {
+                var uiOptions = SystemUiFlags.LayoutHideNavigation | SystemUiFlags.LayoutStable;
+                if (activity.Resources.GetBoolean(Resource.Boolean.is_light_theme))
+                {
+                    uiOptions |= SystemUiFlags.LightNavigationBar;
+                    uiOptions |= SystemUiFlags.LightStatusBar;
+                }
+                activity.Window.DecorView.SystemUiVisibility = (StatusBarVisibility) (int) uiOptions;
+            }
         }
     }
 }

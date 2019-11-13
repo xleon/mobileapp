@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Reports;
 using Toggl.Core.UI.Extensions;
@@ -13,6 +15,7 @@ using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.Views;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.iOS.Helper;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Views.Reports;
 using Toggl.iOS.ViewSources;
@@ -31,14 +34,18 @@ namespace Toggl.iOS.ViewControllers
 
         private const double maxWidth = 834;
 
+        private CGRect activityIndicatorCenteredFrame = new CGRect(80, 0.5, 40, 40);
+        private CGRect activityIndicatorLeftAlignedFrame = new CGRect(-35, -5, 40, 40);
 
         private UIButton titleButton;
+        private UIActivityIndicatorView activityIndicator;
         private bool calendarIsVisible;
         private bool alreadyLoadedCalendar;
         private ReportsTableViewSource source;
         private IDisposable calendarSizeDisposable;
         private ReportsCalendarViewController calendarViewController;
         private nfloat calendarHeight => CalendarContainer.Bounds.Height;
+        private ISubject<Unit> viewDidAppearSubject = new Subject<Unit>();
         private ReportsOverviewCardView overview = ReportsOverviewCardView.CreateFromNib();
         private ReportsBarChartCardView barChart = ReportsBarChartCardView.CreateFromNib();
 
@@ -63,6 +70,9 @@ namespace Toggl.iOS.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            var separator = NavigationController.NavigationBar.InsertSeparator();
+            separator.BackgroundColor = ColorAssets.OpaqueSeparator;
 
             calendarViewController = ViewControllerLocator.GetViewController(ViewModel.CalendarViewModel) as ReportsCalendarViewController;
             prepareViews();
@@ -108,18 +118,35 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.CurrentDateRange
-                .Subscribe(titleButton.Rx().Title())
+                .Subscribe(titleButton.Rx().TitleAdaptive())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.CurrentDateRange
+                .Select(range => range == null)
+                .DistinctUntilChanged()
+                .Subscribe(shouldCenter =>
+                {
+                    if (shouldCenter)
+                        activityIndicator.Frame = activityIndicatorCenteredFrame;
+                    else
+                        activityIndicator.Frame = activityIndicatorLeftAlignedFrame;
+                })
                 .DisposedBy(DisposeBag);
 
             //Visibility
             ViewModel.WorkspacesObservable
                 .Select(areThereEnoughWorkspaces)
+                .Do(updateWorkspaceButtonInsets)
                 .Subscribe(WorkspaceButton.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
             ViewModel.WorkspaceNameObservable
                 .Select(isWorkspaceNameTooLong)
                 .Subscribe(WorkspaceFadeView.Rx().FadeRight())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.IsLoadingObservable
+                .Subscribe(activityIndicator.Rx().IsAnimating())
                 .DisposedBy(DisposeBag);
 
             //Commands
@@ -134,6 +161,29 @@ namespace Toggl.iOS.ViewControllers
             WorkspaceButton.Rx()
                 .BindAction(ViewModel.SelectWorkspace)
                 .DisposedBy(DisposeBag);
+
+            //Handoff
+            viewDidAppearSubject.AsObservable()
+                .CombineLatest(
+                    ViewModel.WorkspaceId,
+                    ViewModel.StartDate,
+                    ViewModel.EndDate,
+                    (_, workspaceId, start, end) => createUserActivity(workspaceId, start, end))
+                .Subscribe(updateUserActivity);
+
+            NSUserActivity createUserActivity(long workspaceId, DateTimeOffset start, DateTimeOffset end)
+            {
+                var userActivity = new NSUserActivity(Handoff.Action.Reports);
+                userActivity.EligibleForHandoff = true;
+                userActivity.WebPageUrl = Handoff.Url.Reports(workspaceId, start, end);
+                return userActivity;
+            }
+
+            void updateUserActivity(NSUserActivity userActivity)
+            {
+                UserActivity = userActivity;
+                UserActivity.BecomeCurrent();
+            }
 
             void toggleCalendar()
             {
@@ -163,7 +213,7 @@ namespace Toggl.iOS.ViewControllers
                 return;
 
             // Calendar
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact)
             {
                 AddChildViewController(calendarViewController);
                 CalendarContainer.AddSubview(calendarViewController.View);
@@ -181,10 +231,15 @@ namespace Toggl.iOS.ViewControllers
             }
 
             alreadyLoadedCalendar = true;
+
+            viewDidAppearSubject.OnNext(Unit.Default);
         }
 
         public void ScrollToTop()
         {
+            if (ReportsTableView == null)
+                return;
+
             var point = new CGPoint(0, -ReportsTableView.ContentInset.Top);
             ReportsTableView.SetContentOffset(point, true);
         }
@@ -282,7 +337,12 @@ namespace Toggl.iOS.ViewControllers
             // Title view
             NavigationItem.TitleView = titleButton = new UIButton(new CGRect(0, 0, 200, 40));
             titleButton.Font = UIFont.SystemFontOfSize(14, UIFontWeight.Medium);
-            titleButton.SetTitleColor(UIColor.Black, UIControlState.Normal);
+            titleButton.SetTitleColor(ColorAssets.Text, UIControlState.Normal);
+            activityIndicator = new UIActivityIndicatorView();
+            activityIndicator.Color = ColorAssets.Text;
+            activityIndicator.StartAnimating();
+            activityIndicator.Frame = activityIndicatorCenteredFrame;
+            titleButton.AddSubview(activityIndicator);
 
             // Calendar configuration
             TopCalendarConstraint.Constant = calendarHeight;
@@ -293,11 +353,20 @@ namespace Toggl.iOS.ViewControllers
             WorkspaceButton.Layer.ShadowRadius = 10;
             WorkspaceButton.Layer.ShadowOffset = new CGSize(0, 2);
             WorkspaceButton.Layer.ShadowOpacity = 0.10f;
+            WorkspaceButton.Layer.BorderColor = ColorAssets.Separator.CGColor;
+            WorkspaceButton.Layer.BorderWidth = 0.35f;
+
+            View.BackgroundColor = ColorAssets.TableBackground;
         }
 
         private void onCalendarSizeChanged(NSObservedChange change)
         {
             TopCalendarConstraint.Constant = calendarIsVisible ? 0 : calendarHeight;
+        }
+
+        private void updateWorkspaceButtonInsets(bool workspacesButtonIsShown)
+        {
+            source.UpdateContentInset(workspacesButtonIsShown);
         }
     }
 }

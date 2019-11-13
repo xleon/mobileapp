@@ -64,7 +64,7 @@ namespace Toggl.iOS.ViewControllers
                 .Select(month =>
                 {
                     var dateTime = month.ToDateTime();
-                    var pattern = CultureInfo.CurrentCulture.DateTimeFormat.YearMonthPattern;
+                    var pattern = DateFormatCultureInfo.CurrentCulture.DateTimeFormat.YearMonthPattern;
 
                     var yearMonthString = dateTime.ToString(pattern);
 
@@ -75,9 +75,9 @@ namespace Toggl.iOS.ViewControllers
 
                     var attributedString = new NSMutableAttributedString(
                         yearMonthString,
-                        new UIStringAttributes { ForegroundColor = Colors.Black.ToNativeColor() });
+                        new UIStringAttributes { ForegroundColor = ColorAssets.Text });
                     attributedString.AddAttributes(
-                        new UIStringAttributes { ForegroundColor = Colors.ReportsCalendar.YearColor.ToNativeColor() },
+                        new UIStringAttributes { ForegroundColor = ColorAssets.Text2 },
                         range);
 
                     return attributedString;
@@ -142,6 +142,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.CurrentPageObservable
+                .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler)
                 .Subscribe(CalendarCollectionView.Rx().CurrentPageObserver())
                 .DisposedBy(DisposeBag);
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Networking.ApiClients.Interfaces;
 using Toggl.Networking.Models.Reports;
 using Toggl.Networking.Network;
@@ -31,7 +32,7 @@ namespace Toggl.Networking.ApiClients
             this.credentials = credentials;
         }
 
-        public IObservable<ITimeEntriesTotals> GetTotals(
+        public async Task<ITimeEntriesTotals> GetTotals(
             long userId, long workspaceId, DateTimeOffset startDate, DateTimeOffset endDate)
         {
             if (endDate.Date - startDate.Date > maximumRange)
@@ -39,28 +40,22 @@ namespace Toggl.Networking.ApiClients
 
             var parameters = new TimeEntriesTotalsParameters(userId, startDate, endDate);
             var json = serializer.Serialize(parameters, SerializationReason.Post);
+            var endPoint = endPoints.Totals(workspaceId);
+            var totals = await
+                SendRequest<TotalsResponse>(endPoint, credentials.Header, json)
+                    .ConfigureAwait(false);
 
-            return Observable.Create<ITimeEntriesTotals>(async observer =>
+            return new TimeEntriesTotals
             {
-                var response = await SendRequest<TotalsResponse>(endPoints.Totals(workspaceId), credentials.Header, json);
-
-                var totals = new TimeEntriesTotals
+                StartDate = startDate,
+                EndDate = endDate,
+                Resolution = totals.Resolution,
+                Groups = totals.Graph.Select(group => new TimeEntriesTotalsGroup
                 {
-                    StartDate = startDate,
-                    EndDate = endDate,
-                    Resolution = response.Resolution,
-                    Groups = response.Graph.Select(group => new TimeEntriesTotalsGroup
-                    {
-                        Total = TimeSpan.FromSeconds(group.Seconds),
-                        Billable = TimeSpan.FromSeconds(group.BillableSeconds)
-                    }).ToArray<ITimeEntriesTotalsGroup>()
-                };
-
-                observer.OnNext(totals);
-                observer.OnCompleted();
-
-                return () => { };
-            });
+                    Total = TimeSpan.FromSeconds(group.Seconds),
+                    Billable = TimeSpan.FromSeconds(group.BillableSeconds)
+                }).ToArray<ITimeEntriesTotalsGroup>()
+            };
         }
 
         [Preserve(AllMembers = true)]

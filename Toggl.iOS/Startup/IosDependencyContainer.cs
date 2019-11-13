@@ -46,7 +46,8 @@ namespace Toggl.iOS
                 new RootPresenter(window, appDelegate),
                 new NavigationPresenter(window, appDelegate),
                 new ModalDialogPresenter(window, appDelegate),
-                new ModalCardPresenter(window, appDelegate)
+                new ModalCardPresenter(window, appDelegate),
+                new PageSheetPresenter(window, appDelegate)
             );
 
             Instance = new IosDependencyContainer(viewPresenter, environment, Platform.Daneel, version);
@@ -105,7 +106,7 @@ namespace Toggl.iOS
 
         protected override IApplicationShortcutCreator CreateShortcutCreator()
             => new ApplicationShortcutCreator();
-        
+
         protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
             => new PushNotificationsTokenServiceIos();
 
@@ -126,5 +127,8 @@ namespace Toggl.iOS
 
         protected override IAccessibilityService CreateAccessibilityService()
             => new AccessibilityServiceIos();
+
+        protected override IWidgetsService CreateWidgetsService()
+            => new WidgetsServiceIos(DataSource);
     }
 }

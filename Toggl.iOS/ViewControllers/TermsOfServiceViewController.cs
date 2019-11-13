@@ -23,7 +23,8 @@ namespace Toggl.iOS.ViewControllers
 
         private readonly UIStringAttributes normalTextAttributes = new UIStringAttributes
         {
-            Font = UIFont.SystemFontOfSize(fontSize)
+            Font = UIFont.SystemFontOfSize(fontSize),
+            ForegroundColor = ColorAssets.Text
         };
 
         private readonly UIStringAttributes highlitedTextAttributes = new UIStringAttributes
@@ -44,7 +45,7 @@ namespace Toggl.iOS.ViewControllers
             TitleLabel.Text = Resources.ReviewTheTerms;
             AcceptButton.SetTitle(Resources.IAgree, UIControlState.Normal);
 
-            var height = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad
+            var height = TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
                 ? 260
                 : View.Frame.Height;
 
@@ -57,7 +58,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             CloseButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
         }
 

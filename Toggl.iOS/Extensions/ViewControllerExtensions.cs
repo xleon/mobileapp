@@ -1,12 +1,13 @@
 using CoreGraphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Toggl.Core.UI.Views;
+using Toggl.iOS.ViewControllers.Common;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Extensions
@@ -15,7 +16,12 @@ namespace Toggl.iOS.Extensions
     {
         internal static void Dismiss(this UIViewController viewController)
         {
-            if (viewController.NavigationController == null && viewController.PresentingViewController != null)
+            if (viewController.NavigationController != null &&
+                !viewController.NavigationController.ViewControllers[0].Equals(viewController))
+            {
+                viewController.NavigationController.PopViewController(true);
+            }
+            else if (viewController.PresentingViewController != null)
             {
                 viewController.DismissViewController(true, null);
             }
@@ -35,7 +41,7 @@ namespace Toggl.iOS.Extensions
 
                 var dismissAction = UIAlertAction.Create(dismissButtonText, UIAlertActionStyle.Cancel, _ =>
                 {
-                    observer.OnNext(true);
+                    observer.OnNext(false);
                     observer.OnCompleted();
                 });
 
@@ -94,7 +100,7 @@ namespace Toggl.iOS.Extensions
                     observer.OnCompleted();
                 });
 
-                if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+                if (viewController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
                 {
                     var extraCancelAction = UIAlertAction.Create(cancelText, UIAlertActionStyle.Default, _ =>
                     {
@@ -115,7 +121,24 @@ namespace Toggl.iOS.Extensions
             });
         }
 
-        internal static IObservable<T> ShowSelectDialog<T>(this UIViewController viewController, string title, IEnumerable<SelectOption<T>> options, int initialSelectionIndex)
+        internal static IObservable<T> ShowSelectDialog<T>(this UIViewController viewController, string title,
+            IEnumerable<SelectOption<T>> options, int initialSelectionIndex)
+        {
+            if (viewController.NavigationController == null)
+            {
+                return viewController.ShowActionSheet(title, options);
+            }
+
+            return Observable.Create<T>(observer =>
+            {
+                var selector =  new SelectorViewController<T>(title, options, initialSelectionIndex, observer.CompleteWith);
+                viewController.NavigationController.PushViewController(selector, true);
+                return Disposable.Empty;
+            });
+        }
+
+        internal static IObservable<T> ShowActionSheet<T>(this UIViewController viewController, string title,
+                IEnumerable<SelectOption<T>> options)
         {
             return Observable.Create<T>(observer =>
             {
@@ -134,7 +157,6 @@ namespace Toggl.iOS.Extensions
 
                 var cancelAction = UIAlertAction.Create(Resources.Cancel, UIAlertActionStyle.Cancel, _ =>
                 {
-                    observer.OnNext(default);
                     observer.OnCompleted();
                 });
 
@@ -170,7 +192,7 @@ namespace Toggl.iOS.Extensions
         private static void applyPopoverDetailsIfNeeded(UIViewController presentingController, UIAlertController alert)
         {
             var popoverController = alert.PopoverPresentationController;
-            if (popoverController != null && UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            if (popoverController != null && presentingController.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
                 var view = presentingController.View;
                 popoverController.SourceView = view;

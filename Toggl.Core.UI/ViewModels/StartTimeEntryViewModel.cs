@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Autocomplete;
@@ -50,8 +51,8 @@ namespace Toggl.Core.UI.ViewModels
         private bool isDirty => !string.IsNullOrEmpty(textFieldInfo.Value.Description)
                                 || textFieldInfo.Value.Spans.Any(s => s is ProjectSpan || s is TagSpan)
                                 || isBillable.Value
-                                || startTime != parameter.StartTime
-                                || duration != parameter.Duration;
+                                || startTime != parameter?.StartTime
+                                || duration != parameter?.Duration;
 
         private bool hasAnyTags;
         private bool hasAnyProjects;
@@ -83,12 +84,12 @@ namespace Toggl.Core.UI.ViewModels
         public IOnboardingStorage OnboardingStorage { get; }
 
         public OutputAction<IThreadSafeTimeEntry> Done { get; }
-        public UIAction DurationTapped { get; }
-        public UIAction ToggleBillable { get; }
-        public UIAction SetStartDate { get; }
-        public UIAction ChangeTime { get; }
-        public UIAction ToggleTagSuggestions { get; }
-        public UIAction ToggleProjectSuggestions { get; }
+        public ViewAction DurationTapped { get; }
+        public ViewAction ToggleBillable { get; }
+        public ViewAction SetStartDate { get; }
+        public ViewAction ChangeTime { get; }
+        public ViewAction ToggleTagSuggestions { get; }
+        public ViewAction ToggleProjectSuggestions { get; }
         public InputAction<AutocompleteSuggestion> SelectSuggestion { get; }
         public InputAction<TimeSpan> SetRunningTime { get; }
         public InputAction<ProjectSuggestion> ToggleTasks { get; }
@@ -150,16 +151,17 @@ namespace Toggl.Core.UI.ViewModels
 
             var queryByType = queryByTypeSubject
                 .AsObservable()
-                .SelectMany(type => interactorFactory.GetAutocompleteSuggestions(new QueryInfo("", type)).Execute());
+                .Select(type => new QueryInfo("", type));
 
             var queryByText = textFieldInfo
                 .SelectMany(setBillableValues)
                 .Select(QueryInfo.ParseFieldInfo)
                 .Do(onParsedQuery)
-                .ObserveOn(schedulerProvider.BackgroundScheduler)
-                .SelectMany(query => interactorFactory.GetAutocompleteSuggestions(query).Execute());
+                .ObserveOn(schedulerProvider.BackgroundScheduler);
 
             Suggestions = Observable.Merge(queryByText, queryByType)
+                .SelectMany(query => interactorFactory.GetAutocompleteSuggestions(query).Execute())
+                .Select(items => items.ToList()) // This is line is needed for now to read objects from realm .ObserveOn(schedulerProvider.BackgroundScheduler)
                 .Select(filter)
                 .Select(group)
                 .CombineLatest(expandedProjects, (groups, _) => groups)
@@ -245,16 +247,19 @@ namespace Toggl.Core.UI.ViewModels
             disposeBag?.Dispose();
         }
 
-        public override async void CloseWithDefaultResult()
+        public override async Task<bool> ConfirmCloseRequest()
         {
             if (isDirty)
             {
-                var shouldDiscard = await View.ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
-                if (!shouldDiscard)
-                    return;
+                var view = View;
+                if (view == null)
+                    return true;
+
+                return await view
+                    .ConfirmDestructiveAction(ActionType.DiscardNewTimeEntry);
             }
 
-            Close();
+            return true;
         }
 
         private void setTextSpans(IImmutableList<ISpan> spans)
@@ -487,9 +492,11 @@ namespace Toggl.Core.UI.ViewModels
                 origin = paramOrigin;
             }
 
+            Close();
+
             return interactorFactory.CreateTimeEntry(timeEntry, origin)
                 .Execute()
-                .Do(_ => Close());
+                .ToObservable();
         }
 
         private void onParsedQuery(QueryInfo parsedQuery)
@@ -566,7 +573,11 @@ namespace Toggl.Core.UI.ViewModels
                         items = items.Prepend(ProjectSuggestion.NoProject(projectSuggestion.WorkspaceId,
                             projectSuggestion.WorkspaceName));
                     }
-
+                    else if (group.First() is TimeEntrySuggestion timeEntrySuggestion)
+                    {
+                        header = timeEntrySuggestion.WorkspaceName;
+                    }
+                    
                     return new SectionModel<string, AutocompleteSuggestion>(header, items);
                 }
             );

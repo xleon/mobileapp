@@ -17,11 +17,11 @@ namespace Toggl.Networking.Tests.Integration
     {
         public sealed class TheGetAllMethod : AuthenticatedGetAllEndpointBaseTests<IProject>
         {
-            protected override IObservable<List<IProject>> CallEndpointWith(ITogglApi togglApi)
+            protected override Task<List<IProject>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Projects.GetAll();
 
             [Fact, LogTestInfo]
-            public async System.Threading.Tasks.Task ReturnsAllProjects()
+            public async ThreadingTask ReturnsAllProjects()
             {
                 var (togglClient, user) = await SetupTestUser();
 
@@ -31,7 +31,7 @@ namespace Toggl.Networking.Tests.Integration
                 var projectB = await createNewProject(togglClient, user.DefaultWorkspaceId.Value);
                 var projectBPosted = await togglClient.Projects.Create(projectB);
 
-                var projects = await CallEndpointWith(togglClient);
+                var projects = await togglClient.Projects.GetAll();
 
                 projects.Should().HaveCount(2);
 
@@ -40,7 +40,7 @@ namespace Toggl.Networking.Tests.Integration
             }
 
             [Fact, LogTestInfo]
-            public async System.Threading.Tasks.Task ReturnsOnlyActiveProjects()
+            public async ThreadingTask ReturnsOnlyActiveProjects()
             {
                 var (togglClient, user) = await SetupTestUser();
 
@@ -50,7 +50,7 @@ namespace Toggl.Networking.Tests.Integration
                 var inactiveProject = await createNewProject(togglClient, user.DefaultWorkspaceId.Value, isActive: false);
                 var inactiveProjectPosted = await togglClient.Projects.Create(inactiveProject);
 
-                var projects = await CallEndpointWith(togglClient);
+                var projects = await togglClient.Projects.GetAll();
 
                 projects.Should().HaveCount(1);
                 projects.Should().Contain(project => isTheSameAs(project, activeProjectPosted));
@@ -58,11 +58,11 @@ namespace Toggl.Networking.Tests.Integration
             }
 
             [Fact, LogTestInfo]
-            public async System.Threading.Tasks.Task ReturnsEmptyListWhenThereAreNoActiveProjects()
+            public async ThreadingTask ReturnsEmptyListWhenThereAreNoActiveProjects()
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                var noProjects = await CallEndpointWith(togglClient);
+                var noProjects = await togglClient.Projects.GetAll();
 
                 Project project = await createNewProject(togglClient, user.DefaultWorkspaceId.Value, isActive: false);
                 await togglClient.Projects.Create(project);
@@ -70,90 +70,76 @@ namespace Toggl.Networking.Tests.Integration
                 project = await createNewProject(togglClient, user.DefaultWorkspaceId.Value, isActive: false);
                 await togglClient.Projects.Create(project);
 
-                var activeProjects = await CallEndpointWith(togglClient);
+                var activeProjects = await togglClient.Projects.GetAll();
 
                 noProjects.Should().HaveCount(0);
                 activeProjects.Should().HaveCount(0);
             }
+        }
 
-            public sealed class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<IProject>
+        public sealed class TheGetAllSinceMethod : AuthenticatedGetSinceEndpointBaseTests<IProject>
+        {
+            protected override Task<List<IProject>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
+                => togglApi.Projects.GetAllSince(threshold);
+
+            protected override DateTimeOffset AtDateOf(IProject model)
+                => model.At;
+
+            protected override IProject MakeUniqueModel(ITogglApi api, IUser user)
+                => new Project { Active = true, Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId.Value };
+
+            protected override Task<IProject> PostModelToApi(ITogglApi api, IProject model)
+                => api.Projects.Create(model);
+
+            protected override Expression<Func<IProject, bool>> ModelWithSameAttributesAs(IProject model)
+                => p => isTheSameAs(model, p);
+
+
+            [Fact, LogTestInfo]
+            public async ThreadingTask ReturnsProjectsAccordingToTheFetchArchivedFlag()
             {
-                protected override IObservable<List<IProject>> CallEndpointWith(ITogglApi togglApi, DateTimeOffset threshold)
-                    => togglApi.Projects.GetAllSince(threshold);
+                var (togglClient, user) = await SetupTestUser();
 
-                protected override DateTimeOffset AtDateOf(IProject model)
-                    => model.At;
+                var activeProject = await createNewProject(togglClient, user.DefaultWorkspaceId.Value);
+                var activeProjectPosted = await togglClient.Projects.Create(activeProject);
 
-                protected override IProject MakeUniqueModel(ITogglApi api, IUser user)
-                    => new Project { Active = true, Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId.Value };
+                var inactiveProject = await createNewProject(togglClient, user.DefaultWorkspaceId.Value, isActive: false);
+                var inactiveProjectPosted = await togglClient.Projects.Create(inactiveProject);
 
-                protected override IObservable<IProject> PostModelToApi(ITogglApi api, IProject model)
-                    => api.Projects.Create(model);
+                var projects = await togglClient.Projects.GetAllSince(activeProjectPosted.At);
 
-                protected override Expression<Func<IProject, bool>> ModelWithSameAttributesAs(IProject model)
-                    => p => isTheSameAs(model, p);
+                projects.Should()
+                    .Contain(project => isTheSameAs(project, activeProjectPosted));
+
+                projects.Should().HaveCount(2);
+            }
+        }
+
+        public sealed class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IProject>
+        {
+            protected override async Task<IProject> CallEndpointWith(ITogglApi togglApi)
+            {
+                var user = await togglApi.User.Get();
+                var project = await createNewProject(togglApi, user.DefaultWorkspaceId.Value);
+                return await CallEndpointWith(togglApi, project);
             }
 
-            public sealed class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IProject>
+            private Task<IProject> CallEndpointWith(ITogglApi togglApi, IProject project)
+                => togglApi.Projects.Create(project);
+
+            [Fact, LogTestInfo]
+            public async System.Threading.Tasks.Task CreatesNewProject()
             {
-                protected override IObservable<IProject> CallEndpointWith(ITogglApi togglApi)
-                    => Observable.Defer(async () =>
-                    {
-                        var user = await togglApi.User.Get();
-                        var project = await createNewProject(togglApi, user.DefaultWorkspaceId.Value);
-                        return CallEndpointWith(togglApi, project);
-                    });
+                var (togglClient, user) = await SetupTestUser();
 
-                private IObservable<IProject> CallEndpointWith(ITogglApi togglApi, IProject project)
-                    => togglApi.Projects.Create(project);
+                var project = await createNewProject(togglClient, user.DefaultWorkspaceId.Value);
+                var persistedProject = await togglClient.Projects.Create(project);
 
-                [Fact, LogTestInfo]
-                public async System.Threading.Tasks.Task CreatesNewProject()
-                {
-                    var (togglClient, user) = await SetupTestUser();
-
-                    var project = await createNewProject(togglClient, user.DefaultWorkspaceId.Value);
-                    var persistedProject = await CallEndpointWith(togglClient, project);
-
-                    persistedProject.Name.Should().Be(project.Name);
-                    persistedProject.ClientId.Should().Be(project.ClientId);
-                    persistedProject.IsPrivate.Should().Be(project.IsPrivate);
-                    persistedProject.Color.Should().Be(project.Color);
-                }
+                persistedProject.Name.Should().Be(project.Name);
+                persistedProject.ClientId.Should().Be(project.ClientId);
+                persistedProject.IsPrivate.Should().Be(project.IsPrivate);
+                persistedProject.Color.Should().Be(project.Color);
             }
-
-            private static async Task<Project> createNewProject(ITogglApi togglClient, long workspaceID, bool isActive = true, bool createClient = false)
-            {
-                IClient client = null;
-
-                if (createClient)
-                {
-                    client = new Client
-                    {
-                        Name = Guid.NewGuid().ToString(),
-                        WorkspaceId = workspaceID
-                    };
-
-                    client = await togglClient.Clients.Create(client);
-                }
-
-                return new Project
-                {
-                    Name = Guid.NewGuid().ToString(),
-                    WorkspaceId = workspaceID,
-                    At = DateTimeOffset.UtcNow,
-                    Color = "#06aaf5",
-                    Active = isActive,
-                    ClientId = client?.Id
-                };
-            }
-
-            private static bool isTheSameAs(IProject a, IProject b)
-                => a.Id == b.Id
-                && a.Name == b.Name
-                && a.ClientId == b.ClientId
-                && a.IsPrivate == b.IsPrivate
-                && a.Color == b.Color;
         }
 
         public sealed class TheSearchMethod : AuthenticatedEndpointBaseTests<List<IProject>>
@@ -229,9 +215,44 @@ namespace Toggl.Networking.Tests.Integration
                 projects.Should().Contain(p => p.Id == projectA.Id);
             }
 
-            protected override IObservable<List<IProject>> CallEndpointWith(ITogglApi togglApi)
-                => togglApi.User.Get()
-                    .SelectMany(user => togglApi.Projects.Search(user.DefaultWorkspaceId.Value, new[] { -1L }));
+            protected override async Task<List<IProject>> CallEndpointWith(ITogglApi togglApi)
+            {
+                var user = await togglApi.User.Get();
+                return await togglApi.Projects.Search(user.DefaultWorkspaceId.Value, new[] { -1L });
+            }
         }
+
+        private static async Task<Project> createNewProject(ITogglApi togglClient, long workspaceID, bool isActive = true, bool createClient = false)
+        {
+            IClient client = null;
+
+            if (createClient)
+            {
+                client = new Client
+                {
+                    Name = Guid.NewGuid().ToString(),
+                    WorkspaceId = workspaceID
+                };
+
+                client = await togglClient.Clients.Create(client);
+            }
+
+            return new Project
+            {
+                Name = Guid.NewGuid().ToString(),
+                WorkspaceId = workspaceID,
+                At = DateTimeOffset.UtcNow,
+                Color = "#06aaf5",
+                Active = isActive,
+                ClientId = client?.Id
+            };
+        }
+
+        private static bool isTheSameAs(IProject a, IProject b)
+            => a.Id == b.Id
+            && a.Name == b.Name
+            && a.ClientId == b.ClientId
+            && a.IsPrivate == b.IsPrivate
+            && a.Color == b.Color;
     }
 }

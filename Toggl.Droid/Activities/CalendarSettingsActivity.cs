@@ -18,7 +18,7 @@ namespace Toggl.Droid.Activities
     {
         public CalendarSettingsActivity() : base(
             Resource.Layout.CalendarSettingsActivity,
-            Resource.Style.AppTheme_Light,
+            Resource.Style.AppTheme,
             Transitions.SlideInFromRight)
         { }
 
@@ -29,12 +29,16 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeBindings()
         {
-            toggleCalendarsView.Rx().Tap()
-                .Subscribe(ViewModel.TogglCalendarIntegration.Inputs)
+            toggleCalendarsView.Rx()
+                .BindAction(ViewModel.TogglCalendarIntegration)
+                .DisposedBy(DisposeBag);
+
+            toggleCalendarsSwitch.Rx()
+                .BindAction(ViewModel.TogglCalendarIntegration)
                 .DisposedBy(DisposeBag);
 
             ViewModel.CalendarListVisible
-                .Subscribe(toggleCalendarsSwitch.Rx().CheckedObserver())
+                .Subscribe(toggleCalendarsSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
             ViewModel.CalendarListVisible

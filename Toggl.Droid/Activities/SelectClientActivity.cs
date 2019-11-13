@@ -17,7 +17,7 @@ namespace Toggl.Droid.Activities
     {
         public SelectClientActivity() : base(
             Resource.Layout.SelectClientActivity,
-            Resource.Style.AppTheme_Light_WhiteBackground,
+            Resource.Style.AppTheme,
             Transitions.SlideInFromBottom)
         { }
 
@@ -29,10 +29,6 @@ namespace Toggl.Droid.Activities
         {
             ViewModel.Clients
                 .Subscribe(selectClientRecyclerAdapter.Rx().Items())
-                .DisposedBy(DisposeBag);
-
-            backImageView.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
                 .DisposedBy(DisposeBag);
 
             filterEditText.Rx().Text()

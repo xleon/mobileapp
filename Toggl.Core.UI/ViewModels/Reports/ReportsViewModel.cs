@@ -17,6 +17,7 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Reports;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Views;
@@ -73,28 +74,28 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public IObservable<bool> IsLoadingObservable { get; }
 
-        public IObservable<TimeSpan> TotalTimeObservable
-            => totalTimeSubject.AsObservable();
+        public IObservable<TimeSpan> TotalTimeObservable { get; }
 
         public IObservable<bool> TotalTimeIsZeroObservable
             => TotalTimeObservable.Select(time => time.Ticks == 0);
 
-        public IObservable<DurationFormat> DurationFormatObservable { get; private set; }
+        public IObservable<DurationFormat> DurationFormatObservable { get; }
 
-        public IObservable<float?> BillablePercentageObservable => billablePercentageSubject.AsObservable();
+        public IObservable<float?> BillablePercentageObservable { get; }
 
         public ReportsBarChartViewModel BarChartViewModel { get; }
 
         public ReportsCalendarViewModel CalendarViewModel { get; }
 
-        public IObservable<IImmutableList<ChartSegment>> SegmentsObservable { get; private set; }
+        public IObservable<IImmutableList<ChartSegment>> SegmentsObservable { get; }
 
-        public IObservable<IImmutableList<ChartSegment>> GroupedSegmentsObservable { get; private set; }
+        public IObservable<IImmutableList<ChartSegment>> GroupedSegmentsObservable { get; }
 
-        public IObservable<bool> ShowEmptyStateObservable { get; private set; }
+        public IObservable<bool> ShowEmptyStateObservable { get; }
 
         public IObservable<string> CurrentDateRange { get; }
 
+        public IObservable<long> WorkspaceId { get; }
         public IObservable<string> WorkspaceNameObservable { get; }
         public ICollection<SelectOption<IThreadSafeWorkspace>> Workspaces { get; private set; }
         public IObservable<ICollection<SelectOption<IThreadSafeWorkspace>>> WorkspacesObservable { get; }
@@ -102,7 +103,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public IObservable<DateTimeOffset> EndDate { get; }
         public IObservable<bool> WorkspaceHasBillableFeatureEnabled { get; }
 
-        public UIAction SelectWorkspace { get; }
+        public ViewAction SelectWorkspace { get; }
 
         public ReportsViewModel(ITogglDataSource dataSource,
             ITimeService timeService,
@@ -134,11 +135,18 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Where(report => report != null);
             BarChartViewModel = new ReportsBarChartViewModel(schedulerProvider, dataSource.Preferences, totalsObservable, navigationService);
 
-            IsLoadingObservable = isLoading.AsObservable().StartWith(true).AsDriver(schedulerProvider);
+            IsLoadingObservable = isLoading.AsObservable().AsDriver(schedulerProvider);
             StartDate = startDateSubject.AsObservable().AsDriver(schedulerProvider);
             EndDate = endDateSubject.AsObservable().AsDriver(schedulerProvider);
+            TotalTimeObservable = totalTimeSubject.AsObservable().AsDriver(schedulerProvider);
+            BillablePercentageObservable = billablePercentageSubject.AsObservable().AsDriver(schedulerProvider);
 
             SelectWorkspace = rxActionFactory.FromAsync(selectWorkspace);
+
+            WorkspaceId = workspaceSubject
+                .Select(workspace => workspace.Id)
+                .DistinctUntilChanged()
+                .AsDriver(schedulerProvider);
 
             WorkspaceNameObservable = workspaceSubject
                 .Select(workspace => workspace?.Name ?? string.Empty)
@@ -154,7 +162,9 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .AsDriver(schedulerProvider);
 
             CurrentDateRange = currentDateRangeStringSubject
-                .Select(text => !string.IsNullOrEmpty(text) ? $"{text} ▾" : "")
+                .StartWith(Resources.ThisWeek)
+                .Where(text => !string.IsNullOrEmpty(text))
+                .Select(text => $"{text} ▾")
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
@@ -167,9 +177,17 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Select(prefs => prefs.DurationFormat)
                 .AsDriver(schedulerProvider);
 
-            SegmentsObservable = segmentsSubject.CombineLatest(DurationFormatObservable, applyDurationFormat);
-            GroupedSegmentsObservable = SegmentsObservable.CombineLatest(DurationFormatObservable, groupSegments);
-            ShowEmptyStateObservable = SegmentsObservable.CombineLatest(IsLoadingObservable, shouldShowEmptyState);
+            var segmentsObservable = segmentsSubject.CombineLatest(DurationFormatObservable, applyDurationFormat);
+
+            SegmentsObservable = segmentsObservable.AsDriver(schedulerProvider);
+
+            GroupedSegmentsObservable = segmentsObservable
+                .CombineLatest(DurationFormatObservable, groupSegments)
+                .AsDriver(schedulerProvider);
+
+            ShowEmptyStateObservable = segmentsObservable
+                .CombineLatest(IsLoadingObservable, shouldShowEmptyState)
+                .AsDriver(schedulerProvider);
         }
 
         public override async Task Initialize()
@@ -219,6 +237,21 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Select(currentUser => currentUser.BeginningOfWeek)
                 .Subscribe(onBeginningOfWeekChanged)
                 .DisposedBy(disposeBag);
+
+            interactorFactory.ObserveDefaultWorkspaceId()
+                .Execute()
+                .Where(newWorkspaceId => newWorkspaceId != workspaceId)
+                .SelectMany(id => interactorFactory.GetWorkspaceById(id).Execute())
+                .Where(ws => !ws.IsInaccessible)
+                .Subscribe(updateWorkspace)
+                .DisposedBy(disposeBag);
+        }
+
+        private void updateWorkspace(IThreadSafeWorkspace newWorkspace)
+        {
+            if (viewAppearedForTheFirstTime()) return;
+
+            loadReport(newWorkspace, startDate, endDate, source);
         }
 
         public override void ViewAppeared()
@@ -340,8 +373,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
             }
             else
             {
-                var startDateText = startDate.ToString(dateFormat.Short, CultureInfo.CurrentCulture);
-                var endDateText = endDate.ToString(dateFormat.Short, CultureInfo.CurrentCulture);
+                var startDateText = startDate.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
+                var endDateText = endDate.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
                 var dateRangeText = $"{startDateText} - {endDateText}";
                 currentDateRangeStringSubject.OnNext(dateRangeText);
             }

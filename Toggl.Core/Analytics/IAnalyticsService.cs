@@ -113,13 +113,19 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<string, string> EntitySyncStatus { get; }
 
-        IAnalyticsEvent NoDefaultWorkspace { get; }
+        IAnalyticsEvent<int> NoDefaultWorkspace { get; }
+
+        IAnalyticsEvent NoWorkspaces { get; }
 
         IAnalyticsEvent<string, string> HandledException { get; }
 
         IAnalyticsEvent TwoRunningTimeEntriesInconsistencyFixed { get; }
 
         IAnalyticsEvent CalendarOnboardingStarted { get; }
+
+        IAnalyticsEvent<int> NumberOfLinkedCalendarsChanged { get; }
+
+        IAnalyticsEvent<int> NumberOfLinkedCalendarsNewUser { get; }
 
         IAnalyticsEvent EditViewOpenedFromCalendar { get; }
 
@@ -190,6 +196,26 @@ namespace Toggl.Core.Analytics
         IAnalyticsEvent<bool> AccessibilityEnabled { get; }
 
         IAnalyticsEvent<bool> WatchPaired { get; }
+
+        IAnalyticsEvent<bool> TimerWidgetInstallStateChange { get; }
+
+        IAnalyticsEvent<bool> SuggestionsWidgetInstallStateChange { get; }
+
+        IAnalyticsEvent<int> TimerWidgetSizeChanged { get; }
+
+        IAnalyticsEvent<CalendarContextualMenuActionType> CalendarEventContextualMenu { get; }
+
+        IAnalyticsEvent<CalendarContextualMenuActionType> CalendarNewTimeEntryContextualMenu { get; }
+
+        IAnalyticsEvent<CalendarContextualMenuActionType> CalendarExistingTimeEntryContextualMenu { get; }
+
+        IAnalyticsEvent<CalendarContextualMenuActionType> CalendarRunningTimeEntryContextualMenu { get; }
+
+        IAnalyticsEvent<CalendarTimeEntryCreatedType, int, string> CalendarTimeEntryCreated { get; }
+
+        IAnalyticsEvent<int, string> CalendarWeeklyDatePickerSelectionChanged { get; }
+
+        IAnalyticsEvent<CalendarSwipeDirection, int, string> CalendarSingleSwipe { get; }
 
         void SetAppCenterUserId(long id);
         void ResetAppCenterUserId();

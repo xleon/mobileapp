@@ -1,6 +1,9 @@
 #tool "nuget:?package=xunit.runner.console&version=2.2.0"
 #tool "nuget:?package=NUnit.Runners&version=2.6.3"
 
+using System.Text.RegularExpressions;
+using System;
+
 public class TemporaryFileTransformation
 {
     public string Path { get; set; }
@@ -8,8 +11,18 @@ public class TemporaryFileTransformation
     public string Temporary { get; set; }
 }
 
+private HashSet<string> stagingTargets = new HashSet<string>
+{
+    "Build.Release.iOS.AdHoc",
+    "Build.Release.Android.AdHoc"
+};
+
 var target = Argument("target", "Default");
+var isStaging = stagingTargets.Contains(target);
 var buildAll = Argument("buildall", Bitrise.IsRunningOnBitrise);
+var rnd = new Random();
+var formattedTimestamp = GetFormattedTimestamp();
+readonly var MAX_REVISION_NUMBER = 15;
 
 private void FormatAndroidAxml()
 {
@@ -34,22 +47,6 @@ private Action Test(string[] projectPaths)
         foreach (var projectPath in projectPaths)
         {
             DotNetCoreTest(projectPath, settings);
-        }
-    };
-}
-
-private Action UITest(string[] dllPaths)
-{
-    return () =>
-    {
-        foreach(var dllPath in dllPaths)
-        {
-            var args = $"tools/nunit.runners.2.6.3/NUnit.Runners/tools/nunit-console.exe {dllPath}";
-
-            var result = StartProcess("mono", new ProcessSettings { Arguments = args });
-            if (result == 0) continue;
-
-            throw new Exception($"Failed while running UI tests at {dllPath}");
         }
     };
 }
@@ -109,6 +106,63 @@ private string GetCommitCount()
     return redirectedOutput.Last();
 }
 
+private string GetFormattedTimestamp()
+{
+    var now = DateTime.UtcNow;
+    // we append a random value greater than 14 to the version number to not clash with the versions generated from tags
+    // the last component in the tag generated version is the revision number, so this approach gives us at least 14 revisions
+    var randomComponent = MAX_REVISION_NUMBER + rnd.Next(100 - MAX_REVISION_NUMBER);
+    
+    return now.ToString("yyMMdd") + randomComponent.ToString();
+} 
+
+private string GetVersionNumberFromTagOrTimestamp()
+{
+    var platform = "";
+    if (target == "Build.Release.iOS.AppStore") 
+    {
+        platform = "ios";
+    } 
+    else if (target == "Build.Release.Android.PlayStore") 
+    {
+        platform = "android";
+    } 
+    else 
+    {
+        throw new InvalidOperationException($"Unable to get version number from this type of build target: {target}");
+    }
+    
+    StartProcess("git", new ProcessSettings
+    {
+        Arguments = "tag --list '" + platform + "-*'",
+        RedirectStandardOutput = true
+    }, out var redirectedOutput);
+
+    
+    var tagName = redirectedOutput.DefaultIfEmpty(formattedTimestamp).Last();
+    if (tagName == formattedTimestamp)
+    {
+        return tagName;
+    }
+         
+    var p = Regex.Match(tagName, @"(?<platform>(android|ios))-(?<major>\d{1,2})\.(?<minor>\d{1,2})(\.(?<build>\d{1,2}))?(-(?<rev>\d{1,2}))?");
+    if (!p.Success) 
+    {
+        throw new InvalidOperationException($"Unsupported release tag format: {tagName}");
+    } 
+    var major = Int32.Parse(p.Groups["major"].Value) * 1000000;
+    var minor = Int32.Parse(p.Groups["minor"].Value) *   10000;
+    var build = string.IsNullOrEmpty(p.Groups["build"].Value) ? 0 : Int32.Parse(p.Groups["build"].Value) * 100;
+    var rev = string.IsNullOrEmpty(p.Groups["rev"].Value) ? 0 : Int32.Parse(p.Groups["rev"].Value);
+    
+    if (rev >= MAX_REVISION_NUMBER)
+    {
+        Console.WriteLine($"[WARNING]: revision {rev} might result in a build version clashing with a previously used one.");
+    }
+
+    return (major + minor + build + rev).ToString();
+}
+
 private TemporaryFileTransformation GetAndroidProjectConfigurationTransformation()
 {
     const string path = "Toggl.Droid/Toggl.Droid.csproj";
@@ -129,18 +183,24 @@ private TemporaryFileTransformation GetAndroidProjectConfigurationTransformation
     };
 }
 
+private string GetStagingAwareEnvironmentVariable(string varName)
+{
+    return isStaging ? EnvironmentVariable(varName + "_STAGING") : EnvironmentVariable(varName);
+}
+
 private TemporaryFileTransformation GetIosAnalyticsServicesConfigurationTransformation()
 {
     const string path = "Toggl.iOS/GoogleService-Info.plist";
     var adUnitForBannerTest = EnvironmentVariable("TOGGL_AD_UNIT_ID_FOR_BANNER_TEST");
     var adUnitIdForInterstitialTest = EnvironmentVariable("TOGGL_AD_UNIT_ID_FOR_INTERSTITIAL_TEST");
-    var clientId = EnvironmentVariable("TOGGL_CLIENT_ID");
-    var reversedClientId = EnvironmentVariable("TOGGL_REVERSED_CLIENT_ID");
-    var apiKey = EnvironmentVariable("TOGGL_API_KEY");
-    var gcmSenderId = EnvironmentVariable("TOGGL_GCM_SENDER_ID");
-    var projectId = EnvironmentVariable("TOGGL_PROJECT_ID");
-    var storageBucket = EnvironmentVariable("TOGGL_STORAGE_BUCKET");
-    var googleAppId = EnvironmentVariable("TOGGL_GOOGLE_APP_ID");
+    
+    var clientId = GetStagingAwareEnvironmentVariable("TOGGL_CLIENT_ID");
+    var reversedClientId = GetStagingAwareEnvironmentVariable("TOGGL_REVERSED_CLIENT_ID");
+    var apiKey = GetStagingAwareEnvironmentVariable("TOGGL_API_KEY");
+    var gcmSenderId = GetStagingAwareEnvironmentVariable("TOGGL_GCM_SENDER_ID");
+    var projectId = GetStagingAwareEnvironmentVariable("TOGGL_PROJECT_ID");
+    var storageBucket = GetStagingAwareEnvironmentVariable("TOGGL_STORAGE_BUCKET");
+    var googleAppId = GetStagingAwareEnvironmentVariable("TOGGL_GOOGLE_APP_ID");
 
     var filePath = GetFiles(path).Single();
     var file = TransformTextFile(filePath).ToString();
@@ -191,14 +251,17 @@ private TemporaryFileTransformation GetIosAppDelegateTransformation()
 private TemporaryFileTransformation GetAndroidGoogleServicesTransformation()
 {
     const string path = "Toggl.Droid/google-services.json";
-    var gcmSenderId = EnvironmentVariable("TOGGL_GCM_SENDER_ID");
-    var databaseUrl = EnvironmentVariable("TOGGL_DATABASE_URL");
-    var projectId = EnvironmentVariable("TOGGL_PROJECT_ID");
-    var storageBucket = EnvironmentVariable("TOGGL_STORAGE_BUCKET");
+    var gcmSenderId = GetStagingAwareEnvironmentVariable("TOGGL_GCM_SENDER_ID");
+    var databaseUrl = GetStagingAwareEnvironmentVariable("TOGGL_DATABASE_URL");
+    var projectId = GetStagingAwareEnvironmentVariable("TOGGL_PROJECT_ID");
+    var storageBucket = GetStagingAwareEnvironmentVariable("TOGGL_STORAGE_BUCKET");
+    var apiKey = GetStagingAwareEnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_API_KEY");
+    
     var mobileSdkAppId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_MOBILE_SDK_APP_ID");
     var mobileSdkAdhocAppId = EnvironmentVariable("TOGGL_DROID_ADHOC_GOOGLE_SERVICES_MOBILE_SDK_APP_ID");
+    var mobileSdkAdhocAppIdStaging = EnvironmentVariable("TOGGL_DROID_ADHOC_GOOGLE_SERVICES_MOBILE_SDK_APP_ID_STAGING");
+
     var clientId = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID");
-    var apiKey = EnvironmentVariable("TOGGL_DROID_GOOGLE_SERVICES_API_KEY");
 
     var filePath = GetFiles(path).Single();
     var file = TransformTextFile(filePath).ToString();
@@ -213,6 +276,7 @@ private TemporaryFileTransformation GetAndroidGoogleServicesTransformation()
                         .Replace("{TOGGL_STORAGE_BUCKET}", storageBucket)
                         .Replace("{TOGGL_DROID_GOOGLE_SERVICES_MOBILE_SDK_APP_ID}", mobileSdkAppId)
                         .Replace("{TOGGL_DROID_ADHOC_GOOGLE_SERVICES_MOBILE_SDK_APP_ID}", mobileSdkAdhocAppId)
+                        .Replace("{TOGGL_DROID_ADHOC_GOOGLE_SERVICES_MOBILE_SDK_APP_ID_STAGING}", mobileSdkAdhocAppIdStaging)
                         .Replace("{TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID}", clientId)
                         .Replace("{TOGGL_DROID_GOOGLE_SERVICES_API_KEY}", apiKey)
     };
@@ -241,7 +305,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
     const string appNameToReplace = "Toggl for Devs";
     const string iconSetToReplace = "Assets.xcassets/AppIcon-debug.appiconset";
 
-    var commitCount = GetCommitCount();
+    var bundleVersion = GetCommitCount();
     var reversedClientId = EnvironmentVariable("TOGGL_REVERSED_CLIENT_ID");
 
     var bundleId = bundleIdToReplace;
@@ -259,6 +323,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
         bundleId = "com.toggl.daneel";
         appName = "Toggl";
         iconSet = "Assets.xcassets/AppIcon.appiconset";
+        bundleVersion = GetVersionNumberFromTagOrTimestamp();
     }
 
     var filePath = GetFiles(path).Single();
@@ -269,7 +334,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
         Path = path,
         Original = file,
         Temporary = file.Replace("{TOGGL_REVERSED_CLIENT_ID}", reversedClientId)
-                        .Replace("IOS_BUNDLE_VERSION", commitCount)
+                        .Replace("IOS_BUNDLE_VERSION", bundleVersion)
                         .Replace(bundleIdToReplace, bundleId)
                         .Replace(appNameToReplace, appName)
                         .Replace(iconSetToReplace, iconSet)
@@ -282,7 +347,7 @@ private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransfor
     const string bundleIdToReplace = "com.toggl.daneel.debug.SiriExtension";
     const string appNameToReplace = "Siri Extension Development";
 
-    var commitCount = GetCommitCount();
+    var bundleVersion = GetCommitCount();
 
     var bundleId = bundleIdToReplace;
     var appName = appNameToReplace;
@@ -296,6 +361,7 @@ private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransfor
     {
         bundleId = "com.toggl.daneel.SiriExtension";
         appName = "Siri Extension";
+        bundleVersion = GetVersionNumberFromTagOrTimestamp();
     }
 
     var filePath = GetFiles(path).Single();
@@ -305,7 +371,7 @@ private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransfor
     {
         Path = path,
         Original = file,
-        Temporary = file.Replace("IOS_BUNDLE_VERSION", commitCount)
+        Temporary = file.Replace("IOS_BUNDLE_VERSION", bundleVersion)
                         .Replace(bundleIdToReplace, bundleId)
                         .Replace(appNameToReplace, appName)
     };
@@ -317,7 +383,7 @@ private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransf
     const string bundleIdToReplace = "com.toggl.daneel.debug.SiriUIExtension";
     const string appNameToReplace = "Toggl.Daneel.SiriExtension.UI";
 
-    var commitCount = GetCommitCount();
+    var bundleVersion = GetCommitCount();
 
     var bundleId = bundleIdToReplace;
     var appName = appNameToReplace;
@@ -331,6 +397,7 @@ private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransf
     {
         bundleId = "com.toggl.daneel.SiriUIExtension";
         appName = "Siri UI Extension";
+        bundleVersion = GetVersionNumberFromTagOrTimestamp();
     }
 
     var filePath = GetFiles(path).Single();
@@ -340,11 +407,48 @@ private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransf
     {
         Path = path,
         Original = file,
-        Temporary = file.Replace("IOS_BUNDLE_VERSION", commitCount)
+        Temporary = file.Replace("IOS_BUNDLE_VERSION", bundleVersion)
                         .Replace(bundleIdToReplace, bundleId)
                         .Replace(appNameToReplace, appName)
     };
 }
+
+private TemporaryFileTransformation GetIosTimerWidgetExtensionInfoConfigurationTransformation()
+{
+    const string path = "Toggl.iOS.TimerWidgetExtension/Info.plist";
+    const string bundleIdToReplace = "com.toggl.daneel.debug.TimerWidgetExtension";
+    const string appNameToReplace = "Toggl for Devs";
+
+    var bundleVersion = GetCommitCount();
+
+    var bundleId = bundleIdToReplace;
+    var appName = appNameToReplace;
+
+    if (target == "Build.Release.iOS.AdHoc")
+    {
+        bundleId = "com.toggl.daneel.adhoc.TimerWidgetExtension";
+        appName = "Toggl for Tests";
+    }
+    else if (target == "Build.Release.iOS.AppStore")
+    {
+        bundleId = "com.toggl.daneel.TimerWidgetExtension";
+        appName = "Toggl";
+        bundleVersion = GetVersionNumberFromTagOrTimestamp();
+    }
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    {
+        Path = path,
+        Original = file,
+        Temporary = file.Replace("IOS_BUNDLE_VERSION", bundleVersion)
+                        .Replace(bundleIdToReplace, bundleId)
+                        .Replace(appNameToReplace, appName)
+    };
+}
+
 
 private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformation()
 {
@@ -377,9 +481,36 @@ private TemporaryFileTransformation GetIosEntitlementsConfigurationTransformatio
     };
 }
 
-private TemporaryFileTransformation GetIosExtensionEntitlementsConfigurationTransformation()
+private TemporaryFileTransformation GetIosSiriExtensionEntitlementsConfigurationTransformation()
 {
     const string path = "Toggl.iOS.SiriExtension/Entitlements.plist";
+    const string groupIdToReplace = "group.com.toggl.daneel.debug.extensions";
+
+    var groupId = groupIdToReplace;
+
+    if (target == "Build.Release.iOS.AdHoc")
+    {
+        groupId = "group.com.toggl.daneel.adhoc.extensions";
+    }
+    else if (target == "Build.Release.iOS.AppStore")
+    {
+        groupId = "group.com.toggl.daneel.extensions";
+    }
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    {
+        Path = path,
+        Original = file,
+        Temporary = file.Replace(groupIdToReplace, groupId)
+    };
+}
+
+private TemporaryFileTransformation GetIosTimerWidgetExtensionEntitlementsConfigurationTransformation()
+{
+    const string path = "Toggl.iOS.TimerWidgetExtension/Entitlements.plist";
     const string groupIdToReplace = "group.com.toggl.daneel.debug.extensions";
 
     var groupId = groupIdToReplace;
@@ -411,7 +542,7 @@ private TemporaryFileTransformation GetAndroidManifestTransformation()
     const string versionNumberToReplace = "987654321";
     const string appNameToReplace = "Toggl for Devs";
 
-    var commitCount = GetCommitCount();
+    var versionNumber = GetCommitCount();
     var packageName = packageNameToReplace;
     var appName = appNameToReplace;
 
@@ -424,6 +555,7 @@ private TemporaryFileTransformation GetAndroidManifestTransformation()
     {
         packageName = "com.toggl.giskard";
         appName = "Toggl";
+        versionNumber = GetVersionNumberFromTagOrTimestamp();
     }
 
     var filePath = GetFiles(path).Single();
@@ -433,7 +565,7 @@ private TemporaryFileTransformation GetAndroidManifestTransformation()
     {
         Path = path,
         Original = file,
-        Temporary = file.Replace(versionNumberToReplace, commitCount)
+        Temporary = file.Replace(versionNumberToReplace, versionNumber)
                         .Replace(packageNameToReplace, packageName)
                         .Replace(appNameToReplace, appName)
     };
@@ -506,22 +638,51 @@ private TemporaryFileTransformation GetIntegrationTestsConfigurationTransformati
     };
 }
 
+private TemporaryFileTransformation GetAndroidAppIconTransformation()
+{
+    const string path = "Toggl.Droid/Resources/mipmap-anydpi-v26/ic_launcher.xml";
+    const string drawableToReplace = "@color/launcherBackgroundDebug";
+    var drawable = "@color/launcherBackgroundDebug";
+    
+    if (target == "Build.Release.Android.AdHoc")
+    {
+        drawable = "@color/launcherBackgroundAdHoc";
+    }
+    else if (target == "Build.Release.Android.PlayStore")
+    {
+        drawable = "@color/launcherBackground";
+    }
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    {
+        Path = path,
+        Original = file,
+        Temporary = file.Replace(drawableToReplace, drawable)
+    };
+}
+
 var transformations = new List<TemporaryFileTransformation>
 {
     GetIosInfoConfigurationTransformation(),
     GetIosSiriExtensionInfoConfigurationTransformation(),
     GetIosSiriUIExtensionInfoConfigurationTransformation(),
+    GetIosTimerWidgetExtensionInfoConfigurationTransformation(),
     GetIosAppDelegateTransformation(),
     GetIntegrationTestsConfigurationTransformation(),
     GetIosAnalyticsServicesConfigurationTransformation(),
     GetIosEntitlementsConfigurationTransformation(),
-    GetIosExtensionEntitlementsConfigurationTransformation(),
+    GetIosSiriExtensionEntitlementsConfigurationTransformation(),
+    GetIosTimerWidgetExtensionEntitlementsConfigurationTransformation(),
     GetAndroidProjectConfigurationTransformation(),
     GetAndroidGoogleServicesTransformation(),
     GetAndroidGoogleLoginTransformation(),
     GetAndroidSplashScreenTransformation(),
     GetAndroidTogglApplicationTransformation(),
-    GetAndroidManifestTransformation()
+    GetAndroidManifestTransformation(),
+    GetAndroidAppIconTransformation(),
 };
 
 private HashSet<string> targetsThatSkipTearDown = new HashSet<string>
@@ -538,16 +699,6 @@ private string[] GetUnitTestProjects() => new []
     "./Toggl.Networking.Tests/Toggl.Networking.Tests.csproj",
     "./Toggl.Storage.Tests/Toggl.Storage.Tests.csproj",
     "./Toggl.Core.Tests/Toggl.Core.Tests.csproj",
-};
-
-private string[] GetIosUITestFiles() => new []
-{
-    "./bin/Release/Toggl.iOS.Tests.UI.dll"
-};
-
-private string[] GetAndroidUITestFiles() => new []
-{
-	".bin/Release/Toggl.Giskard.Tests.UI.dll"
 };
 
 private string[] GetIntegrationTestProjects()
@@ -573,6 +724,7 @@ Task("Clean")
             CleanDirectory("./Toggl.iOS/obj");
             CleanDirectory("./Toggl.iOS.SiriExtension/obj");
             CleanDirectory("./Toggl.iOS.SiriExtension.UI/obj");
+            CleanDirectory("./Toggl.iOS.TimerWidgetExtension/obj");
             CleanDirectory("./Toggl.iOS.Tests/obj");
             CleanDirectory("./Toggl.iOS.Tests.UI/obj");
             CleanDirectory("./Toggl.Droid/obj");
@@ -616,10 +768,6 @@ Task("Build.Tests.Integration")
 Task("Build.Tests.Sync")
     .IsDependentOn("Nuget")
     .Does(BuildSolution("SyncTests"));
-
-Task("Build.Tests.UI")
-    .IsDependentOn("Nuget")
-    .Does(BuildSolution("UITests"));
 
 Task("BuildSyncDiagramGenerator")
     .IsDependentOn("Nuget")
@@ -666,21 +814,10 @@ Task("Tests.Sync")
     .IsDependentOn("Build.Tests.Sync")
     .Does(Test(GetSyncTestProjects()));
 
-//UI Tests
-Task("Tests.UI.iOS")
-    .IsDependentOn("Build.Tests.UI")
-    .Does(UITest(GetIosUITestFiles()));
-
-Task("Tests.UI.Android")
-    .IsDependentOn("Build.Tests.UI")
-    .Does(UITest(GetAndroidUITestFiles()));
-
 // All Tests
 Task("Tests")
     .IsDependentOn("Tests.Unit")
-    .IsDependentOn("Tests.Integration")
-    .IsDependentOn("Tests.UI.iOS")
-	.IsDependentOn("Tests.UI.Android");
+    .IsDependentOn("Tests.Integration");
 
 //Default Operation
 Task("Default")

@@ -24,6 +24,13 @@ namespace Toggl.iOS.Extensions.Reactive
         public static Action<string> Title(this IReactive<UIButton> reactive)
             => title => reactive.Base.SetTitle(title, UIControlState.Normal);
 
+        public static Action<string> TitleAdaptive(this IReactive<UIButton> reactive)
+            => title =>
+            {
+                reactive.Base.SetTitle(title, UIControlState.Normal);
+                reactive.Base.SizeToFit();
+            };
+
         public static Action<UIColor> TitleColor(this IReactive<UIButton> reactive)
             => color => reactive.Base.SetTitleColor(color, UIControlState.Normal);
 
@@ -39,7 +46,7 @@ namespace Toggl.iOS.Extensions.Reactive
                 );
             };
 
-        public static IDisposable BindAction(this IReactive<UIButton> reactive, UIAction action,
+        public static IDisposable BindAction(this IReactive<UIButton> reactive, ViewAction action,
             ButtonEventType eventType = ButtonEventType.Tap) =>
             reactive.BindAction(action, _ => Unit.Default, eventType);
 

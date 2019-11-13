@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
 using Android.Runtime;
 using Android.Views;
 using System;
@@ -9,7 +10,6 @@ using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
-using AndroidColor = Android.Graphics.Color;
 using FoundationResources = Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Activities
@@ -20,11 +20,14 @@ namespace Toggl.Droid.Activities
               ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public sealed partial class EditProjectActivity : ReactiveActivity<EditProjectViewModel>
     {
+        private IMenuItem createMenuItem;
+
         public EditProjectActivity() : base(
             Resource.Layout.EditProjectActivity,
-            Resource.Style.AppTheme_Light_WhiteBackground,
+            Resource.Style.AppTheme,
             Transitions.SlideInFromBottom)
-        { }
+        {
+        }
 
         public EditProjectActivity(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
@@ -95,42 +98,59 @@ namespace Toggl.Droid.Activities
                 .Subscribe(clientNameTextView.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
 
-            var noClientColor = AndroidColor.ParseColor("#CECECE");
+            var primaryTextColor = this.SafeGetColor(Resource.Color.primaryText);
+            var placeholderTextColor = this.SafeGetColor(Resource.Color.placeholderText);
             ViewModel.ClientName
                 .Select(clientTextColor)
                 .Subscribe(clientNameTextView.SetTextColor)
                 .DisposedBy(DisposeBag);
 
             // Is Private
-            toggleIsPrivateView.Rx().Tap()
-                .Select(_ => isPrivateSwitch.Checked)
-                .Subscribe(ViewModel.IsPrivate.Accept)
+            toggleIsPrivateView.Rx()
+                .BindAction(ViewModel.ToggleIsPrivate)
+                .DisposedBy(DisposeBag);
+
+            isPrivateSwitch.Rx()
+                .BindAction(ViewModel.ToggleIsPrivate)
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsPrivate
-                .Subscribe(isPrivateSwitch.Rx().CheckedObserver())
+                .Subscribe(isPrivateSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
-            // Save
-            createProjectButton.Rx()
-                .BindAction(ViewModel.Save)
+            ViewModel.CanCreatePublicProjects
+                .Subscribe(toggleIsPrivateView.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
-
-            var enabledColor = AndroidColor.Black;
-            var disabledColor = AndroidColor.LightGray;
+            
             ViewModel.Save.Enabled
-                .Select(createProjectTextColor)
-                .Subscribe(createProjectButton.SetTextColor)
+                .Subscribe(isEnabled => createMenuItem?.SetEnabled(isEnabled))
                 .DisposedBy(DisposeBag);
 
             string clientNameWithEmptyText(string clientName)
                 => string.IsNullOrEmpty(clientName) ? FoundationResources.AddClient : clientName;
 
-            AndroidColor clientTextColor(string clientName)
-                => string.IsNullOrEmpty(clientName) ? noClientColor : AndroidColor.Black;
+            Color clientTextColor(string clientName)
+                => string.IsNullOrEmpty(clientName) ? placeholderTextColor : primaryTextColor;
 
-            AndroidColor createProjectTextColor(bool enabled)
-                => enabled ? enabledColor : disabledColor;
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.OneButtonMenu, menu);
+            createMenuItem = menu.FindItem(Resource.Id.ButtonMenuItem);
+            createMenuItem.SetTitle(Shared.Resources.Create);
+            return true;
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (item.ItemId == Resource.Id.ButtonMenuItem)
+            {
+                ViewModel.Save.Execute();
+                return true;
+            }
+
+            return base.OnOptionsItemSelected(item);
         }
     }
 }

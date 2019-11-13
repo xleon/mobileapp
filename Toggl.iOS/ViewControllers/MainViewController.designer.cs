@@ -61,6 +61,9 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UIView StopTimeEntryOnboardingBubbleView { get; set; }
 
 		[Outlet]
+		UIKit.UIView TableShadow { get; set; }
+
+		[Outlet]
 		UIKit.UIView TapToEditBubbleView { get; set; }
 
 		[Outlet]
@@ -76,13 +79,7 @@ namespace Toggl.iOS.ViewControllers
 		Toggl.iOS.Views.TimeEntriesLogTableView TimeEntriesLogTableView { get; set; }
 
 		[Outlet]
-		UIKit.NSLayoutConstraint TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint { get; set; }
-
-		[Outlet]
 		UIKit.NSLayoutConstraint TopConstraint { get; set; }
-
-		[Outlet]
-		UIKit.UIView TopSeparator { get; set; }
 
 		[Outlet]
 		UIKit.UILabel WelcomeBackDescriptionLabel { get; set; }
@@ -95,14 +92,14 @@ namespace Toggl.iOS.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (CurrentTimeEntryCard != null) {
-				CurrentTimeEntryCard.Dispose ();
-				CurrentTimeEntryCard = null;
-			}
-
 			if (CreatedFirstTimeEntryLabel != null) {
 				CreatedFirstTimeEntryLabel.Dispose ();
 				CreatedFirstTimeEntryLabel = null;
+			}
+
+			if (CurrentTimeEntryCard != null) {
+				CurrentTimeEntryCard.Dispose ();
+				CurrentTimeEntryCard = null;
 			}
 
 			if (CurrentTimeEntryDescriptionLabel != null) {
@@ -190,19 +187,9 @@ namespace Toggl.iOS.ViewControllers
 				TimeEntriesLogTableView = null;
 			}
 
-			if (TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint != null) {
-				TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint.Dispose ();
-				TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint = null;
-			}
-
 			if (TopConstraint != null) {
 				TopConstraint.Dispose ();
 				TopConstraint = null;
-			}
-
-			if (TopSeparator != null) {
-				TopSeparator.Dispose ();
-				TopSeparator = null;
 			}
 
 			if (WelcomeBackDescriptionLabel != null) {
@@ -218,6 +205,11 @@ namespace Toggl.iOS.ViewControllers
 			if (WelcomeBackView != null) {
 				WelcomeBackView.Dispose ();
 				WelcomeBackView = null;
+			}
+
+			if (TableShadow != null) {
+				TableShadow.Dispose ();
+				TableShadow = null;
 			}
 		}
 	}

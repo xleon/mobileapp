@@ -3,6 +3,7 @@ using Android.App;
 using Android.App.Job;
 using Android.Content;
 using Firebase.Messaging;
+using Toggl.Droid.Extensions;
 using Toggl.Droid.Helper;
 using Toggl.Storage.Settings;
 using static Toggl.Droid.Services.JobServicesConstants;
@@ -24,7 +25,7 @@ namespace Toggl.Droid.Services
             var keyValueStorage = dependencyContainer.KeyValueStorage;
             if (!shouldScheduleSyncJob(keyValueStorage)) return;
 
-            var jobClass = Java.Lang.Class.FromType(typeof(SyncJobService));
+            var jobClass = JavaUtils.ToClass<SyncJobService>();
             var jobScheduler = (JobScheduler) GetSystemService(JobSchedulerService);
             var serviceName = new ComponentName(this, jobClass);
             var jobInfoBuilder = new JobInfo.Builder(SyncJobServiceJobId, serviceName)

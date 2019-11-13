@@ -14,6 +14,7 @@ using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Views;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
@@ -42,7 +43,9 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<Color> Color { get; }
         public IObservable<string> ClientName { get; }
         public IObservable<string> WorkspaceName { get; }
-        public UIAction Save { get; }
+        public IObservable<bool> CanCreatePublicProjects { get; }
+        public ViewAction ToggleIsPrivate { get; }
+        public ViewAction Save { get; }
         public OutputAction<Color> PickColor { get; }
         public OutputAction<IThreadSafeClient> PickClient { get; }
         public OutputAction<IThreadSafeWorkspace> PickWorkspace { get; }
@@ -65,7 +68,7 @@ namespace Toggl.Core.UI.ViewModels
             this.interactorFactory = interactorFactory;
 
             Name = new BehaviorRelay<string>("");
-            IsPrivate = new BehaviorRelay<bool>(false, CommonFunctions.Invert);
+            IsPrivate = new BehaviorRelay<bool>(true);
 
             PickColor = rxActionFactory.FromObservable<Color>(pickColor);
             PickClient = rxActionFactory.FromObservable<IThreadSafeClient>(pickClient);
@@ -92,6 +95,12 @@ namespace Toggl.Core.UI.ViewModels
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
+            CanCreatePublicProjects = currentWorkspace
+                .Select(w => w.Admin)
+                .DoIf(isAdmin => !isAdmin, _ => IsPrivate.Accept(true))
+                .DistinctUntilChanged()
+                .AsDriver(schedulerProvider);
+
             var clientName = currentClient
                 .Select(client => client?.Name ?? "")
                 .DistinctUntilChanged();
@@ -115,6 +124,7 @@ namespace Toggl.Core.UI.ViewModels
                 .Merge(clientName.SelectUnit(), Name.SelectUnit());
 
             Save = rxActionFactory.FromObservable(done, saveEnabledObservable);
+            ToggleIsPrivate = rxActionFactory.FromAction(toggleIsPrivate);
 
             Error = Save.Errors
                 .Select(e => e.Message)
@@ -159,14 +169,26 @@ namespace Toggl.Core.UI.ViewModels
             return base.Initialize(name);
         }
 
+        private void toggleIsPrivate()
+        {
+            IsPrivate.Accept(!IsPrivate.Value);
+        }
+
         private IObservable<IThreadSafeWorkspace> pickWorkspace()
         {
             return currentWorkspace.FirstAsync().SelectMany(workspaceFromViewModel);
 
             IObservable<IThreadSafeWorkspace> workspaceFromViewModel(IThreadSafeWorkspace currentWorkspace)
-                => Navigate<SelectWorkspaceViewModel, SelectWorkspaceParameters, long>(new SelectWorkspaceParameters(Resources.SetDefaultWorkspace, currentWorkspace.Id))
-                    .ToObservable()
-                    .SelectMany(selectedWorkspaceId => workspaceFromId(selectedWorkspaceId, currentWorkspace));
+                => interactorFactory.GetAllWorkspaces().Execute()
+                .SelectMany(allWorkspaces =>
+                {
+                    var eligibleWorkspaces = allWorkspaces.Where(ws => ws.IsEligibleForProjectCreation()).ToList();
+                    var selectWorkspaces = eligibleWorkspaces.Select(ws => new SelectOption<IThreadSafeWorkspace>(ws, ws.Name));
+                    var selectedWorkspaceIndex = eligibleWorkspaces.IndexOf(ws => ws.Id == currentWorkspace.Id);
+
+                    return View.Select(Resources.Workspace, selectWorkspaces, selectedWorkspaceIndex);
+                })
+                .SelectMany(selectedWorkspace => workspaceFromId(selectedWorkspace.Id, currentWorkspace));
 
             IObservable<IThreadSafeWorkspace> workspaceFromId(long selectedWorkspaceId, IThreadSafeWorkspace currentWorkspace)
                 => selectedWorkspaceId == currentWorkspace.Id

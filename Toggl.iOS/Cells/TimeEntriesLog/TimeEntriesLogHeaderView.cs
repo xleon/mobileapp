@@ -29,8 +29,13 @@ namespace Toggl.iOS.Views
         {
             base.AwakeFromNib();
 
+            ContentView.InsertSeparator();
+
+            ContentView.BackgroundColor = ColorAssets.TableBackground;
+            DateLabel.TextColor = ColorAssets.Text2;
+            DurationLabel.TextColor = ColorAssets.Text2;
+
             IsAccessibilityElement = true;
-            ContentView.BackgroundColor = UIColor.White;
             AccessibilityTraits = UIAccessibilityTrait.Header;
             DurationLabel.Font = DurationLabel.Font.GetMonospacedDigitFont();
         }

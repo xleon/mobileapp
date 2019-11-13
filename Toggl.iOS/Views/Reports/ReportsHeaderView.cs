@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Runtime.InteropServices;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Extensions;
@@ -26,7 +27,6 @@ namespace Toggl.iOS.Views.Reports
         private ReportsOverviewCardView overview = ReportsOverviewCardView.CreateFromNib();
         private ReportsBarChartCardView barChart = ReportsBarChartCardView.CreateFromNib();
 
-        private CAShapeLayer borderLayer = new CAShapeLayer();
         private CAShapeLayer mask = new CAShapeLayer();
 
         static ReportsHeaderView()
@@ -50,6 +50,10 @@ namespace Toggl.iOS.Views.Reports
 
             EmptyStateTitleLabel.Text = Resources.ReportsEmptyStateTitle;
             EmptyStateDescriptionLabel.Text = Resources.ReportsEmptyStateDescription;
+
+            PieChartBackground.BackgroundColor = TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
+                ? ColorAssets.CellBackground
+                : UIColor.Clear;
         }
 
         public override void LayoutSubviews()
@@ -63,7 +67,12 @@ namespace Toggl.iOS.Views.Reports
 
             if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
+                // iPad -> turn this into a card
+                // A card has rounded corners and a shadow
                 var cornerRadius = 8;
+
+                // when there are some projects, the bottom part of the card
+                // is the reports "legend" table view
                 var cornersToRound = PieChartView.Segments.Count() > 0
                     ? UIRectCorner.TopLeft | UIRectCorner.TopRight
                     : UIRectCorner.TopLeft | UIRectCorner.TopRight | UIRectCorner.BottomLeft | UIRectCorner.BottomRight;
@@ -71,16 +80,14 @@ namespace Toggl.iOS.Views.Reports
                 mask.Path = UIBezierPath.FromRoundedRect(Bounds, cornersToRound, new CGSize(cornerRadius, cornerRadius)).CGPath;
                 Layer.Mask = mask;
 
-                borderLayer.FillColor = UIColor.Clear.CGColor;
-                borderLayer.LineWidth = 1;
-                borderLayer.StrokeColor = UIColor.GroupTableViewBackgroundColor.CGColor;
-                borderLayer.Path = UIBezierPath.FromRoundedRect(new CGRect(0.5, 0.5, Bounds.Width - 1, Bounds.Height - 1), cornersToRound, new CGSize(cornerRadius + 1, cornerRadius + 1)).CGPath;
-                Layer.AddSublayer(borderLayer);
+                Layer.ShadowColor = UIColor.Black.CGColor;
+                Layer.ShadowRadius = 8;
+                Layer.ShadowOffset = new CGSize(0, 2);
+                Layer.ShadowOpacity = 0.1f;
             }
             else
             {
                 Layer.Mask = null;
-                borderLayer.RemoveFromSuperLayer();
             }
         }
 
@@ -90,7 +97,8 @@ namespace Toggl.iOS.Views.Reports
             barChart.Item = Item;
 
             //Loading chart
-            Item.IsLoadingObservable
+            Item.GroupedSegmentsObservable
+                .Select(segments => segments == null)
                 .Subscribe(LoadingPieChartView.Rx().IsVisibleWithFade())
                 .DisposedBy(disposeBag);
 

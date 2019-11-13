@@ -8,12 +8,16 @@ using Java.Interop;
 using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Droid.BroadcastReceivers;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Helper;
+using static Android.Support.V7.App.AppCompatDelegate;
 
 namespace Toggl.Droid
 {
     [Application(AllowBackup = false)]
     public class TogglApplication : Application, ILifecycleObserver
     {
+        private const int modeNightAutoBattery = 3;
         public TimezoneChangedBroadcastReceiver TimezoneChangedBroadcastReceiver { get; set; }
 
         public bool IsInForeground { get; private set; } = false;
@@ -25,13 +29,14 @@ namespace Toggl.Droid
 
         public override void OnCreate()
         {
+            DefaultNightMode = QApis.AreAvailable ? ModeNightFollowSystem : modeNightAutoBattery;
+
             base.OnCreate();
             ProcessLifecycleOwner.Get().Lifecycle.AddObserver(this);
 
 #if !DEBUG
             Firebase.FirebaseApp.InitializeApp(this);
 #endif
-
             AndroidDependencyContainer.EnsureInitialized(Context);
             var app = new AppStart(AndroidDependencyContainer.Instance);
             app.LoadLocalizationConfiguration();

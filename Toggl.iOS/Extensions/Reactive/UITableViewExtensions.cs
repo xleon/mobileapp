@@ -23,6 +23,7 @@ namespace Toggl.iOS.Extensions.Reactive
             {
                 dataSource.SetSections(list);
                 reactive.Base.ReloadData();
+                dataSource.OnItemsChanged?.Invoke(dataSource, new EventArgs());
             });
         }
 
@@ -41,6 +42,7 @@ namespace Toggl.iOS.Extensions.Reactive
                 {
                     dataSource.SetSections(finalSections);
                     reactive.Base.ReloadData();
+                    dataSource.OnItemsChanged?.Invoke(dataSource, new EventArgs());
                     return;
                 }
 
@@ -49,6 +51,7 @@ namespace Toggl.iOS.Extensions.Reactive
                 {
                     dataSource.SetSections(finalSections);
                     reactive.Base.ReloadData();
+                    dataSource.OnItemsChanged?.Invoke(dataSource, new EventArgs());
                     return;
                 }
 
@@ -74,6 +77,8 @@ namespace Toggl.iOS.Extensions.Reactive
                             headerView.Item = difference.FinalSections[section].Header;
                         }
                     }
+
+                    dataSource.OnItemsChanged?.Invoke(dataSource, new EventArgs());
                 }
             });
         }
@@ -86,6 +91,7 @@ namespace Toggl.iOS.Extensions.Reactive
             {
                 dataSource.SetItems(list);
                 reactive.Base.ReloadData();
+                dataSource.OnItemsChanged?.Invoke(dataSource, new EventArgs());
             });
         }
 
