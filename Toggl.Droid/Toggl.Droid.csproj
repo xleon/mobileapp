@@ -775,8 +775,6 @@
     <AndroidResource Include="Resources\layout\SelectProjectActivityProjectCell.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityTaskCell.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityWorkspaceHeader.axml" />
-    <AndroidResource Include="Resources\layout\SelectDateFormatFragment.axml" />
-    <AndroidResource Include="Resources\layout\SelectDateFormatFragmentCell.axml" />
     <AndroidResource Include="Resources\drawable\TransparentToBackgroundGradient.xml" />
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
