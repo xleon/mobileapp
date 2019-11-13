@@ -25,11 +25,9 @@ namespace Toggl.Core.Interactors
 
         IInteractor<Task<IThreadSafeTimeEntry>> StartSuggestion(Suggestion suggestion);
 
-        IInteractor<Task<IThreadSafeTimeEntry>> ContinueTimeEntry(ITimeEntryPrototype prototype, ContinueTimeEntryMode continueMode);
+        IInteractor<Task<IThreadSafeTimeEntry>> ContinueTimeEntry(long timeEntryId, ContinueTimeEntryMode continueMode);
 
-        IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueTimeEntryFromMainLog(ITimeEntryPrototype prototype, ContinueTimeEntryMode continueMode, int indexInLog, int dayInLog, int daysInThePast);
-
-        IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueMostRecentTimeEntry();
+        IInteractor<Task<IThreadSafeTimeEntry>> ContinueMostRecentTimeEntry();
 
         IInteractor<Task<IThreadSafeTimeEntry>> UpdateTimeEntry(EditTimeEntryDto dto);
 
