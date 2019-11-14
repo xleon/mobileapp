@@ -123,7 +123,7 @@ namespace Toggl.Droid.Activities
                         mainFragment.ViewModel = getTabViewModel<MainViewModel>();
                         break;
                     case ReportsFragment reportsFragment:
-                        reportsFragment.ViewModel = getTabViewModel<ReportsViewModel>();
+                        reportsFragment.ViewModel = getTabViewModel<ReportsViewModelOld>();
                         break;
                     case CalendarFragment calendarFragment:
                         calendarFragment.ViewModel = getTabViewModel<CalendarViewModel>();
@@ -156,7 +156,7 @@ namespace Toggl.Droid.Activities
             if (reportsRequestedStartDate == null || reportsRequestedEndDate == null)
                 return;
 
-            var reportsViewModel = getTabViewModel<ReportsViewModel>();
+            var reportsViewModel = getTabViewModel<ReportsViewModelOld>();
             if (reportsViewModel != null && navigationView.SelectedItemId == Resource.Id.MainTabReportsItem)
             {
                 reportsViewModel.LoadReport(reportsRequestedWorkspaceId, reportsRequestedStartDate.Value, reportsRequestedEndDate.Value, ReportsSource.Other);
@@ -178,7 +178,7 @@ namespace Toggl.Droid.Activities
                     fragment = new MainFragment { ViewModel = getTabViewModel<MainViewModel>() };
                     break;
                 case Resource.Id.MainTabReportsItem:
-                    fragment = new ReportsFragment { ViewModel = getTabViewModel<ReportsViewModel>() };
+                    fragment = new ReportsFragment { ViewModel = getTabViewModel<ReportsViewModelOld>() };
                     break;
                 case Resource.Id.MainTabCalendarItem:
                     fragment = new CalendarFragment { ViewModel = getTabViewModel<CalendarViewModel>() };

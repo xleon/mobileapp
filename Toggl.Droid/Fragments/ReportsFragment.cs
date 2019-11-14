@@ -16,7 +16,7 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
-    public sealed partial class ReportsFragment : ReactiveTabFragment<ReportsViewModel>, IScrollableToStart
+    public sealed partial class ReportsFragment : ReactiveTabFragment<ReportsViewModelOld>, IScrollableToStart
     {
         private static readonly TimeSpan toggleCalendarThrottleDuration = TimeSpan.FromMilliseconds(300);
         private ReportsRecyclerAdapter reportsRecyclerAdapter;

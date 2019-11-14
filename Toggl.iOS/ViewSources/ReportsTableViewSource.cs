@@ -17,8 +17,8 @@ using UIKit;
 
 namespace Toggl.iOS.ViewSources
 {
-    using ReportsSection = SectionModel<ReportsViewModel, ChartSegment>;
-    public sealed class ReportsTableViewSource : BaseTableViewSource<ReportsSection, ReportsViewModel, ChartSegment>
+    using ReportsSection = SectionModel<ReportsViewModelOld, ChartSegment>;
+    public sealed class ReportsTableViewSource : BaseTableViewSource<ReportsSection, ReportsViewModelOld, ChartSegment>
     {
         private const int summaryHeightRegular = 308;
         private const int summaryHeightCompact = 768;
@@ -26,7 +26,7 @@ namespace Toggl.iOS.ViewSources
         private const int bottomWorkspaceSelectionButtonInset = 76;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
-        private readonly ReportsViewModel viewModel;
+        private readonly ReportsViewModelOld viewModel;
         private readonly UITableView tableView;
 
         public IObservable<CGPoint> ScrolledWithHeaderOffset { get; }
@@ -54,7 +54,7 @@ namespace Toggl.iOS.ViewSources
 
         private bool showWorkspaceButton = false;
 
-        public ReportsTableViewSource(UITableView tableView, ReportsViewModel viewModel)
+        public ReportsTableViewSource(UITableView tableView, ReportsViewModelOld viewModel)
         {
             this.viewModel = viewModel;
             this.tableView = tableView;

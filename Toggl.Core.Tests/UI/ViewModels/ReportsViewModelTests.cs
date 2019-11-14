@@ -27,7 +27,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 {
     public sealed class ReportsViewModelTests
     {
-        public abstract class ReportsViewModelTest : BaseViewModelTests<ReportsViewModel>
+        public abstract class ReportsViewModelTest : BaseViewModelTests<ReportsViewModelOld>
         {
             protected const long WorkspaceId = 10;
 
@@ -42,13 +42,13 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.ObserveDefaultWorkspaceId().Execute().Returns(workspaceIdObservable);
             }
 
-            protected override ReportsViewModel CreateViewModel()
+            protected override ReportsViewModelOld CreateViewModel()
             {
                 InteractorFactory
                     .GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset?>())
                     .Returns(Interactor);
 
-                return new ReportsViewModel(
+                return new ReportsViewModelOld(
                     DataSource,
                     TimeService,
                     NavigationService,
@@ -88,7 +88,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new ReportsViewModel(reportsProvider,
+                    () => new ReportsViewModelOld(reportsProvider,
                                                timeService,
                                                navigationService,
                                                interactorFactory,
@@ -748,7 +748,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset?>())
                     .Returns(Interactor);
 
-                var viewModel = new ReportsViewModel(
+                var viewModel = new ReportsViewModelOld(
                     DataSource,
                     timeService,
                     NavigationService,

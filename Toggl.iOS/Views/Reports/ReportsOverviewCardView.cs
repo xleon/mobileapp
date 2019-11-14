@@ -18,7 +18,7 @@ using UIKit;
 namespace Toggl.iOS.Views.Reports
 {
     [Register(nameof(ReportsOverviewCardView))]
-    public sealed partial class ReportsOverviewCardView : BaseReportsCardView<ReportsViewModel>
+    public sealed partial class ReportsOverviewCardView : BaseReportsCardView<ReportsViewModelOld>
     {
         private const int fontSize = 24;
 

@@ -77,6 +77,9 @@ namespace Toggl.Shared.Extensions
                 .ObserveOn(schedulerProvider.MainScheduler);
         }
 
+        public static IObservable<T> WhereNotNull<T>(this IObservable<T> observable) where T : class
+            => observable.Where(item => item != null);
+
         public static IObservable<TValue> NotNullable<TValue>(this IObservable<TValue?> observable)
             where TValue : struct
             => observable.Where(x => x != null).Select(x => x.Value);

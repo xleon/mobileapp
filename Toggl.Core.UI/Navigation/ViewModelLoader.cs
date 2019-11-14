@@ -331,14 +331,23 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService);
             }
 
-            if (viewModelType == typeof(ReportsViewModel))
+            if (viewModelType == typeof(ReportsViewModelOld))
             {
-                return new ReportsViewModel(
+                return new ReportsViewModelOld(
                     dependencyContainer.DataSource,
                     dependencyContainer.TimeService,
                     dependencyContainer.NavigationService,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.AnalyticsService,
+                    dependencyContainer.SchedulerProvider,
+                    dependencyContainer.RxActionFactory);
+            }
+
+            if (viewModelType == typeof(ReportsViewModel))
+            {
+                return new ReportsViewModel(
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.InteractorFactory,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.RxActionFactory);
             }

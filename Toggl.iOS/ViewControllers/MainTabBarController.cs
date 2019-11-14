@@ -19,7 +19,7 @@ namespace Toggl.iOS.ViewControllers
         private static readonly Dictionary<Type, string> imageNameForType = new Dictionary<Type, string>
         {
             { typeof(MainViewModel), "icTime" },
-            { typeof(ReportsViewModel), "icReports" },
+            { typeof(ReportsViewModelOld), "icReports" },
             { typeof(CalendarViewModel), "icCalendar" },
             { typeof(SettingsViewModel), "icSettings" }
         };
@@ -27,7 +27,7 @@ namespace Toggl.iOS.ViewControllers
         private static readonly Dictionary<Type, string> accessibilityLabels = new Dictionary<Type, string>
         {
             { typeof(MainViewModel), Resources.Timer },
-            { typeof(ReportsViewModel), Resources.Reports },
+            { typeof(ReportsViewModelOld), Resources.Reports },
             { typeof(CalendarViewModel), Resources.Calendar },
             { typeof(SettingsViewModel), Resources.Settings }
         };

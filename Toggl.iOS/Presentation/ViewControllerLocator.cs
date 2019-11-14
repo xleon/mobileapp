@@ -52,7 +52,7 @@ namespace Toggl.iOS.Presentation
                     return new OutdatedAppViewController(vm);
                 case PasteFromClipboardViewModel vm:
                     return new PasteFromClipboardViewController(vm);
-                case ReportsViewModel vm:
+                case ReportsViewModelOld vm:
                     return new ReportsViewController(vm);
                 case ReportsCalendarViewModel vm:
                     return new ReportsCalendarViewController(vm);

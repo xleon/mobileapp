@@ -25,7 +25,7 @@ using static Toggl.iOS.Extensions.AnimationExtensions;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed partial class ReportsViewController : ReactiveViewController<ReportsViewModel>, IScrollableToTop
+    public sealed partial class ReportsViewController : ReactiveViewController<ReportsViewModelOld>, IScrollableToTop
     {
         private const string boundsKey = "bounds";
 
@@ -49,7 +49,7 @@ namespace Toggl.iOS.ViewControllers
         private ReportsOverviewCardView overview = ReportsOverviewCardView.CreateFromNib();
         private ReportsBarChartCardView barChart = ReportsBarChartCardView.CreateFromNib();
 
-        public ReportsViewController(ReportsViewModel viewModel) : base(viewModel, nameof(ReportsViewController))
+        public ReportsViewController(ReportsViewModelOld viewModel) : base(viewModel, nameof(ReportsViewController))
         {
         }
 

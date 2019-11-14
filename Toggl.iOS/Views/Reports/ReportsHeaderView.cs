@@ -16,7 +16,7 @@ using UIKit;
 
 namespace Toggl.iOS.Views.Reports
 {
-    public partial class ReportsHeaderView : BaseTableHeaderFooterView<ReportsViewModel>
+    public partial class ReportsHeaderView : BaseTableHeaderFooterView<ReportsViewModelOld>
     {
         public static readonly string Identifier = nameof(ReportsHeaderView);
         public static readonly NSString Key = new NSString(nameof(ReportsHeaderView));

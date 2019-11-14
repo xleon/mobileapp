@@ -21,7 +21,7 @@ using UIKit;
 namespace Toggl.iOS.Views.Reports
 {
     [Register(nameof(ReportsBarChartCardView))]
-    public partial class ReportsBarChartCardView : BaseReportsCardView<ReportsViewModel>
+    public partial class ReportsBarChartCardView : BaseReportsCardView<ReportsViewModelOld>
     {
         private const float barChartSpacingProportion = 0.3f;
 
