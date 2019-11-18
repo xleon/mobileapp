@@ -226,7 +226,7 @@ namespace Toggl.Core.Interactors
         #region Reports
 
         IInteractor<IObservable<ITimeEntriesTotals>> GetReportsTotals(
-            long userId, long workspaceId, DateTimeOffset startDate, DateTimeOffset endDate);
+            long userId, long workspaceId, DateTimeOffsetRange timeRange);
 
         IInteractor<IObservable<ProjectSummaryReport>> GetProjectSummary(
             long workspaceId, DateTimeOffset startDate, DateTimeOffset? endDate);

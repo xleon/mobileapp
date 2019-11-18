@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Text;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
@@ -18,11 +16,9 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
-    using WorkspaceSelectOptions = ImmutableList<SelectOption<IThreadSafeWorkspace>>;
-
     public sealed class ReportsViewModel : ViewModel
     {
-        private long selectedWorkspaceId;
+        private long? selectedWorkspaceId;
         private DateTimeOffsetRange selectedTimeRange;
 
         private IInteractorFactory interactorFactory;
@@ -56,12 +52,24 @@ namespace Toggl.Core.UI.ViewModels.Reports
             SelectWorkspace = rxActionFactory.FromAsync(selectWorkspace);
             SelectTimeRange = rxActionFactory.FromAsync(selectTimeRange);
 
-            Elements = Observable.CombineLatest(
-                SelectWorkspace.Elements.WhereNotNull(),
-                SelectTimeRange.Elements,
-                reportElements)
-                .StartWith(ImmutableList<IReportElement>.Empty)
+            var workspaceSelector = interactorFactory.GetDefaultWorkspace().Execute()
+                .Concat(SelectWorkspace.Elements.WhereNotNull());
+
+            // TODO: Get default range (current week) instead of this hardcoded value
+            var defaultTimeRange = new DateTimeOffsetRange(DateTimeOffset.Now - TimeSpan.FromDays(7), DateTimeOffset.Now);
+
+            var timeRangeSelector = SelectTimeRange.Elements.StartWith(defaultTimeRange);
+
+            Elements = Observable
+                .CombineLatest(workspaceSelector, timeRangeSelector, ReportFilter.Create)
+                .SelectMany(reportElements)
                 .AsDriver(ImmutableList<IReportElement>.Empty, schedulerProvider);
+        }
+
+        public override async Task Initialize()
+        {
+            var defaultWorkspace = await interactorFactory.GetDefaultWorkspace().Execute();
+            selectedWorkspaceId = defaultWorkspace?.Id;
         }
 
         private async Task<IThreadSafeWorkspace> selectWorkspace()
@@ -88,21 +96,58 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private async Task<DateTimeOffsetRange> selectTimeRange()
         {
             // TODO: Navigate to reports calendar fragment and replace this Task with it
-            selectedTimeRange = await Task.FromResult(getDummyResult());
+            selectedTimeRange = await Task.FromResult(getDummyTimeRange());
 
             return selectedTimeRange;
         }
 
         [Obsolete("Remove this in favor of data from the Reports Calendar results")]
-        private DateTimeOffsetRange getDummyResult()
+        private DateTimeOffsetRange getDummyTimeRange()
             => new DateTimeOffsetRange(
                 new DateTimeOffset(2019, 1, 1, 0, 0, 0, TimeSpan.Zero),
                 new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.Zero));
 
-        private IEnumerable<IReportElement> reportElements(IThreadSafeWorkspace workspace, DateTimeOffsetRange timeRange)
+        private ImmutableList<IReportElement> createLoadingStateReportElements()
+            => elements(
+                ReportSummaryElement.LoadingState,
+                ReportBarChartElement.LoadingState,
+                ReportDonutChartDonutElement.LoadingState);
+
+        private IObservable<ImmutableList<IReportElement>> reportElements(ReportFilter filter)
+            => reportElementsProcess(filter)
+            .ToObservable()
+            .StartWith(createLoadingStateReportElements());
+
+        private async Task<ImmutableList<IReportElement>> reportElementsProcess(ReportFilter filter)
         {
-            // TODO: Refetch and update Elements
-            return ImmutableList<IReportElement>.Empty;
+            try
+            {
+                var user = await interactorFactory.GetCurrentUser().Execute();
+
+                var reportsTotal = await interactorFactory
+                    .GetReportsTotals(user.Id, filter.Workspace.Id, filter.TimeRange)
+                    .Execute();
+
+                var summaryData = await interactorFactory
+                    .GetProjectSummary(filter.Workspace.Id, filter.TimeRange.Minimum, filter.TimeRange.Maximum)
+                    .Execute();
+
+                if (summaryData.Segments.None())
+                    return elements(new ReportNoDataElement());
+
+                return elements(
+                    new ReportSummaryElement(reportsTotal, summaryData),
+                    new ReportBarChartElement(reportsTotal, summaryData),
+                    new ReportDonutChartDonutElement(reportsTotal, summaryData));
+            }
+            catch (Exception ex)
+            {
+                return elements(new ReportErrorElement(ex));
+            }
         }
+
+        private ImmutableList<IReportElement> elements(params IReportElement[] elements)
+            => elements.Flatten();
+
     }
 }

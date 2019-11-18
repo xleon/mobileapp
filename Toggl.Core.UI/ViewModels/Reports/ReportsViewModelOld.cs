@@ -131,7 +131,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
             CalendarViewModel = new ReportsCalendarViewModel(timeService, dataSource, rxActionFactory, navigationService, schedulerProvider);
 
             var totalsObservable = reportSubject
-                .SelectMany(_ => interactorFactory.GetReportsTotals(userId, workspaceId, startDate, endDate).Execute())
+                .SelectMany(_ => interactorFactory.GetReportsTotals(userId, workspaceId, new DateTimeOffsetRange(startDate, endDate)).Execute())
                 .Catch<ITimeEntriesTotals, OfflineException>(_ => Observable.Return<ITimeEntriesTotals>(null))
                 .Where(report => report != null);
             BarChartViewModel = new ReportsBarChartViewModel(schedulerProvider, dataSource.Preferences, totalsObservable, navigationService);
