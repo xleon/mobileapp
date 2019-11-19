@@ -5,10 +5,12 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
+using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Views;
 using Toggl.Shared;
@@ -26,16 +28,20 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public IObservable<IEnumerable<IReportElement>> Elements { get; set; }
         public IObservable<bool> HasMultipleWorkspaces { get; set; }
 
+        public IObservable<string> FormattedTimeRange { get; set; }
+
         public OutputAction<IThreadSafeWorkspace> SelectWorkspace { get; private set; }
         public OutputAction<DateTimeOffsetRange> SelectTimeRange { get; private set; }
 
         public ReportsViewModel(
+            ITogglDataSource dataSource,
             INavigationService navigationService,
             IInteractorFactory interactorFactory,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory)
             : base(navigationService)
         {
+            Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
@@ -64,6 +70,15 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .CombineLatest(workspaceSelector, timeRangeSelector, ReportFilter.Create)
                 .SelectMany(reportElements)
                 .AsDriver(ImmutableList<IReportElement>.Empty, schedulerProvider);
+
+            var dateFormatObservable = dataSource.Preferences
+                .Current
+                .Select(preferences => preferences.DateFormat);
+
+            FormattedTimeRange = Observable.Merge(Observable.Return(defaultTimeRange), SelectTimeRange.Elements)
+                .CombineLatest(dateFormatObservable, resultSelector: formattedTimeRange)
+                .DistinctUntilChanged()
+                .AsDriver("", schedulerProvider);
         }
 
         public override async Task Initialize()
@@ -118,6 +133,13 @@ namespace Toggl.Core.UI.ViewModels.Reports
             .ToObservable()
             .StartWith(createLoadingStateReportElements());
 
+        private string formattedTimeRange(DateTimeOffsetRange range, DateFormat dateFormat)
+        {
+            var startDateText = range.Minimum.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
+            var endDateText = range.Maximum.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
+            return $"{startDateText} - {endDateText}";
+        }
+
         private async Task<ImmutableList<IReportElement>> reportElementsProcess(ReportFilter filter)
         {
             try
@@ -148,6 +170,5 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private ImmutableList<IReportElement> elements(params IReportElement[] elements)
             => elements.Flatten();
-
     }
 }

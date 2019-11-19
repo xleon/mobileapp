@@ -123,7 +123,7 @@ namespace Toggl.Droid.Activities
                         mainFragment.ViewModel = getTabViewModel<MainViewModel>();
                         break;
                     case ReportsFragment reportsFragment:
-                        reportsFragment.ViewModel = getTabViewModel<ReportsViewModelOld>();
+                        reportsFragment.ViewModel = getTabViewModel<ReportsViewModel>();
                         break;
                     case CalendarFragment calendarFragment:
                         calendarFragment.ViewModel = getTabViewModel<CalendarViewModel>();
@@ -141,30 +141,12 @@ namespace Toggl.Droid.Activities
                 navigationView.SelectedItemId = requestedInitialTab ?? Resource.Id.MainTabTimerItem;
                 activityResumedBefore = true;
                 requestedInitialTab = null;
-                loadReportsIfNeeded();
                 return;
             }
 
             if (requestedInitialTab == null) return;
             navigationView.SelectedItemId = requestedInitialTab.Value;
             requestedInitialTab = null;
-            loadReportsIfNeeded();
-        }
-
-        private void loadReportsIfNeeded()
-        {
-            if (reportsRequestedStartDate == null || reportsRequestedEndDate == null)
-                return;
-
-            var reportsViewModel = getTabViewModel<ReportsViewModelOld>();
-            if (reportsViewModel != null && navigationView.SelectedItemId == Resource.Id.MainTabReportsItem)
-            {
-                reportsViewModel.LoadReport(reportsRequestedWorkspaceId, reportsRequestedStartDate.Value, reportsRequestedEndDate.Value, ReportsSource.Other);
-            }
-
-            reportsRequestedWorkspaceId = null;
-            reportsRequestedStartDate = null;
-            reportsRequestedEndDate = null;
         }
 
         private Fragment getCachedFragment(int itemId)
@@ -178,7 +160,7 @@ namespace Toggl.Droid.Activities
                     fragment = new MainFragment { ViewModel = getTabViewModel<MainViewModel>() };
                     break;
                 case Resource.Id.MainTabReportsItem:
-                    fragment = new ReportsFragment { ViewModel = getTabViewModel<ReportsViewModelOld>() };
+                    fragment = new ReportsFragment { ViewModel = getTabViewModel<ReportsViewModel>() };
                     break;
                 case Resource.Id.MainTabCalendarItem:
                     fragment = new CalendarFragment { ViewModel = getTabViewModel<CalendarViewModel>() };

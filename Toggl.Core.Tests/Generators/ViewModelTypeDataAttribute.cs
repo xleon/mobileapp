@@ -27,9 +27,10 @@ namespace Toggl.Core.Tests.Generators
                 .Select(viewModelType => new object[] { viewModelType });
 
         private bool isAValidViewModel(Type type)
-            => type.IsAbstract == false &&
-               type.Name != nameof(IViewModel) &&
-               type.ImplementsOrDerivesFrom<IViewModel>() &&
-               !exceptionViewModels.Contains(type);
+            => type.IsAbstract == false
+            && type.Name != nameof(IViewModel)
+            && type.ImplementsOrDerivesFrom<IViewModel>()
+            && type.GetCustomAttribute<ObsoleteAttribute>() == null
+            && !exceptionViewModels.Contains(type);
     }
 }

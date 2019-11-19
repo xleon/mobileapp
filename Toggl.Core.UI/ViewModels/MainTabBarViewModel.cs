@@ -22,7 +22,7 @@ namespace Toggl.Core.UI.ViewModels
     public sealed class MainTabBarViewModel : ViewModel
     {
         private readonly MainViewModel mainViewModel;
-        private readonly ReportsViewModelOld reportsViewModel;
+        private readonly ReportsViewModel reportsViewModel;
         private readonly CalendarViewModel calendarViewModel;
 
         private bool hasOpenedReports = false;
@@ -96,12 +96,10 @@ namespace Toggl.Core.UI.ViewModels
                 platformInfo,
                 widgetsService);
 
-            reportsViewModel = new ReportsViewModelOld(
+            reportsViewModel = new ReportsViewModel(
                 dataSource,
-                timeService,
                 navigationService,
                 interactorFactory,
-                analyticsService,
                 schedulerProvider,
                 rxActionFactory);
 

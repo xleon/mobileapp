@@ -36,7 +36,8 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             protected void SetupEnvironment(
                 Func<List<MockWorkspace>, IEnumerable<MockWorkspace>> adjustWorkspaces = null,
                 Func<List<MockWorkspace>, MockWorkspace> setDefaultWorkspace = null,
-                Func<WorkspaceOptions, IThreadSafeWorkspace> dialogWorkspaceSelection = null)
+                Func<WorkspaceOptions, IThreadSafeWorkspace> dialogWorkspaceSelection = null,
+                Func<DateFormat> selectDateFormat = null)
             {
                 workspaces = Enumerable.Range(0, 10)
                     .Select(id => new MockWorkspace(id, isInaccessible: id % 4 == 0))
@@ -89,12 +90,18 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                         return Observable.Return(chosenElement);
                     });
 
+                selectDateFormat = selectDateFormat ?? (() => DateFormat.FromLocalizedDateFormat("YYYY-MM-DD"));
+                var preferences = Substitute.For<IThreadSafePreferences>();
+                preferences.DateFormat.Returns(selectDateFormat());
+                DataSource.Preferences.Current.Returns(Observable.Return(preferences));
+
                 ViewModel = CreateViewModel();
                 ViewModel.AttachView(View);
             }
 
             protected override ReportsViewModel CreateViewModel()
                 => new ReportsViewModel(
+                    DataSource,
                     NavigationService,
                     InteractorFactory,
                     SchedulerProvider,
@@ -106,17 +113,20 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             [Theory, LogIfTooSlow]
             [ConstructorData]
             public void ThrowsIfAnyOfTheArgumentsIsNull(
+                bool useDataSource,
                 bool useNavigationService,
                 bool useSchedulerProvider,
                 bool useInteractorFactory,
                 bool useRxActionFactory)
             {
+                var dataSource = useDataSource ? DataSource : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
 
                 Action tryingToConstructWithEmptyParameters = () => new ReportsViewModel(
+                    dataSource,
                     navigationService,
                     interactorFactory,
                     schedulerProvider,
@@ -175,6 +185,11 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                     OnNext<IEnumerable<IReportElement>>(4, isNoDataElement)
                 );
             }
+        }
+
+        public sealed class TheFormattedTimeRangeProperty : ReportsViewModelTest
+        {
+            // TODO Add tests when the time range selector view model is implemented
         }
 
         public sealed class TheHasMultipleWorkspacesProperty : ReportsViewModelTest
