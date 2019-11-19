@@ -136,7 +136,7 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsTimeEntryRunning
-                .Subscribe(onTimeEntryCardVisibilityChanged)
+                .Subscribe(visible => playButton.SetExpanded(visible))
                 .DisposedBy(DisposeBag);
 
             ViewModel.SyncProgressState
@@ -334,11 +334,6 @@ namespace Toggl.Droid.Fragments
         private void onSwipeActionsChanged(bool enabled)
         {
             touchCallback.AreSwipeActionsEnabled = enabled;
-        }
-
-        private void onTimeEntryCardVisibilityChanged(bool visible)
-        {
-            playButton.SetExpanded(visible);
         }
 
         private void onEmptyStateVisibilityChanged(bool shouldShowEmptyState)
