@@ -14,7 +14,8 @@ using Toggl.Droid.Views;
 
 namespace Toggl.Droid.Adapters
 {
-    public sealed class ReportsRecyclerAdapter : RecyclerView.Adapter
+    [Obsolete("Remove in favor of ReportsAdapter")]
+    public sealed class ReportsRecyclerAdapterOld : RecyclerView.Adapter
     {
         private readonly int lastItemCellHeight;
         private readonly int normalItemCellHeight;
@@ -35,13 +36,13 @@ namespace Toggl.Droid.Adapters
         private ReportsSummaryData currentReportsSummaryData = ReportsSummaryData.Empty();
         public IObservable<Unit> SummaryCardClicks => summaryCardClicks.AsObservable();
 
-        public ReportsRecyclerAdapter(Context context)
+        public ReportsRecyclerAdapterOld(Context context)
         {
             lastItemCellHeight = 72.DpToPixels(context);
             normalItemCellHeight = 48.DpToPixels(context);
         }
 
-        public ReportsRecyclerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
+        public ReportsRecyclerAdapterOld(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
         }
@@ -53,7 +54,7 @@ namespace Toggl.Droid.Adapters
             {
                 case WorkspaceName:
                     var workpaceNameCell = layoutInflater.Inflate(Resource.Layout.ReportsFragmentWorkspaceName, parent, false);
-                    return new ReportsWorkspaceNameViewHolder(workpaceNameCell);
+                    return new ReportsWorkspaceNameViewHolderOld(workpaceNameCell);
 
                 case Header:
                     var headerCellView = layoutInflater.Inflate(Resource.Layout.ReportsFragmentHeader, parent, false);
@@ -80,7 +81,7 @@ namespace Toggl.Droid.Adapters
                     reportsViewHolder.RecalculateSize();
                     break;
 
-                case ReportsWorkspaceNameViewHolder reportsWorkspaceHolder:
+                case ReportsWorkspaceNameViewHolderOld reportsWorkspaceHolder:
                     reportsWorkspaceHolder.Item = currentWorkspaceName;
                     break;
 

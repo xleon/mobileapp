@@ -1,6 +1,4 @@
-﻿using System.Collections.Immutable;
-
-namespace Toggl.Core.UI.ViewModels.Reports
+﻿namespace Toggl.Core.UI.ViewModels.Reports
 {
     public abstract class ReportElementBase : IReportElement
     {
@@ -10,5 +8,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         {
             IsLoading = isLoading;
         }
+
+        public abstract bool Equals(IReportElement other);
     }
 }

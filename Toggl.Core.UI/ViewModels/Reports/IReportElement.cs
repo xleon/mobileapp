@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
-    public interface IReportElement
+    public interface IReportElement : IEquatable<IReportElement>
     {
     }
 

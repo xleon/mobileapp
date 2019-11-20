@@ -1,23 +1,31 @@
 ﻿using Android.OS;
 using Android.Views;
 using System;
+using System.Linq;
 using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
+using Toggl.Droid.LayoutManagers;
 using Toggl.Droid.Presentation;
+using Toggl.Droid.ViewHolders;
+using Toggl.Droid.ViewHolders.Reports;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
     public sealed partial class ReportsFragment : ReactiveTabFragment<ReportsViewModel>, IScrollableToStart
     {
+        private ReportsAdapter adapter = new ReportsAdapter();
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(Resource.Layout.ReportsFragment, container, false);
             InitializeViews(view);
-            SetupToolbar(view);
-            reportsRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
 
+            SetupToolbar(view);
+            setupRecyclerView();
+       
             return view;
         }
 
@@ -32,11 +40,22 @@ namespace Toggl.Droid.Fragments
             ViewModel.FormattedTimeRange
                 .Subscribe(toolbarCurrentDateRangeText.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
+
+            ViewModel.Elements
+                .Subscribe(adapter.Rx().Items())
+                .DisposedBy(DisposeBag);
         }
 
         public void ScrollToStart()
         {
             reportsRecyclerView?.SmoothScrollToPosition(0);
+        }
+
+        private void setupRecyclerView()
+        {
+            reportsRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
+            reportsRecyclerView.SetLayoutManager(new UnpredictiveLinearLayoutManager(Context));
+            reportsRecyclerView.SetAdapter(adapter);
         }
     }
 }

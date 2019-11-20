@@ -5,15 +5,15 @@ using System;
 
 namespace Toggl.Droid.ViewHolders
 {
-    public class ReportsWorkspaceNameViewHolder : BaseRecyclerViewHolder<string>
+    public class ReportsWorkspaceNameViewHolderOld : BaseRecyclerViewHolder<string>
     {
         private TextView workspaceName;
 
-        public ReportsWorkspaceNameViewHolder(View itemView) : base(itemView)
+        public ReportsWorkspaceNameViewHolderOld(View itemView) : base(itemView)
         {
         }
 
-        public ReportsWorkspaceNameViewHolder(IntPtr handle, JniHandleOwnership ownership) : base(handle, ownership)
+        public ReportsWorkspaceNameViewHolderOld(IntPtr handle, JniHandleOwnership ownership) : base(handle, ownership)
         {
         }
 

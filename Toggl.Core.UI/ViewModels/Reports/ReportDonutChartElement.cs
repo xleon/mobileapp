@@ -7,14 +7,17 @@ namespace Toggl.Core.UI.ViewModels.Reports
 {
     public sealed class ReportDonutChartElement : CompositeReportElement
     {
+        private ReportDonutChartDonutElement donutElement;
+        private IReportElement[] legend;
+
         public ReportDonutChartElement(ITimeEntriesTotals reportsTotal, ProjectSummaryReport summary)
             : base(false)
         {
             // use the arguments to calculate what's needed for the donut
-            var donutElement = new ReportDonutChartDonutElement(reportsTotal, summary);
+            donutElement = new ReportDonutChartDonutElement(reportsTotal, summary);
 
             // use the arguments to calculate the items for the donut legend
-            var legend = new IReportElement[]
+            legend = new IReportElement[]
             {
                 new ReportDonutChartLegendItemElement(reportsTotal, summary),
                 new ReportDonutChartLegendItemElement(reportsTotal, summary),
@@ -32,5 +35,12 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public static ReportDonutChartElement LoadingState
             => new ReportDonutChartElement(true);
+
+        // TODO: Do not forget to update this method and write tests for it when the element is implemented
+        public override bool Equals(IReportElement other)
+            => other is ReportDonutChartElement donutChartElement
+            && donutChartElement.IsLoading == IsLoading
+            && donutChartElement.donutElement.Equals(donutElement)
+            && donutChartElement.legend.SequenceEqual(legend);
     }
 }
