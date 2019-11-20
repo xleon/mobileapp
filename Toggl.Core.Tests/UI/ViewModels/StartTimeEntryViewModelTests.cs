@@ -1526,6 +1526,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
                     TestScheduler.Start();
+                    var values = TextFieldInfoObserver.Values();
                     var querySpan = TextFieldInfoObserver.LastEmittedValue().FirstTextSpan();
                     querySpan.Text.Should().Be("Something ");
                 }
@@ -1739,6 +1740,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
                     TestScheduler.Start();
+                    var values = TextFieldInfoObserver.Values().ToList();
                     var querySpan = TextFieldInfoObserver.LastEmittedValue().Spans.OfType<TextSpan>().First();
                     querySpan.Text.Should().Be("Something ");
                 }
@@ -1775,6 +1777,27 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     TestScheduler.Start();
                     var querySpan = TextFieldInfoObserver.LastEmittedValue().FirstTextSpan();
                     querySpan.Text.Should().Be(Suggestion.Symbol);
+                }
+            }
+
+            public sealed class WhenSelectingACreateEntitySuggestion : StartTimeEntryViewModelTest
+            {
+                [Fact, LogIfTooSlow]
+                public void RemovesTheQuerySymbolWhenCreateingATag()
+                {
+                    var suggestionsObserver = TestScheduler.CreateObserver<IImmutableList<SectionModel<string, AutocompleteSuggestion>>>();
+                    ViewModel.Suggestions.Subscribe(suggestionsObserver);
+                    var textFieldInfoObserver = TestScheduler.CreateObserver<TextFieldInfo>();
+                    ViewModel.TextFieldInfo.Subscribe(textFieldInfoObserver);
+                    var spans = new ISpan[] {new QueryTextSpan("#NewTag", 7)}.ToImmutableList();
+                    ViewModel.SetTextSpans.Execute(spans);
+                    TestScheduler.Start();
+                    var suggestionToTap = suggestionsObserver.LastEmittedValue().First().Items.Single(suggestion => suggestion is CreateEntitySuggestion);
+
+                    ViewModel.SelectSuggestion.Execute(suggestionToTap);
+                    TestScheduler.Start();
+
+                    textFieldInfoObserver.LastEmittedValue().Description.Should().NotContain("#");
                 }
             }
         }

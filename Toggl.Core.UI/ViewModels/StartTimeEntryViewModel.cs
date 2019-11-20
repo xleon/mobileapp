@@ -381,7 +381,6 @@ namespace Toggl.Core.UI.ViewModels
             var tagSuggestion = new TagSuggestion(createdTag);
             await selectSuggestion(tagSuggestion);
             hasAnyTags = true;
-            toggleTagSuggestions();
         }
 
         private void durationTapped()
@@ -577,7 +576,7 @@ namespace Toggl.Core.UI.ViewModels
                     {
                         header = timeEntrySuggestion.WorkspaceName;
                     }
-                    
+
                     return new SectionModel<string, AutocompleteSuggestion>(header, items);
                 }
             );
