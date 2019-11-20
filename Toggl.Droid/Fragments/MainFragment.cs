@@ -2,11 +2,6 @@ using Android.App;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
-using Android.Support.Design.Widget;
-using Android.Support.V4.Content;
-using Android.Support.V7.App;
-using Android.Support.V7.Widget;
-using Android.Support.V7.Widget.Helper;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
@@ -32,11 +27,9 @@ using static Android.Content.Context;
 using static Toggl.Core.Sync.SyncProgress;
 using static Toggl.Core.Analytics.EditTimeEntryOrigin;
 using FoundationResources = Toggl.Shared.Resources;
-using System.Linq;
-using Android.Content;
-using Toggl.Droid.Widgets;
-using Android.Appwidget;
-using Toggl.Droid.Services;
+using AndroidX.Core.Content;
+using AndroidX.RecyclerView.Widget;
+using Google.Android.Material.Snackbar;
 
 namespace Toggl.Droid.Fragments
 {
@@ -136,7 +129,7 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsTimeEntryRunning
-                .Subscribe(onTimeEntryCardVisibilityChanged)
+                .Subscribe(visible => playButton.SetExpanded(visible))
                 .DisposedBy(DisposeBag);
 
             ViewModel.SyncProgressState
@@ -334,11 +327,6 @@ namespace Toggl.Droid.Fragments
         private void onSwipeActionsChanged(bool enabled)
         {
             touchCallback.AreSwipeActionsEnabled = enabled;
-        }
-
-        private void onTimeEntryCardVisibilityChanged(bool visible)
-        {
-            playButton.SetExpanded(visible);
         }
 
         private void onEmptyStateVisibilityChanged(bool shouldShowEmptyState)

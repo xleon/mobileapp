@@ -18,7 +18,7 @@ using Toggl.Droid.Fragments;
 using Toggl.Droid.Helper;
 using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
-using Fragment = Android.Support.V4.App.Fragment;
+using Fragment = AndroidX.Fragment.App.Fragment;
 
 namespace Toggl.Droid.Activities
 {
@@ -215,6 +215,7 @@ namespace Toggl.Droid.Activities
 
         private void showFragment(Fragment fragment)
         {
+            SupportFragmentManager.ExecutePendingTransactions();
             var transaction = SupportFragmentManager.BeginTransaction();
 
             if (activeFragment is MainFragment mainFragmentToHide)
@@ -236,6 +237,7 @@ namespace Toggl.Droid.Activities
         private void showInitialFragment(int initialTabItemId)
         {
             SupportFragmentManager.RemoveAllFragments();
+            SupportFragmentManager.ExecutePendingTransactions();
 
             var initialFragment = getCachedFragment(initialTabItemId);
             if (!initialFragment.IsAdded)

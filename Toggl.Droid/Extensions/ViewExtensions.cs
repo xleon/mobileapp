@@ -1,22 +1,13 @@
-﻿using System;
-using Android.Animation;
+using System;
 using Android.Content;
-using Android.Graphics;
-using Android.Graphics.Drawables;
-using Android.Support.Design.Widget;
-using Android.Support.V4.Widget;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Views.InputMethods;
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Shared;
-using Color = Toggl.Shared.Color;
 using AndroidColor = Android.Graphics.Color;
-using Android.App;
-using Android.Util;
+using AndroidX.Core.Widget;
+using Google.Android.Material.AppBar;
 using Toggl.Droid.Helper;
-using Toggl.Droid.Views.Calendar;
 
 namespace Toggl.Droid.Extensions
 {
@@ -98,7 +89,7 @@ namespace Toggl.Droid.Extensions
         {
             view.DoOnApplyWindowInsets((v, insets, padding) =>
             {
-                view.UpdatePadding(bottom: padding.bottom + insets.SystemWindowInsetBottom);
+                view.UpdatePadding(bottom: padding.Bottom + insets.SystemWindowInsetBottom);
             });
         }
 
@@ -106,7 +97,7 @@ namespace Toggl.Droid.Extensions
         {
             view.DoOnApplyWindowInsets((v, insets, padding) =>
             {
-                v.UpdatePadding(top: padding.top + insets.SystemWindowInsetTop);
+                v.UpdatePadding(top: padding.Top + insets.SystemWindowInsetTop);
             });
         }
 
@@ -117,7 +108,7 @@ namespace Toggl.Droid.Extensions
             // Set the actual Listener which proxies to insetsHandler, also passing in the original padding state
             view.SetOnApplyWindowInsetsListener(new OnApplyWindowInsetsListener(insetsHandler, initialPadding));
             // request some insets
-            view.RequestApplyInsets();
+            view.RequestApplyInsetsWhenAttached();
         }
 
         private class OnApplyWindowInsetsListener : Java.Lang.Object, View.IOnApplyWindowInsetsListener
@@ -140,23 +131,21 @@ namespace Toggl.Droid.Extensions
         }
 
         private static InitialPadding recordInitialPaddingForView(this View view)
-        {
-            return new InitialPadding(view.PaddingLeft, view.PaddingTop, view.PaddingRight, view.PaddingBottom);
-        }
+            => new InitialPadding(view.PaddingLeft, view.PaddingTop, view.PaddingRight, view.PaddingBottom);
 
         public struct InitialPadding
         {
-            public readonly int left;
-            public readonly int top;
-            public readonly int right;
-            public readonly int bottom;
+            public int Left { get; }
+            public int Top { get; }
+            public int Right { get; }
+            public int Bottom { get; }
 
             public InitialPadding(int left, int top, int right, int bottom)
             {
-                this.left = left;
-                this.top = top;
-                this.right = right;
-                this.bottom = bottom;
+                Left = left;
+                Top = top;
+                Right = right;
+                Bottom = bottom;
             }
         }
 
