@@ -12,7 +12,7 @@ You can check that in the [GitHub Translations Project's Preparing Translation(s
 
 ### How can I start a translation request?
 If there isn't a translation request for your desired language or translation improvement, you can create a new issue to make your request. 
-Take a look at the Mobile Translation Framework documentation section about the translations GitHub Project [section about open requests](./localization-framework.md) and start a [New Language Request issue](https://github.com/toggl/mobileapp/issues/new?template=g-translation-request.md) or [Translation Improvement issue](https://github.com/toggl/mobileapp/issues/new?template=h-translation-fix-request.md).
+Take a look at the Mobile Translation Framework documentation section about the translations GitHub Project [section about open requests](./localization-framework.md) and start a [New Language Request issue](https://github.com/toggl/mobileapp/issues/new?template=h-translation-request.md&title=New+Language+Request+-+Examplanese%2C+eg-EG) or [Translation Improvement issue](https://github.com/toggl/mobileapp/issues/new?template=i-translation-fix-request.md&title=Translation+Improvement+Request+-+Issue%2FFeature%2FScreen+-+Language+code).
 
 ### Can I contribute to a translation in progress?
 Yes, feel free to leave a comment in the translation issue telling that you want to help.
