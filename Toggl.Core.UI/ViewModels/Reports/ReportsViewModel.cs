@@ -23,7 +23,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private long? selectedWorkspaceId;
         private DateTimeOffsetRange selectedTimeRange;
 
-        private IInteractorFactory interactorFactory;
+        private readonly IInteractorFactory interactorFactory;
 
         public IObservable<IImmutableList<IReportElement>> Elements { get; set; }
         public IObservable<bool> HasMultipleWorkspaces { get; set; }
@@ -154,12 +154,18 @@ namespace Toggl.Core.UI.ViewModels.Reports
                     .GetProjectSummary(filter.Workspace.Id, filter.TimeRange.Minimum, filter.TimeRange.Maximum)
                     .Execute();
 
+                var durationFormat = await interactorFactory
+                    .GetPreferences()
+                    .Execute()
+                    .FirstAsync()
+                    .Select(preferences => preferences.DurationFormat);
+
                 if (summaryData.Segments.None())
                     return elements(new ReportNoDataElement());
 
                 return elements(
                     new ReportWorkspaceNameElement(filter.Workspace.Name),
-                    new ReportSummaryElement(summaryData),
+                    new ReportSummaryElement(summaryData, durationFormat),
                     new ReportBarChartElement(reportsTotal, summaryData),
                     new ReportDonutChartDonutElement(reportsTotal, summaryData));
             }

@@ -69,8 +69,8 @@ namespace Toggl.Droid.Fragments
                     return new ReportWorkspaceNameViewHolder(workpaceNameCell);
 
                 case ViewType.Summary:
-                    var summaryCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
-                    return new ReportEmptyElementViewHolder(summaryCell);
+                    var summaryCell = inflater.Inflate(Resource.Layout.ReportSummaryElement, parent, false);
+                    return new ReportSummaryViewHolder(summaryCell);
 
                 case ViewType.BarChart:
                     var barChartCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);

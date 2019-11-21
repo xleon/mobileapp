@@ -619,6 +619,7 @@
     <Compile Include="ViewHolders\LicenseViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportElementViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportEmptyElementViewHolder.cs" />
+    <Compile Include="ViewHolders\Reports\ReportSummaryViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportWorkspaceNameViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\SuggestionRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\ProjectSuggestionViewHolder.cs" />
@@ -917,6 +918,7 @@
     <AndroidResource Include="Resources\drawable\Splash.xml" />
     <AndroidResource Include="Resources\drawable\text_placeholder.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
+    <AndroidResource Include="Resources\layout\ReportSummaryElement.axml" />
     <AndroidResource Include="Resources\layout\WidgetLoading.axml" />
     <AndroidResource Include="Resources\layout\CalendarDayFragmentPage.axml" />
     <AndroidResource Include="Resources\layout\ContextualMenuActionCell.axml" />

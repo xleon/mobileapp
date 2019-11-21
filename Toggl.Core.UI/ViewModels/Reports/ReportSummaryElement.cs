@@ -1,19 +1,24 @@
 ﻿using System;
 using Toggl.Core.Reports;
-using Toggl.Shared.Models.Reports;
+using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
     public sealed class ReportSummaryElement : ReportElementBase
     {
-        public float BillablePercentage { get; }
-        public TimeSpan TotalTime { get; }
+        public float? BillablePercentage { get; }
+        public TimeSpan? TotalTime { get; }
+        public DurationFormat DurationFormat { get; }
 
-        public ReportSummaryElement(ProjectSummaryReport summary) : this(false)
+        public ReportSummaryElement(ProjectSummaryReport summary, DurationFormat durationFormat) : this(false)
         {
-            // use the arguments to calculate the totals and the billable
-            TotalTime = TimeSpan.FromSeconds(summary?.TotalSeconds ?? 0);
-            BillablePercentage = summary?.BillablePercentage ?? 0;
+            if (summary != null)
+            {
+                TotalTime = TimeSpan.FromSeconds(summary.TotalSeconds);
+                BillablePercentage = summary.BillablePercentage;
+            }
+            
+            DurationFormat = durationFormat;
         }
 
         private ReportSummaryElement(bool isLoading)
@@ -26,8 +31,9 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public override bool Equals(IReportElement other)
             => other is ReportSummaryElement summaryElement
-            && summaryElement.IsLoading == IsLoading
-            && summaryElement.BillablePercentage == BillablePercentage
-            && summaryElement.TotalTime == TotalTime;
+               && summaryElement.IsLoading == IsLoading
+               && summaryElement.BillablePercentage == BillablePercentage
+               && summaryElement.TotalTime == TotalTime
+               && summaryElement.DurationFormat == DurationFormat;
     }
 }
