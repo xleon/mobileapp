@@ -13,7 +13,9 @@ namespace Toggl.iOS
     {
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
+#if !DEBUG
             Messaging.SharedInstance.ApnsToken = deviceToken;
+#endif
         }
 
         public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
