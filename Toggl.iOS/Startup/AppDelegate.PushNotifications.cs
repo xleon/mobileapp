@@ -13,6 +13,7 @@ namespace Toggl.iOS
     {
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
+            if (Messaging.SharedInstance == null) return;
             Messaging.SharedInstance.ApnsToken = deviceToken;
         }
 
