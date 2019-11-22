@@ -1,14 +1,20 @@
-﻿using Toggl.Core.Reports;
-using Toggl.Shared.Models.Reports;
+﻿using System.Linq;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
+using static Toggl.Core.UI.ViewModels.Reports.ReportDonutChartElement;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
-    public sealed class ReportDonutChartDonutElement : ReportElementBase
+    public class ReportDonutChartDonutElement : ReportElementBase
     {
-        public ReportDonutChartDonutElement(ITimeEntriesTotals reportsTotal, ProjectSummaryReport summary)
+        public ImmutableList<Segment> Segments { get; } = ImmutableList<Segment>.Empty; 
+
+        public ReportDonutChartDonutElement(ImmutableList<Segment> segments)
             : base(false)
         {
-            // use the arguments to calculate what's needed for the donut segments.
+            Segments = segments;
         }
 
         private ReportDonutChartDonutElement(bool isLoading)
@@ -19,10 +25,10 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public static ReportDonutChartDonutElement LoadingState
             => new ReportDonutChartDonutElement(true);
 
-        // TODO: Do not forget to update this method and write tests for it when the element is implemented
         public override bool Equals(IReportElement other)
             => other is ReportDonutChartDonutElement donutChartDonutElement
-            && donutChartDonutElement.IsLoading == IsLoading;
+            && donutChartDonutElement.IsLoading == IsLoading
+            && donutChartDonutElement.Segments.SequenceEqual(Segments);
     }
 }
 
