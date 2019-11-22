@@ -186,7 +186,7 @@ namespace Toggl.Core.Models
             Billable = entity.Billable;
             Start = entity.Start;
             Duration = entity.Duration;
-            Description = entity.Description;
+            Description = entity.Description ?? string.Empty;
             TagIds = entity.TagIds;
             UserId = entity.UserId;
             At = entity.At;
