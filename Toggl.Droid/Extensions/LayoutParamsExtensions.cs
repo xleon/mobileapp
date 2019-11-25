@@ -1,7 +1,11 @@
-﻿using Android.Views;
+﻿//Todo: Remove the following two usings
+using Android.Support.Constraints;
+using Android.Support.V7.Widget;
+using Android.Views;
 using Android.Widget;
-using AndroidX.ConstraintLayout.Widget;
-using AndroidX.RecyclerView.Widget;
+//Todo: Re-add the following two usings
+//using AndroidX.ConstraintLayout.Widget;
+//using AndroidX.RecyclerView.Widget;
 
 namespace Toggl.Droid.Extensions
 {
