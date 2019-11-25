@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using Toggl.Shared;
 using Toggl.Storage.Models;
 using Toggl.Storage.Realm.Models;
 
@@ -12,9 +13,11 @@ namespace Toggl.Storage.Realm
     {
         private readonly RealmConfiguration realmConfiguration;
 
-        public Database()
+        public Database(RealmConfigurator realmConfigurator)
         {
-            realmConfiguration = createRealmConfiguration();
+            Ensure.Argument.IsNotNull(realmConfigurator, nameof(realmConfigurator));
+
+            realmConfiguration = realmConfigurator.Configuration;
             IdProvider = new IdProvider(getRealmInstance);
             SinceParameters = createSinceParameterRepository();
             Tags = Repository<IDatabaseTag>.For(getRealmInstance, (tag, realm) => new RealmTag(tag, realm));
@@ -72,47 +75,5 @@ namespace Toggl.Storage.Realm
 
             return new SinceParameterStorage(sinceParametersRealmAdapter);
         }
-
-        private RealmConfiguration createRealmConfiguration()
-            => new RealmConfiguration
-            {
-                SchemaVersion = 8,
-                MigrationCallback = (migration, oldSchemaVersion) =>
-                {
-                    if (oldSchemaVersion < 3)
-                    {
-                        // nothing needs explicit updating when updating from schema 0 up to 3
-                    }
-
-                    if (oldSchemaVersion < 4)
-                    {
-                        var newTags = migration.NewRealm.All<RealmTag>();
-                        var oldTags = migration.OldRealm.All("RealmTag");
-                        for (var i = 0; i < newTags.Count(); i++)
-                        {
-                            var oldTag = oldTags.ElementAt(i);
-                            var newTag = newTags.ElementAt(i);
-                            newTag.ServerDeletedAt = oldTag.DeletedAt;
-                        }
-                    }
-
-                    if (oldSchemaVersion < 6)
-                    {
-                        // nothing needs explicit updating when updating from schema 4 up to 6
-                    }
-
-                    if (oldSchemaVersion < 7)
-                    {
-                        // RealmWorkspace: IsGhost was renamed to IsInaccessible
-                        // A migration is not required because the property was not used until now
-                    }
-
-                    if (oldSchemaVersion < 8)
-                    {
-                        // RealmUser: Added new property Timezone
-                        // A migration is not required because it's acceptable for the timezone to be unspecified (null)
-                    }
-                }
-            };
     }
 }
