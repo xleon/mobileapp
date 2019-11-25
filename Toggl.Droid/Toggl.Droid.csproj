@@ -986,7 +986,7 @@
     <AndroidResource Include="Resources\drawable\SmallDot.xml" />
     <AndroidResource Include="Resources\layout\MainSuggestionsCard.axml" />
     <AndroidResource Include="Resources\layout\MainRunningTimeEntry.axml" />
-    <AndroidResource Include="Resources\layout\SettingsFragment.axml" />
+    <AndroidResource Include="Resources\layout\SettingsActivity.axml" />
     <AndroidResource Include="Resources\drawable\TopShadow.xml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivity.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityTimeEntryCell.axml" />
