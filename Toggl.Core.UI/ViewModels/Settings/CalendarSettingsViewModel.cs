@@ -103,6 +103,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
                 ReloadCalendars();
                 permissionGrantedSubject.OnNext(authorized);
+                calendarListVisibleSubject.OnNext(authorized);
             }
         }
 

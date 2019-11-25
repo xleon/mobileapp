@@ -21,7 +21,7 @@ namespace Toggl.Droid.Activities
     public partial class SettingsActivity : ReactiveActivity<SettingsViewModel>
     {
         public SettingsActivity() : base(
-            Resource.Layout.SettingsFragment,
+            Resource.Layout.SettingsActivity,
             Resource.Style.AppTheme,
             Transitions.SlideInFromBottom)
         {

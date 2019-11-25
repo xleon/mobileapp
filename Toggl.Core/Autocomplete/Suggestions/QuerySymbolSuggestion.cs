@@ -1,4 +1,5 @@
-﻿using Toggl.Shared;
+﻿using System;
+using Toggl.Shared;
 
 namespace Toggl.Core.Autocomplete.Suggestions
 {
@@ -21,7 +22,7 @@ namespace Toggl.Core.Autocomplete.Suggestions
         }
 
         public override int GetHashCode()
-            => HashCode.From(Symbol, Description);
+            => HashCode.Combine(Symbol, Description);
     }
 
     public static class QuerySymbolSuggestionExtensions

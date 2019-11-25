@@ -192,7 +192,7 @@ namespace Toggl.Core.UI.Transformations
 
             public int GetHashCode(IThreadSafeTimeEntry timeEntry)
             {
-                var hashCode = HashCode.From(
+                var hashCode = HashCode.Combine(
                     timeEntry.Workspace.Id,
                     timeEntry.Description,
                     timeEntry.Project?.Id,
@@ -202,7 +202,7 @@ namespace Toggl.Core.UI.Transformations
                 var tags = timeEntry.TagIds.OrderBy(id => id);
                 foreach (var tag in tags)
                 {
-                    hashCode = HashCode.From(hashCode, tag);
+                    hashCode = HashCode.Combine(hashCode, tag);
                 }
 
                 return hashCode;

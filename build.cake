@@ -33,7 +33,7 @@ private void FormatAndroidAxml()
 
 private void GenerateSyncDiagram()
 {
-    var args = "bin/Debug/netcoreapp2.0/SyncDiagramGenerator.dll";
+    var args = "bin/Debug/netcoreapp3.0/SyncDiagramGenerator.dll";
 
     StartProcess("dotnet", new ProcessSettings { Arguments = args });
 }

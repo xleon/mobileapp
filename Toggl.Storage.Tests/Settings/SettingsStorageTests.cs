@@ -251,7 +251,6 @@ namespace Toggl.Storage.Tests.Settings
             [Theory]
             [InlineData("id1", "id2", "id0", "id")]
             [InlineData("id1")]
-            [InlineData]
             [InlineData(null)]
             public void ReturnsTheStoredCalendars(params string[] ids)
             {
