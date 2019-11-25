@@ -318,7 +318,7 @@ namespace Toggl.Droid.Adapters.Calendar
             }
 
             private int anchoredItemHashCode(CalendarItem item)
-                => Shared.HashCode.From(
+                => HashCode.Combine(
                     item.Source,
                     item.Id,
                     item.StartTime,

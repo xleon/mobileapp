@@ -1,4 +1,5 @@
-﻿using Toggl.Core.UI.Interfaces;
+﻿using System;
+using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels
@@ -32,7 +33,7 @@ namespace Toggl.Core.UI.ViewModels
             return Equals((SelectableClientBaseViewModel)obj);
         }
 
-        public override int GetHashCode() => HashCode.From(Name ?? string.Empty, Selected);
+        public override int GetHashCode() => HashCode.Combine(Name ?? string.Empty, Selected);
 
         public long Identifier => Name.GetHashCode();
     }

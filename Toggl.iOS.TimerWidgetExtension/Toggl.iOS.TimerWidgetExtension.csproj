@@ -9,6 +9,7 @@
     <RootNamespace>Toggl.iOS.TimerWidgetExtension</RootNamespace>
     <AssemblyName>Toggl.iOS.TimerWidgetExtension</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>

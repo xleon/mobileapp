@@ -46,11 +46,11 @@ The project has the following columns:
     All new open requests are located in this column. Different types of translation requests are created using different issue templates:
 
     - New Language Request:
-    If you would like the whole app to be translated into a new language, create a [New Language Request issue](https://github.com/toggl/mobileapp/issues/new?template=g-translation-request.md). If you see that the [Translations project](https://github.com/toggl/mobileapp/projects/74) already has a request for the language or improvement you are rooting for, don't hesitate to comment or react to that issue.
+    If you would like the whole app to be translated into a new language, create a [New Language Request issue](https://github.com/toggl/mobileapp/issues/new?template=h-translation-request.md&title=New+Language+Request+-+Examplanese%2C+eg-EG). If you see that the [Translations project](https://github.com/toggl/mobileapp/projects/74) already has a request for the language or improvement you are rooting for, don't hesitate to comment or react to that issue.
     - Translation Improvement:
-    If there are any imprecise/incorrect texts that need to be improved in a specific language, create a new [Translation Improvement issue](https://github.com/toggl/mobileapp/issues/new?template=h-translation-fix-request.md).
+    If there are any imprecise/incorrect texts that need to be improved in a specific language, create a new [Translation Improvement issue](https://github.com/toggl/mobileapp/issues/new?template=i-translation-fix-request.md&title=Translation+Improvement+Request+-+Issue%2FFeature%2FScreen+-+Language+code).
     - New Copy Translation:
-    When introducing new pieces of text in the app, all of them need to be translated to currently supported languages before they can be released. Create a [New Copy Translation issue](https://github.com/toggl/mobileapp/issues/new?template=i-new-copy-translation-request.md) to start the translation process for new copy.
+    When introducing new pieces of text in the app, all of them need to be translated to currently supported languages before they can be released. Create a [New Copy Translation issue](https://github.com/toggl/mobileapp/issues/new?template=j-new-copy-translation-request.md&title=New+Copy+Translation+Request+-+Issue%2FFeature%2FScreen) to start the translation process for new copy.
 - In Progress
 Translation request issues in this column either have been assigned to translators or are currently being worked on in some other way.
 - In Review
