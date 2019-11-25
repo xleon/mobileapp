@@ -9,6 +9,7 @@
     <RootNamespace>Toggl.iOS.SiriExtension.UI</RootNamespace>
     <AssemblyName>Toggl.iOS.SiriExtension.UI</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>

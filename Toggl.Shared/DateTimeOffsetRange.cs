@@ -28,7 +28,7 @@ namespace Toggl.Shared
             => !range.Equals(other);
 
         public override int GetHashCode()
-            => HashCode.From(Minimum, Maximum);
+            => HashCode.Combine(Minimum, Maximum);
 
         public override string ToString()
             => $"[{Minimum}, {Maximum}]";

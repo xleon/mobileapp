@@ -76,9 +76,6 @@ namespace Toggl.Shared.Extensions
             return maxItem;
         }
 
-        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> collection)
-            => new HashSet<T>(collection);
-
         public static IEnumerable<T> Yield<T>(this T item)
         {
             yield return item;

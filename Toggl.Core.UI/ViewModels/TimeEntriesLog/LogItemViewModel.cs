@@ -120,21 +120,26 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
         }
 
         public override int GetHashCode()
-            => HashCode.From(
+        {
+            var hasSoFar = HashCode.Combine(
                 RepresentedTimeEntriesIds.Aggregate(
-                    (acc, id) => HashCode.From(acc, id)),
+                    (acc, id) => HashCode.Combine(acc, id)),
                 IsBillable,
                 IsActive,
                 Description,
                 ProjectName,
                 ProjectColor,
-                ClientName,
+                ClientName);
+
+            return HashCode.Combine(
+                hasSoFar,
                 TaskName,
                 Duration,
                 HasProject,
                 HasTags,
                 NeedsSync,
                 CanContinue);
+        }
 
         public static bool operator ==(LogItemViewModel left, LogItemViewModel right) => Equals(left, right);
 
