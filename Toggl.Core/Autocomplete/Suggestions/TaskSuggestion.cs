@@ -1,6 +1,6 @@
-﻿using Toggl.Core.Extensions;
+﻿using System;
+using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
-using Toggl.Shared;
 
 namespace Toggl.Core.Autocomplete.Suggestions
 {
@@ -27,6 +27,6 @@ namespace Toggl.Core.Autocomplete.Suggestions
         }
 
         public override int GetHashCode()
-            => HashCode.From(TaskId, ProjectId, Name);
+            => HashCode.Combine(TaskId, ProjectId, Name);
     }
 }

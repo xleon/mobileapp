@@ -9,6 +9,7 @@
     <RootNamespace>Toggl.iOS.Shared</RootNamespace>
     <AssemblyName>Toggl.iOS.Shared</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

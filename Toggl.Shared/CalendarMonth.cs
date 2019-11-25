@@ -72,6 +72,6 @@ namespace Toggl.Shared
         }
 
         public override int GetHashCode()
-            => HashCode.From(Year, Month);
+            => HashCode.Combine(Year, Month);
     }
 }

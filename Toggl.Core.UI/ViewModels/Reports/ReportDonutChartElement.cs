@@ -132,7 +132,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 && segment.Value == Value;
 
             public override int GetHashCode()
-                => HashCode.From(Color, Label, Value);
+                => HashCode.Combine(Color, Label, Value);
 
             public static bool operator ==(Segment left, Segment right)
                 => left.Equals(right);

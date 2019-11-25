@@ -38,7 +38,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
 
         public override int GetHashCode()
         {
-            return HashCode.From(MenuType, ActionKind, Title, MenuItemAction);
+            return HashCode.Combine(MenuType, ActionKind, Title, MenuItemAction);
         }
     }
 }

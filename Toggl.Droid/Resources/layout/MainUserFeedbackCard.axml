@@ -41,7 +41,7 @@
             android:textSize="20sp"
             android:fontFamily="sans-serif-medium"
             android:textStyle="normal"
-            android:textColor="#3e3e3e"
+            android:textColor="@color/primaryText"
             android:letterSpacing="0.01"
             tools:text="Do you like this app?" />
         <ImageView
@@ -110,7 +110,7 @@
             android:textSize="20sp"
             android:fontFamily="sans-serif-medium"
             android:textStyle="normal"
-            android:textColor="#3e3e3e"
+            android:textColor="@color/primaryText"
             android:letterSpacing="0.01"
             android:gravity="center_horizontal"
             tools:text="Awesome!" />
@@ -147,7 +147,7 @@
             android:singleLine="false"
             android:fontFamily="sans-serif"
             android:textStyle="normal"
-            android:textColor="#3e3e3e"
+            android:textColor="@color/secondaryText"
             android:lineSpacingExtra="8sp"
             tools:text="Would you mind rating Toggl in the Play Store? Your review really makes a difference." />
         <Button
