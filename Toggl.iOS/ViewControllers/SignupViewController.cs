@@ -12,6 +12,7 @@ using UIKit;
 using static Toggl.iOS.Extensions.LoginSignupViewExtensions;
 using static Toggl.iOS.Extensions.ViewExtensions;
 using AdjustBindingsiOS;
+using CoreGraphics;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -30,6 +31,8 @@ namespace Toggl.iOS.ViewControllers
 
         private const int tabletFormOffset = 246;
         private const int tabletLandscapeKeyboardOffset = 80;
+
+        private UIButton showPasswordButton;
 
         public SignupViewController(SignupViewModel viewModel) : base(viewModel, nameof(SignupViewController))
         {
@@ -50,6 +53,8 @@ namespace Toggl.iOS.ViewControllers
 
             UIKeyboard.Notifications.ObserveWillShow(KeyboardWillShow);
             UIKeyboard.Notifications.ObserveWillHide(KeyboardWillHide);
+
+            prepareViews();
 
             ViewModel.SuccessfulSignup
                 .Subscribe(logAdjustSignupEvent)
@@ -102,7 +107,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsShowPasswordButtonVisible
-                .Subscribe(ShowPasswordButton.Rx().IsVisible())
+                .Subscribe(showPasswordButton.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
             PasswordTextField.FirstResponder
@@ -126,7 +131,7 @@ namespace Toggl.iOS.ViewControllers
                 .BindAction(ViewModel.GoogleSignup)
                 .DisposedBy(DisposeBag);
 
-            ShowPasswordButton.Rx().Tap()
+            showPasswordButton.Rx().Tap()
                 .Subscribe(ViewModel.TogglePasswordVisibility)
                 .DisposedBy(DisposeBag);
 
@@ -159,8 +164,6 @@ namespace Toggl.iOS.ViewControllers
                         SelectCountryButton.Shake();
                 })
                 .DisposedBy(DisposeBag);
-
-            prepareViews();
 
             UIColor signupButtonTintColor(bool hasError)
                 => hasError ? UIColor.White : UIColor.Black;
@@ -228,6 +231,11 @@ namespace Toggl.iOS.ViewControllers
         {
             NavigationController.NavigationBarHidden = true;
 
+            showPasswordButton = new UIButton(new CGRect(0, 0, 40, PasswordTextField.Frame.Height));
+            showPasswordButton.SetupShowPasswordButton();
+            PasswordTextField.RightView = showPasswordButton;
+            PasswordTextField.RightViewMode = UITextFieldViewMode.Always;
+
             ActivityIndicator.Alpha = 0;
             ActivityIndicator.StartSpinning();
 
@@ -248,8 +256,6 @@ namespace Toggl.iOS.ViewControllers
                 PasswordTextField.ResignFirstResponder();
                 return false;
             };
-
-            ShowPasswordButton.SetupShowPasswordButton();
 
             setupKeyboardDismissingGestureRecognizers();
         }
