@@ -234,5 +234,6 @@
     <Rule Id="SA1649" Action="None" />
     <Rule Id="SA1651" Action="None" />
     <Rule Id="SA1652" Action="None" />
+    <Rule Id="xUnit1013" Action="Error" />
   </Rules>
 </RuleSet>
