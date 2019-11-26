@@ -6,9 +6,11 @@
     <Rule Id="CS0168" Action="Error" />
     <Rule Id="CS0169" Action="Error" />
     <Rule Id="CS0414" Action="Error" />
+    <Rule Id="CS0618" Action="None" />
     <Rule Id="CS0628" Action="Error" />
     <Rule Id="CS0649" Action="Error" />
     <Rule Id="CS1998" Action="Error" />
+    <Rule Id="CS4014" Action="None" />
   </Rules>
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA1001" Action="Error" />
