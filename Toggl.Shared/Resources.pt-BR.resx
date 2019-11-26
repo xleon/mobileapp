@@ -261,9 +261,6 @@
   <data name="TermsOfService" xml:space="preserve">
     <value>Termos de serviço</value>
   </data>
-  <data name="And" xml:space="preserve">
-    <value>e</value>
-  </data>
   <data name="Delete" xml:space="preserve">
     <value>Deletar</value>
   </data>
