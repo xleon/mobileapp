@@ -151,7 +151,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 protected abstract IAnalyticsEvent ExpectedEvent { get; }
 
                 [Fact, LogIfTooSlow]
-                public async Task HidesTheView()
+                public void HidesTheView()
                 {
                     var observer = TestScheduler.CreateObserver<Unit>();
                     ViewModel.HideRatingView.Subscribe(observer);
@@ -168,7 +168,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task PerformsTheCorrectAction()
+                public void PerformsTheCorrectAction()
                 {
                     ViewModel.PerformMainAction.Execute();
                     TestScheduler.Start();
@@ -177,7 +177,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task TracksTheAppropriateEventWithTheExpectedParameter()
+                public void TracksTheAppropriateEventWithTheExpectedParameter()
                 {
                     ViewModel.PerformMainAction.Execute();
                     TestScheduler.Start();
@@ -189,7 +189,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task TracksTheCorrectEvent()
+                public void TracksTheCorrectEvent()
                 {
                     ViewModel.PerformMainAction.Execute();
                     TestScheduler.Start();
@@ -198,7 +198,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task StoresTheAppropriateRatingViewOutcomeAndTime()
+                public void StoresTheAppropriateRatingViewOutcomeAndTime()
                 {
                     ViewModel.PerformMainAction.Execute();
                     TestScheduler.Start();
@@ -239,7 +239,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public sealed class WhenImpressionWasntLeft : RatingViewModelTest
             {
                 [Fact, LogIfTooSlow]
-                public async Task DoesNothing()
+                public void DoesNothing()
                 {
                     ViewModel.PerformMainAction.Execute();
                     TestScheduler.Start();
@@ -309,7 +309,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task TracksTheCorrectEvent()
+                public void TracksTheCorrectEvent()
                 {
                     ViewModel.Dismiss();
 

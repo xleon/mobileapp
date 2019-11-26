@@ -49,7 +49,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData(CalendarNotificationsOption.FifteenMinutes, true, 15)]
             [InlineData(CalendarNotificationsOption.ThirtyMinutes, true, 30)]
             [InlineData(CalendarNotificationsOption.OneHour, true, 60)]
-            public async Task SavesTheSelectedOption(CalendarNotificationsOption option, bool enabled, int minutes)
+            public void SavesTheSelectedOption(CalendarNotificationsOption option, bool enabled, int minutes)
             {
                 var selectableOption = new SelectableCalendarNotificationsOptionViewModel(option, false);
                 ViewModel.SelectOption.Execute(selectableOption);

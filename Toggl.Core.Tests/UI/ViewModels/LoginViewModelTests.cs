@@ -124,7 +124,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData("invalid email address", "123")]
             [InlineData("invalid email address", "T0tally s4afe p4a$$")]
             [InlineData("person@company.com", "123")]
-            public async Task ReturnsFalseWhenIsLoading(string email, string password)
+            public void ReturnsFalseWhenIsLoading(string email, string password)
             {
                 var observer = TestScheduler.CreateObserver<bool>();
                 ViewModel.LoginEnabled.Subscribe(observer);

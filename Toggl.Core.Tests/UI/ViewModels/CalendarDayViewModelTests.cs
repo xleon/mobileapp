@@ -300,7 +300,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task TracksTheTimeEntryEditedFromCalendarEventWhenDurationChanges()
+            public void TracksTheTimeEntryEditedFromCalendarEventWhenDurationChanges()
             {
                 var timeEntry = new MockTimeEntry
                 {
@@ -317,7 +317,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task TracksTheTimeEntryEditedFromCalendarEventWhenStartTimeChanges()
+            public void TracksTheTimeEntryEditedFromCalendarEventWhenStartTimeChanges()
             {
                 var timeEntry = new MockTimeEntry
                 {
@@ -334,7 +334,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task TracksTheTimeEntryEditedFromCalendarEventWhenBothStartTimeAndDurationChange()
+            public void TracksTheTimeEntryEditedFromCalendarEventWhenBothStartTimeAndDurationChange()
             {
                 var timeEntry = new MockTimeEntry
                 {
@@ -351,7 +351,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 AnalyticsService.TimeEntryChangedFromCalendar.Received().Track(CalendarChangeEvent.StartTime);
             }
         }
-        
+
         public sealed class TheTimeTrackedOnDayObservable : CalendarDayViewModelTest
         {
             [Fact, LogIfTooSlow]
@@ -375,14 +375,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 this.DataSource.Preferences.Current.Returns(Observable.Return(preferences));
                 var timeOnDayObserver = TestScheduler.CreateObserver<string>();
                 ViewModel.TimeTrackedOnDay.Subscribe(timeOnDayObserver);
-                
+
                 await ViewModel.Initialize();
 
                 TestScheduler.Start();
 
                 timeOnDayObserver.LastEmittedValue().Should().Be(DurationAndFormatToString.Convert(TimeSpan.FromMinutes(90), DurationFormat.Classic));
             }
-            
+
             [Fact, LogIfTooSlow]
             public async Task ItsTheSameAsTheTimeEntriesTodayIfTheCalendarDayInFactToday()
             {

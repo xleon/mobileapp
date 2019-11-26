@@ -61,7 +61,7 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
         }
 
         [Fact, LogIfTooSlow]
-        public async Task DoesntErrorOutIfTokenIsNull()
+        public void DoesntErrorOutIfTokenIsNull()
         {
             PushNotificationsTokenService.Token.Returns(_ => null);
 
@@ -75,7 +75,7 @@ namespace Toggl.Core.Tests.Interactors.PushNotifications
         }
 
         [Fact, LogIfTooSlow]
-        public async Task IgnoresServerErrors()
+        public void IgnoresServerErrors()
         {
             var token = new PushNotificationsToken("token");
             PushNotificationsTokenService.Token.Returns(token);

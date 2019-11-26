@@ -118,7 +118,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task StartsWithTheCurrentDate()
+            public void StartsWithTheCurrentDate()
             {
                 var preferences = Substitute.For<IThreadSafePreferences>();
                 preferences.DateFormat.Returns(DateFormat.ValidDateFormats[0]);

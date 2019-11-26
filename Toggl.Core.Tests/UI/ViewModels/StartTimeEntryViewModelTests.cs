@@ -338,7 +338,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task WontExistIfAProjectIsAlreadySelected()
+                public void WontExistIfAProjectIsAlreadySelected()
                 {
                     var observer = TestScheduler.CreateObserver<CollectionSections>();
                     ViewModel.Suggestions.Subscribe(observer);
@@ -356,7 +356,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task WontExistIfAProjectIsAlreadySelectedEvenIfInProjectSelectionMode()
+                public void WontExistIfAProjectIsAlreadySelectedEvenIfInProjectSelectionMode()
                 {
                     var observer = TestScheduler.CreateObserver<CollectionSections>();
                     ViewModel.Suggestions.Subscribe(observer);
@@ -519,7 +519,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task TracksTagSelection()
+                public void TracksTagSelection()
                 {
                     ViewModel.Initialize(DefaultParameter);
                     TestScheduler.Start();
@@ -576,7 +576,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task SelectsTheCreatedProject()
+                public void SelectsTheCreatedProject()
                 {
                     long projectId = 200;
                     NavigationService
@@ -626,7 +626,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task CreatesTagInProjectsWorkspaceIfAProjectIsSelected()
+            public void CreatesTagInProjectsWorkspaceIfAProjectIsSelected()
             {
                 ViewModel.Suggestions.Subscribe();
 
@@ -837,7 +837,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .ToList();
 
             [Fact, LogIfTooSlow]
-            public async Task StartProjectSuggestionEvenIfTheProjectHasAlreadyBeenSelected()
+            public void StartProjectSuggestionEvenIfTheProjectHasAlreadyBeenSelected()
             {
                 ViewModel.Initialize(DefaultParameter);
                 ViewModel.OnTextFieldInfoFromView(
@@ -928,7 +928,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task AddsAnAtSymbolAtTheEndOfTheQueryInOrderToStartProjectSuggestionMode()
+            public void AddsAnAtSymbolAtTheEndOfTheQueryInOrderToStartProjectSuggestionMode()
             {
                 const string description = "Testing Toggl Apps";
                 var expected = $"{description} @";
@@ -1039,7 +1039,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task AddsHashtagSymbolAtTheEndOfTheQueryInOrderToTagSuggestionMode()
+            public void AddsHashtagSymbolAtTheEndOfTheQueryInOrderToTagSuggestionMode()
             {
                 const string description = "Testing Toggl Apps";
                 var expected = $"{description} #";
@@ -1063,7 +1063,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData("Testing Toggl Apps #somequery")]
             [InlineData("Testing Toggl Apps #some query")]
             [InlineData("Testing Toggl Apps #some query #query")]
-            public async Task SetsTheIsSuggestingTagsPropertyToFalseIfAlreadyInTagSuggestionMode(string description)
+            public void SetsTheIsSuggestingTagsPropertyToFalseIfAlreadyInTagSuggestionMode(string description)
             {
                 ViewModel.Initialize(DefaultParameter);
                 ViewModel.Suggestions.Subscribe();
@@ -1086,7 +1086,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData("Testing Toggl Apps #somequery", "Testing Toggl Apps ")]
             [InlineData("Testing Toggl Apps #some query", "Testing Toggl Apps ")]
             [InlineData("Testing Toggl Apps #some query #query", "Testing Toggl Apps ")]
-            public async Task RemovesTheHashtagSymbolFromTheDescriptionTextIfAlreadyInTagSuggestionMode(
+            public void RemovesTheHashtagSymbolFromTheDescriptionTextIfAlreadyInTagSuggestionMode(
                 string description, string expected)
             {
                 ViewModel.Suggestions.Subscribe();
@@ -1134,7 +1134,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheChangeTimeCommand : StartTimeEntryViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task TracksStartTimeTap()
+            public void TracksStartTimeTap()
             {
                 var now = DateTimeOffset.UtcNow;
                 var parameters = StartTimeEntryParameters.ForTimerMode(now, false);
@@ -1200,7 +1200,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task TracksStartDateTap()
+            public void TracksStartDateTap()
             {
                 TimeService.CurrentDateTime.Returns(now);
                 NavigationService
@@ -1257,7 +1257,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task CallsTheCreateTimeEntryInteractor()
+            public void CallsTheCreateTimeEntryInteractor()
             {
                 ViewModel.Done.Execute(Unit.Default);
 
@@ -1332,7 +1332,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task CreatesARunningTimeEntryWhenDurationIsNull()
+            public void CreatesARunningTimeEntryWhenDurationIsNull()
             {
                 var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, "", null, null);
 
@@ -1414,7 +1414,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task TracksProjectSelectionWhenProjectSymbolSelected()
+                public void TracksProjectSelectionWhenProjectSymbolSelected()
                 {
                     var projectSuggestion = QuerySymbolSuggestion.Suggestions
                         .First((s) => s.Symbol == QuerySymbols.ProjectsString);
@@ -1429,7 +1429,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task TracksTagSelectionWhenTagSymbolSelected()
+                public void TracksTagSelectionWhenTagSymbolSelected()
                 {
                     var tagSuggestion = QuerySymbolSuggestion.Suggestions
                         .First((s) => s.Symbol == QuerySymbols.TagsString);
@@ -1503,7 +1503,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 [InlineData(true)]
                 [InlineData(false)]
                 [InlineData(null)]
-                public async Task DisablesBillableIfTheWorkspaceOfTheSelectedProjectDoesNotAllowIt(bool? billableValue)
+                public void DisablesBillableIfTheWorkspaceOfTheSelectedProjectDoesNotAllowIt(bool? billableValue)
                 {
                     var isBillableObserver = TestScheduler.CreateObserver<bool>();
                     var isBillableAvailableObserver = TestScheduler.CreateObserver<bool>();
@@ -1535,7 +1535,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task RemovesTheProjectQueryFromTheTextFieldInfo()
+                public void RemovesTheProjectQueryFromTheTextFieldInfo()
                 {
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
@@ -1620,7 +1620,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task SetsTheTextFieldInfoTextToTheValueOfTheSuggestedDescription()
+                public void SetsTheTextFieldInfoTextToTheValueOfTheSuggestedDescription()
                 {
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
@@ -1630,7 +1630,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task TracksWhenTimeEntrySuggestionSelected()
+                public void TracksWhenTimeEntrySuggestionSelected()
                 {
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
@@ -1639,7 +1639,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task ChangesTheWorkspaceIfNeeded()
+                public void ChangesTheWorkspaceIfNeeded()
                 {
                     const long expectedWorkspaceId = WorkspaceId + 1;
                     TimeEntry.WorkspaceId.Returns(expectedWorkspaceId);
@@ -1662,7 +1662,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task SetsTheTaskIdToTheSameIdAsTheSelectedSuggestion()
+                public void SetsTheTaskIdToTheSameIdAsTheSelectedSuggestion()
                 {
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
@@ -1672,7 +1672,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task TracksWhenTaskSuggestionSelected()
+                public void TracksWhenTaskSuggestionSelected()
                 {
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
@@ -1691,7 +1691,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task SetsTheTaskIdToNull()
+                public void SetsTheTaskIdToNull()
                 {
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
@@ -1724,7 +1724,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task TracksWhenProjectSuggestionSelected()
+                public void TracksWhenProjectSuggestionSelected()
                 {
                     View
                         .Confirm(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
@@ -1749,7 +1749,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task RemovesTheTagQueryFromTheTextFieldInfo()
+                public void RemovesTheTagQueryFromTheTextFieldInfo()
                 {
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
@@ -1760,7 +1760,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task AddsTheSuggestedTagToTheList()
+                public void AddsTheSuggestedTagToTheList()
                 {
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
@@ -1770,7 +1770,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task TracksWhenTagSuggestionSelected()
+                public void TracksWhenTagSuggestionSelected()
                 {
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
@@ -1784,7 +1784,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 protected override QuerySymbolSuggestion Suggestion { get; } = QuerySymbolSuggestion.Suggestions.First();
 
                 [Fact, LogIfTooSlow]
-                public async Task SetsTheTextToTheQuerySymbolSelected()
+                public void SetsTheTextToTheQuerySymbolSelected()
                 {
                     ViewModel.SelectSuggestion.Execute(Suggestion);
 
@@ -1890,7 +1890,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task IsClearedWhenThereAreNoWordsToQuery()
+            public void IsClearedWhenThereAreNoWordsToQuery()
             {
                 var observer = TestScheduler
                     .CreateObserver<IEnumerable<SectionModel<string, AutocompleteSuggestion>>>();
@@ -1903,7 +1903,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task DoesNotSuggestAnythingWhenAProjectIsAlreadySelected()
+            public void DoesNotSuggestAnythingWhenAProjectIsAlreadySelected()
             {
                 var description = "abc";
                 var projectA = Substitute.For<IThreadSafeProject>();
@@ -1949,7 +1949,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task SortsProjectsByName()
+            public void SortsProjectsByName()
             {
                 var suggestions = new List<ProjectSuggestion>();
                 suggestions.Add(getProjectSuggestion(3, 0));

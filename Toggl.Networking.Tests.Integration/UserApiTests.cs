@@ -356,7 +356,7 @@ namespace Toggl.Networking.Tests.Integration
             }
 
             [Fact, LogTestInfo]
-            public async Task FailsForNonSupportedTimezone()
+            public void FailsForNonSupportedTimezone()
             {
                 var email = RandomEmail.GenerateValid();
                 var password = "s3cr3tzzz".ToPassword();

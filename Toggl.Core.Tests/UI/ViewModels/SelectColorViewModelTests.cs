@@ -86,7 +86,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task DoesNotReturnIfCustomColorsAreAllowed()
+            public void DoesNotReturnIfCustomColorsAreAllowed()
             {
                 var initiallySelectedColor = Colors.DefaultProjectColors.First();
                 var colorToSelect = Colors.DefaultProjectColors.Last();
@@ -215,7 +215,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheSaveCommand : SelectColorViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
                 ViewModel.Save.Execute();
                 TestScheduler.Start();

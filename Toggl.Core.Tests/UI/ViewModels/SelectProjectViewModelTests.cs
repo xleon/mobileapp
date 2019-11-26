@@ -47,7 +47,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
-              
+
                 Action tryingToConstructWithEmptyParameters =
                     () => new SelectProjectViewModel(dataSource, rxActionFactory, interactorFactory, navigationService, schedulerProvider);
 
@@ -100,7 +100,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheSelectProjectCommand : SelectProjectViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
                 ViewModel.SelectProject
                     .Execute(ProjectSuggestion.NoProject(0, ""));

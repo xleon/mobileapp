@@ -246,7 +246,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact]
-            public async ThreadingTask TracksTheDeleteOfSingleTimeEntryEvent()
+            public void TracksTheDeleteOfSingleTimeEntryEvent()
             {
                 viewModel.DelayDeleteTimeEntries.Execute(new[] { 123L });
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks);
@@ -254,7 +254,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact]
-            public async ThreadingTask TracksTheDeleteOfGroupedTimeEntriesEvent()
+            public void TracksTheDeleteOfGroupedTimeEntriesEvent()
             {
                 viewModel.DelayDeleteTimeEntries.Execute(new[] { 123L, 456L, 789L });
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks);
@@ -275,7 +275,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact]
-            public async ThreadingTask DoesNotDeleteTheTimeEntryIfTheUndoIsInitiatedBeforeTheUndoPeriodIsOver()
+            public void DoesNotDeleteTheTimeEntryIfTheUndoIsInitiatedBeforeTheUndoPeriodIsOver()
             {
                 viewModel.DelayDeleteTimeEntries.Execute(batch);
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 2);
@@ -286,7 +286,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact]
-            public async ThreadingTask DeletesTheTimeEntryIfTheUndoIsInitiatedAfterTheUndoPeriodIsOver()
+            public void DeletesTheTimeEntryIfTheUndoIsInitiatedAfterTheUndoPeriodIsOver()
             {
                 viewModel.DelayDeleteTimeEntries.Execute(batch);
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks);
@@ -296,7 +296,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact]
-            public async ThreadingTask HidesTheUndoUI()
+            public void HidesTheUndoUI()
             {
                 viewModel.DelayDeleteTimeEntries.Execute(batch);
                 SchedulerProvider.TestScheduler.AdvanceBy(Constants.UndoTime.Ticks / 2);

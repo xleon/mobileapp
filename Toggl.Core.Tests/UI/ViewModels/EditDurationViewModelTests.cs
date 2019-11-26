@@ -277,7 +277,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheSaveCommand : EditDurationViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
                 var parameter = DurationParameter.WithStartAndDuration(DateTimeOffset.UtcNow, null);
                 ViewModel.Initialize(new EditDurationParameters(parameter));

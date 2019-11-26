@@ -106,7 +106,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
                 var selectedWorkspace = new SelectableWorkspaceViewModel(new MockWorkspace(), false);
 

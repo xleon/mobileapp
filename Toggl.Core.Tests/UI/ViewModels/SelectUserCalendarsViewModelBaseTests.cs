@@ -224,7 +224,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 }
 
                 [Fact, LogIfTooSlow]
-                public async Task EmitsTrueAfterOneCalendarHasBeenSelected()
+                public void EmitsTrueAfterOneCalendarHasBeenSelected()
                 {
                     var observer = Substitute.For<IObserver<bool>>();
                     ViewModel.Save.Enabled.Subscribe(observer);

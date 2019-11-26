@@ -208,7 +208,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheTryLogoutMethod : SettingsViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task EmitsOneIsLoggingOutEvent()
+            public void EmitsOneIsLoggingOutEvent()
             {
                 var observer = TestScheduler.CreateObserver<Unit>();
                 ViewModel.LoggingOut.Subscribe(observer);
@@ -393,7 +393,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task StartsTheSyncAlgorithm()
+            public void StartsTheSyncAlgorithm()
             {
                 View.Select(
                     Arg.Any<string>(),
@@ -581,7 +581,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     Arg.Any<IEnumerable<SelectOption<DateFormat>>>(),
                     Arg.Any<int>())
                 .Returns(Observable.Return(newDateFormat));
-                    
+
                 ViewModel.SelectDateFormat.Execute();
                 TestScheduler.Start();
 
@@ -618,7 +618,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task InitiatesPushSync()
+            public void InitiatesPushSync()
             {
                 var oldDateFormat = DateFormat.FromLocalizedDateFormat("MM-DD-YYYY");
                 var newDateFormat = DateFormat.FromLocalizedDateFormat("DD.MM.YYYY");
@@ -658,7 +658,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task InitiatesPushSync()
+            public void InitiatesPushSync()
             {
                 var preferences = new MockPreferences();
                 PreferencesSubject.OnNext(preferences);
@@ -854,7 +854,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheOpenAboutViewMethod : SettingsViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task NavigatesToTheAboutPage()
+            public void NavigatesToTheAboutPage()
             {
                 ViewModel.OpenAboutView.Execute();
 
@@ -936,7 +936,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await viewModel.Initialize();
                 viewModel.IsCalendarSmartRemindersVisible.Subscribe(observer);
                 TestScheduler.Start();
-                
+
                 observer.Messages.First().Value.Value.Should().BeFalse();
             }
 

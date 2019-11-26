@@ -231,7 +231,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheCloseButtonTappedAction : SendFeedbackViewModelTest
         {
             [Fact]
-            public async Task SimplyClosesTheViewWhenTextIsEmpty()
+            public void SimplyClosesTheViewWhenTextIsEmpty()
             {
                 ViewModel.FeedbackText.OnNext(string.Empty);
 

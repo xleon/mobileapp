@@ -488,7 +488,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async ThreadingTask InitiatesPushSync()
+            public void InitiatesPushSync()
             {
                 ViewModel.StopTimeEntry.Execute(Arg.Any<TimeEntryStopOrigin>());
 
@@ -506,7 +506,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async ThreadingTask DoesNotInitiatePushSyncWhenSavingFails()
+            public void DoesNotInitiatePushSyncWhenSavingFails()
             {
                 InteractorFactory
                     .StopTimeEntry(Arg.Any<DateTimeOffset>(), Arg.Any<TimeEntryStopOrigin>())

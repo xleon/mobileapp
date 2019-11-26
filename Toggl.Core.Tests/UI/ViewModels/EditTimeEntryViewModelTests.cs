@@ -1721,7 +1721,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
 
             [Fact, LogIfTooSlow]
-            public async Task TracksStartDateTap()
+            public void TracksStartDateTap()
             {
                 var newStartTime = entry.Start.AddHours(1);
                 NavigationService

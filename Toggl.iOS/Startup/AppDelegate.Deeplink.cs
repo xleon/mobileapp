@@ -34,7 +34,7 @@ namespace Toggl.iOS
                 calendar => showCalendar(calendar));
         }
 
-        private async Task showNewTimeEntry(DeeplinkNewTimeEntryParameters timeEntry)
+        private void showNewTimeEntry(DeeplinkNewTimeEntryParameters timeEntry)
         {
             var startTimeEntryParameters = timeEntry.ToStartTimeEntryParameters(IosDependencyContainer.Instance.TimeService);
 
@@ -42,13 +42,13 @@ namespace Toggl.iOS
                 .Navigate<StartTimeEntryViewModel, StartTimeEntryParameters, Unit>(startTimeEntryParameters, null);
         }
 
-        private async Task showEditTimeEntry(DeeplinkEditTimeEntryParameters timeEntry)
+        private void showEditTimeEntry(DeeplinkEditTimeEntryParameters timeEntry)
         {
             IosDependencyContainer.Instance.NavigationService
                 .Navigate<EditTimeEntryViewModel, long[], Unit>(new[] { timeEntry.TimeEntryId }, null);
         }
 
-        private async Task showReports(DeeplinkShowReportsParameters reportsParameters)
+        private void showReports(DeeplinkShowReportsParameters reportsParameters)
         {
             var presenter = IosDependencyContainer.Instance.ViewPresenter;
             var change = new ShowReportsPresentationChange(reportsParameters.WorkspaceId, reportsParameters.StartDate, reportsParameters.EndDate);

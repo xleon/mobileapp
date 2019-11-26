@@ -152,7 +152,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
-            
+
                 Action tryingToConstructWithEmptyParameters =
                     () => new EditProjectViewModel(
                         dataSource,
@@ -338,7 +338,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var interactor = Substitute.For<IInteractor<IObservable<IThreadSafeWorkspace>>>();
                 interactor.Execute().Returns(Observable.Return(mockWorkspace));
                 InteractorFactory.GetWorkspaceById(Arg.Is(1L)).Returns(interactor);
-                
+
                 View.Select(
                         Arg.Any<string>(),
                         Arg.Any<IEnumerable<SelectOption<IThreadSafeWorkspace>>>(),
@@ -358,7 +358,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheCloseWithDefaultResultMethod : EditProjectViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task ClosesTheViewModel()
+            public void ClosesTheViewModel()
             {
                 ViewModel.CloseWithDefaultResult();
                 TestScheduler.Start();

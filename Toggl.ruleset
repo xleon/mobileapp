@@ -3,6 +3,7 @@
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CS0105" Action="Error" />
     <Rule Id="CS0108" Action="Error" />
+    <Rule Id="CS1998" Action="Error" />
     <Rule Id="CA1001" Action="Error" />
     <Rule Id="CA1009" Action="Error" />
     <Rule Id="CA1016" Action="Error" />

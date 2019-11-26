@@ -69,7 +69,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheRequestAccessAction : NotificationSettingsViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task OpensAppSettings()
+            public void OpensAppSettings()
             {
                 ViewModel.RequestAccess.Execute(Unit.Default);
                 TestScheduler.Start();
@@ -81,7 +81,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheOpenUpcomingEventsAction : NotificationSettingsViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task NavigatesToTheUpcomingEvents()
+            public void NavigatesToTheUpcomingEvents()
             {
                 ViewModel.OpenUpcomingEvents.Execute();
                 TestScheduler.Start();
