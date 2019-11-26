@@ -14,7 +14,7 @@ namespace Toggl.iOS.Cells.Calendar
             Nib = UINib.FromName(nameof(CurrentTimeSupplementaryView), NSBundle.MainBundle);
         }
 
-        protected CurrentTimeSupplementaryView(IntPtr handle) : base(handle)
+        public CurrentTimeSupplementaryView(IntPtr handle) : base(handle)
         {
         }
 

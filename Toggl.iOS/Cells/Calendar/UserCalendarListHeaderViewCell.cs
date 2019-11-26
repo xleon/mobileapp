@@ -17,7 +17,7 @@ namespace Toggl.iOS.Cells.Calendar
             Nib = UINib.FromName(nameof(UserCalendarListHeaderViewCell), NSBundle.MainBundle);
         }
 
-        protected UserCalendarListHeaderViewCell(IntPtr handle) : base(handle)
+        public UserCalendarListHeaderViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }

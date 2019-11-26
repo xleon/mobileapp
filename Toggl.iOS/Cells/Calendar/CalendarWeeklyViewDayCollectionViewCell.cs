@@ -21,7 +21,7 @@ namespace Toggl.iOS.Cells.Calendar
             Nib = UINib.FromName(nameof(CalendarWeeklyViewDayCollectionViewCell), NSBundle.MainBundle);
         }
 
-        protected CalendarWeeklyViewDayCollectionViewCell(IntPtr handle) : base(handle)
+        public CalendarWeeklyViewDayCollectionViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }

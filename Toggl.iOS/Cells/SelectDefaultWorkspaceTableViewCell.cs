@@ -15,7 +15,7 @@ namespace Toggl.iOS.Cells
             Nib = UINib.FromName(nameof(SelectDefaultWorkspaceTableViewCell), NSBundle.MainBundle);
         }
 
-        protected SelectDefaultWorkspaceTableViewCell(IntPtr handle) : base(handle)
+        public SelectDefaultWorkspaceTableViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }

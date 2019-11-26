@@ -17,7 +17,7 @@ namespace Toggl.iOS.Views.StartTimeEntry
             Nib = UINib.FromName(nameof(NoEntityInfoViewCell), NSBundle.MainBundle);
         }
 
-        protected NoEntityInfoViewCell(IntPtr handle) : base(handle)
+        public NoEntityInfoViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }

@@ -31,7 +31,7 @@ namespace Toggl.iOS.Views.StartTimeEntry
             Nib = UINib.FromName(nameof(ReactiveProjectSuggestionViewCell), NSBundle.MainBundle);
         }
 
-        protected ReactiveProjectSuggestionViewCell(IntPtr handle) : base(handle)
+        public ReactiveProjectSuggestionViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }

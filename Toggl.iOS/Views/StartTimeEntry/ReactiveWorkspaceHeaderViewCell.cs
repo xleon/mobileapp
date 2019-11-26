@@ -33,7 +33,7 @@ namespace Toggl.iOS.Views.StartTimeEntry
             ContentView.InsertSeparator();
         }
 
-        protected ReactiveWorkspaceHeaderViewCell(IntPtr handle) : base(handle)
+        public ReactiveWorkspaceHeaderViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }

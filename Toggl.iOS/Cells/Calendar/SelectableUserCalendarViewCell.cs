@@ -21,7 +21,7 @@ namespace Toggl.iOS.Cells.Calendar
             Nib = UINib.FromName(nameof(SelectableUserCalendarViewCell), NSBundle.MainBundle);
         }
 
-        protected SelectableUserCalendarViewCell(IntPtr handle) : base(handle)
+        public SelectableUserCalendarViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }
