@@ -160,9 +160,9 @@ namespace Toggl.Core.Tests.Autocomplete
 
             public sealed class Tags
             {
-                protected const long ProjectId = 10;
-                protected const string ProjectName = "Toggl";
-                protected const string ProjectColor = "#F41F19";
+                private const long ProjectId = 10;
+                private const string ProjectName = "Toggl";
+                private const string ProjectColor = "#F41F19";
 
                 [Theory, LogIfTooSlow]
                 [InlineData("#", "")]
