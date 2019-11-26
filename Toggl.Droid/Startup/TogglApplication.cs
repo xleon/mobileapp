@@ -1,22 +1,22 @@
 using System;
 using Android.App;
-using Android.Arch.Lifecycle;
 using Android.Content;
 using Android.Runtime;
 using Android.Views.Accessibility;
+using AndroidX.Lifecycle;
 using Java.Interop;
 using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Droid.BroadcastReceivers;
-using Toggl.Droid.Extensions;
 using Toggl.Droid.Helper;
-using static Android.Support.V7.App.AppCompatDelegate;
+using static AndroidX.AppCompat.App.AppCompatDelegate;
 
 namespace Toggl.Droid
 {
     [Application(AllowBackup = false)]
     public class TogglApplication : Application, ILifecycleObserver
     {
+        private const int modeNightAutoBattery = 3;
         public TimezoneChangedBroadcastReceiver TimezoneChangedBroadcastReceiver { get; set; }
 
         public bool IsInForeground { get; private set; } = false;
@@ -28,7 +28,7 @@ namespace Toggl.Droid
 
         public override void OnCreate()
         {
-            DefaultNightMode = QApis.AreAvailable ? ModeNightFollowSystem : ModeNightAuto;
+            DefaultNightMode = QApis.AreAvailable ? ModeNightFollowSystem : modeNightAutoBattery;
 
             base.OnCreate();
             ProcessLifecycleOwner.Get().Lifecycle.AddObserver(this);
@@ -85,7 +85,7 @@ namespace Toggl.Droid
         }
 
         [Export]
-        [Lifecycle.Event.OnStart]
+        [OnStart]
         public void OnEnterForeground()
         {
             IsInForeground = true;
@@ -94,12 +94,24 @@ namespace Toggl.Droid
         }
 
         [Export]
-        [Lifecycle.Event.OnStop]
+        [OnStop]
         public void OnEnterBackground()
         {
             IsInForeground = false;
             var backgroundService = AndroidDependencyContainer.Instance?.BackgroundService;
             backgroundService?.EnterBackground();
+        }
+        
+        [Preserve]
+        [Annotation("androidx.lifecycle.OnLifecycleEvent(androidx.lifecycle.Lifecycle.Event.ON_START)")]
+        public class OnStartAttribute : Attribute
+        {
+        }
+
+        [Preserve]
+        [Annotation("androidx.lifecycle.OnLifecycleEvent(androidx.lifecycle.Lifecycle.Event.ON_STOP)")]
+        public class OnStopAttribute : Attribute
+        {
         }
 
         public override void OnTrimMemory(TrimMemory level)

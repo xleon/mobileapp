@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using System;
-using Com.Microsoft.Appcenter.Ingestion.Models.One;
+using Realms;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Services;
@@ -15,7 +15,9 @@ using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Storage;
+using Toggl.Storage.Queries;
 using Toggl.Storage.Realm;
+using Toggl.Storage.Realm.Queries;
 using Toggl.Storage.Settings;
 
 namespace Toggl.Droid
@@ -32,6 +34,8 @@ namespace Toggl.Droid
 
         private readonly CompositePresenter viewPresenter;
         private readonly Lazy<SettingsStorage> settingsStorage;
+        private readonly Lazy<RealmConfigurator> realmConfigurator
+            = new Lazy<RealmConfigurator>(() => new RealmConfigurator());
 
         public ViewModelCache ViewModelCache { get; } = new ViewModelCache();
 
@@ -70,7 +74,7 @@ namespace Toggl.Droid
             => new CalendarServiceAndroid(PermissionsChecker);
 
         protected override ITogglDatabase CreateDatabase()
-            => new Database();
+            => new Database(realmConfigurator.Value);
 
         protected override IKeyValueStorage CreateKeyValueStorage()
         {
@@ -89,6 +93,9 @@ namespace Toggl.Droid
 
         protected override IPlatformInfo CreatePlatformInfo()
             => new PlatformInfoAndroid();
+
+        protected override IQueryFactory CreateQueryFactory()
+            => new RealmQueryFactory(() => Realm.GetInstance(realmConfigurator.Value.Configuration));
 
         protected override IPrivateSharedStorageService CreatePrivateSharedStorageService()
             => new PrivateSharedStorageServiceAndroid(KeyValueStorage);

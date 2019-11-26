@@ -50,7 +50,7 @@ namespace Toggl.Core.Interactors.Suggestions
                    && s1.TaskId == s2.TaskId;
 
             public int GetHashCode(Suggestion suggestion)
-                => HashCode.From(
+                => HashCode.Combine(
                     suggestion.WorkspaceId,
                     suggestion.Description,
                     suggestion.ProjectId,

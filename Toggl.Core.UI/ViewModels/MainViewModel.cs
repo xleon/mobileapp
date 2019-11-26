@@ -6,6 +6,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
@@ -29,6 +30,10 @@ using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Services;
+using System.ComponentModel;
+using static Toggl.Core.Analytics.ContinueTimeEntryMode;
+using static Toggl.Core.Analytics.ContinueTimeEntryOrigin;
+
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -247,9 +252,9 @@ namespace Toggl.Core.UI.ViewModels
             OpenSettings = rxActionFactory.FromAsync(openSettings);
             OpenSyncFailures = rxActionFactory.FromAsync(openSyncFailures);
             SelectTimeEntry = rxActionFactory.FromAsync<EditTimeEntryInfo>(timeEntrySelected);
-            ContinueTimeEntry = rxActionFactory.FromObservable<ContinueTimeEntryInfo, IThreadSafeTimeEntry>(continueTimeEntry);
             StartTimeEntry = rxActionFactory.FromAsync<bool>(startTimeEntry, IsTimeEntryRunning.Invert());
             StopTimeEntry = rxActionFactory.FromObservable<TimeEntryStopOrigin>(stopTimeEntry, IsTimeEntryRunning);
+            ContinueTimeEntry = rxActionFactory.FromAsync<ContinueTimeEntryInfo, IThreadSafeTimeEntry>(continueTimeEntry);
 
             ShouldShowRatingView = Observable.Merge(
                     ratingViewExperiment.RatingViewShouldBeVisible,
@@ -411,19 +416,39 @@ namespace Toggl.Core.UI.ViewModels
             return navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(parameter);
         }
 
-        private IObservable<IThreadSafeTimeEntry> continueTimeEntry(ContinueTimeEntryInfo continueInfo)
+        private async Task<IThreadSafeTimeEntry> continueTimeEntry(ContinueTimeEntryInfo continueInfo)
         {
-            return interactorFactory.GetTimeEntryById(continueInfo.Id).Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler)
-                .Select(timeEntry => timeEntry.AsTimeEntryPrototype())
-                .SelectMany(prototype =>
-                    interactorFactory.ContinueTimeEntryFromMainLog(
-                        prototype,
-                        continueInfo.ContinueMode,
-                        continueInfo.IndexInLog,
-                        continueInfo.DayInLog,
-                        continueInfo.DaysInThePast).Execute())
-                .Do(_ => OnboardingStorage.SetTimeEntryContinued());
+            var continuedTimeEntry = await interactorFactory
+                .ContinueTimeEntry(continueInfo.Id, continueInfo.ContinueMode)
+                .Execute()
+                .ConfigureAwait(false);
+               
+            analyticsService.TimeEntryContinued.Track(
+                originFromContinuationMode(continueInfo.ContinueMode),
+                continueInfo.IndexInLog,
+                continueInfo.DayInLog,
+                continueInfo.DaysInThePast);
+
+            OnboardingStorage.SetTimeEntryContinued();
+
+            return continuedTimeEntry;
+
+            ContinueTimeEntryOrigin originFromContinuationMode(ContinueTimeEntryMode mode)
+            {
+                switch (mode)
+                {
+                    case SingleTimeEntrySwipe:
+                        return Swipe;
+                    case SingleTimeEntryContinueButton:
+                        return ContinueButton;
+                    case TimeEntriesGroupSwipe:
+                        return GroupSwipe;
+                    case TimeEntriesGroupContinueButton:
+                        return GroupContinueButton;
+                }
+
+                throw new InvalidEnumArgumentException($"Unexpected continue time entry mode {mode}");
+            }
         }
 
         private async Task timeEntrySelected(EditTimeEntryInfo editTimeEntryInfo)
@@ -446,7 +471,7 @@ namespace Toggl.Core.UI.ViewModels
             return interactorFactory
                 .StopTimeEntry(TimeService.CurrentDateTime, origin)
                 .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler)
+                .ToObservable()
                 .Do(syncManager.InitiatePushSync)
                 .SelectUnit();
         }

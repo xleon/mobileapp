@@ -33,7 +33,7 @@ namespace Toggl.iOS.Shared
             userDefaults = new NSUserDefaults($"group.{bundleId}.extensions", NSUserDefaultsType.SuiteName);
         }
 
-        public static SharedStorage Instance => new SharedStorage();
+        public static SharedStorage Instance { get; } = new SharedStorage();
 
         public void SetApiToken(string apiToken)
         {

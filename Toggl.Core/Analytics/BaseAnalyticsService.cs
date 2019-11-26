@@ -90,7 +90,9 @@ namespace Toggl.Core.Analytics
 
         public IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; }
 
-        public IAnalyticsEvent NoDefaultWorkspace { get; }
+        public IAnalyticsEvent<int> NoDefaultWorkspace { get; }
+
+        public IAnalyticsEvent NoWorkspaces { get; }
 
         public IAnalyticsEvent<TimeEntryStartOrigin> TimeEntryStarted { get; }
 
@@ -206,6 +208,20 @@ namespace Toggl.Core.Analytics
 
         public IAnalyticsEvent<int> TimerWidgetSizeChanged { get; }
 
+        public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarEventContextualMenu { get; }
+
+        public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarNewTimeEntryContextualMenu { get; }
+
+        public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarExistingTimeEntryContextualMenu { get; }
+
+        public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarRunningTimeEntryContextualMenu { get; }
+
+        public IAnalyticsEvent<CalendarTimeEntryCreatedType, int, string> CalendarTimeEntryCreated { get; }
+
+        public IAnalyticsEvent<int, string> CalendarWeeklyDatePickerSelectionChanged { get; }
+
+        public IAnalyticsEvent<CalendarSwipeDirection, int, string> CalendarSingleSwipe { get; }
+
         protected BaseAnalyticsService()
         {
             Login = new AnalyticsEvent<AuthenticationMethod>(this, nameof(Login), "AuthenticationMethod");
@@ -247,7 +263,8 @@ namespace Toggl.Core.Analytics
             HandledException = new AnalyticsEvent<string, string>(this, nameof(HandledException), "ExceptionType", "ExceptionMessage");
             TwoRunningTimeEntriesInconsistencyFixed = new AnalyticsEvent(this, nameof(TwoRunningTimeEntriesInconsistencyFixed));
             StartViewTapped = new AnalyticsEvent<StartViewTapSource>(this, nameof(StartViewTapped), "TapSource");
-            NoDefaultWorkspace = new AnalyticsEvent(this, nameof(NoDefaultWorkspace));
+            NoDefaultWorkspace = new AnalyticsEvent<int>(this, nameof(NoDefaultWorkspace), "NumberOfWorkspaces");
+            NoWorkspaces = new AnalyticsEvent(this, nameof(NoWorkspaces));
             TimeEntryStarted = new AnalyticsEvent<TimeEntryStartOrigin>(this, nameof(TimeEntryStarted), "Origin");
             TimeEntryStopped = new AnalyticsEvent<TimeEntryStopOrigin>(this, nameof(TimeEntryStopped), "Origin");
             TimeEntryContinued = new AnalyticsEvent<ContinueTimeEntryOrigin, int, int, int>(this, nameof(TimeEntryContinued), "Origin", "IndexInLog", "DayInLog", "DaysInThePast");
@@ -304,7 +321,14 @@ namespace Toggl.Core.Analytics
             PushInitiatedSyncFetch = new AnalyticsEvent<string>(this, nameof(PushInitiatedSyncFetch), "NumberOfEntitiesFetched");
             PushNotificationSyncStarted = new AnalyticsEvent<string>(this, nameof(PushNotificationSyncStarted), "Source");
             PushNotificationSyncFinished = new AnalyticsEvent<string>(this, nameof(PushNotificationSyncFinished), "Source");
+            CalendarWeeklyDatePickerSelectionChanged = new AnalyticsEvent<int, string>(this, nameof(CalendarWeeklyDatePickerSelectionChanged), "DaysSinceToday", "DayOfWeek");
+            CalendarSingleSwipe = new AnalyticsEvent<CalendarSwipeDirection, int, string>(this, nameof(CalendarSingleSwipe), "SwipeDirection", "DaysSinceToday", "DayOfWeek");
             PushNotificationSyncFailed = new AnalyticsEvent<string, string, string, string>(this, nameof(PushNotificationSyncFailed), "Source", "Type", "Message", "StackTrace");
+            CalendarEventContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarEventContextualMenu), "SelectedOption");
+            CalendarNewTimeEntryContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarNewTimeEntryContextualMenu), "SelectedOption");
+            CalendarExistingTimeEntryContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarExistingTimeEntryContextualMenu), "SelectedOption");
+            CalendarRunningTimeEntryContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarRunningTimeEntryContextualMenu), "SelectedOption");
+            CalendarTimeEntryCreated = new AnalyticsEvent<CalendarTimeEntryCreatedType, int, string>(this, nameof(CalendarTimeEntryCreated), "Type", "DaysSinceToday", "DayOfTheWeek");
         }
 
         public void TrackAnonymized(Exception exception)

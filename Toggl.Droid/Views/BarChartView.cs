@@ -1,7 +1,6 @@
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
-using Android.Support.V4.Content;
 using Android.Util;
 using Android.Views;
 using System;
@@ -229,7 +228,7 @@ namespace Toggl.Droid.Views
                     canvas.DrawRect(left, nonBillableTop, barRight, billableTop, nonBillablePaint);
                 }
 
-                if (willDrawDayLabels && numberOfLabels >= i)
+                if (willDrawDayLabels && i < numberOfLabels)
                 {
                     var horizontalLabel = labelsToRender[i];
 

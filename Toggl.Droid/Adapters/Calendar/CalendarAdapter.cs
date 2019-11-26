@@ -1,7 +1,5 @@
 using Android.Content;
 using Android.OS;
-using Android.Support.V7.Util;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Java.Lang;
 using System;
@@ -10,6 +8,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core;
 using Toggl.Core.Calendar;
 using Toggl.Core.Helper;
@@ -319,7 +318,7 @@ namespace Toggl.Droid.Adapters.Calendar
             }
 
             private int anchoredItemHashCode(CalendarItem item)
-                => Shared.HashCode.From(
+                => HashCode.Combine(
                     item.Source,
                     item.Id,
                     item.StartTime,

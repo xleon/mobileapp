@@ -26,7 +26,7 @@ namespace Toggl.Core.UI.ViewModels
             => Name;
 
         public override int GetHashCode()
-            => HashCode.From(Name ?? string.Empty, WorkspaceId, Selected);
+            => HashCode.Combine(Name ?? string.Empty, WorkspaceId, Selected);
 
         public bool Equals(SelectableTagBaseViewModel other)
         {

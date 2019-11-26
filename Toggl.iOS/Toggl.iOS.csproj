@@ -10,7 +10,7 @@
     <RootNamespace>Toggl.iOS</RootNamespace>
     <AssemblyName>Toggl.iOS</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,12 +59,13 @@
     <DefineConstants>__UNIFIED__;__MOBILE__;__IOS__;USE_PRODUCTION_API;USE_ANALYTICS;USE_APPCENTER</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <CodesignKey>iPhone Distribution</CodesignKey>
-    <MtouchExtraArgs>--linkskip Toggl.iOS --linkskip=Toggl.Storage.Realm --registrar:static</MtouchExtraArgs>
+    <MtouchExtraArgs>--linkskip=Toggl.Storage.Realm --registrar:static</MtouchExtraArgs>
     <MtouchFloat32>true</MtouchFloat32>
     <MtouchLink>Full</MtouchLink>
     <MtouchArch>ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <MtouchArch>ARM64</MtouchArch>
@@ -108,22 +109,22 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.2.5.0\lib\Xamarin.iOS10\Microsoft.AppCenter.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.2.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Analytics, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.5.0\lib\Xamarin.iOS10\Microsoft.AppCenter.Analytics.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Analytics.iOS.Bindings, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.5.0\lib\Xamarin.iOS10\Microsoft.AppCenter.Analytics.iOS.Bindings.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Analytics.iOS.Bindings.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Crashes, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.5.0\lib\Xamarin.iOS10\Microsoft.AppCenter.Crashes.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Crashes.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Crashes.iOS.Bindings, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.5.0\lib\Xamarin.iOS10\Microsoft.AppCenter.Crashes.iOS.Bindings.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Crashes.iOS.Bindings.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.iOS.Bindings, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.2.5.0\lib\Xamarin.iOS10\Microsoft.AppCenter.iOS.Bindings.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.2.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.iOS.Bindings.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
@@ -140,13 +141,13 @@
     <Reference Include="System.IO.Compression" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Google.Core">
       <HintPath>..\packages\Xamarin.Google.iOS.Core.3.1.0\lib\Xamarin.iOS10\Google.Core.dll</HintPath>
     </Reference>
     <Reference Include="Google.SignIn">
-      <HintPath>..\packages\Xamarin.Google.iOS.SignIn.4.4.0\lib\Xamarin.iOS10\Google.SignIn.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Google.iOS.SignIn.5.0.1\lib\xamarinios10\Google.SignIn.dll</HintPath>
     </Reference>
     <Reference Include="Realm.DataBinding">
       <HintPath>..\packages\Realm.DataBinding.1.2.0\lib\Xamarin.iOS10\Realm.DataBinding.dll</HintPath>
@@ -167,16 +168,16 @@
       <HintPath>..\packages\System.Reactive.Core.4.2.0\lib\netstandard2.0\System.Reactive.Core.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.Core">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.Core.5.2.0\lib\Xamarin.iOS10\Firebase.Core.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.Core.6.1.0\lib\xamarinios10\Firebase.Core.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.InstanceID">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.InstanceID.3.4.0\lib\Xamarin.iOS10\Firebase.InstanceID.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.InstanceID.4.2.1\lib\xamarinios10\Firebase.InstanceID.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.Analytics">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.Analytics.5.5.0\lib\Xamarin.iOS10\Firebase.Analytics.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.Analytics.6.0.4\lib\xamarinios10\Firebase.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.RemoteConfig">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.RemoteConfig.3.0.1\lib\Xamarin.iOS10\Firebase.RemoteConfig.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.RemoteConfig.4.2.1\lib\xamarinios10\Firebase.RemoteConfig.dll</HintPath>
     </Reference>
     <Reference Include="System.Collections.Immutable">
       <HintPath>..\packages\System.Collections.Immutable.1.6.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
@@ -191,10 +192,10 @@
       <HintPath>..\packages\AdjustSdk.Xamarin.iOS.4.18.0\lib\xamarinios10\AdjustSdk.Xamarin.iOS.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.CloudMessaging">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.CloudMessaging.3.1.2\lib\Xamarin.iOS10\Firebase.CloudMessaging.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.CloudMessaging.4.1.1.1\lib\xamarinios10\Firebase.CloudMessaging.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.ABTesting">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.ABTesting.2.0.0.2\lib\Xamarin.iOS10\Firebase.ABTesting.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.ABTesting.3.0.0\lib\xamarinios10\Firebase.ABTesting.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive">
       <HintPath>..\packages\System.Reactive.4.2.0\lib\netstandard2.0\System.Reactive.dll</HintPath>
@@ -1267,6 +1268,55 @@
     <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_1024pt.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\x.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\x.imageset\x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\stop.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop.png" />
+    <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\continue.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\continue.imageset\continue.png" />
+    <ImageAsset Include="Resources\Images.xcassets\continue.imageset\continue%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\continue.imageset\continue%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\discard.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\discard.imageset\discard.png" />
+    <ImageAsset Include="Resources\Images.xcassets\discard.imageset\discard%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\discard.imageset\discard%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\copy.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\copy.imageset\copy.png" />
+    <ImageAsset Include="Resources\Images.xcassets\copy.imageset\copy%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\copy.imageset\copy%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\save.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\save.imageset\save.png" />
+    <ImageAsset Include="Resources\Images.xcassets\save.imageset\save%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\save.imageset\save%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\edit.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\edit.imageset\edit%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\edit.imageset\edit%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\edit.imageset\edit.png" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete.png" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete%403x-1.png" />
+    <ImageAsset Include="Resources\Colors.xcassets\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Background.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text2.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Separator.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\OpaqueSeparator.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\TableBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CellBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text3.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text4.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray2.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray3.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray4.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray5.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray6.colorset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo.png" />
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpiderDark.png" />
@@ -1316,6 +1366,18 @@
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationProjects_Dark.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationProjects_Dark%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationProjects_Dark%403x.png" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarDeleteAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarEditAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarSaveAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarContinueAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarDiscardAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarStopAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarCopyAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarStartAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarSelectedTodayBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarUnavailableDayText.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarUnselectedTodayText.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarHeaderLabel.colorset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -1371,13 +1433,12 @@
     <InterfaceDefinition Include="Cells\Settings\LicensesViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\NoWorkspaceViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\SendFeedbackViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\Calendar\CalendarViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Calendar\CalendarDayViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Calendar\CalendarPermissionDeniedViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\CalendarItemView.xib" />
     <InterfaceDefinition Include="Cells\Calendar\CurrentTimeSupplementaryView.xib" />
     <InterfaceDefinition Include="Cells\Calendar\HourSupplementaryView.xib" />
     <InterfaceDefinition Include="Views\SnackBar.xib" />
-    <InterfaceDefinition Include="ViewControllers\Calendar\SelectUserCalendarsViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\SelectableUserCalendarViewCell.xib" />
     <InterfaceDefinition Include="Cells\Calendar\UserCalendarListHeaderViewCell.xib" />
     <InterfaceDefinition Include="Views\Settings\CalendarSettingsTableViewHeader.xib" />
@@ -1412,6 +1473,8 @@
     <InterfaceDefinition Include="Cells\Settings\SettingsAnnotationCell.xib" />
     <InterfaceDefinition Include="Cells\Settings\SettingsButtonCell.xib" />
     <InterfaceDefinition Include="Cells\Common\SelectorCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\Calendar\CalendarViewController.xib" />
+    <InterfaceDefinition Include="Cells\Calendar\CalendarWeeklyViewDayCollectionViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1435,6 +1498,7 @@
     <Compile Include="Extensions\Reactive\UISliderExtensions.cs" />
     <Compile Include="Extensions\Reactive\WheelForegroundViewExtensions.cs" />
     <Compile Include="Extensions\SectionedIndexExtensions.cs" />
+    <Compile Include="Extensions\TimeEntryDisplayInfoExtensions.cs" />
     <Compile Include="Extensions\SuggestionExtensions.cs" />
     <Compile Include="Extensions\ViewControllerExtensions.cs" />
     <Compile Include="Helper\PermissionsHelper.cs" />
@@ -1508,6 +1572,7 @@
     </Compile>
     <Compile Include="ViewControllers\Settings\Siri\SiriShortcutViewModel.cs" />
     <Compile Include="ViewControllers\SyncFailuresViewController.cs" />
+    <Compile Include="ViewSources\CalendarWeeklyViewDayCollectionViewSource.cs" />
     <Compile Include="ViewSources\Generic\CollectionView\ReloadCollectionViewSource.cs" />
     <Compile Include="ViewSources\Generic\TableView\BaseTableViewSource.cs" />
     <Compile Include="ViewSources\SettingsTableViewSource.cs" />
@@ -1553,7 +1618,9 @@
       <DependentUpon>SelectTagsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\SelectTagsTableViewSource.cs" />
+    <Compile Include="Views\Calendar\CalendarCollectionViewContextualMenuDismissHelper.cs" />
     <Compile Include="Views\Calendar\CalendarCollectionViewLayout.cs" />
+    <Compile Include="Views\Calendar\CalendarContextualMenuActionView.cs" />
     <Compile Include="Views\Client\ClientViewCell.cs" />
     <Compile Include="Views\Client\ClientViewCell.designer.cs">
       <DependentUpon>ClientViewCell.cs</DependentUpon>
@@ -1797,9 +1864,9 @@
       <DependentUpon>SendFeedbackViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ReactiveCollectionViewCell.cs" />
-    <Compile Include="ViewControllers\Calendar\CalendarViewController.cs" />
-    <Compile Include="ViewControllers\Calendar\CalendarViewController.designer.cs">
-      <DependentUpon>CalendarViewController.cs</DependentUpon>
+    <Compile Include="ViewControllers\Calendar\CalendarDayViewController.cs" />
+    <Compile Include="ViewControllers\Calendar\CalendarDayViewController.designer.cs">
+      <DependentUpon>CalendarDayViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\Calendar\CalendarPermissionDeniedViewController.cs" />
     <Compile Include="ViewControllers\Calendar\CalendarPermissionDeniedViewController.designer.cs">
@@ -1827,10 +1894,6 @@
     <Compile Include="ViewControllers\NoWorkspaceViewController.cs" />
     <Compile Include="ViewControllers\NoWorkspaceViewController.designer.cs">
       <DependentUpon>NoWorkspaceViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\Calendar\SelectUserCalendarsViewController.cs" />
-    <Compile Include="ViewControllers\Calendar\SelectUserCalendarsViewController.designer.cs">
-      <DependentUpon>SelectUserCalendarsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\SelectUserCalendarsTableViewSource.cs" />
     <Compile Include="Cells\Calendar\SelectableUserCalendarViewCell.cs" />
@@ -1902,7 +1965,6 @@
     <Compile Include="Views\Tag\NewTagViewCell.designer.cs">
       <DependentUpon>NewTagViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Views\StartTimeEntry\ReactiveProjectSuggestionViewCell.cs" />
     <Compile Include="Views\StartTimeEntry\ReactiveProjectSuggestionViewCell.designer.cs">
       <DependentUpon>ReactiveProjectSuggestionViewCell.cs</DependentUpon>
@@ -2008,6 +2070,14 @@
     </Compile>
     <Compile Include="ViewSources\Generic\Common\SelectorTableViewSource.cs" />
     <Compile Include="Helper\Handoff.cs" />
+    <Compile Include="ViewControllers\Calendar\CalendarViewController.cs" />
+    <Compile Include="ViewControllers\Calendar\CalendarViewController.designer.cs">
+      <DependentUpon>CalendarViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Calendar\CalendarWeeklyViewDayCollectionViewCell.cs" />
+    <Compile Include="Cells\Calendar\CalendarWeeklyViewDayCollectionViewCell.designer.cs">
+      <DependentUpon>CalendarWeeklyViewDayCollectionViewCell.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\TextViewExtensions.cs" />
     <Compile Include="Analytics\WidgetTrackingEventExtensions.cs" />
     <Compile Include="Analytics\WidgetErrorTrackingEvent.cs" />
@@ -2094,6 +2164,14 @@
     <Folder Include="Resources\Images.xcassets\thumbsdown.imageset\" />
     <Folder Include="Resources\Images.xcassets\thumbsup.imageset\" />
     <Folder Include="Resources\Images.xcassets\togglLogoBig.imageset\" />
+    <Folder Include="Resources\Images.xcassets\x.imageset\" />
+    <Folder Include="Resources\Images.xcassets\stop.imageset\" />
+    <Folder Include="Resources\Images.xcassets\continue.imageset\" />
+    <Folder Include="Resources\Images.xcassets\discard.imageset\" />
+    <Folder Include="Resources\Images.xcassets\copy.imageset\" />
+    <Folder Include="Resources\Images.xcassets\save.imageset\" />
+    <Folder Include="Resources\Images.xcassets\edit.imageset\" />
+    <Folder Include="Resources\Images.xcassets\delete.imageset\" />
     <Folder Include="Resources\Colors.xcassets\Background.colorset\" />
     <Folder Include="Resources\Colors.xcassets\Text.colorset\" />
     <Folder Include="Resources\Colors.xcassets\Text2.colorset\" />
@@ -2116,6 +2194,18 @@
     <Folder Include="Resources\Colors.xcassets\Spider.colorset\" />
     <Folder Include="Resources\Colors.xcassets\ErrorText.colorset\" />
     <Folder Include="Resources\Colors.xcassets\ErrorBackground.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarDeleteAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarEditAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarSaveAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarContinueAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarDiscardAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarStopAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarCopyAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarStartAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarSelectedTodayBackground.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarUnavailableDayText.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarUnselectedTodayText.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarHeaderLabel.colorset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />
@@ -2126,11 +2216,6 @@
   <Import Project="..\packages\Realm.3.0.0\build\Realm.targets" Condition="Exists('..\packages\Realm.3.0.0\build\Realm.targets')" />
   <Import Project="..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.targets" Condition="Exists('..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.targets')" />
   <Import Project="..\packages\Xamarin.Google.iOS.Core.3.1.0.1\build\Xamarin.Google.iOS.Core.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.Core.3.1.0.1\build\Xamarin.Google.iOS.Core.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.RemoteConfig.3.0.1\build\Xamarin.Firebase.iOS.RemoteConfig.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.RemoteConfig.3.0.1\build\Xamarin.Firebase.iOS.RemoteConfig.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.InstanceID.3.4.0\build\Xamarin.Firebase.iOS.InstanceID.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.InstanceID.3.4.0\build\Xamarin.Firebase.iOS.InstanceID.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.Analytics.5.5.0\build\Xamarin.Firebase.iOS.Analytics.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.Analytics.5.5.0\build\Xamarin.Firebase.iOS.Analytics.targets')" />
-  <Import Project="..\packages\Xamarin.Google.iOS.SignIn.4.4.0\build\Xamarin.Google.iOS.SignIn.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.SignIn.4.4.0\build\Xamarin.Google.iOS.SignIn.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.ABTesting.2.0.0.2\build\Xamarin.Firebase.iOS.ABTesting.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.ABTesting.2.0.0.2\build\Xamarin.Firebase.iOS.ABTesting.targets')" />
   <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -2139,4 +2224,9 @@
     <Error Condition="!Exists('..\packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.0\build\Accord.targets'))" />
   </Target>
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.Core.6.1.0\build\Xamarin.Firebase.iOS.Core.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.Core.6.1.0\build\Xamarin.Firebase.iOS.Core.targets')" />
+  <Import Project="..\packages\Xamarin.Google.iOS.SignIn.5.0.1\build\Xamarin.Google.iOS.SignIn.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.SignIn.5.0.1\build\Xamarin.Google.iOS.SignIn.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.ABTesting.3.0.0\build\Xamarin.Firebase.iOS.ABTesting.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.ABTesting.3.0.0\build\Xamarin.Firebase.iOS.ABTesting.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.Analytics.6.0.4\build\Xamarin.Firebase.iOS.Analytics.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.Analytics.6.0.4\build\Xamarin.Firebase.iOS.Analytics.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.RemoteConfig.4.2.1\build\Xamarin.Firebase.iOS.RemoteConfig.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.RemoteConfig.4.2.1\build\Xamarin.Firebase.iOS.RemoteConfig.targets')" />
 </Project>

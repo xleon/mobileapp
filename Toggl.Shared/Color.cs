@@ -57,7 +57,7 @@ namespace Toggl.Shared
         }
 
         public override int GetHashCode()
-            => HashCode.From(Alpha, Red, Green, Blue);
+            => HashCode.Combine(Alpha, Red, Green, Blue);
 
         public static bool operator ==(Color color, Color otherColor)
             => color.Red == otherColor.Red

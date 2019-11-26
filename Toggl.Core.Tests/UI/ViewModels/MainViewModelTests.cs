@@ -3,7 +3,6 @@ using Microsoft.Reactive.Testing;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -22,7 +21,6 @@ using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
@@ -513,7 +511,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory
                     .StopTimeEntry(Arg.Any<DateTimeOffset>(), Arg.Any<TimeEntryStopOrigin>())
                     .Execute()
-                    .Returns(Observable.Throw<IThreadSafeTimeEntry>(new Exception()));
+                    .Returns(ThreadingTask.FromException<IThreadSafeTimeEntry>(new Exception()));
 
                 var errors = TestScheduler.CreateObserver<Exception>();
                 ViewModel.StopTimeEntry.Errors.Subscribe(errors);

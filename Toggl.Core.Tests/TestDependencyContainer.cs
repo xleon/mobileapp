@@ -11,6 +11,7 @@ using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Storage;
+using Toggl.Storage.Queries;
 using Toggl.Storage.Settings;
 
 namespace Toggl.Core.UI
@@ -90,6 +91,10 @@ namespace Toggl.Core.UI
         internal IPlatformInfo MockPlatformInfo { get; set; }
         protected override IPlatformInfo CreatePlatformInfo()
             => MockPlatformInfo;
+
+        internal IQueryFactory MockQueryFactory { get; set; }
+        protected override IQueryFactory CreateQueryFactory()
+            => MockQueryFactory;
 
         internal IPrivateSharedStorageService MockPrivateSharedStorageService { get; set; }
         protected override IPrivateSharedStorageService CreatePrivateSharedStorageService()
