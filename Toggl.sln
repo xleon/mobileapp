@@ -1131,6 +1131,7 @@ Global
 		{0C219958-CAD1-4B1B-BBCB-D12CC6E11F49}.Release|Any CPU.Build.0 = Release.AppStore|iPhone
 		{0C219958-CAD1-4B1B-BBCB-D12CC6E11F49}.Release|iPhone.ActiveCfg = Release.AppStore|iPhone
 		{0C219958-CAD1-4B1B-BBCB-D12CC6E11F49}.Release|iPhone.Build.0 = Release.AppStore|iPhone
+		{0C219958-CAD1-4B1B-BBCB-D12CC6E11F49}.UnitTests|Any CPU.ActiveCfg = Debug|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
