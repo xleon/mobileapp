@@ -4,6 +4,7 @@
     <Rule Id="CS0105" Action="Error" />
     <Rule Id="CS0108" Action="Error" />
     <Rule Id="CS0169" Action="Error" />
+    <Rule Id="CS0414" Action="Error" />
     <Rule Id="CS0649" Action="Error" />
     <Rule Id="CS1998" Action="Error" />
   </Rules>

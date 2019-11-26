@@ -25,8 +25,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ReportsViewModel reportsViewModel;
         private readonly CalendarViewModel calendarViewModel;
 
-        private bool hasOpenedReports = false;
-
         public IList<ViewModel> Tabs { get; }
 
         public MainTabBarViewModel(
