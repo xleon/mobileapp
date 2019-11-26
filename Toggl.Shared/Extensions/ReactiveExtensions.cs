@@ -81,7 +81,7 @@ namespace Toggl.Shared.Extensions
             where TValue : struct
             => observable.Where(x => x != null).Select(x => x.Value);
 
-        public static IObservable<U> SelectValue<T, U>(this IObservable<T> observable, U u)
+        public static IObservable<TValue> SelectValue<TInput, TValue>(this IObservable<TInput> observable, TValue u)
             => observable.Select(_ => u);
 
         public static IObservable<Unit> SelectUnit<T>(this IObservable<T> observable)
