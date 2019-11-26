@@ -19,7 +19,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ISyncManager syncManager;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IInteractorFactory interactorFactory;
-        private readonly ISchedulerProvider schedulerProvider;
         private readonly IRxActionFactory rxActionFactory;
 
         public IObservable<bool> IsLoading { get; }
