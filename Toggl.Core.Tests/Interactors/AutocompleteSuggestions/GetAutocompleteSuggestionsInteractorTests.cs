@@ -26,7 +26,7 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
             protected const string ProjectName = "Toggl";
             protected const string ProjectColor = "#F41F19";
 
-            protected IInteractorFactory InteractorFactory { get; } = Substitute.For<IInteractorFactory>();
+            protected new IInteractorFactory InteractorFactory { get; } = Substitute.For<IInteractorFactory>();
 
             private ISearchEngine<IThreadSafeTimeEntry> setupMockSearchEngine(ImmutableList<IThreadSafeTimeEntry> timeEntries = null)
             {
