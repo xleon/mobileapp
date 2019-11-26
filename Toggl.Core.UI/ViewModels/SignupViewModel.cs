@@ -53,7 +53,6 @@ namespace Toggl.Core.UI.ViewModels
         private bool termsOfServiceAccepted;
         private List<ICountry> allCountries;
         private long? countryId;
-        private string timezone;
 
         private readonly Subject<ShakeTargets> shakeSubject = new Subject<ShakeTargets>();
         private readonly Subject<bool> isShowPasswordButtonVisibleSubject = new Subject<bool>();
@@ -353,7 +352,7 @@ namespace Toggl.Core.UI.ViewModels
 
             signupDisposable = View.GetGoogleToken()
                 .SelectMany(googleToken => userAccessManager
-                    .SignUpWithGoogle(googleToken, termsOfServiceAccepted, (int)countryId.Value, timezone))
+                    .SignUpWithGoogle(googleToken, termsOfServiceAccepted, (int)countryId.Value, timezone: null))
                 .Track(analyticsService.SignUp, AuthenticationMethod.Google)
                 .Subscribe(_ => onAuthenticated(), onError, onCompleted);
         }

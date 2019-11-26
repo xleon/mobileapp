@@ -3,6 +3,7 @@
   <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp" RuleNamespace="Microsoft.CodeAnalysis.CSharp">
     <Rule Id="CS0105" Action="Error" />
     <Rule Id="CS0108" Action="Error" />
+    <Rule Id="CS0649" Action="Error" />
     <Rule Id="CS1998" Action="Error" />
   </Rules>
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
