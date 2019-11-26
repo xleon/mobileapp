@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
-    <CodeAnalysisRuleSet>..\Toggl.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\Toggl.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>../../bin/Debug/</OutputPath>
