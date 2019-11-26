@@ -1,5 +1,4 @@
 ﻿﻿using System;
-using System;
 using Toggl.Core.Calendar;
 using System.Linq;
 using Toggl.Core.Helper;
