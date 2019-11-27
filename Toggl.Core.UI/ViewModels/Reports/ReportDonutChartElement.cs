@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Collections.Generic;
 using Toggl.Shared;
 using System;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
@@ -12,19 +13,34 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private ImmutableList<IReportElement> legend;
 
         /// <summary>
-        /// The maximum percentage of elements under the Other category.
+        /// Elements with larger than the fraction specified by this constant
+        /// are included in the chart as individual slices.
         /// </summary>
-        private readonly double groupUnderOtherThreshold = 0.1;
+        public static readonly double GuaranteedSliceThreshold = 0.05;
+
+        /// <summary>
+        /// Group into 'Other' all elements that would fill less of
+        /// a chart fraction than this constant specifies
+        /// </summary>
+        public static readonly double GuaranteedForOtherThreshold = 0.01;
+
+        /// <summary>
+        /// After all segments larger than 5% (GuaranteedSliceThreshold) are set apart as individual slices
+        /// and all segments smaller than 1% (GuaranteedForOtherThreshold) are grouped into Other
+        /// the rest are added into the Other category one by one from smallest to larger until the
+        /// Other category reaches this size (in this case 5%).
+        /// </summary>
+        public static readonly double BaseMaximumOtherPercentage = 0.05;
 
         /// <summary>
         /// The label used for the group of the smaller elements
         /// </summary>
-        private readonly string otherCategoryLabel = Resources.Other;
+        public static readonly string OtherCategoryLabel = Resources.Other;
 
         /// <summary>
         /// The color of the Other category segment
         /// </summary>
-        private readonly string otherCategoryColor = "#808080";
+        public static readonly string OtherCategoryColor = "#808080";
 
         public ReportDonutChartElement(
             IEnumerable<Segment> segments,
@@ -36,10 +52,9 @@ namespace Toggl.Core.UI.ViewModels.Reports
             donutSelector = donutSelector ?? defaultDonutSelector;
             donutElement = donutSelector(segments);
 
-            // use the arguments to calculate the items for the donut legend
             legendItemsSelector = legendItemsSelector ?? defaultLegendItemsSelector;
             legend = legendItemsSelector(segments).Cast<IReportElement>().ToImmutableList();
-
+            
             SubElements = legend.Prepend(donutElement)
                 .ToImmutableList();
         }
@@ -53,6 +68,10 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private ReportDonutChartElement(bool isLoading)
             : base(isLoading)
         {
+            SubElements = ReportDonutChartDonutElement.LoadingState
+                .Yield()
+                .Cast<IReportElement>()
+                .ToImmutableList();
         }
 
         public static ReportDonutChartElement LoadingState
@@ -66,33 +85,51 @@ namespace Toggl.Core.UI.ViewModels.Reports
         /// </summary>
         private ImmutableList<Segment> normalizeSegments(IEnumerable<Segment> segments)
         {
-            var percentageUsed = 0d;
-            var nonGroupedPercentage = 1 - groupUnderOtherThreshold;
+            var slices = new List<Segment>();
+            var other = new List<Segment>();
+            var otherPercentage = 0.0;
+
             var total = segments.Sum(s => s.Value);
 
-            var normalizedSegments = segments
-                .Select(s => s.Normalized(s.Value / total))
-                .OrderByDescending(s => s.NormalizedValue)
-                .ToList();
+            if (total == 0)
+                return ImmutableList<Segment>.Empty;
 
-            var segmentsWithOther = new List<Segment>();
-            for (var i = 0; i < normalizedSegments.Count; i++)
+            foreach (var segment in segments.OrderBy(s => s.Value))
             {
-                var segment = normalizedSegments[i];
-                percentageUsed += segment.NormalizedValue;
+                var percentage = segment.Value / total;
 
-                segmentsWithOther.Add(segment);
-
-                if (percentageUsed >= nonGroupedPercentage)
+                if (percentage >= GuaranteedSliceThreshold)
                 {
-                    if (i < normalizedSegments.Count - 1)
-                        segmentsWithOther.Add(new Segment(otherCategoryColor, otherCategoryLabel, 1 - percentageUsed));
-
-                    break;
+                    slices.Add(segment);
+                    continue;
                 }
+
+                if (percentage <= GuaranteedForOtherThreshold || otherPercentage <= BaseMaximumOtherPercentage)
+                {
+                    otherPercentage += percentage;
+                    other.Add(segment);
+                    continue;
+                }
+
+                slices.Add(segment);
             }
 
-            return segmentsWithOther.ToImmutableList();
+            if (other.Count == 1)
+            {
+                slices.Add(other.Single());
+                other.Clear();
+            }
+
+            // The elements were being added in ascending order, but the final list has to be descending
+            slices.Reverse();
+
+            if (other.Any())
+            {
+                var totalInOther = other.Sum(s => s.Value);
+                slices.Add(new Segment(OtherCategoryColor, OtherCategoryLabel, totalInOther));
+            }
+
+            return slices.ToImmutableList();
         }
 
         // TODO: Do not forget to update this method and write tests for it when the element is implemented
@@ -104,26 +141,16 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public struct Segment
         {
-            public string Color { get; private set; }
-            public string Label { get; private set; }
-            public double Value { get; private set; }
-            public double NormalizedValue { get; private set; }
+            public string Color { get; }
+            public string Label { get; }
+            public double Value { get; }
 
             public Segment(string color, string label, double value)
             {
                 Color = color;
                 Label = label;
                 Value = value;
-                NormalizedValue = value;
             }
-
-            private Segment(string color, string label, double value, double normalizedValue) : this(color, label, value)
-            {
-                NormalizedValue = normalizedValue;
-            }
-
-            public Segment Normalized(double value)
-                => new Segment(Color, Label, Value, value);
 
             public override bool Equals(object obj)
                 => obj is Segment segment
