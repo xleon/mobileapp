@@ -234,7 +234,7 @@ namespace Toggl.iOS.Views.Calendar
             if (!isActive)
                 return;
 
-            var currentPointWithOffest = new CGPoint(point.X, point.Y - verticalOffset);
+            var currentPointWithOffest = new CGPoint(point.X, point.Y);
 
             var newStartTime = NewStartTimeWithStaticDuration(currentPointWithOffest, allItemsStartAndEndTime, calendarItem.Duration);
 
