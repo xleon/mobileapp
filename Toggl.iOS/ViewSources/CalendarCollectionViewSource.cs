@@ -309,7 +309,8 @@ namespace Toggl.iOS.ViewSources
 
         private void onCollectionChanges()
         {
-            if (IsEditing)
+            if (editingItemIndexPath != null
+                && (editingItemIndexPath.Item < 0 || editingItemIndexPath.Item >= calendarItems.Count))
                 return;
 
             long? originalId = null;
@@ -383,6 +384,9 @@ namespace Toggl.iOS.ViewSources
 
         private NSIndexPath updateCalendarItem(NSIndexPath indexPath, DateTimeOffset startTime, TimeSpan? duration)
         {
+            if (indexPath == null || indexPath.Item >= calendarItems.Count)
+                return null;
+
             var position = (int)indexPath.Item;
 
             calendarItems[position] = calendarItems[position]
