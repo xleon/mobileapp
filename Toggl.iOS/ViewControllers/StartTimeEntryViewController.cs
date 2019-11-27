@@ -28,6 +28,7 @@ namespace Toggl.iOS.ViewControllers
         private const double desiredIpadHeight = 360;
 
         private bool isUpdatingDescriptionField;
+        private bool inTheMiddleOfAHack;
 
         private UIImage greyCheckmarkButtonImage;
         private UIImage greenCheckmarkButtonImage;
@@ -262,7 +263,9 @@ namespace Toggl.iOS.ViewControllers
             DescriptionTextView.AttributedText = textFieldInfo.AsAttributedText();
             DescriptionTextView.SelectedRange = textFieldInfo.CursorPosition();
 
-            DescriptionTextView.RejectAutocorrect();
+            inTheMiddleOfAHack = true;
+            DescriptionTextView.RejectAutocorrect(scratchView: TimeInput);
+            inTheMiddleOfAHack = false;
         }
 
         private void switchTimeLabelAndInput()
@@ -281,12 +284,16 @@ namespace Toggl.iOS.ViewControllers
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
         {
+            if (!inTheMiddleOfAHack) return;
+
             BottomDistanceConstraint.Constant = e.FrameEnd.Height;
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
         }
 
         protected override void KeyboardWillHide(object sender, UIKeyboardEventArgs e)
         {
+            if (inTheMiddleOfAHack) return;
+
             BottomDistanceConstraint.Constant = 0;
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
         }
@@ -355,7 +362,11 @@ namespace Toggl.iOS.ViewControllers
         }
 
         private void onTimeInputLostFocus(object sender, EventArgs e)
-            => switchTimeLabelAndInput();
+        {
+            if (inTheMiddleOfAHack) return;
+
+            switchTimeLabelAndInput();
+        }
 
         private IEnumerable<UIButton> getButtons()
         {
