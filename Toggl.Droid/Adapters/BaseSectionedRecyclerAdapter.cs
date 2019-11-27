@@ -34,10 +34,8 @@ namespace Toggl.Droid.Adapters
         private readonly Subject<Unit> itemsUpdateCompletedSubject = new Subject<Unit>();
         public IObservable<Unit> ItemsUpdateCompleted { get; }
 
-        private IImmutableList<SectionModel<TSection, TItem>> items;
         public IImmutableList<SectionModel<TSection, TItem>> Items
         {
-            get => items;
             set => setItems(value ?? ImmutableList<SectionModel<TSection, TItem>>.Empty);
         }
 

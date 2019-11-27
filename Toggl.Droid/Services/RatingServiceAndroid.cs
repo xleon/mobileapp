@@ -22,7 +22,7 @@ namespace Toggl.Droid.Services
                 var uriString = $"market://details?id={packageName}";
                 executeRatingIntent(uriString);
             }
-            catch (ActivityNotFoundException ex)
+            catch (ActivityNotFoundException)
             {
                 var fallbackUriString = $"http://play.google.com/store/apps/details?id={packageName}";
                 executeRatingIntent(fallbackUriString);

@@ -10,7 +10,6 @@ using System.Reactive.Disposables;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Extensions;
-using Toggl.Droid.Extensions;
 using Toggl.Droid.Presentation;
 
 namespace Toggl.Droid.Activities

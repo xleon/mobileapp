@@ -9,10 +9,6 @@ using Color = Android.Graphics.Color;
 using Toggl.Droid.Extensions;
 using Android.App;
 using Toggl.Droid.Services;
-using static Toggl.Droid.Widgets.WidgetsConstants;
-using static Android.App.PendingIntentFlags;
-using static Android.Content.ActivityFlags;
-using Toggl.Droid.Services;
 
 namespace Toggl.Droid.Widgets
 {

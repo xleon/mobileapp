@@ -22,7 +22,7 @@ namespace Toggl.Droid.Services
                 {
                     runSync(parameters);
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                     finishJobClearingPendingSyncJobLock(parameters);
                 }
@@ -54,7 +54,7 @@ namespace Toggl.Droid.Services
                 .RemoteConfigService
                 .GetPushNotificationsConfiguration()
                 .HandlePushNotifications;
-            
+
             if (shouldHandlePushNotifications)
             {
                 var interactorFactory = dependencyContainer.InteractorFactory;
