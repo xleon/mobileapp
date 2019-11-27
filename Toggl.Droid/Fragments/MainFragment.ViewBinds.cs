@@ -9,6 +9,10 @@ namespace Toggl.Droid.Fragments
 {
     public sealed partial class MainFragment
     {
+        protected override int LayoutId => Resource.Layout.MainFragment;
+
+        protected override View LoadingPlaceholderView { get; set; }
+
         private View runningEntryCardFrame;
         private FloatingActionButton playButton;
         private FloatingActionButton stopButton;
@@ -48,7 +52,10 @@ namespace Toggl.Droid.Fragments
             welcomeBackStub = fragmentView.FindViewById<ViewStub>(Resource.Id.WelcomeBackViewStub);
             toolbar = fragmentView.FindViewById<Toolbar>(Resource.Id.Toolbar);
             appBarLayout = fragmentView.FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
-            
+
+            emptyStateView = emptyStateViewStub.Inflate();
+            LoadingPlaceholderView = emptyStateView;
+
             timeEntryCardAddDescriptionLabel.Text = Shared.Resources.AddDescription;
         }
     }

@@ -52,4 +52,17 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:layout_gravity="bottom|right" />
+    <FrameLayout
+        android:id="@+id/TabLoadingIndicator"
+        android:background="@color/background"
+        android:paddingBottom="64dp"
+        android:clipToPadding="false"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"/>
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

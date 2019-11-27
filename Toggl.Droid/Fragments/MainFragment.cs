@@ -1,10 +1,8 @@
 using Android.App;
 using Android.Graphics;
 using Android.Graphics.Drawables;
-using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V4.Content;
-using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
 using Android.Text;
@@ -33,6 +31,7 @@ using static Toggl.Core.Sync.SyncProgress;
 using static Toggl.Core.Analytics.EditTimeEntryOrigin;
 using FoundationResources = Toggl.Shared.Resources;
 using System.Linq;
+using Android.Runtime;
 
 namespace Toggl.Droid.Fragments
 {
@@ -50,20 +49,19 @@ namespace Toggl.Droid.Fragments
         private Drawable addDrawable;
         private Drawable playDrawable;
 
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        public MainFragment(MainTabBarViewModel tabBarViewModel)
+            : base(tabBarViewModel)
         {
-            var view = inflater.Inflate(Resource.Layout.MainFragment, container, false);
-
-            InitializeViews(view);
-            SetupToolbar(view);
-            mainRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
-
-            return view;
         }
 
-        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        public MainFragment(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
-            base.OnViewCreated(view, savedInstanceState);
+        }
+
+        protected override void InitializationFinished()
+        {
+            mainRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
 
             refreshLayout.SetProgressBackgroundColorSchemeResource(Resource.Color.cardBackground);
             refreshLayout.SetColorSchemeResources(new[] { Resource.Color.primaryText });
@@ -211,9 +209,9 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(onWelcomeBackViewVisibilityChanged)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.ShouldShowEmptyState
-                .Subscribe(onEmptyStateVisibilityChanged)
-                .DisposedBy(DisposeBag);
+            //ViewModel.ShouldShowEmptyState
+            //    .Subscribe(onEmptyStateVisibilityChanged)
+            //    .DisposedBy(DisposeBag);
 
             ViewModel.ShouldShowRatingView
                 .Subscribe(setupRatingViewVisibility)
@@ -337,22 +335,22 @@ namespace Toggl.Droid.Fragments
             playButton.SetExpanded(visible);
         }
 
-        private void onEmptyStateVisibilityChanged(bool shouldShowEmptyState)
-        {
-            if (shouldShowEmptyState)
-            {
-                if (emptyStateView == null)
-                {
-                    emptyStateView = emptyStateViewStub.Inflate();
-                }
+        //private void onEmptyStateVisibilityChanged(bool shouldShowEmptyState)
+        //{
+        //    if (shouldShowEmptyState)
+        //    {
+        //        if (emptyStateView == null)
+        //        {
+        //            emptyStateView = emptyStateViewStub.Inflate();
+        //        }
 
-                emptyStateView.Visibility = ViewStates.Visible;
-            }
-            else if (emptyStateView != null)
-            {
-                emptyStateView.Visibility = ViewStates.Gone;
-            }
-        }
+        //        emptyStateView.Visibility = ViewStates.Visible;
+        //    }
+        //    else if (emptyStateView != null)
+        //    {
+        //        emptyStateView.Visibility = ViewStates.Gone;
+        //    }
+        //}
 
         private void showUndoDeletion(int? numberOfTimeEntriesPendingDeletion)
         {

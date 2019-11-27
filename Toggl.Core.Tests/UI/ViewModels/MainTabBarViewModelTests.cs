@@ -3,9 +3,22 @@ using NSubstitute;
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using Toggl.Core.Analytics;
+using Toggl.Core.DataSources;
+using Toggl.Core.Interactors;
+using Toggl.Core.Login;
+using Toggl.Core.Services;
+using Toggl.Core.Shortcuts;
 using Toggl.Core.Suggestions;
+using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.UI;
+using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Shared;
+using Toggl.Storage;
+using Toggl.Storage.Settings;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
@@ -15,104 +28,36 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class MainTabViewModelTest : BaseViewModelTests<MainTabBarViewModel>
         {
             protected override MainTabBarViewModel CreateViewModel()
-                => new MainTabBarViewModel(
-                    TimeService,
-                    DataSource,
-                    SyncManager,
-                    RatingService,
-                    UserPreferences,
-                    AnalyticsService,
-                    BackgroundService,
-                    InteractorFactory,
-                    OnboardingStorage,
-                    SchedulerProvider,
-                    PermissionsChecker,
-                    NavigationService,
-                    RemoteConfigService,
-                    AccessibilityService,
-                    UpdateRemoteConfigCacheService,
-                    AccessRestrictionStorage,
-                    RxActionFactory,
-                    UserAccessManager,
-                    PrivateSharedStorageService,
-                    PlatformInfo
-                );
-        }
-
-        public sealed class TheConstructor : MainTabViewModelTest
-        {
-            [Theory, LogIfTooSlow]
-            [ConstructorData]
-            public void ThrowsIfAnyOfTheArgumentsIsNull(
-                    bool useTimeService,
-                    bool useDataSource,
-                    bool useSyncManager,
-                    bool useRatingService,
-                    bool useUserPreferences,
-                    bool useAnalyticsService,
-                    bool useBackgroundService,
-                    bool useInteractorFactory,
-                    bool useOnboardingStorage,
-                    bool useSchedulerProvider,
-                    bool usePermissionsChecker,
-                    bool useNavigationService,
-                    bool useRemoteConfigService,
-                    bool useAccessibilityService,
-                    bool useRemoteConfigUpdateService,
-                    bool useAccessRestrictionStorage,
-                    bool useRxActionFactory,
-                    bool useUserAccessManager,
-                    bool usePrivateSharedStorageService,
-                    bool usePlatformInfo)
-            {
-                var timeService = useTimeService ? TimeService : null;
-                var dataSource = useDataSource ? DataSource : null;
-                var syncManager = useSyncManager ? SyncManager : null;
-                var ratingService = useRatingService ? RatingService : null;
-                var userPreferences = useUserPreferences ? UserPreferences : null;
-                var analyticsService = useAnalyticsService ? AnalyticsService : null;
-                var interactorFactory = useInteractorFactory ? InteractorFactory : null;
-                var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
-                var backgroundService = useBackgroundService ? BackgroundService : null;
-                var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
-                var permissionsService = usePermissionsChecker ? PermissionsChecker : null;
-                var navigationService = useNavigationService ? NavigationService : null;
-                var remoteConfigService = useRemoteConfigService ? RemoteConfigService : null;
-                var accessibilityService = useAccessibilityService ? AccessibilityService : null;
-                var remoteConfigUpdateService = useRemoteConfigUpdateService ? UpdateRemoteConfigCacheService : null;
-                var accessRestrictionStorage = useAccessRestrictionStorage ? AccessRestrictionStorage : null;
-                var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
-                var userAccessManager = useUserAccessManager ? UserAccessManager : null;
-                var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
-                var platformInfo = usePlatformInfo ? PlatformInfo : null;
-
-                Action tryingToConstructWithEmptyParameters =
-                    () => new MainTabBarViewModel(
-                        timeService,
-                        dataSource,
-                        syncManager,
-                        ratingService,
-                        userPreferences,
-                        analyticsService,
-                        backgroundService,
-                        interactorFactory,
-                        onboardingStorage,
-                        schedulerProvider,
-                        permissionsService,
-                        navigationService,
-                        remoteConfigService,
-                        accessibilityService,
-                        remoteConfigUpdateService,
-                        accessRestrictionStorage,
-                        rxActionFactory,
-                        userAccessManager,
-                        privateSharedStorageService,
-                        platformInfo
-                    );
-
-                tryingToConstructWithEmptyParameters
-                    .Should().Throw<ArgumentNullException>();
-            }
+                => new MainTabBarViewModel(new TestDependencyContainer
+                {
+                    MockUserAccessManager = Substitute.For<IUserAccessManager>(),
+                    MockAccessRestrictionStorage = Substitute.For<IAccessRestrictionStorage>(),
+                    MockAnalyticsService = Substitute.For<IAnalyticsService>(),
+                    MockBackgroundSyncService = Substitute.For<IBackgroundSyncService>(),
+                    MockCalendarService = Substitute.For<ICalendarService>(),
+                    MockDatabase = Substitute.For<ITogglDatabase>(),
+                    MockDataSource = Substitute.For<ITogglDataSource>(),
+                    MockKeyValueStorage = Substitute.For<IKeyValueStorage>(),
+                    MockLastTimeUsageStorage = Substitute.For<ILastTimeUsageStorage>(),
+                    MockLicenseProvider = Substitute.For<ILicenseProvider>(),
+                    MockNavigationService = Substitute.For<INavigationService>(),
+                    MockNotificationService = Substitute.For<INotificationService>(),
+                    MockAccessibilityService = Substitute.For<IAccessibilityService>(),
+                    MockOnboardingStorage = Substitute.For<IOnboardingStorage>(),
+                    MockPermissionsChecker = Substitute.For<IPermissionsChecker>(),
+                    MockPlatformInfo = Substitute.For<IPlatformInfo>(),
+                    MockPrivateSharedStorageService = Substitute.For<IPrivateSharedStorageService>(),
+                    MockRatingService = Substitute.For<IRatingService>(),
+                    MockRemoteConfigService = Substitute.For<IRemoteConfigService>(),
+                    MockSchedulerProvider = Substitute.For<ISchedulerProvider>(),
+                    MockShortcutCreator = Substitute.For<IApplicationShortcutCreator>(),
+                    MockUserPreferences = Substitute.For<IUserPreferences>(),
+                    MockInteractorFactory = Substitute.For<IInteractorFactory>(),
+                    MockTimeService = Substitute.For<ITimeService>(),
+                    MockSyncManager = Substitute.For<ISyncManager>(),
+                    MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>(),
+                    MockUpdateRemoteConfigCacheService = Substitute.For<IUpdateRemoteConfigCacheService>()
+                });
         }
 
         public sealed class TheTabsProperty : MainTabViewModelTest

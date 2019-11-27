@@ -5,12 +5,10 @@ namespace Toggl.Droid.Activities
 {
     public sealed partial class MainTabBarActivity
     {
-        private View tabLoadingIndicator;
         private BottomNavigationView navigationView;
 
         protected override void InitializeViews()
         {
-            tabLoadingIndicator = FindViewById(Resource.Id.TabLoadingIndicator);
             navigationView = FindViewById<BottomNavigationView>(Resource.Id.MainTabBarBottomNavigationView);
 
             var menu = navigationView.Menu;

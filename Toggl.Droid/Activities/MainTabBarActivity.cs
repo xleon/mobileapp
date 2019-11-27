@@ -31,7 +31,7 @@ namespace Toggl.Droid.Activities
         public static readonly string StartDateExtra = "StartDateExtra";
         public static readonly string EndDateExtra = "EndDateExtra";
 
-        private readonly Dictionary<int, Task<Fragment>> fragments = new Dictionary<int, Task<Fragment>>();
+        private readonly Dictionary<int, Fragment> fragments = new Dictionary<int, Fragment>();
         
         private Fragment activeFragment;
         private bool activityResumedBefore = false;
@@ -170,44 +170,32 @@ namespace Toggl.Droid.Activities
             reportsRequestedEndDate = null;
         }
 
-        private Task<Fragment> getCachedFragment(int itemId)
+        private Fragment getCachedFragment(int itemId)
         {
             if (fragments.TryGetValue(itemId, out var fragment))
                 return fragment;
 
-            fragments[itemId] = Task.Run<Fragment>(async () =>
+            switch (itemId)
             {
-                await Task.Yield();
-
-                switch (itemId)
-                {
-                    case Resource.Id.MainTabTimerItem:
-                        var mainVM = getTabViewModel<MainViewModel>();
-                        await mainVM.Initialize();
-                        return new MainFragment { ViewModel = mainVM };
-                    case Resource.Id.MainTabReportsItem:
-                        var reportsVM = getTabViewModel<ReportsViewModel>();
-                        await reportsVM.Initialize();
-                        return new ReportsFragment { ViewModel = reportsVM };
-                    case Resource.Id.MainTabCalendarItem:
-                        var calendarVM = getTabViewModel<CalendarViewModel>();
-                        await calendarVM.Initialize();
-                        return new CalendarFragment { ViewModel = calendarVM };
-                    case Resource.Id.MainTabSettinsItem:
-                        var settingsVM = getTabViewModel<SettingsViewModel>();
-                        await settingsVM.Initialize();
-                        return new SettingsFragment { ViewModel = settingsVM };
-                    default:
-                        throw new ArgumentException($"Unexpected item id {itemId}");
-                }
-            });
-
+                case Resource.Id.MainTabTimerItem:
+                    return new MainFragment(ViewModel);
+                case Resource.Id.MainTabReportsItem:
+                    return new ReportsFragment(ViewModel);
+                case Resource.Id.MainTabCalendarItem:
+                    return new CalendarFragment(ViewModel);
+                case Resource.Id.MainTabSettinsItem:
+                    return new SettingsFragment(ViewModel);
+                default:
+                    throw new ArgumentException($"Unexpected item id {itemId}");
+            }
+        
+            fragments[itemId] = fragment;
             return fragments[itemId];
         }
 
         private TTabViewModel getTabViewModel<TTabViewModel>()
             where TTabViewModel : class, IViewModel
-            => ViewModel.GetViewModel<TTabViewModel>();
+            => ViewModel.GetViewModel<TTabViewModel>().Value;
 
         public override void OnBackPressed()
         {
@@ -230,68 +218,50 @@ namespace Toggl.Droid.Activities
                 return;
             }
 
-            getCachedFragment(item.ItemId)
-                .ContinueWith(t =>
-                {
-                    var fragment = t.Result;
-                    if (fragment is IScrollableToTop scrollableToTop)
-                    {
-                        scrollableToTop.ScrollToTop();
-                    }
-                });
-        }
-
-        private async Task showFragment(int itemId)
-        {
-            var fragmentTask = getCachedFragment(itemId);
-            tabLoadingIndicator.Visibility = (!fragmentTask.IsCompleted).ToVisibility();
-            var fragment = await fragmentTask.ConfigureAwait(false);
-
-            await Task.Run(() =>
+            var fragment = getCachedFragment(item.ItemId);
+            if (fragment is IScrollableToTop scrollableToTop)
             {
-                var transaction = SupportFragmentManager.BeginTransaction();
-
-                if (activeFragment is MainFragment mainFragmentToHide)
-                    mainFragmentToHide.SetFragmentIsVisible(false);
-
-                if (fragment.IsAdded)
-                    transaction.Hide(activeFragment).Show(fragment);
-                else
-                    transaction.Add(Resource.Id.CurrentTabFragmmentContainer, fragment).Hide(activeFragment);
-
-                transaction.RunOnCommit(new Runnable(() => tabLoadingIndicator.SafeHide()));
-
-                transaction.Commit();
-
-                if (fragment is MainFragment mainFragmentToShow)
-                    mainFragmentToShow.SetFragmentIsVisible(true);
-
-                activeFragment = fragment;
-            });
+                scrollableToTop.ScrollToTop();
+            }
         }
 
-        private async Task showInitialFragment(int initialTabItemId)
+        private void showFragment(int itemId)
+        {
+            var fragment = getCachedFragment(itemId);
+
+            var transaction = SupportFragmentManager.BeginTransaction();
+
+            if (activeFragment is MainFragment mainFragmentToHide)
+                mainFragmentToHide.SetFragmentIsVisible(false);
+
+            if (fragment.IsAdded)
+                transaction.Hide(activeFragment).Show(fragment);
+            else
+                transaction.Add(Resource.Id.CurrentTabFragmmentContainer, fragment).Hide(activeFragment);
+
+            transaction.Commit();
+
+            if (fragment is MainFragment mainFragmentToShow)
+                mainFragmentToShow.SetFragmentIsVisible(true);
+
+            activeFragment = fragment;
+        }
+
+        private void showInitialFragment(int initialTabItemId)
         {
             SupportFragmentManager.RemoveAllFragments();
 
             requestedInitialTab = initialTabItemId;
             navigationView.SelectedItemId = initialTabItemId;
 
-            tabLoadingIndicator.Visibility = ViewStates.Visible;
-            var initialFragment = await getCachedFragment(initialTabItemId);
+            var initialFragment = getCachedFragment(initialTabItemId);
             activeFragment = initialFragment;
             if (!initialFragment.IsAdded)
             {
                 SupportFragmentManager
                     .BeginTransaction()
                     .Add(Resource.Id.CurrentTabFragmmentContainer, initialFragment)
-                    .RunOnCommit(new Runnable(
-                        () => tabLoadingIndicator.SafeHide()))
                     .Commit();
-            }
-            else
-            {
-                tabLoadingIndicator.Visibility = ViewStates.Gone;
             }
 
             if (initialFragment is MainFragment mainFragment)

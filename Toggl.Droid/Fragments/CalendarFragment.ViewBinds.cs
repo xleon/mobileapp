@@ -7,6 +7,10 @@ namespace Toggl.Droid.Fragments
 {
     public partial class CalendarFragment
     {
+        protected override int LayoutId => Resource.Layout.CalendarFragment;
+
+        protected override View LoadingPlaceholderView { get; set; }
+
         private View headerCalendarEventsView;
         private View headerTimeEntriesView;
         private TextView headerDayTextView;
@@ -43,6 +47,8 @@ namespace Toggl.Droid.Fragments
             headerCalendarEventsLabel.Text = Shared.Resources.CalendarEvents;
             headerCalendarTimeEntriesLabel.Text = Shared.Resources.TimeEntries;
             headerLinkCalendarsButton.Text = Shared.Resources.LinkCalendars;
+
+            LoadingPlaceholderView = view;
         }
     }
 }

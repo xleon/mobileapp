@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -82,21 +83,21 @@ namespace Toggl.Core.UI.ViewModels
             Tabs = getViewModels().ToImmutableList();
         }
 
-        public TViewModel GetViewModel<TViewModel>()
+        public Lazy<TViewModel> GetViewModel<TViewModel>()
             where TViewModel : class, IViewModel
         {
             var expectedType = typeof(TViewModel);
             if (expectedType == typeof(MainViewModel))
-                return mainViewModel.Value as TViewModel;
+                return mainViewModel.Select(x => x as TViewModel);
 
             if (expectedType == typeof(ReportsViewModel))
-                return reportsViewModel.Value as TViewModel;
+                return reportsViewModel.Select(x => x as TViewModel);
 
             if (expectedType == typeof(CalendarViewModel))
-                return calendarViewModel.Value as TViewModel;
+                return calendarViewModel.Select(x => x as TViewModel);
 
             if (expectedType == typeof(SettingsViewModel))
-                return settingsViewModel.Value as TViewModel;
+                return settingsViewModel.Select(x => x as TViewModel);
 
             throw new InvalidOperationException();
         }

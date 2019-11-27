@@ -1,4 +1,5 @@
 using Android.OS;
+using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Core.Calendar;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Droid.Adapters.Calendar;
 using Toggl.Droid.Extensions;
@@ -21,17 +23,18 @@ namespace Toggl.Droid.Fragments
     {
         private CalendarLayoutManager calendarLayoutManager;
 
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        public CalendarFragment(MainTabBarViewModel tabBarViewModel)
+            : base(tabBarViewModel)
         {
-            var view = inflater.Inflate(Resource.Layout.CalendarFragment, container, false);
-            InitializeViews(view);
-            return view;
         }
 
-        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        public CalendarFragment(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
-            base.OnViewCreated(view, savedInstanceState);
+        }
 
+        protected override void InitializationFinished()
+        {
             var timeService = AndroidDependencyContainer.Instance.TimeService;
             var schedulerProvider = AndroidDependencyContainer.Instance.SchedulerProvider;
 
@@ -39,7 +42,7 @@ namespace Toggl.Droid.Fragments
             calendarRecyclerView.SetLayoutManager(calendarLayoutManager);
             var displayMetrics = new DisplayMetrics();
             Activity.WindowManager.DefaultDisplay.GetMetrics(displayMetrics);
-            var calendarAdapter = new CalendarAdapter(view.Context, timeService, displayMetrics.WidthPixels);
+            var calendarAdapter = new CalendarAdapter(Context, timeService, displayMetrics.WidthPixels);
             calendarRecyclerView.SetTimeService(timeService);
             calendarRecyclerView.SetAdapter(calendarAdapter);
 

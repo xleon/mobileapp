@@ -9,6 +9,10 @@ namespace Toggl.Droid.Fragments
 {
     public sealed partial class ReportsFragment
     {
+        protected override int LayoutId => Resource.Layout.CalendarFragment;
+
+        protected override View LoadingPlaceholderView { get; set; }
+
         private FloatingActionButton selectWorkspaceFab;
         private TextView workspaceName;
         private TextView toolbarCurrentDateRangeText;
@@ -22,6 +26,8 @@ namespace Toggl.Droid.Fragments
             toolbarCurrentDateRangeText = fragmentView.FindViewById<TextView>(Resource.Id.ToolbarCurrentDateRangeText);
             reportsRecyclerView = fragmentView.FindViewById<RecyclerView>(Resource.Id.ReportsFragmentRecyclerView);
             appBarLayout = fragmentView.FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
+
+            LoadingPlaceholderView = fragmentView;
         }
     }
 }
