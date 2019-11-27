@@ -1,14 +1,32 @@
-﻿using Toggl.Core.Reports;
-using Toggl.Shared.Models.Reports;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
-    public sealed class ReportBarChartElement : ReportElementBase
+    public class ReportBarChartElement : ReportElementBase
     {
-        public ReportBarChartElement(ITimeEntriesTotals reportsTotal, ProjectSummaryReport summary)
+        public ImmutableList<Bar> Bars { get; } = ImmutableList<Bar>.Empty;
+        public DurationFormat DurationFormat { get; }
+
+        public ReportBarChartElement(
+            IEnumerable<Bar> bars,
+            DurationFormat durationFormat,
+            Func<Bar, Bar> scalingFunction = null)
             : base(false)
         {
-            // use the arguments to calculate what's needed for the bar chart
+            var barsList = bars.ToList();
+            var upperLimit = upperValueLimit(barsList);
+
+            scalingFunction ??= (bar => normalizeBar(bar, upperLimit));
+
+            Bars = barsList
+                .Select(scalingFunction)
+                .ToImmutableList();
+
+            DurationFormat = durationFormat;
         }
 
         private ReportBarChartElement(bool isLoading)
@@ -19,9 +37,45 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public static ReportBarChartElement LoadingState
             => new ReportBarChartElement(true);
 
-        // TODO: Do not forget to update this method and write tests for it when the element is implemented
+        private double upperValueLimit(IEnumerable<Bar> bars) => bars.Max(bar => bar.TotalValue);
+
+        private Bar normalizeBar(Bar bar, double maxValue) => bar.Scaled(maxValue);
+
         public override bool Equals(IReportElement other)
             => other is ReportBarChartElement barChartElement
-            && barChartElement.IsLoading == IsLoading;
+               && barChartElement.IsLoading == IsLoading
+               && barChartElement.DurationFormat == DurationFormat
+               && barChartElement.Bars.SequenceEqual(Bars);
+
+        public struct Bar
+        {
+            public double FilledValue { get; }
+            public double TotalValue { get; }
+            public DateTimeOffsetRange DataTimeRange { get; }
+
+            public Bar(double filledValue, double totalValue, DateTimeOffsetRange offsetRange)
+            {
+                FilledValue = filledValue;
+                TotalValue = totalValue;
+                DataTimeRange = offsetRange;
+            }
+
+            public Bar Scaled(double maxValue) => new Bar(FilledValue / maxValue, TotalValue / maxValue, DataTimeRange);
+
+            public override bool Equals(object obj)
+                => obj is Bar bar
+                   && bar.FilledValue == FilledValue
+                   && bar.TotalValue == TotalValue
+                   && bar.DataTimeRange.Equals(DataTimeRange);
+
+            public override int GetHashCode()
+                => HashCode.Combine(FilledValue, TotalValue, DataTimeRange);
+
+            public static bool operator ==(Bar left, Bar right)
+                => left.Equals(right);
+
+            public static bool operator !=(Bar left, Bar right)
+                => !(left == right);
+        }
     }
 }

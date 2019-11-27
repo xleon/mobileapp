@@ -166,7 +166,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 return elements(
                     new ReportWorkspaceNameElement(filter.Workspace.Name),
                     new ReportSummaryElement(summaryData, durationFormat),
-                    new ReportBarChartElement(reportsTotal, summaryData),
+                    new ReportProjectsBarChartElement(reportsTotal, durationFormat),
                     new ReportProjectsDonutChartElement(summaryData, durationFormat));
             }
             catch (Exception ex)

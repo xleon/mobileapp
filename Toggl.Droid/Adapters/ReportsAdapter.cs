@@ -56,7 +56,7 @@ namespace Toggl.Droid.Fragments
                     return (int)ViewType.Error;
 
                 default:
-                    throw new InvalidOperationException("Invalid Report Segment View Type.");
+                    throw new InvalidOperationException($"Invalid Report Segment View Type for position {position}.");
             }
         }
 
