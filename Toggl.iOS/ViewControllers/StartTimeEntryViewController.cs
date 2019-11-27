@@ -27,8 +27,6 @@ namespace Toggl.iOS.ViewControllers
     {
         private const double desiredIpadHeight = 360;
 
-        private bool isUpdatingDescriptionField;
-
         private UIImage greyCheckmarkButtonImage;
         private UIImage greenCheckmarkButtonImage;
 

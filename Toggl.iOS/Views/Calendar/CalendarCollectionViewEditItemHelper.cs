@@ -42,7 +42,6 @@ namespace Toggl.iOS.Views.Calendar
         private CalendarItem calendarItem;
         private List<DateTimeOffset> allItemsStartAndEndTime;
 
-        private nfloat verticalOffset;
         private CGPoint firstPoint;
         private CGPoint previousPoint;
 

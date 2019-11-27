@@ -2,7 +2,6 @@
 using System.Reactive.Subjects;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.Suggestions;
-using Toggl.Core.UI.Helper;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
 using UIKit;

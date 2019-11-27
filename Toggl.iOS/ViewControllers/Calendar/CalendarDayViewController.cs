@@ -9,7 +9,6 @@ using Toggl.iOS.Views.Calendar;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using UIKit;
-using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive;

@@ -21,7 +21,6 @@ namespace Toggl.iOS.ViewControllers
     {
         private CGSize popoverPreferedSize = new CGSize(319, 355);
         private bool calendarInitialized;
-        private List<ReportsCalendarPageViewModel> pendingMonthsUpdate;
         private ReportsCalendarCollectionViewSource calendarCollectionViewSource;
 
         public ReportsCalendarViewController(ReportsCalendarViewModel viewModel)

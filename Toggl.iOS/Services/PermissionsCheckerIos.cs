@@ -9,9 +9,6 @@ namespace Toggl.iOS.Services
     [Preserve(AllMembers = true)]
     public sealed class PermissionsCheckerIos : IPermissionsChecker
     {
-        private readonly UNAuthorizationOptions options =
-            UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound;
-
         public IObservable<bool> CalendarPermissionGranted
             => PermissionsHelper.CalendarPermissionGranted;
 
