@@ -37,7 +37,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public static ReportBarChartElement LoadingState
             => new ReportBarChartElement(true);
 
-        private double upperValueLimit(IEnumerable<Bar> bars) => bars.Max(bar => bar.TotalValue);
+        private double upperValueLimit(List<Bar> bars) => bars.Count > 0 ? bars.Max(bar => bar.TotalValue) : 0;
 
         private Bar normalizeBar(Bar bar, double maxValue) => bar.Scaled(maxValue);
 

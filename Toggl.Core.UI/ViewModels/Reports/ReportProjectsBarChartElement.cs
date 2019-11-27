@@ -18,6 +18,11 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private static IEnumerable<Bar> convertReportTimeEntriesToBars(ITimeEntriesTotals report)
         {
+            if (report == null)
+            {
+                return Enumerable.Empty<Bar>();
+            }
+
             var offsets = convertReportTimeEntriesToOffsets(report);
 
             return report.Groups
