@@ -297,7 +297,6 @@
             <color key="backgroundColor" name="Background"/>
             <constraints>
                 <constraint firstAttribute="width" secondItem="2" secondAttribute="width" id="6Dc-a4-kUH"/>
-                <constraint firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="EbD-YZ-1YQ"/>
                 <constraint firstItem="ydj-ru-FYv" firstAttribute="top" secondItem="2" secondAttribute="top" id="HYM-Ho-DxF"/>
                 <constraint firstItem="ydj-ru-FYv" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="QV5-Nq-fh2"/>
                 <constraint firstAttribute="trailing" secondItem="hUN-Vx-fPV" secondAttribute="trailing" id="UEs-fL-kte"/>
