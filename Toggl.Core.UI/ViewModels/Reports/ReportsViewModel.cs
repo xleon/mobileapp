@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.DataSources;
@@ -27,6 +28,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public IObservable<IImmutableList<IReportElement>> Elements { get; set; }
         public IObservable<bool> HasMultipleWorkspaces { get; set; }
+        public IObservable<string> CurrentWorkspaceName { get; private set; }
 
         public IObservable<string> FormattedTimeRange { get; set; }
 
@@ -65,6 +67,12 @@ namespace Toggl.Core.UI.ViewModels.Reports
             var defaultTimeRange = new DateTimeOffsetRange(DateTimeOffset.Now - TimeSpan.FromDays(7), DateTimeOffset.Now);
 
             var timeRangeSelector = SelectTimeRange.Elements.StartWith(defaultTimeRange);
+
+            CurrentWorkspaceName = workspaceSelector
+                .Select(ws => ws.Name)
+                .StartWith(string.Empty)
+                .DistinctUntilChanged()
+                .AsDriver(string.Empty, schedulerProvider);
 
             Elements = Observable
                 .CombineLatest(workspaceSelector, timeRangeSelector, ReportFilter.Create)

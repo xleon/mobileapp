@@ -1400,7 +1400,7 @@
     <InterfaceDefinition Include="ViewControllers\SelectClientViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\OutdatedAppViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\TokenResetViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\ReportsViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\ReportsViewControllerOld.xib" />
     <InterfaceDefinition Include="Views\Color\ColorSelectionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\ProjectSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\StartTimeEntryEmptyViewCell.xib" />
@@ -1475,6 +1475,13 @@
     <InterfaceDefinition Include="Cells\Common\SelectorCell.xib" />
     <InterfaceDefinition Include="ViewControllers\Calendar\CalendarViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\CalendarWeeklyViewDayCollectionViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\ReportsViewController.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsSummaryCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsBarChartCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsDonutChartCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsNoDataCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsErrorCollectionViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1700,9 +1707,9 @@
     <Compile Include="ViewControllers\LoginViewController.designer.cs">
       <DependentUpon>LoginViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewControllers\ReportsViewController.cs" />
-    <Compile Include="ViewControllers\ReportsViewController.designer.cs">
-      <DependentUpon>ReportsViewController.cs</DependentUpon>
+    <Compile Include="ViewControllers\ReportsViewControllerOld.cs" />
+    <Compile Include="ViewControllers\ReportsViewControllerOld.designer.cs">
+      <DependentUpon>ReportsViewControllerOld.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Color\ColorSelectionViewCell.cs" />
     <Compile Include="Views\Color\ColorSelectionViewCell.designer.cs">
@@ -2081,6 +2088,37 @@
     <Compile Include="Extensions\TextViewExtensions.cs" />
     <Compile Include="Analytics\WidgetTrackingEventExtensions.cs" />
     <Compile Include="Analytics\WidgetErrorTrackingEvent.cs" />
+    <Compile Include="ViewControllers\ReportsViewController.cs" />
+    <Compile Include="ViewControllers\ReportsViewController.designer.cs">
+      <DependentUpon>ReportsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reports\ReportsCollectionViewRegularLayout.cs" />
+    <Compile Include="ViewSources\ReportsCollectionViewSource.cs" />
+    <Compile Include="Cells\Reports\ReportsSummaryCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsSummaryCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsSummaryCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsBarChartCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsBarChartCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsBarChartCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsDonutChartCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsDonutChartCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsDonutChartCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsDonutChartLegendCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reports\ReportsCollectionViewCompactLayout.cs" />
+    <Compile Include="Cells\Reports\ReportsNoDataCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsNoDataCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsNoDataCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsErrorCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsErrorCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsErrorCollectionViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">
@@ -2206,6 +2244,7 @@
     <Folder Include="Resources\Colors.xcassets\CalendarUnavailableDayText.colorset\" />
     <Folder Include="Resources\Colors.xcassets\CalendarUnselectedTodayText.colorset\" />
     <Folder Include="Resources\Colors.xcassets\CalendarHeaderLabel.colorset\" />
+    <Folder Include="Cells\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />
