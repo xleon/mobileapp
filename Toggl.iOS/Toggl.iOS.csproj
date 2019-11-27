@@ -499,12 +499,6 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-87x87.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-57x57.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-114x114.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-180x180.png">
       <Visible>false</Visible>
     </ImageAsset>
@@ -1292,7 +1286,6 @@
     <ImageAsset Include="Resources\Images.xcassets\delete.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete.png" />
     <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete%403x-1.png" />
     <ImageAsset Include="Resources\Colors.xcassets\Contents.json" />
     <ImageAsset Include="Resources\Colors.xcassets\Background.colorset\Contents.json" />
