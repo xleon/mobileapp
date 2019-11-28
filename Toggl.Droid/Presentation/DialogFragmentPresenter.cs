@@ -1,14 +1,12 @@
-using Android.Support.V7.App;
 using System;
 using System.Collections.Generic;
+using AndroidX.AppCompat.App;
+using AndroidX.Fragment.App;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Fragments;
-using DialogFragment = Android.Support.V4.App.DialogFragment;
-using Fragment = Android.Support.V4.App.Fragment;
-using FragmentManager = Android.Support.V4.App.FragmentManager;
 
 namespace Toggl.Droid.Presentation
 {
@@ -20,9 +18,9 @@ namespace Toggl.Droid.Presentation
             typeof(NoWorkspaceViewModel),
             typeof(SelectColorViewModel),
             typeof(SelectDefaultWorkspaceViewModel),
-            typeof(SelectUserCalendarsViewModel),
             typeof(TermsOfServiceViewModel),
-            typeof(UpcomingEventsNotificationSettingsViewModel)
+            typeof(UpcomingEventsNotificationSettingsViewModel),
+            typeof(January2020CampaignViewModel)
         };
 
         protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView)
@@ -56,14 +54,14 @@ namespace Toggl.Droid.Presentation
                 case SelectDefaultWorkspaceViewModel _:
                     return new SelectDefaultWorkspaceFragment { Cancelable = false };
 
-                case SelectUserCalendarsViewModel _:
-                    return new SelectUserCalendarsFragment();
-
                 case TermsOfServiceViewModel _:
                     return new TermsOfServiceFragment();
 
                 case UpcomingEventsNotificationSettingsViewModel _:
                     return new UpcomingEventsNotificationSettingsFragment();
+                
+                case January2020CampaignViewModel _:
+                    return new January2020CampaignFragment();
             }
 
             throw new InvalidOperationException($"There's no reactive dialog implementation for {viewModel.GetType().Name}");

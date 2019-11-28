@@ -1,5 +1,6 @@
 using System;
 using Foundation;
+using Toggl.Core.Sync;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Cells.Settings;
@@ -11,13 +12,6 @@ namespace Toggl.iOS.ViewSources
 {
     using SettingsSection = SectionModel<string, ISettingRow>;
 
-    public enum SyncStatus
-    {
-        Synced,
-        Syncing,
-        LoggingOut
-    }
-
     public class SettingsTableViewSource: BaseTableViewSource<SettingsSection, string, ISettingRow>
     {
         private readonly float headerHeight = 48;
@@ -25,6 +19,7 @@ namespace Toggl.iOS.ViewSources
 
         public SettingsTableViewSource(UITableView tableView)
         {
+            tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             tableView.RegisterNibForCellReuse(SettingCell.Nib, SettingCell.Identifier);
             tableView.RegisterNibForCellReuse(SettingsAnnotationCell.Nib, SettingsAnnotationCell.Identifier);
             tableView.RegisterNibForCellReuse(SettingsSyncCell.Nib, SettingsSyncCell.Identifier);
@@ -47,7 +42,7 @@ namespace Toggl.iOS.ViewSources
                     return cell;
                 }
 
-                case CustomRow<SyncStatus> customRow:
+                case CustomRow<PresentableSyncStatus> customRow:
                 {
                     var cell = (SettingsSyncCell) tableView.DequeueReusableCell(
                         SettingsSyncCell.Identifier,
@@ -69,8 +64,6 @@ namespace Toggl.iOS.ViewSources
                 {
                     var cell = (SettingCell)tableView.DequeueReusableCell(SettingCell.Identifier, indexPath);
                     cell.Item = model;
-                    cell.IsLast = indexPath.Row == Sections[indexPath.Section].Items.Count - 1
-                                  || Sections[indexPath.Section].Items[indexPath.Row + 1] is AnnotationRow;
                     return cell;
                 }
             }
@@ -95,7 +88,7 @@ namespace Toggl.iOS.ViewSources
             if (string.IsNullOrEmpty(title))
             {
                 var view = new UIView();
-                view.BackgroundColor = Colors.Settings.Background.ToNativeColor();
+                view.BackgroundColor = ColorAssets.TableBackground;
                 return view;
             }
 

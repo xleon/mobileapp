@@ -1,10 +1,6 @@
 using Android.App;
 using Android.Graphics;
 using Android.Graphics.Drawables;
-using Android.Support.Design.Widget;
-using Android.Support.V4.Content;
-using Android.Support.V7.Widget;
-using Android.Support.V7.Widget.Helper;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
@@ -32,10 +28,13 @@ using static Toggl.Core.Analytics.EditTimeEntryOrigin;
 using FoundationResources = Toggl.Shared.Resources;
 using System.Linq;
 using Android.Runtime;
+using AndroidX.Core.Content;
+using AndroidX.RecyclerView.Widget;
+using Google.Android.Material.Snackbar;
 
 namespace Toggl.Droid.Fragments
 {
-    public sealed partial class MainFragment : ReactiveTabFragment<MainViewModel>, IScrollableToTop
+    public sealed partial class MainFragment : ReactiveTabFragment<MainViewModel>, IScrollableToStart
     {
         private const int snackbarDuration = 5000;
         private NotificationManager notificationManager;
@@ -130,7 +129,7 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsTimeEntryRunning
-                .Subscribe(onTimeEntryCardVisibilityChanged)
+                .Subscribe(visible => playButton.SetExpanded(visible))
                 .DisposedBy(DisposeBag);
 
             ViewModel.SyncProgressState
@@ -220,7 +219,7 @@ namespace Toggl.Droid.Fragments
             setupOnboardingSteps();
         }
 
-        public void ScrollToTop()
+        public void ScrollToStart()
         {
             mainRecyclerView?.SmoothScrollToPosition(0);
         }
@@ -328,11 +327,6 @@ namespace Toggl.Droid.Fragments
         private void onSwipeActionsChanged(bool enabled)
         {
             touchCallback.AreSwipeActionsEnabled = enabled;
-        }
-
-        private void onTimeEntryCardVisibilityChanged(bool visible)
-        {
-            playButton.SetExpanded(visible);
         }
 
         //private void onEmptyStateVisibilityChanged(bool shouldShowEmptyState)

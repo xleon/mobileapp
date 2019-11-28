@@ -3,6 +3,7 @@ using Android.App.Job;
 using Android.Content;
 using Toggl.Core.Services;
 using Toggl.Droid.Extensions;
+using Toggl.Droid.Helper;
 
 namespace Toggl.Droid.Services
 {
@@ -10,9 +11,12 @@ namespace Toggl.Droid.Services
     {
         public override void EnableBackgroundSync()
         {
-            // Background sync is temporary disabled due to a crash that is hard to reproduce
-            DisableBackgroundSync();
-            return;
+            // Background sync is temporary disabled for android 10 due to a crash on Android 10 devices
+            if (QApis.AreAvailable)
+            {
+                DisableBackgroundSync();
+                return;
+            }
 
             var context = Application.Context;
             var jobScheduler = (JobScheduler)context.GetSystemService(Context.JobSchedulerService);

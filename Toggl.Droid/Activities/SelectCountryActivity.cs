@@ -32,10 +32,6 @@ namespace Toggl.Droid.Activities
                 .Subscribe(recyclerAdapter.Rx().Items())
                 .DisposedBy(DisposeBag);
 
-            backImageView.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
-                .DisposedBy(DisposeBag);
-
             filterEditText.Rx().Text()
                 .Subscribe(ViewModel.FilterText)
                 .DisposedBy(DisposeBag);

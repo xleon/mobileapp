@@ -1,11 +1,12 @@
 using Foundation;
-using SiriExtension.Models;
 using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Toggl.iOS.ExtensionKit;
-using Toggl.iOS.ExtensionKit.Analytics;
-using Toggl.iOS.ExtensionKit.Extensions;
+using Toggl.iOS.Shared;
+using Toggl.iOS.Shared.Analytics;
+using Toggl.iOS.Shared.Extensions;
+using Toggl.iOS.Shared.Models;
+using System.Reactive.Threading.Tasks;
 using Toggl.iOS.Intents;
 using Toggl.Networking;
 using Toggl.Shared.Models;
@@ -32,6 +33,7 @@ namespace SiriExtension
             }
 
             togglAPI.TimeEntries.GetAll()
+                .ToObservable()
                 .FirstAsync()
                 .Select(timeEntries => timeEntries.First())
                 .Subscribe(
@@ -52,24 +54,25 @@ namespace SiriExtension
         {
 
             togglAPI.TimeEntries.Create(continueTimeEntry(lastEntry))
+                .ToObservable()
                 .Subscribe(
                     te =>
                     {
-                        SharedStorage.instance.SetNeedsSync(true);
+                        SharedStorage.Instance.SetNeedsSync(true);
                         var response = string.IsNullOrEmpty(te.Description)
                             ? new ContinueTimerIntentResponse(ContinueTimerIntentResponseCode.Success, null)
                             : ContinueTimerIntentResponse.SuccessWithEntryDescriptionIntentResponseWithEntryDescription(
                                 te.Description
                             );
 
-                        SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.StartTimer(te));
+                        SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.StartTimer(te));
 
                         completion(response);
                     },
                     exception =>
                     {
 
-                        SharedStorage.instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
+                        SharedStorage.Instance.AddSiriTrackingEvent(SiriTrackingEvent.Error(exception.Message));
                         completion(new ContinueTimerIntentResponse(ContinueTimerIntentResponseCode.Failure, null));
                     });
         }

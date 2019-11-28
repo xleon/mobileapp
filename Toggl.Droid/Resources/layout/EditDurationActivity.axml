@@ -6,20 +6,14 @@
     android:fillViewport="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/Toolbar"
-            android:elevation="4dp"
-            android:background="@color/background"
-            app:titleTextColor="@color/primaryText"
-            android:theme="@style/AppBarTheme"
-            app:popupTheme="@style/AppBarPopupTheme"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize" />
-        <android.support.constraint.Guideline
+            style="@style/ToolbarStyle"
+            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/CenterGuideline"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5"
@@ -221,5 +215,5 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </FrameLayout>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

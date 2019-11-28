@@ -33,11 +33,13 @@ namespace Toggl.Droid.Activities
             Resource.Layout.StartTimeEntryActivity,
             Resource.Style.AppTheme,
             Transitions.SlideInFromBottom)
-        { }
+        {
+        }
 
         public StartTimeEntryActivity(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
-        { }
+        {
+        }
 
         protected override void InitializeBindings()
         {
@@ -93,15 +95,6 @@ namespace Toggl.Droid.Activities
                 .Subscribe(selectBillableToolbarButton.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
-            // Finish buttons
-            doneButton.Rx()
-                .BindAction(ViewModel.Done)
-                .DisposedBy(DisposeBag);
-
-            closeButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
-                .DisposedBy(DisposeBag);
-
             // Description text field
             descriptionField.Hint = ViewModel.PlaceholderText;
 
@@ -117,8 +110,28 @@ namespace Toggl.Droid.Activities
                 .SubscribeOn(ThreadPoolScheduler.Instance)
                 .Throttle(typingThrottleDuration)
                 .Select(text => text.AsImmutableSpans(descriptionField.SelectionStart))
-                .Subscribe(ViewModel.SetTextSpans.Inputs)
+                .Subscribe(ViewModel.SetTextSpans)
                 .DisposedBy(DisposeBag);
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.OneButtonMenu, menu);
+            var doneMenuItem = menu.FindItem(Resource.Id.ButtonMenuItem);
+            doneMenuItem.SetTitle(Shared.Resources.Done);
+            
+            return true;
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (item.ItemId == Resource.Id.ButtonMenuItem)
+            {
+                ViewModel.Done.Execute();
+                return true;
+            }
+
+            return base.OnOptionsItemSelected(item);
         }
 
         protected override void OnResume()

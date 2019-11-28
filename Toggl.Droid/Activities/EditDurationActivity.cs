@@ -206,15 +206,15 @@ namespace Toggl.Droid.Activities
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            MenuInflater.Inflate(Resource.Menu.GenericSaveMenu, menu);
-            var sendMenuItem = menu.FindItem(Resource.Id.SaveMenuItem);
-            sendMenuItem.SetTitle(Shared.Resources.Save);
+            MenuInflater.Inflate(Resource.Menu.OneButtonMenu, menu);
+            var saveMenuItem = menu.FindItem(Resource.Id.ButtonMenuItem);
+            saveMenuItem.SetTitle(Shared.Resources.Save);
             return true;
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            if (item.ItemId == Resource.Id.SaveMenuItem)
+            if (item.ItemId == Resource.Id.ButtonMenuItem)
             {
                 wheelNumericInput.ApplyDurationIfBeingEdited();
                 ViewModel.Save.Execute();

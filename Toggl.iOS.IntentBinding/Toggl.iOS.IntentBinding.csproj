@@ -9,6 +9,7 @@
     <RootNamespace>Toggl.iOS.IntentBinding</RootNamespace>
     <AssemblyName>Toggl.iOS.IntentBinding</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

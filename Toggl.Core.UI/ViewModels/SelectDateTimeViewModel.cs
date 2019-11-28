@@ -20,7 +20,7 @@ namespace Toggl.Core.UI.ViewModels
         public bool Is24HoursFormat { get; private set; } = true;
         public BehaviorRelay<DateTimeOffset> CurrentDateTime { get; private set; }
 
-        public UIAction Save { get; }
+        public ViewAction Save { get; }
 
         public SelectDateTimeViewModel(IRxActionFactory rxActionFactory, INavigationService navigationService)
             : base(navigationService)
@@ -42,9 +42,10 @@ namespace Toggl.Core.UI.ViewModels
             return base.Initialize(dateTimePicker);
         }
 
-        public override void CloseWithDefaultResult()
+        public override Task<bool> CloseWithDefaultResult()
         {
             Close(defaultResult);
+            return Task.FromResult(true);
         }
 
         private DateTimeOffset sanitizeBasedOnMode(DateTimeOffset dateTime)

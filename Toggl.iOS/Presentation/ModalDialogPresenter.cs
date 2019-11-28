@@ -18,11 +18,9 @@ namespace Toggl.iOS.Presentation
             typeof(CalendarPermissionDeniedViewModel),
             typeof(NoWorkspaceViewModel),
             typeof(PasteFromClipboardViewModel),
-            typeof(SelectColorViewModel),
-            typeof(SelectDateTimeViewModel),
             typeof(SelectDefaultWorkspaceViewModel),
-            typeof(SelectUserCalendarsViewModel),
             typeof(TermsOfServiceViewModel),
+            typeof(January2020CampaignViewModel),
         };
 
         public ModalDialogPresenter(UIWindow window, AppDelegate appDelegate) : base(window, appDelegate)

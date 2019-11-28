@@ -1,7 +1,8 @@
 ﻿using Android.App;
 using Android.Content;
-using Android.Support.V4.App;
 using System;
+using AndroidX.Core.App;
+using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Services
 {
@@ -17,7 +18,7 @@ namespace Toggl.Droid.Services
 
         public static void EnqueueWork(Context context, Intent intent)
         {
-            var componentName = new ComponentName(context, Java.Lang.Class.FromType(typeof(ScheduleEventNotificationsService)));
+            var componentName = new ComponentName(context, JavaUtils.ToClass<ScheduleEventNotificationsService>());
             EnqueueWork(context, componentName, JobId, intent);
         }
 

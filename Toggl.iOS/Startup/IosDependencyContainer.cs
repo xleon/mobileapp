@@ -13,7 +13,9 @@ using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Storage;
+using Toggl.Storage.Queries;
 using Toggl.Storage.Realm;
+using Toggl.Storage.Realm.Queries;
 using Toggl.Storage.Settings;
 using UIKit;
 
@@ -30,6 +32,9 @@ namespace Toggl.iOS
 #endif
 
         private readonly Lazy<SettingsStorage> settingsStorage;
+
+        private readonly Lazy<RealmConfigurator> realmConfigurator
+            = new Lazy<RealmConfigurator>(() => new RealmConfigurator());
 
         public CompositePresenter ViewPresenter { get; }
         public IntentDonationService IntentDonationService { get; }
@@ -78,7 +83,7 @@ namespace Toggl.iOS
             => new CalendarServiceIos(PermissionsChecker);
 
         protected override ITogglDatabase CreateDatabase()
-            => new Database();
+            => new Database(realmConfigurator.Value);
 
         protected override IKeyValueStorage CreateKeyValueStorage()
             => new UserDefaultsStorageIos();
@@ -95,6 +100,9 @@ namespace Toggl.iOS
         protected override IPlatformInfo CreatePlatformInfo()
             => new PlatformInfoIos();
 
+        protected override IQueryFactory CreateQueryFactory()
+            => new RealmQueryFactory(() => Realms.Realm.GetInstance(realmConfigurator.Value.Configuration));
+
         protected override IPrivateSharedStorageService CreatePrivateSharedStorageService()
             => new PrivateSharedStorageServiceIos();
 
@@ -106,7 +114,7 @@ namespace Toggl.iOS
 
         protected override IApplicationShortcutCreator CreateShortcutCreator()
             => new ApplicationShortcutCreator();
-        
+
         protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
             => new PushNotificationsTokenServiceIos();
 
@@ -127,5 +135,8 @@ namespace Toggl.iOS
 
         protected override IAccessibilityService CreateAccessibilityService()
             => new AccessibilityServiceIos();
+
+        protected override IWidgetsService CreateWidgetsService()
+            => new WidgetsServiceIos(DataSource);
     }
 }

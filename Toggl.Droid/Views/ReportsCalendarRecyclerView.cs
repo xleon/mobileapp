@@ -1,9 +1,9 @@
 ﻿using Android.Content;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using System;
+using AndroidX.RecyclerView.Widget;
 
 namespace Toggl.Droid.Views
 {
@@ -44,5 +44,9 @@ namespace Toggl.Droid.Views
         }
 
         public override bool CanScrollVertically() => false;
+
+        // see the comment in UnpredictiveLinearLayoutManager for rationale
+        public override bool SupportsPredictiveItemAnimations() => false;
+
     }
 }

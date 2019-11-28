@@ -62,10 +62,6 @@ namespace Toggl.Droid.Activities
                 .Subscribe(ViewModel.FilterText)
                 .DisposedBy(DisposeBag);
 
-            closeButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
-                .DisposedBy(DisposeBag);
-
             void scrollToTopIfHasntToggledTasks()
             {
                 if (!hasToggledTasks)

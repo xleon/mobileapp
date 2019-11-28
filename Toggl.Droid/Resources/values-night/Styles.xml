@@ -2,10 +2,14 @@
 <resources>
   <style name="AppBarPopupTheme" parent="ThemeOverlay.AppCompat.Dark">
   </style>
-  
+
   <style name="AppBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <item name="android:actionMenuTextColor">@color/ToolbarButtonTextColor</item>
+    <item name="actionMenuTextColor">@color/ToolbarButtonTextColor</item>
+    <item name="android:colorControlNormal">@color/primaryText</item>
+    <item name="colorControlNormal">@color/primaryText</item>
   </style>
-  
+
   <style name="WheelDialogStyle" parent="android:Theme.Material.Dialog">
     <item name="android:colorAccent">@color/accent</item>
     <item name="android:headerTimeTextAppearance">@style/TextAppearance.AppCompat</item>

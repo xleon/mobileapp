@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using System.Linq;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
@@ -59,7 +60,7 @@ namespace Toggl.Core.Autocomplete.Suggestions
         }
 
         public override int GetHashCode()
-            => HashCode.From(ProjectName, ProjectColor, ClientName);
+            => HashCode.Combine(ProjectName, ProjectColor, ClientName);
     }
 
     public static class ProjectSuggestionExtensions

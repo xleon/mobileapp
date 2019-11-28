@@ -16,7 +16,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly Lazy<ViewModel> mainViewModel;
         private readonly Lazy<ViewModel> reportsViewModel;
         private readonly Lazy<ViewModel> calendarViewModel;
-        private readonly Lazy<ViewModel> settingsViewModel;
 
         public IImmutableList<Lazy<ViewModel>> Tabs { get; }
 
@@ -43,7 +42,9 @@ namespace Toggl.Core.UI.ViewModels
                 dependencyContainer.RxActionFactory,
                 dependencyContainer.PermissionsChecker,
                 dependencyContainer.BackgroundService,
-                platformInfo));
+                platformInfo,
+                dependencyContainer.WidgetsService,
+                dependencyContainer.LastTimeUsageStorage));
 
             reportsViewModel = new Lazy<ViewModel>(() => new ReportsViewModel(
                 dependencyContainer.DataSource,
@@ -57,28 +58,13 @@ namespace Toggl.Core.UI.ViewModels
             calendarViewModel = new Lazy<ViewModel>(() => new CalendarViewModel(
                 dependencyContainer.DataSource,
                 dependencyContainer.TimeService,
+                dependencyContainer.RxActionFactory,
                 dependencyContainer.UserPreferences,
                 dependencyContainer.AnalyticsService,
                 dependencyContainer.BackgroundService,
                 dependencyContainer.InteractorFactory,
-                dependencyContainer.OnboardingStorage,
                 dependencyContainer.SchedulerProvider,
-                dependencyContainer.PermissionsChecker,
-                dependencyContainer.NavigationService,
-                dependencyContainer.RxActionFactory));
-
-            settingsViewModel = new Lazy<ViewModel>(() => new SettingsViewModel(
-                dependencyContainer.DataSource,
-                dependencyContainer.SyncManager,
-                dependencyContainer.PlatformInfo,
-                dependencyContainer.UserPreferences,
-                dependencyContainer.AnalyticsService,
-                dependencyContainer.InteractorFactory,
-                dependencyContainer.OnboardingStorage,
-                dependencyContainer.NavigationService,
-                dependencyContainer.RxActionFactory,
-                dependencyContainer.PermissionsChecker,
-                dependencyContainer.SchedulerProvider));
+                dependencyContainer.NavigationService));
 
             Tabs = getViewModels().ToImmutableList();
         }
@@ -96,9 +82,6 @@ namespace Toggl.Core.UI.ViewModels
             if (expectedType == typeof(CalendarViewModel))
                 return calendarViewModel.Select(x => x as TViewModel);
 
-            if (expectedType == typeof(SettingsViewModel))
-                return settingsViewModel.Select(x => x as TViewModel);
-
             throw new InvalidOperationException();
         }
 
@@ -107,11 +90,6 @@ namespace Toggl.Core.UI.ViewModels
             yield return mainViewModel;
             yield return reportsViewModel;
             yield return calendarViewModel;
-
-            if (platformInfo.Platform == Platform.Giskard)
-            {
-                yield return settingsViewModel;
-            }
         }
     }
 }

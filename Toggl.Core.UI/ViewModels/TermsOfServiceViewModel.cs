@@ -13,8 +13,11 @@ namespace Toggl.Core.UI.ViewModels
         private const string privacyPolicyUrl = "https://toggl.com/legal/privacy/";
         private const string termsOfServiceUrl = "https://toggl.com/legal/terms/";
 
-        public UIAction ViewTermsOfService { get; }
-        public UIAction ViewPrivacyPolicy { get; }
+        public int IndexOfPrivacyPolicy { get; }
+        public int IndexOfTermsOfService { get; }
+        public string FormattedDialogText { get; }
+        public ViewAction ViewTermsOfService { get; }
+        public ViewAction ViewPrivacyPolicy { get; }
 
         public TermsOfServiceViewModel(IRxActionFactory rxActionFactory, INavigationService navigationService)
             : base(navigationService)
@@ -23,6 +26,13 @@ namespace Toggl.Core.UI.ViewModels
 
             ViewPrivacyPolicy = rxActionFactory.FromAsync(openPrivacyPolicy);
             ViewTermsOfService = rxActionFactory.FromAsync(openTermsOfService);
+            FormattedDialogText = string.Format(
+                Resources.TermsOfServiceDialogMessage,
+                Resources.TermsOfService,
+                Resources.PrivacyPolicy);
+
+            IndexOfPrivacyPolicy = FormattedDialogText.IndexOf(Resources.PrivacyPolicy);
+            IndexOfTermsOfService = FormattedDialogText.IndexOf(Resources.TermsOfService);
         }
 
         private Task openPrivacyPolicy()

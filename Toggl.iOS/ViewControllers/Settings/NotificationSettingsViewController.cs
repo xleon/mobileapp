@@ -19,6 +19,8 @@ namespace Toggl.iOS.ViewControllers.Settings
         {
             base.ViewDidLoad();
 
+            View.BackgroundColor = ColorAssets.TableBackground;
+
             NavigationItem.Title = Resources.SmartReminders;
             NotificationDisabledLabel.Text = Resources.NotificationDisabledNotice;
             OpenSettingsButton.SetTitle(Resources.OpenSettingsApp, UIControlState.Normal);

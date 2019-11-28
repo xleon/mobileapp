@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Networking.Exceptions;
 using Toggl.Networking.Models;
 using Toggl.Networking.Tests.Integration.BaseTests;
@@ -18,7 +19,7 @@ namespace Toggl.Networking.Tests.Integration
     {
         public sealed class TheGetMethod : AuthenticatedEndpointBaseTests<List<IWorkspace>>
         {
-            protected override IObservable<List<IWorkspace>> CallEndpointWith(ITogglApi togglApi)
+            protected override Task<List<IWorkspace>> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Workspaces.GetAll();
 
             [Fact, LogTestInfo]
@@ -26,7 +27,7 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                var workspaces = await CallEndpointWith(togglClient);
+                var workspaces = await togglClient.Workspaces.GetAll();
 
                 workspaces.Should().HaveCount(1);
                 workspaces.Should().Contain(ws => ws.Id == user.DefaultWorkspaceId);
@@ -39,7 +40,7 @@ namespace Toggl.Networking.Tests.Integration
                 var secondWorkspace =
                     await togglClient.Workspaces.Create(new Workspace { Name = Guid.NewGuid().ToString() });
 
-                var workspaces = await CallEndpointWith(togglClient);
+                var workspaces = await togglClient.Workspaces.GetAll();
 
                 workspaces.Should().HaveCount(2);
                 workspaces.Should().Contain(ws => ws.Id == user.DefaultWorkspaceId);
@@ -52,7 +53,7 @@ namespace Toggl.Networking.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 await WorkspaceHelper.Delete(user, user.DefaultWorkspaceId.Value).ConfigureAwait(false);
 
-                var workspaces = await CallEndpointWith(togglClient);
+                var workspaces = await togglClient.Workspaces.GetAll();
 
                 workspaces.Should().BeEmpty();
             }
@@ -60,25 +61,18 @@ namespace Toggl.Networking.Tests.Integration
 
         public sealed class TheGetByIdMethod : AuthenticatedGetEndpointBaseTests<IWorkspace>
         {
-            protected override IObservable<IWorkspace> CallEndpointWith(ITogglApi togglApi)
-                => Observable.Defer(async () =>
-                {
-                    var user = await togglApi.User.Get();
-                    return CallEndpointWith(togglApi, user.DefaultWorkspaceId.Value);
-                });
-
-            private Func<Task> CallingEndpointWith(ITogglApi togglApi, long id)
-                => async () => await CallEndpointWith(togglApi, id);
-
-            private IObservable<IWorkspace> CallEndpointWith(ITogglApi togglApi, long id)
-                => togglApi.Workspaces.GetById(id);
+            protected override async Task<IWorkspace> CallEndpointWith(ITogglApi togglApi)
+            {
+                var user = await togglApi.User.Get();
+                return await togglApi.Workspaces.GetById(user.DefaultWorkspaceId.Value);
+            }
 
             [Fact, LogTestInfo]
             public async Task ReturnsDefaultWorkspace()
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                var workspace = await CallEndpointWith(togglClient, user.DefaultWorkspaceId.Value);
+                var workspace = await togglClient.Workspaces.GetById(user.DefaultWorkspaceId.Value);
 
                 workspace.Id.Should().Be(user.DefaultWorkspaceId);
             }
@@ -89,7 +83,7 @@ namespace Toggl.Networking.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var secondWorkspace = await togglClient.Workspaces.Create(new Workspace { Name = Guid.NewGuid().ToString() });
 
-                var workspace = await CallEndpointWith(togglClient, secondWorkspace.Id);
+                var workspace = await togglClient.Workspaces.GetById(secondWorkspace.Id);
 
                 workspace.Id.Should().Be(secondWorkspace.Id);
                 workspace.Name.Should().Be(secondWorkspace.Name);
@@ -100,13 +94,15 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                CallingEndpointWith(togglClient, user.DefaultWorkspaceId.Value - 1).Should().Throw<ForbiddenException>();
+                Func<Task> gettingById = async () => await togglClient.Workspaces.GetById(user.DefaultWorkspaceId.Value - 1);
+
+                gettingById.Should().Throw<ForbiddenException>();
             }
         }
 
         public sealed class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IWorkspace>
         {
-            protected override IObservable<IWorkspace> CallEndpointWith(ITogglApi togglApi)
+            protected override Task<IWorkspace> CallEndpointWith(ITogglApi togglApi)
                 => togglApi.Workspaces.Create(new Workspace { Name = Guid.NewGuid().ToString() });
 
             [Fact, LogTestInfo]
@@ -127,9 +123,8 @@ namespace Toggl.Networking.Tests.Integration
                 var name = Guid.NewGuid().ToString();
 
                 var workspace = await api.Workspaces.Create(new Workspace { Name = name });
-                var features = await api.WorkspaceFeatures.GetAll()
-                    .SelectMany(all => all.Where(workspaceFeatures => workspaceFeatures.WorkspaceId == workspace.Id))
-                    .SingleAsync();
+                var features = (await api.WorkspaceFeatures.GetAll())
+                    .Single(workspaceFeatures => workspaceFeatures.WorkspaceId == workspace.Id);
 
                 features.Features.Should().Contain(feature =>
                     feature.FeatureId == WorkspaceFeatureId.Pro && feature.Enabled == false);

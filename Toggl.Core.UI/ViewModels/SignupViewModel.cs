@@ -46,7 +46,6 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ILastTimeUsageStorage lastTimeUsageStorage;
         private readonly ITimeService timeService;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly IRxActionFactory rxActionFactory;
         private readonly IPlatformInfo platformInfo;
 
         private IDisposable getCountrySubscription;
@@ -81,10 +80,10 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> IsShowPasswordButtonVisible { get; }
         public IObservable<Unit> SuccessfulSignup { get; }
 
-        public UIAction Login { get; }
-        public UIAction Signup { get; }
-        public UIAction GoogleSignup { get; }
-        public UIAction PickCountry { get; }
+        public ViewAction Login { get; }
+        public ViewAction Signup { get; }
+        public ViewAction GoogleSignup { get; }
+        public ViewAction PickCountry { get; }
 
         public SignupViewModel(
             IApiFactory apiFactory,
@@ -119,7 +118,6 @@ namespace Toggl.Core.UI.ViewModels
             this.lastTimeUsageStorage = lastTimeUsageStorage;
             this.timeService = timeService;
             this.schedulerProvider = schedulerProvider;
-            this.rxActionFactory = rxActionFactory;
             this.platformInfo = platformInfo;
 
             Login = rxActionFactory.FromAsync(login);
@@ -280,6 +278,14 @@ namespace Toggl.Core.UI.ViewModels
                             timezone)
                 )
                 .Track(analyticsService.SignUp, AuthenticationMethod.EmailAndPassword)
+                .Do(_ =>
+                {
+                    var password = passwordSubject.Value;
+                    if (!password.IsValid)
+                        return;
+
+                    analyticsService.Track(new SignupPasswordComplexityEvent(password));
+                })
                 .Subscribe(_ => onAuthenticated(), onError, onCompleted);
         }
 

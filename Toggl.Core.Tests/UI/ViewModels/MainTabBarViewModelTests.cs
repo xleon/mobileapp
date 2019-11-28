@@ -1,17 +1,10 @@
-﻿using FluentAssertions;
-using NSubstitute;
-using System;
-using System.Linq;
-using System.Reactive.Linq;
-using Toggl.Core.Analytics;
+﻿using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
-using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
-using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
@@ -19,7 +12,6 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
-using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -58,23 +50,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>(),
                     MockUpdateRemoteConfigCacheService = Substitute.For<IUpdateRemoteConfigCacheService>()
                 });
-        }
-
-        public sealed class TheTabsProperty : MainTabViewModelTest
-        {
-            [Theory]
-            [InlineData(Platform.Daneel, false)]
-            [InlineData(Platform.Giskard, true)]
-            public void ShouldContainTheSettingsViewModelBasedOntheRemoteConfigService(Platform platform, bool includesSettings)
-            {
-                PlatformInfo.Platform.Returns(platform);
-
-                var viewModel = CreateViewModel();
-
-                var expectedTabCount = 3 + (includesSettings ? 1 : 0);
-
-                viewModel.Tabs.Count().Should().Be(expectedTabCount);
-            }
         }
     }
 }

@@ -50,6 +50,7 @@ namespace Toggl.Storage.Settings
 
         private const string enabledCalendarsKey = "EnabledCalendars";
         private const char calendarIdSeparator = ';';
+        private const string isFirstTimeConnectingCalendarsKey = "IsFirstTimeConnectingCalendars";
 
         private const string calendarNotificationsEnabledKey = "CalendarNotificationsEnabled";
         private const string timeSpanBeforeCalendarNotificationsKey = "TimeSpanBeforeCalendarNotifications";
@@ -57,6 +58,8 @@ namespace Toggl.Storage.Settings
         private const string didShowSiriClipboardInstructionKey = "didShowSiriClipboardInstructionKey";
 
         private const string swipeActionsDisabledKey = "swipeActionsDisabled";
+
+        private const string showedJanuary2020Campaign = "showedJanuary2020Campaign";
 
         private readonly Version version;
         private readonly IKeyValueStorage keyValueStorage;
@@ -308,6 +311,14 @@ namespace Toggl.Storage.Settings
 
         public void SetDidShowSiriClipboardInstruction(bool value) => keyValueStorage.SetBool(didShowSiriClipboardInstructionKey, value);
 
+        public void SetJanuary2020CampaignWasShown()
+        {
+            keyValueStorage.SetBool(showedJanuary2020Campaign, true);
+        }
+
+        public bool WasJanuary2020CampaignShown()
+            => keyValueStorage.GetBool(showedJanuary2020Campaign);
+
         public bool WasDismissed(IDismissable dismissable) => keyValueStorage.GetBool(onboardingPrefix + dismissable.Key);
 
         public void Dismiss(IDismissable dismissable) => keyValueStorage.SetBool(onboardingPrefix + dismissable.Key, true);
@@ -448,6 +459,12 @@ namespace Toggl.Storage.Settings
             keyValueStorage.SetBool(swipeActionsDisabledKey, !enabled);
             swipeActionsEnabledSubject.OnNext(enabled);
         }
+
+        public bool IsFirstTimeConnectingCalendars()
+            => !keyValueStorage.GetBool(isFirstTimeConnectingCalendarsKey);
+
+        public void SetIsFirstTimeConnectingCalendars()
+            => keyValueStorage.SetBool(isFirstTimeConnectingCalendarsKey, true);
 
         #endregion
 

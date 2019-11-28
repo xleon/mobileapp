@@ -2,7 +2,6 @@ using Android.App;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Text;
 using Android.Text.Style;
 using Android.Views;
@@ -10,11 +9,12 @@ using Android.Widget;
 using System;
 using System.Reactive;
 using System.Reactive.Subjects;
-using Toggl.Core.Extensions;
+using AndroidX.CardView.Widget;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Droid.Views;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Color = Android.Graphics.Color;
 
 namespace Toggl.Droid.ViewHolders

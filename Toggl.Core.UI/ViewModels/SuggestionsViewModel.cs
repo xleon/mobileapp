@@ -18,6 +18,7 @@ using System.Reactive.Subjects;
 using Toggl.Core.Extensions;
 using Toggl.Core.Sync;
 using System.Collections.Generic;
+using System.Reactive.Threading.Tasks;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -38,6 +39,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IBackgroundService backgroundService;
         private readonly IUserPreferences userPreferences;
         private readonly ISyncManager syncManager;
+        private readonly IWidgetsService widgetsService;
 
         public IObservable<IImmutableList<Suggestion>> Suggestions { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
@@ -54,7 +56,8 @@ namespace Toggl.Core.UI.ViewModels
             INavigationService navigationService,
             IBackgroundService backgroundService,
             IUserPreferences userPreferences,
-            ISyncManager syncManager)
+            ISyncManager syncManager,
+            IWidgetsService widgetsService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
@@ -67,6 +70,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(syncManager, nameof(syncManager));
+            Ensure.Argument.IsNotNull(widgetsService, nameof(widgetsService));
 
             this.interactorFactory = interactorFactory;
             this.onboardingStorage = onboardingStorage;
@@ -78,6 +82,7 @@ namespace Toggl.Core.UI.ViewModels
             this.backgroundService = backgroundService;
             this.userPreferences = userPreferences;
             this.syncManager = syncManager;
+            this.widgetsService = widgetsService;
         }
 
         public override Task Initialize()
@@ -114,6 +119,8 @@ namespace Toggl.Core.UI.ViewModels
                 .ConnectedReplay();
 
             Suggestions = suggestionsObservable
+                .Do(widgetsService.OnSuggestionsUpdated)
+                .ObserveOn(schedulerProvider.BackgroundScheduler)
                 .AsDriver(onErrorJustReturn: ImmutableList.Create<Suggestion>(), schedulerProvider: schedulerProvider);
 
             IsEmpty = suggestionsObservable
@@ -135,7 +142,7 @@ namespace Toggl.Core.UI.ViewModels
             var timeEntry = interactorFactory
                 .StartSuggestion(suggestion)
                 .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler);
+                .ToObservable();
 
             analyticsService.SuggestionStarted.Track(suggestion.ProviderType);
 

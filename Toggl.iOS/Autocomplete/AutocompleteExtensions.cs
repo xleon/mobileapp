@@ -62,13 +62,15 @@ namespace Toggl.iOS.Autocomplete
         public static TokenTextAttachment GetTagToken(this string tag)
             => new TagTextAttachment(
                 tag.TruncatedAt(maxTextLength),
-                Colors.StartTimeEntry.TokenText.ToNativeColor(),
+                ColorAssets.Text2,
                 tokenFont);
 
         public static IEnumerable<ISpan> AsSpans(this NSAttributedString text, int cursorPosition)
         {
             var start = 0;
             bool queryTextSpanAlreadyUsed = false;
+
+            List<ISpan> spans = new List<ISpan>();
 
             while (start != text.Length)
             {
@@ -80,12 +82,12 @@ namespace Toggl.iOS.Autocomplete
                 {
                     var (projectId, projectName, projectColor, taskId, taskName) = attributes.GetProjectInformation();
 
-                    yield return new ProjectSpan(projectId, projectName, projectColor, taskId, taskName);
+                    spans.Add(new ProjectSpan(projectId, projectName, projectColor, taskId, taskName));
                 }
                 else if (attributes.ContainsKey(TagId))
                 {
                     var (tagId, tagName) = attributes.GetTagInformation();
-                    yield return new TagSpan(tagId, tagName);
+                    spans.Add(new TagSpan(tagId, tagName));
                 }
                 else if (length > 0)
                 {
@@ -93,19 +95,41 @@ namespace Toggl.iOS.Autocomplete
                     if (queryTextSpanAlreadyUsed == false && cursorPosition.IsInRange(start, end))
                     {
                         queryTextSpanAlreadyUsed = true;
-                        yield return new QueryTextSpan(subText, cursorPosition - start);
+                        spans.Add(new QueryTextSpan(subText, cursorPosition - start));
                     }
                     else
                     {
-                        yield return new TextSpan(subText);
+                        spans.Add(new TextSpan(subText));
                     }
                 }
 
                 start = end;
             }
+
+            for(var i = 1; i < spans.Count; i++)
+            {
+                var previousSpan = spans[i - 1];
+                if (!previousSpan.IsTextSpan())
+                    continue;
+
+                var previousTextSpan = (TextSpan)previousSpan;
+                var previousTextSpanContainsQuerySymbol =
+                    previousTextSpan.Text.Contains(QuerySymbols.ProjectsString)
+                    || previousTextSpan.Text.Contains(QuerySymbols.TagsString);
+
+                if (previousTextSpanContainsQuerySymbol
+                    && spans[i] is QueryTextSpan currentSpan)
+                {
+                    var newText = previousTextSpan.Text + currentSpan.Text;
+                    spans[i] = new QueryTextSpan(newText, newText.Length);
+                    spans.Remove(spans[i - 1]);
+                }
+            }
+
+            return spans;
         }
 
-        public static NSAttributedString AsAttributedTextAndCursorPosition(this TextFieldInfo self)
+        public static NSAttributedString AsAttributedText(this TextFieldInfo self)
         {
             var attributedText = new NSMutableAttributedString("", createBasicAttributes());
 
@@ -116,6 +140,25 @@ namespace Toggl.iOS.Autocomplete
             }
 
             return attributedText;
+        }
+
+        public static NSRange CursorPosition(this TextFieldInfo self)
+        {
+            nint location = 0;
+
+            foreach (var span in self.Spans)
+            {
+                if (span is QueryTextSpan querySpan)
+                {
+                    location += querySpan.CursorPosition;
+                    break;
+                }
+
+                var spanString = span.AsAttributedString();
+                location += spanString.Length;
+            }
+
+            return new NSRange(location, 0);
         }
 
         private static NSMutableAttributedString AsAttributedString(this ISpan span)
@@ -182,6 +225,7 @@ namespace Toggl.iOS.Autocomplete
         private static UIStringAttributes createBasicAttributes()
             => new UIStringAttributes
             {
+                ForegroundColor = ColorAssets.Text,
                 Font = regularFont,
                 ParagraphStyle = paragraphStyle
             };

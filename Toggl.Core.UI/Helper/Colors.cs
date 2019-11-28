@@ -249,19 +249,15 @@ namespace Toggl.Core.UI.Helper
                 public static readonly Color[] Rainbow =
                 {
                     new Color("F1F2F3"),
-                    new Color("EDE4F0"),
                     new Color("DFC3E6"),
                     new Color("CA99D7"),
-                    new Color("B599D7"),
                     new Color("8799E5"),
                     new Color("5168C5"),
                     new Color("55BBDF"),
                     new Color("95D0E5"),
-                    new Color("B0DCEC"),
                     new Color("BFDBD7"),
                     new Color("7FC5BC"),
                     new Color("E5F0BA"),
-                    new Color("F0E3BA"),
                     new Color("F8DAB8"),
                     new Color("F0D06C"),
                     new Color("EFBA7A"),
@@ -305,29 +301,8 @@ namespace Toggl.Core.UI.Helper
             public static readonly Color TextColor = black;
         }
 
-        public sealed class ReportsCalendar
-        {
-            public sealed class QuickSelect
-            {
-                public static readonly Color UnselectedBackground = new Color(181, 188, 192, 30);
-                public static readonly Color SelectedBackground = new Color(181, 188, 192);
-
-                public static readonly Color UnselectedTitle = new Color(181, 188, 192);
-                public static readonly Color SelectedTitle = new Color(255, 255, 255);
-            }
-
-            public static readonly Color SelectedDayBackgoundColor = new Color(181, 188, 192);
-            public static readonly Color YearColor = new Color(181, 188, 192);
-            public static readonly Color Today = new Color(181, 188, 192, 30);
-            public static readonly Color CellTextColorInCurrentMonth = new Color(0, 0, 0);
-            public static readonly Color CellTextColorOutOfCurrentMonth = new Color(163, 163, 163);
-            public static readonly Color CellTextColorSelected = new Color(255, 255, 255);
-        }
-
         public static class Reports
         {
-            public static readonly Color Background = new Color(250, 251, 252);
-
             public static readonly Color PercentageActivated = new Color(0, 171, 252);
 
             public static readonly Color PercentageActivatedBackground = new Color(6, 170, 245, 61);

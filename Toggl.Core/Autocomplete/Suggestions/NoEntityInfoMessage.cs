@@ -27,7 +27,7 @@ namespace Toggl.Core.Autocomplete.Suggestions
 
         public override int GetHashCode()
         {
-            return HashCode.From(Text, ImageResource);
+            return HashCode.Combine(Text, ImageResource);
         }
 
         public static NoEntityInfoMessage CreateTag()

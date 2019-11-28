@@ -1,7 +1,8 @@
-using Android.Support.V7.Widget;
 using Android.Widget;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
+using Toggl.Droid.LayoutManagers;
 using Toggl.Droid.ViewHolders.Country;
 
 namespace Toggl.Droid.Activities
@@ -13,23 +14,23 @@ namespace Toggl.Droid.Activities
                 Resource.Layout.SelectCountryActivityCountryCell,
                 CountrySelectionViewHolder.Create);
 
-        private ImageView backImageView;
         private EditText filterEditText;
         private RecyclerView recyclerView;
 
         protected override void InitializeViews()
         {
-            backImageView = FindViewById<ImageView>(Resource.Id.BackImageView);
             filterEditText = FindViewById<EditText>(Resource.Id.FilterEditText);
             recyclerView = FindViewById<RecyclerView>(Resource.Id.RecyclerView);
 
             filterEditText.Hint = Shared.Resources.SelectCountry;
-            recyclerView.SetLayoutManager(new LinearLayoutManager(this)
+            recyclerView.SetLayoutManager(new UnpredictiveLinearLayoutManager(this)
             {
                 ItemPrefetchEnabled = true,
                 InitialPrefetchItemCount = 4
             });
             recyclerView.SetAdapter(recyclerAdapter);
+            
+            SetupToolbar();
         }
     }
 }

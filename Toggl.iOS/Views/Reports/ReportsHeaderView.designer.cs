@@ -31,6 +31,12 @@ namespace Toggl.iOS.Views.Reports
 		UIKit.UIView OverviewContainerView { get; set; }
 
 		[Outlet]
+		UIKit.UIView PieChartBackground { get; set; }
+
+		[Outlet]
+		UIKit.UIView PieChartContainer { get; set; }
+
+		[Outlet]
 		Toggl.iOS.Views.Reports.PieChartView PieChartView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
@@ -38,6 +44,16 @@ namespace Toggl.iOS.Views.Reports
 			if (BarChartContainerView != null) {
 				BarChartContainerView.Dispose ();
 				BarChartContainerView = null;
+			}
+
+			if (EmptyStateDescriptionLabel != null) {
+				EmptyStateDescriptionLabel.Dispose ();
+				EmptyStateDescriptionLabel = null;
+			}
+
+			if (EmptyStateTitleLabel != null) {
+				EmptyStateTitleLabel.Dispose ();
+				EmptyStateTitleLabel = null;
 			}
 
 			if (EmptyStateView != null) {
@@ -55,19 +71,19 @@ namespace Toggl.iOS.Views.Reports
 				OverviewContainerView = null;
 			}
 
+			if (PieChartContainer != null) {
+				PieChartContainer.Dispose ();
+				PieChartContainer = null;
+			}
+
 			if (PieChartView != null) {
 				PieChartView.Dispose ();
 				PieChartView = null;
 			}
 
-			if (EmptyStateTitleLabel != null) {
-				EmptyStateTitleLabel.Dispose ();
-				EmptyStateTitleLabel = null;
-			}
-
-			if (EmptyStateDescriptionLabel != null) {
-				EmptyStateDescriptionLabel.Dispose ();
-				EmptyStateDescriptionLabel = null;
+			if (PieChartBackground != null) {
+				PieChartBackground.Dispose ();
+				PieChartBackground = null;
 			}
 		}
 	}

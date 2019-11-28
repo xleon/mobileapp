@@ -31,6 +31,8 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            CloseButton.SetTemplateColor(ColorAssets.Text2);
+
             TitleLabel.Text = Resources.ProjectColor;
             SaveButton.SetTitle(Resources.Save, UIControlState.Normal);
 
@@ -54,7 +56,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             CloseButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             // Picker view
@@ -91,10 +93,10 @@ namespace Toggl.iOS.ViewControllers
             PreferredContentSize = new CGSize
             {
                 // ScreenWidth - 32 for 16pt margins on both sides
-                Width = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad
+                Width = TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
                     ? 0
-                    : screenWidth > 320 ? screenWidth - 32 : 312,
-                Height = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad
+                    : screenWidth - 32,
+                Height = TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
                     ? (ViewModel.AllowCustomColors ? customColorEnabledHeightPad : customColorDisabledHeight)
                     : (ViewModel.AllowCustomColors ? customColorEnabledHeight : customColorDisabledHeight)
             };

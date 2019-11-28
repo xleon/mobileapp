@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
@@ -23,6 +24,12 @@ using Toggl.Shared.Extensions;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Services;
+using System.ComponentModel;
+using System.Globalization;
+using System.Threading;
+using static Toggl.Core.Analytics.ContinueTimeEntryMode;
+using static Toggl.Core.Analytics.ContinueTimeEntryOrigin;
+
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -46,6 +53,9 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly IAccessibilityService accessibilityService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
+        private readonly IWidgetsService widgetsService;
+        private readonly IRemoteConfigService remoteConfigService;
+        private readonly ILastTimeUsageStorage lastTimeUsageStorage;
 
         private readonly RatingViewExperiment ratingViewExperiment;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
@@ -70,10 +80,9 @@ namespace Toggl.Core.UI.ViewModels
         public SuggestionsViewModel SuggestionsViewModel { get; }
         public IOnboardingStorage OnboardingStorage { get; }
 
-        public UIAction Refresh { get; private set; }
-        public UIAction OpenReports { get; private set; }
-        public UIAction OpenSettings { get; private set; }
-        public UIAction OpenSyncFailures { get; private set; }
+        public ViewAction Refresh { get; private set; }
+        public ViewAction OpenSettings { get; private set; }
+        public ViewAction OpenSyncFailures { get; private set; }
         public InputAction<bool> StartTimeEntry { get; private set; }
         public InputAction<EditTimeEntryInfo> SelectTimeEntry { get; private set; }
         public InputAction<TimeEntryStopOrigin> StopTimeEntry { get; private set; }
@@ -101,7 +110,9 @@ namespace Toggl.Core.UI.ViewModels
             IRxActionFactory rxActionFactory,
             IPermissionsChecker permissionsChecker,
             IBackgroundService backgroundService,
-            IPlatformInfo platformInfo)
+            IPlatformInfo platformInfo,
+            IWidgetsService widgetsService,
+            ILastTimeUsageStorage lastTimeUsageStorage)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -121,6 +132,8 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
+            Ensure.Argument.IsNotNull(widgetsService, nameof(widgetsService));
+            Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
 
             this.dataSource = dataSource;
             this.syncManager = syncManager;
@@ -132,16 +145,19 @@ namespace Toggl.Core.UI.ViewModels
             this.schedulerProvider = schedulerProvider;
             this.accessibilityService = accessibilityService;
             this.accessRestrictionStorage = accessRestrictionStorage;
+            this.widgetsService = widgetsService;
+            this.remoteConfigService = remoteConfigService;
+            this.lastTimeUsageStorage = lastTimeUsageStorage;
 
             TimeService = timeService;
             OnboardingStorage = onboardingStorage;
 
-            SuggestionsViewModel = new SuggestionsViewModel(interactorFactory, OnboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager);
+            SuggestionsViewModel = new SuggestionsViewModel(interactorFactory, OnboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager, widgetsService);
             RatingViewModel = new RatingViewModel(timeService, ratingService, analyticsService, OnboardingStorage, navigationService, schedulerProvider, rxActionFactory);
             TimeEntriesViewModel = new TimeEntriesViewModel(dataSource, interactorFactory, analyticsService, schedulerProvider, rxActionFactory, timeService);
 
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService, updateRemoteConfigCacheService);
-            
+
             SwipeActionsEnabled = userPreferences.SwipeActionsEnabled.AsDriver(schedulerProvider);
         }
 
@@ -155,6 +171,7 @@ namespace Toggl.Core.UI.ViewModels
 
             await SuggestionsViewModel.Initialize();
             await RatingViewModel.Initialize();
+            widgetsService.Start();
 
             SyncProgressState = syncManager.ProgressObservable
                 .AsDriver(schedulerProvider);
@@ -226,13 +243,12 @@ namespace Toggl.Core.UI.ViewModels
                 .SubscribeOn(schedulerProvider.BackgroundScheduler);
 
             Refresh = rxActionFactory.FromAsync(refresh);
-            OpenReports = rxActionFactory.FromAsync(openReports);
             OpenSettings = rxActionFactory.FromAsync(openSettings);
             OpenSyncFailures = rxActionFactory.FromAsync(openSyncFailures);
             SelectTimeEntry = rxActionFactory.FromAsync<EditTimeEntryInfo>(timeEntrySelected);
-            ContinueTimeEntry = rxActionFactory.FromObservable<ContinueTimeEntryInfo, IThreadSafeTimeEntry>(continueTimeEntry);
             StartTimeEntry = rxActionFactory.FromAsync<bool>(startTimeEntry, IsTimeEntryRunning.Invert());
             StopTimeEntry = rxActionFactory.FromObservable<TimeEntryStopOrigin>(stopTimeEntry, IsTimeEntryRunning);
+            ContinueTimeEntry = rxActionFactory.FromAsync<ContinueTimeEntryInfo, IThreadSafeTimeEntry>(continueTimeEntry);
 
             ShouldShowRatingView = Observable.Merge(
                     ratingViewExperiment.RatingViewShouldBeVisible,
@@ -339,6 +355,11 @@ namespace Toggl.Core.UI.ViewModels
             hideRatingViewIfStillVisibleAfterDelay();
             await handleNoWorkspaceState();
             handleNoDefaultWorkspaceState();
+
+            if (await shouldShowJanuary2020Campaign())
+            {
+                await navigate<January2020CampaignViewModel>();
+            }
         }
 
         private void hideRatingViewIfStillVisibleAfterDelay()
@@ -370,11 +391,34 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        private Task openSettings()
-            => navigate<SettingsViewModel>();
+        private async Task<bool> shouldShowJanuary2020Campaign()
+        {
+            var isTheAppShownInJapanese = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.Equals("JA", StringComparison.InvariantCultureIgnoreCase);
+            if (isTheAppShownInJapanese)
+                return false;
 
-        private Task openReports()
-            => navigate<ReportsViewModel>();
+            var isDisabled = remoteConfigService.GetJanuary2020CampaignConfiguration().Option == January2020CampaignConfiguration.AvailableOption.None;
+            if (isDisabled)
+                return false;
+
+            var wasAlreadyShown = OnboardingStorage.WasJanuary2020CampaignShown();
+            if (wasAlreadyShown)
+                return false;
+
+            if (!lastTimeUsageStorage.LastLogin.HasValue)
+                return false;
+
+            var isNotANewUser =
+                TimeService.CurrentDateTime - lastTimeUsageStorage.LastLogin.Value > TimeSpan.FromHours(48)
+                    && await TimeEntriesCount.FirstAsync() >= 2;
+
+            return isNotANewUser;
+        }
+
+        private Task openSettings()
+        {
+            return navigate<SettingsViewModel>();
+        }
 
         private Task openSyncFailures()
             => navigate<SyncFailuresViewModel>();
@@ -396,19 +440,39 @@ namespace Toggl.Core.UI.ViewModels
             return navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(parameter);
         }
 
-        private IObservable<IThreadSafeTimeEntry> continueTimeEntry(ContinueTimeEntryInfo continueInfo)
+        private async Task<IThreadSafeTimeEntry> continueTimeEntry(ContinueTimeEntryInfo continueInfo)
         {
-            return interactorFactory.GetTimeEntryById(continueInfo.Id).Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler)
-                .Select(timeEntry => timeEntry.AsTimeEntryPrototype())
-                .SelectMany(prototype =>
-                    interactorFactory.ContinueTimeEntryFromMainLog(
-                        prototype,
-                        continueInfo.ContinueMode,
-                        continueInfo.IndexInLog,
-                        continueInfo.DayInLog,
-                        continueInfo.DaysInThePast).Execute())
-                .Do(_ => OnboardingStorage.SetTimeEntryContinued());
+            var continuedTimeEntry = await interactorFactory
+                .ContinueTimeEntry(continueInfo.Id, continueInfo.ContinueMode)
+                .Execute()
+                .ConfigureAwait(false);
+               
+            analyticsService.TimeEntryContinued.Track(
+                originFromContinuationMode(continueInfo.ContinueMode),
+                continueInfo.IndexInLog,
+                continueInfo.DayInLog,
+                continueInfo.DaysInThePast);
+
+            OnboardingStorage.SetTimeEntryContinued();
+
+            return continuedTimeEntry;
+
+            ContinueTimeEntryOrigin originFromContinuationMode(ContinueTimeEntryMode mode)
+            {
+                switch (mode)
+                {
+                    case SingleTimeEntrySwipe:
+                        return Swipe;
+                    case SingleTimeEntryContinueButton:
+                        return ContinueButton;
+                    case TimeEntriesGroupSwipe:
+                        return GroupSwipe;
+                    case TimeEntriesGroupContinueButton:
+                        return GroupContinueButton;
+                }
+
+                throw new InvalidEnumArgumentException($"Unexpected continue time entry mode {mode}");
+            }
         }
 
         private async Task timeEntrySelected(EditTimeEntryInfo editTimeEntryInfo)
@@ -431,7 +495,7 @@ namespace Toggl.Core.UI.ViewModels
             return interactorFactory
                 .StopTimeEntry(TimeService.CurrentDateTime, origin)
                 .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler)
+                .ToObservable()
                 .Do(syncManager.InitiatePushSync)
                 .SelectUnit();
         }

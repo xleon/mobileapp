@@ -1,4 +1,5 @@
-﻿using Toggl.Core.UI.Interfaces;
+﻿using System;
+using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels
@@ -32,7 +33,7 @@ namespace Toggl.Core.UI.ViewModels
             return obj is SelectableColorViewModel other && Equals(other);
         }
 
-        public override int GetHashCode() => HashCode.From(Color, Selected);
+        public override int GetHashCode() => HashCode.Combine(Color, Selected);
 
         public long Identifier => Color.GetHashCode();
     }

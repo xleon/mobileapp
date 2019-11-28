@@ -49,8 +49,8 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
 
         public override int GetHashCode()
         {
-            var hashCode = HashCode.From(date, description, workspaceId, projectId, taskId, isBillable);
-            return tagIds.Aggregate(hashCode, HashCode.From);
+            var hashCode = HashCode.Combine(date, description, workspaceId, projectId, taskId, isBillable);
+            return tagIds.Aggregate(hashCode, HashCode.Combine);
         }
     }
 }

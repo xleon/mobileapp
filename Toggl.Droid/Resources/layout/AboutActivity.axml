@@ -5,19 +5,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
-      <android.support.v7.widget.Toolbar
+      <androidx.appcompat.widget.Toolbar
           android:id="@+id/Toolbar"
-          android:minHeight="?attr/actionBarSize"
-          android:background="@color/background"
-          app:titleTextColor="@color/primaryText"
-          android:theme="@style/AppBarTheme"
-          app:popupTheme="@style/AppBarPopupTheme"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content" />
-    </android.support.design.widget.AppBarLayout>
+          style="@style/ToolbarStyle" />
+    </com.google.android.material.appbar.AppBarLayout>
     <TextView
         android:id="@+id/LicensesButton"
         android:textSize="15sp"

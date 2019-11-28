@@ -1,9 +1,10 @@
-﻿using Android.Support.Constraints;
-using Android.Support.Design.Widget;
-using Android.Support.V4.Widget;
-using Android.Support.V7.Widget;
-using Android.Views;
+﻿using Android.Views;
 using Android.Widget;
+using AndroidX.CardView.Widget;
+using AndroidX.ConstraintLayout.Widget;
+using AndroidX.Core.Widget;
+using AndroidX.RecyclerView.Widget;
+using Google.Android.Material.AppBar;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using static Toggl.Droid.Resource.Id;
@@ -19,8 +20,6 @@ namespace Toggl.Droid.Activities
             Resource.Layout.EditTimeEntryTagCell,
             StringViewHolder.Create);
 
-        private ImageView closeButton;
-        private TextView confirmButton;
         private EditText descriptionEditText;
 
         private Group singleTimeEntryModeViews;
@@ -70,8 +69,6 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeViews()
         {
-            closeButton = FindViewById<ImageView>(CloseButton);
-            confirmButton = FindViewById<TextView>(ConfirmButton);
             descriptionEditText = FindViewById<EditText>(DescriptionEditText);
 
             singleTimeEntryModeViews = FindViewById<Group>(SingleTimeEntryModeViews);
@@ -124,14 +121,12 @@ namespace Toggl.Droid.Activities
 
             descriptionEditText.Text = ViewModel.Description.Value;
             descriptionEditText.Hint = Shared.Resources.StartTimeEntryPlaceholder;
-            confirmButton.Text = Shared.Resources.Save;
             errorTitle.Text = Shared.Resources.Oops;
             billableLabel.Text = Shared.Resources.Billable;
             startTimeLabel.Text = Shared.Resources.StartTime;
             stopTimeLabel.Text = Shared.Resources.EndTime;
             durationLabel.Text = Shared.Resources.Duration;
             deleteLabel.Text = Shared.Resources.DeleteThisEntry;
-            closeButton.ContentDescription = Shared.Resources.Cancel;
             projectPlaceholderLabel.Text = Shared.Resources.AddProjectTask;
 
             groupCountTextView.Text = string.Format(
@@ -147,6 +142,9 @@ namespace Toggl.Droid.Activities
             layoutManager.InitialPrefetchItemCount = 5;
             tagsRecycler.SetLayoutManager(layoutManager);
             tagsRecycler.SetAdapter(tagsAdapter);
+
+            SetupToolbar();
+            SupportActionBar.SetHomeAsUpIndicator(Resource.Drawable.toolbar_close);
 
             scrollView.AttachMaterialScrollBehaviour(appBarLayout);
         }

@@ -90,7 +90,9 @@ namespace Toggl.Core.Analytics
 
         public IAnalyticsEvent<StartViewTapSource> StartViewTapped { get; }
 
-        public IAnalyticsEvent NoDefaultWorkspace { get; }
+        public IAnalyticsEvent<int> NoDefaultWorkspace { get; }
+
+        public IAnalyticsEvent NoWorkspaces { get; }
 
         public IAnalyticsEvent<TimeEntryStartOrigin> TimeEntryStarted { get; }
 
@@ -125,6 +127,10 @@ namespace Toggl.Core.Analytics
         public IAnalyticsEvent<string, string> EntitySyncStatus { get; }
 
         public IAnalyticsEvent CalendarOnboardingStarted { get; }
+
+        public IAnalyticsEvent<int> NumberOfLinkedCalendarsChanged { get; }
+
+        public IAnalyticsEvent<int> NumberOfLinkedCalendarsNewUser { get; }
 
         public IAnalyticsEvent EditViewOpenedFromCalendar { get; }
 
@@ -179,13 +185,13 @@ namespace Toggl.Core.Analytics
         public IAnalyticsEvent<SuggestionProviderType> SuggestionStarted { get; }
 
         public IAnalyticsEvent<ApplicationInstallLocation> ApplicationInstallLocation { get; }
-        
+
         public IAnalyticsEvent<string> PushInitiatedSyncFetch { get; protected set; }
-        
+
         public IAnalyticsEvent<string> PushNotificationSyncStarted { get; protected set; }
-        
+
         public IAnalyticsEvent<string> PushNotificationSyncFinished { get; protected set; }
-        
+
         public IAnalyticsEvent<string, string, string, string> PushNotificationSyncFailed { get; protected set; }
 
         public IAnalyticsEvent<string, string, string, string> DebugSchedulerError { get; }
@@ -195,6 +201,32 @@ namespace Toggl.Core.Analytics
         public IAnalyticsEvent<bool> AccessibilityEnabled { get; }
 
         public IAnalyticsEvent<bool> WatchPaired { get; }
+
+        public IAnalyticsEvent<bool> TimerWidgetInstallStateChange { get; }
+
+        public IAnalyticsEvent<bool> SuggestionsWidgetInstallStateChange { get; }
+
+        public IAnalyticsEvent<int> TimerWidgetSizeChanged { get; }
+
+        public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarEventContextualMenu { get; }
+
+        public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarNewTimeEntryContextualMenu { get; }
+
+        public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarExistingTimeEntryContextualMenu { get; }
+
+        public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarRunningTimeEntryContextualMenu { get; }
+
+        public IAnalyticsEvent<CalendarTimeEntryCreatedType, int, string> CalendarTimeEntryCreated { get; }
+
+        public IAnalyticsEvent<int, string> CalendarWeeklyDatePickerSelectionChanged { get; }
+
+        public IAnalyticsEvent<CalendarSwipeDirection, int, string> CalendarSingleSwipe { get; }
+
+        public IAnalyticsEvent<string> MarketingMessageShown { get; }
+
+        public IAnalyticsEvent<string> MarketingMessageCallToActionHit { get; }
+
+        public IAnalyticsEvent<string> MarketingMessageDismissed { get; }
 
         protected BaseAnalyticsService()
         {
@@ -237,7 +269,8 @@ namespace Toggl.Core.Analytics
             HandledException = new AnalyticsEvent<string, string>(this, nameof(HandledException), "ExceptionType", "ExceptionMessage");
             TwoRunningTimeEntriesInconsistencyFixed = new AnalyticsEvent(this, nameof(TwoRunningTimeEntriesInconsistencyFixed));
             StartViewTapped = new AnalyticsEvent<StartViewTapSource>(this, nameof(StartViewTapped), "TapSource");
-            NoDefaultWorkspace = new AnalyticsEvent(this, nameof(NoDefaultWorkspace));
+            NoDefaultWorkspace = new AnalyticsEvent<int>(this, nameof(NoDefaultWorkspace), "NumberOfWorkspaces");
+            NoWorkspaces = new AnalyticsEvent(this, nameof(NoWorkspaces));
             TimeEntryStarted = new AnalyticsEvent<TimeEntryStartOrigin>(this, nameof(TimeEntryStarted), "Origin");
             TimeEntryStopped = new AnalyticsEvent<TimeEntryStopOrigin>(this, nameof(TimeEntryStopped), "Origin");
             TimeEntryContinued = new AnalyticsEvent<ContinueTimeEntryOrigin, int, int, int>(this, nameof(TimeEntryContinued), "Origin", "IndexInLog", "DayInLog", "DaysInThePast");
@@ -255,6 +288,8 @@ namespace Toggl.Core.Analytics
             EntitySynced = new AnalyticsEvent<PushSyncOperation, string>(this, nameof(EntitySynced), "Method", "Entity");
             EntitySyncStatus = new AnalyticsEvent<string, string>(this, nameof(EntitySyncStatus), "Entity", "Status");
             CalendarOnboardingStarted = new AnalyticsEvent(this, nameof(CalendarOnboardingStarted));
+            NumberOfLinkedCalendarsChanged = new AnalyticsEvent<int>(this, nameof(NumberOfLinkedCalendarsChanged), "Count");
+            NumberOfLinkedCalendarsNewUser = new AnalyticsEvent<int>(this, nameof(NumberOfLinkedCalendarsNewUser), "Count");
             EditViewOpenedFromCalendar = new AnalyticsEvent(this, nameof(EditViewOpenedFromCalendar));
             TimeEntryChangedFromCalendar = new AnalyticsEvent<CalendarChangeEvent>(this, nameof(TimeEntryChangedFromCalendar), "ChangeEvent");
             ProjectsInaccesibleAfterCleanUp = new AnalyticsEvent<int>(this, nameof(ProjectsInaccesibleAfterCleanUp), "NumberOfProjectsInaccesibleAfterCleanUp");
@@ -264,8 +299,8 @@ namespace Toggl.Core.Analytics
             TimeEntriesInaccesibleAfterCleanUp = new AnalyticsEvent<int>(this, nameof(TimeEntriesInaccesibleAfterCleanUp), "NumberOfTimeEntriesInaccesibleAfterCleanUp");
             WorkspacesInaccesibleAfterCleanUp = new AnalyticsEvent<int>(this, nameof(WorkspacesInaccesibleAfterCleanUp), "NumberOfWorkspacesInaccesibleAfterCleanUp");
             BackgroundSyncStarted = new AnalyticsEvent(this, nameof(BackgroundSyncStarted));
-            BackgroundSyncFinished = new AnalyticsEvent<string>(this, nameof(BackgroundSyncStarted), "BackgroundSyncFinishedWithOutcome");
-            BackgroundSyncFailed = new AnalyticsEvent<string, string, string>(this, nameof(BackgroundSyncStarted), "Type", "Message", "StackTrace");
+            BackgroundSyncFinished = new AnalyticsEvent<string>(this, nameof(BackgroundSyncFinished), "BackgroundSyncFinishedWithOutcome");
+            BackgroundSyncFailed = new AnalyticsEvent<string, string, string>(this, nameof(BackgroundSyncFailed), "Type", "Message", "StackTrace");
             BackgroundSyncMustStopExcecution = new AnalyticsEvent(this, nameof(BackgroundSyncMustStopExcecution));
             UnknownLoginFailure = new AnalyticsEvent<string, string>(this, nameof(UnknownLoginFailure), "Type", "Message");
             UnknownSignUpFailure = new AnalyticsEvent<string, string>(this, nameof(UnknownSignUpFailure), "Type", "Message");
@@ -286,10 +321,23 @@ namespace Toggl.Core.Analytics
             DebugNavigationError = new AnalyticsEvent<string, string>(this, nameof(DebugNavigationError), "Action", "Type");
             AccessibilityEnabled = new AnalyticsEvent<bool>(this, nameof(AccessibilityEnabled), "Enabled");
             WatchPaired = new AnalyticsEvent<bool>(this, nameof(WatchPaired), "Installed");
+            TimerWidgetInstallStateChange = new AnalyticsEvent<bool>(this, nameof(TimerWidgetInstallStateChange), "Installed");
+            SuggestionsWidgetInstallStateChange = new AnalyticsEvent<bool>(this, nameof(SuggestionsWidgetInstallStateChange), "Installed");
+            TimerWidgetSizeChanged = new AnalyticsEvent<int>(this, nameof(TimerWidgetSizeChanged), "Columns");
             PushInitiatedSyncFetch = new AnalyticsEvent<string>(this, nameof(PushInitiatedSyncFetch), "NumberOfEntitiesFetched");
             PushNotificationSyncStarted = new AnalyticsEvent<string>(this, nameof(PushNotificationSyncStarted), "Source");
             PushNotificationSyncFinished = new AnalyticsEvent<string>(this, nameof(PushNotificationSyncFinished), "Source");
+            CalendarWeeklyDatePickerSelectionChanged = new AnalyticsEvent<int, string>(this, nameof(CalendarWeeklyDatePickerSelectionChanged), "DaysSinceToday", "DayOfWeek");
+            CalendarSingleSwipe = new AnalyticsEvent<CalendarSwipeDirection, int, string>(this, nameof(CalendarSingleSwipe), "SwipeDirection", "DaysSinceToday", "DayOfWeek");
             PushNotificationSyncFailed = new AnalyticsEvent<string, string, string, string>(this, nameof(PushNotificationSyncFailed), "Source", "Type", "Message", "StackTrace");
+            CalendarEventContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarEventContextualMenu), "SelectedOption");
+            CalendarNewTimeEntryContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarNewTimeEntryContextualMenu), "SelectedOption");
+            CalendarExistingTimeEntryContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarExistingTimeEntryContextualMenu), "SelectedOption");
+            CalendarRunningTimeEntryContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarRunningTimeEntryContextualMenu), "SelectedOption");
+            CalendarTimeEntryCreated = new AnalyticsEvent<CalendarTimeEntryCreatedType, int, string>(this, nameof(CalendarTimeEntryCreated), "Type", "DaysSinceToday", "DayOfTheWeek");
+            MarketingMessageShown = new AnalyticsEvent<string>(this, nameof(MarketingMessageShown), "Campaign");
+            MarketingMessageCallToActionHit = new AnalyticsEvent<string>(this, nameof(MarketingMessageCallToActionHit), "Campaign");
+            MarketingMessageDismissed = new AnalyticsEvent<string>(this, nameof(MarketingMessageDismissed), "Campaign");
         }
 
         public void TrackAnonymized(Exception exception)

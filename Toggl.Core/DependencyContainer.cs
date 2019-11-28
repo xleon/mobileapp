@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
@@ -14,6 +13,7 @@ using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
+using Toggl.Storage.Queries;
 using Toggl.Storage.Settings;
 
 namespace Toggl.Core
@@ -34,6 +34,7 @@ namespace Toggl.Core
         private readonly Lazy<ITogglDatabase> database;
         private readonly Lazy<ITimeService> timeService;
         private readonly Lazy<IPlatformInfo> platformInfo;
+        private readonly Lazy<IQueryFactory> queryFactory;
         private readonly Lazy<IRatingService> ratingService;
         private readonly Lazy<ICalendarService> calendarService;
         private readonly Lazy<IKeyValueStorage> keyValueStorage;
@@ -70,6 +71,7 @@ namespace Toggl.Core
         public IApiFactory ApiFactory => apiFactory.Value;
         public ITogglDatabase Database => database.Value;
         public ITimeService TimeService => timeService.Value;
+        public IQueryFactory QueryFactory => queryFactory.Value;
         public IPlatformInfo PlatformInfo => platformInfo.Value;
         public ITogglDataSource DataSource => dataSource.Value;
         public IRatingService RatingService => ratingService.Value;
@@ -106,6 +108,7 @@ namespace Toggl.Core
             syncManager = new Lazy<ISyncManager>(CreateSyncManager);
             timeService = new Lazy<ITimeService>(CreateTimeService);
             dataSource = new Lazy<ITogglDataSource>(CreateDataSource);
+            queryFactory = new Lazy<IQueryFactory>(CreateQueryFactory);
             platformInfo = new Lazy<IPlatformInfo>(CreatePlatformInfo);
             ratingService = new Lazy<IRatingService>(CreateRatingService);
             calendarService = new Lazy<ICalendarService>(CreateCalendarService);
@@ -143,17 +146,18 @@ namespace Toggl.Core
 
             UserAccessManager
                 .UserLoggedIn
-                .Subscribe(recreateLazyDependenciesForLogin)
+                .Subscribe(RecreateLazyDependenciesForLogin)
                 .DisposedBy(disposeBag);
 
             UserAccessManager
                 .UserLoggedOut
-                .Subscribe(_ => recreateLazyDependenciesForLogout())
+                .Subscribe(_ => RecreateLazyDependenciesForLogout())
                 .DisposedBy(disposeBag);
         }
 
         protected abstract ITogglDatabase CreateDatabase();
         protected abstract IPlatformInfo CreatePlatformInfo();
+        protected abstract IQueryFactory CreateQueryFactory();
         protected abstract IRatingService CreateRatingService();
         protected abstract ICalendarService CreateCalendarService();
         protected abstract IKeyValueStorage CreateKeyValueStorage();
@@ -240,7 +244,7 @@ namespace Toggl.Core
             pushNotificationsTokenStorage
         );
 
-        private void recreateLazyDependenciesForLogin(ITogglApi api)
+        protected virtual void RecreateLazyDependenciesForLogin(ITogglApi api)
         {
             this.api = new Lazy<ITogglApi>(() => api);
 
@@ -254,7 +258,7 @@ namespace Toggl.Core
             });
         }
 
-        private void recreateLazyDependenciesForLogout()
+        protected virtual void RecreateLazyDependenciesForLogout()
         {
             api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
 

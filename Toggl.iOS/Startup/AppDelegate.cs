@@ -6,9 +6,11 @@ using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Services;
+using Toggl.Shared;
 using UIKit;
 using UserNotifications;
 using Firebase.CloudMessaging;
+using Google.SignIn;
 
 namespace Toggl.iOS
 {
@@ -24,22 +26,22 @@ namespace Toggl.iOS
                 += (sender, certificate, chain, sslPolicyErrors) => true;
 #endif
 
-            #if !DEBUG
-                Firebase.Core.App.Configure();
-            #endif
+#if !DEBUG
+            Firebase.Core.App.Configure();
+            Messaging.SharedInstance.Delegate = this;
+#endif
 
             UNUserNotificationCenter.Current.Delegate = this;
             UIApplication.SharedApplication.RegisterForRemoteNotifications();
-            Messaging.SharedInstance.Delegate = this;
+
+            var googleServiceDictionary = NSDictionary.FromFile("GoogleService-Info.plist");
+            SignIn.SharedInstance.ClientId = googleServiceDictionary["CLIENT_ID"].ToString();
 
             initializeAnalytics();
 
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
             Window.MakeKeyAndVisible();
-
-            setupNavigationBar();
-            setupTabBar();
-
+            
             IosDependencyContainer.EnsureInitialized(Window, this);
             var app = new AppStart(IosDependencyContainer.Instance);
             app.LoadLocalizationConfiguration();
@@ -50,16 +52,12 @@ namespace Toggl.iOS
             var accessLevel = app.GetAccessLevel();
             loginWithCredentialsIfNecessary(accessLevel);
             navigateAccordingToAccessLevel(accessLevel, app);
-            
+
             var accessibilityEnabled = UIAccessibility.IsVoiceOverRunning;
             IosDependencyContainer.Instance.AnalyticsService.AccessibilityEnabled.Track(accessibilityEnabled);
 
             var watchservice = new WatchService();
             watchservice.TryLogWatchConnectivity();
-
-#if ENABLE_TEST_CLOUD
-            Xamarin.Calabash.Start();
-#endif
 
             return true;
         }
@@ -83,8 +81,7 @@ namespace Toggl.iOS
             }
 
 #if USE_ANALYTICS
-            var openUrlOptions = new UIKit.UIApplicationOpenUrlOptions(options);
-            return Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
+            return SignIn.SharedInstance.HandleUrl(url);
 #endif
 
             return false;
