@@ -42,7 +42,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             protected Password InvalidPassword { get; } = Password.Empty;
 
             protected ILocation Location { get; } = Substitute.For<ILocation>();
-            protected ILastTimeUsageStorage LastTimeUsageStorage { get; } = Substitute.For<ILastTimeUsageStorage>();
 
             protected override SignupViewModel CreateViewModel()
                 => new SignupViewModel(

@@ -35,8 +35,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             protected Password ValidPassword { get; } = Password.From("T0t4lly s4afe p4$$");
             protected Password InvalidPassword { get; } = Password.From("123");
 
-            protected ILastTimeUsageStorage LastTimeUsageStorage { get; } = Substitute.For<ILastTimeUsageStorage>();
-
             protected override LoginViewModel CreateViewModel()
                 => new LoginViewModel(
                     UserAccessManager,

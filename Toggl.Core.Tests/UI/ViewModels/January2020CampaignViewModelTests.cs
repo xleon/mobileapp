@@ -118,7 +118,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData(Platform.Daneel, B, "https://toggl.com/winter-is-here/?utm_source=mobile-ios&utm_medium=popup&utm_campaign=winter-is-here&utm_content=copy-b")]
             [InlineData(Platform.Giskard, A, "https://toggl.com/winter-is-here/?utm_source=mobile-android&utm_medium=popup&utm_campaign=winter-is-here&utm_content=copy-a")]
             [InlineData(Platform.Giskard, B, "https://toggl.com/winter-is-here/?utm_source=mobile-android&utm_medium=popup&utm_campaign=winter-is-here&utm_content=copy-b")]
-            public async Task OpensTheBrowserAtCorrectUrl(
+            public void OpensTheBrowserAtCorrectUrl(
                 Platform platform, January2020CampaignConfiguration.AvailableOption option, string expectedUrl)
             {
                 var url = January2020CampaignViewModel.FormatUrl(option, platform);
@@ -129,7 +129,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Theory, LogIfTooSlow]
             [InlineData(Platform.Daneel)]
             [InlineData(Platform.Giskard)]
-            public async Task PreventsFormattingAURLWhenTheConfigurationOptionIsNone(Platform platform)
+            public void PreventsFormattingAURLWhenTheConfigurationOptionIsNone(Platform platform)
             {
                 Action formattingUrl = () => January2020CampaignViewModel.FormatUrl(None, platform);
 
