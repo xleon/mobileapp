@@ -1,8 +1,8 @@
-﻿using Android.OS;
-using Android.Views;
+﻿using Android.Runtime;
 using System;
 using System.Reactive.Linq;
 using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
@@ -19,19 +19,20 @@ namespace Toggl.Droid.Fragments
         private static readonly TimeSpan toggleCalendarThrottleDuration = TimeSpan.FromMilliseconds(300);
         private ReportsRecyclerAdapter reportsRecyclerAdapter;
 
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        public ReportsFragment(MainTabBarViewModel tabBarViewModel)
+            : base(tabBarViewModel)
         {
-            var view = inflater.Inflate(Resource.Layout.ReportsFragment, container, false);
-            InitializeViews(view);
-            SetupToolbar(view);
-            reportsRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
-
-            return view;
         }
 
-        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        public ReportsFragment(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
-            base.OnViewCreated(view, savedInstanceState);
+        }
+
+        protected override void InitializationFinished()
+        {
+            reportsRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
+
             ViewModel?.CalendarViewModel.AttachView(this);
 
             selectWorkspaceFab.Rx().Tap()

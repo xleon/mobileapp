@@ -410,7 +410,7 @@ namespace Toggl.Core.UI.ViewModels
 
             var isNotANewUser =
                 TimeService.CurrentDateTime - lastTimeUsageStorage.LastLogin.Value > TimeSpan.FromHours(48)
-                    && await TimeEntriesCount.FirstAsync() >= 2;
+                    && await TimeEntriesViewModel.Count.FirstAsync() >= 2;
 
             return isNotANewUser;
         }

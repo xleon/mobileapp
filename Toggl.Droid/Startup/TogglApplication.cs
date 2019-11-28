@@ -10,6 +10,7 @@ using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Droid.BroadcastReceivers;
 using Toggl.Droid.Helper;
+using static Android.Content.Intent;
 using static AndroidX.AppCompat.App.AppCompatDelegate;
 
 namespace Toggl.Droid

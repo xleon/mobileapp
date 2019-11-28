@@ -8,12 +8,12 @@ using AndroidX.Fragment.App;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
-using Toggl.Droid.Extensions;
+using System.Threading.Tasks;
 
 namespace Toggl.Droid.Fragments
 {
     public abstract partial class ReactiveTabFragment<TViewModel> : Fragment, IView, IMenuItemOnMenuItemClickListener 
-        where TViewModel : class, IViewModel
+        where TViewModel : ViewModel
     {
         private readonly Lazy<TViewModel> lazyViewModel;
         protected CompositeDisposable DisposeBag = new CompositeDisposable();
