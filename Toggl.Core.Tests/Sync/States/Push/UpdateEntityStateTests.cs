@@ -209,7 +209,7 @@ namespace Toggl.Core.Tests.Sync.States.Push
 
             analyticsService.EntitySyncStatus.Received().Track(
                 entity.GetSafeTypeName(),
-                $"{Update}:{Resources.Success}");
+                $"{Update}:Success");
         }
 
         [Fact, LogIfTooSlow]
@@ -249,7 +249,7 @@ namespace Toggl.Core.Tests.Sync.States.Push
 
             analyticsService.EntitySyncStatus.Received().Track(
                 entity.GetSafeTypeName(),
-                $"{Update}:{Resources.Failure}");
+                $"{Update}:Failure");
         }
 
         [Theory, LogIfTooSlow]

@@ -546,12 +546,6 @@ Start the timer and your most used time entries will appear here.</value>
     <data name="ArchivedProjectDecorator" xml:space="preserve">
         <value>(archived)</value>
     </data>
-    <data name="Failure" xml:space="preserve">
-        <value>Failure</value>
-    </data>
-    <data name="Success" xml:space="preserve">
-        <value>Success</value>
-    </data>
     <data name="EntryDeleted" xml:space="preserve">
         <value>Time entry was deleted</value>
     </data>
