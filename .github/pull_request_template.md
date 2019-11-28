@@ -30,5 +30,8 @@ Integration tests: <!-- link --> - do not merge this branch unless these tests a
 <!-- If your PR touches syncing, schedule and add a link to Bitrise for 'Tests.Sync' -->
 Syncing tests: <!-- link --> - do not merge this branch unless these tests are passing.
 
+## Localizations
+<!-- If your PR is adding/updating copies or touching Resources.resx, make sure that all translations of the app are handled properly or that they don't have to be handled --> 
+
 ## :squid: Permissions
 <!-- Is anybody else allowed to merge this? If so, who? -->

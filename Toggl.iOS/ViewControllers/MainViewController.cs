@@ -611,6 +611,7 @@ namespace Toggl.iOS.ViewControllers
 
             //Hide play button for later animating it
             StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f);
+            StartTimeEntryButton.AdjustsImageWhenHighlighted = false;
 
             //Prepare Navigation bar images
             settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);
@@ -624,6 +625,7 @@ namespace Toggl.iOS.ViewControllers
 
             prepareWelcomeBackViews();
             prepareEmptyStateView();
+            prepareStartButtonLongPressAnimation();
 
             // Open edit view for the currently running time entry by swiping up
             var swipeUpRunningCardGesture = new UISwipeGestureRecognizer(async () =>
@@ -637,6 +639,75 @@ namespace Toggl.iOS.ViewControllers
             });
             swipeUpRunningCardGesture.Direction = UISwipeGestureRecognizerDirection.Up;
             CurrentTimeEntryCard.AddGestureRecognizer(swipeUpRunningCardGesture);
+        }
+
+        private void prepareStartButtonLongPressAnimation()
+        {
+            const double longPressMinimumPressDuration = 0.5; // default OS long press duration is 0.5s
+            const double startAnimatingAfter = 0.1;
+            const double bounceAnimationDuration = 0.1f;
+            const double shrinkingAnimationDuration = longPressMinimumPressDuration - startAnimatingAfter - bounceAnimationDuration;
+            nfloat noDelay = 0.0f;
+
+            var shrunk = CGAffineTransform.MakeScale(0.9f, 0.9f);
+            var bigger = CGAffineTransform.MakeScale(1.05f, 1.05f);
+            var normalScale = CGAffineTransform.MakeScale(1f, 1f);
+
+            var cts = new CancellationTokenSource();
+            var press = new UILongPressGestureRecognizer(startButtonAnimation);
+            press.MinimumPressDuration = startAnimatingAfter;
+            press.ShouldRecognizeSimultaneously = (_, __) => true;
+
+            StartTimeEntryButton.AddGestureRecognizer(press);
+
+            void startButtonAnimation(UIGestureRecognizer recognizer)
+            {
+                switch (recognizer.State)
+                {
+                    case UIGestureRecognizerState.Began:
+                        startShrinkingAnimation();
+                        break;
+
+                    case UIGestureRecognizerState.Cancelled:
+                    case UIGestureRecognizerState.Failed:
+                        cts?.Cancel();
+                        cts = new CancellationTokenSource();
+                        backToNormal();
+                        break;
+                }
+            }
+
+            void startShrinkingAnimation()
+            {
+                AnimationExtensions.Animate(
+                    shrinkingAnimationDuration,
+                    noDelay,
+                    Curves.Bounce,
+                    () => StartTimeEntryButton.Transform = shrunk,
+                    expand,
+                    cts.Token);
+            }
+
+            void expand()
+            {
+                AnimationExtensions.Animate(
+                    bounceAnimationDuration / 2,
+                    noDelay,
+                    Curves.Bounce,
+                    () => StartTimeEntryButton.Transform = bigger,
+                    backToNormal,
+                    cts.Token);
+            }
+
+            void backToNormal()
+            {
+                AnimationExtensions.Animate(
+                    bounceAnimationDuration / 2,
+                    noDelay,
+                    Curves.Bounce,
+                    () => StartTimeEntryButton.Transform = normalScale,
+                    cancellationToken: cts.Token);
+            }
         }
 
         private void showTimeEntryCard()

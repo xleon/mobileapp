@@ -56,7 +56,7 @@ namespace Toggl.Core.Sync.States.Push
             return delete(entity)
                 .SelectMany(_ => dataSource.Delete(entity.Id))
                 .Track(AnalyticsService.EntitySynced, Delete, entity.GetSafeTypeName())
-                .Track(AnalyticsService.EntitySyncStatus, entity.GetSafeTypeName(), $"{Delete}:{Resources.Success}")
+                .Track(AnalyticsService.EntitySyncStatus, entity.GetSafeTypeName(), $"{Delete}:Success")
                 .Select(_ => Done.Transition())
                 .Catch(Fail(entity, Delete));
         }

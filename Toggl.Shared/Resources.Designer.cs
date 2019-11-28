@@ -334,12 +334,6 @@ namespace Toggl.Shared {
             }
         }
 
-        public static string And {
-            get {
-                return ResourceManager.GetString("And", resourceCulture);
-            }
-        }
-
         public static string TermsOfServiceUrl {
             get {
                 return ResourceManager.GetString("TermsOfServiceUrl", resourceCulture);
@@ -826,12 +820,6 @@ namespace Toggl.Shared {
             }
         }
 
-        public static string TermsOfServiceDialogMessageDroid {
-            get {
-                return ResourceManager.GetString("TermsOfServiceDialogMessageDroid", resourceCulture);
-            }
-        }
-
         public static string CountryOfResidence {
             get {
                 return ResourceManager.GetString("CountryOfResidence", resourceCulture);
@@ -907,18 +895,6 @@ namespace Toggl.Shared {
         public static string ArchivedProjectDecorator {
             get {
                 return ResourceManager.GetString("ArchivedProjectDecorator", resourceCulture);
-            }
-        }
-
-        public static string Failure {
-            get {
-                return ResourceManager.GetString("Failure", resourceCulture);
-            }
-        }
-
-        public static string Success {
-            get {
-                return ResourceManager.GetString("Success", resourceCulture);
             }
         }
 
@@ -2461,6 +2437,36 @@ namespace Toggl.Shared {
         public static string LoginToShowSuggestions {
             get {
                 return ResourceManager.GetString("LoginToShowSuggestions", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignTitle {
+            get {
+                return ResourceManager.GetString("January2020CampaignTitle", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignPositiveButtonText {
+            get {
+                return ResourceManager.GetString("January2020CampaignPositiveButtonText", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignNegativeButtonText {
+            get {
+                return ResourceManager.GetString("January2020CampaignNegativeButtonText", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignTextVersionA {
+            get {
+                return ResourceManager.GetString("January2020CampaignTextVersionA", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignTextVersionB {
+            get {
+                return ResourceManager.GetString("January2020CampaignTextVersionB", resourceCulture);
             }
         }
     }

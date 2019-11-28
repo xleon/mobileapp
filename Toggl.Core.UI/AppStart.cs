@@ -42,7 +42,7 @@ namespace Toggl.Core.UI
                         cultureInfo = new CultureInfo(twoLettersLanguageCode);
                 }
 
-                if (SupportedLanguageCodes.Contains(cultureInfo.Name))
+                if (SupportedTwoLettersLanguageCodes.Contains(cultureInfo.TwoLetterISOLanguageName, StringComparer.InvariantCultureIgnoreCase))
                 {
                     dateFormatCultureInfo = cultureInfo;
                 }

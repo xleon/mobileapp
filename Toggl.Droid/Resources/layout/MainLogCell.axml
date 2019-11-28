@@ -35,13 +35,13 @@
         android:background="@color/stopTimeEntryButtonBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/MainLogContentView"
         android:elevation="1dp"
         android:background="@color/cardBackground"
         android:layout_height="72dp"
         android:layout_width="match_parent">
-        <android.support.constraint.Guideline
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/TopGuideline"
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="8dp"
@@ -50,8 +50,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_height="0dp"
             android:layout_width="wrap_content" />
-        <!-- Todo: replace with androidx.constraintlayout.widget.Guideline --> 
-        <android.support.constraint.Guideline
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/BottomGuideline"
             android:orientation="horizontal"
             app:layout_constraintGuide_end="8dp"
@@ -237,5 +236,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_height="0.5dp"
             android:layout_width="match_parent" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

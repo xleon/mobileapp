@@ -11,16 +11,23 @@ namespace Toggl.iOS.Services
 
         public void InvalidateCurrentToken()
         {
+#if !DEBUG
             InstanceId.SharedInstance.DeleteId(CommonFunctions.DoNothing);
+#endif
         }
 
         private PushNotificationsToken? getToken()
         {
+#if !DEBUG
             var refreshedToken = Firebase.CloudMessaging.Messaging.SharedInstance.FcmToken;
+
             if (string.IsNullOrEmpty(refreshedToken))
                 return null;
 
             return new PushNotificationsToken(refreshedToken);
+#else
+            return null;
+#endif
         }
     }
 }

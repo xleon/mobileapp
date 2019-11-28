@@ -1,4 +1,5 @@
-﻿using Toggl.Core.UI.Interfaces;
+﻿using System;
+using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Models;
 
@@ -30,6 +31,6 @@ namespace Toggl.Core.UI.ViewModels
 
         public override bool Equals(object obj) => Equals(obj as SelectableCountryViewModel);
 
-        public override int GetHashCode() => HashCode.From(Country, Selected);
+        public override int GetHashCode() => HashCode.Combine(Country, Selected);
     }
 }
