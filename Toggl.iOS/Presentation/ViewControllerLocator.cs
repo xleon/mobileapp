@@ -94,6 +94,8 @@ namespace Toggl.iOS.Presentation
                     return new TokenResetViewController(vm);
                 case UpcomingEventsNotificationSettingsViewModel vm:
                     return new UpcomingEventsNotificationSettingsViewController(vm);
+                case January2020CampaignViewModel vm:
+                    return new January2020CampaignViewController(vm);
                 default:
                     throw new Exception($"Failed to create ViewController for ViewModel of type {viewModel.GetType().Name}");
             }

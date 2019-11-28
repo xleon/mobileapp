@@ -18,7 +18,7 @@ namespace Toggl.Core.Tests.Sync.Helpers
 
         public SyncStorage()
         {
-            Database = new Database();
+            Database = new Database(new RealmConfigurator());
         }
 
         public async Task<DatabaseState> LoadCurrentState()

@@ -192,6 +192,12 @@ namespace Toggl.Droid.Views.Calendar
             calendarItemsToSearch = calendarItems;
             var calendarLayoutItems = calendarItemLayoutAttributes;
             var calendarItemIndex = calendarItemsToSearch.IndexOf(calendarItem);
+            if (calendarItemIndex < 0)
+            {
+                cancelCurrentEdition();
+                return;
+            }
+            
             var itemInEditMode = new CalendarItemEditInfo(calendarItem, calendarLayoutItems[calendarItemIndex], calendarItemIndex, hourHeight, minHourHeight, timeService.CurrentDateTime);
             
             itemEditInEditMode = itemInEditMode;

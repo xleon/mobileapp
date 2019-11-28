@@ -141,7 +141,7 @@
     <Reference Include="System.IO.Compression" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Google.Core">
       <HintPath>..\packages\Xamarin.Google.iOS.Core.3.1.0\lib\Xamarin.iOS10\Google.Core.dll</HintPath>
@@ -1272,6 +1272,10 @@
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x.png" />
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata.png" />
+    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\stop.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop.png" />
     <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop%403x.png" />
@@ -1482,6 +1486,7 @@
     <InterfaceDefinition Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.xib" />
     <InterfaceDefinition Include="Cells\Reports\ReportsNoDataCollectionViewCell.xib" />
     <InterfaceDefinition Include="Cells\Reports\ReportsErrorCollectionViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\January2020CampaignViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -2118,6 +2123,10 @@
     <Compile Include="Cells\Reports\ReportsErrorCollectionViewCell.cs" />
     <Compile Include="Cells\Reports\ReportsErrorCollectionViewCell.designer.cs">
       <DependentUpon>ReportsErrorCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\January2020CampaignViewController.cs" />
+    <Compile Include="ViewControllers\January2020CampaignViewController.designer.cs">
+      <DependentUpon>January2020CampaignViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

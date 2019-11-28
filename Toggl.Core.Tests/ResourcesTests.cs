@@ -16,7 +16,7 @@ namespace Toggl.Core.Tests
                 "Toggl.Shared.Resources",
                 typeof(Shared.Resources).Assembly);
 
-            foreach (var code in Helper.Constants.SupportedLanguageCodes)
+            foreach (var code in Helper.Constants.SupportedTwoLettersLanguageCodes)
             {
                 var culture = new CultureInfo(code);
 
