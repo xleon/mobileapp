@@ -104,7 +104,7 @@ namespace Toggl.Core.Autocomplete
             return querySpan == null ? this : removeQuery(querySpan, QuerySymbols.Tags);
         }
 
-        internal QueryTextSpan GetSpanWithCurrentTextCursor()
+        public QueryTextSpan GetSpanWithCurrentTextCursor()
             => Spans.OfType<QueryTextSpan>().SingleOrDefault();
 
         private TextFieldInfo removeQuery(QueryTextSpan currentQuerySpan, char querySymbol)

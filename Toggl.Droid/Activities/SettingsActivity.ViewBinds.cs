@@ -4,6 +4,7 @@ using Android.Widget;
 using AndroidX.Core.Widget;
 using Google.Android.Material.AppBar;
 using Toggl.Core.Sync;
+using Toggl.Droid.Extensions;
 using static Toggl.Core.Sync.PresentableSyncStatus;
 using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
 
@@ -24,6 +25,7 @@ namespace Toggl.Droid.Activities
         private View smartRemindersViewSeparator;
         private View groupTimeEntriesView;
         private View defaultWorkspaceView;
+        private View finalSeparator;
 
         private TextView helpView;
         private TextView calendarSettingsView;
@@ -78,6 +80,7 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeViews()
         {
+            finalSeparator = FindViewById(Resource.Id.FinalSeparator);
             aboutView = FindViewById(Resource.Id.SettingsAboutContainer);
             swipeActionsView = FindViewById(Resource.Id.SettingsToggleSwipeActionsView);
             manualModeView = FindViewById(Resource.Id.SettingsToggleManualModeView);
@@ -175,6 +178,14 @@ namespace Toggl.Droid.Activities
             SupportActionBar.Title = Shared.Resources.Settings;
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetDisplayShowHomeEnabled(true);
+
+            var baseMargin = 24.DpToPixels(this);
+            finalSeparator.DoOnApplyWindowInsets((v, insets, initialPadding) =>
+            {
+                var bottomMargin = baseMargin + insets.SystemWindowInsetBottom;
+                var currentLayoutParams = finalSeparator.LayoutParameters as LinearLayout.LayoutParams;
+                finalSeparator.LayoutParameters = currentLayoutParams.WithMargins(bottom: bottomMargin);
+            });
         }
     }
 }

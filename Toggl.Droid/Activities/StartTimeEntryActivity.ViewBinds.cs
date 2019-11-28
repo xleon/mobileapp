@@ -1,6 +1,8 @@
+using Android.Views;
 using Android.Widget;
 using AndroidX.RecyclerView.Widget;
 using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
 using Toggl.Droid.LayoutManagers;
 using Toggl.Droid.Views;
 using static Toggl.Droid.Resource.Id;
@@ -12,6 +14,8 @@ namespace Toggl.Droid.Activities
         private ImageView selectTagToolbarButton;
         private ImageView selectProjectToolbarButton;
         private ImageView selectBillableToolbarButton;
+
+        private ViewGroup durationCard;
 
         private TextView durationLabel;
 
@@ -25,6 +29,9 @@ namespace Toggl.Droid.Activities
             selectTagToolbarButton = FindViewById<ImageView>(ToolbarTagButton);
             selectProjectToolbarButton = FindViewById<ImageView>(ToolbarProjectButton);
             selectBillableToolbarButton = FindViewById<ImageView>(ToolbarBillableButton);
+
+            durationCard = FindViewById<ViewGroup>(DurationCard);
+            durationCard.FitBottomInset();
 
             durationLabel = FindViewById<TextView>(DurationText);
 

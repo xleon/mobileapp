@@ -33,7 +33,7 @@ namespace Toggl.iOS.Shared
             userDefaults = new NSUserDefaults($"group.{bundleId}.extensions", NSUserDefaultsType.SuiteName);
         }
 
-        public static SharedStorage Instance => new SharedStorage();
+        public static SharedStorage Instance { get; } = new SharedStorage();
 
         public void SetApiToken(string apiToken)
         {
@@ -76,10 +76,10 @@ namespace Toggl.iOS.Shared
 
         public void AddWidgetTrackingEvent(WidgetTrackingEvent e)
         {
-            var currentEvents = (NSMutableArray) getTrackableEvents(widgetInstalledKey).MutableCopy();
+            var currentEvents = (NSMutableArray) getTrackableEvents(widgetTrackingEventsKey).MutableCopy();
             currentEvents.Add(e);
 
-            userDefaults[siriTrackingEventsKey] = NSKeyedArchiver.ArchivedDataWithRootObject(currentEvents);
+            userDefaults[widgetTrackingEventsKey] = NSKeyedArchiver.ArchivedDataWithRootObject(currentEvents);
             userDefaults.Synchronize();
         }
 

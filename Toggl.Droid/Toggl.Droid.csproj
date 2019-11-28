@@ -127,7 +127,7 @@
       <HintPath>..\packages\Remotion.Linq.2.1.2\lib\portable-net45+win+wpa81+wp80\Remotion.Linq.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.AndroidX.Annotation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Xamarin.AndroidX.Annotation.1.0.2-preview02\lib\monoandroid90\Xamarin.AndroidX.Annotation.dll</HintPath>
@@ -585,6 +585,7 @@
     <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.ViewBinds.cs">
       <DependentUpon>CalendarDayViewPageFragment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fragments\January2020CampaignFragment.cs" />
     <Compile Include="Fragments\LockableViewPager.cs" />
     <Compile Include="Extensions\JavaExtensions.cs" />
     <Compile Include="Adapters\ReportsAdapter.cs" />
@@ -923,6 +924,7 @@
     <AndroidResource Include="Resources\drawable\text_placeholder.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
     <AndroidResource Include="Resources\layout\ReportSummaryElement.axml" />
+    <AndroidResource Include="Resources\layout\January2020CampaignFragment.axml" />
     <AndroidResource Include="Resources\layout\WidgetLoading.axml" />
     <AndroidResource Include="Resources\layout\CalendarDayFragmentPage.axml" />
     <AndroidResource Include="Resources\layout\ContextualMenuActionCell.axml" />
@@ -982,6 +984,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\padlock.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\padlock.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\padlock.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\pinata.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\pinata.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\pinata.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\pinata.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\pinata.png" />
     <AndroidResource Include="Resources\drawable-hdpi\workspace.png" />
     <AndroidResource Include="Resources\drawable-mdpi\workspace.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\workspace.png" />
@@ -1168,7 +1175,7 @@
     <AndroidResource Include="Resources\drawable\SmallDot.xml" />
     <AndroidResource Include="Resources\layout\MainSuggestionsCard.axml" />
     <AndroidResource Include="Resources\layout\MainRunningTimeEntry.axml" />
-    <AndroidResource Include="Resources\layout\SettingsFragment.axml" />
+    <AndroidResource Include="Resources\layout\SettingsActivity.axml" />
     <AndroidResource Include="Resources\drawable\TopShadow.xml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivity.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityTimeEntryCell.axml" />
