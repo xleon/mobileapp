@@ -8,9 +8,12 @@ namespace Toggl.Core.UI.ViewModels.Reports
 {
     public class ReportProjectsDonutChartLegendItemElement : ReportDonutChartLegendItemElement
     {
-        public ReportProjectsDonutChartLegendItemElement(string project, string color, TimeSpan duration, DurationFormat durationFormat)
-            : base(project, color, duration.ToFormattedString(durationFormat))
+        public string Client { get; private set; }
+
+        public ReportProjectsDonutChartLegendItemElement(string project, string color, string client, string duration, double percentage)
+            : base(project, color, duration, percentage)
         {
+            Client = client;
         }
     }
 }

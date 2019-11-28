@@ -23,7 +23,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
 
         public class MockLegendItem : ReportDonutChartLegendItemElement
         {
-            public MockLegendItem() : base("", "", "")
+            public MockLegendItem() : base("", "", "", 1)
             {
             }
         }

@@ -77,12 +77,12 @@ namespace Toggl.Droid.Fragments
                     return new ReportEmptyElementViewHolder(barChartCell);
 
                 case ViewType.Donut:
-                    var donutCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
-                    return new ReportEmptyElementViewHolder(donutCell);
+                    var donutCell = inflater.Inflate(Resource.Layout.ReportDonutChartDonutElement, parent, false);
+                    return new ReportDonutChartDonutViewHolder(donutCell);
 
                 case ViewType.DonutLegendItem:
-                    var donutLegendItemCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
-                    return new ReportEmptyElementViewHolder(donutLegendItemCell);
+                    var donutLegendItemCell = inflater.Inflate(Resource.Layout.ReportDonutLegendItem, parent, false);
+                    return new ReportDonutChartLegendItemViewHolder(donutLegendItemCell);
 
                 case ViewType.NoData:
                     var noDataCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);

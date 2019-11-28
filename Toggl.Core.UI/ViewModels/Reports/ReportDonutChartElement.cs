@@ -60,7 +60,14 @@ namespace Toggl.Core.UI.ViewModels.Reports
         }
 
         private static IEnumerable<ReportDonutChartLegendItemElement> defaultLegendItemsSelector(IEnumerable<Segment> segments)
-            => segments.Select(s => new ReportDonutChartLegendItemElement(s.Label, s.Color, s.Value.ToString()));
+        {
+            var total = segments.Sum(s => s.Value);
+
+            if (total == 0)
+                return Enumerable.Empty<ReportDonutChartLegendItemElement>();
+
+            return segments.Select(s => new ReportDonutChartLegendItemElement(s.Label, s.Color, s.Value.ToString(), s.Value / total));
+        }
 
         private static ReportDonutChartDonutElement defaultDonutSelector(IEnumerable<Segment> segments)
             => new ReportDonutChartDonutElement(segments.ToImmutableList());
@@ -139,7 +146,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
             && donutChartElement.donutElement.Equals(donutElement)
             && donutChartElement.legend.SequenceEqual(legend);
 
-        public struct Segment
+        public class Segment
         {
             public string Color { get; }
             public string Label { get; }
