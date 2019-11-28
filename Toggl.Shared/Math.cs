@@ -23,7 +23,9 @@ namespace Toggl.Shared
         public static double ToPositiveAngle(this double angle)
         {
             while (angle < 0)
+            {
                 angle += FullCircle;
+            }
 
             return angle;
         }
