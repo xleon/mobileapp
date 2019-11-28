@@ -113,10 +113,13 @@ namespace Toggl.iOS.Autocomplete
                     continue;
 
                 var previousTextSpan = (TextSpan)previousSpan;
-                if (previousTextSpan.Text.Contains(QuerySymbols.ProjectsString)
-                    || previousTextSpan.Text.Contains(QuerySymbols.TagsString))
+                var previousTextSpanContainsQuerySymbol =
+                    previousTextSpan.Text.Contains(QuerySymbols.ProjectsString)
+                    || previousTextSpan.Text.Contains(QuerySymbols.TagsString);
+
+                if (previousTextSpanContainsQuerySymbol
+                    && spans[i] is QueryTextSpan currentSpan)
                 {
-                    var currentSpan = (QueryTextSpan)spans[i];
                     var newText = previousTextSpan.Text + currentSpan.Text;
                     spans[i] = new QueryTextSpan(newText, newText.Length);
                     spans.Remove(spans[i - 1]);
@@ -126,7 +129,7 @@ namespace Toggl.iOS.Autocomplete
             return spans;
         }
 
-        public static NSAttributedString AsAttributedTextAndCursorPosition(this TextFieldInfo self)
+        public static NSAttributedString AsAttributedText(this TextFieldInfo self)
         {
             var attributedText = new NSMutableAttributedString("", createBasicAttributes());
 
@@ -137,6 +140,25 @@ namespace Toggl.iOS.Autocomplete
             }
 
             return attributedText;
+        }
+
+        public static NSRange CursorPosition(this TextFieldInfo self)
+        {
+            nint location = 0;
+
+            foreach (var span in self.Spans)
+            {
+                if (span is QueryTextSpan querySpan)
+                {
+                    location += querySpan.CursorPosition;
+                    break;
+                }
+
+                var spanString = span.AsAttributedString();
+                location += spanString.Length;
+            }
+
+            return new NSRange(location, 0);
         }
 
         private static NSMutableAttributedString AsAttributedString(this ISpan span)

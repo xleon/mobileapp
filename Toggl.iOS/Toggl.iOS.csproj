@@ -1266,6 +1266,10 @@
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x.png" />
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata.png" />
+    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\stop.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop.png" />
     <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop%403x.png" />
@@ -1468,6 +1472,7 @@
     <InterfaceDefinition Include="Cells\Common\SelectorCell.xib" />
     <InterfaceDefinition Include="ViewControllers\Calendar\CalendarViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\CalendarWeeklyViewDayCollectionViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\January2020CampaignViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -2074,6 +2079,10 @@
     <Compile Include="Extensions\TextViewExtensions.cs" />
     <Compile Include="Analytics\WidgetTrackingEventExtensions.cs" />
     <Compile Include="Analytics\WidgetErrorTrackingEvent.cs" />
+    <Compile Include="ViewControllers\January2020CampaignViewController.cs" />
+    <Compile Include="ViewControllers\January2020CampaignViewController.designer.cs">
+      <DependentUpon>January2020CampaignViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">

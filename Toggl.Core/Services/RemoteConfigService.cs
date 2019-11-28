@@ -19,5 +19,8 @@ namespace Toggl.Core.Services
 
         public PushNotificationsConfiguration GetPushNotificationsConfiguration()
             => keyValueStorage.ReadStoredPushNotificationsConfiguration();
+
+        public January2020CampaignConfiguration GetJanuary2020CampaignConfiguration()
+            => keyValueStorage.ReadJanuary2020CampaignConfiguration();
     }
 }

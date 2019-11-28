@@ -19,7 +19,8 @@ namespace Toggl.Droid.Presentation
             typeof(SelectColorViewModel),
             typeof(SelectDefaultWorkspaceViewModel),
             typeof(TermsOfServiceViewModel),
-            typeof(UpcomingEventsNotificationSettingsViewModel)
+            typeof(UpcomingEventsNotificationSettingsViewModel),
+            typeof(January2020CampaignViewModel)
         };
 
         protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView)
@@ -58,6 +59,9 @@ namespace Toggl.Droid.Presentation
 
                 case UpcomingEventsNotificationSettingsViewModel _:
                     return new UpcomingEventsNotificationSettingsFragment();
+                
+                case January2020CampaignViewModel _:
+                    return new January2020CampaignFragment();
             }
 
             throw new InvalidOperationException($"There's no reactive dialog implementation for {viewModel.GetType().Name}");

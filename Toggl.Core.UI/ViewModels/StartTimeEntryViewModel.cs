@@ -94,7 +94,6 @@ namespace Toggl.Core.UI.ViewModels
         public InputAction<AutocompleteSuggestion> SelectSuggestion { get; }
         public InputAction<TimeSpan> SetRunningTime { get; }
         public InputAction<ProjectSuggestion> ToggleTasks { get; }
-        public InputAction<IImmutableList<ISpan>> SetTextSpans { get; }
 
         public IObservable<IImmutableList<SectionModel<string, AutocompleteSuggestion>>> Suggestions { get; }
         public IObservable<string> DisplayedTime { get; }
@@ -150,7 +149,6 @@ namespace Toggl.Core.UI.ViewModels
             SelectSuggestion = rxActionFactory.FromAsync<AutocompleteSuggestion>(selectSuggestion);
             SetRunningTime = rxActionFactory.FromAction<TimeSpan>(setRunningTime);
             ToggleTasks = rxActionFactory.FromAction<ProjectSuggestion>(toggleTasks);
-            SetTextSpans = rxActionFactory.FromAction<IImmutableList<ISpan>>(setTextSpans);
 
             var queryByType = queryByTypeSubject
                 .AsObservable()
@@ -271,7 +269,7 @@ namespace Toggl.Core.UI.ViewModels
             return true;
         }
 
-        private void setTextSpans(IImmutableList<ISpan> spans)
+        public void SetTextSpans(IImmutableList<ISpan> spans)
         {
             textFieldInfo.Accept(textFieldInfo.Value.ReplaceSpans(spans));
         }

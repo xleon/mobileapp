@@ -898,18 +898,6 @@ namespace Toggl.Shared {
             }
         }
 
-        public static string Failure {
-            get {
-                return ResourceManager.GetString("Failure", resourceCulture);
-            }
-        }
-
-        public static string Success {
-            get {
-                return ResourceManager.GetString("Success", resourceCulture);
-            }
-        }
-
         public static string EntryDeleted {
             get {
                 return ResourceManager.GetString("EntryDeleted", resourceCulture);
@@ -2449,6 +2437,36 @@ namespace Toggl.Shared {
         public static string LoginToShowSuggestions {
             get {
                 return ResourceManager.GetString("LoginToShowSuggestions", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignTitle {
+            get {
+                return ResourceManager.GetString("January2020CampaignTitle", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignPositiveButtonText {
+            get {
+                return ResourceManager.GetString("January2020CampaignPositiveButtonText", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignNegativeButtonText {
+            get {
+                return ResourceManager.GetString("January2020CampaignNegativeButtonText", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignTextVersionA {
+            get {
+                return ResourceManager.GetString("January2020CampaignTextVersionA", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignTextVersionB {
+            get {
+                return ResourceManager.GetString("January2020CampaignTextVersionB", resourceCulture);
             }
         }
     }
