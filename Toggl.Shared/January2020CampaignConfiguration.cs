@@ -8,7 +8,7 @@ namespace Toggl.Shared
         {
             None,
             A,
-            B
+            B,
         }
 
         public AvailableOption Option { get; }
