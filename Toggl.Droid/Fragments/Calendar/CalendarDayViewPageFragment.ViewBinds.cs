@@ -1,8 +1,6 @@
-//Todo: Remove this
-using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-//Todo: Re-add this using AndroidX.RecyclerView.Widget;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Views.Calendar;
 
