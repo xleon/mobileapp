@@ -23,9 +23,11 @@ namespace Toggl.Droid.Views
     {
         private const float fullCircle = 360f;
         private const float donutInnerCircleFactor = 0.6f;
+        const float angleRightToTopCorrection = -90;
 
         private Paint paint = new Paint() { AntiAlias = true };
         private Color backgroundColor;
+        private RectF circle = new RectF();
 
         private ReportDonutChartDonutElement data;
 
@@ -64,8 +66,6 @@ namespace Toggl.Droid.Views
 
         protected override void OnDraw(Canvas canvas)
         {
-            const float angleRightToTopCorrection = -90;
-
             if (data == null)
                 return;
 
@@ -73,12 +73,11 @@ namespace Toggl.Droid.Views
 
             var angleOffset = angleRightToTopCorrection;
 
-            using (var circle = new RectF(0, 0, Width, Height))
+            circle.Set(0, 0, Width, Height);
+
+            foreach (var segment in data.Segments)
             {
-                foreach (var segment in data.Segments)
-                {
-                    drawSlice(canvas, circle, segment, totalValue, ref angleOffset);
-                }
+                drawSlice(canvas, circle, segment, totalValue, ref angleOffset);
             }
 
             drawInnerCircle(canvas);
