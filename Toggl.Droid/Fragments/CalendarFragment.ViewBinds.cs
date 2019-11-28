@@ -12,9 +12,8 @@ namespace Toggl.Droid.Fragments
 {
     public partial class CalendarFragment
     {
-        protected override int LayoutId => Resource.Layout.CalendarFragment;
-
         protected override View LoadingPlaceholderView { get; set; }
+        protected override int LayoutId => Resource.Layout.CalendarFragment;
         
         private TextView headerTimeEntriesDurationTextView;
         private TextView headerDateTextView;
@@ -40,6 +39,8 @@ namespace Toggl.Droid.Fragments
             }
             
             toolbar = view.FindViewById<Toolbar>(Resource.Id.Toolbar);
+
+            LoadingPlaceholderView = view.FindViewById(Resource.Id.TabLoadingIndicator);
         }
     }
 }

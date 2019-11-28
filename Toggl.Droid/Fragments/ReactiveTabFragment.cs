@@ -39,7 +39,7 @@ namespace Toggl.Droid.Fragments
 
         public sealed override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            var view = inflater.Inflate(Resource.Layout.MainFragment, container, false);
+            var view = inflater.Inflate(LayoutId, container, false);
 
             InitializeViews(view);
             SetupToolbar(view);

@@ -175,20 +175,13 @@ namespace Toggl.Droid.Activities
             if (fragments.TryGetValue(itemId, out var fragment))
                 return fragment;
 
-            switch (itemId)
+            return fragments[itemId] = itemId switch
             {
-                case Resource.Id.MainTabTimerItem:
-                    return new MainFragment(ViewModel);
-                case Resource.Id.MainTabReportsItem:
-                    return new ReportsFragment(ViewModel);
-                case Resource.Id.MainTabCalendarItem:
-                    return new CalendarFragment(ViewModel);
-                default:
-                    throw new ArgumentException($"Unexpected item id {itemId}");
-            }
-        
-            fragments[itemId] = fragment;
-            return fragments[itemId];
+                Resource.Id.MainTabTimerItem => new MainFragment(ViewModel),
+                Resource.Id.MainTabReportsItem => new ReportsFragment(ViewModel),
+                Resource.Id.MainTabCalendarItem => new CalendarFragment(ViewModel),
+                _ => throw new ArgumentException($"Unexpected item id {itemId}")
+            };
         }
 
         private TTabViewModel getTabViewModel<TTabViewModel>()
