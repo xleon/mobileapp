@@ -1,18 +1,18 @@
 ﻿using System;
 using Toggl.Networking.Exceptions;
+using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
     public sealed class ReportErrorElement : IReportElement
     {
-        enum ErrorType
+        public enum ErrorType
         {
             ConnectionError,
             DataError
         }
 
-        private ErrorType errorType;
-
+        public ErrorType Type { get; private set; }
         public string Message { get; private set; }
 
         public ReportErrorElement(Exception ex)
@@ -21,19 +21,19 @@ namespace Toggl.Core.UI.ViewModels.Reports
             switch (ex)
             {
                 case OfflineException _:
-                    Message = "Your internet connection ded.";
-                    errorType = ErrorType.ConnectionError;
+                    Message = Resources.ReportErrorOffline;
+                    Type = ErrorType.ConnectionError;
                     break;
 
                 default:
-                    Message = "Ooops! Something's wrong. Or is it?";
-                    errorType = ErrorType.DataError;
+                    Message = Resources.ReportErrorGeneric;
+                    Type = ErrorType.DataError;
                     break;
             }
         }
 
         public bool Equals(IReportElement other)
             => other is ReportErrorElement errorElement
-            && errorElement.errorType == errorType;
+            && errorElement.Type == Type;
     }
 }

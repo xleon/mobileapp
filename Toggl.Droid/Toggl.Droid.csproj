@@ -622,7 +622,9 @@
     <Compile Include="ViewHolders\Reports\ReportDonutChartLegendItemViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportDonutChartDonutViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportElementViewHolder.cs" />
+    <Compile Include="ViewHolders\Reports\ReportErrorElementViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportEmptyElementViewHolder.cs" />
+    <Compile Include="ViewHolders\Reports\ReportNoDataElementViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportSummaryViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportWorkspaceNameViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\SuggestionRecyclerViewHolder.cs" />
@@ -941,6 +943,8 @@
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportWorkspaceNameElement.axml" />
     <AndroidResource Include="Resources\layout\ReportEmptyElement.axml" />
+    <AndroidResource Include="Resources\layout\ReportNoDataElement.axml" />
+    <AndroidResource Include="Resources\layout\ReportErrorElement.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
     <AndroidResource Include="Resources\layout\SuggestionsWidget.axml" />
     <AndroidResource Include="Resources\layout\SuggestionsWidgetItem.axml" />

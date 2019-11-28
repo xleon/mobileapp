@@ -2451,6 +2451,18 @@ namespace Toggl.Shared {
                 return ResourceManager.GetString("LoginToShowSuggestions", resourceCulture);
             }
         }
+
+        public static string ReportErrorOffline {
+            get {
+                return ResourceManager.GetString("ReportErrorOffline", resourceCulture);
+            }
+        }
+
+        public static string ReportErrorGeneric {
+            get {
+                return ResourceManager.GetString("ReportErrorGeneric", resourceCulture);
+            }
+        }
         
         public static string January2020CampaignTitle {
             get {

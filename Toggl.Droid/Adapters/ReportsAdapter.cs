@@ -5,12 +5,13 @@ using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.ViewHolders;
 using Toggl.Droid.ViewHolders.Reports;
+using static Toggl.Droid.Fragments.ReportsAdapter.ViewType;
 
 namespace Toggl.Droid.Fragments
 {
     public class ReportsAdapter : BaseRecyclerAdapter<IReportElement>
     {
-        private enum ViewType
+        public enum ViewType
         {
             WorkspaceName,
             Summary,
@@ -32,47 +33,34 @@ namespace Toggl.Droid.Fragments
 
         public override int GetItemViewType(int position)
         {
-            switch (Items[position])
+            var itemType = Items[position] switch
             {
-                case ReportWorkspaceNameElement _:
-                    return (int)ViewType.WorkspaceName;
+                ReportWorkspaceNameElement _ => WorkspaceName,
+                ReportSummaryElement _ => Summary,
+                ReportBarChartElement _ => BarChart,
+                ReportDonutChartDonutElement _ => Donut,
+                ReportDonutChartLegendItemElement _ => DonutLegendItem,
+                ReportNoDataElement _ => NoData,
+                ReportErrorElement _ => Error,
+                _ => throw new InvalidOperationException($"Invalid Report Segment View Type for position {position}."),
+            };
 
-                case ReportSummaryElement _:
-                    return (int)ViewType.Summary;
-
-                case ReportBarChartElement _:
-                    return (int)ViewType.BarChart;
-
-                case ReportDonutChartDonutElement _:
-                    return (int)ViewType.Donut;
-
-                case ReportDonutChartLegendItemElement _:
-                    return (int)ViewType.DonutLegendItem;
-
-                case ReportNoDataElement _:
-                    return (int)ViewType.NoData;
-
-                case ReportErrorElement _:
-                    return (int)ViewType.Error;
-
-                default:
-                    throw new InvalidOperationException($"Invalid Report Segment View Type for position {position}.");
-            }
+            return (int)itemType;
         }
 
         protected override BaseRecyclerViewHolder<IReportElement> CreateViewHolder(ViewGroup parent, LayoutInflater inflater, int viewType)
         {
             switch ((ViewType)viewType)
             {
-                case ViewType.WorkspaceName:
+                case WorkspaceName:
                     var workpaceNameCell = inflater.Inflate(Resource.Layout.ReportWorkspaceNameElement, parent, false);
                     return new ReportWorkspaceNameViewHolder(workpaceNameCell);
 
-                case ViewType.Summary:
+                case Summary:
                     var summaryCell = inflater.Inflate(Resource.Layout.ReportSummaryElement, parent, false);
                     return new ReportSummaryViewHolder(summaryCell);
 
-                case ViewType.BarChart:
+                case BarChart:
                     var barChartCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
                     return new ReportEmptyElementViewHolder(barChartCell);
 
@@ -84,13 +72,13 @@ namespace Toggl.Droid.Fragments
                     var donutLegendItemCell = inflater.Inflate(Resource.Layout.ReportDonutLegendItem, parent, false);
                     return new ReportDonutChartLegendItemViewHolder(donutLegendItemCell);
 
-                case ViewType.NoData:
-                    var noDataCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
-                    return new ReportEmptyElementViewHolder(noDataCell);
+                case NoData:
+                    var noDataCell = inflater.Inflate(Resource.Layout.ReportNoDataElement, parent, false);
+                    return new ReportNoDataElementViewHolder(noDataCell);
 
-                case ViewType.Error:
-                    var errorCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
-                    return new ReportEmptyElementViewHolder(errorCell);
+                case Error:
+                    var errorCell = inflater.Inflate(Resource.Layout.ReportErrorElement, parent, false);
+                    return new ReportErrorElementViewHolder(errorCell);
 
                 default:
                     throw new InvalidOperationException("Can't create a viewholder for the given ViewType.");

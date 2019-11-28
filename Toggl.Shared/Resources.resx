@@ -1331,6 +1331,12 @@ to project members</value>
     <data name="LoginToShowSuggestions" xml:space="preserve">
         <value>Log in to show suggestions</value>
     </data>
+    <data name="ReportErrorOffline" xml:space="preserve">
+        <value>Network connection failed</value>
+    </data>
+    <data name="ReportErrorGeneric" xml:space="preserve">
+        <value>Something went wrong</value>
+    </data>
     <data name="January2020CampaignTitle" xml:space="preserve">
         <value>Save 20% on Annual Plans</value>
         <comment>@Invariant</comment>
