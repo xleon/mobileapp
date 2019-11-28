@@ -56,9 +56,9 @@ namespace Toggl.iOS.ViewSources
         {
             switch (elements[(int)indexPath.Item])
             {
-                case ReportSummaryElement _:
+                case ReportSummaryElement element:
                     var summaryCell = collectionView.DequeueReusableCell(summaryCellIdentifier, indexPath) as ReportsSummaryCollectionViewCell;
-                    // TODO: populate cell
+                    summaryCell.SetElement(element);
                     return summaryCell;
                 case ReportBarChartElement _:
                     var barChartCell = collectionView.DequeueReusableCell(barChartCellIdentifier, indexPath) as ReportsBarChartCollectionViewCell;
