@@ -2,6 +2,7 @@ using Foundation;
 using Toggl.iOS.Shared.Models;
 using Toggl.iOS.Shared.Extensions;
 using Toggl.Shared.Models;
+using System;
 
 namespace Toggl.iOS.Shared
 {
@@ -22,6 +23,8 @@ namespace Toggl.iOS.Shared
         private const string timeEntryDuration = "Duration";
         private const string timeEntryServerDeletedAt = "ServerDeletedAt";
         private const string timeEntryAt = "At";
+
+        private IDisposable currentTimeEntryObservingDisposable;
 
         public void SetRunningTimeEntry(ITimeEntry timeEntry, string projectName = "", string projectColor = "", string taskName = "", string clientName = "")
         {
@@ -71,6 +74,26 @@ namespace Toggl.iOS.Shared
         {
             var dict = userDefaults.ValueForKey(new NSString(runningTimeEntry)) as NSDictionary;
             return getTimeEntryViewModel(dict);
+        }
+
+        public void ObserveChangesToCurrentRunningTimeEntry(Action<TimeEntryViewModel> onUpdate)
+        {
+            currentTimeEntryObservingDisposable?.Dispose();
+            currentTimeEntryObservingDisposable =
+                userDefaults.AddObserver(
+                    runningTimeEntry,
+                    NSKeyValueObservingOptions.New,
+                    change =>
+                    {
+                        var dict = change.NewValue as NSDictionary;
+                        onUpdate(getTimeEntryViewModel(dict));
+                    });
+        }
+
+        public void StopObservingChangesToCurrentRunningTimeEntry()
+        {
+            currentTimeEntryObservingDisposable?.Dispose();
+            currentTimeEntryObservingDisposable = null;
         }
 
         private ITimeEntry getTimeEntry(NSDictionary dict)

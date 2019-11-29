@@ -547,12 +547,6 @@
     <data name="ArchivedProjectDecorator" xml:space="preserve">
         <value>(アーカイブされました)</value>
     </data>
-    <data name="Failure" xml:space="preserve">
-        <value>失敗</value>
-    </data>
-    <data name="Success" xml:space="preserve">
-        <value>成功</value>
-    </data>
     <data name="EntryDeleted" xml:space="preserve">
         <value>記録は削除されました</value>
     </data>

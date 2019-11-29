@@ -31,6 +31,8 @@ using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Services;
 using System.ComponentModel;
+using System.Globalization;
+using System.Threading;
 using static Toggl.Core.Analytics.ContinueTimeEntryMode;
 using static Toggl.Core.Analytics.ContinueTimeEntryOrigin;
 
@@ -61,6 +63,8 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IAccessibilityService accessibilityService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IWidgetsService widgetsService;
+        private readonly IRemoteConfigService remoteConfigService;
+        private readonly ILastTimeUsageStorage lastTimeUsageStorage;
 
         private readonly RatingViewExperiment ratingViewExperiment;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
@@ -119,7 +123,8 @@ namespace Toggl.Core.UI.ViewModels
             IPermissionsChecker permissionsChecker,
             IBackgroundService backgroundService,
             IPlatformInfo platformInfo,
-            IWidgetsService widgetsService)
+            IWidgetsService widgetsService,
+            ILastTimeUsageStorage lastTimeUsageStorage)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -140,6 +145,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
             Ensure.Argument.IsNotNull(widgetsService, nameof(widgetsService));
+            Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
 
             this.dataSource = dataSource;
             this.syncManager = syncManager;
@@ -152,6 +158,8 @@ namespace Toggl.Core.UI.ViewModels
             this.accessibilityService = accessibilityService;
             this.accessRestrictionStorage = accessRestrictionStorage;
             this.widgetsService = widgetsService;
+            this.remoteConfigService = remoteConfigService;
+            this.lastTimeUsageStorage = lastTimeUsageStorage;
 
             TimeService = timeService;
             OnboardingStorage = onboardingStorage;
@@ -360,6 +368,11 @@ namespace Toggl.Core.UI.ViewModels
             hideRatingViewIfStillVisibleAfterDelay();
             await handleNoWorkspaceState();
             handleNoDefaultWorkspaceState();
+
+            if (await shouldShowJanuary2020Campaign())
+            {
+                await navigate<January2020CampaignViewModel>();
+            }
         }
 
         private void hideRatingViewIfStillVisibleAfterDelay()
@@ -389,6 +402,30 @@ namespace Toggl.Core.UI.ViewModels
                 await Navigate<SelectDefaultWorkspaceViewModel, Unit>();
                 noDefaultWorkspaceViewPresented = false;
             }
+        }
+
+        private async Task<bool> shouldShowJanuary2020Campaign()
+        {
+            var isTheAppShownInJapanese = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.Equals("JA", StringComparison.InvariantCultureIgnoreCase);
+            if (isTheAppShownInJapanese)
+                return false;
+
+            var isDisabled = remoteConfigService.GetJanuary2020CampaignConfiguration().Option == January2020CampaignConfiguration.AvailableOption.None;
+            if (isDisabled)
+                return false;
+
+            var wasAlreadyShown = OnboardingStorage.WasJanuary2020CampaignShown();
+            if (wasAlreadyShown)
+                return false;
+
+            if (!lastTimeUsageStorage.LastLogin.HasValue)
+                return false;
+
+            var isNotANewUser =
+                TimeService.CurrentDateTime - lastTimeUsageStorage.LastLogin.Value > TimeSpan.FromHours(48)
+                    && await TimeEntriesCount.FirstAsync() >= 2;
+
+            return isNotANewUser;
         }
 
         private Task openSettings()

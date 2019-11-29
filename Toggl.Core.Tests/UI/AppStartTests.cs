@@ -1,11 +1,8 @@
 using FluentAssertions;
 using NSubstitute;
 using System;
-using System.Globalization;
 using System.Reactive.Linq;
 using System.Threading;
-using NSubstitute.ExceptionExtensions;
-using NUnit.Framework;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.Models.Interfaces;
@@ -14,10 +11,8 @@ using Toggl.Core.Sync;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Helper;
 using Toggl.Networking;
-using Toggl.Shared;
 using Toggl.Storage.Settings;
 using Xunit;
-using Xunit.Sdk;
 
 namespace Toggl.Core.Tests.UI
 {
@@ -198,7 +193,7 @@ namespace Toggl.Core.Tests.UI
 
         public sealed class TheLoadLocalizationConfigurationMethod : AppStartTest
         {
-            [Fact, LogIfTooSlow]
+            [Fact, LogIfTooSlow, DiscardCultureChanges]
             public void DoesNotCrashWhenThePlatformInfoReturnsANullCurrentNativeLanguageCode()
             {
                 string nullLanguageCode = null;
@@ -208,9 +203,8 @@ namespace Toggl.Core.Tests.UI
 
                 call.Should().NotThrow();
             }
-
-
-            [Fact, LogIfTooSlow]
+            
+            [Fact, LogIfTooSlow, DiscardCultureChanges]
             public void DoesNotCrashWhenThePlatformInfoReturnsAnInvalidCurrentNativeLanguageCodeWithAnInvalidCulture()
             {
                 string invalidLanguageCode = "ja_US";
@@ -221,7 +215,7 @@ namespace Toggl.Core.Tests.UI
                 call.Should().NotThrow();
             }
 
-            [Fact, LogIfTooSlow]
+            [Fact, LogIfTooSlow, DiscardCultureChanges]
             public void DoesNotCrashWhenThePlatformInfoReturnsAnInvalidCurrentNativeLanguageCodeWithAnInvalidLanguageAndCultureCodes()
             {
                 string invalidLanguageCode = "00-11";
@@ -232,7 +226,7 @@ namespace Toggl.Core.Tests.UI
                 call.Should().NotThrow();
             }
 
-            [Fact, LogIfTooSlow]
+            [Fact, LogIfTooSlow, DiscardCultureChanges]
             public void SetsTheCultureInfoToEnglishWhenWhenThePlatformInfoReturnsAnInvalidCurrentNativeLanguageCodeWithAnInvalidLanguageAndCultureCodes()
             {
                 string invalidLanguageCode = "00_11";
@@ -243,7 +237,7 @@ namespace Toggl.Core.Tests.UI
                 Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.Should().Be("en");
             }
 
-            [Fact, LogIfTooSlow]
+            [Fact, LogIfTooSlow, DiscardCultureChanges]
             public void SetsTheCultureInfoToEnglishWhenThePlatformInfoReturnsANullCurrentNativeLanguageCode()
             {
                 string nullLanguageCode = null;
@@ -254,7 +248,7 @@ namespace Toggl.Core.Tests.UI
                 Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.Should().Be("en");
             }
 
-            [Fact, LogIfTooSlow]
+            [Fact, LogIfTooSlow, DiscardCultureChanges]
             public void SetsTheCultureInfoToEnglishWhenThePlatformInfoReturnsAnEmptyCurrentNativeLanguageCode()
             {
                 string nullLanguageCode = " ";
@@ -265,7 +259,7 @@ namespace Toggl.Core.Tests.UI
                 Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.Should().Be("en");
             }
 
-            [Fact, LogIfTooSlow]
+            [Fact, LogIfTooSlow, DiscardCultureChanges]
             public void SetsTheCultureInfoToTheClosestOneWhenThePlatformInfoReturnsAnInvalidCurrentNativeLanguageCode()
             {
                 string invalidLanguageCode = "ja_US";
@@ -276,7 +270,7 @@ namespace Toggl.Core.Tests.UI
                 Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.Should().Be("ja");
             }
 
-            [Fact, LogIfTooSlow]
+            [Fact, LogIfTooSlow, DiscardCultureChanges]
             public void SetsTheCultureInfoProperlyWhenThePlatformInfoReturnsAValidCurrentNativeLanguageCode()
             {
                 string invalidLanguageCode = "ja_JP";
@@ -287,7 +281,7 @@ namespace Toggl.Core.Tests.UI
                 Thread.CurrentThread.CurrentCulture.Name.Should().Be("ja-JP");
             }
 
-            [Fact, LogIfTooSlow]
+            [Fact, LogIfTooSlow, DiscardCultureChanges]
             public void SetsTheDateFormatCultureInfoProperlyWhenThePlatformInfoReturnsASupportedCurrentNativeLanguageCode()
             {
                 string supportedLanguageCode = "en";
@@ -298,7 +292,7 @@ namespace Toggl.Core.Tests.UI
                 DateFormatCultureInfo.CurrentCulture.Name.Should().Be("en");
             }
 
-            [Fact, LogIfTooSlow]
+            [Fact, LogIfTooSlow, DiscardCultureChanges]
             public void SetsTheDateFormatCultureInfoProperlyWhenThePlatformInfoReturnsAnUnsupportedCurrentNativeLanguageCode()
             {
                 string unsupportedLanguageCode = "xx_XX";

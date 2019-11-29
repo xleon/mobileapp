@@ -34,7 +34,7 @@ namespace Toggl.Core.Sync.States.Push
             => exception =>
             {
                 typeof(T).ToSyncErrorAnalyticsEvent(AnalyticsService).Track($"{operation}:{exception.Message}");
-                AnalyticsService.EntitySyncStatus.Track(entity.GetSafeTypeName(), $"{operation}:{Resources.Failure}");
+                AnalyticsService.EntitySyncStatus.Track(entity.GetSafeTypeName(), $"{operation}:Failure");
 
                 if (exception is AggregateException aggregate)
                 {

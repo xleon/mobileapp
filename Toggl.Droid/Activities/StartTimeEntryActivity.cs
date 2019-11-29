@@ -110,7 +110,7 @@ namespace Toggl.Droid.Activities
                 .SubscribeOn(ThreadPoolScheduler.Instance)
                 .Throttle(typingThrottleDuration)
                 .Select(text => text.AsImmutableSpans(descriptionField.SelectionStart))
-                .Subscribe(ViewModel.SetTextSpans.Inputs)
+                .Subscribe(ViewModel.SetTextSpans)
                 .DisposedBy(DisposeBag);
         }
 

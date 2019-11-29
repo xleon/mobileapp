@@ -55,6 +55,13 @@ namespace Toggl.Droid.Services
                 remoteConfig.GetBoolean(RegisterPushNotificationsTokenWithServerParameter),
                 remoteConfig.GetBoolean(HandlePushNotificationsParameter));
         }
+
+        public January2020CampaignConfiguration ExtractJanuary2020CampaignConfig()
+        {
+            var remoteConfig = FirebaseRemoteConfig.Instance;
+            return new January2020CampaignConfiguration(
+                remoteConfig.GetString(January2020CampaignOption));
+        }
     }
 
     public class RemoteConfigCompletionHandler : Java.Lang.Object, IOnCompleteListener

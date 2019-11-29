@@ -546,12 +546,6 @@ Start the timer and your most used time entries will appear here.</value>
     <data name="ArchivedProjectDecorator" xml:space="preserve">
         <value>(archived)</value>
     </data>
-    <data name="Failure" xml:space="preserve">
-        <value>Failure</value>
-    </data>
-    <data name="Success" xml:space="preserve">
-        <value>Success</value>
-    </data>
     <data name="EntryDeleted" xml:space="preserve">
         <value>Time entry was deleted</value>
     </data>
@@ -1330,5 +1324,25 @@ to project members</value>
     </data>
     <data name="LoginToShowSuggestions" xml:space="preserve">
         <value>Log in to show suggestions</value>
+    </data>
+    <data name="January2020CampaignTitle" xml:space="preserve">
+        <value>Save 20% on Annual Plans</value>
+        <comment>@Invariant</comment>
+    </data>
+    <data name="January2020CampaignPositiveButtonText" xml:space="preserve">
+        <value>Learn more</value>
+        <comment>@Invariant</comment>
+    </data>
+    <data name="January2020CampaignNegativeButtonText" xml:space="preserve">
+        <value>Dismiss</value>
+        <comment>@Invariant</comment>
+    </data>
+    <data name="January2020CampaignTextVersionA" xml:space="preserve">
+        <value>Upgrade to any annual plan and pocket some extra cash just in time for the holiday season!</value>
+        <comment>@Invariant</comment>
+    </data>
+    <data name="January2020CampaignTextVersionB" xml:space="preserve">
+        <value>Psst... we've got an early gift for you! Sign up for any annual plan between now and January 17th and get 20% off.</value>
+        <comment>@Invariant</comment>
     </data>
 </root>
