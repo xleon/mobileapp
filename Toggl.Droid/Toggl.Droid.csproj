@@ -915,6 +915,8 @@
     <AndroidResource Include="Resources\drawable\Splash.xml" />
     <AndroidResource Include="Resources\drawable\text_placeholder.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
+    <AndroidResource Include="Resources\layout\CalendarDayViewPageFragmentContextualMenu.axml" />
+    <AndroidResource Include="Resources\layout\CalendarDayViewPageFragmentDayView.axml" />
     <AndroidResource Include="Resources\layout\January2020CampaignFragment.axml" />
     <AndroidResource Include="Resources\layout\WidgetLoading.axml" />
     <AndroidResource Include="Resources\layout\CalendarDayFragmentPage.axml" />
