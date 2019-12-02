@@ -255,7 +255,7 @@ namespace Toggl.iOS.ViewControllers
             var manualModeImage = UIImage.FromBundle("manualIcon");
             ViewModel.IsInManualMode
                 .Select(isInManualMode => isInManualMode ? manualModeImage : trackModeImage)
-                .Subscribe(image => StartTimeEntryButton.SetImage(image, UIControlState.Normal))
+                .Subscribe(image => StartTimeEntryButton.Image = image)
                 .DisposedBy(DisposeBag);
 
             //The sync failures button
@@ -611,7 +611,6 @@ namespace Toggl.iOS.ViewControllers
 
             //Hide play button for later animating it
             StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f);
-            StartTimeEntryButton.AdjustsImageWhenHighlighted = false;
 
             //Prepare Navigation bar images
             settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);
