@@ -867,7 +867,10 @@
         <value>送信する</value>
     </data>
     <data name="FeedbackFieldPlaceholder" xml:space="preserve">
-        <value>Togglはいかがですか？感想や質問をお聞かせください</value>
+        <value>Togglはいかがですか？感想や質問をお聞かせください
+
+追伸　カスタマーサポートは現在英語だけで運営しております。ご不便をかけて申し訳ございません。
+        </value>
     </data>
     <data name="FeedbackHint" xml:space="preserve">
         <value>メッセージ</value>
