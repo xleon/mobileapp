@@ -40,9 +40,7 @@ namespace Toggl.iOS.ViewControllers
             ((ReactiveNavigationController)NavigationController).SetBackgroundColor(ColorAssets.TableBackground);
 
             NavigationItem.RightBarButtonItem = ReactiveNavigationController.CreateSystemItem(
-                UIBarButtonSystemItem.Done,
-                () => ViewModel.Close()
-            );
+                Resources.Done, UIBarButtonItemStyle.Done, ViewModel.Close);
             NavigationItem.BackBarButtonItem.Title = Resources.Back;
 
             var source = new SettingsTableViewSource(tableView);
