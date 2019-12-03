@@ -2,6 +2,7 @@
 using System.Linq;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
@@ -63,7 +64,7 @@ namespace Toggl.iOS.ViewControllers
             viewController.NavigationItem.BackBarButtonItem = new UIBarButtonItem();
 
             var backButton = new UIBarButtonItem(
-                "Back",
+                Resources.Back,
                  UIBarButtonItemStyle.Done,
                 (sender, args) => { viewController.NavigationController.PopViewController(true); }
             );

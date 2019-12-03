@@ -43,6 +43,7 @@ namespace Toggl.iOS.ViewControllers
                 UIBarButtonSystemItem.Done,
                 () => ViewModel.Close()
             );
+            NavigationItem.BackBarButtonItem.Title = Resources.Back;
 
             var source = new SettingsTableViewSource(tableView);
             tableView.Source = source;
