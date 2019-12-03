@@ -17,6 +17,7 @@ using Toggl.Core.UI.Calendar;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using Constants = Toggl.Core.Helper.Constants;
 using Math = System.Math;
 
@@ -32,11 +33,13 @@ namespace Toggl.Droid.Views.Calendar
         
         private readonly ISubject<CalendarItem?> calendarItemTappedSubject = new Subject<CalendarItem?>();
         private readonly ISubject<DateTimeOffset> emptySpansTouchedObservable = new Subject<DateTimeOffset>();
-        private readonly ISubject<int> scrollOffsetSubject = new Subject<int>();
+        private readonly BehaviorSubject<int> scrollOffsetSubject = new BehaviorSubject<int>(0);
         private readonly RectF tapCheckRectF = new RectF();
         private readonly TimeSpan defaultDuration = TimeSpan.FromMinutes(30);
 
+        private BehaviorSubject<int> hourHeightSubject;
         private GestureDetector gestureDetector;
+        private ScaleGestureDetector scaleGestureDetector;
         private OverScroller scroller;
         private Handler handler;
         private ITimeService timeService;
@@ -45,17 +48,21 @@ namespace Toggl.Droid.Views.Calendar
         private Paint currentHourPaint;
         private Vibrator hapticFeedbackProvider;
         private bool shouldDrawCurrentHourIndicator = false;
-        private int scrollOffset;
         private bool isScrolling;
         private bool flingWasCalled;
         private float availableWidth;
-        private int hourHeight;
-        private int maxHeight;
+        private int baseHourHeight;
+        private int maxHourHeight;
+
+        private int hourHeight => hourHeightSubject.Value;
+        private int scrollOffset => scrollOffsetSubject.Value;
+        private int maxHeight => hourHeight * hoursPerDay;
 
         private ImmutableList<CalendarItem> originalCalendarItems = ImmutableList<CalendarItem>.Empty;
+
         private ImmutableList<CalendarItem> calendarItems = ImmutableList<CalendarItem>.Empty;
         private ImmutableList<CalendarItemRectAttributes> calendarItemLayoutAttributes = ImmutableList<CalendarItemRectAttributes>.Empty;
-        
+
         public IObservable<CalendarItem?> CalendarItemTappedObservable
             => calendarItemTappedSubject.AsObservable();
 
@@ -64,6 +71,9 @@ namespace Toggl.Droid.Views.Calendar
 
         public IObservable<int> ScrollOffsetObservable
             => scrollOffsetSubject.AsObservable();
+
+        public IObservable<int> HourHeight
+            => hourHeightSubject.AsObservable();
 
         #region Constructors
 
@@ -95,6 +105,10 @@ namespace Toggl.Droid.Views.Calendar
 
         private void init()
         {
+            baseHourHeight = 56.DpToPixels(Context);
+            hourHeightSubject = new BehaviorSubject<int>(baseHourHeight);
+            maxHourHeight = 112.DpToPixels(Context);
+
             timeService = AndroidDependencyContainer.Instance.TimeService;
             calendarLayoutCalculator = new CalendarLayoutCalculator(timeService);
             hapticFeedbackProvider = (Vibrator)Context.GetSystemService(Context.VibratorService);
@@ -103,12 +117,13 @@ namespace Toggl.Droid.Views.Calendar
                 onLongPress,
                 scrollView,
                 flingView,
-                onSingleTapUp);
+                onSingleTapUp,
+                onScale);
+
             gestureDetector = new GestureDetector(Context, calendarGestureListener);
+            scaleGestureDetector = new ScaleGestureDetector(Context, calendarGestureListener);
             scroller = new OverScroller(Context);
             handler = new Handler(Looper.MainLooper);
-            hourHeight = 56.DpToPixels(Context);
-            maxHeight = hourHeight * 24;
             currentHourPaint = new Paint(PaintFlags.AntiAlias);
             currentHourPaint.Color = Context.SafeGetColor(Resource.Color.currentHourColor);
             currentHourPaint.StrokeWidth = 1.DpToPixels(Context);
@@ -272,29 +287,39 @@ namespace Toggl.Droid.Views.Calendar
             availableWidth = Width - leftMargin;
             if (scrollOffsetIsPastBottomFrame())
             {
-                scrollOffset = maxHeight - Height;
-                scrollOffsetSubject.OnNext(scrollOffset);
+                scrollOffsetSubject.OnNext(maxHeight - Height);
             }
             availableWidth = Width - leftMargin;
-            processBackgroundOnLayout(changed, left, top, right, bottom);
-            processEventsOnLayout(changed, left, top, right, bottom);
+
+            if (!changed)
+                return;
+
+            processBackgroundOnLayout();
+            processEventsOnLayout();
         }
 
         public void SetOffset(int offset)
         {
-            if (offset == scrollOffset) return;
+            if (offset == scrollOffset)
+                return;
             
-            scrollOffset = offset;
+            scrollOffsetSubject.OnNext(offset);
             Invalidate();
         }
 
-        public int GetOffset()
+        public void SetHourHeight(int hourHeight)
         {
-            return scrollOffset;
+            if (hourHeight == this.hourHeight)
+                return;
+
+            hourHeightSubject.OnNext(hourHeight);
+            processBackgroundOnLayout();
+            processEventsOnLayout();
+            Invalidate();
         }
-        
-        partial void processBackgroundOnLayout(bool changed, int left, int top, int right, int bottom);
-        partial void processEventsOnLayout(bool changed, int left, int top, int right, int bottom);
+
+        partial void processBackgroundOnLayout();
+        partial void processEventsOnLayout();
 
         private void continueScroll()
         {
@@ -312,18 +337,9 @@ namespace Toggl.Droid.Views.Calendar
             }
 
             var oldScrollOffset = scrollOffset;
-            scrollOffset = scroller.CurrY;
+            scrollOffsetSubject.OnNext(
+                scroller.CurrY.Clamp(0, maxHeight - Height));
 
-            if (scrollOffset < 0)
-            {
-                scrollOffset = 0;
-            }
-            else if (scrollOffsetIsPastBottomFrame())
-            {
-                scrollOffset = maxHeight - Height;
-            }
-
-            scrollOffsetSubject.OnNext(scrollOffset);
             OnScrollChanged(0, scrollOffset, 0, oldScrollOffset);
 
             handler.Post(continueScroll);
@@ -365,7 +381,40 @@ namespace Toggl.Droid.Views.Calendar
             var newCalendarItem = new CalendarItem("", CalendarItemSource.TimeEntry, startTime, duration, Shared.Resources.NewTimeEntry, CalendarIconKind.None);
             calendarItemTappedSubject.OnNext(newCalendarItem);
         }
-        
+
+        private bool onScale(ScaleGestureDetector detector)
+        {
+            var oldHourHeight = hourHeight;
+            var scaleFactor = detector.ScaleFactor;
+            var newHourHeight =(int)(hourHeight * scaleFactor);
+            hourHeightSubject.OnNext(
+                newHourHeight.Clamp(baseHourHeight, maxHourHeight));
+
+            var hourSizeChanged = oldHourHeight != hourHeight;
+            if (!hourSizeChanged)
+                return true;
+
+            // Since the size of each hour is an integer
+            // we first need to calculate the real scale
+            // factor applied to the calendar
+            var actualScale = (newHourHeight - oldHourHeight) / (((float)newHourHeight + oldHourHeight) / 2);
+
+            // We need to calculate so the calendar feels
+            // like it's zooming in and not sliding below
+            // the user's fingers
+            var focusPointOffset = detector.FocusY * actualScale;
+            var scaledOffset = scrollOffset * actualScale;
+            var newScrollOffset = scrollOffset + scaledOffset + focusPointOffset;
+            scrollOffsetSubject.OnNext(
+                (int)newScrollOffset.Clamp(0, maxHeight - Height));
+            
+            processBackgroundOnLayout();
+            processEventsOnLayout();
+            Invalidate();
+
+            return true;
+        }
+
         private ImmutableList<DateTimeOffset> selectItemsStartAndEndTime()
         {
             var calendarItemsToSelect = calendarItems;
@@ -432,18 +481,10 @@ namespace Toggl.Droid.Views.Calendar
                 return;
 
             var oldScrollOffset = scrollOffset;
-            scrollOffset += (int) deltaY;
+            var newScrollOffset = scrollOffset + (int)deltaY;
+            scrollOffsetSubject.OnNext(
+                newScrollOffset.Clamp(0, maxHeight - Height));
 
-            if (scrollOffset < 0)
-            {
-                scrollOffset = 0;
-            }
-            else if (scrollOffsetIsPastBottomFrame())
-            {
-                scrollOffset = maxHeight - Height;
-            }
-            
-            scrollOffsetSubject.OnNext(scrollOffset);
             OnScrollChanged(0, scrollOffset, 0, oldScrollOffset);
 
             isScrolling = true;
@@ -465,6 +506,10 @@ namespace Toggl.Droid.Views.Calendar
 
         public override bool OnTouchEvent(MotionEvent e)
         {
+            var scaleResult = scaleGestureDetector.OnTouchEvent(e);
+            if (scaleGestureDetector.IsInProgress)
+                return scaleResult || base.OnTouchEvent(e);
+
             switch (e.Action)
             {
                 case MotionEventActions.Down:
@@ -546,25 +591,29 @@ namespace Toggl.Droid.Views.Calendar
             updateItemsAndRecalculateEventsAttrs(newItems);
         }
 
-        private class CalendarGestureListener : GestureDetector.SimpleOnGestureListener
+        private class CalendarGestureListener : GestureDetector.SimpleOnGestureListener, ScaleGestureDetector.IOnScaleGestureListener
         {
             private readonly Action<MotionEvent> onDown;
             private readonly Action<MotionEvent> onLongPress;
+            private readonly Func<ScaleGestureDetector, bool> onScale;
             private readonly Action<MotionEvent, MotionEvent, float, float> onScroll;
             private readonly Action<MotionEvent, MotionEvent, float, float> onFling;
             private readonly Action<MotionEvent> onSingleTapUp;
 
-            public CalendarGestureListener(Action<MotionEvent> onDown,
+            public CalendarGestureListener(
+                Action<MotionEvent> onDown,
                 Action<MotionEvent> onLongPress,
                 Action<MotionEvent, MotionEvent, float, float> onScroll,
                 Action<MotionEvent, MotionEvent, float, float> onFling,
-                Action<MotionEvent> onSingleTapUp)
+                Action<MotionEvent> onSingleTapUp,
+                Func<ScaleGestureDetector, bool> onScale)
             {
-                this.onSingleTapUp = onSingleTapUp;
-                this.onLongPress = onLongPress;
+                this.onDown = onDown;
+                this.onScale = onScale;
                 this.onFling = onFling;
                 this.onScroll = onScroll;
-                this.onDown = onDown;
+                this.onLongPress = onLongPress;
+                this.onSingleTapUp = onSingleTapUp;
             }
 
             public override bool OnDown(MotionEvent e)
@@ -594,6 +643,16 @@ namespace Toggl.Droid.Views.Calendar
             public override void OnLongPress(MotionEvent e)
             {
                 onLongPress(e);
+            }
+
+            public bool OnScale(ScaleGestureDetector detector)
+                => onScale(detector);
+
+            public bool OnScaleBegin(ScaleGestureDetector detector)
+                => true;
+
+            public void OnScaleEnd(ScaleGestureDetector detector)
+            {
             }
         }
     }

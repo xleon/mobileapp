@@ -303,7 +303,7 @@ namespace Toggl.Droid.Fragments
                     var snackbar = Snackbar.Make(coordinatorLayout, errorMessage, Snackbar.LengthLong)
                         .SetAction(FoundationResources.TapToRetry, onRetryTapped);
                     snackbar.SetDuration(snackbarDuration);
-                    snackbar.Show();
+                    snackbar.ShowWithoutBottomInsetPadding();
                     break;
             }
 
@@ -357,7 +357,7 @@ namespace Toggl.Droid.Fragments
 
             Snackbar.Make(coordinatorLayout, undoText, snackbarDuration)
                 .SetAction(FoundationResources.UndoButtonTitle, view => ViewModel.TimeEntriesViewModel.CancelDeleteTimeEntry.Execute())
-                .Show();
+                .ShowWithoutBottomInsetPadding();
         }
 
         private void onWelcomeBackViewVisibilityChanged(bool shouldShowWelcomeBackView)
