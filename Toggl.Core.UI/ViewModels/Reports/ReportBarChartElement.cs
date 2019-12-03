@@ -9,24 +9,29 @@ namespace Toggl.Core.UI.ViewModels.Reports
     public class ReportBarChartElement : ReportElementBase
     {
         public ImmutableList<Bar> Bars { get; } = ImmutableList<Bar>.Empty;
-        public DurationFormat DurationFormat { get; }
+        public ImmutableList<string> XLabels { get; } = ImmutableList<string>.Empty;
+        public double MaxBarValue { get; } = 0;
+        public YAxisLabels YLabels { get; } = YAxisLabels.Empty;
 
         public ReportBarChartElement(
             IEnumerable<Bar> bars,
-            DurationFormat durationFormat,
+            IEnumerable<string> xLabels,
+            YAxisLabels yLabels,
             Func<Bar, Bar> scalingFunction = null)
             : base(false)
         {
             var barsList = bars.ToList();
             var upperLimit = upperValueLimit(barsList);
 
+            MaxBarValue = upperLimit;
             scalingFunction ??= (bar => normalizeBar(bar, upperLimit));
 
             Bars = barsList
                 .Select(scalingFunction)
                 .ToImmutableList();
 
-            DurationFormat = durationFormat;
+            XLabels = xLabels.ToImmutableList();
+            YLabels = yLabels;
         }
 
         private ReportBarChartElement(bool isLoading)
@@ -44,38 +49,74 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public override bool Equals(IReportElement other)
             => other is ReportBarChartElement barChartElement
                && barChartElement.IsLoading == IsLoading
-               && barChartElement.DurationFormat == DurationFormat
-               && barChartElement.Bars.SequenceEqual(Bars);
+               && barChartElement.Bars.SequenceEqual(Bars)
+               && barChartElement.XLabels.SequenceEqual(XLabels)
+               && barChartElement.YLabels == YLabels;
 
         public struct Bar
         {
             public double FilledValue { get; }
             public double TotalValue { get; }
-            public DateTimeOffsetRange DataTimeRange { get; }
 
-            public Bar(double filledValue, double totalValue, DateTimeOffsetRange offsetRange)
+            public Bar(double filledValue, double totalValue)
             {
                 FilledValue = filledValue;
                 TotalValue = totalValue;
-                DataTimeRange = offsetRange;
             }
 
-            public Bar Scaled(double maxValue) => new Bar(FilledValue / maxValue, TotalValue / maxValue, DataTimeRange);
+            public Bar Scaled(double maxValue) => new Bar(FilledValue / maxValue, TotalValue / maxValue);
 
             public override bool Equals(object obj)
                 => obj is Bar bar
                    && bar.FilledValue == FilledValue
-                   && bar.TotalValue == TotalValue
-                   && bar.DataTimeRange.Equals(DataTimeRange);
+                   && bar.TotalValue == TotalValue;
 
             public override int GetHashCode()
-                => HashCode.Combine(FilledValue, TotalValue, DataTimeRange);
+                => HashCode.Combine(FilledValue, TotalValue);
 
             public static bool operator ==(Bar left, Bar right)
                 => left.Equals(right);
 
             public static bool operator !=(Bar left, Bar right)
                 => !(left == right);
+
+            public override string ToString()
+            {
+                return $"{FilledValue}/{TotalValue}";
+            }
+        }
+
+        public struct YAxisLabels
+        {
+            public string TopLabel { get; }
+            public string MiddleLabel { get; }
+            public string BottomLabel { get; }
+
+            public YAxisLabels(string topLabel, string middleLabel, string bottomLabel)
+            {
+                TopLabel = topLabel;
+                MiddleLabel = middleLabel;
+                BottomLabel = bottomLabel;
+            }
+
+            public static YAxisLabels Empty = new YAxisLabels("", "", "");
+
+            public override bool Equals(object obj)
+                => obj is YAxisLabels labels
+                && labels.TopLabel == TopLabel
+                && labels.MiddleLabel == MiddleLabel
+                && labels.BottomLabel == BottomLabel;
+
+            public override int GetHashCode()
+                => HashCode.Combine(TopLabel, MiddleLabel, BottomLabel);
+
+            public static bool operator ==(YAxisLabels left, YAxisLabels right)
+                => left.Equals(right);
+
+            public static bool operator !=(YAxisLabels left, YAxisLabels right)
+                => !(left == right);
+
+            public override string ToString() => $"{TopLabel} {MiddleLabel} {BottomLabel}";
         }
     }
 }

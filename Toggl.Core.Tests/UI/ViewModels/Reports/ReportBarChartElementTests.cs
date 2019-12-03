@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Toggl.Core.UI.ViewModels.Reports;
-using Toggl.Shared;
 using Xunit;
 using Bar = Toggl.Core.UI.ViewModels.Reports.ReportBarChartElement.Bar;
+using YAxisLabels = Toggl.Core.UI.ViewModels.Reports.ReportBarChartElement.YAxisLabels;
 
 namespace Toggl.Core.Tests.UI.ViewModels.Reports
 {
@@ -25,7 +25,12 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             [Fact, LogIfTooSlow]
             public void SetsIsLoadingToFalse()
             {
-                new ReportBarChartElement(new List<Bar>(), DurationFormat.Classic).IsLoading.Should().BeFalse();
+                var element = new ReportBarChartElement(
+                    new List<Bar>(),
+                    new string[] { "aaa", "aa", "" },
+                    new YAxisLabels("aaa", "aa", "" ));
+
+                element.IsLoading.Should().BeFalse();
             }
 
             [Fact, LogIfTooSlow]
@@ -54,13 +59,13 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
 
             private ReportBarChartElement setupReportBarChartElement(Func<Bar, Bar> scalingFunction)
             {
-                var offsetRange = new DateTimeOffsetRange(DateTimeOffset.Now, DateTimeOffset.Now);
                 return new ReportBarChartElement(new Bar[]
                     {
-                        new Bar(1, 2, offsetRange),
-                        new Bar(1, 4, offsetRange)
+                        new Bar(1, 2),
+                        new Bar(1, 4)
                     },
-                    DurationFormat.Classic,
+                    new string[] { "aaa", "aa", "" },
+                    new YAxisLabels("aaa", "aa", ""),
                     scalingFunction);
             }
         }

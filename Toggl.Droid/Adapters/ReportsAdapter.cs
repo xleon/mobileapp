@@ -61,8 +61,8 @@ namespace Toggl.Droid.Fragments
                     return new ReportSummaryViewHolder(summaryCell);
 
                 case BarChart:
-                    var barChartCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
-                    return new ReportEmptyElementViewHolder(barChartCell);
+                    var barChartCell = inflater.Inflate(Resource.Layout.ReportsBarChartElement, parent, false);
+                    return new ReportBarChartViewHolder(barChartCell);
 
                 case ViewType.Donut:
                     var donutCell = inflater.Inflate(Resource.Layout.ReportDonutChartDonutElement, parent, false);

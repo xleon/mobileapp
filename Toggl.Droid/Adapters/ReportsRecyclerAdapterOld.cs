@@ -92,7 +92,7 @@ namespace Toggl.Droid.Adapters
                         var barChartView = holder.ItemView.FindViewById<BarChartView>(Resource.Id.BarChartView);
                         var barChartTopLegendGroup = holder.ItemView.FindViewById<Group>(Resource.Id.WorkspaceBillableGroup);
                         var barChartData = currentBarChartData.GetValueOrDefault();
-                        barChartView.BarChartData = barChartData;
+                        //barChartView.BarChartData = barChartData;
                         barChartTopLegendGroup.Visibility = barChartData.WorkspaceIsBillable ? ViewStates.Visible : ViewStates.Gone;
                     }
                     break;

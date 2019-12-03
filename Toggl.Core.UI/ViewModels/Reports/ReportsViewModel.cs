@@ -64,7 +64,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Concat(SelectWorkspace.Elements.WhereNotNull());
 
             // TODO: Get default range (current week) instead of this hardcoded value
-            var defaultTimeRange = new DateTimeOffsetRange(DateTimeOffset.Now - TimeSpan.FromDays(7), DateTimeOffset.Now);
+            var defaultTimeRange = new DateTimeOffsetRange(DateTimeOffset.Now - TimeSpan.FromDays(6), DateTimeOffset.Now);
 
             var timeRangeSelector = SelectTimeRange.Elements.StartWith(defaultTimeRange);
 
@@ -162,11 +162,13 @@ namespace Toggl.Core.UI.ViewModels.Reports
                     .GetProjectSummary(filter.Workspace.Id, filter.TimeRange.Minimum, filter.TimeRange.Maximum)
                     .Execute();
 
-                var durationFormat = await interactorFactory
+                var preferences = await interactorFactory
                     .GetPreferences()
                     .Execute()
-                    .FirstAsync()
-                    .Select(preferences => preferences.DurationFormat);
+                    .FirstAsync();
+
+                var durationFormat = preferences.DurationFormat;
+                var dateFormat = preferences.DateFormat;
 
                 if (summaryData.Segments.None())
                     return elements(new ReportNoDataElement());
@@ -174,7 +176,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 return elements(
                     new ReportWorkspaceNameElement(filter.Workspace.Name),
                     new ReportSummaryElement(summaryData, durationFormat),
-                    new ReportProjectsBarChartElement(reportsTotal, durationFormat),
+                    new ReportProjectsBarChartElement(reportsTotal, dateFormat),
                     new ReportProjectsDonutChartElement(summaryData, durationFormat));
             }
             catch (Exception ex)

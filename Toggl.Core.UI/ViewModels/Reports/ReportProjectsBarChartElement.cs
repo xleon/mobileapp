@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Toggl.Core.Conversions;
+using Toggl.Core.UI.Helper;
 using Toggl.Shared;
 using Toggl.Shared.Models.Reports;
 
@@ -9,10 +11,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
 {
     public class ReportProjectsBarChartElement : ReportBarChartElement
     {
-        private const int weekLengthInDays = 7;
-
-        public ReportProjectsBarChartElement(ITimeEntriesTotals report, DurationFormat durationFormat)
-            : base(convertReportTimeEntriesToBars(report), durationFormat)
+        public ReportProjectsBarChartElement(ITimeEntriesTotals report, DateFormat dateFormat)
+            : base(convertReportTimeEntriesToBars(report), convertReportTimeEntriesToXAxisLabels(report, dateFormat), convertReportTimeEntriesToYAxisLabels(report))
         {
         }
 
@@ -23,33 +23,74 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 return Enumerable.Empty<Bar>();
             }
 
-            var offsets = convertReportTimeEntriesToOffsets(report);
-
             return report.Groups
-                .Zip(offsets, (group, offset) => new Bar(group.Billable.TotalHours, group.Total.TotalHours, offset));
+                .Select(group => new Bar(group.Billable.TotalHours, group.Total.TotalHours));
         }
 
-        private static DateTimeOffsetRange addToDate(DateTimeOffset start, int howMany, Resolution resolution)
+        private static IEnumerable<string> convertReportTimeEntriesToXAxisLabels(ITimeEntriesTotals report, DateFormat dateFormat)
         {
-            if (resolution == Resolution.Day)
+            if(report == null)
             {
-                return new DateTimeOffsetRange(start.AddDays(howMany), start.AddDays(howMany + 1));
-            }
-            else if (resolution == Resolution.Week)
-            {
-                return new DateTimeOffsetRange(start.AddDays(weekLengthInDays * howMany),
-                    start.AddDays(weekLengthInDays * (howMany + 1)));
+                yield break;
             }
 
-            return new DateTimeOffsetRange(start.AddMonths(howMany), start.AddMonths(howMany + 1));
+            if (report.Resolution == Resolution.Day && report.Groups.Count() <= 7)
+            {
+                for (var i = 0; i < report.Groups.Count(); i++)
+                {
+                    var date = report.StartDate.AddDays(i);
+                    var dateString = date.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
+                    var dayOfWeekString = DateTimeOffsetConversion.ToDayOfWeekInitial(date);
+                    yield return $"{dateString}\n{dayOfWeekString}";
+                }
+                yield break;
+            }
+
+            yield return report.StartDate.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
+            yield return report.EndDate.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
         }
 
-        private static IImmutableList<DateTimeOffsetRange> convertReportTimeEntriesToOffsets(ITimeEntriesTotals report)
-            => timeRanges(report.Groups.Length, report.StartDate, report.Resolution);
+        private static YAxisLabels convertReportTimeEntriesToYAxisLabels(ITimeEntriesTotals report)
+        {
+            if(report == null)
+            {
+                return YAxisLabels.Empty;
+            }
 
-        private static IImmutableList<DateTimeOffsetRange> timeRanges(int numberOfDays, DateTimeOffset startDate, Resolution resolution)
-            => Enumerable.Range(0, numberOfDays)
-                .Select(i => addToDate(startDate, i, resolution))
-                .ToImmutableList();
+            Func<double, string> formatTime = (double x) =>
+            {
+                var asString = x.ToString("F0");
+                if (asString.EndsWith(".0", StringComparison.InvariantCulture))
+                    return asString[0..^2];
+                return asString;
+            };
+
+            var maxTime = report.Groups.Max(group => group.Total);
+            double maxValue, halfValue;
+            string timeUnitString;
+            if (maxTime.TotalHours > 1)
+            {
+                maxValue = maxTime.TotalHours;
+                halfValue = maxValue / 2;
+                timeUnitString = Resources.UnitHour;
+            }
+            else if (maxTime.TotalMinutes > 1)
+            {
+                maxValue = maxTime.TotalMinutes;
+                halfValue = maxValue / 2;
+                timeUnitString = Resources.UnitMin;
+            }
+            else
+            {
+                maxValue = maxTime.TotalSeconds;
+                halfValue = maxValue / 2;
+                timeUnitString = Resources.UnitSecond;
+            }
+
+            return new YAxisLabels(
+                $"{formatTime(maxValue)} {timeUnitString}",
+                $"{formatTime(halfValue)} {timeUnitString}",
+                $"0 {timeUnitString}");
+        }
     }
 }

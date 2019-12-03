@@ -18,4 +18,8 @@
   <color name="darkBackground">#DDFFFFFF</color>
   <color name="primaryTextOnDarkBackground">#FF000000</color>
   <color name="weekStripeDisabledDayColor">#656565</color>
+
+  <!-- Reports page-->
+  <color name="placeholderBarFilled">#19FFFFFF</color>
+  <color name="placeholderBarRegular">#0FFFFFFF</color>
 </resources>

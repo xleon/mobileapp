@@ -904,6 +904,7 @@
     <Compile Include="Widgets\WidgetsConstants.cs" />
     <Compile Include="Widgets\TimeEntryWidgetDefaultFormFactor.cs" />
     <Compile Include="Widgets\WidgetSuggestionItem.cs" />
+    <Compile Include="ViewHolders\Reports\ReportBarChartViewHolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -1336,6 +1337,7 @@
     <AndroidResource Include="Resources\drawable\CalendarHeaderDayBackground.xml" />
     <AndroidResource Include="Resources\drawable\WidgetStartButton.xml" />
     <AndroidResource Include="Resources\drawable\WidgetStopButton.xml" />
+    <AndroidResource Include="Resources\layout\ReportsBarChartElement.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core\Toggl.Core.csproj">

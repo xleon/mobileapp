@@ -1,11 +1,13 @@
 using System;
 using System.Globalization;
 using FluentAssertions;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Networking.Models.Reports;
 using Toggl.Shared;
 using Toggl.Shared.Models.Reports;
 using Xunit;
+using YAxisLabels = Toggl.Core.UI.ViewModels.Reports.ReportBarChartElement.YAxisLabels;
 
 namespace Toggl.Core.Tests.UI.ViewModels.Reports
 {
@@ -24,71 +26,76 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
 
         public sealed class TheConstructor
         {
+            private static readonly YAxisLabels expectedLabels = new YAxisLabels("4 h", "2 h", "0 h");
+
             [Fact, LogIfTooSlow]
             public void SetsIsLoadingToFalse()
             {
-                new ReportProjectsBarChartElement(null, DurationFormat.Classic).IsLoading.Should().BeFalse();
+                new ReportProjectsBarChartElement(null, DateFormat.ValidDateFormats[0]).IsLoading.Should().BeFalse();
             }
             
             [Fact, LogIfTooSlow]
             public void ConvertsDayReportToBars()
             {
                 var timeEntriesTotals = setupTotals(Resolution.Day);
-                var startDate = timeEntriesTotals.StartDate;
                 
-                var element = new ReportProjectsBarChartElement(timeEntriesTotals, DurationFormat.Classic);
+                var element = new ReportProjectsBarChartElement(timeEntriesTotals, DateFormat.ValidDateFormats[0]);
                 
                 element.Bars[0].FilledValue.Should().BeApproximately(0.5, eps);
                 element.Bars[0].TotalValue.Should().BeApproximately(0.5, eps);
-                element.Bars[0].DataTimeRange.Should().Be(new DateTimeOffsetRange(startDate, startDate.AddDays(1)));
                 
                 element.Bars[1].FilledValue.Should().BeApproximately(0.5, eps);
                 element.Bars[1].TotalValue.Should().BeApproximately(1, eps);
-                element.Bars[1].DataTimeRange.Should().Be(new DateTimeOffsetRange(startDate.AddDays(1), startDate.AddDays(2)));
+
+                element.XLabels.Should().BeEquivalentTo(new string[] { "01/01\nM", "01/02\nT" });
+                element.YLabels.Should().BeEquivalentTo(expectedLabels);
             }
-            
+
             [Fact, LogIfTooSlow]
             public void ConvertsWeeklyReportToBars()
             {
                 var timeEntriesTotals = setupTotals(Resolution.Week);
-                var startDate = timeEntriesTotals.StartDate;
                 
-                var element = new ReportProjectsBarChartElement(timeEntriesTotals, DurationFormat.Classic);
+                var element = new ReportProjectsBarChartElement(timeEntriesTotals, DateFormat.ValidDateFormats[0]);
                 
                 element.Bars[0].FilledValue.Should().BeApproximately(0.5, eps);
                 element.Bars[0].TotalValue.Should().BeApproximately(0.5, eps);
-                element.Bars[0].DataTimeRange.Should().Be(new DateTimeOffsetRange(startDate, startDate.AddDays(7)));
                 
                 element.Bars[1].FilledValue.Should().BeApproximately(0.5, eps);
                 element.Bars[1].TotalValue.Should().BeApproximately(1, eps);
-                element.Bars[1].DataTimeRange.Should().Be(new DateTimeOffsetRange(startDate.AddDays(7), startDate.AddDays(14)));
+
+                element.XLabels.Should().BeEquivalentTo(new string[] { "01/01", "01/08" });
+                element.YLabels.Should().BeEquivalentTo(expectedLabels);
             }
-            
+
             [Fact, LogIfTooSlow]
             public void ConvertsMonthlyReportToBars()
             {
                 var timeEntriesTotals = setupTotals(Resolution.Month);
-                var startDate = timeEntriesTotals.StartDate;
                 
-                var element = new ReportProjectsBarChartElement(timeEntriesTotals, DurationFormat.Classic);
+                var element = new ReportProjectsBarChartElement(timeEntriesTotals, DateFormat.ValidDateFormats[0]);
                 
                 element.Bars[0].FilledValue.Should().BeApproximately(0.5, eps);
                 element.Bars[0].TotalValue.Should().BeApproximately(0.5, eps);
-                element.Bars[0].DataTimeRange.Should().Be(new DateTimeOffsetRange(startDate, startDate.AddMonths(1)));
                 
                 element.Bars[1].FilledValue.Should().BeApproximately(0.5, eps);
                 element.Bars[1].TotalValue.Should().BeApproximately(1, eps);
-                element.Bars[1].DataTimeRange.Should().Be(new DateTimeOffsetRange(startDate.AddMonths(1), startDate.AddMonths(2)));
+
+                element.XLabels.Should().BeEquivalentTo(new string[] { "01/01", "02/01" });
+                element.YLabels.Should().BeEquivalentTo(expectedLabels);
             }
 
             private TimeEntriesTotals setupTotals(Resolution resolution)
             {
+                DateFormatCultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
                 var startDate = new DateTimeOffset(2001, 1, 1, 14, 53, 0, TimeSpan.Zero);
+                var endDate = resolution == Resolution.Month ? startDate.AddMonths(1) : startDate.AddDays(7);
 
                 var timeEntriesTotals = new TimeEntriesTotals
                 {
                     Resolution = resolution,
-                    StartDate = startDate
+                    StartDate = startDate,
+                    EndDate = endDate
                 };
 
                 var group1 = new TimeEntriesTotalsGroup
