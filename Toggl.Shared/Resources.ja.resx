@@ -810,8 +810,8 @@
     <data name="ProjectColor" xml:space="preserve">
         <value>プロジェクト色</value>
     </data>
-    <data name="Search" xml:space="preserve">
-        <value>検索</value>
+    <data name="SearchObject" xml:space="preserve">
+        <value>{0}を検索する</value>
     </data>
     <data name="DateFormat" xml:space="preserve">
         <value>日時のフォーマット</value>
@@ -822,8 +822,11 @@
     <data name="DurationFormat" xml:space="preserve">
         <value>期間のフォーマット</value>
     </data>
-    <data name="Projects" xml:space="preserve">
+    <data name="SelectProjectTitle" xml:space="preserve">
         <value>プロジェクトの一覧</value>
+    </data>
+    <data name="Projects" xml:space="preserve">
+        <value>プロジェクト</value>
     </data>
     <data name="Project" xml:space="preserve">
         <value>プロジェクト</value>
