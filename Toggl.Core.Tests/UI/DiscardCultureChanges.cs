@@ -10,19 +10,25 @@ namespace Toggl.Core.Tests.UI
     {
         private CultureInfo originalCultureInfo;
         private CultureInfo originalCultureInfoUI;
+        private CultureInfo originalThreadCultureInfo;
+        private CultureInfo originalThreadCultureInfoUI;
         private CultureInfo originalDateFormatCultureInfo; 
             
         public override void Before(MethodInfo methodUnderTest)
         {
-            originalCultureInfo = Thread.CurrentThread.CurrentCulture;
-            originalCultureInfoUI = Thread.CurrentThread.CurrentUICulture;
+            originalCultureInfo = CultureInfo.DefaultThreadCurrentCulture;
+            originalCultureInfoUI = CultureInfo.DefaultThreadCurrentUICulture;
+            originalThreadCultureInfo = Thread.CurrentThread.CurrentCulture;
+            originalThreadCultureInfoUI = Thread.CurrentThread.CurrentUICulture;
             originalDateFormatCultureInfo = DateFormatCultureInfo.CurrentCulture;
         }
             
         public override void After(MethodInfo methodUnderTest)
         {
-            Thread.CurrentThread.CurrentCulture = originalCultureInfo;
-            Thread.CurrentThread.CurrentUICulture = originalCultureInfoUI;
+            CultureInfo.DefaultThreadCurrentCulture = originalCultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = originalCultureInfoUI;
+            Thread.CurrentThread.CurrentCulture = originalThreadCultureInfo;
+            Thread.CurrentThread.CurrentUICulture = originalThreadCultureInfoUI;
             DateFormatCultureInfo.CurrentCulture = originalDateFormatCultureInfo;
         }
     }
