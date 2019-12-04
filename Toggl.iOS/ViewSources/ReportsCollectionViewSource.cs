@@ -60,10 +60,9 @@ namespace Toggl.iOS.ViewSources
                     var summaryCell = collectionView.DequeueReusableCell(summaryCellIdentifier, indexPath) as ReportsSummaryCollectionViewCell;
                     summaryCell.SetElement(element);
                     return summaryCell;
-                case ReportBarChartElement _:
+                case ReportBarChartElement element:
                     var barChartCell = collectionView.DequeueReusableCell(barChartCellIdentifier, indexPath) as ReportsBarChartCollectionViewCell;
-                    // TODO: populate cell
-                    barChartCell.BackgroundColor = UIColor.SystemGreenColor;
+                    barChartCell.SetElement(element);
                     return barChartCell;
                 case ReportDonutChartDonutElement _:
                     var donutCell = collectionView.DequeueReusableCell(donutChartCellIdentifier, indexPath) as ReportsDonutChartCollectionViewCell;

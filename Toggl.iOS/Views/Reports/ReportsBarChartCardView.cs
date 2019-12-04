@@ -150,7 +150,7 @@ namespace Toggl.iOS.Views.Reports
                     return new EmptyBarView();
                 }
 
-                return new BarView(bar);
+                return new EmptyBarView();
             });
 
         private IEnumerable<UILabel> createHorizontalLegendLabels(IEnumerable<DateTimeOffset> dates, DateFormat format)

@@ -1382,6 +1382,10 @@
     <ImageAsset Include="Resources\Colors.xcassets\CalendarUnavailableDayText.colorset\Contents.json" />
     <ImageAsset Include="Resources\Colors.xcassets\CalendarUnselectedTodayText.colorset\Contents.json" />
     <ImageAsset Include="Resources\Colors.xcassets\CalendarHeaderLabel.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartFilled.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartTotal.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartFilledPlaceholder.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartTotalPlaceholder.colorset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -2254,6 +2258,10 @@
     <Folder Include="Resources\Colors.xcassets\CalendarUnselectedTodayText.colorset\" />
     <Folder Include="Resources\Colors.xcassets\CalendarHeaderLabel.colorset\" />
     <Folder Include="Cells\Reports\" />
+    <Folder Include="Resources\Colors.xcassets\ReportsBarChartFilled.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ReportsBarChartTotal.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ReportsBarChartFilledPlaceholder.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ReportsBarChartTotalPlaceholder.colorset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

@@ -11,6 +11,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 {
     public class ReportProjectsBarChartElement : ReportBarChartElement
     {
+
         public ReportProjectsBarChartElement(ITimeEntriesTotals report, DateFormat dateFormat)
             : base(convertReportTimeEntriesToBars(report), convertReportTimeEntriesToXAxisLabels(report, dateFormat), convertReportTimeEntriesToYAxisLabels(report))
         {
@@ -52,7 +53,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private static YAxisLabels convertReportTimeEntriesToYAxisLabels(ITimeEntriesTotals report)
         {
-            if(report == null)
+            if (report == null)
             {
                 return YAxisLabels.Empty;
             }
