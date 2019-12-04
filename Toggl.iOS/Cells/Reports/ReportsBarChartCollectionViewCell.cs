@@ -72,7 +72,7 @@ namespace Toggl.iOS.Cells.Reports
 
             foreach (var view in BarsStackView.ArrangedSubviews)
             {
-                BarsStackView.RemoveArrangedSubview(view);
+                view.RemoveFromSuperview();
             }
 
             var barViews = createBarViews(element.Bars);
@@ -102,7 +102,7 @@ namespace Toggl.iOS.Cells.Reports
         {
             foreach (var view in HorizontalLegendStackView.ArrangedSubviews)
             {
-                HorizontalLegendStackView.RemoveArrangedSubview(view);
+                view.RemoveFromSuperview();
             }
 
             var labels = createHorizontalLegendLabels(element.XLabels);
@@ -138,7 +138,7 @@ namespace Toggl.iOS.Cells.Reports
 
             foreach (var view in BarsStackView.ArrangedSubviews)
             {
-                BarsStackView.RemoveArrangedSubview(view);
+                view.RemoveFromSuperview();
             }
             var placeholderBars = generatePlaceholderBars();
             foreach (var barView in placeholderBars)
