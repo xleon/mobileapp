@@ -1,6 +1,7 @@
 ﻿using System;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.DateRangePicker;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.ViewModels.Settings.Siri;
@@ -333,6 +334,16 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService);
             }
 
+            if (viewModelType == typeof(DateRangePickerViewModel))
+            {
+                return new DateRangePickerViewModel(
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.SchedulerProvider,
+                    dependencyContainer.TimeService);
+            }
+
             if (viewModelType == typeof(ReportsViewModel))
             {
                 return new ReportsViewModel(
@@ -340,7 +351,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.TimeService);
             }
 
             if (viewModelType == typeof(AboutViewModel))

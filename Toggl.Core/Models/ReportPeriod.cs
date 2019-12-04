@@ -17,29 +17,20 @@ namespace Toggl.Core.Models
 
     public static class ReportPeriodExtensions
     {
-        public static string ToHumanReadableString(this ReportPeriod p)
+        public static string ToHumanReadableString(this ReportPeriod period)
         {
-            switch (p)
+            return period switch
             {
-                case ReportPeriod.LastMonth:
-                    return Resources.LastMonth;
-                case ReportPeriod.LastWeek:
-                    return Resources.LastWeek;
-                case ReportPeriod.Yesterday:
-                    return Resources.Yesterday;
-                case ReportPeriod.Today:
-                    return Resources.Today;
-                case ReportPeriod.ThisWeek:
-                    return Resources.ThisWeek;
-                case ReportPeriod.ThisMonth:
-                    return Resources.ThisMonth;
-                case ReportPeriod.ThisYear:
-                    return Resources.ThisYear;
-                case ReportPeriod.LastYear:
-                    return Resources.LastYear;
-                default:
-                    return Resources.Unknown;
-            }
+                ReportPeriod.LastMonth => Resources.LastMonth,
+                ReportPeriod.LastWeek => Resources.LastWeek,
+                ReportPeriod.Yesterday => Resources.Yesterday,
+                ReportPeriod.Today => Resources.Today,
+                ReportPeriod.ThisWeek => Resources.ThisWeek,
+                ReportPeriod.ThisMonth => Resources.ThisMonth,
+                ReportPeriod.ThisYear => Resources.ThisYear,
+                ReportPeriod.LastYear => Resources.LastYear,
+                _ => Resources.Unknown,
+            };
         }
     }
 }

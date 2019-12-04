@@ -8,11 +8,13 @@ using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
+using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.ViewModels.DateRangePicker;
 using Toggl.Core.UI.Views;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -22,9 +24,12 @@ namespace Toggl.Core.UI.ViewModels.Reports
     public sealed class ReportsViewModel : ViewModel
     {
         private long? selectedWorkspaceId;
-        private DateTimeOffsetRange selectedTimeRange;
+        private Either<ReportPeriod, DateRange> selection;
 
         private readonly IInteractorFactory interactorFactory;
+        private readonly ITimeService timeService;
+        private readonly ISchedulerProvider schedulerProvider;
+        private readonly ITogglDataSource dataSource;
 
         public IObservable<IImmutableList<IReportElement>> Elements { get; set; }
         public IObservable<bool> HasMultipleWorkspaces { get; set; }
@@ -40,7 +45,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
             INavigationService navigationService,
             IInteractorFactory interactorFactory,
             ISchedulerProvider schedulerProvider,
-            IRxActionFactory rxActionFactory)
+            IRxActionFactory rxActionFactory,
+            ITimeService timeService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -48,8 +54,12 @@ namespace Toggl.Core.UI.ViewModels.Reports
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
+            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
 
+            this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
+            this.schedulerProvider = schedulerProvider;
+            this.timeService = timeService;
 
             HasMultipleWorkspaces = interactorFactory.ObserveAllWorkspaces().Execute()
                 .Select(workspaces => workspaces.Where(w => !w.IsInaccessible))
@@ -59,20 +69,24 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             SelectWorkspace = rxActionFactory.FromAsync(selectWorkspace);
             SelectTimeRange = rxActionFactory.FromAsync(selectTimeRange);
+        }
 
+        public override async Task Initialize()
+        {
             var workspaceSelector = interactorFactory.GetDefaultWorkspace().Execute()
                 .Concat(SelectWorkspace.Elements.WhereNotNull());
 
-            // TODO: Get default range (current week) instead of this hardcoded value
-            var defaultTimeRange = new DateTimeOffsetRange(DateTimeOffset.Now - TimeSpan.FromDays(6), DateTimeOffset.Now);
+            var beginningOfWeek = (await interactorFactory.GetCurrentUser().Execute()).BeginningOfWeek;
+            var initialSelection = defaultTimeRange(beginningOfWeek);
 
-            var timeRangeSelector = SelectTimeRange.Elements.StartWith(defaultTimeRange);
+            var timeRangeSelector = SelectTimeRange.Elements
+                .StartWith(initialSelection);
 
             CurrentWorkspaceName = workspaceSelector
                 .Select(ws => ws.Name)
-                .StartWith(string.Empty)
+                .StartWith("")
                 .DistinctUntilChanged()
-                .AsDriver(string.Empty, schedulerProvider);
+                .AsDriver("", schedulerProvider);
 
             Elements = Observable
                 .CombineLatest(workspaceSelector, timeRangeSelector, ReportFilter.Create)
@@ -83,16 +97,14 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Current
                 .Select(preferences => preferences.DateFormat);
 
-            FormattedTimeRange = Observable.Merge(Observable.Return(defaultTimeRange), SelectTimeRange.Elements)
+            FormattedTimeRange = Observable.Merge(Observable.Return(initialSelection), SelectTimeRange.Elements)
                 .CombineLatest(dateFormatObservable, resultSelector: formattedTimeRange)
                 .DistinctUntilChanged()
                 .AsDriver("", schedulerProvider);
-        }
 
-        public override async Task Initialize()
-        {
-            var defaultWorkspace = await interactorFactory.GetDefaultWorkspace().Execute();
-            selectedWorkspaceId = defaultWorkspace?.Id;
+            selectedWorkspaceId = (await interactorFactory.GetDefaultWorkspace().Execute())?.Id;
+
+            selection = Either<ReportPeriod, DateRange>.WithLeft(ReportPeriod.ThisWeek);
         }
 
         private async Task<IThreadSafeWorkspace> selectWorkspace()
@@ -118,17 +130,12 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private async Task<DateTimeOffsetRange> selectTimeRange()
         {
-            // TODO: Navigate to reports calendar fragment and replace this Task with it
-            selectedTimeRange = await Task.FromResult(getDummyTimeRange());
+            var selectedTimeRange = await Navigate<DateRangePickerViewModel, Either<ReportPeriod, DateRange>, DateRange>(selection);
 
-            return selectedTimeRange;
+            selection = Either<ReportPeriod, DateRange>.WithRight(selectedTimeRange);
+
+            return selectedTimeRange.ToLocalInstantaneousTimeRange();
         }
-
-        [Obsolete("Remove this in favor of data from the Reports Calendar results")]
-        private DateTimeOffsetRange getDummyTimeRange()
-            => new DateTimeOffsetRange(
-                new DateTimeOffset(2019, 1, 1, 0, 0, 0, TimeSpan.Zero),
-                new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.Zero));
 
         private ImmutableList<IReportElement> createLoadingStateReportElements()
             => elements(
@@ -187,5 +194,13 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private ImmutableList<IReportElement> elements(params IReportElement[] elements)
             => elements.Flatten();
+
+        private DateTimeOffsetRange defaultTimeRange(BeginningOfWeek beginningOfWeek)
+        {
+            var today = timeService.CurrentDateTime.ToLocalTime().Date;
+            var beginning = today.BeginningOfWeek(beginningOfWeek);
+            var end = beginning.AddDays(6);
+            return new DateRange(beginning, end).ToLocalInstantaneousTimeRange();
+        }
     }
 }

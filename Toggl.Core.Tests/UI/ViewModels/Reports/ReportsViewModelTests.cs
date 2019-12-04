@@ -67,7 +67,11 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                 InteractorFactory
                     .GetCurrentUser()
                     .Execute()
-                    .Returns(Observable.Return(new MockUser { Id = 1 }));
+                    .Returns(Observable.Return(new MockUser { Id = 1, BeginningOfWeek = BeginningOfWeek.Wednesday }));
+
+                TimeService
+                    .CurrentDateTime
+                    .Returns(new DateTimeOffset(2019, 1, 1, 0, 0, 0, TimeSpan.Zero));
 
                 var totals = new TimeEntriesTotals();
                 InteractorFactory
@@ -105,7 +109,8 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                     NavigationService,
                     InteractorFactory,
                     SchedulerProvider,
-                    RxActionFactory);
+                    RxActionFactory,
+                    TimeService);
         }
 
         public sealed class TheConstructor : ReportsViewModelTest
@@ -117,20 +122,23 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                 bool useNavigationService,
                 bool useSchedulerProvider,
                 bool useInteractorFactory,
-                bool useRxActionFactory)
+                bool useRxActionFactory,
+                bool useTimeService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var timeService = useTimeService ? TimeService : null;
 
                 Action tryingToConstructWithEmptyParameters = () => new ReportsViewModel(
                     dataSource,
                     navigationService,
                     interactorFactory,
                     schedulerProvider,
-                    rxActionFactory);
+                    rxActionFactory,
+                    timeService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -153,9 +161,9 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             {
                 SetupEnvironment();
                 var observer = TestScheduler.CreateObserver<IEnumerable<IReportElement>>();
-                ViewModel.Elements.Subscribe(observer);
 
                 await ViewModel.Initialize();
+                ViewModel.Elements.Subscribe(observer);
                 TestScheduler.Start();
 
                 observer.Messages.AssertEqual(
@@ -169,9 +177,9 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             {
                 SetupEnvironment();
                 var observer = TestScheduler.CreateObserver<IEnumerable<IReportElement>>();
-                ViewModel.Elements.Subscribe(observer);
 
                 await ViewModel.Initialize();
+                ViewModel.Elements.Subscribe(observer);
                 ViewModel.SelectWorkspace.Execute();
                 TestScheduler.Start();
 
@@ -199,9 +207,9 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             {
                 SetupEnvironment();
                 var observer = TestScheduler.CreateObserver<bool>();
-                ViewModel.HasMultipleWorkspaces.Subscribe(observer);
 
                 await ViewModel.Initialize();
+                ViewModel.HasMultipleWorkspaces.Subscribe(observer);
                 TestScheduler.Start();
 
                 observer.LastEmittedValue().Should().BeTrue();
@@ -210,12 +218,11 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             [Fact, LogIfTooSlow]
             public async Task ReturnsFalseForSingleWorkspace()
             {
-                SetupEnvironment(
-                    adjustWorkspaces: workspaces => workspaces.Where(ws => !ws.IsInaccessible).Take(1));
+                SetupEnvironment(adjustWorkspaces: workspaces => workspaces.Where(ws => !ws.IsInaccessible).Take(1));
                 var observer = TestScheduler.CreateObserver<bool>();
-                ViewModel.HasMultipleWorkspaces.Subscribe(observer);
 
                 await ViewModel.Initialize();
+                ViewModel.HasMultipleWorkspaces.Subscribe(observer);
                 TestScheduler.Start();
 
                 observer.LastEmittedValue().Should().BeFalse();
@@ -232,9 +239,9 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                         return workspaces;
                     });
                 var observer = TestScheduler.CreateObserver<bool>();
-                ViewModel.HasMultipleWorkspaces.Subscribe(observer);
 
                 await ViewModel.Initialize();
+                ViewModel.HasMultipleWorkspaces.Subscribe(observer);
                 TestScheduler.Start();
 
                 observer.LastEmittedValue().Should().BeFalse();

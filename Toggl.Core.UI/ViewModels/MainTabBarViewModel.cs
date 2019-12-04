@@ -104,7 +104,8 @@ namespace Toggl.Core.UI.ViewModels
                 navigationService,
                 interactorFactory,
                 schedulerProvider,
-                rxActionFactory);
+                rxActionFactory,
+                timeService);
 
             calendarViewModel = new CalendarViewModel(
                 dataSource,
