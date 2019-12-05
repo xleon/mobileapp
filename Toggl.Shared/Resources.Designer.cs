@@ -796,6 +796,13 @@ namespace Toggl.Shared {
             }
         }
 
+        
+        public static string Back {
+            get {
+                return ResourceManager.GetString("Back", resourceCulture);
+            }
+        }
+        
         public static string CountriesJson {
             get {
                 return ResourceManager.GetString("CountriesJson", resourceCulture);
