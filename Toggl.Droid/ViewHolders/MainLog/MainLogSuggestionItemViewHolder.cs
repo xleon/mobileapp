@@ -5,8 +5,6 @@ using Android.Graphics;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Toggl.Core.Suggestions;
-using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Droid.Extensions;
 

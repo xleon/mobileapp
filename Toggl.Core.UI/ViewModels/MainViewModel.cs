@@ -20,7 +20,7 @@ using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Shared;
@@ -32,7 +32,6 @@ using System.ComponentModel;
 using System.Threading;
 using static Toggl.Core.Analytics.ContinueTimeEntryMode;
 using static Toggl.Core.Analytics.ContinueTimeEntryOrigin;
-
 
 namespace Toggl.Core.UI.ViewModels
 {
