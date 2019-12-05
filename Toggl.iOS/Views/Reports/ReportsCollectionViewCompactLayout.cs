@@ -96,10 +96,10 @@ namespace Toggl.iOS.Views.Reports
                     case ReportsCollectionViewCell.NoData:
                     case ReportsCollectionViewCell.Error:
                         attributes.Frame = new CGRect(
-                            CollectionViewContentSize.Width / 4,
-                            CollectionViewContentSize.Height / 4,
-                            CollectionViewContentSize.Width / 2,
-                            CollectionViewContentSize.Height / 2);
+                            0,
+                            0,
+                            CollectionView.Bounds.Width,
+                            CollectionView.Bounds.Height);
                         break;
                 }
                 layoutAttributes.Add(attributes);

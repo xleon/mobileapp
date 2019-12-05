@@ -1386,6 +1386,10 @@
     <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartTotal.colorset\Contents.json" />
     <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartFilledPlaceholder.colorset\Contents.json" />
     <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartTotalPlaceholder.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorBadData.imageset\error_baddata-2.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorBadData.imageset\error_baddata-1.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorBadData.imageset\error_baddata.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorBadData.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />

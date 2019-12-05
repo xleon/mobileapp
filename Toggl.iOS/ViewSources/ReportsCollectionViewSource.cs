@@ -76,14 +76,15 @@ namespace Toggl.iOS.ViewSources
                     return donutLegendItemCell;
                 case ReportNoDataElement _:
                     var noDataCell = collectionView.DequeueReusableCell(noDataCellIdentifier, indexPath) as ReportsNoDataCollectionViewCell;
-                    // TODO: populate cell
-                    noDataCell.BackgroundColor = UIColor.SystemPurpleColor;
                     return noDataCell;
-                default:
+                case ReportErrorElement element:
                     var errorCell = collectionView.DequeueReusableCell(errorCellIdentifier, indexPath) as ReportsErrorCollectionViewCell;
-                    // TODO: populate cell
-                    errorCell.BackgroundColor = UIColor.SystemTealColor;
+                    errorCell.setElement(element);
                     return errorCell;
+                default:
+                    var defaultCell = collectionView.DequeueReusableCell(errorCellIdentifier, indexPath) as ReportsErrorCollectionViewCell;
+                    defaultCell.setElement(new ReportErrorElement(new ArgumentException()));
+                    return defaultCell;
             }
         }
 

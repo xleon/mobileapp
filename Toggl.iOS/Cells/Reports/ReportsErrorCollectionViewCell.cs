@@ -1,7 +1,8 @@
 ﻿using System;
-
+using Toggl.iOS.Extensions;
 using Foundation;
 using UIKit;
+using Toggl.Core.UI.ViewModels.Reports;
 
 namespace Toggl.iOS.Cells.Reports
 {
@@ -18,6 +19,21 @@ namespace Toggl.iOS.Cells.Reports
         protected ReportsErrorCollectionViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
+        }
+
+        override public void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+
+            ErrorTitleLabel.Text = "Ooooops!";
+
+            ErrorTitleLabel.SetKerning(-0.2);
+            ErrorMessageLabel.SetKerning(-0.2);
+        }
+
+        public void setElement(ReportErrorElement errorElement)
+        {
+            ErrorMessageLabel.Text = errorElement.Message;
         }
     }
 }
