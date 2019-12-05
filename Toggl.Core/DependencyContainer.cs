@@ -191,7 +191,7 @@ namespace Toggl.Core
             => new SyncErrorHandlingService(ErrorHandlingService);
 
         protected virtual ITogglDataSource CreateDataSource()
-            => new TogglDataSource(Database, TimeService, AnalyticsService);
+            => new TogglDataSource(Database, TimeService, AnalyticsService, SchedulerProvider);
 
         protected virtual IRxActionFactory CreateRxActionFactory()
             => new RxActionFactory(SchedulerProvider);

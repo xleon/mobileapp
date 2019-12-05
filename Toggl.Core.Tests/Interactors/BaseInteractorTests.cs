@@ -7,8 +7,10 @@ using Toggl.Core.Login;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Sync;
+using Toggl.Core.Tests.UI;
 using Toggl.Networking;
 using Toggl.Networking.Network;
+using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 
@@ -42,6 +44,8 @@ namespace Toggl.Core.Tests
             Substitute.For<IPushNotificationsTokenStorage>();
 
         protected IInteractorFactory InteractorFactory { get; }
+        
+        protected TestSchedulerProvider SchedulerProvider { get; } = new TestSchedulerProvider();
 
         protected BaseInteractorTests()
         {
