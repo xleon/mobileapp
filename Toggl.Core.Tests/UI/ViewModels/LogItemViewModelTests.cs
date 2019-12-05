@@ -74,7 +74,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var timeEntries = ids.Get.Select(timeEntry).ToArray();
 
-                var viewModel = new LogItemViewModel(
+                var viewModel = new TimeEntryLogItemViewModel(
                     new GroupId(timeEntries.First()),
                     timeEntries.Select(te => te.Id).ToArray(),
                     LogItemVisualizationIntent.CollapsedGroupHeader,
@@ -104,7 +104,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var timeEntries = ids.Get.Select(timeEntry).ToArray();
 
-                var viewModel = new LogItemViewModel(
+                var viewModel = new TimeEntryLogItemViewModel(
                     new GroupId(timeEntries.First()),
                     timeEntries.Select(te => te.Id).ToArray(),
                     LogItemVisualizationIntent.CollapsedGroupHeader,
@@ -133,7 +133,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         private static IThreadSafeTimeEntry timeEntry(long id)
             => new MockTimeEntry { Id = id, Workspace = workspace, TagIds = Array.Empty<long>() };
 
-        private static LogItemViewModel toViewModel(IThreadSafeTimeEntry timeEntry)
+        private static TimeEntryLogItemViewModel toViewModel(IThreadSafeTimeEntry timeEntry)
             => timeEntry.ToViewModel(
                 new GroupId(timeEntry), LogItemVisualizationIntent.SingleItem, DurationFormat.Improved, 0, 0, 0);
     }

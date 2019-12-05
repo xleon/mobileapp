@@ -12,6 +12,7 @@ about: A checklist before releasing to the AppStore and Play Store.
 - [ ] Create a release pull request, including the diff and write the user-facing changelog following [the guidelines][2], and add it to the release project
 - [ ] Link the release pull request in this issue
 - [ ] Have the changelog reviewed
+- [ ] Ask in the `#marketing-apps` channel if any app metadata needs to be updated based on the changelog
 - [ ] When all changes are included in the release branch, create a new tag, name should be `ios-X.Y` or `android-X.Y`
 - [ ] Create a GitHub release from the tag and include the user-facing changelog
 - [ ] Inform `@mobileteam` and `@support` in the `#mobile-support` channel that a new build is available for testing, include the user-facing changelog
@@ -30,7 +31,6 @@ about: A checklist before releasing to the AppStore and Play Store.
 ## Release phase
 
 - [ ] Create a new version on AppStore Connect or Google Play Console, include the reviewed changelog
-- [ ] Ask in the `#marketing-apps` channel if any app metadata needs to be updated
 - [ ] Make sure they translated the changelog into the languages that we support (default texts are [here](https://www.notion.so/toggl/Localized-Changelogs-b490351ff90e445eb98335b9ae770268))
 - [ ] Release to users with a phased rollout (send for review with automatic release to users selected in case of iOS)
 - [ ] Inform `@mobileteam` and `@support` in the `#mobile-support` channel that a phased rollout started

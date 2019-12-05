@@ -25,7 +25,7 @@ using ThreadingTask = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
-    using TimeEntriesLog = IEnumerable<ISectionModel<DaySummaryViewModel, LogItemViewModel>>;
+    using TimeEntriesLog = IEnumerable<ISectionModel<MainLogSectionViewModel, MainLogItemViewModel>>;
 
     public sealed class TimeEntriesViewModelTests
     {
