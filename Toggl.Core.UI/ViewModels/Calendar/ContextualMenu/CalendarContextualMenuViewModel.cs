@@ -315,6 +315,14 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             if (!calendarItem.TimeEntryId.HasValue)
                 return;
 
+            var view = View;
+            if (view == null)
+                return;
+
+            var shouldDelete = await view.ConfirmDestructiveAction(ActionType.DeleteExistingTimeEntry);
+            if (!shouldDelete)
+                return;
+
             calendarItemRemoved.OnNext(calendarItem);
             await interactorFactory.DeleteTimeEntry(calendarItem.TimeEntryId.Value).Execute();
             closeMenuWithCommittedChanges();

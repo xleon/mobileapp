@@ -63,7 +63,7 @@ namespace Toggl.Core.Sync.States.Push
                 .Select(convertToThreadsafeModel)
                 .SelectMany(tryOverwrite(entity))
                 .Track(AnalyticsService.EntitySynced, Update, entity.GetSafeTypeName())
-                .Track(AnalyticsService.EntitySyncStatus, entity.GetSafeTypeName(), $"{Update}:{Resources.Success}")
+                .Track(AnalyticsService.EntitySyncStatus, entity.GetSafeTypeName(), $"{Update}:Success")
                 .Catch(Fail(entity, Update));
         }
 

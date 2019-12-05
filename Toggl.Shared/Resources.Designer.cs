@@ -796,6 +796,13 @@ namespace Toggl.Shared {
             }
         }
 
+        
+        public static string Back {
+            get {
+                return ResourceManager.GetString("Back", resourceCulture);
+            }
+        }
+        
         public static string CountriesJson {
             get {
                 return ResourceManager.GetString("CountriesJson", resourceCulture);
@@ -895,18 +902,6 @@ namespace Toggl.Shared {
         public static string ArchivedProjectDecorator {
             get {
                 return ResourceManager.GetString("ArchivedProjectDecorator", resourceCulture);
-            }
-        }
-
-        public static string Failure {
-            get {
-                return ResourceManager.GetString("Failure", resourceCulture);
-            }
-        }
-
-        public static string Success {
-            get {
-                return ResourceManager.GetString("Success", resourceCulture);
             }
         }
 
@@ -1431,10 +1426,10 @@ namespace Toggl.Shared {
                 return ResourceManager.GetString("ProjectColor", resourceCulture);
             }
         }
-
-        public static string Search {
+        
+        public static string SearchObject {
             get {
-                return ResourceManager.GetString("Search", resourceCulture);
+                return ResourceManager.GetString("SearchObject", resourceCulture);
             }
         }
 
@@ -1455,7 +1450,13 @@ namespace Toggl.Shared {
                 return ResourceManager.GetString("DurationFormat", resourceCulture);
             }
         }
-
+        
+        public static string SelectProjectTitle {
+            get {
+                return ResourceManager.GetString("SelectProjectTitle", resourceCulture);
+            }
+        }
+        
         public static string Projects {
             get {
                 return ResourceManager.GetString("Projects", resourceCulture);

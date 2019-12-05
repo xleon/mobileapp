@@ -20,15 +20,16 @@ namespace Toggl.iOS.Services
         public void FetchRemoteConfigData(Action onFetchSucceeded, Action<Exception> onFetchFailed)
         {
             var remoteConfig = RemoteConfig.SharedInstance;
-            remoteConfig.Fetch((status, error) =>
+
+            remoteConfig.FetchAndActivate((status, error) =>
             {
-                if (error != null)
-                    onFetchFailed(new Exception(error.Description));
-                else
+                if (status == RemoteConfigFetchAndActivateStatus.Error)
                 {
-                    remoteConfig.ActivateFetched();
-                    onFetchSucceeded();
+                    onFetchFailed(new Exception(error?.Description ?? "Fetching Firebase Remote Configuration failed for some unknown reason."));
+                    return;
                 }
+
+                onFetchSucceeded();
             });
         }
 

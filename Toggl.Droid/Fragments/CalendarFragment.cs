@@ -8,6 +8,8 @@ using System.Reactive.Linq;
 using Toggl.Core.UI.ViewModels;
 using System.Reactive.Subjects;
 using Android.Runtime;
+using Android.Content;
+using AndroidX.ConstraintLayout.Widget;
 using AndroidX.Fragment.App;
 using AndroidX.ViewPager.Widget;
 using Toggl.Core;
@@ -21,7 +23,6 @@ using Toggl.Droid.ViewHolders;
 using Toggl.Droid.Views.Calendar;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
-using AndroidX.ConstraintLayout.Widget;
 
 namespace Toggl.Droid.Fragments
 {
@@ -48,10 +49,14 @@ namespace Toggl.Droid.Fragments
 
         protected override void InitializationFinished()
         {
-            calendarDayAdapter = new CalendarDayFragmentAdapter(ViewModel, scrollToStartSignaler, ChildFragmentManager);
+            calendarDayAdapter = new CalendarDayFragmentAdapter(Context, ViewModel, scrollToStartSignaler, ChildFragmentManager);
+            var startingCalendarDayViewPage = calculateDayViewPage(ViewModel.CurrentlyShownDate.Value);
+            calendarDayAdapter.CurrentPageRelay.Accept(startingCalendarDayViewPage);
+
             calendarViewPager.Adapter = calendarDayAdapter;
+            calendarViewPager.SetCurrentItem(startingCalendarDayViewPage, false);
             calendarViewPager.AddOnPageChangeListener(calendarDayAdapter);
-            calendarViewPager.SetPageTransformer(false, new VerticalOffsetPageTransformer(calendarDayAdapter.OffsetRelay));
+            calendarViewPager.SetPageTransformer(false, new VerticalOffsetPageTransformer(calendarDayAdapter.HourHeightRelay, calendarDayAdapter.OffsetRelay));
             calendarDayAdapter.CurrentPageRelay
                 .Select(getDateAtAdapterPosition)
                 .Subscribe(configureHeaderDate)
@@ -67,9 +72,6 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(swipeIsLocked => calendarViewPager.IsLocked = swipeIsLocked)
                 .DisposedBy(DisposeBag);
 
-            var startingCalendarDayViewPage = calculateDayViewPage(ViewModel.CurrentlyShownDate.Value);
-            calendarViewPager.SetCurrentItem(startingCalendarDayViewPage, false);
-            
             calendarWeekStripeAdapter = new CalendarWeekStripeAdapter(ViewModel.SelectDayFromWeekView, ViewModel.CurrentlyShownDate);
             calendarWeekStripePager.AddOnPageChangeListener(calendarWeekStripeAdapter);
             calendarWeekStripePager.Adapter = calendarWeekStripeAdapter;
@@ -212,9 +214,13 @@ namespace Toggl.Droid.Fragments
         private class VerticalOffsetPageTransformer : Java.Lang.Object, ViewPager.IPageTransformer
         {
             private BehaviorRelay<int> verticalOffsetProvider { get; }
+            private BehaviorRelay<int> hourHeightProvider { get; }
 
-            public VerticalOffsetPageTransformer(BehaviorRelay<int> verticalOffsetProvider)
+            public VerticalOffsetPageTransformer(
+                BehaviorRelay<int> hourHeightProvider,
+                BehaviorRelay<int> verticalOffsetProvider)
             {
+                this.hourHeightProvider = hourHeightProvider;
                 this.verticalOffsetProvider = verticalOffsetProvider;
             }
 
@@ -222,6 +228,7 @@ namespace Toggl.Droid.Fragments
             {
                 var calendarDayView = page.FindViewById<CalendarDayView>(Resource.Id.CalendarDayView);
                 calendarDayView?.SetOffset(verticalOffsetProvider.Value);
+                calendarDayView?.SetHourHeight(hourHeightProvider.Value);
             }
         }
 
@@ -231,8 +238,11 @@ namespace Toggl.Droid.Fragments
             private readonly IObservable<bool> scrollToTopSign;
             private readonly ISubject<Unit> pageNeedsToBeInvalidated = new Subject<Unit>();
             private readonly ISubject<Unit> backPressSubject = new Subject<Unit>();
+            private readonly ISubject<int> ScrollingPage = new Subject<int>();
+            
             public BehaviorRelay<int> OffsetRelay { get; } = new BehaviorRelay<int>(0);
-            public BehaviorRelay<int> CurrentPageRelay { get; } = new BehaviorRelay<int>(0);
+            public BehaviorRelay<int> HourHeightRelay { get; }
+            public BehaviorRelay<int> CurrentPageRelay { get; } = new BehaviorRelay<int>(-1);
             public BehaviorRelay<bool> MenuVisibilityRelay { get; } = new BehaviorRelay<bool>(false);
             public BehaviorRelay<string> TimeTrackedOnDay { get; } = new BehaviorRelay<string>(string.Empty);
             
@@ -240,10 +250,17 @@ namespace Toggl.Droid.Fragments
             {
             }
 
-            public CalendarDayFragmentAdapter(CalendarViewModel calendarViewModel, IObservable<bool> scrollToTopSign, FragmentManager fm) : base(fm)
+            public CalendarDayFragmentAdapter(
+                Context context,
+                CalendarViewModel calendarViewModel,
+                IObservable<bool> scrollToTopSign,
+                FragmentManager fm)
+                : base(fm)
             {
                 this.calendarViewModel = calendarViewModel;
                 this.scrollToTopSign = scrollToTopSign;
+
+                HourHeightRelay = new BehaviorRelay<int>(56.DpToPixels(context));
             }
 
             public override int Count { get; } = calendarPagesCount;
@@ -253,13 +270,15 @@ namespace Toggl.Droid.Fragments
                 {
                     ViewModel = calendarViewModel.DayViewModelAt(-(Count - 1 - position)),
                     ScrollOffsetRelay = OffsetRelay,
+                    HourHeightRelay = HourHeightRelay,
                     CurrentPageRelay = CurrentPageRelay,
                     MenuVisibilityRelay =  MenuVisibilityRelay,
                     PageNumber = position,
                     ScrollToStartSign = scrollToTopSign,
                     InvalidationListener = pageNeedsToBeInvalidated.AsObservable(),
                     BackPressListener = backPressSubject.AsObservable(),
-                    TimeTrackedOnDay = TimeTrackedOnDay
+                    TimeTrackedOnDay = TimeTrackedOnDay,
+                    ScrollingPage = ScrollingPage.AsObservable()
                 };
 
             public void InvalidateCurrentPage()
@@ -281,6 +300,8 @@ namespace Toggl.Droid.Fragments
 
             public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
             {
+                if (!(positionOffset > 0.01f)) return;
+                ScrollingPage.OnNext(position);
             }
         }
         
