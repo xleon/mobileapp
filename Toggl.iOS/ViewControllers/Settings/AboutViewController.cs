@@ -16,6 +16,7 @@ namespace Toggl.iOS.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            NavigationItem.BackBarButtonItem.Title = Resources.Back;
 
             Title = Resources.About;
 
