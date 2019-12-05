@@ -37,7 +37,7 @@ using static Toggl.Core.UI.Helper.Animation;
 
 namespace Toggl.iOS.ViewControllers
 {
-    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
+    using MainLogSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
 
     public partial class MainViewController : ReactiveViewController<MainViewModel>, IScrollableToTop
     {
@@ -128,7 +128,7 @@ namespace Toggl.iOS.ViewControllers
             TimeEntriesLogTableView.BackgroundColor = ColorAssets.TableBackground;
 
             ViewModel.TimeEntries
-                .Subscribe(TimeEntriesLogTableView.Rx().AnimateSections<MainLogSection, DaySummaryViewModel, LogItemViewModel, IMainLogKey>(tableViewSource))
+                .Subscribe(TimeEntriesLogTableView.Rx().AnimateSections<MainLogSection, MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>(tableViewSource))
                 .DisposedBy(disposeBag);
 
             ViewModel.ShouldReloadTimeEntryLog
@@ -164,6 +164,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             tableViewSource.Rx().ModelSelected()
+                .Select(item => item as TimeEntryLogItemViewModel)
                 .Select(editEventInfo)
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
@@ -400,7 +401,7 @@ namespace Toggl.iOS.ViewControllers
             TimeEntriesLogTableView.TableHeaderView = tableHeader;
         }
 
-        private EditTimeEntryInfo editEventInfo(LogItemViewModel item)
+        private EditTimeEntryInfo editEventInfo(TimeEntryLogItemViewModel item)
         {
             var origin = item.IsTimeEntryGroupHeader
                 ? GroupHeader
@@ -411,7 +412,7 @@ namespace Toggl.iOS.ViewControllers
             return new EditTimeEntryInfo(origin, item.RepresentedTimeEntriesIds);
         }
 
-        private ContinueTimeEntryInfo timeEntryContinuation(LogItemViewModel itemViewModel, bool isSwipe)
+        private ContinueTimeEntryInfo timeEntryContinuation(TimeEntryLogItemViewModel itemViewModel, bool isSwipe)
         {
             var continueMode = default(ContinueTimeEntryMode);
 
