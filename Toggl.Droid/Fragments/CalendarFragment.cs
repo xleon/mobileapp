@@ -23,6 +23,7 @@ using Toggl.Droid.ViewHolders;
 using Toggl.Droid.Views.Calendar;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Extensions.Reactive;
+using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Fragments
 {

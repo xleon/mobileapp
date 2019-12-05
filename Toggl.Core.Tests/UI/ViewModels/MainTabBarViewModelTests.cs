@@ -1,4 +1,5 @@
-﻿using Toggl.Core.Analytics;
+﻿using NSubstitute;
+using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
