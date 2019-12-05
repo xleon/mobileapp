@@ -87,7 +87,6 @@
     <DefineConstants>USE_PRODUCTION_API</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <CodesignKey>iPhone Distribution: Toggl OU (B227VTMZ94)</CodesignKey>
-    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchVerbosity>
     </MtouchVerbosity>
     <MtouchFloat32>true</MtouchFloat32>
