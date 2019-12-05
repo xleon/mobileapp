@@ -116,8 +116,8 @@ namespace Toggl.Core.UI
 
         private void setLocale(CultureInfo cultureInfo, CultureInfo dateFormatCultureInfo)
         {
-            Thread.CurrentThread.CurrentCulture = cultureInfo;
-            Thread.CurrentThread.CurrentUICulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
             DateFormatCultureInfo.CurrentCulture = dateFormatCultureInfo;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Android.Views;
 using Android.Widget;
 using Google.Android.Material.TextField;
+using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Activities
 {
@@ -11,7 +12,8 @@ namespace Toggl.Droid.Activities
         private TextInputLayout loginEmail;
         private TextInputLayout loginPassword;
 
-        private View signupCard;
+        private ViewGroup signupCard;
+        private ViewGroup loginSignupContainer;
         private View googleLoginButton;
 
         private EditText emailEditText;
@@ -28,7 +30,9 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeViews()
         {
-            signupCard = FindViewById(Resource.Id.LoginSignupCardView);
+            signupCard = FindViewById<ViewGroup>(Resource.Id.LoginSignupCardView);
+            loginSignupContainer = FindViewById<ViewGroup>(Resource.Id.LoginSignupContainer);
+            loginSignupContainer.FitBottomInset();
             errorTextView = FindViewById<TextView>(Resource.Id.LoginError);
             loginButton = FindViewById<Button>(Resource.Id.LoginLoginButton);
             forgotPasswordView = FindViewById<TextView>(Resource.Id.LoginForgotPassword);
@@ -42,7 +46,7 @@ namespace Toggl.Droid.Activities
             emailEditText = FindViewById<EditText>(Resource.Id.LoginEmailEditText);
             loginPassword = FindViewById<TextInputLayout>(Resource.Id.LoginPassword);
             passwordEditText = FindViewById<EditText>(Resource.Id.LoginPasswordEditText);
-            
+
             loginEmail.Hint = Shared.Resources.Email;
             loginPassword.Hint = Shared.Resources.Password;
             forgotPasswordView.Text = Shared.Resources.LoginForgotPassword;

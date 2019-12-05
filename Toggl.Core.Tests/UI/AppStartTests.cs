@@ -191,6 +191,7 @@ namespace Toggl.Core.Tests.UI
             }
         }
 
+        [CollectionDefinition("global", DisableParallelization = true)]
         public sealed class TheLoadLocalizationConfigurationMethod : AppStartTest
         {
             [Fact, LogIfTooSlow, DiscardCultureChanges]
