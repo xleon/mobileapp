@@ -33,7 +33,6 @@ namespace Toggl.Droid.Views.Calendar
         private float leftPadding;
         private float rightPadding;
         private float itemSpacing;
-        private float minHourHeight;
         private float runningTimeEntryStripesSpacing;
         private float runningTimeEntryThinStripeWidth;
         private int shortCalendarItemHeight;
@@ -55,6 +54,8 @@ namespace Toggl.Droid.Views.Calendar
         private Color lastCalendarItemBackgroundColor;
         private CalendarItemEditInfo itemEditInEditMode = CalendarItemEditInfo.None;
 
+        private float minHourHeight => hourHeight / 4f;
+
         public void UpdateItems(ObservableGroupedOrderedCollection<CalendarItem> calendarItems)
         {
             var newItems = calendarItems.IsEmpty
@@ -67,7 +68,6 @@ namespace Toggl.Droid.Views.Calendar
 
         partial void initEventDrawingBackingFields()
         {
-            minHourHeight = hourHeight / 4f;
             leftMargin = 68.DpToPixels(Context);
             leftPadding = 4.DpToPixels(Context);
             rightPadding = 4.DpToPixels(Context);
@@ -149,10 +149,9 @@ namespace Toggl.Droid.Views.Calendar
             }
         }
 
-        partial void processEventsOnLayout(bool changed, int left, int top, int right, int bottom)
+        partial void processEventsOnLayout()
         {
-            if (changed)
-                updateItemsAndRecalculateEventsAttrs(calendarItems);
+            updateItemsAndRecalculateEventsAttrs(calendarItems);
         }
 
         private CalendarItemRectAttributes calculateCalendarItemRect(CalendarItemLayoutAttributes attrs)

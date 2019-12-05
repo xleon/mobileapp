@@ -14,7 +14,7 @@ using System.Reactive.Linq;
 
 namespace Toggl.iOS.Views
 {
-    public partial class TimeEntriesLogViewCell : BaseTableViewCell<LogItemViewModel>
+    public partial class TimeEntriesLogViewCell : BaseTableViewCell<TimeEntryLogItemViewModel>
     {
         public static readonly string Identifier = "timeEntryCell";
 

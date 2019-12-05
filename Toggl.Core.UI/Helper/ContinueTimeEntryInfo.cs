@@ -16,7 +16,7 @@ namespace Toggl.Core.UI.Helper
 
         public int DaysInThePast { get; }
 
-        public ContinueTimeEntryInfo(LogItemViewModel viewModel, ContinueTimeEntryMode continueMode)
+        public ContinueTimeEntryInfo(TimeEntryLogItemViewModel viewModel, ContinueTimeEntryMode continueMode)
         {
             Id = viewModel.RepresentedTimeEntriesIds.First();
             IndexInLog = viewModel.IndexInLog;

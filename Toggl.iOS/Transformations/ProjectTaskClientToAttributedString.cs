@@ -26,15 +26,15 @@ namespace Toggl.iOS.Transformations
             this.fontHeight = fontHeight;
         }
 
-        public NSAttributedString Convert(LogItemViewModel logItemViewModel)
+        public NSAttributedString Convert(TimeEntryLogItemViewModel timeEntryLogItemViewModel)
         {
-            var projectColor = new Color(logItemViewModel.ProjectColor).ToNativeColor();
+            var projectColor = new Color(timeEntryLogItemViewModel.ProjectColor).ToNativeColor();
             return Convert(
-                logItemViewModel.ProjectName,
-                logItemViewModel.TaskName,
-                logItemViewModel.ClientName, projectColor,
-                logItemViewModel.ProjectIsPlaceholder,
-                logItemViewModel.TaskIsPlaceholder);
+                timeEntryLogItemViewModel.ProjectName,
+                timeEntryLogItemViewModel.TaskName,
+                timeEntryLogItemViewModel.ClientName, projectColor,
+                timeEntryLogItemViewModel.ProjectIsPlaceholder,
+                timeEntryLogItemViewModel.TaskIsPlaceholder);
         }
 
         public NSAttributedString Convert(IThreadSafeTimeEntry timeEntry)

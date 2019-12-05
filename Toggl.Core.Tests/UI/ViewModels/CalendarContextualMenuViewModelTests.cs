@@ -503,8 +503,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 => CreateDummyTimeEntryCalendarItem(isRunning: true);
 
             [Fact]
-            public void TheDiscardActionDeletesTheRunningTimeEntry()
+            public void TheDiscardActionDeletesTheRunningTimeEntryIfTheUsersConfirmsTheDialog()
             {
+                View.ConfirmDestructiveAction(Arg.Any<ActionType>()).ReturnsObservableOf(true);
                 var discardAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Discard);
                 var runningTimeEntryId = 10;
                 var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: true, timeEntryId: runningTimeEntryId);
@@ -516,10 +517,26 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
                 InteractorFactory.Received().DeleteTimeEntry(runningTimeEntryId);
             }
-            
+
+            [Fact]
+            public void TheDiscardActionDoesNotDeleteTheRunningTimeEntryIfTheUsersDoesNotConfirmTheDialog()
+            {
+                View.ConfirmDestructiveAction(Arg.Any<ActionType>()).ReturnsObservableOf(false);
+                var discardAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Discard);
+                var runningTimeEntryId = 10;
+                var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: true, timeEntryId: runningTimeEntryId);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(runningTimeEntry);
+                TestScheduler.Start();
+
+                discardAction.MenuItemAction.Execute();
+
+                TestScheduler.Start();
+                InteractorFactory.DidNotReceive().DeleteTimeEntry(runningTimeEntryId);
+            }
+
             [Fact]
             public void TheDiscardActionExecutesActionAndClosesMenu()
-                => ExecutesActionAndClosesMenu(TheDiscardActionDeletesTheRunningTimeEntry);
+                => ExecutesActionAndClosesMenu(TheDiscardActionDeletesTheRunningTimeEntryIfTheUsersConfirmsTheDialog);
 
             [Fact]
             public void TheEditActionNavigatesToTheEditTimeEntryViewModelWithTheRightId()
@@ -613,8 +630,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 => CreateDummyTimeEntryCalendarItem(isRunning: false);
 
             [Fact]
-            public void TheDeleteActionDeletesTheRunningTimeEntry()
+            public void TheDeleteActionDeletesTheTimeEntryIfTheUserConfirmsTheDialog()
             {
+                View.ConfirmDestructiveAction(ActionType.DeleteExistingTimeEntry).ReturnsObservableOf(true);
                 var deleteAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Delete);
                 var stoppedTimeEntryId = 10;
                 var stoppedTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: stoppedTimeEntryId);
@@ -626,10 +644,26 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
                 InteractorFactory.Received().DeleteTimeEntry(stoppedTimeEntryId);
             }
-            
+
+            [Fact]
+            public void TheDeleteActionDoesNotDeleteTheTimeEntryIfTheUserConfirmsDoesNotConfirmTheDialog()
+            {
+                View.ConfirmDestructiveAction(ActionType.DeleteExistingTimeEntry).ReturnsObservableOf(false);
+                var deleteAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Delete);
+                var stoppedTimeEntryId = 10;
+                var stoppedTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: stoppedTimeEntryId);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(stoppedTimeEntry);
+                TestScheduler.Start();
+
+                deleteAction.MenuItemAction.Execute();
+
+                TestScheduler.Start();
+                InteractorFactory.DidNotReceive().DeleteTimeEntry(stoppedTimeEntryId);
+            }
+
             [Fact]
             public void TheDeleteActionExecutesActionAndClosesMenu()
-                => ExecutesActionAndClosesMenu(TheDeleteActionDeletesTheRunningTimeEntry);
+                => ExecutesActionAndClosesMenu(TheDeleteActionDeletesTheTimeEntryIfTheUserConfirmsTheDialog);
 
             [Fact]
             public void TheEditActionNavigatesToTheEditTimeEntryViewModelWithTheRightId()

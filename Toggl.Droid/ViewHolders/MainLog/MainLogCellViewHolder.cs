@@ -12,9 +12,9 @@ using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
 using static Toggl.Droid.Resource.Id;
 
-namespace Toggl.Droid.ViewHolders
+namespace Toggl.Droid.ViewHolders.MainLog
 {
-    public class MainLogCellViewHolder : BaseRecyclerViewHolder<TimeEntryViewData>
+    public class MainLogCellViewHolder : BaseRecyclerViewHolder<MainLogItemViewModel>
     {
         private Color cardColor;
         private Color backgroundColor;
@@ -39,8 +39,9 @@ namespace Toggl.Droid.ViewHolders
         private TextView groupCountTextView;
         private View groupExpansionButton;
 
-        public bool CanSync => Item.ViewModel.CanContinue;
+        public bool CanSync => ((TimeEntryLogItemViewModel) Item).CanContinue;
         public View MainLogContentView { get; private set; }
+        public ISubject<TimeEntryLogItemViewModel> EditTimeEntrySubject { get; set; }
         public Subject<ContinueTimeEntryInfo> ContinueButtonTappedSubject { get; set; }
         public Subject<GroupId> ToggleGroupExpansionSubject { get; set; }
 
@@ -80,12 +81,18 @@ namespace Toggl.Droid.ViewHolders
             MainLogContentView = ItemView.FindViewById(Resource.Id.MainLogContentView);
 
             groupExpansionButton = ItemView.FindViewById(TimeEntriesLogCellToggleExpansionButton);
+            ItemView.Click += onItemClick;
             timeEntriesLogCellContinueButton.Click += onContinueClick;
             groupExpansionButton.Click += onExpansionClick;
 
             mainLogBackgroundContinue.Text = Shared.Resources.Continue;
             mainLogBackgroundDelete.Text = Shared.Resources.Delete;
             addDescriptionLabel.Text = Shared.Resources.AddDescription;
+        }
+
+        private void onItemClick(object sender, EventArgs e)
+        {
+            EditTimeEntrySubject.OnNext((TimeEntryLogItemViewModel) Item);
         }
 
         private void onExpansionClick(object sender, EventArgs e)
@@ -113,19 +120,21 @@ namespace Toggl.Droid.ViewHolders
 
         private void onContinueClick(object sender, EventArgs e)
         {
-            var continueMode = Item.ViewModel.IsTimeEntryGroupHeader
+            var timeEntryLogItemViewModel = (TimeEntryLogItemViewModel) Item;
+            var continueMode = timeEntryLogItemViewModel.IsTimeEntryGroupHeader
                 ? ContinueTimeEntryMode.TimeEntriesGroupContinueButton
                 : ContinueTimeEntryMode.SingleTimeEntryContinueButton;
 
-            ContinueButtonTappedSubject?.OnNext(new ContinueTimeEntryInfo(Item.ViewModel, continueMode));
+            ContinueButtonTappedSubject?.OnNext(new ContinueTimeEntryInfo(timeEntryLogItemViewModel, continueMode));
         }
 
         private ConstraintLayout.LayoutParams getDurationPaddingWidthDependentOnIcons()
         {
+            var timeEntryLogItemViewModel = (TimeEntryLogItemViewModel) Item;
             var whitePaddingWidth =
                 72
-                + (Item.ViewModel.IsBillable ? 22 : 0)
-                + (Item.ViewModel.HasTags ? 22 : 0);
+                + (timeEntryLogItemViewModel.IsBillable ? 22 : 0)
+                + (timeEntryLogItemViewModel.HasTags ? 22 : 0);
 
             var layoutParameters = (ConstraintLayout.LayoutParams)durationPadding.LayoutParameters;
             layoutParameters.Width = whitePaddingWidth.DpToPixels(ItemView.Context);
@@ -134,30 +143,32 @@ namespace Toggl.Droid.ViewHolders
 
         protected override void UpdateView()
         {
-            groupId = Item.ViewModel.GroupId;
+            var timeEntryViewData = new TimeEntryViewData(ItemView.Context, (TimeEntryLogItemViewModel) Item);
 
-            timeEntriesLogCellDescription.Text = Item.ViewModel.Description;
-            timeEntriesLogCellDescription.Visibility = Item.DescriptionVisibility;
-            addDescriptionLabel.Visibility = Item.AddDescriptionLabelVisibility;
+            groupId = timeEntryViewData.ViewModel.GroupId;
 
-            timeEntriesLogCellProjectLabel.TextFormatted = Item.ProjectTaskClientText;
-            timeEntriesLogCellProjectLabel.Visibility = Item.ProjectTaskClientVisibility;
+            timeEntriesLogCellDescription.Text = timeEntryViewData.ViewModel.Description;
+            timeEntriesLogCellDescription.Visibility = timeEntryViewData.DescriptionVisibility;
+            addDescriptionLabel.Visibility = timeEntryViewData.AddDescriptionLabelVisibility;
 
-            timeEntriesLogCellProjectArchivedIcon.Visibility = Item.ProjectArchivedIconVisibility;
-            timeEntriesLogCellProjectArchivedIcon.SetColorFilter(Item.ProjectArchivedIconTintColor);
+            timeEntriesLogCellProjectLabel.TextFormatted = timeEntryViewData.ProjectTaskClientText;
+            timeEntriesLogCellProjectLabel.Visibility = timeEntryViewData.ProjectTaskClientVisibility;
 
-            timeEntriesLogCellDuration.Text = Item.ViewModel.Duration;
+            timeEntriesLogCellProjectArchivedIcon.Visibility = timeEntryViewData.ProjectArchivedIconVisibility;
+            timeEntriesLogCellProjectArchivedIcon.SetColorFilter(timeEntryViewData.ProjectArchivedIconTintColor);
 
-            timeEntriesLogCellContinueImage.Visibility = Item.ContinueImageVisibility;
-            errorImageView.Visibility = Item.ErrorImageViewVisibility;
-            errorNeedsSync.Visibility = Item.ErrorNeedsSyncVisibility;
-            timeEntriesLogCellContinueButton.Visibility = Item.ContinueButtonVisibility;
-            billableIcon.Visibility = Item.BillableIconVisibility;
-            hasTagsIcon.Visibility = Item.HasTagsIconVisibility;
+            timeEntriesLogCellDuration.Text = timeEntryViewData.ViewModel.Duration;
+
+            timeEntriesLogCellContinueImage.Visibility = timeEntryViewData.ContinueImageVisibility;
+            errorImageView.Visibility = timeEntryViewData.ErrorImageViewVisibility;
+            errorNeedsSync.Visibility = timeEntryViewData.ErrorNeedsSyncVisibility;
+            timeEntriesLogCellContinueButton.Visibility = timeEntryViewData.ContinueButtonVisibility;
+            billableIcon.Visibility = timeEntryViewData.BillableIconVisibility;
+            hasTagsIcon.Visibility = timeEntryViewData.HasTagsIconVisibility;
 
             durationPadding.LayoutParameters = getDurationPaddingWidthDependentOnIcons();
 
-            switch (Item.ViewModel.VisualizationIntent)
+            switch (timeEntryViewData.ViewModel.VisualizationIntent)
             {
                 case LogItemVisualizationIntent.SingleItem:
                     presentAsSingleTimeEntry();
@@ -168,15 +179,15 @@ namespace Toggl.Droid.ViewHolders
                     break;
 
                 case LogItemVisualizationIntent.CollapsedGroupHeader:
-                    presentAsCollapsedGroupHeader(Item.ViewModel.RepresentedTimeEntriesIds.Length);
+                    presentAsCollapsedGroupHeader(timeEntryViewData.ViewModel.RepresentedTimeEntriesIds.Length);
                     break;
 
                 case LogItemVisualizationIntent.ExpandedGroupHeader:
-                    presentAsExpandedGroupHeader(Item.ViewModel.RepresentedTimeEntriesIds.Length);
+                    presentAsExpandedGroupHeader(timeEntryViewData.ViewModel.RepresentedTimeEntriesIds.Length);
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException($"Cannot visualize {Item.ViewModel.VisualizationIntent} in the time entries log table.");
+                    throw new ArgumentOutOfRangeException($"Cannot visualize {timeEntryViewData.ViewModel.VisualizationIntent} in the time entries log table.");
             }
         }
 
@@ -231,6 +242,7 @@ namespace Toggl.Droid.ViewHolders
             if (!disposing)
                 return;
 
+            ItemView.Click -= onItemClick;
             timeEntriesLogCellContinueButton.Click -= onContinueClick;
             groupExpansionButton.Click -= onExpansionClick;
         }
