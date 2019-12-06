@@ -36,7 +36,7 @@ namespace Toggl.Droid.Fragments
             : base(javaReference, transfer)
         {
         }
-
+    
         public sealed override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(LayoutId, container, false);
@@ -48,6 +48,7 @@ namespace Toggl.Droid.Fragments
             Task.Run(async () =>
             {
                 ViewModel = lazyViewModel.Value;
+                ViewModel.AttachView(this);
                 await ViewModel.Initialize();
                 ViewModel?.ViewAppearing();
 
@@ -61,12 +62,6 @@ namespace Toggl.Droid.Fragments
             });
 
             return view;
-        }
-
-        public override void OnViewCreated(View view, Bundle savedInstanceState)
-        {
-            base.OnViewCreated(view, savedInstanceState);
-            ViewModel?.AttachView(this);
         }
 
         public override void OnStart()
