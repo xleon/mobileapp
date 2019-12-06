@@ -37,7 +37,7 @@ namespace Toggl.Core.UI.ViewModels
         private IDisposable delayedDeletionDisposable;
         private long[] timeEntriesToDelete;
 
-        public IObservable<IImmutableList<AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>>> TimeEntries { get; }
+        public IObservable<IImmutableList<AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>>> TimeEntries { get; }
         public IObservable<bool> Empty { get; }
         public IObservable<int> Count { get; }
         public IObservable<int?> TimeEntriesPendingDeletion { get; }

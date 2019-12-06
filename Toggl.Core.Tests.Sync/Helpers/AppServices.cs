@@ -8,6 +8,7 @@ using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
 using Toggl.Networking;
+using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 
@@ -20,6 +21,8 @@ namespace Toggl.Core.Tests.Sync.Helpers
         public ITogglApi TogglApi { get; }
 
         public IScheduler Scheduler { get; }
+        
+        public ISchedulerProvider SchedulerProvider { get; }
 
         public ITimeService TimeService { get; }
 
@@ -53,6 +56,7 @@ namespace Toggl.Core.Tests.Sync.Helpers
             TogglApi = api;
             Scheduler = System.Reactive.Concurrency.Scheduler.Default;
             TimeService = new TimeService(Scheduler);
+            SchedulerProvider = new AppServicesSchedulerProvider();
 
             var errorHandlingService = new ErrorHandlingService(NavigationServiceSubstitute, AccessRestrictionStorageSubsitute);
             syncErrorHandlingService = new SyncErrorHandlingService(errorHandlingService);
@@ -60,7 +64,8 @@ namespace Toggl.Core.Tests.Sync.Helpers
             var dataSource = new TogglDataSource(
                 database,
                 TimeService,
-                AnalyticsServiceSubstitute);
+                AnalyticsServiceSubstitute,
+                SchedulerProvider);
 
             var dependencyContainer = new TestDependencyContainer();
             dependencyContainer.MockKeyValueStorage = KeyValueStorage;
@@ -81,6 +86,13 @@ namespace Toggl.Core.Tests.Sync.Helpers
                 dependencyContainer);
 
             syncErrorHandlingService.HandleErrorsOf(SyncManager);
+        }
+
+        public class AppServicesSchedulerProvider : ISchedulerProvider
+        {
+            public IScheduler MainScheduler { get; } = CurrentThreadScheduler.Instance;
+            public IScheduler DefaultScheduler { get; } = System.Reactive.Concurrency.Scheduler.Default;
+            public IScheduler BackgroundScheduler { get; } = NewThreadScheduler.Default;
         }
     }
 }

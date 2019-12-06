@@ -59,6 +59,7 @@ namespace Toggl.iOS.Views.Calendar
         public IObservable<CalendarItem> ItemUpdated  => itemUpdatedSubject.AsObservable();
 
         public InputAction<CalendarItem?> StartEditingItem { get; }
+        public ViewAction StopEditing { get; }
 
         public CalendarCollectionViewEditItemHelper(
             UICollectionView CollectionView,
@@ -75,6 +76,7 @@ namespace Toggl.iOS.Views.Calendar
             this.dataSource = dataSource;
 
             StartEditingItem = rxActionFactory.FromAction<CalendarItem?>(startEditingItem);
+            StopEditing = rxActionFactory.FromAction(stopEditingCurrentCell);
 
             panGestureRecognizer = new UIPanGestureRecognizer(onPan)
             {

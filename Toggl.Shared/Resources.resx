@@ -812,8 +812,9 @@ Please update your app to continue.</value>
     <data name="ProjectColor" xml:space="preserve">
         <value>Project color</value>
     </data>
-    <data name="Search" xml:space="preserve">
-        <value>Search</value>
+    <data name="SearchObject" xml:space="preserve">
+        <value>Search {0}</value>
+        <comment> This is shown when starting a new time entry. {0} is a placeholder for where the words "Tags" or "Projects" will be.</comment>
     </data>
     <data name="DateFormat" xml:space="preserve">
         <value>Date format</value>
@@ -823,6 +824,9 @@ Please update your app to continue.</value>
     </data>
     <data name="DurationFormat" xml:space="preserve">
         <value>Duration format</value>
+    </data>
+    <data name="SelectProjectTitle" xml:space="preserve">
+        <value>Projects</value>
     </data>
     <data name="Projects" xml:space="preserve">
         <value>Projects</value>

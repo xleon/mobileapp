@@ -10,6 +10,8 @@ using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.UI;
+using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 using Xunit;
@@ -43,12 +45,13 @@ namespace Toggl.Core.Tests.DataSources
         private readonly IRepository<IDatabaseTimeEntry> repository
             = Substitute.For<IRepository<IDatabaseTimeEntry>>();
         private readonly IAnalyticsService analyticsService = Substitute.For<IAnalyticsService>();
+        private readonly ISchedulerProvider schedulerProvider = new TestSchedulerProvider();
 
         private readonly DataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry> dataSource;
 
         public DataSourceTests()
         {
-            dataSource = new TimeEntriesDataSource(repository, timeService, analyticsService);
+            dataSource = new TimeEntriesDataSource(repository, timeService, analyticsService, schedulerProvider);
         }
 
         [Fact]

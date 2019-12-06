@@ -231,7 +231,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             currentCalendarItem = default;
             calendarItemThatOriginallyTriggeredTheMenu = null;
             currentMenuType = ContextualMenuType.Closed;
-            calendarItemInEditMode.OnNext(null);
             currentMenuSubject.OnNext(contextualMenus[ContextualMenuType.Closed]);
             menuVisibilitySubject.OnNext(false);
         }

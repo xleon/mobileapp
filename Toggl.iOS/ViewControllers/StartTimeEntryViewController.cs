@@ -283,7 +283,8 @@ namespace Toggl.iOS.ViewControllers
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
         {
-            if (!inTheMiddleOfAHack) return;
+            if (inTheMiddleOfAHack)
+                return;
 
             BottomDistanceConstraint.Constant = e.FrameEnd.Height;
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
@@ -291,7 +292,8 @@ namespace Toggl.iOS.ViewControllers
 
         protected override void KeyboardWillHide(object sender, UIKeyboardEventArgs e)
         {
-            if (inTheMiddleOfAHack) return;
+            if (inTheMiddleOfAHack)
+                return;
 
             BottomDistanceConstraint.Constant = 0;
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
@@ -362,7 +364,8 @@ namespace Toggl.iOS.ViewControllers
 
         private void onTimeInputLostFocus(object sender, EventArgs e)
         {
-            if (inTheMiddleOfAHack) return;
+            if (inTheMiddleOfAHack)
+                return;
 
             switchTimeLabelAndInput();
         }

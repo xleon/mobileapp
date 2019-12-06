@@ -73,7 +73,7 @@ namespace Toggl.Core.Tests.UI.Transformations
             DurationFormat durationFormat,
             IEnumerable<IGrouping<DateTime, IThreadSafeTimeEntry>> log,
             HashSet<GroupId> expandedGroups,
-            params AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>[] expectedTree)
+            params AnimatableSectionModel<DaySummaryViewModel, MainLogItemViewModel, IMainLogKey>[] expectedTree)
         {
             var preferences =
                 new MockPreferences
@@ -283,15 +283,15 @@ namespace Toggl.Core.Tests.UI.Transformations
 
         private static IThreadSafeTimeEntry[] group(params IThreadSafeTimeEntry[] timeEntries) => timeEntries;
 
-        private static AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey> logOf(
+        private static AnimatableSectionModel<DaySummaryViewModel, MainLogItemViewModel, IMainLogKey> logOf(
             DateTime date,
             string title,
             string trackedTime,
-            IEnumerable<LogItemViewModel> items)
-            => new AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>(
+            IEnumerable<TimeEntryLogItemViewModel> items)
+            => new AnimatableSectionModel<DaySummaryViewModel, MainLogItemViewModel, IMainLogKey>(
                 new DaySummaryViewModel(date, title, trackedTime), items);
 
-        private static IEnumerable<LogItemViewModel> single(IThreadSafeTimeEntry timeEntry, DurationFormat durationFormat)
+        private static IEnumerable<TimeEntryLogItemViewModel> single(IThreadSafeTimeEntry timeEntry, DurationFormat durationFormat)
         {
             yield return timeEntry.ToViewModel(
                 new GroupId(timeEntry),
@@ -302,12 +302,12 @@ namespace Toggl.Core.Tests.UI.Transformations
                 0);
         }
 
-        private static IEnumerable<LogItemViewModel> collapsed(IThreadSafeTimeEntry[] group, DurationFormat durationFormat)
+        private static IEnumerable<TimeEntryLogItemViewModel> collapsed(IThreadSafeTimeEntry[] group, DurationFormat durationFormat)
         {
             yield return header(group, LogItemVisualizationIntent.CollapsedGroupHeader, durationFormat);
         }
 
-        private static IEnumerable<LogItemViewModel> expanded(IThreadSafeTimeEntry[] group, DurationFormat durationFormat)
+        private static IEnumerable<TimeEntryLogItemViewModel> expanded(IThreadSafeTimeEntry[] group, DurationFormat durationFormat)
         {
             yield return header(group, LogItemVisualizationIntent.ExpandedGroupHeader, durationFormat);
             foreach (var timeEntry in group)
@@ -316,13 +316,13 @@ namespace Toggl.Core.Tests.UI.Transformations
             }
         }
 
-        private static LogItemViewModel header(
+        private static TimeEntryLogItemViewModel header(
             IThreadSafeTimeEntry[] group,
             LogItemVisualizationIntent visualizationIntent,
             DurationFormat durationFormat)
         {
             var sample = group.First();
-            return new LogItemViewModel(
+            return new TimeEntryLogItemViewModel(
                 groupId: new GroupId(sample),
                 representedTimeEntriesIds: group.Select(timeEntry => timeEntry.Id).ToArray(),
                 visualizationIntent: visualizationIntent,
@@ -347,7 +347,7 @@ namespace Toggl.Core.Tests.UI.Transformations
                 taskIsPlaceholder: sample.Task?.IsPlaceholder() ?? false);
         }
 
-        private static LogItemViewModel groupItem(IThreadSafeTimeEntry timeEntry, DurationFormat durationFormat)
+        private static TimeEntryLogItemViewModel groupItem(IThreadSafeTimeEntry timeEntry, DurationFormat durationFormat)
             => timeEntry.ToViewModel(
                 new GroupId(timeEntry),
                 LogItemVisualizationIntent.GroupItem,
