@@ -1,4 +1,5 @@
 using Foundation;
+using Toggl.iOS.Shared;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 
