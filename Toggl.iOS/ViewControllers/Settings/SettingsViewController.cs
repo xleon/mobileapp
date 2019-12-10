@@ -13,7 +13,7 @@ using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Helper;
 using Toggl.iOS.Presentation.Transition;
-using Toggl.iOS.ViewControllers.Settings.Models;
+using Toggl.Core.UI.ViewModels.Settings.Rows;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;

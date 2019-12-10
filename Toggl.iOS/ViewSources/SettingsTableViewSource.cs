@@ -5,7 +5,7 @@ using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
 using Toggl.iOS.Cells.Settings;
 using Toggl.iOS.Extensions;
-using Toggl.iOS.ViewControllers.Settings.Models;
+using Toggl.Core.UI.ViewModels.Settings.Rows;
 using UIKit;
 
 namespace Toggl.iOS.ViewSources

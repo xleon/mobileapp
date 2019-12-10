@@ -1,6 +1,6 @@
 using Toggl.Shared.Extensions;
 
-namespace Toggl.iOS.ViewControllers.Settings.Models
+namespace Toggl.Core.UI.ViewModels.Settings.Rows
 {
     public class InfoRow : ISettingRow
     {

@@ -32,4 +32,7 @@
       <DependentUpon>DeeplinkParameters.cs</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\Settings\Rows\" />
+  </ItemGroup>
 </Project>
