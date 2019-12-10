@@ -70,6 +70,12 @@ namespace Toggl.Shared {
             }
         }
 
+        public static string NoRunningTimeEntry {
+            get {
+                return ResourceManager.GetString("NoRunningTimeEntry", resourceCulture);
+            }
+        }
+
         public static string LoginForgotPassword {
             get {
                 return ResourceManager.GetString("LoginForgotPassword", resourceCulture);
