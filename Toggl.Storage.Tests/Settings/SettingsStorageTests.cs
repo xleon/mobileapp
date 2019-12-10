@@ -415,5 +415,24 @@ namespace Toggl.Storage.Tests.Settings
                 });
             }
         }
+
+        public sealed class TheUserPreferencesResetMethod : SettingsStorageTest
+        {
+            private IUserPreferences userPreferences;
+            private IKeyValueStorage keyValueStorage;
+
+            public TheUserPreferencesResetMethod()
+            {
+                keyValueStorage = Substitute.For<IKeyValueStorage>();
+                userPreferences = new SettingsStorage(Version.Parse(VersionString), keyValueStorage);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void RemovesAllSelectedCalendarIdsWhenResetIsCalled()
+            {
+                userPreferences.Reset();
+                keyValueStorage.Received().Remove("EnabledCalendars");
+            }
+        }
     }
 }

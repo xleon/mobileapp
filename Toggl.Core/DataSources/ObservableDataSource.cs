@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.Storage;
@@ -20,10 +21,11 @@ namespace Toggl.Core.DataSources
 
         public IObservable<Unit> ItemsChanged { get; }
 
-        protected ObservableDataSource(IRepository<TDatabase> repository)
+        protected ObservableDataSource(IRepository<TDatabase> repository, ISchedulerProvider schedulerProvider)
             : base(repository)
         {
-            ItemsChanged = itemsChangedSubject.AsObservable();
+            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
+            ItemsChanged = itemsChangedSubject.ObserveOn(schedulerProvider.BackgroundScheduler).AsObservable();
         }
 
         public override IObservable<TThreadsafe> Create(TThreadsafe entity)

@@ -2,6 +2,7 @@
 using System.Linq;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
@@ -26,12 +27,9 @@ namespace Toggl.iOS.ViewControllers
         {
         }
 
-        public static UIBarButtonItem CreateSystemItem(UIBarButtonSystemItem systemItem, Action action)
+        public static UIBarButtonItem CreateSystemItem(string title, UIBarButtonItemStyle style, Action action)
         {
-            var button = new UIBarButtonItem(
-                systemItem,
-                (sender, args) => action()
-            );
+            var button = new UIBarButtonItem(title, style, (sender, args) => action());
 
             button.SetTitleTextAttributes(barButtonTextAttributes, UIControlState.Normal);
             button.SetTitleTextAttributes(barButtonTextAttributes, UIControlState.Highlighted);
@@ -63,7 +61,7 @@ namespace Toggl.iOS.ViewControllers
             viewController.NavigationItem.BackBarButtonItem = new UIBarButtonItem();
 
             var backButton = new UIBarButtonItem(
-                "Back",
+                Resources.Back,
                  UIBarButtonItemStyle.Done,
                 (sender, args) => { viewController.NavigationController.PopViewController(true); }
             );

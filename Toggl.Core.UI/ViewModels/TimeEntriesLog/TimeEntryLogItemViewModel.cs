@@ -6,7 +6,7 @@ using Toggl.Shared;
 
 namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
 {
-    public sealed class LogItemViewModel : IDiffable<IMainLogKey>, IEquatable<LogItemViewModel>
+    public sealed class TimeEntryLogItemViewModel : MainLogItemViewModel
     {
         public GroupId GroupId { get; }
         public long[] RepresentedTimeEntriesIds { get; }
@@ -28,8 +28,6 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
         public bool NeedsSync { get; }
         public bool CanContinue { get; }
 
-        public IMainLogKey Identity { get; }
-
         public int IndexInLog { get; }
         public int DayInLog { get; }
         public int DaysInThePast { get; }
@@ -45,7 +43,7 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
 
         public bool TaskIsPlaceholder { get; }
 
-        public LogItemViewModel(
+        public TimeEntryLogItemViewModel(
             GroupId groupId,
             long[] representedTimeEntriesIds,
             LogItemVisualizationIntent visualizationIntent,
@@ -93,10 +91,12 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
             TaskIsPlaceholder = taskIsPlaceholder;
         }
 
-        public bool Equals(LogItemViewModel other)
+        public override bool Equals(MainLogItemViewModel logItem)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
+            if (ReferenceEquals(null, logItem)) return false;
+            if (ReferenceEquals(this, logItem)) return true;
+            if (!(logItem is TimeEntryLogItemViewModel other)) return false;
+
             return RepresentedTimeEntriesIds.SequenceEqual(other.RepresentedTimeEntriesIds)
                 && IsBillable == other.IsBillable
                 && IsActive == other.IsActive
@@ -116,7 +116,7 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(this, obj)) return true;
-            return obj is LogItemViewModel other && Equals(other);
+            return obj is TimeEntryLogItemViewModel other && Equals(other);
         }
 
         public override int GetHashCode()
@@ -141,9 +141,9 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
                 CanContinue);
         }
 
-        public static bool operator ==(LogItemViewModel left, LogItemViewModel right) => Equals(left, right);
+        public static bool operator ==(TimeEntryLogItemViewModel left, TimeEntryLogItemViewModel right) => Equals(left, right);
 
-        public static bool operator !=(LogItemViewModel left, LogItemViewModel right) => !Equals(left, right);
+        public static bool operator !=(TimeEntryLogItemViewModel left, TimeEntryLogItemViewModel right) => !Equals(left, right);
 
     }
 }

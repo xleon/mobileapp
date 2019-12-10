@@ -45,7 +45,7 @@ namespace Toggl.iOS.ViewControllers
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UIButton StartTimeEntryButton { get; set; }
+		UIKit.UIImageView StartTimeEntryButton { get; set; }
 
 		[Outlet]
 		UIKit.UIView StartTimeEntryOnboardingBubbleView { get; set; }

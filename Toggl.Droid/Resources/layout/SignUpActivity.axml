@@ -186,17 +186,12 @@
     </ScrollView>
     <androidx.cardview.widget.CardView
         android:id="@+id/LoginSignupCardView"
-        app:cardCornerRadius="8dp"
-        app:cardBackgroundColor="@color/cardBackground"
-        android:layout_height="80dp"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="-8dp"
-        android:layout_width="match_parent">
+        style="@style/BottomAuthCard">
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/LoginSignupContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="6dp">
             <TextView
                 android:id="@+id/AlreadyHaveAnAccountLabel"
                 android:maxLines="1"
