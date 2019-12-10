@@ -11,6 +11,9 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
             this.date = date;
         }
 
+        public long Identifier()
+            => date.ToBinary();
+
         public bool Equals(IMainLogKey other)
             => other is DayHeaderKey headerKey && date == headerKey.date;
 
@@ -20,8 +23,5 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
             if (ReferenceEquals(this, obj)) return true;
             return obj is DayHeaderKey other && Equals(other);
         }
-
-        public override int GetHashCode()
-            => date.GetHashCode();
     }
 }

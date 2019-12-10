@@ -231,7 +231,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             currentCalendarItem = default;
             calendarItemThatOriginallyTriggeredTheMenu = null;
             currentMenuType = ContextualMenuType.Closed;
-            calendarItemInEditMode.OnNext(null);
             currentMenuSubject.OnNext(contextualMenus[ContextualMenuType.Closed]);
             menuVisibilitySubject.OnNext(false);
         }
@@ -313,6 +312,14 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
         private async Task deleteTimeEntry(CalendarItem calendarItem)
         {
             if (!calendarItem.TimeEntryId.HasValue)
+                return;
+
+            var view = View;
+            if (view == null)
+                return;
+
+            var shouldDelete = await view.ConfirmDestructiveAction(ActionType.DeleteExistingTimeEntry);
+            if (!shouldDelete)
                 return;
 
             calendarItemRemoved.OnNext(calendarItem);

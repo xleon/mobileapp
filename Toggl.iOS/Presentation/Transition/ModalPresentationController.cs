@@ -138,25 +138,7 @@ namespace Toggl.iOS.Presentation.Transition
         }
 
         public override CGSize GetSizeForChildContentContainer(IUIContentContainer contentContainer, CGSize parentContainerSize)
-        {
-            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
-            {
-                var preferredContentHeight = PresentedViewController.PreferredContentSize.Height != 0
-                    ? PresentedViewController.PreferredContentSize.Height
-                    : iPadMaxHeight;
-
-                var height = preferredContentHeight;
-                var width = Min(iPadMaxWidth, parentContainerSize.Width);
-                var stackingDepth = iPadStackModalViewSpacing * levelsOfModalViews();
-
-                height = Min(height, iPadMaxHeight - stackingDepth);
-                return new CGSize(width, height);
-            }
-
-            var maxHeight = ContainerView.Bounds.Height - ContainerView.SafeAreaInsets.Top;
-            var preferredHeight = Min(maxHeight, PresentedViewController.PreferredContentSize.Height);
-            return new CGSize(parentContainerSize.Width, preferredHeight == 0 ? maxHeight : preferredHeight);
-        }
+            => calculateSize(contentContainer, parentContainerSize, 0f);
 
         public override CGRect FrameOfPresentedViewInContainerView
         {
@@ -167,7 +149,7 @@ namespace Toggl.iOS.Presentation.Transition
 
                 var containerSize = ContainerView.Bounds.Size;
                 var frame = CGRect.Empty;
-                frame.Size = GetSizeForChildContentContainer(PresentedViewController, containerSize);
+                frame.Size = calculateSize(PresentedViewController, containerSize, 0f);
 
                 if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
                 {
@@ -192,13 +174,39 @@ namespace Toggl.iOS.Presentation.Transition
                             var firstResponderFrame =
                                 firstResponder.ConvertRectToView(firstResponder.Frame, PresentedView);
                             var newY = containerSize.Height - keyboardHeight - firstResponderFrame.Y - firstResponderFrame.Height - keyboardMargin;
-                            frame.Y = (nfloat)Max(Min(newY, frame.Y), UIApplication.SharedApplication.StatusBarFrame.Height);
+                            frame.Y = (nfloat)Min(newY, frame.Y);
                         }
                     }
+
+                    frame.Y = (nfloat)Max(frame.Y, UIApplication.SharedApplication.StatusBarFrame.Height);
+
+                    // re-calculate the size now, that we know the final vertical offset
+                    frame.Size = calculateSize(PresentedViewController, containerSize, frame.Y);
                 }
 
                 return frame;
             }
+        }
+
+        private CGSize calculateSize(IUIContentContainer contentContainer, CGSize parentContainerSize, nfloat verticalOffset)
+        {
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
+            {
+                var preferredContentHeight = contentContainer.PreferredContentSize.Height != 0
+                    ? contentContainer.PreferredContentSize.Height
+                    : iPadMaxHeight;
+
+                var height = preferredContentHeight;
+                var width = Min(iPadMaxWidth, parentContainerSize.Width);
+                var stackingDepth = iPadStackModalViewSpacing * levelsOfModalViews();
+
+                height = Min(height, iPadMaxHeight - stackingDepth);
+                return new CGSize(width, height);
+            }
+
+            var maxHeight = ContainerView.Bounds.Height - verticalOffset;
+            var preferredHeight = Min(maxHeight, contentContainer.PreferredContentSize.Height);
+            return new CGSize(parentContainerSize.Width, preferredHeight == 0 ? maxHeight : preferredHeight);
         }
 
         private int levelsOfModalViews()
