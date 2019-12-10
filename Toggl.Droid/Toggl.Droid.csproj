@@ -1292,6 +1292,7 @@
     <AndroidResource Include="Resources\drawable\ic_thumbs_down.xml" />
     <AndroidResource Include="Resources\drawable\ic_thumbs_up.xml" />
     <AndroidResource Include="Resources\layout\MainUserFeedbackCard.axml" />
+    <AndroidResource Include="Resources\xml\actions.xml" />
     <AndroidResource Include="Resources\xml\RemoteConfigDefaults.xml" />
     <AndroidResource Include="Resources\layout\MainLogEmptyView.axml" />
     <AndroidResource Include="Resources\drawable\TagsBackground.xml" />

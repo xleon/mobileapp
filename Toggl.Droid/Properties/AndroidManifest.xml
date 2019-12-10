@@ -21,5 +21,8 @@
 				<category android:name="${applicationId}" />
 			</intent-filter>
 		</receiver>
+		<meta-data
+				android:name="com.google.android.actions"
+				android:resource="@xml/actions" />
 	</application>
 </manifest>

@@ -12,6 +12,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Activities;
 using Toggl.Droid.BroadcastReceivers;
 using Toggl.Droid.Presentation;
+using Toggl.Shared.Extensions;
 using static Android.Content.Intent;
 
 namespace Toggl.Droid
@@ -31,6 +32,14 @@ namespace Toggl.Droid
         new[] { "android.intent.action.PROCESS_TEXT" },
         Categories = new[] { "android.intent.category.DEFAULT" },
         DataMimeType = "text/plain")]
+    [IntentFilter(
+        new[] { "android.intent.action.EDIT" },
+        Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.VOICE" })]
+    [IntentFilter(
+            new[] { "android.intent.action.VIEW" },
+            Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
+            DataHost = "toggl.com",
+            DataScheme = "https")]
     public partial class SplashScreen : AppCompatActivity
     {
         public SplashScreen()
@@ -64,7 +73,18 @@ namespace Toggl.Droid
                 dependencyContainer.ViewModelCache,
                 dependencyContainer.ViewModelLoader);
 
+            if (IsVoiceInteractionRoot)
+            {
+                System.Diagnostics.Debug.WriteLine("xxaa IsVoiceInteractionRoot");
+                Intent.Extras.KeySet().ForEach(key =>
+                {
+                    System.Diagnostics.Debug.WriteLine($"xxaa extra {key} -> {Intent.Extras.Get(key)}");
+                });
+
+            }
+
             var navigationUrl = Intent.Data?.ToString() ?? getTrackUrlFromProcessedText();
+            System.Diagnostics.Debug.WriteLine($"xxaa nav url {navigationUrl}");
             if (string.IsNullOrEmpty(navigationUrl))
             {
                 app.ForceFullSync();
