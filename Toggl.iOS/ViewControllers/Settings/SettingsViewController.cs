@@ -200,13 +200,7 @@ namespace Toggl.iOS.ViewControllers
         }
 
         private void showErrorTriggeringView()
-        {
-            PresentViewController(new Toggl.iOS.DebugHelpers.ErrorTriggeringViewController
-            {
-                ModalPresentationStyle = UIModalPresentationStyle.Custom,
-                TransitioningDelegate = new ModalDialogTransitionDelegate()
-            }, true, null);
-        }
+            => ViewModel.OpenDebugCommands.Execute();
 #endif
     }
 }

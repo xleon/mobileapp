@@ -91,6 +91,7 @@ namespace Toggl.Core.UI.ViewModels
         public ViewAction SelectBeginningOfWeek { get; }
         public ViewAction ToggleManualMode { get; }
         public ViewAction ToggleSwipeActions { get; }
+        public ViewAction OpenDebugCommands { get; }
 
         public SettingsViewModel(
             ITogglDataSource dataSource,
@@ -258,6 +259,7 @@ namespace Toggl.Core.UI.ViewModels
             ToggleTimeEntriesGrouping = rxActionFactory.FromAsync(toggleTimeEntriesGrouping);
             ToggleManualMode = rxActionFactory.FromAction(toggleManualMode);
             ToggleSwipeActions = rxActionFactory.FromAction(toggleSwipeActions);
+            OpenDebugCommands = rxActionFactory.FromAsync(openDebugCommands);
         }
 
         public override async Task Initialize()
@@ -495,5 +497,8 @@ namespace Toggl.Core.UI.ViewModels
         {
             userPreferences.SetSwipeActionsEnabled(!userPreferences.AreSwipeActionsEnabled);
         }
+
+        private Task openDebugCommands()
+            => Navigate<DebugCommandsViewModel>();
     }
 }

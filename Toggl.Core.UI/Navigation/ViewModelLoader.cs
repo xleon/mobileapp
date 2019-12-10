@@ -469,6 +469,12 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService);
             }
 
+            if (viewModelType == typeof(DebugCommandsViewModel))
+            {
+                return new DebugCommandsViewModel(
+                    dependencyContainer.NavigationService);
+            }
+
             throw new InvalidOperationException($"Trying to locate ViewModel {viewModelType.Name} failed.");
         }
     }

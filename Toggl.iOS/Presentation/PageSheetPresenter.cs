@@ -12,6 +12,7 @@ namespace Toggl.iOS.Presentation
         protected override HashSet<Type> AcceptedViewModels { get; } = new HashSet<Type>
         {
             typeof(SettingsViewModel),
+            typeof(DebugCommandsViewModel),
         };
 
         public PageSheetPresenter(UIWindow window, AppDelegate appDelegate) : base(window, appDelegate)

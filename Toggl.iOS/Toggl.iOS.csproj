@@ -1480,6 +1480,7 @@
     <InterfaceDefinition Include="ViewControllers\Calendar\CalendarViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\CalendarWeeklyViewDayCollectionViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\January2020CampaignViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\DebugCommandsViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -2082,6 +2083,10 @@
     <Compile Include="ViewControllers\January2020CampaignViewController.cs" />
     <Compile Include="ViewControllers\January2020CampaignViewController.designer.cs">
       <DependentUpon>January2020CampaignViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\DebugCommandsViewController.cs" />
+    <Compile Include="ViewControllers\DebugCommandsViewController.designer.cs">
+      <DependentUpon>DebugCommandsViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
