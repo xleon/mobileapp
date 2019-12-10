@@ -20,10 +20,10 @@ namespace Toggl.iOS.Views.Reports
         private const float linesSeparatorHeight = 0.5f * padding;
         private const int minVisibleLetters = 8;
         private const float paddingMultiplicatorForProjectName = 3.5f;
-        
+
         private Point nameCoordinates = new Point();
         private Point percentageCoordinates = new Point();
-        
+
         private static readonly UIStringAttributes attributes = new UIStringAttributes
         {
             Font = UIFont.SystemFontOfSize(10, UIFontWeight.Semibold),
@@ -46,8 +46,8 @@ namespace Toggl.iOS.Views.Reports
         }
 
         private static bool isSegmentOnTheRight(float endAngle) =>
-            endAngle > (float) -Math.PI / 2.0f && endAngle < 0
-            || (endAngle >= 0 && endAngle <= (float) Math.PI / 2.0f);
+            endAngle > (float)-Math.PI / 2.0f && endAngle < 0
+            || (endAngle >= 0 && endAngle <= (float)Math.PI / 2.0f);
 
         public override void Draw(CGRect rect)
         {
@@ -57,16 +57,16 @@ namespace Toggl.iOS.Views.Reports
             var viewCenterX = Bounds.Size.Width * 0.5f;
             var viewCenterY = Bounds.Size.Height * 0.5f;
             var radius = viewCenterX;
-            var totalSeconds = (float) Segments.Select(x => x.TrackedTime.TotalSeconds).Sum();
+            var totalSeconds = (float)Segments.Select(x => x.TrackedTime.TotalSeconds).Sum();
 
-            var startAngle = (float) Math.PI * -0.5f;
+            var startAngle = (float)Math.PI * -0.5f;
 
             foreach (var segment in Segments)
             {
                 ctx.SetFillColor(new Color(segment.Color).ToNativeColor().CGColor);
 
-                var percent = (float) segment.TrackedTime.TotalSeconds / totalSeconds;
-                var endAngle = startAngle + (float) FullCircle * percent;
+                var percent = (float)segment.TrackedTime.TotalSeconds / totalSeconds;
+                var endAngle = startAngle + (float)FullCircle * percent;
 
                 // Draw arc
                 ctx.MoveTo(viewCenterX, viewCenterY);
@@ -80,16 +80,16 @@ namespace Toggl.iOS.Views.Reports
                     ctx.SaveState();
 
                     var isOnTheRight = isSegmentOnTheRight(endAngle);
-                    var integerPercentage = (int) (percent * 100);
+                    var integerPercentage = (int)(percent * 100);
                     var nameToDraw = new NSAttributedString(segment.FormattedName(), attributes);
                     var percentageToDraw = new NSAttributedString($"{integerPercentage}%", attributes);
 
                     var textWidth = nameToDraw.Size.Width;
                     var textHeight = nameToDraw.Size.Height;
                     var initialTextLength = nameToDraw.Length;
-                    
+
                     var shortenBy = 1;
-                    while(shortenBy < initialTextLength - minVisibleLetters
+                    while (shortenBy < initialTextLength - minVisibleLetters
                           && textWidth >= radius - paddingMultiplicatorForProjectName * padding)
                     {
                         nameToDraw = new NSAttributedString(segment.FormattedName(shortenBy), attributes);
@@ -107,25 +107,19 @@ namespace Toggl.iOS.Views.Reports
                     {
                         ctx.RotateCTM(endAngle);
 
-                        nameCoordinates.X = radius - padding - textWidth;
-                        nameCoordinates.Y = -padding - textHeight;
-
-                        percentageCoordinates.X = radius - padding - percentWidth;
-                        percentageCoordinates.Y = -(padding + linesSeparatorHeight) - textHeight - percentHeight;
+                        nameCoordinates = new Point(radius - padding - textWidth, -padding - textHeight);
+                        percentageCoordinates = new Point(radius - padding - percentWidth, -(padding + linesSeparatorHeight) - textHeight - percentHeight);
                     }
                     else
                     {
-                        ctx.RotateCTM(endAngle + (float) Math.PI);
-                        
-                        nameCoordinates.X = -radius + padding;
-                        nameCoordinates.Y = padding;
+                        ctx.RotateCTM(endAngle + (float)Math.PI);
 
-                        percentageCoordinates.X = -radius + padding;
-                        percentageCoordinates.Y = textHeight + padding + linesSeparatorHeight;
+                        nameCoordinates = new Point(-radius + padding, padding);
+                        percentageCoordinates = new Point(-radius + padding, textHeight + padding + linesSeparatorHeight);
                     }
 
-                    nameToDraw.DrawString(new CGPoint(x: nameCoordinates.X, y: nameCoordinates.Y));
-                    percentageToDraw.DrawString(new CGPoint(x: percentageCoordinates.X, y: percentageCoordinates.Y));
+                    nameToDraw.DrawString(new CGPoint(nameCoordinates.X, nameCoordinates.Y));
+                    percentageToDraw.DrawString(new CGPoint(percentageCoordinates.X, percentageCoordinates.Y));
 
                     // Restore the original coordinate system.
                     ctx.RestoreState();

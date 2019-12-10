@@ -7,6 +7,9 @@ namespace Toggl.Shared
     {
         public DateRange(DateTime beginning, DateTime end)
         {
+            if (end < beginning)
+                (beginning, end) = (end, beginning);
+
             Beginning = beginning;
             End = end;
         }

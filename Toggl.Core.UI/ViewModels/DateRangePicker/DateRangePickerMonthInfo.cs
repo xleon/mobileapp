@@ -1,4 +1,5 @@
 ﻿using System;
+using Toggl.Core.UI.Helper;
 using Toggl.Shared;
 using SelectionState = Toggl.Shared.Either<System.DateTime, Toggl.Shared.DateRange>;
 
@@ -11,6 +12,24 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
         public int Month { get; }
 
         public int Year { get; }
+
+        public string MonthDisplay
+            => new DateTime(Year, Month, 1)
+            .ToString(DateFormatCultureInfo.CurrentCulture.DateTimeFormat.YearMonthPattern);
+
+        public bool IsTodaySelected
+            => Selection.HasValue
+            && Today.HasValue
+            && Selection.Value.Contains(Today.Value);
+
+        public int RowCount
+            => DisplayDates.Length / 7;
+
+        public bool IsDateTheFirstSelectedDate(DateTime date)
+            => date == Selection?.Beginning && IsSelectionBeginningBoundary;
+
+        public bool IsDateTheLastSelectedDate(DateTime date)
+            => date == Selection?.End && IsSelectionEndBoundary;
 
         /// <summary>
         /// If this is the current month, Today will be set to this value.
@@ -32,6 +51,14 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
         public DateRange? Selection { get; }
 
         /// <summary>
+        /// Defines whether the selection is partial, where only the
+        /// beginning of the range is selected, awaiting the selection of the end date.
+        /// If it is true, the Selection's Length will be 1.
+        /// If Selection is null, this property should not be read.
+        /// </summary>
+        public bool IsSelectionPartial { get; private set; }
+
+        /// <summary>
         /// This property defines whether the beginning of the Selection is the
         /// left boundary of the total user selection and can be used to represent
         /// such dates differently on UI.
@@ -50,16 +77,18 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
         private DateRangePickerMonthInfo(
             DateTime firstDayOfMonth,
             DateRange displayedDates,
-            DateTime? today = null,
-            DateRange? selection = null,
-            bool isSelectionBeginningBoundary = false,
-            bool isSelectionEndBoundary = false)
+            DateTime? today,
+            DateRange? selection,
+            bool isSelectionPartial,
+            bool isSelectionBeginningBoundary,
+            bool isSelectionEndBoundary)
         {
             Month = firstDayOfMonth.Month;
             Year = firstDayOfMonth.Year;
             DisplayDates = displayedDates;
             Today = today;
             Selection = selection;
+            IsSelectionPartial = isSelectionPartial;
             IsSelectionBeginningBoundary = isSelectionBeginningBoundary;
             IsSelectionEndBoundary = isSelectionEndBoundary;
         }
@@ -73,42 +102,39 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
 
             var preMonthDaysCount = ((int)firstDayOfMonth.DayOfWeek - (int)beginningOfWeek + daysInWeek) % daysInWeek;
             var postMonthDaysCount = daysInWeek - (month.Length + preMonthDaysCount) % daysInWeek;
+            postMonthDaysCount %= 7;
 
             var displayedBeginning = month.Beginning.AddDays(-preMonthDaysCount);
             var displayedEnd = month.End.AddDays(postMonthDaysCount);
 
-            var displayedDates = new DateRange(displayedBeginning, displayedEnd);
+            var displayedRange = new DateRange(displayedBeginning, displayedEnd);
 
-            var today = displayedDates.Contains(DateTime.Today)
+            var today = displayedRange.Contains(DateTime.Today)
                 ? DateTime.Today
                 : (DateTime?)null;
 
             return selection.Match(
-                beginning => getMonthInfoForSingleDate(firstDayOfMonth, selection, displayedDates, today),
-                range => getMonthInfoForRange(firstDayOfMonth, selection, month, displayedBeginning, displayedEnd, displayedDates, today));
+                beginning => getMonthInfoForSingleDate(firstDayOfMonth, beginning, displayedRange, today),
+                range => getMonthInfoForRange(firstDayOfMonth, range, displayedRange, displayedRange, today));
         }
 
         private static DateRangePickerMonthInfo getMonthInfoForRange(
             DateTime firstDayOfMonth,
-            Either<DateTime, DateRange> selection,
-            DateRange month,
-            DateTime displayedBeginning,
-            DateTime displayedEnd,
+            DateRange selectedRange,
+            DateRange displayedRange,
             DateRange displayedDates,
             DateTime? today)
         {
-            var selectedRange = selection.Right;
+            if (!displayedRange.OverlapsWith(selectedRange))
+                return new DateRangePickerMonthInfo(firstDayOfMonth, displayedDates, today, null, false, false, false);
 
-            if (!month.OverlapsWith(selectedRange))
-                return new DateRangePickerMonthInfo(firstDayOfMonth, displayedDates);
-
-            var displayedSelectionDateBeginning = selectedRange.Beginning > displayedBeginning
+            var displayedSelectionDateBeginning = selectedRange.Beginning > displayedRange.Beginning
                 ? selectedRange.Beginning
-                : displayedBeginning;
+                : displayedRange.Beginning;
 
-            var displayedSelectionDateEnd = selectedRange.End < displayedEnd
+            var displayedSelectionDateEnd = selectedRange.End < displayedRange.End
                 ? selectedRange.End
-                : displayedEnd;
+                : displayedRange.End;
 
             var displaySelection = new DateRange(displayedSelectionDateBeginning, displayedSelectionDateEnd);
 
@@ -120,28 +146,31 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
                 displayedDates,
                 today,
                 displaySelection,
-                isSelectionBeginningBoundary,
-                isSelectionEndBoundary);
+                isSelectionPartial: false,
+                isSelectionBeginningBoundary: isSelectionBeginningBoundary,
+                isSelectionEndBoundary: isSelectionEndBoundary);
         }
 
         private static DateRangePickerMonthInfo getMonthInfoForSingleDate(
             DateTime firstDayOfMonth,
-            Either<DateTime, DateRange> selection,
+            DateTime selectedBeginning,
             DateRange displayedDates,
             DateTime? today)
         {
-            var selectedBeginning = selection.Left;
             var isSelectionDisplayed = displayedDates.Contains(selectedBeginning);
+
             var selectedDateRange = isSelectionDisplayed
                 ? new DateRange(selectedBeginning, selectedBeginning)
                 : (DateRange?)null;
 
             return new DateRangePickerMonthInfo(
-                  firstDayOfMonth,
-                  displayedDates,
-                  today,
-                  selectedDateRange,
-                  isSelectionDisplayed, isSelectionDisplayed);
+                firstDayOfMonth,
+                displayedDates,
+                today,
+                selectedDateRange,
+                isSelectionPartial: true,
+                isSelectionBeginningBoundary: isSelectionDisplayed,
+                isSelectionEndBoundary: isSelectionDisplayed);
         }
     }
 }

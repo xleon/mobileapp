@@ -44,6 +44,10 @@ namespace Toggl.Droid.Fragments
             ViewModel.Elements
                 .Subscribe(adapter.Rx().Items())
                 .DisposedBy(DisposeBag);
+
+            toolbarCurrentDateRangeText.Rx()
+                .BindAction(ViewModel.SelectTimeRange)
+                .DisposedBy(DisposeBag);
         }
 
         public void ScrollToStart()

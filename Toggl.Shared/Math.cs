@@ -45,11 +45,7 @@ namespace Toggl.Shared
         }
 
         public static Point PointOnCircumference(Point center, double angle, double radius)
-            => new Point
-            {
-                X = center.X + radius * System.Math.Cos(angle),
-                Y = center.Y + radius * System.Math.Sin(angle)
-            };
+            => new Point(center.X + radius * System.Math.Cos(angle), center.Y + radius * System.Math.Sin(angle));
 
         public static bool IsBetween(this double angle, double startAngle, double endAngle)
         {

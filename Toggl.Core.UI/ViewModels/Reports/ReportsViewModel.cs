@@ -38,7 +38,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public IObservable<string> FormattedTimeRange { get; set; }
 
         public OutputAction<IThreadSafeWorkspace> SelectWorkspace { get; private set; }
-        public OutputAction<DateTimeOffsetRange> SelectTimeRange { get; private set; }
+        public OutputAction<DateTimeOffsetRange?> SelectTimeRange { get; private set; }
 
         public ReportsViewModel(
             ITogglDataSource dataSource,
@@ -89,7 +89,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .AsDriver("", schedulerProvider);
 
             Elements = Observable
-                .CombineLatest(workspaceSelector, timeRangeSelector, ReportFilter.Create)
+                .CombineLatest(workspaceSelector, timeRangeSelector.WhereNotNull(), ReportFilter.Create)
                 .SelectMany(reportElements)
                 .AsDriver(ImmutableList<IReportElement>.Empty, schedulerProvider);
 
@@ -97,7 +97,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Current
                 .Select(preferences => preferences.DateFormat);
 
-            FormattedTimeRange = Observable.Merge(Observable.Return(initialSelection), SelectTimeRange.Elements)
+            FormattedTimeRange = Observable.Merge(Observable.Return(initialSelection), SelectTimeRange.Elements.WhereNotNull())
                 .CombineLatest(dateFormatObservable, resultSelector: formattedTimeRange)
                 .DistinctUntilChanged()
                 .AsDriver("", schedulerProvider);
@@ -128,13 +128,16 @@ namespace Toggl.Core.UI.ViewModels.Reports
             return workspace;
         }
 
-        private async Task<DateTimeOffsetRange> selectTimeRange()
+        private async Task<DateTimeOffsetRange?> selectTimeRange()
         {
-            var selectedTimeRange = await Navigate<DateRangePickerViewModel, Either<ReportPeriod, DateRange>, DateRange>(selection);
+            var selectedTimeRange = await Navigate<DateRangePickerViewModel, Either<ReportPeriod, DateRange>, DateRange?>(selection);
 
-            selection = Either<ReportPeriod, DateRange>.WithRight(selectedTimeRange);
+            if (!selectedTimeRange.HasValue)
+                return null;
 
-            return selectedTimeRange.ToLocalInstantaneousTimeRange();
+            selection = Either<ReportPeriod, DateRange>.WithRight(selectedTimeRange.Value);
+
+            return selectedTimeRange.Value.ToLocalInstantaneousTimeRange();
         }
 
         private ImmutableList<IReportElement> createLoadingStateReportElements()

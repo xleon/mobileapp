@@ -4,6 +4,7 @@ using AndroidX.AppCompat.App;
 using AndroidX.Fragment.App;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.DateRangePicker;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Fragments;
@@ -20,7 +21,8 @@ namespace Toggl.Droid.Presentation
             typeof(SelectDefaultWorkspaceViewModel),
             typeof(TermsOfServiceViewModel),
             typeof(UpcomingEventsNotificationSettingsViewModel),
-            typeof(January2020CampaignViewModel)
+            typeof(DateRangePickerViewModel),
+            typeof(January2020CampaignViewModel),
         };
 
         protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView)
@@ -59,7 +61,10 @@ namespace Toggl.Droid.Presentation
 
                 case UpcomingEventsNotificationSettingsViewModel _:
                     return new UpcomingEventsNotificationSettingsFragment();
-                
+
+                case DateRangePickerViewModel _:
+                    return new DateRangePickerFragment();
+
                 case January2020CampaignViewModel _:
                     return new January2020CampaignFragment();
             }

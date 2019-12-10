@@ -574,6 +574,7 @@
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
+    <Compile Include="Extensions\Reactive\PagerViewExtensions.cs" />
     <Compile Include="Extensions\SnackbarExtensions.cs" />
     <Compile Include="Extensions\SpannableExtensions.cs" />
     <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.cs" />
@@ -586,10 +587,15 @@
     <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.ViewBinds.cs">
       <DependentUpon>CalendarDayViewPageFragment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fragments\DateRangePickerFragment.cs" />
+    <Compile Include="Fragments\DateRangePickerFragment.ViewBinds.cs">
+      <DependentUpon>DateRangePickerFragment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fragments\January2020CampaignFragment.cs" />
     <Compile Include="Fragments\LockableViewPager.cs" />
     <Compile Include="Extensions\JavaExtensions.cs" />
     <Compile Include="Adapters\ReportsAdapter.cs" />
+    <Compile Include="Adapters\DateRangePickerMonthsPagerAdapter.cs" />
     <Compile Include="Fragments\ReportsCalendarFragment.cs" />
     <Compile Include="Helper\ActiveTheme.cs" />
     <Compile Include="LayoutManagers\UnpredictiveLinearLayoutManager.cs" />
@@ -619,6 +625,7 @@
     <Compile Include="ViewHelpers\CalendarItemRectAttributes.cs" />
     <Compile Include="ViewHolders\CalendarMenuActionCellViewHolder.cs" />
     <Compile Include="ViewHolders\CalendarWeekSectionViewHolder.cs" />
+    <Compile Include="ViewHolders\DateRangePicker\DateRangePickerShortcutViewHolder.cs" />
     <Compile Include="ViewHolders\LicenseViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportDonutChartLegendItemViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportDonutChartDonutViewHolder.cs" />
@@ -721,6 +728,7 @@
     <Compile Include="Views\Calendar\CalendarLayoutManager.ScrollHelper.cs">
       <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\DateRangePickerMonthView.cs" />
     <Compile Include="Views\DonutChartView.cs" />
     <Compile Include="Views\EditDuration\Shapes\Arc.cs" />
     <Compile Include="Views\EditDuration\Shapes\Cap.cs" />
@@ -936,7 +944,6 @@
     <AndroidResource Include="Resources\layout\ContextualMenuActionCell.axml" />
     <AndroidResource Include="Resources\layout\CalendarWeekStripeLabelsView.axml" />
     <AndroidResource Include="Resources\layout\CalendarWeekStripeDaysView.axml" />
-    <AndroidResource Include="Resources\layout\ReportsCalendar.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityProjectCell.axml" />
@@ -1340,6 +1347,10 @@
     <AndroidResource Include="Resources\drawable\WidgetStartButton.xml" />
     <AndroidResource Include="Resources\drawable\WidgetStopButton.xml" />
     <AndroidResource Include="Resources\layout\ReportsBarChartElement.axml" />
+    <AndroidResource Include="Resources\layout\DateRangePicker.axml" />
+    <AndroidResource Include="Resources\layout\DatePickerShortcutCell.axml" />
+    <AndroidResource Include="Resources\layout\DateRangePickerMonthView.axml" />
+    <AndroidResource Include="Resources\layout\ReportsCalendar.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core\Toggl.Core.csproj">

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Toggl.Core.Models;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
@@ -8,7 +10,7 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
 {
     public sealed partial class DateRangePickerViewModel
     {
-        IEnumerable<DatePickerShortcut> createShortcuts(BeginningOfWeek beginningOfWeek, DateTimeOffset now)
+        IEnumerable<DateRangePickerShortcut> createShortcuts(BeginningOfWeek beginningOfWeek, DateTimeOffset now)
         {
             var today = now.ToLocalTime().Date;
 
@@ -22,15 +24,40 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
             yield return new LastYearShortcut(today);
         }
 
-        private abstract class DatePickerShortcut
+        public struct Shortcut : IDiffableByIdentifier<Shortcut>
+        {
+            public static Shortcut From(DateRangePickerShortcut shortcut, bool isSelected)
+                => new Shortcut(shortcut.Period, shortcut.Text, isSelected);
+
+            private Shortcut(ReportPeriod period, string text, bool isSelected)
+            {
+                ReportPeriod = period;
+                Text = text;
+                IsSelected = isSelected;
+            }
+
+            public string Text { get; }
+            public ReportPeriod ReportPeriod { get; }
+            public bool IsSelected { get; }
+
+            public long Identifier
+                => (long)ReportPeriod;
+
+            public bool Equals(Shortcut other)
+                => other.ReportPeriod == ReportPeriod
+                && other.IsSelected == IsSelected;
+        }
+
+        public abstract class DateRangePickerShortcut 
         {
             protected DateTime today;
 
-            public DatePickerShortcut(DateTime today)
+            public DateRangePickerShortcut(DateTime today)
             {
                 this.today = today;
             }
 
+            public abstract string Text { get; }
             public abstract ReportPeriod Period { get; }
             public abstract DateRange DateRange { get; }
 
@@ -38,7 +65,7 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
                 => range == DateRange;
         }
 
-        private class TodayShortcut : DatePickerShortcut
+        private class TodayShortcut : DateRangePickerShortcut
         {
             public override ReportPeriod Period
                 => ReportPeriod.Today;
@@ -46,12 +73,15 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
             public override DateRange DateRange
                 => new DateRange(today, today);
 
+            public override string Text
+                => Resources.Today;
+
             public TodayShortcut(DateTime today) : base(today)
             {
             }
         }
 
-        private class YesterdayShortcut : DatePickerShortcut
+        private class YesterdayShortcut : DateRangePickerShortcut
         {
             public override ReportPeriod Period
                 => ReportPeriod.Yesterday;
@@ -59,12 +89,15 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
             public override DateRange DateRange
                 => new DateRange(today.AddDays(-1), today.AddDays(-1));
 
+            public override string Text
+                => Resources.Yesterday;
+
             public YesterdayShortcut(DateTime today) : base(today)
             {
             }
         }
 
-        private class ThisWeekShortcut : DatePickerShortcut
+        private class ThisWeekShortcut : DateRangePickerShortcut
         {
             private BeginningOfWeek beginningOfWeek;
 
@@ -80,13 +113,16 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
                 }
             }
 
+            public override string Text
+                => Resources.ThisWeek;
+
             public ThisWeekShortcut(BeginningOfWeek beginningOfWeek, DateTime today) : base(today)
             {
                 this.beginningOfWeek = beginningOfWeek;
             }
         }
 
-        private class LastWeekShortcut : DatePickerShortcut
+        private class LastWeekShortcut : DateRangePickerShortcut
         {
             private BeginningOfWeek beginningOfWeek;
 
@@ -102,13 +138,16 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
                 }
             }
 
+            public override string Text
+                => Resources.LastWeek;
+
             public LastWeekShortcut(BeginningOfWeek beginningOfWeek, DateTime today) : base(today)
             {
                 this.beginningOfWeek = beginningOfWeek;
             }
         }
 
-        private class ThisMonthShortcut : DatePickerShortcut
+        private class ThisMonthShortcut : DateRangePickerShortcut
         {
             public override ReportPeriod Period => ReportPeriod.ThisMonth;
 
@@ -116,12 +155,15 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
                 today.FirstDayOfSameMonth(),
                 today.LastDayOfSameMonth());
 
+            public override string Text
+                => Resources.ThisMonth;
+
             public ThisMonthShortcut(DateTime today) : base(today)
             {
             }
         }
 
-        private class LastMonthShortcut : DatePickerShortcut
+        private class LastMonthShortcut : DateRangePickerShortcut
         {
             public override ReportPeriod Period => ReportPeriod.LastMonth;
 
@@ -135,12 +177,15 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
                 }
             }
 
+            public override string Text
+                => Resources.LastMonth;
+
             public LastMonthShortcut(DateTime today) : base(today)
             {
             }
         }
 
-        private class ThisYearShortcut : DatePickerShortcut
+        private class ThisYearShortcut : DateRangePickerShortcut
         {
             public override ReportPeriod Period => ReportPeriod.ThisYear;
 
@@ -155,12 +200,15 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
                 }
             }
 
+            public override string Text
+                => Resources.ThisYear;
+
             public ThisYearShortcut(DateTime today) : base(today)
             {
             }
         }
 
-        private class LastYearShortcut : DatePickerShortcut
+        private class LastYearShortcut : DateRangePickerShortcut
         {
             public override ReportPeriod Period => ReportPeriod.LastYear;
 
@@ -174,6 +222,9 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
                     return new DateRange(firstDayOfLastYear, lastDayOfLastYear);
                 }
             }
+
+            public override string Text
+                => Resources.LastYear;
 
             public LastYearShortcut(DateTime today) : base(today)
             {

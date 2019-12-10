@@ -4,10 +4,10 @@ using Android.Views;
 using Android.Views.InputMethods;
 using System.Collections.Generic;
 using System.Linq;
-using AndroidColor = Android.Graphics.Color;
 using AndroidX.Core.Widget;
 using Google.Android.Material.AppBar;
 using Toggl.Droid.Helper;
+using Toggl.Shared;
 
 namespace Toggl.Droid.Extensions
 {
@@ -74,6 +74,12 @@ namespace Toggl.Droid.Extensions
             }
         }
 
+        public static Point GetLocationOnScreen(this View view)
+        {
+            var coordinates = new int[2];
+            view.GetLocationOnScreen(coordinates);
+            return new Point(coordinates[0], coordinates[1]);
+        }
 
         public static void UpdatePadding(this View view, int? left = null, int? top = null, int? right = null, int? bottom = null)
         {

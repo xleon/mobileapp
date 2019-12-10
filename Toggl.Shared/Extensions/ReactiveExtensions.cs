@@ -80,6 +80,9 @@ namespace Toggl.Shared.Extensions
         public static IObservable<T> WhereNotNull<T>(this IObservable<T> observable) where T : class
             => observable.Where(item => item != null);
 
+        public static IObservable<T> WhereNotNull<T>(this IObservable<T?> observable) where T : struct
+            => observable.Where(item => item.HasValue).Select(item => item.Value);
+
         public static IObservable<TValue> NotNullable<TValue>(this IObservable<TValue?> observable)
             where TValue : struct
             => observable.Where(x => x != null).Select(x => x.Value);
