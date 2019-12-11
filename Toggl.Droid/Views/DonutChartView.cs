@@ -23,10 +23,18 @@ namespace Toggl.Droid.Views
     {
         private const float fullCircle = 360f;
         private const float donutInnerCircleFactor = 0.6f;
+        private const float minimumSegmentPercentageToShowLabel = 0.06f;
         const float angleRightToTopCorrection = -90;
+        const float degreesToRadians = MathF.PI / 180;
+        private const float sliceLabelCenterRadius = (1 + donutInnerCircleFactor) / 2;
 
         private Paint paint = new Paint() { AntiAlias = true };
+        private Paint textPaint = new Paint() { AntiAlias = true, TextAlign = Paint.Align.Center };
+        private Rect textBounds = new Rect();
+
         private Color backgroundColor;
+        private Color donutColor;
+
         private RectF circle = new RectF();
 
         private ReportDonutChartDonutElement data;
@@ -51,6 +59,9 @@ namespace Toggl.Droid.Views
         private void initialize(Context context)
         {
             backgroundColor = context.SafeGetColor(Resource.Color.cardBackground);
+            donutColor = context.SafeGetColor(Resource.Color.placeholderDonut);
+
+            textPaint.TextSize = 12.SpToPixels(context);
         }
 
         public void Update(ReportDonutChartDonutElement data)
@@ -69,6 +80,12 @@ namespace Toggl.Droid.Views
             if (data == null)
                 return;
 
+            if (data.IsLoading)
+            {
+                drawIsLoading(canvas);
+                return;
+            }
+
             var totalValue = data.Segments.Sum(s => s.Value);
 
             var angleOffset = angleRightToTopCorrection;
@@ -83,14 +100,38 @@ namespace Toggl.Droid.Views
             drawInnerCircle(canvas);
         }
 
+        private void drawIsLoading(Canvas canvas)
+        {
+            paint.Color = donutColor;
+
+            canvas.DrawCircle(Width / 2, Height / 2, Width / 2, paint);
+
+            drawInnerCircle(canvas);
+        }
+
         private void drawSlice(Canvas canvas, RectF circle, Segment segment, double totalValue, ref float angleOffset)
         {
-            var sliceAngle = (float)(fullCircle * segment.Value / totalValue);
+            var percentage = segment.Value / totalValue;
+            var sliceAngle = (float)(fullCircle * percentage);
             paint.Color = Color.ParseColor(segment.Color);
 
             canvas.DrawArc(circle, angleOffset, sliceAngle, true, paint);
 
+            drawSegmentPercentageLabel(canvas, percentage, sliceAngle, angleOffset);
+
             angleOffset += sliceAngle;
+        }
+
+        private void drawSegmentPercentageLabel(Canvas canvas, double percentage, float sliceAngle, float angleOffset)
+        {
+            if (percentage > minimumSegmentPercentageToShowLabel)
+            {
+                var labelAngle = angleOffset + sliceAngle / 2;
+                var x = Width / 2 * (1 + sliceLabelCenterRadius * MathF.Cos(labelAngle * degreesToRadians));
+                var y = Height / 2 * (1 + sliceLabelCenterRadius * MathF.Sin(labelAngle * degreesToRadians));
+
+                drawLabel(canvas, $"{(int)(100 * percentage)}%", new Point(x, y));
+            }
         }
 
         private void drawInnerCircle(Canvas canvas)
@@ -98,6 +139,16 @@ namespace Toggl.Droid.Views
             paint.Color = backgroundColor;
 
             canvas.DrawCircle(Width / 2, Width / 2, Width * donutInnerCircleFactor / 2, paint);
+        }
+
+        private void drawLabel(Canvas canvas, string text, Point center)
+        {
+            textPaint.GetTextBounds(text, 0, text.Length, textBounds);
+
+            var offsetY = textBounds.Height() / 2;
+
+            textPaint.Color = Color.White;
+            canvas.DrawText(text, (float)center.X, (float)(center.Y + offsetY), textPaint);
         }
     }
 }

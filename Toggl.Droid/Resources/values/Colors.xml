@@ -39,6 +39,7 @@
   <color name="disabledReportFeature">#FFB5BCC0</color>
   <color name="placeholderBarFilled">#19000000</color>
   <color name="placeholderBarRegular">#0F000000</color>
+  <color name="placeholderDonut">#FFF6F7F7</color>
   
   <!-- DateRange picker -->
   <color name="dateRangePickerBackground">#FFFFFF</color>
