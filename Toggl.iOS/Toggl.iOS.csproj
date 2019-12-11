@@ -2136,6 +2136,7 @@
     <Compile Include="ViewControllers\January2020CampaignViewController.designer.cs">
       <DependentUpon>January2020CampaignViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Reports\DonutChartView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">

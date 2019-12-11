@@ -64,15 +64,13 @@ namespace Toggl.iOS.ViewSources
                     var barChartCell = collectionView.DequeueReusableCell(barChartCellIdentifier, indexPath) as ReportsBarChartCollectionViewCell;
                     barChartCell.SetElement(element);
                     return barChartCell;
-                case ReportDonutChartDonutElement _:
+                case ReportDonutChartDonutElement element:
                     var donutCell = collectionView.DequeueReusableCell(donutChartCellIdentifier, indexPath) as ReportsDonutChartCollectionViewCell;
-                    // TODO: populate cell
-                    donutCell.BackgroundColor = UIColor.SystemRedColor;
+                    donutCell.SetElement(element, indexPath.Item == elements.Count - 1);
                     return donutCell;
-                case ReportDonutChartLegendItemElement _:
+                case ReportProjectsDonutChartLegendItemElement element:
                     var donutLegendItemCell = collectionView.DequeueReusableCell(donutChartLegendCellIdentifier, indexPath) as ReportsDonutChartLegendCollectionViewCell;
-                    // TODO: populate cell
-                    donutLegendItemCell.BackgroundColor = UIColor.SystemYellowColor;
+                    donutLegendItemCell.SetElement(element, indexPath.Item == elements.Count - 1);
                     return donutLegendItemCell;
                 case ReportNoDataElement _:
                     var noDataCell = collectionView.DequeueReusableCell(noDataCellIdentifier, indexPath) as ReportsNoDataCollectionViewCell;
@@ -92,7 +90,7 @@ namespace Toggl.iOS.ViewSources
             => 1;
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
-            => elements == null ? 0 : elements.Count();
+            => elements == null ? 0 : elements.Count;
 
         public ReportsCollectionViewCell CellTypeAt(NSIndexPath indexPath)
         {

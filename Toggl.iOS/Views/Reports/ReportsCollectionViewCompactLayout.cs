@@ -33,10 +33,9 @@ namespace Toggl.iOS.Views.Reports
                         + ReportsSummaryCollectionViewCell.Height
                         + verticalCellInset * 2
                         + ReportsBarChartCollectionViewCell.Height
-                        + verticalCellInset * 2
+                        + verticalCellInset * 3
                         + ReportsDonutChartCollectionViewCell.Height
-                        + ReportsDonutChartLegendCollectionViewCell.Height * source.NumberOfDonutChartLegendItems()
-                        + verticalCellInset;
+                        + ReportsDonutChartLegendCollectionViewCell.Height * source.NumberOfDonutChartLegendItems();
                 }
                 return new CGSize(width, height);
             }
@@ -71,26 +70,26 @@ namespace Toggl.iOS.Views.Reports
                         break;
                     case ReportsCollectionViewCell.DonutChart:
                         attributes.Frame = new CGRect(
-                            horizontalCellInset,
+                            0,
                             verticalCellInset
                                 + ReportsSummaryCollectionViewCell.Height
                                 + verticalCellInset * 2
                                 + ReportsBarChartCollectionViewCell.Height
-                                + verticalCellInset * 2,
-                            columnWidth,
+                                + verticalCellInset * 3,
+                            CollectionViewContentSize.Width,
                             ReportsDonutChartCollectionViewCell.Height);
                         break;
                     case ReportsCollectionViewCell.DonutChartLegendItem:
                         attributes.Frame = new CGRect(
-                            horizontalCellInset,
+                            0,
                             verticalCellInset
                                 + ReportsSummaryCollectionViewCell.Height
                                 + verticalCellInset * 2
                                 + ReportsBarChartCollectionViewCell.Height
-                                + verticalCellInset * 2
+                                + verticalCellInset * 3
                                 + ReportsDonutChartCollectionViewCell.Height
                                 + ReportsDonutChartLegendCollectionViewCell.Height * (indexPath.Item - (CollectionView.NumberOfItemsInSection(0) - source.NumberOfDonutChartLegendItems())),
-                            columnWidth,
+                            CollectionViewContentSize.Width,
                             ReportsDonutChartLegendCollectionViewCell.Height);
                         break;
                     case ReportsCollectionViewCell.NoData:
