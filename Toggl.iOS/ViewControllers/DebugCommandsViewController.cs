@@ -21,8 +21,6 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    using Section = SectionModel<string, ISettingRow>;
-
     public partial class DebugCommandsViewController : ReactiveViewController<DebugCommandsViewModel>
     {
         private readonly float bottomInset = 24;
@@ -45,34 +43,20 @@ namespace Toggl.iOS.ViewControllers
             TableView.Source = source;
             TableView.TableFooterView = new UIView(frame: new CGRect(0, 0, 0, bottomInset));
 
-            tableSections()
+            ViewModel.TableSections
                 .Subscribe(TableView.Rx().ReloadSections(source))
                 .DisposedBy(DisposeBag);
 
             source.Rx().ModelSelected()
                 .Subscribe(handleTap)
                 .DisposedBy(DisposeBag);
+
+            Title = ViewModel.Title;
         }
 
         private void handleTap(ISettingRow row)
         {
             row.Action.Execute();
-        }
-
-        private IObservable<IImmutableList<Section>> tableSections()
-        {
-            var sections = new List<Section>();
-
-            var userDefaultsSection = new Section("User defaults", new ISettingRow[]
-                    {
-                        new InfoRow(Resources.Name, "asd"),
-                        new InfoRow(Resources.EmailAddress, "asd@asd.cam"),
-                        new NavigationRow(Resources.Workspace, "asd")
-                    });
-
-            sections.Add(userDefaultsSection);
-
-            return Observable.Return(sections.ToIImmutableList());
         }
     }
 }

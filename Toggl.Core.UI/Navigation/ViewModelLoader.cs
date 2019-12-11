@@ -472,7 +472,9 @@ namespace Toggl.Core.UI.Navigation
             if (viewModelType == typeof(DebugCommandsViewModel))
             {
                 return new DebugCommandsViewModel(
-                    dependencyContainer.NavigationService);
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.SchedulerProvider,
+                    dependencyContainer.AccessRestrictionStorage);
             }
 
             throw new InvalidOperationException($"Trying to locate ViewModel {viewModelType.Name} failed.");
