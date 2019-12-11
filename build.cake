@@ -548,7 +548,7 @@ private TemporaryFileTransformation GetAndroidManifestTransformation()
 
     if (target == "Build.Release.Android.AdHoc")
     {
-        packageName = "com.toggl.giskard.adhoc";
+        packageName = "com.toggl.giskard.adhoc.piotr";
         appName = "Toggl for Tests";
     }
     else if (target == "Build.Release.Android.PlayStore")
