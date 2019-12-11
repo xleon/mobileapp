@@ -553,7 +553,7 @@ private TemporaryFileTransformation GetAndroidManifestTransformation()
     }
     else if (target == "Build.Release.Android.PlayStore")
     {
-        packageName = "com.toggl.giskard";
+        packageName = "com.toggl.giskard.piotr";
         appName = "Toggl";
         versionNumber = GetVersionNumberFromTagOrTimestamp();
     }
