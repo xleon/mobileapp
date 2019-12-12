@@ -474,7 +474,8 @@ namespace Toggl.Core.UI.Navigation
                 return new DebugCommandsViewModel(
                     dependencyContainer.NavigationService,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.AccessRestrictionStorage);
+                    dependencyContainer.AccessRestrictionStorage,
+                    dependencyContainer.InteractorFactory);
             }
 
             throw new InvalidOperationException($"Trying to locate ViewModel {viewModelType.Name} failed.");

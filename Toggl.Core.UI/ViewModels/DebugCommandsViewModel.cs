@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using Toggl.Core.Interactors;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Navigation;
@@ -23,18 +25,22 @@ namespace Toggl.Core.UI.ViewModels
 
         private ISchedulerProvider schedulerProvider;
         private IAccessRestrictionStorage accessRestrictionStorage;
+        private IInteractorFactory interactorFactory;
 
         public DebugCommandsViewModel(
             INavigationService navigationService,
             ISchedulerProvider schedulerProvider,
-            IAccessRestrictionStorage accessRestrictionStorage)
+            IAccessRestrictionStorage accessRestrictionStorage,
+            IInteractorFactory interactorFactory)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(accessRestrictionStorage, nameof(accessRestrictionStorage));
+            Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
 
             this.schedulerProvider = schedulerProvider;
             this.accessRestrictionStorage = accessRestrictionStorage;
+            this.interactorFactory = interactorFactory;
 
             var sections = new List<Section>();
 
@@ -51,7 +57,16 @@ namespace Toggl.Core.UI.ViewModels
 
             sections.Add(errorScreenSection);
 
-            TableSections = Observable.Return(sections.ToIImmutableList());
+            TableSections = interactorFactory.GetFeedbackInfo().Execute()
+                .Select(data =>
+                {
+                    var infoRows = data.Select(pair => new InfoRow(pair.Key, pair.Value));
+
+                    var infoSection = new Section("Device info", infoRows);
+                    sections.Add(infoSection);
+
+                    return sections.ToIImmutableList();
+                });
         }
 
         private ViewAction dissmissAndNavigateTo<TViewModel>()
