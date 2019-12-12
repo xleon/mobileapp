@@ -159,6 +159,8 @@ namespace Toggl.Core.Interactors
 
         IInteractor<IObservable<Unit>> SendFeedback(string message);
 
+        IInteractor<IObservable<Dictionary<string, string>>> GetFeedbackInfo();
+
         #endregion
 
         #region Calendar

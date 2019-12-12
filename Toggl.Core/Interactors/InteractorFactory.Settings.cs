@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive;
 using Toggl.Core.Interactors.Settings;
 
@@ -10,13 +11,18 @@ namespace Toggl.Core.Interactors
             => new SendFeedbackInteractor(
                 api.Feedback,
                 dataSource.User,
+                this,
+                message);
+
+        public IInteractor<IObservable<Dictionary<string, string>>> GetFeedbackInfo()
+            => new GetFeedbackInfoInteractor(
+                dataSource.User,
                 dataSource.Workspaces,
                 dataSource.TimeEntries,
                 platformInfo,
                 userPreferences,
                 lastTimeUsageStorage,
                 timeService,
-                this,
-                message);
+                this);
     }
 }
