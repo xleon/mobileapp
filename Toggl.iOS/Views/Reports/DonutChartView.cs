@@ -2,7 +2,9 @@
 using Foundation;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.iOS.Extensions;
 using UIKit;
 using static Toggl.Core.UI.ViewModels.Reports.ReportDonutChartElement;
@@ -22,7 +24,6 @@ namespace Toggl.iOS.Views.Reports
         private float radius;
         private float innerRadius;
         private float textRadius;
-        private float totalValue;
 
         private static readonly UIStringAttributes attributes = new UIStringAttributes
         {
@@ -30,15 +31,12 @@ namespace Toggl.iOS.Views.Reports
             ForegroundColor = UIColor.White
         };
 
-        private IEnumerable<Segment> segments = new Segment[0];
-        public IEnumerable<Segment> Segments
+        private ImmutableList<PercentageDecoratedSegment> percentageSegments;
+
+        public void UpdateSegments(IEnumerable<Segment> segments)
         {
-            get => segments;
-            set
-            {
-                segments = value;
-                SetNeedsDisplay();
-            }
+            percentageSegments = DonutChartGrouping.Group(segments);
+            SetNeedsDisplay();
         }
 
         public DonutChartView(IntPtr handle) : base(handle)
@@ -50,16 +48,15 @@ namespace Toggl.iOS.Views.Reports
             var ctx = UIGraphics.GetCurrentContext();
             if (ctx == null) return;
 
-            centerX = (float) Bounds.Size.Width * 0.5f;
-            centerY = (float) Bounds.Size.Height * 0.5f;
+            centerX = (float)Bounds.Size.Width * 0.5f;
+            centerY = (float)Bounds.Size.Height * 0.5f;
             radius = centerX;
             innerRadius = centerX * donutInnerCircleFactor;
             textRadius = (radius + innerRadius) / 2;
-            totalValue = (float) Segments.Sum(s => s.Value);
 
-            var startAngle = (float) Math.PI * -0.5f;
+            var startAngle = (float)Math.PI * -0.5f;
 
-            foreach (var segment in Segments)
+            foreach (var segment in percentageSegments)
             {
                 drawSegment(ctx, segment, ref startAngle);
             }
@@ -67,26 +64,25 @@ namespace Toggl.iOS.Views.Reports
             drawInnerCircle(ctx);
         }
 
-        private void drawSegment(CGContext ctx, Segment segment, ref float startAngle)
+        private void drawSegment(CGContext ctx, PercentageDecoratedSegment percentageSegment, ref float startAngle)
         {
-            ctx.SetFillColor(new Color(segment.Color).ToNativeColor().CGColor);
+            ctx.SetFillColor(new Color(percentageSegment.Segment.Color).ToNativeColor().CGColor);
 
-            var percent = (float)segment.Value / totalValue;
-            var endAngle = startAngle + (float)FullCircle * percent;
+            var endAngle = startAngle + (float)(FullCircle * percentageSegment.NormalizedPercentage);
 
             ctx.MoveTo(centerX, centerY);
             ctx.AddArc(centerX, centerY, radius, startAngle, endAngle, clockwise: false);
             ctx.FillPath();
 
-            drawLabel(ctx, percent, startAngle, endAngle);
+            drawLabel(ctx, percentageSegment.OriginalPercentage, startAngle, endAngle);
 
             startAngle = endAngle;
         }
 
-        private void drawLabel(CGContext ctx, float percent, float startAngle, float endAngle)
+        private void drawLabel(CGContext ctx, double percentage, float startAngle, float endAngle)
         {
             var textAngle = (startAngle + endAngle) / 2;
-            var integerPercentage = (int)(percent * 100);
+            var integerPercentage = (int)(percentage * 100);
             var percentageToDraw = new NSAttributedString($"{integerPercentage}%", attributes);
             ctx.MoveTo(centerX, centerY);
             ctx.AddArc(centerX, centerY, textRadius, textAngle, textAngle, clockwise: false);

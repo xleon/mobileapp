@@ -34,7 +34,7 @@ namespace Toggl.iOS.Cells.Reports
 
         public void SetElement(ReportDonutChartDonutElement element, bool last)
         {
-            DonutChartView.Segments = element.Segments;
+            DonutChartView.UpdateSegments(element.Segments);
             isLast = last;
             SetNeedsLayout();
         }

@@ -38,6 +38,7 @@ namespace Toggl.Droid.Views
         private RectF circle = new RectF();
 
         private ReportDonutChartDonutElement data;
+        private ImmutableList<PercentageDecoratedSegment> percentageSegments;
 
         public DonutChartView(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
@@ -67,6 +68,8 @@ namespace Toggl.Droid.Views
         public void Update(ReportDonutChartDonutElement data)
         {
             this.data = data;
+            percentageSegments = DonutChartGrouping.Group(data.Segments);
+
             PostInvalidate();
         }
 
@@ -86,15 +89,13 @@ namespace Toggl.Droid.Views
                 return;
             }
 
-            var totalValue = data.Segments.Sum(s => s.Value);
-
             var angleOffset = angleRightToTopCorrection;
 
             circle.Set(0, 0, Width, Height);
 
-            foreach (var segment in data.Segments)
+            foreach (var segment in percentageSegments)
             {
-                drawSlice(canvas, circle, segment, totalValue, ref angleOffset);
+                drawSlice(canvas, circle, segment, ref angleOffset);
             }
 
             drawInnerCircle(canvas);
@@ -109,15 +110,14 @@ namespace Toggl.Droid.Views
             drawInnerCircle(canvas);
         }
 
-        private void drawSlice(Canvas canvas, RectF circle, Segment segment, double totalValue, ref float angleOffset)
+        private void drawSlice(Canvas canvas, RectF circle, PercentageDecoratedSegment percentageSegment, ref float angleOffset)
         {
-            var percentage = segment.Value / totalValue;
-            var sliceAngle = (float)(fullCircle * percentage);
-            paint.Color = Color.ParseColor(segment.Color);
+            var sliceAngle = (float)(fullCircle * percentageSegment.NormalizedPercentage);
+            paint.Color = Color.ParseColor(percentageSegment.Segment.Color);
 
             canvas.DrawArc(circle, angleOffset, sliceAngle, true, paint);
 
-            drawSegmentPercentageLabel(canvas, percentage, sliceAngle, angleOffset);
+            drawSegmentPercentageLabel(canvas, percentageSegment.OriginalPercentage, sliceAngle, angleOffset);
 
             angleOffset += sliceAngle;
         }

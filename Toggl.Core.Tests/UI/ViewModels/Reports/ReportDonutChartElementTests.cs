@@ -93,24 +93,6 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             }
 
             [Fact, LogIfTooSlow]
-            public void DefaultOverloadCreatesCorrectNumberOfSubElementsWithOtherCategory()
-            {
-                var segments = CreateSegments(new[] { 40.0, 30, 2, 15, 5, 7, 1 }).ToList();
-                var expectedValues = new[] { 40, 30, 15, 7, 5, 3 };
-
-                var donutChart = new ReportDonutChartElement(segments);
-
-                var elements = donutChart.SubElements;
-                var legend = elements.Skip(1).Cast<ReportDonutChartLegendItemElement>();
-                elements.Count.Should().Be(1 + expectedValues.Length);
-                elements.First().Should().BeOfType<ReportDonutChartDonutElement>();
-                legend.Select(li => double.Parse(li.Value)).Should().BeSequenceEquivalentTo(expectedValues);
-                var otherLegendItem = legend.Last();
-                otherLegendItem.Color.Should().Be(OtherCategoryColor);
-                otherLegendItem.Name.Should().Be(OtherCategoryLabel);
-            }
-
-            [Fact, LogIfTooSlow]
             public void CreatesCorrectDonutElement()
             {
                 var segments = CreateSegments(1).ToList();
@@ -133,70 +115,6 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                 var elements = donutChart.SubElements;
                 elements.Count.Should().Be(1 + segments.Count);
                 elements.Skip(1).Should().AllBeOfType<MockLegendItem>();
-            }
-        }
-
-        public sealed class TheGroupingAlgorithm : ReportDonutElementsBaseTests
-        {
-            [Fact, LogIfTooSlow]
-            public void GivesEachSegmentOverFivePercentTheirOwnSlice()
-            {
-                var segments = CreateSegments(new[] { 30.0, 20, 15, 12, 10, 8, 5 }).ToList();
-
-                var donutChart = new ReportDonutChartElement(segments);
-
-                donutChart.SubElements
-                    .OfType<ReportDonutChartLegendItemElement>()
-                    .Should().HaveCount(segments.Count);
-            }
-
-            [Fact, LogIfTooSlow]
-            public void GroupsAllSegmentsBelowOnePercentUnderOther()
-            {
-                var values = Enumerable.Range(0, 101).Select(x => 1.0).ToArray();
-                var segments = CreateSegments(values).ToList();
-                var sum = values.Sum();
-
-                var donutChart = new ReportDonutChartElement(segments);
-
-                var legend = donutChart.SubElements.OfType<ReportDonutChartLegendItemElement>();
-                legend.Should().HaveCount(1);
-                legend.Last().Name.Should().Be(OtherCategoryLabel);
-                legend.Last().Value.Should().Be(sum.ToString());
-            }
-
-            [Fact, LogIfTooSlow]
-            public void GroupsUnderOtherUntilOtherIsLargerThan5Percent()
-            {
-                var values = new[]
-                {
-                    91.0, // gets its own slice automatically
-                    1, 1, 1, 1, // autogroups under Other slice
-                    2, // gets into Other because it is not yet filled
-                    3, // gets its own slice because the Other group is full
-                };
-                var segments = CreateSegments(values).ToList();
-                var autogrouped = 1 + 1 + 1 + 1;
-                var expectedOtherValue = autogrouped + 2;
-
-                var donutChart = new ReportDonutChartElement(segments);
-
-                var legend = donutChart.SubElements.OfType<ReportDonutChartLegendItemElement>();
-                legend.Should().HaveCount(3);
-                legend.Last().Name.Should().Be(OtherCategoryLabel);
-                legend.Last().Value.Should().Be(expectedOtherValue.ToString());
-            }
-
-            [Fact, LogIfTooSlow]
-            public void UnwrapsSingleOtherElement()
-            {
-                var segments = CreateSegments(new[] { 99.0, 1 }).ToList();
-
-                var donutChart = new ReportDonutChartElement(segments);
-
-                var legend = donutChart.SubElements.OfType<ReportDonutChartLegendItemElement>();
-                legend.Should().HaveCount(2);
-                legend.Last().Name.Should().NotBe(OtherCategoryLabel);
             }
         }
     }
