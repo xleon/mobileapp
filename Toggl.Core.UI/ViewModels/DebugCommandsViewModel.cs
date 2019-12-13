@@ -69,23 +69,19 @@ namespace Toggl.Core.UI.ViewModels
                 });
         }
 
-        private ViewAction dissmissAndNavigateTo<TViewModel>()
+        private ViewAction dissmissAndNavigateTo<TViewModel>(Action callBack = null)
             where TViewModel : ViewModel<Unit, Unit>
-        {
-            Close();
-            return ViewAction.FromAsync(() => NavigationService.Navigate<TViewModel>(null), schedulerProvider.MainScheduler);
-        }
+            => ViewAction.FromAsync(() =>
+                {
+                    callBack();
+                    Close();
+                    return NavigationService.Navigate<TViewModel>(null);
+                }, schedulerProvider.MainScheduler);
 
         private ViewAction clientOutdatedPermanently()
-        {
-            accessRestrictionStorage.SetClientOutdated();
-            return dissmissAndNavigateTo<OutdatedAppViewModel>();
-        }
+            => dissmissAndNavigateTo<OutdatedAppViewModel>(accessRestrictionStorage.SetClientOutdated);
 
         private ViewAction apiOutdatedPermanently()
-        {
-            accessRestrictionStorage.SetApiOutdated();
-            return dissmissAndNavigateTo<OutdatedAppViewModel>();
-        }
+            => dissmissAndNavigateTo<OutdatedAppViewModel>(accessRestrictionStorage.SetApiOutdated);
     }
 }
