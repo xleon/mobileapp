@@ -42,7 +42,6 @@ namespace Toggl.iOS.Views.EditDuration
             {
                 if (startTime == value) return;
                 startTime = value.Clamp(MinimumStartTime, MaximumStartTime);
-                StartTimeChanged?.Invoke(this, new EventArgs());
                 SetNeedsLayout();
             }
         }
@@ -54,7 +53,6 @@ namespace Toggl.iOS.Views.EditDuration
             {
                 if (endTime == value) return;
                 endTime = value.Clamp(MinimumEndTime, MaximumEndTime);
-                EndTimeChanged?.Invoke(this, new EventArgs());
                 SetNeedsLayout();
             }
         }
@@ -340,19 +338,19 @@ namespace Toggl.iOS.Views.EditDuration
             {
                 var nextStartTime = (StartTime + diff).RoundToClosestMinute();
                 giveFeedback = nextStartTime != StartTime;
-                StartTime = nextStartTime;
+                updateStartTime(nextStartTime);
             }
 
             if (updateType == WheelUpdateType.EditEndTime)
             {
                 var nextEndTime = (EndTime + diff).RoundToClosestMinute();
                 giveFeedback = nextEndTime != EndTime;
-                EndTime = nextEndTime;
+                updateEndTime(nextEndTime);
             }
 
             if (updateType == WheelUpdateType.EditBothAtOnce)
             {
-                EndTime = StartTime + duration;
+                updateEndTime(StartTime + duration);
             }
 
             if (giveFeedback)
@@ -360,6 +358,18 @@ namespace Toggl.iOS.Views.EditDuration
                 feedbackGenerator.SelectionChanged();
                 feedbackGenerator.Prepare();
             }
+        }
+
+        private void updateStartTime(DateTimeOffset time)
+        {
+            StartTime = time;
+            StartTimeChanged?.Invoke(this, new EventArgs());
+        }
+
+        private void updateEndTime(DateTimeOffset time)
+        {
+            EndTime = time;
+            EndTimeChanged?.Invoke(this, new EventArgs());
         }
 
         private void finishTouchEditing()
