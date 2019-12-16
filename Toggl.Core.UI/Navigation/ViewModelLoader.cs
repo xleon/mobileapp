@@ -109,7 +109,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PrivateSharedStorageService,
                     dependencyContainer.PlatformInfo,
                     dependencyContainer.WidgetsService,
-                    dependencyContainer.LastTimeUsageStorage);
+                    dependencyContainer.LastTimeUsageStorage,
+                    dependencyContainer.CalendarShortcutsService);
             }
 
             if (viewModelType == typeof(MainViewModel))
@@ -341,7 +342,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.TimeService);
+                    dependencyContainer.CalendarShortcutsService);
             }
 
             if (viewModelType == typeof(ReportsViewModel))
@@ -352,7 +353,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.RxActionFactory,
-                    dependencyContainer.TimeService);
+                    dependencyContainer.CalendarShortcutsService);
             }
 
             if (viewModelType == typeof(AboutViewModel))

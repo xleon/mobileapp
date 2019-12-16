@@ -51,7 +51,8 @@ namespace Toggl.Core.UI.ViewModels
             IPrivateSharedStorageService privateSharedStorageService,
             IPlatformInfo platformInfo,
             IWidgetsService widgetsService,
-            ILastTimeUsageStorage lastTimeUsageStorage)
+            ILastTimeUsageStorage lastTimeUsageStorage,
+            ICalendarShortcutsService calendarShortcutService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -76,6 +77,7 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
             Ensure.Argument.IsNotNull(widgetsService, nameof(widgetsService));
             Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
+            Ensure.Argument.IsNotNull(calendarShortcutService, nameof(calendarShortcutService));
 
             mainViewModel = new MainViewModel(
                 dataSource,
@@ -105,7 +107,7 @@ namespace Toggl.Core.UI.ViewModels
                 interactorFactory,
                 schedulerProvider,
                 rxActionFactory,
-                timeService);
+                calendarShortcutService);
 
             calendarViewModel = new CalendarViewModel(
                 dataSource,

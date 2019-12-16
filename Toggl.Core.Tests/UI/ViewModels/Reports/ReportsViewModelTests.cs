@@ -14,6 +14,7 @@ using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.Views;
 using Toggl.Networking.Models.Reports;
@@ -30,6 +31,8 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
         public abstract class ReportsViewModelTest : BaseViewModelTests<ReportsViewModel>
         {
             private List<MockWorkspace> workspaces;
+
+            protected new ICalendarShortcutsService CalendarShortcutsService { get; private set; } = Substitute.For<ICalendarShortcutsService>();
 
             protected new ReportsViewModel ViewModel { get; set; }
 
@@ -64,14 +67,22 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                     .Execute()
                     .Returns(Observable.Return(workspaces));
 
+                var userObservable = Observable.Return(new MockUser { Id = 1, BeginningOfWeek = BeginningOfWeek.Wednesday });
+
                 InteractorFactory
                     .GetCurrentUser()
                     .Execute()
-                    .Returns(Observable.Return(new MockUser { Id = 1, BeginningOfWeek = BeginningOfWeek.Wednesday }));
+                    .Returns(userObservable);
+
+                DataSource.User
+                    .Current
+                    .Returns(userObservable);
 
                 TimeService
                     .CurrentDateTime
                     .Returns(new DateTimeOffset(2019, 1, 1, 0, 0, 0, TimeSpan.Zero));
+
+                CalendarShortcutsService = new CalendarShortcutsService(DataSource, TimeService);
 
                 var totals = new TimeEntriesTotals();
                 InteractorFactory
@@ -110,7 +121,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                     InteractorFactory,
                     SchedulerProvider,
                     RxActionFactory,
-                    TimeService);
+                    CalendarShortcutsService);
         }
 
         public sealed class TheConstructor : ReportsViewModelTest
@@ -123,14 +134,14 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                 bool useSchedulerProvider,
                 bool useInteractorFactory,
                 bool useRxActionFactory,
-                bool useTimeService)
+                bool useCalendarShortcutsService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
-                var timeService = useTimeService ? TimeService : null;
+                var calendarShortcutsService = useCalendarShortcutsService ? CalendarShortcutsService : null;
 
                 Action tryingToConstructWithEmptyParameters = () => new ReportsViewModel(
                     dataSource,
@@ -138,7 +149,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                     interactorFactory,
                     schedulerProvider,
                     rxActionFactory,
-                    timeService);
+                    calendarShortcutsService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();

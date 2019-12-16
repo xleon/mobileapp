@@ -14,6 +14,7 @@ using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels.DateRangePicker;
 using Toggl.Core.UI.Views;
 using Toggl.Shared;
@@ -27,7 +28,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private Either<ReportPeriod, DateRange> selection;
 
         private readonly IInteractorFactory interactorFactory;
-        private readonly ITimeService timeService;
+        private readonly ICalendarShortcutsService calendarShortcutsService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ITogglDataSource dataSource;
 
@@ -38,7 +39,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public IObservable<string> FormattedTimeRange { get; set; }
 
         public OutputAction<IThreadSafeWorkspace> SelectWorkspace { get; private set; }
-        public OutputAction<DateTimeOffsetRange?> SelectTimeRange { get; private set; }
+        public OutputAction<DateRange?> SelectTimeRange { get; private set; }
 
         public ReportsViewModel(
             ITogglDataSource dataSource,
@@ -46,7 +47,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
             IInteractorFactory interactorFactory,
             ISchedulerProvider schedulerProvider,
             IRxActionFactory rxActionFactory,
-            ITimeService timeService)
+            ICalendarShortcutsService calendarShortcutsService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -54,12 +55,12 @@ namespace Toggl.Core.UI.ViewModels.Reports
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(calendarShortcutsService, nameof(calendarShortcutsService));
 
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
             this.schedulerProvider = schedulerProvider;
-            this.timeService = timeService;
+            this.calendarShortcutsService = calendarShortcutsService;
 
             HasMultipleWorkspaces = interactorFactory.ObserveAllWorkspaces().Execute()
                 .Select(workspaces => workspaces.Where(w => !w.IsInaccessible))
@@ -77,10 +78,13 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Concat(SelectWorkspace.Elements.WhereNotNull());
 
             var beginningOfWeek = (await interactorFactory.GetCurrentUser().Execute()).BeginningOfWeek;
-            var initialSelection = defaultTimeRange(beginningOfWeek);
+
+            var initialSelection = calendarShortcutsService.GetShortcutFrom(ReportPeriod.ThisWeek).DateRange;
 
             var timeRangeSelector = SelectTimeRange.Elements
-                .StartWith(initialSelection);
+                .StartWith(initialSelection)
+                .WhereNotNull()
+                .Select(range => range.ToLocalInstantaneousTimeRange());
 
             CurrentWorkspaceName = workspaceSelector
                 .Select(ws => ws.Name)
@@ -89,7 +93,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .AsDriver("", schedulerProvider);
 
             Elements = Observable
-                .CombineLatest(workspaceSelector, timeRangeSelector.WhereNotNull(), ReportFilter.Create)
+                .CombineLatest(workspaceSelector, timeRangeSelector, ReportFilter.Create)
                 .SelectMany(reportElements)
                 .AsDriver(ImmutableList<IReportElement>.Empty, schedulerProvider);
 
@@ -128,7 +132,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
             return workspace;
         }
 
-        private async Task<DateTimeOffsetRange?> selectTimeRange()
+        private async Task<DateRange?> selectTimeRange()
         {
             var selectedTimeRange = await Navigate<DateRangePickerViewModel, Either<ReportPeriod, DateRange>, DateRange?>(selection);
 
@@ -137,7 +141,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             selection = Either<ReportPeriod, DateRange>.WithRight(selectedTimeRange.Value);
 
-            return selectedTimeRange.Value.ToLocalInstantaneousTimeRange();
+            return selectedTimeRange.Value;
         }
 
         private ImmutableList<IReportElement> createLoadingStateReportElements()
@@ -151,10 +155,14 @@ namespace Toggl.Core.UI.ViewModels.Reports
             .ToObservable()
             .StartWith(createLoadingStateReportElements());
 
-        private string formattedTimeRange(DateTimeOffsetRange range, DateFormat dateFormat)
+        private string formattedTimeRange(DateRange range, DateFormat dateFormat)
         {
-            var startDateText = range.Minimum.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
-            var endDateText = range.Maximum.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
+            var knownShortcut = calendarShortcutsService.GetShortcutFrom(range);
+            if (knownShortcut != null)
+                return knownShortcut.Text;
+
+            var startDateText = range.Beginning.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
+            var endDateText = range.End.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
             return $"{startDateText} - {endDateText}";
         }
 
@@ -197,13 +205,5 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private ImmutableList<IReportElement> elements(params IReportElement[] elements)
             => elements.Flatten();
-
-        private DateTimeOffsetRange defaultTimeRange(BeginningOfWeek beginningOfWeek)
-        {
-            var today = timeService.CurrentDateTime.ToLocalTime().Date;
-            var beginning = today.BeginningOfWeek(beginningOfWeek);
-            var end = beginning.AddDays(6);
-            return new DateRange(beginning, end).ToLocalInstantaneousTimeRange();
-        }
     }
 }

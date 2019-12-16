@@ -12,6 +12,7 @@ using Toggl.Shared.Extensions;
 using System.Threading.Tasks;
 using Toggl.Core.Interactors;
 using SelectionState = Toggl.Shared.Either<System.DateTime, Toggl.Shared.DateRange>;
+using Toggl.Core.UI.Services;
 
 namespace Toggl.Core.UI.ViewModels.DateRangePicker
 {
@@ -31,14 +32,12 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
 
         private readonly IInteractorFactory interactorFactory;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly ITimeService timeService;
+        private readonly ICalendarShortcutsService calendarShortcutsService;
 
         private BeginningOfWeek beginningOfWeek;
         private SelectionState selectionState;
 
         private DateRange? result;
-
-        private ImmutableList<DateRangePickerShortcut> shortcuts = ImmutableList<DateRangePickerShortcut>.Empty;
 
         public ImmutableList<string> WeekDaysLabels { get; private set; }
 
@@ -57,17 +56,17 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
             IInteractorFactory interactorFactory,
             IRxActionFactory rxActionFactory,
             ISchedulerProvider schedulerProvider,
-            ITimeService timeService)
+            ICalendarShortcutsService calendarShortcutsService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(timeService, nameof(timeService));
+            Ensure.Argument.IsNotNull(calendarShortcutsService, nameof(calendarShortcutsService));
 
             this.interactorFactory = interactorFactory;
             this.schedulerProvider = schedulerProvider;
-            this.timeService = timeService;
+            this.calendarShortcutsService = calendarShortcutsService;
 
             SelectDate = rxActionFactory.FromFunction<DateTime, SelectionState>(selectDate);
             SetReportPeriod = rxActionFactory.FromFunction<ReportPeriod, SelectionState>(setReportPeriod);
@@ -83,8 +82,6 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
                 .FirstAsync();
 
             WeekDaysLabels = getWeekDaysLabels(beginningOfWeek);
-
-            shortcuts = createShortcuts(beginningOfWeek, timeService.CurrentDateTime).ToImmutableList();
 
             var initialRange = unwrapInitialRange(initialSelection);
             selectionState = SelectionState.WithRight(initialRange);
@@ -110,7 +107,7 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
 
         private DateRange unwrapInitialRange(Either<ReportPeriod, DateRange> initialSelection)
             => initialSelection.Match(
-                period => shortcuts.First(s => s.Period == period).DateRange,
+                period => calendarShortcutsService.GetShortcutFrom(period).DateRange,
                 range => range);
 
         private void saveResult(SelectionState selection)
@@ -137,16 +134,17 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
             Close(result);
         }
 
-        private SelectionState setReportPeriod(ReportPeriod date)
-            => SelectionState.WithRight(shortcuts.First(s => s.Period == date).DateRange);
+        private SelectionState setReportPeriod(ReportPeriod period)
+            => SelectionState.WithRight(calendarShortcutsService.GetShortcutFrom(period).DateRange);
 
         private ReportPeriod reportPeriodFromSelection(SelectionState state)
             => state.Match(
                 beginning => ReportPeriod.Unknown,
-                range => shortcuts.FirstOrDefault(s => s.MatchesDateRange(range))?.Period ?? ReportPeriod.Unknown);
+                range => calendarShortcutsService.GetShortcutFrom(range)?.Period ?? ReportPeriod.Unknown);
 
         private ImmutableList<Shortcut> shortcutsFromSelectedPeriod(ReportPeriod period)
-            => shortcuts
+            => calendarShortcutsService
+                .Shortcuts
                 .Select(shortcut => Shortcut.From(shortcut, shortcut.Period == period))
                 .ToImmutableList();
 
