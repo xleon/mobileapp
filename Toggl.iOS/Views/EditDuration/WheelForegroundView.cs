@@ -176,7 +176,7 @@ namespace Toggl.iOS.Views.EditDuration
 
         private void calculateEndPointPositions()
         {
-            var center = Center.ToTogglPoint();
+            var center = Center.ToSharedPoint();
 
             startTimePosition = PointOnCircumference(center, startTimeAngle, endPointsRadius).ToCGPoint();
             endTimePosition = PointOnCircumference(center, endTimeAngle, endPointsRadius).ToCGPoint();
@@ -233,7 +233,7 @@ namespace Toggl.iOS.Views.EditDuration
                     break;
             }
 
-            var currentAngle = AngleBetween(position.ToTogglPoint(), Center.ToTogglPoint());
+            var currentAngle = AngleBetween(position.ToSharedPoint(), Center.ToSharedPoint());
 
             var angleChange = currentAngle - previousAngle;
             while (angleChange < -Math.PI) angleChange += FullCircle;
@@ -275,7 +275,7 @@ namespace Toggl.iOS.Views.EditDuration
                 if (updateType == WheelUpdateType.EditBothAtOnce)
                 {
                     editBothAtOnceStartTimeAngleOffset =
-                        AngleBetween(position.ToTogglPoint(), Center.ToTogglPoint()) - startTimeAngle;
+                        AngleBetween(position.ToSharedPoint(), Center.ToSharedPoint()) - startTimeAngle;
                 }
 
                 return true;
@@ -314,11 +314,11 @@ namespace Toggl.iOS.Views.EditDuration
             => (extendedRadius ? extendedRadiusMultiplier : 1) * (Thickness / 2);
 
         private static bool isCloseEnough(CGPoint tapPosition, CGPoint endPoint, nfloat radius)
-            => DistanceSq(tapPosition.ToTogglPoint(), endPoint.ToTogglPoint()) <= radius * radius;
+            => DistanceSq(tapPosition.ToSharedPoint(), endPoint.ToSharedPoint()) <= radius * radius;
 
         private bool isOnTheWheelBetweenStartAndStop(CGPoint point)
         {
-            var distanceFromCenterSq = DistanceSq(Center.ToTogglPoint(), point.ToTogglPoint());
+            var distanceFromCenterSq = DistanceSq(Center.ToSharedPoint(), point.ToSharedPoint());
 
             if (distanceFromCenterSq < SmallRadius * SmallRadius
                 || distanceFromCenterSq > Radius * Radius)
@@ -326,7 +326,7 @@ namespace Toggl.iOS.Views.EditDuration
                 return false;
             }
 
-            var angle = AngleBetween(point.ToTogglPoint(), Center.ToTogglPoint());
+            var angle = AngleBetween(point.ToSharedPoint(), Center.ToSharedPoint());
             return isFullCircle || angle.IsBetween(startTimeAngle, endTimeAngle);
         }
 
