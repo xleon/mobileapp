@@ -37,10 +37,9 @@ namespace Toggl.Droid.Fragments
     {
         private const int snackbarDuration = 5000;
         private NotificationManager notificationManager;
-        private MainRecyclerAdapter mainRecyclerAdapter;
+        private MainLogRecyclerAdapter mainLogRecyclerAdapter;
         private MainRecyclerViewTouchCallback touchCallback;
         private LinearLayoutManager layoutManager;
-        private bool shouldShowRatingViewOnResume;
         private ISubject<bool> visibilityChangedSubject = new BehaviorSubject<bool>(false);
         private IObservable<bool> visibilityChanged => visibilityChangedSubject.AsObservable();
 
@@ -136,32 +135,32 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(onSyncChanged)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter = new MainRecyclerAdapter(Context, ViewModel.TimeService)
-            {
-                SuggestionsViewModel = ViewModel.SuggestionsViewModel,
-                RatingViewModel = ViewModel.RatingViewModel,
-            };
-            mainRecyclerAdapter.SetupRatingViewVisibility(shouldShowRatingViewOnResume);
-            touchCallback = new MainRecyclerViewTouchCallback(mainRecyclerAdapter);
+            mainLogRecyclerAdapter = new MainLogRecyclerAdapter();
+            touchCallback = new MainRecyclerViewTouchCallback(mainLogRecyclerAdapter);
 
             setupRecycler();
 
-            mainRecyclerAdapter.ToggleGroupExpansion
+            mainLogRecyclerAdapter.ToggleGroupExpansion
                 .Subscribe(ViewModel.TimeEntriesViewModel.ToggleGroupExpansion.Inputs)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter.TimeEntryTaps
+            mainLogRecyclerAdapter.EditTimeEntry
                 .Select(editEventInfo)
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter.ContinueTimeEntry
+            mainLogRecyclerAdapter.ContinueTimeEntry
                 .Subscribe(ViewModel.ContinueTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter.DeleteTimeEntrySubject
+            mainLogRecyclerAdapter.DeleteTimeEntrySubject
                 .Select(vm => vm.RepresentedTimeEntriesIds)
                 .Subscribe(ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntries.Inputs)
+                .DisposedBy(DisposeBag);
+
+            mainLogRecyclerAdapter.ContinueSuggestion
+                .Select(vm => vm.Suggestion)
+                .Subscribe(ViewModel.SuggestionsViewModel.StartTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
             ViewModel.TimeEntriesViewModel.TimeEntriesPendingDeletion
@@ -176,8 +175,8 @@ namespace Toggl.Droid.Fragments
                  .Subscribe(ViewModel.Refresh.Inputs)
                  .DisposedBy(DisposeBag);
 
-            ViewModel.TimeEntries
-                .Subscribe(mainRecyclerAdapter.UpdateCollection)
+            ViewModel.MainLogItems
+                .Subscribe(mainLogRecyclerAdapter.UpdateCollection)
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsTimeEntryRunning
@@ -212,10 +211,6 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(onEmptyStateVisibilityChanged)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.ShouldShowRatingView
-                .Subscribe(setupRatingViewVisibility)
-                .DisposedBy(DisposeBag);
-
             setupOnboardingSteps();
         }
 
@@ -244,12 +239,6 @@ namespace Toggl.Droid.Fragments
                 displayPlaceholders: true);
         }
 
-        private void setupRatingViewVisibility(bool isVisible)
-        {
-            mainRecyclerAdapter.SetupRatingViewVisibility(isVisible);
-            shouldShowRatingViewOnResume = isVisible;
-        }
-
         public void SetFragmentIsVisible(bool isVisible)
         {
             visibilityChangedSubject.OnNext(isVisible);
@@ -257,7 +246,7 @@ namespace Toggl.Droid.Fragments
 
         private void reload()
         {
-            mainRecyclerAdapter.NotifyDataSetChanged();
+            mainLogRecyclerAdapter.NotifyDataSetChanged();
         }
 
         private void setupRecycler()
@@ -266,7 +255,7 @@ namespace Toggl.Droid.Fragments
             layoutManager.ItemPrefetchEnabled = true;
             layoutManager.InitialPrefetchItemCount = 4;
             mainRecyclerView.SetLayoutManager(layoutManager);
-            mainRecyclerView.SetAdapter(mainRecyclerAdapter);
+            mainRecyclerView.SetAdapter(mainLogRecyclerAdapter);
         }
 
         private void setupItemTouchHelper(MainRecyclerViewTouchCallback callback)
@@ -313,7 +302,7 @@ namespace Toggl.Droid.Fragments
             }
         }
 
-        private EditTimeEntryInfo editEventInfo(LogItemViewModel item)
+        private EditTimeEntryInfo editEventInfo(TimeEntryLogItemViewModel item)
         {
             var origin = item.IsTimeEntryGroupHeader
                 ? GroupHeader

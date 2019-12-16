@@ -70,6 +70,12 @@ namespace Toggl.Shared {
             }
         }
 
+        public static string NoRunningTimeEntry {
+            get {
+                return ResourceManager.GetString("NoRunningTimeEntry", resourceCulture);
+            }
+        }
+
         public static string LoginForgotPassword {
             get {
                 return ResourceManager.GetString("LoginForgotPassword", resourceCulture);
@@ -796,6 +802,13 @@ namespace Toggl.Shared {
             }
         }
 
+        
+        public static string Back {
+            get {
+                return ResourceManager.GetString("Back", resourceCulture);
+            }
+        }
+        
         public static string CountriesJson {
             get {
                 return ResourceManager.GetString("CountriesJson", resourceCulture);

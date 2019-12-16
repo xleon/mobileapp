@@ -17,11 +17,13 @@ namespace Toggl.Core.DataSources
         public TogglDataSource(
             ITogglDatabase database,
             ITimeService timeService,
-            IAnalyticsService analyticsService)
+            IAnalyticsService analyticsService,
+            ISchedulerProvider schedulerProvider)
         {
             Ensure.Argument.IsNotNull(database, nameof(database));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
+            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.database = database;
 
@@ -30,10 +32,10 @@ namespace Toggl.Core.DataSources
             Tasks = new TasksDataSource(database.Tasks);
             Clients = new ClientsDataSource(database.Clients);
             Projects = new ProjectsDataSource(database.Projects);
-            Workspaces = new WorkspacesDataSource(database.Workspaces);
+            Workspaces = new WorkspacesDataSource(database.Workspaces, schedulerProvider);
             Preferences = new PreferencesDataSource(database.Preferences);
             WorkspaceFeatures = new WorkspaceFeaturesDataSource(database.WorkspaceFeatures);
-            TimeEntries = new TimeEntriesDataSource(database.TimeEntries, timeService, analyticsService);
+            TimeEntries = new TimeEntriesDataSource(database.TimeEntries, timeService, analyticsService, schedulerProvider);
         }
 
         public ITimeEntriesSource TimeEntries { get; }

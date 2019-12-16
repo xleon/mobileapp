@@ -180,15 +180,14 @@ time entries will appear here.</string>
                         <constraint firstItem="hoP-Tg-vBM" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Jhd-oR-xIN" secondAttribute="leading" id="wvc-Uc-0p0"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Kk-Hz-RBS">
+                <imageView opaque="NO" contentMode="center" image="playIcon" translatesAutoresizingMaskIntoConstraints="NO" id="4Kk-Hz-RBS">
                     <rect key="frame" x="295" y="538" width="80" height="80"/>
                     <accessibility key="accessibilityConfiguration" identifier="MainStartTimeEntry"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="80" id="ZPS-gP-0Ab"/>
                         <constraint firstAttribute="width" constant="80" id="eb6-9a-GbS"/>
                     </constraints>
-                    <state key="normal" image="playIcon"/>
-                </button>
+                </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jpn-gJ-vFB">
                     <rect key="frame" x="113" y="554" width="167" height="48"/>
                     <subviews>

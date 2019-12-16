@@ -6,18 +6,18 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using AndroidX.ConstraintLayout.Widget;
 using AndroidX.RecyclerView.Widget;
+using System.Reactive.Subjects;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 using static Toggl.Shared.Extensions.CommonFunctions;
 
-namespace Toggl.Droid.ViewHolders
+namespace Toggl.Droid.ViewHolders.MainLog
 {
-    public class MainLogUserFeedbackViewHolder : RecyclerView.ViewHolder
+    public class MainLogUserFeedbackViewHolder : BaseRecyclerViewHolder<MainLogItemViewModel>
     {
-        private RatingViewModel ratingViewModel;
-
         private TextView userFeedbackTitle;
         private ImageView thumbsUpButton;
         private ImageView thumbsDownButton;
@@ -34,96 +34,94 @@ namespace Toggl.Droid.ViewHolders
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
+        public MainLogUserFeedbackViewHolder(View itemView) : base(itemView)
+        {
+        }
+
         public MainLogUserFeedbackViewHolder(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {
         }
 
-        public MainLogUserFeedbackViewHolder(View itemView, RatingViewModel ratingViewModel) : base(itemView)
+        protected override void InitializeViews()
         {
-            this.ratingViewModel = ratingViewModel;
-            initializeViews(itemView);
-            bindViews(itemView);
-        }
+            userFeedbackTitle = ItemView.FindViewById<TextView>(Resource.Id.UserFeedbackTitle);
+            thumbsUpButton = ItemView.FindViewById<ImageView>(Resource.Id.UserFeedbackThumbsUp);
+            thumbsDownButton = ItemView.FindViewById<ImageView>(Resource.Id.UserFeedbackThumbsDown);
+            yesText = ItemView.FindViewById<TextView>(Resource.Id.UserFeedbackThumbsUpText);
+            noText = ItemView.FindViewById<TextView>(Resource.Id.UserFeedbackThumbsDownText);
+            impressionTitle = ItemView.FindViewById<TextView>(Resource.Id.UserFeedbackImpressionTitle);
+            impressionThumbsImage = ItemView.FindViewById<ImageView>(Resource.Id.UserFeedbackImpressionThumbsImage);
+            impressionDescription = ItemView.FindViewById<TextView>(Resource.Id.UserFeedbackDescription);
+            rateButton = ItemView.FindViewById<Button>(Resource.Id.UserFeedbackRateButton);
+            laterButton = ItemView.FindViewById<TextView>(Resource.Id.UserFeedbackLaterButton);
 
-        private void bindViews(View itemView)
-        {
-            ratingViewModel.Impression
-                .Select(callToActionTitle)
-                .Subscribe(impressionTitle.Rx().TextObserver())
-                .DisposedBy(disposeBag);
-
-            ratingViewModel.Impression
-                .Select(callToActionDescription)
-                .Subscribe(impressionDescription.Rx().TextObserver())
-                .DisposedBy(disposeBag);
-
-            ratingViewModel.Impression
-                .Select(callToActionButtonTitle)
-                .Subscribe(rateButton.Rx().TextObserver())
-                .DisposedBy(disposeBag);
-
-            ratingViewModel.Impression
-                .Select(impression => impression.HasValue)
-                .Subscribe(impressionGroup.Rx().IsVisible())
-                .DisposedBy(disposeBag);
-
-            ratingViewModel.Impression
-                .Select(impression => impression.HasValue)
-                .Select(Invert)
-                .Subscribe(questionGroup.Rx().IsVisible())
-                .DisposedBy(disposeBag);
-
-            ratingViewModel.Impression
-               .Select(impression => impression ?? false)
-               .Select(drawableFromImpression)
-               .Subscribe(impressionThumbsImage.Rx().Image(itemView.Context))
-               .DisposedBy(disposeBag);
-
-            thumbsUpButton.Rx().Tap()
-                .Subscribe(() => ratingViewModel.RegisterImpression(true))
-                .DisposedBy(disposeBag);
-
-            yesText.Rx().Tap()
-                .Subscribe(() => ratingViewModel.RegisterImpression(true))
-                .DisposedBy(disposeBag);
-
-            thumbsDownButton.Rx().Tap()
-                .Subscribe(() => ratingViewModel.RegisterImpression(false))
-                .DisposedBy(disposeBag);
-
-            noText.Rx().Tap()
-                .Subscribe(() => ratingViewModel.RegisterImpression(false))
-                .DisposedBy(disposeBag);
-
-            rateButton.Rx().Tap()
-                .Subscribe(ratingViewModel.PerformMainAction.Inputs)
-                .DisposedBy(disposeBag);
-
-            laterButton.Rx().Tap()
-                .Subscribe(ratingViewModel.Dismiss)
-                .DisposedBy(disposeBag);
-        }
-
-        private void initializeViews(View view)
-        {
-            userFeedbackTitle = view.FindViewById<TextView>(Resource.Id.UserFeedbackTitle);
-            thumbsUpButton = view.FindViewById<ImageView>(Resource.Id.UserFeedbackThumbsUp);
-            thumbsDownButton = view.FindViewById<ImageView>(Resource.Id.UserFeedbackThumbsDown);
-            yesText = view.FindViewById<TextView>(Resource.Id.UserFeedbackThumbsUpText);
-            noText = view.FindViewById<TextView>(Resource.Id.UserFeedbackThumbsDownText);
-            impressionTitle = view.FindViewById<TextView>(Resource.Id.UserFeedbackImpressionTitle);
-            impressionThumbsImage = view.FindViewById<ImageView>(Resource.Id.UserFeedbackImpressionThumbsImage);
-            impressionDescription = view.FindViewById<TextView>(Resource.Id.UserFeedbackDescription);
-            rateButton = view.FindViewById<Button>(Resource.Id.UserFeedbackRateButton);
-            laterButton = view.FindViewById<TextView>(Resource.Id.UserFeedbackLaterButton);
-
-            questionGroup = view.FindViewById<Group>(Resource.Id.QuestionView);
-            impressionGroup = view.FindViewById<Group>(Resource.Id.ImpressionView);
+            questionGroup = ItemView.FindViewById<Group>(Resource.Id.QuestionView);
+            impressionGroup = ItemView.FindViewById<Group>(Resource.Id.ImpressionView);
 
             userFeedbackTitle.Text = Shared.Resources.RatingTitle;
             yesText.Text = Shared.Resources.RatingYes;
             noText.Text = Shared.Resources.RatingNotReally;
             laterButton.Text = Shared.Resources.Later;
+        }
+
+        protected override void UpdateView()
+        {
+            var viewModel = ((UserFeedbackViewModel) Item).RatingViewModel;
+            viewModel.Impression
+                .Select(callToActionTitle)
+                .Subscribe(impressionTitle.Rx().TextObserver())
+                .DisposedBy(disposeBag);
+
+            viewModel.Impression
+                .Select(callToActionDescription)
+                .Subscribe(impressionDescription.Rx().TextObserver())
+                .DisposedBy(disposeBag);
+
+            viewModel.Impression
+                .Select(callToActionButtonTitle)
+                .Subscribe(rateButton.Rx().TextObserver())
+                .DisposedBy(disposeBag);
+
+            viewModel.Impression
+                .Select(impression => impression.HasValue)
+                .Subscribe(impressionGroup.Rx().IsVisible())
+                .DisposedBy(disposeBag);
+
+            viewModel.Impression
+                .Select(impression => impression.HasValue)
+                .Select(Invert)
+                .Subscribe(questionGroup.Rx().IsVisible())
+                .DisposedBy(disposeBag);
+
+            viewModel.Impression
+               .Select(impression => impression ?? false)
+               .Select(drawableFromImpression)
+               .Subscribe(impressionThumbsImage.Rx().Image(ItemView.Context))
+               .DisposedBy(disposeBag);
+
+            thumbsUpButton.Rx().Tap()
+                .Subscribe(() => viewModel.RegisterImpression(true))
+                .DisposedBy(disposeBag);
+
+            yesText.Rx().Tap()
+                .Subscribe(() => viewModel.RegisterImpression(true))
+                .DisposedBy(disposeBag);
+
+            thumbsDownButton.Rx().Tap()
+                .Subscribe(() => viewModel.RegisterImpression(false))
+                .DisposedBy(disposeBag);
+
+            noText.Rx().Tap()
+                .Subscribe(() => viewModel.RegisterImpression(false))
+                .DisposedBy(disposeBag);
+
+            rateButton.Rx().Tap()
+                .Subscribe(viewModel.PerformMainAction.Inputs)
+                .DisposedBy(disposeBag);
+
+            laterButton.Rx().Tap()
+                .Subscribe(viewModel.Dismiss)
+                .DisposedBy(disposeBag);
         }
 
         private int drawableFromImpression(bool impression)

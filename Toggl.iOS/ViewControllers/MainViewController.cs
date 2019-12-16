@@ -37,7 +37,7 @@ using static Toggl.Core.UI.Helper.Animation;
 
 namespace Toggl.iOS.ViewControllers
 {
-    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
+    using MainLogSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
 
     public partial class MainViewController : ReactiveViewController<MainViewModel>, IScrollableToTop
     {
@@ -128,7 +128,7 @@ namespace Toggl.iOS.ViewControllers
             TimeEntriesLogTableView.BackgroundColor = ColorAssets.TableBackground;
 
             ViewModel.TimeEntries
-                .Subscribe(TimeEntriesLogTableView.Rx().AnimateSections<MainLogSection, DaySummaryViewModel, LogItemViewModel, IMainLogKey>(tableViewSource))
+                .Subscribe(TimeEntriesLogTableView.Rx().AnimateSections<MainLogSection, MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>(tableViewSource))
                 .DisposedBy(disposeBag);
 
             ViewModel.ShouldReloadTimeEntryLog
@@ -164,6 +164,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             tableViewSource.Rx().ModelSelected()
+                .Select(item => item as TimeEntryLogItemViewModel)
                 .Select(editEventInfo)
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
@@ -255,7 +256,7 @@ namespace Toggl.iOS.ViewControllers
             var manualModeImage = UIImage.FromBundle("manualIcon");
             ViewModel.IsInManualMode
                 .Select(isInManualMode => isInManualMode ? manualModeImage : trackModeImage)
-                .Subscribe(image => StartTimeEntryButton.SetImage(image, UIControlState.Normal))
+                .Subscribe(image => StartTimeEntryButton.Image = image)
                 .DisposedBy(DisposeBag);
 
             //The sync failures button
@@ -400,7 +401,7 @@ namespace Toggl.iOS.ViewControllers
             TimeEntriesLogTableView.TableHeaderView = tableHeader;
         }
 
-        private EditTimeEntryInfo editEventInfo(LogItemViewModel item)
+        private EditTimeEntryInfo editEventInfo(TimeEntryLogItemViewModel item)
         {
             var origin = item.IsTimeEntryGroupHeader
                 ? GroupHeader
@@ -411,7 +412,7 @@ namespace Toggl.iOS.ViewControllers
             return new EditTimeEntryInfo(origin, item.RepresentedTimeEntriesIds);
         }
 
-        private ContinueTimeEntryInfo timeEntryContinuation(LogItemViewModel itemViewModel, bool isSwipe)
+        private ContinueTimeEntryInfo timeEntryContinuation(TimeEntryLogItemViewModel itemViewModel, bool isSwipe)
         {
             var continueMode = default(ContinueTimeEntryMode);
 
@@ -611,7 +612,6 @@ namespace Toggl.iOS.ViewControllers
 
             //Hide play button for later animating it
             StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f);
-            StartTimeEntryButton.AdjustsImageWhenHighlighted = false;
 
             //Prepare Navigation bar images
             settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);

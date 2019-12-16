@@ -12,6 +12,7 @@ using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Calendar.ContextualMenu;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
@@ -32,6 +33,7 @@ namespace Toggl.Droid.Fragments.Calendar
 
         public CalendarDayViewModel ViewModel { get; set; }
         public BehaviorRelay<int> CurrentPageRelay { get; set; }
+        public BehaviorRelay<int> HourHeightRelay { get; set; }
         public BehaviorRelay<int> ScrollOffsetRelay { get; set; }
         public BehaviorRelay<bool> MenuVisibilityRelay { get; set; }
         public BehaviorRelay<string> TimeTrackedOnDay { get; set; }
@@ -107,6 +109,7 @@ namespace Toggl.Droid.Fragments.Calendar
         {
             calendarDayView.SetCurrentDate(ViewModel.Date);
             calendarDayView.SetOffset(ScrollOffsetRelay?.Value ?? 0);
+            calendarDayView.SetHourHeight(HourHeightRelay?.Value ?? 56.DpToPixels(Context));
             calendarDayView.UpdateItems(ViewModel.CalendarItems);
             
             ViewModel.TimeOfDayFormat
@@ -133,8 +136,11 @@ namespace Toggl.Droid.Fragments.Calendar
             calendarDayView.ScrollOffsetObservable
                 .Subscribe(updateScrollOffsetIfCurrentPage)
                 .DisposedBy(DisposeBag);
-        }
 
+            calendarDayView.HourHeight
+                .Subscribe(updateHourHeightIfCurrentPage)
+                .DisposedBy(DisposeBag);
+        }
         private void handleMenuVisibility(bool visible)
         {
             var shouldBeVisible = visible && PageNumber == CurrentPageRelay.Value;
@@ -143,7 +149,7 @@ namespace Toggl.Droid.Fragments.Calendar
                 if (contextualMenuContainer == null)
                 {
                     initializeContextualMenuView();
-                    initializeContextualMenuBindings();    
+                    initializeContextualMenuBindings();
                 }
                 contextualMenuContainer.Visibility = ViewStates.Visible;
                 MenuVisibilityRelay?.Accept(true);
@@ -258,6 +264,14 @@ namespace Toggl.Droid.Fragments.Calendar
                 return;
 
             ScrollOffsetRelay?.Accept(scrollOffset);
+        }
+
+        private void updateHourHeightIfCurrentPage(int scrollOffset)
+        {
+            if (PageNumber != CurrentPageRelay?.Value)
+                return;
+
+            HourHeightRelay?.Accept(scrollOffset);
         }
 
         private void scrollToStart(bool shouldSmoothScroll)
