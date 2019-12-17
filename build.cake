@@ -155,7 +155,7 @@ private string GetVersionNumberFromTagOrTimestamp()
     // multiple apks and these used X0000000 to
     // differentiate apk architectures
     const int apkConstant = 50000000;
-    var major = Int32.Parse(p.Groups["major"].Value) *  1000000
+    var major = Int32.Parse(p.Groups["major"].Value) *  1000000;
     var minor = Int32.Parse(p.Groups["minor"].Value) *    10000;
     var build = string.IsNullOrEmpty(p.Groups["build"].Value) ? 0 : Int32.Parse(p.Groups["build"].Value) * 100;
     var rev = string.IsNullOrEmpty(p.Groups["rev"].Value) ? 0 : Int32.Parse(p.Groups["rev"].Value);
