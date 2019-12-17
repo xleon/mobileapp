@@ -1331,4 +1331,7 @@
     <data name="LoginToShowSuggestions" xml:space="preserve">
         <value>提案を表示するためにログイン</value>
     </data>
+    <data name="NoRunningTimeEntry" xml:space="preserve">
+        <value>計測中記録はありません</value>
+    </data>
 </root>

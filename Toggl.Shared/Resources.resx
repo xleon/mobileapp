@@ -1352,4 +1352,8 @@ to project members</value>
         <value>Psst... we've got an early gift for you! Sign up for any annual plan between now and January 17th and get 20% off.</value>
         <comment>@Invariant</comment>
     </data>
+    <data name="NoRunningTimeEntry" xml:space="preserve">
+        <value>No running time entry</value>
+        <comment>Used in the Android widget to indicate that there are no time entries running</comment>
+    </data>
 </root>
