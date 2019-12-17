@@ -92,6 +92,7 @@ namespace Toggl.Droid.Views
         private Color hoursTextColor;
         private Color primaryTextColor;
         private Color emptyBarColor;
+        private Color xAxisLegendColor;
 
         private void initialize(Context context)
         {
@@ -120,6 +121,7 @@ namespace Toggl.Droid.Views
             primaryTextColor = context.SafeGetColor(Resource.Color.primaryText);
             horizontalLineColor = context.SafeGetColor(Resource.Color.separator);
             hoursTextColor = context.SafeGetColor(Resource.Color.placeholderText);
+            xAxisLegendColor = context.SafeGetColor(Resource.Color.secondaryText);
         }
 
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
@@ -135,7 +137,7 @@ namespace Toggl.Droid.Views
             bars = newBars;
             this.yLabels = yLabels;
             this.xLabels = xLabels;
-            
+
             updateBarChartDrawingData();
             PostInvalidate();
         }
@@ -217,7 +219,7 @@ namespace Toggl.Droid.Views
         {
             if (!willDrawIndividualLabels && !isDrawingPlaceholders())
             {
-                othersPaint.Color = primaryTextColor;
+                othersPaint.Color = xAxisLegendColor;
                 othersPaint.TextAlign = Paint.Align.Left;
                 canvas.DrawText(startDate, barsLeftMargin, startEndDatesY, othersPaint);
                 othersPaint.TextAlign = Paint.Align.Right;
@@ -265,7 +267,7 @@ namespace Toggl.Droid.Views
                     var horizontalLabelElements = labelsToRender[i].Split("\n");
                     if (horizontalLabelElements.Length == 2)
                     {
-                        othersPaint.Color = primaryTextColor;
+                        othersPaint.Color = xAxisLegendColor;
                         var middleOfTheBar = left + (barRight - left) / 2f;
                         var dayOfWeekText = horizontalLabelElements[1];
                         othersPaint.TextSize = originalTextSize;
