@@ -118,6 +118,5 @@ namespace Toggl.Core.UI.Services
                 Text = Resources.LastYear;
             }
         }
-
     }
 }

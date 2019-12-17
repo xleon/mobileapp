@@ -196,8 +196,8 @@ namespace Toggl.Core.UI.ViewModels
         public void SelectInitialShortcut()
         {
             var initialShortcut = QuickSelectShortcuts.Single(shortcut => shortcut.Period == reportPeriod);
-            selectedDateRangeSubject.OnNext(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
-            highlightedDateRangeSubject.OnNext(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
+            selectedDateRangeSubject.OnNext(initialShortcut.GetDateRange().WithSource(DateRangeSelectionSource.Initial));
+            highlightedDateRangeSubject.OnNext(initialShortcut.GetDateRange().WithSource(DateRangeSelectionSource.Initial));
         }
 
         public void SelectPeriod(ReportPeriod period)
@@ -207,7 +207,7 @@ namespace Toggl.Core.UI.ViewModels
             if (isInitialized)
             {
                 var initialShortcut = QuickSelectShortcuts.Single(shortcut => shortcut.Period == period);
-                changeDateRange(initialShortcut.GetDateRange().WithSource(ReportsSource.Initial));
+                changeDateRange(initialShortcut.GetDateRange().WithSource(DateRangeSelectionSource.Initial));
             }
         }
 
@@ -219,7 +219,7 @@ namespace Toggl.Core.UI.ViewModels
 
                 var dateRange = ReportsDateRangeParameter
                     .WithDates(date, date)
-                    .WithSource(ReportsSource.Calendar);
+                    .WithSource(DateRangeSelectionSource.Calendar);
                 startOfSelection = tappedDay;
                 highlightDateRange(dateRange);
             }
@@ -240,7 +240,7 @@ namespace Toggl.Core.UI.ViewModels
                 {
                     var dateRange = ReportsDateRangeParameter
                         .WithDates(startDate, endDate)
-                        .WithSource(ReportsSource.Calendar);
+                        .WithSource(DateRangeSelectionSource.Calendar);
                     startOfSelection = null;
                     changeDateRange(dateRange);
                 }
@@ -268,7 +268,7 @@ namespace Toggl.Core.UI.ViewModels
             var date = startOfSelection.DateTimeOffset;
             var dateRange = ReportsDateRangeParameter
                 .WithDates(date, date)
-                .WithSource(ReportsSource.Calendar);
+                .WithSource(DateRangeSelectionSource.Calendar);
             changeDateRange(dateRange);
         }
 

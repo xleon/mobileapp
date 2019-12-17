@@ -26,7 +26,7 @@ namespace Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts
             var end = start.AddDays(6);
             return ReportsDateRangeParameter
                 .WithDates(start, end)
-                .WithSource(ReportsSource.ShortcutLastWeek);
+                .WithSource(DateRangeSelectionSource.ShortcutLastWeek);
         }
     }
 }

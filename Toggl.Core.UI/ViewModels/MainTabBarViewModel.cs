@@ -107,6 +107,8 @@ namespace Toggl.Core.UI.ViewModels
                 interactorFactory,
                 schedulerProvider,
                 rxActionFactory,
+                analyticsService,
+                timeService,
                 calendarShortcutService);
 
             calendarViewModel = new CalendarViewModel(
@@ -119,7 +121,7 @@ namespace Toggl.Core.UI.ViewModels
                 interactorFactory,
                 schedulerProvider,
                 navigationService);
-            
+
             Tabs = getViewModels().ToList();
         }
 

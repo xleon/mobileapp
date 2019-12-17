@@ -59,7 +59,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private DateTimeOffset startDate;
         private DateTimeOffset endDate;
         private int totalDays => (endDate - startDate).Days + 1;
-        private ReportsSource source;
+        private DateRangeSelectionSource source;
 
         [Obsolete("This should be removed, replaced by something that is actually used or turned into a constant.")]
         private int projectsNotSyncedCount = 0;
@@ -488,7 +488,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private float percentageOf(List<ChartSegment> list)
             => list.Sum(segment => segment.Percentage);
 
-        private void loadReport(IThreadSafeWorkspace workspace, DateTimeOffset startDate, DateTimeOffset endDate, ReportsSource source)
+        private void loadReport(IThreadSafeWorkspace workspace, DateTimeOffset startDate, DateTimeOffset endDate, DateRangeSelectionSource source)
         {
             if (this.startDate == startDate && this.endDate == endDate && workspaceId == workspace.Id)
                 return;
@@ -508,7 +508,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
             reportSubject.OnNext(Unit.Default);
         }
 
-        public async Task LoadReport(long? workspaceId, DateTimeOffset startDate, DateTimeOffset endDate, ReportsSource source)
+        public async Task LoadReport(long? workspaceId, DateTimeOffset startDate, DateTimeOffset endDate, DateRangeSelectionSource source)
         {
             var getWorkspaceInteractor = workspaceId.HasValue
                 ? interactorFactory.GetWorkspaceById(this.workspaceId)

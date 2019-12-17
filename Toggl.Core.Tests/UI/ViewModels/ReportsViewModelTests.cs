@@ -316,7 +316,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.CurrentDateRange.Subscribe(observer);
                     await ViewModel.Initialize();
 
-                    await ViewModel.LoadReport(0, startDate, endDate, ReportsSource.Calendar);
+                    await ViewModel.LoadReport(0, startDate, endDate, DateRangeSelectionSource.Calendar);
 
                     TestScheduler.Start();
                     observer.LastEmittedValue().Should().Be($"{result} ▾");
@@ -352,7 +352,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.CurrentDateRange.Subscribe(observer);
                     await ViewModel.Initialize();
 
-                    await ViewModel.LoadReport(0, startDate, endDate, ReportsSource.Calendar);
+                    await ViewModel.LoadReport(0, startDate, endDate, DateRangeSelectionSource.Calendar);
 
                     TestScheduler.Start();
                     observer.LastEmittedValue().Should().Be($"{result} ▾");

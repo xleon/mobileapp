@@ -1,7 +1,8 @@
 ﻿namespace Toggl.Core.Analytics
 {
-    public enum ReportsSource
+    public enum DateRangeSelectionSource
     {
+        Initial,
         ShortcutToday,
         ShortcutYesterday,
         ShortcutThisWeek,
@@ -9,9 +10,8 @@
         ShortcutThisMonth,
         ShortcutLastMonth,
         ShortcutThisYear,
+        ShortcutLastYear,
         Calendar,
-        Initial,
         Other,
-        ShortcutLastYear
     }
 }

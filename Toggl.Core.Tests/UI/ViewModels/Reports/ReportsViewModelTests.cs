@@ -121,6 +121,8 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                     InteractorFactory,
                     SchedulerProvider,
                     RxActionFactory,
+                    AnalyticsService,
+                    TimeService,
                     CalendarShortcutsService);
         }
 
@@ -134,6 +136,8 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                 bool useSchedulerProvider,
                 bool useInteractorFactory,
                 bool useRxActionFactory,
+                bool useAnalyticsService,
+                bool useTimeService,
                 bool useCalendarShortcutsService)
             {
                 var dataSource = useDataSource ? DataSource : null;
@@ -141,6 +145,8 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
+                var analyticsService = useAnalyticsService ? AnalyticsService : null;
+                var timeService = useTimeService ? TimeService : null;
                 var calendarShortcutsService = useCalendarShortcutsService ? CalendarShortcutsService : null;
 
                 Action tryingToConstructWithEmptyParameters = () => new ReportsViewModel(
@@ -149,6 +155,8 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                     interactorFactory,
                     schedulerProvider,
                     rxActionFactory,
+                    analyticsService,
+                    timeService,
                     calendarShortcutsService);
 
                 tryingToConstructWithEmptyParameters

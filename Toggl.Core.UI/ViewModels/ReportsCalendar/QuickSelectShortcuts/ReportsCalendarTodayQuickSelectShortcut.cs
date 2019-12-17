@@ -18,7 +18,7 @@ namespace Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts
             var today = TimeService.CurrentDateTime.RoundDownToLocalDate();
             return ReportsDateRangeParameter
                 .WithDates(today, today)
-                .WithSource(ReportsSource.ShortcutToday);
+                .WithSource(DateRangeSelectionSource.ShortcutToday);
         }
     }
 }

@@ -513,7 +513,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var now = dates[1];
                 var end = dates[2];
                 TimeService.CurrentDateTime.Returns(now);
-                var selectedRange = ReportsDateRangeParameter.WithDates(start, end).WithSource(ReportsSource.Calendar);
+                var selectedRange = ReportsDateRangeParameter.WithDates(start, end).WithSource(DateRangeSelectionSource.Calendar);
                 var customShortcut = new CustomShortcut(selectedRange, TimeService);
                 var errorObserver = TestScheduler.CreateObserver<Exception>();
                 var executionObserver = TestScheduler.CreateObserver<bool>();

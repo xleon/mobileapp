@@ -9,7 +9,7 @@ namespace Toggl.Core.UI.Parameters
 
         public DateTimeOffset EndDate { get; set; }
 
-        public ReportsSource Source { get; set; }
+        public DateRangeSelectionSource Source { get; set; }
 
         public static ReportsDateRangeParameter WithDates(
             DateTimeOffset start,
@@ -19,10 +19,10 @@ namespace Toggl.Core.UI.Parameters
             if (start > end)
                 (start, end) = (end, start);
 
-            return new ReportsDateRangeParameter { StartDate = start, EndDate = end, Source = ReportsSource.Other };
+            return new ReportsDateRangeParameter { StartDate = start, EndDate = end, Source = DateRangeSelectionSource.Other };
         }
 
-        public ReportsDateRangeParameter WithSource(ReportsSource source)
+        public ReportsDateRangeParameter WithSource(DateRangeSelectionSource source)
         {
             return new ReportsDateRangeParameter { StartDate = this.StartDate, EndDate = this.EndDate, Source = source };
         }
