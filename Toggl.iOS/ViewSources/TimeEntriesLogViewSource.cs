@@ -15,10 +15,10 @@ using UIKit;
 
 namespace Toggl.iOS.ViewSources
 {
-    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
+    using MainLogSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
 
     public sealed class TimeEntriesLogViewSource
-        : BaseTableViewSource<MainLogSection, DaySummaryViewModel, LogItemViewModel>
+        : BaseTableViewSource<MainLogSection, MainLogSectionViewModel, MainLogItemViewModel>
     {
         private const int rowHeightCompact = 64;
         private const int rowHeightRegular = 48;
@@ -26,9 +26,9 @@ namespace Toggl.iOS.ViewSources
 
         public delegate IObservable<DaySummaryViewModel> ObservableHeaderForSection(int section);
 
-        private readonly Subject<LogItemViewModel> continueTapSubject = new Subject<LogItemViewModel>();
-        private readonly Subject<LogItemViewModel> continueSwipeSubject = new Subject<LogItemViewModel>();
-        private readonly Subject<LogItemViewModel> deleteSwipeSubject = new Subject<LogItemViewModel>();
+        private readonly Subject<TimeEntryLogItemViewModel> continueTapSubject = new Subject<TimeEntryLogItemViewModel>();
+        private readonly Subject<TimeEntryLogItemViewModel> continueSwipeSubject = new Subject<TimeEntryLogItemViewModel>();
+        private readonly Subject<TimeEntryLogItemViewModel> deleteSwipeSubject = new Subject<TimeEntryLogItemViewModel>();
         private readonly Subject<GroupId> toggleGroupExpansionSubject = new Subject<GroupId>();
 
         private readonly ReplaySubject<TimeEntriesLogViewCell> firstCellSubject = new ReplaySubject<TimeEntriesLogViewCell>(1);
@@ -38,9 +38,9 @@ namespace Toggl.iOS.ViewSources
 
         public const int SpaceBetweenSections = 20;
 
-        public IObservable<LogItemViewModel> ContinueTap { get; }
-        public IObservable<LogItemViewModel> SwipeToContinue { get; }
-        public IObservable<LogItemViewModel> SwipeToDelete { get; }
+        public IObservable<TimeEntryLogItemViewModel> ContinueTap { get; }
+        public IObservable<TimeEntryLogItemViewModel> SwipeToContinue { get; }
+        public IObservable<TimeEntryLogItemViewModel> SwipeToDelete { get; }
         public IObservable<GroupId> ToggleGroupExpansion { get; }
 
         public IObservable<TimeEntriesLogViewCell> FirstCell { get; }
@@ -87,17 +87,17 @@ namespace Toggl.iOS.ViewSources
             var model = ModelAt(indexPath);
 
             cell.ContinueButtonTap
-                .Subscribe(() => continueTapSubject.OnNext(model))
+                .Subscribe(() => continueTapSubject.OnNext(model as TimeEntryLogItemViewModel))
                 .DisposedBy(cell.DisposeBag);
 
             cell.ToggleGroup
-                .Subscribe(() => toggleGroupExpansionSubject.OnNext(model.GroupId))
+                .Subscribe(() => toggleGroupExpansionSubject.OnNext((model as TimeEntryLogItemViewModel).GroupId))
                 .DisposedBy(cell.DisposeBag);
 
             if (indexPath.Row == 0 && indexPath.Section == 0)
                 firstCellSubject.OnNext(cell);
 
-            cell.Item = model;
+            cell.Item = model as TimeEntryLogItemViewModel;
 
             return cell;
         }
@@ -105,7 +105,7 @@ namespace Toggl.iOS.ViewSources
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             var header = (TimeEntriesLogHeaderView)tableView.DequeueReusableHeaderFooterView(TimeEntriesLogHeaderView.Identifier);
-            header.Item = HeaderOf((int)section);
+            header.Item = HeaderOf((int)section) as DaySummaryViewModel;
             return header;
         }
 
@@ -141,16 +141,16 @@ namespace Toggl.iOS.ViewSources
         }
 
         private UISwipeActionsConfiguration createSwipeActionConfiguration(
-            Func<LogItemViewModel, UIContextualAction> factory, NSIndexPath indexPath)
+            Func<TimeEntryLogItemViewModel, UIContextualAction> factory, NSIndexPath indexPath)
         {
             var item = ModelAt(indexPath);
             if (item == null)
                 return null;
 
-            return UISwipeActionsConfiguration.FromActions(new[] { factory(item) });
+            return UISwipeActionsConfiguration.FromActions(new[] { factory(item as TimeEntryLogItemViewModel) });
         }
 
-        private UIContextualAction continueSwipeActionFor(LogItemViewModel viewModel)
+        private UIContextualAction continueSwipeActionFor(TimeEntryLogItemViewModel viewModel)
         {
             var continueAction = UIContextualAction.FromContextualActionStyle(
                 UIContextualActionStyle.Normal,
@@ -165,7 +165,7 @@ namespace Toggl.iOS.ViewSources
             return continueAction;
         }
 
-        private UIContextualAction deleteSwipeActionFor(LogItemViewModel viewModel)
+        private UIContextualAction deleteSwipeActionFor(TimeEntryLogItemViewModel viewModel)
         {
             var deleteAction = UIContextualAction.FromContextualActionStyle(
                 UIContextualActionStyle.Destructive,

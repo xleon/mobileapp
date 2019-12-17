@@ -91,6 +91,7 @@ namespace Toggl.Core.Suggestions
 
             return Description == other.Description
                 && ProjectId == other.ProjectId
+                && ClientName == other.ClientName
                 && TaskId == other.TaskId
                 && WorkspaceId == other.WorkspaceId
                 && StartTime == other.StartTime

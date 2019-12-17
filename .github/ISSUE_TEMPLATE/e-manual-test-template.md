@@ -239,6 +239,10 @@ about: A manual testing checklist that can be assigned to a release to track the
 - [ ] Install the suggestions widget (Android) or expand the timer widget (iOS)
 - [ ] Continue a suggestion
 
+## Testing Push Notifications
+- [ ] Open the app, go to the web app, start a TE in the web app, does the mobile app sync automatically and show the running TE?
+- [ ] Go to the widget with a running TE, stop the TE in the web app, does the widget automatically update the UI?
+
 ## Testing app restriction UI
 
 - [ ] Check that all the non-permanent error screens are showing correctly (long-press on About in Android or the navigation bar in iOS)

@@ -68,4 +68,45 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">@color/secondaryText</item>
     </style>
+
+    <style name="BottomAuthCard">
+        <item name="cardBackgroundColor">@color/cardBackground</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:layout_marginRight">24dp</item>
+        <item name="android:layout_marginBottom">-8dp</item>
+    </style>
+    
+    <style name="AppBarPopupTheme" parent="ThemeOverlay.AppCompat">
+    </style>
+
+    <style name="AppBarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:actionMenuTextColor">@color/ToolbarButtonTextColor</item>
+        <item name="actionMenuTextColor">@color/ToolbarButtonTextColor</item>
+        <item name="android:colorControlNormal">@color/primaryText</item>
+        <item name="colorControlNormal">@color/primaryText</item>
+    </style>
+
+    <style name="WheelDialogStyle" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">#328fff</item>
+        <item name="android:headerTimeTextAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:headerDayOfMonthTextAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:headerAmPmTextAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:headerMonthTextAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:headerYearTextAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:timePickerStyle">@style/WheelTimePicker</item>
+        <item name="android:datePickerStyle">@style/WheelDatePicker</item>
+    </style>
+
+    <style name="WheelDatePicker" parent="@android:style/Widget.Material.Light.DatePicker">
+        <item name="android:headerBackground">@drawable/picker_header_background</item>
+    </style>
+
+    <style name="WheelTimePicker" parent="@android:style/Widget.Material.Light.TimePicker">
+        <item name="android:headerBackground">@drawable/picker_header_background</item>
+        <item name="android:numbersSelectorColor">@color/accent</item>
+    </style>
 </resources>

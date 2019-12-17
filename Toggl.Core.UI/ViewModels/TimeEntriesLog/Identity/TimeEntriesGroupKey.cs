@@ -1,3 +1,5 @@
+using System;
+
 namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
 {
     internal sealed class TimeEntriesGroupKey : IMainLogKey
@@ -9,6 +11,9 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
             this.groupId = groupId;
         }
 
+        public long Identifier()
+            => groupId?.GetHashCode() ?? 0; // This can result in non-unique identifiers
+
         public bool Equals(IMainLogKey other)
             => other is TimeEntriesGroupKey groupKey && groupId.Equals(groupKey.groupId);
 
@@ -18,8 +23,5 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
             if (ReferenceEquals(this, obj)) return true;
             return obj is TimeEntriesGroupKey other && Equals(other);
         }
-
-        public override int GetHashCode()
-            => groupId.GetHashCode();
     }
 }

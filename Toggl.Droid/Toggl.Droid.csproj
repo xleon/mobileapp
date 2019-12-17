@@ -598,6 +598,7 @@
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
+    <Compile Include="Extensions\SnackbarExtensions.cs" />
     <Compile Include="Extensions\SpannableExtensions.cs" />
     <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.cs" />
     <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.DialogProvider.cs">
@@ -642,6 +643,11 @@
     <Compile Include="ViewHolders\CalendarMenuActionCellViewHolder.cs" />
     <Compile Include="ViewHolders\CalendarWeekSectionViewHolder.cs" />
     <Compile Include="ViewHolders\LicenseViewHolder.cs" />
+    <Compile Include="ViewHolders\MainLog\MainLogCellViewHolder.cs" />
+    <Compile Include="ViewHolders\MainLog\MainLogSectionViewHolder.cs" />
+    <Compile Include="ViewHolders\MainLog\MainLogSuggestionItemViewHolder.cs" />
+    <Compile Include="ViewHolders\MainLog\MainLogSuggestionSectionViewHolder.cs" />
+    <Compile Include="ViewHolders\MainLog\MainLogUserFeedbackViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\SuggestionRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\ProjectSuggestionViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\TimeEntrySuggestionViewHolder.cs" />
@@ -702,9 +708,6 @@
     <Compile Include="ViewHelpers\TimeEntryViewData.cs" />
     <Compile Include="ViewHolders\ColorSelectionViewHolder.cs" />
     <Compile Include="ViewHolders\Country\CountrySelectionViewHolder.cs" />
-    <Compile Include="ViewHolders\MainLogCellViewHolder.cs" />
-    <Compile Include="ViewHolders\MainLogSuggestionItemViewHolder.cs" />
-    <Compile Include="ViewHolders\MainLogSuggestionsListViewHolder.cs" />
     <Compile Include="ViewHolders\SimpleTextViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsCalendarShortcutCellViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsHeaderCellViewHolder.cs" />
@@ -741,7 +744,7 @@
     <Compile Include="Views\EditDuration\WheelBackgroundView.cs" />
     <Compile Include="Views\EditDuration\WheelForegroundView.cs" />
     <Compile Include="Views\ReportsCalendarView.cs" />
-    <Compile Include="Adapters\MainRecyclerAdapter.cs" />
+    <Compile Include="Adapters\MainLogRecyclerAdapter.cs" />
     <Compile Include="Extensions\LayoutParamsExtensions.cs" />
     <Compile Include="Extensions\NumberExtensions.cs" />
     <Compile Include="Activities\StartTimeEntryActivity.cs" />
@@ -812,8 +815,6 @@
     </Compile>
     <Compile Include="Views\AutocompleteEditText.cs" />
     <Compile Include="Services\NotificationServiceAndroid.cs" />
-    <Compile Include="ViewHolders\MainLogSectionViewHolder.cs" />
-    <Compile Include="Adapters\ReactiveSectionedRecyclerAdapter.cs" />
     <Compile Include="Activities\SignUpActivity.ViewBinds.cs">
       <DependentUpon>SignUpActivity.cs</DependentUpon>
     </Compile>
@@ -838,7 +839,6 @@
     <Compile Include="Fragments\SelectDefaultWorkspaceFragment.ViewBinds.cs">
       <DependentUpon>SelectDefaultWorkspaceFragment.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewHolders\MainLogUserFeedbackViewHolder.cs" />
     <Compile Include="Extensions\Reactive\ImageViewExtensions.cs" />
     <Compile Include="Extensions\TimeEntryExtensions.cs" />
     <Compile Include="PlatformInfoAndroid.cs" />
@@ -939,6 +939,12 @@
     <AndroidResource Include="Resources\drawable\Splash.xml" />
     <AndroidResource Include="Resources\drawable\text_placeholder.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
+    <AndroidResource Include="Resources\layout\CalendarDayViewPageFragmentContextualMenu.axml" />
+    <AndroidResource Include="Resources\layout\CalendarDayViewPageFragmentDayView.axml" />
+    <AndroidResource Include="Resources\layout\MainLogSuggestionsHeader.axml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\January2020CampaignFragment.axml" />
     <AndroidResource Include="Resources\layout\WidgetLoading.axml" />
     <AndroidResource Include="Resources\layout\CalendarDayFragmentPage.axml" />
@@ -1183,7 +1189,6 @@
     <AndroidResource Include="Resources\values\Colors.xml" />
     <AndroidResource Include="Resources\layout\MainLogCell.axml" />
     <AndroidResource Include="Resources\drawable\TransparentToCardColorGradient.xml" />
-    <AndroidResource Include="Resources\layout\MainSuggestions.axml" />
     <AndroidResource Include="Resources\layout\MainLogHeader.axml" />
     <AndroidResource Include="Resources\drawable\SmallDot.xml" />
     <AndroidResource Include="Resources\layout\MainSuggestionsCard.axml" />
@@ -1449,12 +1454,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values-notnight\Colors.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\values-night\Styles.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
@@ -1464,12 +1463,6 @@
     <AndroidResource Include="Resources\xml\SuggestionsWidgetProvider.xml" />
     <AndroidResource Include="Resources\xml\TimeEntryWidgetProvider.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values-notnight\Styles.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>

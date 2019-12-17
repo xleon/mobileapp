@@ -406,6 +406,7 @@ namespace Toggl.Storage.Settings
             SetStoppedTimerNotifications(false);
             SetRunningTimerNotifications(false);
             isManualModeEnabledSubject.OnNext(false);
+            SetEnabledCalendars();
         }
 
         public List<string> EnabledCalendarIds()
