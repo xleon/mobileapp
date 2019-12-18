@@ -985,9 +985,6 @@ PS. Our customer support team currently operates in English only. Sorry for any 
     <data name="SiriShortcutsDescription" xml:space="preserve">
         <value>Add shortcuts to control Toggl with Siri and the Shortcuts app</value>
     </data>
-    <data name="SiriWorkflowsDescription" xml:space="preserve">
-        <value>Chain your Toggl shortcuts with those from other apps</value>
-    </data>
     <data name="SiriShortcutCustomTimeEntryTitle" xml:space="preserve">
         <value>Time entry details</value>
     </data>
@@ -1008,15 +1005,6 @@ PS. Our customer support team currently operates in English only. Sorry for any 
     </data>
     <data name="SiriClipboardHintLabel" xml:space="preserve">
         <value>When you run this shortcut, the Description will be pasted from Clipboard</value>
-    </data>
-    <data name="SiriWorkflows" xml:space="preserve">
-        <value>Siri Workflows</value>
-    </data>
-    <data name="CantOpenWorkflowTitle" xml:space="preserve">
-        <value>Can't open Shortcut</value>
-    </data>
-    <data name="CantOpenWorkflowDescription" xml:space="preserve">
-        <value>The Shortcuts app is not installed</value>
     </data>
     <data name="SiriTrackEntrySuggestedInvocationPhrase" xml:space="preserve">
         <value>Track {0}</value>
@@ -1259,39 +1247,6 @@ to project members</value>
     </data>
     <data name="SendFeedbackSuccessMessage" xml:space="preserve">
         <value>Message sent. Thank you for your feedback. If you had any questions, we'll get back to you soon.</value>
-    </data>
-    <data name="SiriWorkflowsProductionURL" xml:space="preserve">
-        <value>https://toggl-mobile.firebaseapp.com/</value>
-    </data>
-    <data name="SiriWorkflowsDebugURL" xml:space="preserve">
-        <value>https://toggl-mobile.firebaseapp.com/dev/</value>
-    </data>
-    <data name="SiriWorkflowsAdHocURL" xml:space="preserve">
-        <value>https://toggl-mobile.firebaseapp.com/adhoc/</value>
-    </data>
-    <data name="SiriWorkflowDictateTimeEntryTitle" xml:space="preserve">
-        <value>Dictate time entry</value>
-    </data>
-    <data name="SiriWorkflowDictateTimeEntryDescription" xml:space="preserve">
-        <value>Tell Siri to start a time entry with a custom description you can dictate.</value>
-    </data>
-    <data name="SiriWorkflowDoneForTheDayTitle" xml:space="preserve">
-        <value>Done for the day</value>
-    </data>
-    <data name="SiriWorkflowDoneForTheDayDescription" xml:space="preserve">
-        <value>Stop the running timer and view a custom Summary Report.</value>
-    </data>
-    <data name="SiriWorkflowStartAPomodoroTitle" xml:space="preserve">
-        <value>Start a Pomodoro</value>
-    </data>
-    <data name="SiriWorkflowStartAPomodoroDescription" xml:space="preserve">
-        <value>Start a Time Entry and set an alarm for 25 minutes.</value>
-    </data>
-    <data name="SiriWorkflowFocusModeTitle" xml:space="preserve">
-        <value>Focus mode</value>
-    </data>
-    <data name="SiriWorkflowFocusModeDescription" xml:space="preserve">
-        <value>Start a Time Entry, select a music playlist and turn on do not disturb.</value>
     </data>
     <data name="SystemDefault" xml:space="preserve">
         <value>System Default</value>

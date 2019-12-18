@@ -1462,10 +1462,8 @@
     <InterfaceDefinition Include="Views\Settings\CustomSiriShortcutCell.xib" />
     <InterfaceDefinition Include="Views\Settings\SiriShortcutTableViewHeader.xib" />
     <InterfaceDefinition Include="Views\Settings\SiriShortcutReportPeriodCell.xib" />
-    <InterfaceDefinition Include="Views\Settings\SiriWorkflowCell.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\Siri\PasteFromClipboardViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriWorkflowsViewController.xib" />
     <InterfaceDefinition Include="Cells\Settings\SettingCell.xib" />
     <InterfaceDefinition Include="Cells\Settings\SettingsSectionHeader.xib" />
     <InterfaceDefinition Include="Cells\Settings\SettingsSyncCell.xib" />
@@ -2020,10 +2018,6 @@
     <Compile Include="Views\Settings\SiriShortcutReportPeriodCell.designer.cs">
       <DependentUpon>SiriShortcutReportPeriodCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Settings\SiriWorkflowCell.cs" />
-    <Compile Include="Views\Settings\SiriWorkflowCell.designer.cs">
-      <DependentUpon>SiriWorkflowCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.cs" />
     <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.designer.cs">
       <DependentUpon>SiriShortcutsCustomTimeEntryViewController.cs</DependentUpon>
@@ -2033,10 +2027,6 @@
       <DependentUpon>PasteFromClipboardViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\EmailTextField.cs" />
-    <Compile Include="ViewControllers\Settings\Siri\SiriWorkflowsViewController.cs" />
-    <Compile Include="ViewControllers\Settings\Siri\SiriWorkflowsViewController.designer.cs">
-      <DependentUpon>SiriWorkflowsViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\Reactive\IReactiveViewController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveNavigationController.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringViewController.cs" />
