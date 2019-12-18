@@ -143,7 +143,7 @@ namespace Toggl.Droid.ViewHolders.MainLog
                 return string.Empty;
 
             return impressionIsPositive.Value
-                   ? Shared.Resources.RatingViewPositiveCallToActionDescriptionDroid
+                   ? string.Format(Shared.Resources.RatingViewPositiveCallToActionDescription, Shared.Resources.AndroidStoreName)
                    : Shared.Resources.RatingViewNegativeCallToActionDescription;
         }
 

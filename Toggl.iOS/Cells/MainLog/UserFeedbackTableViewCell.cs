@@ -133,7 +133,7 @@ namespace Toggl.iOS.Cells.MainLog
                 return string.Empty;
 
             return impressionIsPositive.Value
-                   ? Resources.RatingViewPositiveCallToActionDescriptionIos
+                   ? string.Format(Resources.RatingViewPositiveCallToActionDescription, Resources.IosStoreName)
                    : Resources.RatingViewNegativeCallToActionDescription;
         }
 
