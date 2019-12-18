@@ -31,7 +31,6 @@
   <!-- Reports page-->
   <color name="reportsLabel">#FF757575</color>
   <color name="summaryLoadingText">#FF757575</color>
-  <color name="calendarSelected">#FF328FFF</color>
   <color name="regularChartBar">#1E328FFF</color>
   <color name="filledChartBar">#FF328FFF</color>
   <color name="billablePercentageText">#FF00ABFC</color>

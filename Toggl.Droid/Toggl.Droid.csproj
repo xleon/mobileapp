@@ -565,7 +565,6 @@
     <Compile Include="Adapters\DiffingStrategies\EquatableDiffingStrategy.cs" />
     <Compile Include="Adapters\DiffingStrategies\IdentifierEqualityDiffingStrategy.cs" />
     <Compile Include="Adapters\DiffingStrategies\IDiffingStrategy.cs" />
-    <Compile Include="Adapters\ReportsCalendarShortcutAdapter.cs" />
     <Compile Include="Adapters\SelectTagsRecyclerAdapter.cs" />
     <Compile Include="Activities\SelectProjectActivity.cs" />
     <Compile Include="Activities\SelectProjectActivity.ViewBinds.cs">
@@ -596,7 +595,6 @@
     <Compile Include="Extensions\JavaExtensions.cs" />
     <Compile Include="Adapters\ReportsAdapter.cs" />
     <Compile Include="Adapters\DateRangePickerMonthsPagerAdapter.cs" />
-    <Compile Include="Fragments\ReportsCalendarFragment.cs" />
     <Compile Include="Helper\ActiveTheme.cs" />
     <Compile Include="LayoutManagers\UnpredictiveLinearLayoutManager.cs" />
     <Compile Include="Helper\AppWidgetProviderUtils.cs" />
@@ -631,7 +629,6 @@
     <Compile Include="ViewHolders\Reports\ReportDonutChartDonutViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportElementViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportErrorElementViewHolder.cs" />
-    <Compile Include="ViewHolders\Reports\ReportEmptyElementViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportNoDataElementViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportSummaryViewHolder.cs" />
     <Compile Include="ViewHolders\Reports\ReportWorkspaceNameViewHolder.cs" />
@@ -683,17 +680,13 @@
     </Compile>
     <Compile Include="Services\SharedPreferencesStorageAndroid.cs" />
     <Compile Include="Startup\TogglApplication.cs" />
-    <Compile Include="ViewHelpers\BarChartData.cs" />
-    <Compile Include="ViewHelpers\BarChartDayLabel.cs" />
     <Compile Include="ViewHelpers\CopyLessSpannableFactory.cs" />
     <Compile Include="ViewHelpers\DatePickerListener.cs" />
     <Compile Include="ViewHelpers\MainRecyclerViewTouchCallback.cs" />
-    <Compile Include="ViewHelpers\ReportsSummaryData.cs" />
     <Compile Include="ViewHelpers\SimpleRecyclerViewScrollChangeListener.cs" />
     <Compile Include="ViewHelpers\SuggestionsRecyclerViewSnapHelper.cs" />
     <Compile Include="ViewHolders\AnchorViewHolder.cs" />
     <Compile Include="ViewHelpers\TimePickerListener.cs" />
-    <Compile Include="ViewHolders\CalendarDayCellViewHolder.cs" />
     <Compile Include="ViewHolders\CalendarEntryViewHolder.cs" />
     <Compile Include="ViewHolders\Client\ClientCreationSelectionViewHolder.cs" />
     <Compile Include="ViewHolders\Client\ClientSelectionViewHolder.cs" />
@@ -701,13 +694,8 @@
     <Compile Include="ViewHolders\ColorSelectionViewHolder.cs" />
     <Compile Include="ViewHolders\Country\CountrySelectionViewHolder.cs" />
     <Compile Include="ViewHolders\SimpleTextViewHolder.cs" />
-    <Compile Include="ViewHolders\ReportsCalendarShortcutCellViewHolder.cs" />
-    <Compile Include="ViewHolders\ReportsHeaderCellViewHolder.cs" />
-    <Compile Include="ViewHolders\ReportsItemCellViewHolder.cs" />
-    <Compile Include="ViewHolders\ReportsWorkspaceNameViewHolderOld.cs" />
     <Compile Include="ViewHolders\StringViewHolder.cs" />
     <Compile Include="Views\BarChartView.cs" />
-    <Compile Include="Views\CalendarRecyclerView.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.Background.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.EditItem.cs" />
@@ -737,7 +725,6 @@
     <Compile Include="Views\EditDuration\Shapes\Wheel.cs" />
     <Compile Include="Views\EditDuration\WheelBackgroundView.cs" />
     <Compile Include="Views\EditDuration\WheelForegroundView.cs" />
-    <Compile Include="Views\ReportsCalendarView.cs" />
     <Compile Include="Adapters\MainLogRecyclerAdapter.cs" />
     <Compile Include="Extensions\LayoutParamsExtensions.cs" />
     <Compile Include="Extensions\NumberExtensions.cs" />
@@ -764,13 +751,8 @@
     <Compile Include="Activities\SelectClientActivity.cs" />
     <Compile Include="Adapters\SelectClientRecyclerAdapter.cs" />
     <Compile Include="Services\LicenseProviderAndroid.cs" />
-    <Compile Include="Adapters\ReportsRecyclerAdapterOld.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Views\PieChartView.cs" />
-    <Compile Include="Views\ReportsCalendarDayView.cs" />
-    <Compile Include="Adapters\ReportsCalendarRecyclerAdapter.cs" />
-    <Compile Include="Views\ReportsCalendarRecyclerView.cs" />
-    <Compile Include="Adapters\ReportsCalendarPagerAdapter.cs" />
     <Compile Include="Activities\OutdatedAppActivity.cs" />
     <Compile Include="Activities\TokenResetActivity.cs" />
     <Compile Include="Tiles\ReportsTileService.cs" />
@@ -953,10 +935,8 @@
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportWorkspaceNameElement.axml" />
-    <AndroidResource Include="Resources\layout\ReportEmptyElement.axml" />
     <AndroidResource Include="Resources\layout\ReportNoDataElement.axml" />
     <AndroidResource Include="Resources\layout\ReportErrorElement.axml" />
-    <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
     <AndroidResource Include="Resources\layout\SuggestionsWidget.axml" />
     <AndroidResource Include="Resources\layout\SuggestionsWidgetItem.axml" />
     <AndroidResource Include="Resources\layout\TimeEntryWidgetSmall.axml" />
@@ -1212,9 +1192,6 @@
     <AndroidResource Include="Resources\layout\SelectClientActivityCell.axml" />
     <AndroidResource Include="Resources\layout\ReportDonutLegendItem.axml" />
     <AndroidResource Include="Resources\layout\ReportDonutChartDonutElement.axml" />
-    <AndroidResource Include="Resources\layout\ReportsFragmentItem.axml" />
-    <AndroidResource Include="Resources\layout\ReportsCalendarFragmentDayCell.axml" />
-    <AndroidResource Include="Resources\layout\ReportsCalendarFragmentPage.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendarShortcutCell.axml" />
     <AndroidResource Include="Resources\drawable-hdpi\book.png" />
     <AndroidResource Include="Resources\drawable-hdpi\timer.png" />
@@ -1307,7 +1284,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\ic_illustration_error_workspace.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_illustration_error_workspace.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_workspace.png" />
-    <AndroidResource Include="Resources\layout\ReportsFragmentWorkspaceName.axml" />
     <AndroidResource Include="Resources\drawable\workspace_white.xml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragmentCell.axml" />
@@ -1350,7 +1326,6 @@
     <AndroidResource Include="Resources\layout\DateRangePicker.axml" />
     <AndroidResource Include="Resources\layout\DatePickerShortcutCell.axml" />
     <AndroidResource Include="Resources\layout\DateRangePickerMonthView.axml" />
-    <AndroidResource Include="Resources\layout\ReportsCalendar.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core\Toggl.Core.csproj">
@@ -1387,9 +1362,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\add_white.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\add_white.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\add_white.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\ReportsCalendarView.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\EditDurationActivity.axml" />

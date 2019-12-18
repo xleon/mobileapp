@@ -59,7 +59,6 @@ namespace Toggl.Droid.Views
         private float startEndDatesY;
         private float barsStartingLeft;
 
-        private DateFormat dateFormat;
         private IImmutableList<Bar> bars;
         private IImmutableList<string> xLabels;
         private YAxisLabels yLabels;
@@ -68,7 +67,6 @@ namespace Toggl.Droid.Views
         private string endDate;
         private float dayLabelsY;
 
-        private static IImmutableList<BarChartDayLabel> placeholderHorizontalLabels = ImmutableList<BarChartDayLabel>.Empty;
         private static YAxisLabels placeholderYLabels = new YAxisLabels("10 h", "5 h", "0 h");
         private static IImmutableList<string> placeholderXLabels = new string[] { "", "" }.ToImmutableList();
         private static IImmutableList<Bar> placeholderBars = generatePlaceholderBars();
@@ -90,7 +88,6 @@ namespace Toggl.Droid.Views
 
         private Color horizontalLineColor;
         private Color hoursTextColor;
-        private Color primaryTextColor;
         private Color emptyBarColor;
         private Color xAxisLegendColor;
 
@@ -118,7 +115,6 @@ namespace Toggl.Droid.Views
             filledValuePlaceholderPaint.SetStyle(Paint.Style.FillAndStroke);
 
             emptyBarColor = context.SafeGetColor(Resource.Color.placeholderText);
-            primaryTextColor = context.SafeGetColor(Resource.Color.primaryText);
             horizontalLineColor = context.SafeGetColor(Resource.Color.separator);
             hoursTextColor = context.SafeGetColor(Resource.Color.placeholderText);
             xAxisLegendColor = context.SafeGetColor(Resource.Color.secondaryText);
