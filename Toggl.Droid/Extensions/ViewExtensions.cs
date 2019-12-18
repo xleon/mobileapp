@@ -4,9 +4,12 @@ using Android.Views;
 using Android.Views.InputMethods;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using AndroidX.Core.Widget;
 using Google.Android.Material.AppBar;
+using Toggl.Core.Extensions;
 using Toggl.Droid.Helper;
+using Toggl.Shared.Extensions;
 using Toggl.Shared;
 
 namespace Toggl.Droid.Extensions
@@ -182,5 +185,52 @@ namespace Toggl.Droid.Extensions
             {
             }
         }
+
+        private class BoolWrapper
+        {
+            public bool Value { get; }
+
+            public BoolWrapper(bool val)
+            {
+                Value = val;
+            }
+        }
+
+        private static ConditionalWeakTable<View, BoolWrapper> hasMeasuredForView = new ConditionalWeakTable<View, BoolWrapper>();
+        private static EventHandler layoutHandler (WeakReference viewWeakRef)
+        {
+            EventHandler handler = null;
+            handler = (object sender, EventArgs args) =>
+            {
+                if (!viewWeakRef.IsAlive) return;
+
+                var view = viewWeakRef.Target as View;
+                var gotValue = hasMeasuredForView.TryGetValue(view, out BoolWrapper val);
+                if (gotValue && val.Value) return;
+
+                view.logTime();
+
+                var viewTreeObs = (ViewTreeObserver) sender;
+                if (viewTreeObs.IsAlive)
+                    viewTreeObs.GlobalLayout -= handler;
+
+                hasMeasuredForView.AddOrUpdate(view, new BoolWrapper(true));
+            };
+
+            return handler;
+        }
+
+        public static void MeasureLayout(this View view, object holderClass)
+        {
+            view.MeasureLayout($"Layout({holderClass.GetSafeTypeName()})");
+        }
+
+        public static void MeasureLayout(this View view, string measureTag)
+        {
+            hasMeasuredForView.AddOrUpdate(view, new BoolWrapper(false));
+            view.startTimer(measureTag);
+            view.ViewTreeObserver.GlobalLayout += layoutHandler(new WeakReference(view));
+        }
+
     }
 }
