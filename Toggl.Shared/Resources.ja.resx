@@ -986,9 +986,6 @@
     <data name="SiriShortcutsDescription" xml:space="preserve">
         <value>SiriとショートカットアプリでTogglを制御するショートカットを追加する</value>
     </data>
-    <data name="SiriWorkflowsDescription" xml:space="preserve">
-        <value>Togglのショートカットを他のアプリのショートカットと連携させる</value>
-    </data>
     <data name="SiriShortcutCustomTimeEntryTitle" xml:space="preserve">
         <value>記録の詳細</value>
     </data>
@@ -1009,15 +1006,6 @@
     </data>
     <data name="SiriClipboardHintLabel" xml:space="preserve">
         <value>このショートカットを実行すると、詳細がクリップボードから貼り付けられます</value>
-    </data>
-    <data name="SiriWorkflows" xml:space="preserve">
-        <value>Siri ワークフロー</value>
-    </data>
-    <data name="CantOpenWorkflowTitle" xml:space="preserve">
-        <value>ショートカットが開けません</value>
-    </data>
-    <data name="CantOpenWorkflowDescription" xml:space="preserve">
-        <value>ショートカットアプリがインストールされていません</value>
     </data>
     <data name="SiriTrackEntrySuggestedInvocationPhrase" xml:space="preserve">
         <value>追跡中 {0}</value>
@@ -1258,39 +1246,6 @@
     </data>
     <data name="SendFeedbackSuccessMessage" xml:space="preserve">
         <value>フィードバックありがとうございます。もしフィードバックの内容が質問の場合は、すぐにお返事いたします。</value>
-    </data>
-    <data name="SiriWorkflowsProductionURL" xml:space="preserve">
-        <value>https://toggl-mobile.firebaseapp.com/</value>
-    </data>
-    <data name="SiriWorkflowsDebugURL" xml:space="preserve">
-        <value>https://toggl-mobile.firebaseapp.com/dev/</value>
-    </data>
-    <data name="SiriWorkflowsAdHocURL" xml:space="preserve">
-        <value>https://toggl-mobile.firebaseapp.com/adhoc/</value>
-    </data>
-    <data name="SiriWorkflowDictateTimeEntryTitle" xml:space="preserve">
-        <value>記録を読み上げ</value>
-    </data>
-    <data name="SiriWorkflowDictateTimeEntryDescription" xml:space="preserve">
-        <value>Siriに、あなたが話した詳細をつけて記録を開始するように言います</value>
-    </data>
-    <data name="SiriWorkflowDoneForTheDayTitle" xml:space="preserve">
-        <value>その日の終わり</value>
-    </data>
-    <data name="SiriWorkflowDoneForTheDayDescription" xml:space="preserve">
-        <value>実行中のタイマーを停止し、カスタムレポートを表示します</value>
-    </data>
-    <data name="SiriWorkflowStartAPomodoroTitle" xml:space="preserve">
-        <value>ポモドーロを開始</value>
-    </data>
-    <data name="SiriWorkflowStartAPomodoroDescription" xml:space="preserve">
-        <value>記録を開始するとともに、25分後にアラームをセットします</value>
-    </data>
-    <data name="SiriWorkflowFocusModeTitle" xml:space="preserve">
-        <value>フォーカスモード</value>
-    </data>
-    <data name="SiriWorkflowFocusModeDescription" xml:space="preserve">
-        <value>記録を開始すると当時に、音楽プレイリストを選択し、おやすみモードをオンにします</value>
     </data>
     <data name="SystemDefault" xml:space="preserve">
         <value>システムのデフォルト</value>
