@@ -21,7 +21,7 @@ namespace Toggl.Droid.Fragments
 
             SetupToolbar(view);
             setupRecyclerView();
-
+            reportsRecyclerView.MeasureLayout(this);
             return view;
         }
 
