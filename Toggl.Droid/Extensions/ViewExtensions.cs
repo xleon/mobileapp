@@ -5,6 +5,7 @@ using Android.Views.InputMethods;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Android.Util;
 using AndroidX.Core.Widget;
 using Google.Android.Material.AppBar;
 using Toggl.Core.Extensions;
@@ -208,8 +209,8 @@ namespace Toggl.Droid.Extensions
                 var gotValue = hasMeasuredForView.TryGetValue(view, out BoolWrapper val);
                 if (gotValue && val.Value) return;
 
-                view.logTime();
-
+                 // .Eview.logTime();
+                Log.Error("xxaa", view.logTime());
                 var viewTreeObs = (ViewTreeObserver) sender;
                 if (viewTreeObs.IsAlive)
                     viewTreeObs.GlobalLayout -= handler;

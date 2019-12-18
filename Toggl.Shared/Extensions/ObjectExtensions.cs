@@ -16,14 +16,14 @@ namespace Toggl.Shared.Extensions
             timers[obj] = timingData;
         }
 
-        public static void logTime(this object obj)
+        public static string logTime(this object obj)
         {
             var timingData = timers[obj];
 
             var timer = timingData.GetCurrentTimer();
             var tag = timingData.GetCurrentTag();
 
-            Debug.WriteLine($"[TIMER] {timer.ElapsedMilliseconds}ms {tag}#{obj.GetType().GetFriendlyName()}#{obj.GetHashCode()}");
+            return $"[TIMER] {timer.ElapsedMilliseconds}ms {tag}#{obj.GetType().GetFriendlyName()}#{obj.GetHashCode()}";
         }
 
         public static void debugLog(this object obj, string message)
