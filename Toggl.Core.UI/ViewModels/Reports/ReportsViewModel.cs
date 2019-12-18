@@ -26,6 +26,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 {
     public sealed class ReportsViewModel : ViewModel
     {
+        private const string dropdownCharacter = "▾";
         private long? selectedWorkspaceId;
         private Either<ReportPeriod, DateRange> selection;
 
@@ -115,6 +116,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
             FormattedTimeRange = Observable.Merge(Observable.Return(initialSelection), SelectTimeRange.Elements.WhereNotNull())
                 .CombineLatest(dateFormatObservable, resultSelector: formattedTimeRange)
                 .DistinctUntilChanged()
+                .Select(dateRange => $"{dateRange} {dropdownCharacter}")
                 .AsDriver("", schedulerProvider);
 
             selectedWorkspaceId = (await interactorFactory.GetDefaultWorkspace().Execute())?.Id;
