@@ -558,10 +558,6 @@
     <Compile Include="Activities\SettingsActivity.ViewBinds.cs">
       <DependentUpon>SettingsActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Adapters\Calendar\Anchor.cs" />
-    <Compile Include="Adapters\Calendar\AnchorData.cs" />
-    <Compile Include="Adapters\Calendar\CalendarAdapter.cs" />
-    <Compile Include="Adapters\Calendar\LayoutAnchorsCalculator.cs" />
     <Compile Include="Adapters\DiffingStrategies\EquatableDiffingStrategy.cs" />
     <Compile Include="Adapters\DiffingStrategies\IdentifierEqualityDiffingStrategy.cs" />
     <Compile Include="Adapters\DiffingStrategies\IDiffingStrategy.cs" />
@@ -678,7 +674,6 @@
     <Compile Include="ViewHolders\AnchorViewHolder.cs" />
     <Compile Include="ViewHelpers\TimePickerListener.cs" />
     <Compile Include="ViewHolders\CalendarDayCellViewHolder.cs" />
-    <Compile Include="ViewHolders\CalendarEntryViewHolder.cs" />
     <Compile Include="ViewHolders\Client\ClientCreationSelectionViewHolder.cs" />
     <Compile Include="ViewHolders\Client\ClientSelectionViewHolder.cs" />
     <Compile Include="ViewHelpers\TimeEntryViewData.cs" />
@@ -696,22 +691,6 @@
     <Compile Include="Views\Calendar\CalendarDayView.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.EditItem.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.Events.cs" />
-    <Compile Include="Views\Calendar\CalendarLayoutManager.cs" />
-    <Compile Include="Views\Calendar\CalendarLayoutManager.AnchorInfo.cs">
-      <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Calendar\CalendarLayoutManager.LayoutState.cs">
-      <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Calendar\CalendarLayoutManager.AnchorSavedState.cs">
-      <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Calendar\CalendarLayoutManager.Recycler.cs">
-      <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Calendar\CalendarLayoutManager.ScrollHelper.cs">
-      <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\EditDuration\Shapes\Arc.cs" />
     <Compile Include="Views\EditDuration\Shapes\Cap.cs" />
     <Compile Include="Views\EditDuration\Shapes\ClockDial.cs" />
@@ -1378,8 +1357,6 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\GrayBorderRoundedRectangle.xml" />
     <AndroidResource Include="Resources\layout\CalendarFragment.axml" />
-    <AndroidResource Include="Resources\drawable\CalendarEntryBackground.xml" />
-    <AndroidResource Include="Resources\layout\CalendarEntryCell.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\ic_launcher.xml" />
