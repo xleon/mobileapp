@@ -1,6 +1,6 @@
 using System.Linq;
 using Toggl.Core.Analytics;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 
 namespace Toggl.Core.UI.Helper
 {

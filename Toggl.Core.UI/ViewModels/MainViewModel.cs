@@ -21,8 +21,9 @@ using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.UI.ViewModels.Reports;
+using Toggl.Core.UI.ViewModels.MainLog;
+using Toggl.Core.UI.ViewModels.MainLog.Identity;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
@@ -181,8 +182,8 @@ namespace Toggl.Core.UI.ViewModels
 
             SwipeActionsEnabled = userPreferences.SwipeActionsEnabled.AsDriver(schedulerProvider);
 
-            userFeedbackMainLogSection = new MainLogSection(new UserFeedbackViewModel(RatingViewModel),
-                Enumerable.Empty<UserFeedbackViewModel>());
+            userFeedbackMainLogSection = new MainLogSection(new UserFeedbackSectionViewModel(),
+                new [] { new UserFeedbackViewModel(RatingViewModel) });
         }
 
         public override async Task Initialize()

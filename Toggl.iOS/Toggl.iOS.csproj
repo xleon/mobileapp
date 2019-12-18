@@ -1407,7 +1407,6 @@
     <InterfaceDefinition Include="Views\StartTimeEntry\TagSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\TaskSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\WorkspaceHeaderViewCell.xib" />
-    <InterfaceDefinition Include="Views\Suggestions\SuggestionsEmptyViewCell.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\WorkspaceViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\ReportsCalendarViewController.xib" />
     <InterfaceDefinition Include="Views\Reports\ReportsCalendarViewCell.xib" />
@@ -1415,12 +1414,10 @@
     <InterfaceDefinition Include="Views\Reports\ReportsLegendViewCell.xib" />
     <InterfaceDefinition Include="Views\Reports\ReportsHeaderView.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\NoEntityInfoViewCell.xib" />
-    <InterfaceDefinition Include="Views\Suggestions\SuggestionView.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\SettingsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\AboutViewController.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntriesEmptyLogView.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntryMockView.xib" />
-    <InterfaceDefinition Include="Views\Rating\RatingView.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectCountryViewController.xib" />
     <InterfaceDefinition Include="Views\CountrySelection\CountryViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\ForgotPasswordViewController.xib" />
@@ -1453,8 +1450,8 @@
     <InterfaceDefinition Include="Views\StartTimeEntry\ReactiveProjectSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\ReactiveWorkspaceHeaderViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\ReactiveTaskSuggestionViewCell.xib" />
-    <InterfaceDefinition Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.xib" />
-    <InterfaceDefinition Include="Cells\TimeEntriesLog\TimeEntriesLogViewCell.xib" />
+    <InterfaceDefinition Include="Cells\MainLog\TimeEntriesLogHeaderView.xib" />
+    <InterfaceDefinition Include="Cells\MainLog\TimeEntriesLogViewCell.xib" />
     <InterfaceDefinition Include="Views\Reports\ReportsOverviewCardView.xib" />
     <InterfaceDefinition Include="Views\Reports\ReportsBarChartCardView.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\CreateEntityViewCell.xib" />
@@ -1473,6 +1470,9 @@
     <InterfaceDefinition Include="ViewControllers\Calendar\CalendarViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\CalendarWeeklyViewDayCollectionViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\January2020CampaignViewController.xib" />
+    <InterfaceDefinition Include="Cells\MainLog\SuggestionLogViewCell.xib" />
+    <InterfaceDefinition Include="Cells\MainLog\SuggestionsHeaderView.xib" />
+    <InterfaceDefinition Include="Cells\MainLog\UserFeedbackTableViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1485,6 +1485,10 @@
     <Compile Include="Analytics\SiriIntentErrorTrackingEvent.cs" />
     <Compile Include="Analytics\SiriTrackingEventExtensions.cs" />
     <Compile Include="Cells\BaseCollectionViewCell.cs" />
+    <Compile Include="Cells\MainLog\SuggestionLogViewCell.cs" />
+    <Compile Include="Cells\MainLog\SuggestionLogViewCell.designer.cs">
+      <DependentUpon>SuggestionLogViewCell.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\ButtonExtensions.cs" />
     <Compile Include="Extensions\ColorAssets.cs" />
     <Compile Include="Extensions\ImageViewExtensions.cs" />
@@ -1731,10 +1735,6 @@
     <Compile Include="Views\StartTimeEntry\WorkspaceHeaderViewCell.designer.cs">
       <DependentUpon>WorkspaceHeaderViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Suggestions\SuggestionsEmptyViewCell.cs" />
-    <Compile Include="Views\Suggestions\SuggestionsEmptyViewCell.designer.cs">
-      <DependentUpon>SuggestionsEmptyViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\Color\ValueSliderView.cs" />
     <Compile Include="Views\EntityCreation\WorkspaceViewCell.cs" />
     <Compile Include="Views\EntityCreation\WorkspaceViewCell.designer.cs">
@@ -1784,11 +1784,6 @@
     <Compile Include="Views\AutocompleteTextViewPlaceholder.cs" />
     <Compile Include="Views\EditDuration\DurationField.cs" />
     <Compile Include="Views\EditDuration\NumberKeyPressedEventArgs.cs" />
-    <Compile Include="Views\Suggestions\SuggestionsView.cs" />
-    <Compile Include="Views\Suggestions\SuggestionView.cs" />
-    <Compile Include="Views\Suggestions\SuggestionView.designer.cs">
-      <DependentUpon>SuggestionView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Services\LicenseProviderIos.cs" />
     <Compile Include="Views\Log\TimeEntriesEmptyLogView.cs" />
     <Compile Include="Views\Log\TimeEntriesEmptyLogView.designer.cs">
@@ -1818,10 +1813,6 @@
       <DependentUpon>CountryViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginTextField.cs" />
-    <Compile Include="Views\Rating\RatingView.cs" />
-    <Compile Include="Views\Rating\RatingView.designer.cs">
-      <DependentUpon>RatingView.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\ForgotPasswordViewController.cs" />
     <Compile Include="ViewControllers\ForgotPasswordViewController.designer.cs">
       <DependentUpon>ForgotPasswordViewController.cs</DependentUpon>
@@ -1978,12 +1969,12 @@
     </Compile>
     <Compile Include="Views\Calendar\CalendarCollectionViewZoomHelper.cs" />
     <Compile Include="ViewSources\Generic\TableView\CustomTableViewSource.cs" />
-    <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.cs" />
-    <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.designer.cs">
+    <Compile Include="Cells\MainLog\TimeEntriesLogHeaderView.cs" />
+    <Compile Include="Cells\MainLog\TimeEntriesLogHeaderView.designer.cs">
       <DependentUpon>TimeEntriesLogHeaderView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogViewCell.cs" />
-    <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogViewCell.designer.cs">
+    <Compile Include="Cells\MainLog\TimeEntriesLogViewCell.cs" />
+    <Compile Include="Cells\MainLog\TimeEntriesLogViewCell.designer.cs">
       <DependentUpon>TimeEntriesLogViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\Reactive\UIViewControllerExtensions.cs" />
@@ -2074,6 +2065,14 @@
     <Compile Include="ViewControllers\January2020CampaignViewController.cs" />
     <Compile Include="ViewControllers\January2020CampaignViewController.designer.cs">
       <DependentUpon>January2020CampaignViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\MainLog\SuggestionsHeaderView.cs" />
+    <Compile Include="Cells\MainLog\SuggestionsHeaderView.designer.cs">
+      <DependentUpon>SuggestionsHeaderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\MainLog\UserFeedbackTableViewCell.cs" />
+    <Compile Include="Cells\MainLog\UserFeedbackTableViewCell.designer.cs">
+      <DependentUpon>UserFeedbackTableViewCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

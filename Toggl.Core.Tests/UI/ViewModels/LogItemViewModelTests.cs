@@ -9,7 +9,7 @@ using System.Reactive.Subjects;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Shared;
 using Xunit;
 
