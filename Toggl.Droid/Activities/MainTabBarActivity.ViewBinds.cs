@@ -11,7 +11,7 @@ namespace Toggl.Droid.Activities
         protected override void InitializeViews()
         {
             navigationView = FindViewById<BottomNavigationView>(Resource.Id.MainTabBarBottomNavigationView);
-            navigationView.FitBottomInset();
+            navigationView.FitBottomPaddingInset();
 
             var menu = navigationView.Menu;
             var timerTab = menu.FindItem(Resource.Id.MainTabTimerItem);
