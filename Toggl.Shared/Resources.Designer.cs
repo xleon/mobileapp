@@ -904,7 +904,7 @@ namespace Toggl.Shared {
                 return ResourceManager.GetString("ArchivedProjectDecorator", resourceCulture);
             }
         }
-
+        
         public static string EntryDeleted {
             get {
                 return ResourceManager.GetString("EntryDeleted", resourceCulture);

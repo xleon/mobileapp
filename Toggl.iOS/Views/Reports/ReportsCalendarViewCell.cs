@@ -8,14 +8,43 @@ using UIKit;
 
 namespace Toggl.iOS.Views
 {
-    public sealed partial class ReportsCalendarViewCell : ReactiveCollectionViewCell<ReportsCalendarDayViewModel>
+    public struct DatePickerCellData
     {
-        private const int cornerRadius = 16;
+        public DateTime Date { get; }
+        public bool IsToday { get; }
+        public bool IsSelected { get; }
+        public bool IsInCurrentMonth { get; }
+        public bool IsStartOfSelectedPeriod { get; }
+        public bool IsEndOfSelectedPeriod { get; }
+        public bool IsPartial { get; }
+
+        public DatePickerCellData(
+            DateTime date,
+            bool isToday,
+            bool isSelected,
+            bool isInCurrentMonth,
+            bool isStartOfSelectedPeriod,
+            bool isEndOfSelectedPeriod,
+            bool isPartial)
+        {
+            Date = date;
+            IsToday = isToday;
+            IsSelected = isSelected;
+            IsInCurrentMonth = isInCurrentMonth;
+            IsStartOfSelectedPeriod = isStartOfSelectedPeriod;
+            IsEndOfSelectedPeriod = isEndOfSelectedPeriod;
+            IsPartial = isPartial;
+        }
+    }
+
+    public sealed partial class ReportsCalendarViewCell :
+        ReactiveCollectionViewCell<DatePickerCellData>
+    {
+        private const int backgroundCornerRadius = 16;
+        private const int todayCornerRadius = 14;
 
         public static readonly NSString Key = new NSString(nameof(ReportsCalendarViewCell));
         public static readonly UINib Nib;
-
-        private ReportsDateRangeParameter dateRange;
 
         static ReportsCalendarViewCell()
         {
@@ -36,10 +65,13 @@ namespace Toggl.iOS.Views
         private void prepareViews()
         {
             //Background view
-            BackgroundView.CornerRadius = cornerRadius;
+            BackgroundView.CornerRadius = backgroundCornerRadius;
+            BackgroundView.RoundLeft = true;
+            BackgroundView.RoundRight = true;
+            BackgroundView.Layer.BorderWidth = 2;
 
             //Today background indicator
-            TodayBackgroundView.CornerRadius = cornerRadius;
+            TodayBackgroundView.CornerRadius = todayCornerRadius;
             TodayBackgroundView.RoundLeft = true;
             TodayBackgroundView.RoundRight = true;
             TodayBackgroundView.BackgroundColor = ColorAssets.CustomGray2;
@@ -52,35 +84,38 @@ namespace Toggl.iOS.Views
 
         protected override void UpdateView()
         {
-            Text.Text = Item.Day.ToString();
+            Text.Text = Item.Date.Day.ToString();
             Text.TextColor = selectTextColor();
 
-            BackgroundView.BackgroundColor =
-                Item.IsSelected(dateRange)
-                    ? ColorAssets.CustomGray
-                    : Colors.Common.Transparent.ToNativeColor();
+            BackgroundView.BackgroundColor = Item.IsSelected && (!Item.IsPartial || Item.IsToday)
+                ? ColorAssets.CustomGray
+                : Colors.Common.Transparent.ToNativeColor();
 
-            BackgroundView.RoundLeft = Item.IsStartOfSelectedPeriod(dateRange);
-            BackgroundView.RoundRight = Item.IsEndOfSelectedPeriod(dateRange);
+            BackgroundView.Layer.BorderColor = Item.IsSelected && Item.IsPartial
+                ? ColorAssets.CustomGray.CGColor
+                : Colors.Common.Transparent.ToNativeColor().CGColor;
+
+            LeftBackgroundView.BackgroundColor = Item.IsSelected && !Item.IsStartOfSelectedPeriod
+                ? ColorAssets.CustomGray
+                : Colors.Common.Transparent.ToNativeColor();
+
+            RightBackgroundView.BackgroundColor = Item.IsSelected && !Item.IsEndOfSelectedPeriod
+                ? ColorAssets.CustomGray
+                : Colors.Common.Transparent.ToNativeColor();
 
             TodayBackgroundView.Hidden = !Item.IsToday;
-        }
-
-        public void UpdateDateRange(ReportsDateRangeParameter dateRange)
-        {
-            this.dateRange = dateRange;
         }
 
         private UIColor selectTextColor()
         {
             if (Item.IsToday)
             {
-                return Item.IsSelected(dateRange)
+                return Item.IsSelected
                     ? selectedColor
                     : todayColor;
             }
 
-            if (Item.IsSelected(dateRange))
+            if (Item.IsSelected && !Item.IsPartial)
             {
                 return selectedColor;
             }

@@ -51,6 +51,10 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(WorkspaceButton.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
+            titleButton.Rx().Tap()
+                .Subscribe(ViewModel.SelectTimeRange.Inputs)
+                .DisposedBy(DisposeBag);
+
             WorkspaceButton.Rx()
                 .BindAction(ViewModel.SelectWorkspace)
                 .DisposedBy(DisposeBag);

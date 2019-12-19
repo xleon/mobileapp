@@ -1,19 +1,16 @@
 ﻿using Foundation;
 using System;
-using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
 using Toggl.iOS.Extensions;
 using UIKit;
+using static Toggl.Core.UI.ViewModels.DateRangePicker.DateRangePickerViewModel;
 
 namespace Toggl.iOS.Views.Reports
 {
-    public sealed partial class ReportsCalendarQuickSelectViewCell : ReactiveCollectionViewCell<ReportsCalendarBaseQuickSelectShortcut>
+    public sealed partial class ReportsCalendarQuickSelectViewCell : ReactiveCollectionViewCell<Shortcut>
     {
         public static readonly NSString Key = new NSString(nameof(ReportsCalendarQuickSelectViewCell));
         public static readonly UINib Nib;
-
-        private ReportsDateRangeParameter currentDateRange;
 
         static ReportsCalendarQuickSelectViewCell()
         {
@@ -33,20 +30,15 @@ namespace Toggl.iOS.Views.Reports
             TitleLabel.Font = UIFont.SystemFontOfSize(13, UIFontWeight.Medium);
         }
 
-        public void UpdateSelectedDateRange(ReportsDateRangeParameter dateRange)
-        {
-            currentDateRange = dateRange;
-        }
-
         protected override void UpdateView()
         {
-            TitleLabel.Text = Item.Title;
+            TitleLabel.Text = Item.Text;
 
-            ContentView.BackgroundColor = Item.IsSelected(currentDateRange)
+            ContentView.BackgroundColor = Item.IsSelected
                 ? ColorAssets.CustomGray
                 : ColorAssets.CustomGray5;
 
-            TitleLabel.TextColor = Item.IsSelected(currentDateRange)
+            TitleLabel.TextColor = Item.IsSelected
                 ? ColorAssets.InverseText
                 : ColorAssets.Text2;
         }

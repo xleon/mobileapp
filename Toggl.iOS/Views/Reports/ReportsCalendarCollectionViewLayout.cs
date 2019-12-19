@@ -20,7 +20,7 @@ namespace Toggl.iOS
 
         public override void PrepareLayout()
         {
-            cellWidth = CollectionView.Frame.Width / columnCount;
+            cellWidth = (nfloat) Math.Floor(CollectionView.Frame.Width / columnCount);
         }
 
         public override UICollectionViewLayoutAttributes LayoutAttributesForItem(NSIndexPath indexPath)

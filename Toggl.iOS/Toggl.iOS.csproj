@@ -1495,6 +1495,7 @@
     <InterfaceDefinition Include="Cells\Reports\ReportsNoDataCollectionViewCell.xib" />
     <InterfaceDefinition Include="Cells\Reports\ReportsErrorCollectionViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\January2020CampaignViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\DateRangePickerViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -2137,6 +2138,12 @@
       <DependentUpon>January2020CampaignViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Reports\DonutChartView.cs" />
+    <Compile Include="ViewControllers\DateRangePickerViewController.cs" />
+    <Compile Include="ViewControllers\DateRangePickerViewController.designer.cs">
+      <DependentUpon>DateRangePickerViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\DateRangePickerShortcutsSource.cs" />
+    <Compile Include="ViewSources\DateRangePickerViewSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">

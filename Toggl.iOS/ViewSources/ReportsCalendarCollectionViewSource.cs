@@ -43,8 +43,8 @@ namespace Toggl.iOS.ViewSources
             var item = months[indexPath.Section].Days[indexPath.Row];
             var cell = collectionView.DequeueReusableCell(cellIdentifier, indexPath) as ReportsCalendarViewCell;
 
-            cell.UpdateDateRange(currentSelectedDateRange);
-            cell.Item = months[indexPath.Section].Days[indexPath.Row];
+            //cell.UpdateDateRange(currentSelectedDateRange);
+            //cell.Item = months[indexPath.Section].Days[indexPath.Row];
             return cell;
         }
 

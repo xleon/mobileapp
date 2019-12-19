@@ -1,35 +1,33 @@
-﻿using CoreGraphics;
-using Foundation;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.Immutable;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels.ReportsCalendar.QuickSelectShortcuts;
+using CoreGraphics;
+using Foundation;
 using Toggl.iOS.Views.Reports;
 using Toggl.Shared;
 using UIKit;
+using static Toggl.Core.UI.ViewModels.DateRangePicker.DateRangePickerViewModel;
 
 namespace Toggl.iOS.ViewSources
 {
-    public sealed class ReportsCalendarQuickSelectCollectionViewSource
-        : UICollectionViewSource, IUICollectionViewDelegateFlowLayout
+    public class DateRangePickerShortcutsSource
+    : UICollectionViewSource, IUICollectionViewDelegateFlowLayout
     {
         private const int cellWidth = 96;
         private const int cellHeight = 32;
         private const string cellIdentifier = nameof(ReportsCalendarQuickSelectViewCell);
 
-        private ISubject<ReportsCalendarBaseQuickSelectShortcut> shortcutTaps = new Subject<ReportsCalendarBaseQuickSelectShortcut>();
+        private readonly ISubject<Shortcut> shortcutTaps = new Subject<Shortcut>();
         private readonly UICollectionView collectionView;
-        private ReportsDateRangeParameter currentDateRange;
-        private IImmutableList<ReportsCalendarBaseQuickSelectShortcut> shortcuts = ImmutableList<ReportsCalendarBaseQuickSelectShortcut>.Empty;
+        private IImmutableList<Shortcut> shortcuts = ImmutableList<Shortcut>.Empty;
 
-        public IObservable<ReportsCalendarBaseQuickSelectShortcut> ShortcutTaps { get; }
+        public IObservable<Shortcut> ShortcutTaps { get; }
 
-        public ReportsCalendarQuickSelectCollectionViewSource(UICollectionView collectionView)
+        public DateRangePickerShortcutsSource(UICollectionView collectionView)
         {
             Ensure.Argument.IsNotNull(collectionView, nameof(collectionView));
+
             collectionView.RegisterNibForCell(ReportsCalendarQuickSelectViewCell.Nib, cellIdentifier);
             ShortcutTaps = shortcutTaps.AsObservable();
             this.collectionView = collectionView;
@@ -37,11 +35,10 @@ namespace Toggl.iOS.ViewSources
 
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
-            var item = shortcuts[indexPath.Row] as ReportsCalendarBaseQuickSelectShortcut;
+            var item = shortcuts[indexPath.Row];
             var cell = collectionView.DequeueReusableCell(cellIdentifier, indexPath) as ReportsCalendarQuickSelectViewCell;
 
-            //cell.UpdateSelectedDateRange(currentDateRange);
-            //cell.Item = item;
+            cell.Item = item;
 
             return cell;
         }
@@ -61,15 +58,9 @@ namespace Toggl.iOS.ViewSources
             shortcutTaps.OnNext(shortcuts[indexPath.Row]);
         }
 
-        public void UpdateShortcuts(IImmutableList<ReportsCalendarBaseQuickSelectShortcut> newShortcuts)
+        public void UpdateShortcuts(IImmutableList<Shortcut> newShortcuts)
         {
             shortcuts = newShortcuts;
-            collectionView.ReloadData();
-        }
-
-        public void UpdateSelection(ReportsDateRangeParameter dateRange)
-        {
-            currentDateRange = dateRange;
             collectionView.ReloadData();
         }
     }

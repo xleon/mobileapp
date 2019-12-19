@@ -13,29 +13,45 @@ namespace Toggl.iOS.Views
 	partial class ReportsCalendarViewCell
 	{
 		[Outlet]
-		RoundedView BackgroundView { get; set; }
+		Toggl.iOS.Views.RoundedView BackgroundView { get; set; }
+
+		[Outlet]
+		Toggl.iOS.Views.RoundedView LeftBackgroundView { get; set; }
+
+		[Outlet]
+		Toggl.iOS.Views.RoundedView RightBackgroundView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel Text { get; set; }
 
 		[Outlet]
-		RoundedView TodayBackgroundView { get; set; }
-
+		Toggl.iOS.Views.RoundedView TodayBackgroundView { get; set; }
+		
 		void ReleaseDesignerOutlets ()
 		{
+			if (LeftBackgroundView != null) {
+				LeftBackgroundView.Dispose ();
+				LeftBackgroundView = null;
+			}
+
+			if (RightBackgroundView != null) {
+				RightBackgroundView.Dispose ();
+				RightBackgroundView = null;
+			}
+
 			if (BackgroundView != null) {
 				BackgroundView.Dispose ();
 				BackgroundView = null;
 			}
 
-			if (TodayBackgroundView != null) {
-				TodayBackgroundView.Dispose ();
-				TodayBackgroundView = null;
-			}
-
 			if (Text != null) {
 				Text.Dispose ();
 				Text = null;
+			}
+
+			if (TodayBackgroundView != null) {
+				TodayBackgroundView.Dispose ();
+				TodayBackgroundView = null;
 			}
 		}
 	}
