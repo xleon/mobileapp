@@ -8,19 +8,20 @@ namespace Toggl.Core.Tests
 {
     public sealed class ResourcesTests
     {
-        [Fact, LogIfTooSlow]
-        public void TheTermsOfServiceDialogAlwaysContainsPlaceholders()
+        [Theory, LogIfTooSlow]
+        [InlineData("TermsOfServiceDialogMessage", new[] { 0, 1 })]
+        [InlineData("SearchObject", new[] { 0 })]
+        public void TheStringWithPlaceholdersContainsTheRightNumberOfPlaceholdersRegardlessOfLocalization(string stringResourceName, int[] placeholdersToCheck)
         {
-            var placeholdersToCheck = new[] { 0, 1 };
             var resourceManager = new ResourceManager(
                 "Toggl.Shared.Resources",
                 typeof(Shared.Resources).Assembly);
 
-            foreach (var code in Helper.Constants.SupportedLanguageCodes)
+            foreach (var code in Helper.Constants.SupportedTwoLettersLanguageCodes)
             {
                 var culture = new CultureInfo(code);
 
-                var dialogMessage = resourceManager.GetString("TermsOfServiceDialogMessage", culture);
+                var dialogMessage = resourceManager.GetString(stringResourceName, culture);
 
                 foreach (var placeholder in placeholdersToCheck)
                 {

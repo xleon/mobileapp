@@ -2,14 +2,14 @@ using Android.Content;
 using Android.Graphics;
 using Android.Text;
 using Android.Views;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.ViewHelpers
 {
     public class TimeEntryViewData
     {
-        public LogItemViewModel ViewModel { get; }
+        public TimeEntryLogItemViewModel ViewModel { get; }
         public ISpannable ProjectTaskClientText { get; }
         public ViewStates ProjectArchivedIconVisibility { get; }
         public Color ProjectArchivedIconTintColor { get; }
@@ -23,7 +23,7 @@ namespace Toggl.Droid.ViewHelpers
         public ViewStates AddDescriptionLabelVisibility { get; }
         public ViewStates DescriptionVisibility { get; }
 
-        public TimeEntryViewData(Context context, LogItemViewModel viewModel)
+        public TimeEntryViewData(Context context, TimeEntryLogItemViewModel viewModel)
         {
             ViewModel = viewModel;
             if (viewModel.HasProject)

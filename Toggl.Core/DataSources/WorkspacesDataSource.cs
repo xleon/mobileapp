@@ -1,6 +1,7 @@
 ﻿using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Sync.ConflictResolution;
+using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Models;
 
@@ -8,8 +9,8 @@ namespace Toggl.Core.DataSources
 {
     internal sealed class WorkspacesDataSource : ObservableDataSource<IThreadSafeWorkspace, IDatabaseWorkspace>
     {
-        public WorkspacesDataSource(IRepository<IDatabaseWorkspace> repository)
-            : base(repository)
+        public WorkspacesDataSource(IRepository<IDatabaseWorkspace> repository, ISchedulerProvider schedulerProvider)
+            : base(repository, schedulerProvider)
         {
         }
 

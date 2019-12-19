@@ -8,5 +8,6 @@ namespace Toggl.Core.Services
         void FetchRemoteConfigData(Action onFetchSucceeded, Action<Exception> onFetchFailed);
         RatingViewConfiguration ExtractRatingViewConfigurationFromRemoteConfig();
         PushNotificationsConfiguration ExtractPushNotificationsConfigurationFromRemoteConfig();
+        January2020CampaignConfiguration ExtractJanuary2020CampaignConfig();
     }
 }

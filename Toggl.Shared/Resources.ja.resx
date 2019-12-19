@@ -1,0 +1,1172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <!--
+      Microsoft ResX Schema
+
+      Version 2.0
+
+      The primary goals of this format is to allow a simple XML format
+      that is mostly human readable. The generation and parsing of the
+      various data types are done through the TypeConverter classes
+      associated with the data types.
+
+      Example:
+
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+
+      There are any number of "resheader" rows that contain simple
+      name/value pairs.
+
+      Each data row contains a name, and value. The row also contains a
+      type or mimetype. Type corresponds to a .NET class that support
+      text/value conversion through the TypeConverter architecture.
+      Classes that don't support this are serialized and stored with the
+      mimetype set.
+
+      The mimetype is used for serialized objects, and tells the
+      ResXResourceReader how to depersist the object. This is currently not
+      extensible. For a given mimetype the value must be set accordingly:
+
+      Note - application/x-microsoft.net.object.binary.base64 is the format
+      that the ResXResourceWriter will generate, however the reader can
+      read any of the formats listed below.
+
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="LoginTitle" xml:space="preserve">
+        <value>ログイン</value>
+    </data>
+    <data name="Ok" xml:space="preserve">
+        <value>OK</value>
+    </data>
+    <data name="SignUpTitle" xml:space="preserve">
+        <value>登録(無料)</value>
+    </data>
+    <data name="LoginForgotPassword" xml:space="preserve">
+        <value>パスワードをお忘れですか？</value>
+    </data>
+    <data name="LoginGetHelpLoggingIn" xml:space="preserve">
+        <value>ログインに関するヘルプ</value>
+    </data>
+    <data name="Today" xml:space="preserve">
+        <value>今日</value>
+    </data>
+    <data name="Yesterday" xml:space="preserve">
+        <value>昨日</value>
+    </data>
+    <data name="IncorrectEmailOrPassword" xml:space="preserve">
+        <value>メール/パスワードが違います。
+もう一度お試しください</value>
+    </data>
+    <data name="GenericLoginError" xml:space="preserve">
+        <value>ログインに失敗しました。
+もう一度お試しください</value>
+    </data>
+    <data name="GenericSignUpError" xml:space="preserve">
+        <value>登録に失敗しました。
+もう一度お試しください</value>
+    </data>
+    <data name="StartTimeEntryPlaceholder" xml:space="preserve">
+        <value>今日は何する？</value>
+    </data>
+    <data name="ManualTimeEntryPlaceholder" xml:space="preserve">
+        <value>何がおわったの？</value>
+    </data>
+    <data name="Settings" xml:space="preserve">
+        <value>設定</value>
+    </data>
+    <data name="SettingsSyncInProgressTitle" xml:space="preserve">
+        <value>データを同期しています</value>
+    </data>
+    <data name="SettingsSyncInProgressMessage" xml:space="preserve">
+        <value>同期が完了する前にログアウトしてしまうとデータが失われることがあります</value>
+    </data>
+    <data name="SettingsUnsyncedTitle" xml:space="preserve">
+        <value>未同期のデータ</value>
+    </data>
+    <data name="SettingsUnsyncedMessage" xml:space="preserve">
+        <value>未同期のデータがあるので、失われる可能性があります</value>
+    </data>
+    <data name="SettingsDialogButtonSignOut" xml:space="preserve">
+        <value>ログアウト</value>
+    </data>
+    <data name="UnitHour" xml:space="preserve">
+        <value>時間</value>
+    </data>
+    <data name="UnitMin" xml:space="preserve">
+        <value>分</value>
+    </data>
+    <data name="UnitSecond" xml:space="preserve">
+        <value>秒</value>
+    </data>
+    <data name="SuggestionsHeader" xml:space="preserve">
+        <value>まだこれをやっていますか？</value>
+    </data>
+    <data name="AddDescription" xml:space="preserve">
+        <value>説明を追加</value>
+    </data>
+    <data name="NoProject" xml:space="preserve">
+        <value>プロジェクトなし</value>
+    </data>
+    <data name="NoDescription" xml:space="preserve">
+        <value>説明なし</value>
+    </data>
+    <data name="InaccessibleProject" xml:space="preserve">
+        <value>(アクセスできないプロジェクト)</value>
+    </data>
+    <data name="WorkspacePlaceholder" xml:space="preserve">
+        <value>(未同期のワークスペース)</value>
+    </data>
+    <data name="ProjectPlaceholder" xml:space="preserve">
+        <value>(未同期のプロジェクト)</value>
+    </data>
+    <data name="TaskPlaceholder" xml:space="preserve">
+        <value>(未同期のタスク)</value>
+    </data>
+    <data name="TagPlaceholder" xml:space="preserve">
+        <value>(未同期のタグ)</value>
+    </data>
+    <data name="SyncCompleted" xml:space="preserve">
+        <value>同期されました</value>
+    </data>
+    <data name="Syncing" xml:space="preserve">
+        <value>同期しています...</value>
+    </data>
+    <data name="Offline" xml:space="preserve">
+        <value>オフライン</value>
+    </data>
+    <data name="PullDownToRefresh" xml:space="preserve">
+        <value>ひっぱって更新</value>
+    </data>
+    <data name="ReleaseToRefresh" xml:space="preserve">
+        <value>離すと更新</value>
+    </data>
+    <data name="LogEmptyStateTitle" xml:space="preserve">
+        <value>おかえりなさい!</value>
+    </data>
+    <data name="LogEmptyStateText" xml:space="preserve">
+        <value>しばらく記録をつけていなかったみたいですね。
+記録を開始すると、よく使われている記録が表示されます</value>
+    </data>
+    <data name="DifferentWorkspaceAlertTitle" xml:space="preserve">
+        <value>他のワークスペースのプロジェクトが選択されました</value>
+    </data>
+    <data name="DifferentWorkspaceAlertMessage" xml:space="preserve">
+        <value>ワークスペースを変更しますか？</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>キャンセル</value>
+    </data>
+    <data name="ConfirmDeleteNewTETitle" xml:space="preserve">
+        <value>この記録を破棄していいですか？</value>
+    </data>
+    <data name="ContinueEditing" xml:space="preserve">
+        <value>編集を継続</value>
+    </data>
+    <data name="Discard" xml:space="preserve">
+        <value>破棄する</value>
+    </data>
+    <data name="PrivacyPolicy" xml:space="preserve">
+        <value>プライバシーポリシー</value>
+    </data>
+    <data name="TermsOfService" xml:space="preserve">
+        <value>利用規約</value>
+    </data>
+    <data name="Delete" xml:space="preserve">
+        <value>削除</value>
+    </data>
+    <data name="NewProject" xml:space="preserve">
+        <value>新しいプロジェクト</value>
+    </data>
+    <data name="PrivateProject" xml:space="preserve">
+        <value>個人プロジェクト</value>
+    </data>
+    <data name="Create" xml:space="preserve">
+        <value>作成する</value>
+    </data>
+    <data name="AddClient" xml:space="preserve">
+        <value>クライアントを追加</value>
+    </data>
+    <data name="NoClient" xml:space="preserve">
+        <value>クライアントがありません</value>
+    </data>
+    <data name="AddFilterTags" xml:space="preserve">
+        <value>タグを追加/検索</value>
+    </data>
+    <data name="AddFilterProjects" xml:space="preserve">
+        <value>プロジェクトを追加/検索</value>
+    </data>
+    <data name="AddFilterClients" xml:space="preserve">
+        <value>クライアントを追加/検索</value>
+    </data>
+    <data name="CreateTag" xml:space="preserve">
+        <value>タグを追加</value>
+    </data>
+    <data name="CreateProject" xml:space="preserve">
+        <value>プロジェクトを追加</value>
+    </data>
+    <data name="Workspace" xml:space="preserve">
+        <value>ワークスペース</value>
+    </data>
+    <data name="WorkspacePossesive" xml:space="preserve">
+        <value>{0}のワークスペース</value>
+    </data>
+    <data name="SetDefaultWorkspace" xml:space="preserve">
+        <value>デフォルトのワークスペースを設定</value>
+    </data>
+    <data name="EnterProject" xml:space="preserve">
+        <value>プロジェクト名を入力</value>
+    </data>
+    <data name="PasswordResetExplanation" xml:space="preserve">
+        <value>パスワードをリセットするためにメールアドレスを入力してください</value>
+    </data>
+    <data name="PasswordResetSuccess" xml:space="preserve">
+        <value>メールが送信されました。メールを確認してパスワードをリセットしてください</value>
+    </data>
+    <data name="PasswordResetEmailDoesNotExistError" xml:space="preserve">
+        <value>おっと。知らないメールのようです。正しいメールアドレスを入力しているか確認してください</value>
+    </data>
+    <data name="PasswordResetGeneralError" xml:space="preserve">
+        <value>パスワードのリセットに失敗しました。もう一度お試しください</value>
+    </data>
+    <data name="PasswordResetOfflineError" xml:space="preserve">
+        <value>現在オフラインです。インターネットに接続して、もう一度お試しください</value>
+    </data>
+    <data name="AreYouSure" xml:space="preserve">
+        <value>よろしいですか？</value>
+    </data>
+    <data name="IncorrectPassword" xml:space="preserve">
+        <value>パスワードが違います。もう一度お試しください</value>
+    </data>
+    <data name="GoogleLogin" xml:space="preserve">
+        <value>Googleでログイン</value>
+    </data>
+    <data name="GoogleSignUp" xml:space="preserve">
+        <value>Googleで登録</value>
+    </data>
+    <data name="ThisWeek" xml:space="preserve">
+        <value>今週</value>
+    </data>
+    <data name="LastWeek" xml:space="preserve">
+        <value>先週</value>
+    </data>
+    <data name="ThisMonth" xml:space="preserve">
+        <value>今月</value>
+    </data>
+    <data name="LastMonth" xml:space="preserve">
+        <value>先月</value>
+    </data>
+    <data name="ThisYear" xml:space="preserve">
+        <value>今年</value>
+    </data>
+    <data name="LastYear" xml:space="preserve">
+        <value>去年</value>
+    </data>
+    <data name="Unknown" xml:space="preserve">
+        <value>不明</value>
+    </data>
+    <data name="ReportPeriod" xml:space="preserve">
+        <value>レポート期間</value>
+    </data>
+    <data name="SiriReportPeriodInstruction" xml:space="preserve">
+        <value>Siriにこの期間のレポートを表示するよう依頼</value>
+    </data>
+    <data name="SiriCustomTimeEntryInstruction" xml:space="preserve">
+        <value>Siriに記録を開始するように依頼</value>
+    </data>
+    <data name="WorkingOnThis" xml:space="preserve">
+        <value>これをやっていますか？</value>
+    </data>
+    <data name="WorkingOnThese" xml:space="preserve">
+        <value>これをやっていますか？</value>
+    </data>
+    <data name="NoTagsInfoMessage" xml:space="preserve">
+        <value># tags の形式で、記録にキーワードを追加することが出来ます</value>
+    </data>
+    <data name="NoProjectsInfoMessage" xml:space="preserve">
+        <value>@をつけるとプロジェクトを作って記録をカテゴリ分けすることが出来ます</value>
+    </data>
+    <data name="MondayInitial" xml:space="preserve">
+        <value>月</value>
+    </data>
+    <data name="TuesdayInitial" xml:space="preserve">
+        <value>火</value>
+    </data>
+    <data name="WednesdayInitial" xml:space="preserve">
+        <value>水</value>
+    </data>
+    <data name="ThursdayInitial" xml:space="preserve">
+        <value>木</value>
+    </data>
+    <data name="FridayInitial" xml:space="preserve">
+        <value>金</value>
+    </data>
+    <data name="SaturdayInitial" xml:space="preserve">
+        <value>土</value>
+    </data>
+    <data name="SundayInitial" xml:space="preserve">
+        <value>日</value>
+    </data>
+    <data name="Monday" xml:space="preserve">
+        <value>月曜日</value>
+    </data>
+    <data name="Tuesday" xml:space="preserve">
+        <value>火曜日</value>
+    </data>
+    <data name="Wednesday" xml:space="preserve">
+        <value>水曜日</value>
+    </data>
+    <data name="Thursday" xml:space="preserve">
+        <value>木曜日</value>
+    </data>
+    <data name="Friday" xml:space="preserve">
+        <value>金曜日</value>
+    </data>
+    <data name="Saturday" xml:space="preserve">
+        <value>土曜日</value>
+    </data>
+    <data name="Sunday" xml:space="preserve">
+        <value>日曜日</value>
+    </data>
+    <data name="Help" xml:space="preserve">
+        <value>ヘルプ</value>
+    </data>
+    <data name="WorkspaceChangedAlertTitle" xml:space="preserve">
+        <value>ワークスペースを変更しました</value>
+    </data>
+    <data name="WorkspaceChangedAlertMessage" xml:space="preserve">
+        <value>選択したワークスペースにプロジェクトと記録がひも付けられます</value>
+    </data>
+    <data name="Reports" xml:space="preserve">
+        <value>レポート</value>
+    </data>
+    <data name="Other" xml:space="preserve">
+        <value>その他</value>
+    </data>
+    <data name="StartTimeEntry" xml:space="preserve">
+        <value>記録を開始</value>
+    </data>
+    <data name="Continue" xml:space="preserve">
+        <value>続ける</value>
+    </data>
+    <data name="DeleteThisTimeEntry" xml:space="preserve">
+        <value>この記録を削除しますか？</value>
+    </data>
+    <data name="DeleteMultipleTimeEntries" xml:space="preserve">
+        <value>{0}個の記録を完全に削除してもよろしいですか？</value>
+    </data>
+    <data name="DeleteThisEntry" xml:space="preserve">
+        <value>この記録を削除</value>
+    </data>
+    <data name="DeleteNTimeEntries" xml:space="preserve">
+        <value>{0}個の記録を削除</value>
+    </data>
+    <data name="DiscardThisTimeEntry" xml:space="preserve">
+        <value>この記録を破棄してよろしいですか？</value>
+    </data>
+    <data name="DiscardEditingChanges" xml:space="preserve">
+        <value>変更を破棄しますか？</value>
+    </data>
+    <data name="DurationFormatClassic" xml:space="preserve">
+        <value>クラシック(47:06 min)</value>
+    </data>
+    <data name="DurationFormatImproved" xml:space="preserve">
+        <value>時分秒 (0:47:06)</value>
+    </data>
+    <data name="DurationFormatDecimal" xml:space="preserve">
+        <value>小数 (0.79 h)</value>
+    </data>
+    <data name="ContinueLastEntry" xml:space="preserve">
+        <value>最後の記録を継続する</value>
+    </data>
+    <data name="TapToRetry" xml:space="preserve">
+        <value>タップしてリトライ</value>
+    </data>
+    <data name="EmailIsAlreadyUsedError" xml:space="preserve">
+        <value>入力されたメールアドレスのユーザーはすでに存在します</value>
+    </data>
+    <data name="About" xml:space="preserve">
+        <value>Togglについて</value>
+    </data>
+    <data name="Licenses" xml:space="preserve">
+        <value>ライセンス</value>
+    </data>
+    <data name="Save" xml:space="preserve">
+        <value>保存</value>
+    </data>
+    <data name="Done" xml:space="preserve">
+        <value>完了</value>
+    </data>
+    <data name="Back" xml:space="preserve">
+        <value>戻る</value>
+    </data>
+    <data name="GetPasswordResetLink" xml:space="preserve">
+        <value>パスワードリセットのリンクを取得</value>
+    </data>
+    <data name="TermsOfServiceDialogMessage" xml:space="preserve">
+        <value>「同意します」をタップすることにより、Togglの{0}と{1}を理解し同意したことになります</value>
+    </data>
+    <data name="CountryOfResidence" xml:space="preserve">
+        <value>居住国</value>
+    </data>
+    <data name="SelectCountry" xml:space="preserve">
+        <value>国を選択...</value>
+    </data>
+    <data name="RatingViewPositiveCallToActionTitle" xml:space="preserve">
+        <value>素晴らしい!</value>
+    </data>
+    <data name="RatingViewNegativeCallToActionTitle" xml:space="preserve">
+        <value>まあいいんじゃない？</value>
+    </data>
+    <data name="RatingViewPositiveCallToActionDescription" xml:space="preserve">
+        <value>{0}でTogglを評価しますか？あなたの評価がTogglをさらに素晴らしいアプリにします！</value>
+    </data>
+    <data name="Later" xml:space="preserve">
+        <value>あとで</value>
+    </data>
+    <data name="RatingViewNegativeCallToActionDescription" xml:space="preserve">
+        <value>フィードバックをお願いします。みなさまのフィードバックは、Togglの改善にとても役に立っています！</value>
+    </data>
+    <data name="RatingViewPositiveCallToActionButtonTitle" xml:space="preserve">
+        <value>アプリを評価</value>
+    </data>
+    <data name="RatingViewNegativeCallToActionButtonTitle" xml:space="preserve">
+        <value>何が悪いのか教えて下さい</value>
+    </data>
+    <data name="ReportTooLongTitle" xml:space="preserve">
+        <value>長すぎます</value>
+    </data>
+    <data name="ReportTooLongDescription" xml:space="preserve">
+        <value>レポートは365日まで生成することができます</value>
+    </data>
+    <data name="ArchivedProjectDecorator" xml:space="preserve">
+        <value>(アーカイブされました)</value>
+    </data>
+    <data name="EntryDeleted" xml:space="preserve">
+        <value>記録は削除されました</value>
+    </data>
+    <data name="MultipleEntriesDeleted">
+        <value>{0}個の記録が削除されました</value>
+    </data>
+    <data name="UndoButtonTitle" xml:space="preserve">
+        <value>戻す</value>
+    </data>
+    <data name="SelectWorkspace" xml:space="preserve">
+        <value>ワークスペースを選択</value>
+    </data>
+    <data name="On" xml:space="preserve">
+        <value>On</value>
+    </data>
+    <data name="Off" xml:space="preserve">
+        <value>Off</value>
+    </data>
+    <data name="NewTimeEntry" xml:space="preserve">
+        <value>あたらしい記録</value>
+    </data>
+    <data name="EventReminder" xml:space="preserve">
+        <value>リマインダ</value>
+    </data>
+    <data name="Oops" xml:space="preserve">
+        <value>あれ？</value>
+    </data>
+    <data name="Disabled" xml:space="preserve">
+        <value>ラベルをはずす</value>
+    </data>
+    <data name="WhenEventStarts" xml:space="preserve">
+        <value>イベントが開始したとき</value>
+    </data>
+    <data name="FiveMinutes" xml:space="preserve">
+        <value>5分前</value>
+    </data>
+    <data name="TenMinutes" xml:space="preserve">
+        <value>10分前</value>
+    </data>
+    <data name="FifteenMinutes" xml:space="preserve">
+        <value>15分前</value>
+    </data>
+    <data name="ThirtyMinutes" xml:space="preserve">
+        <value>30分前</value>
+    </data>
+    <data name="OneHour" xml:space="preserve">
+        <value>1時間前</value>
+    </data>
+    <data name="CalendarSettingsTitle" xml:space="preserve">
+        <value>カレンダーの設定</value>
+    </data>
+    <data name="Notifications" xml:space="preserve">
+        <value>通知</value>
+    </data>
+    <data name="NotificationsRunningTimer" xml:space="preserve">
+        <value>タイマーが実行中です</value>
+    </data>
+    <data name="NotificationsStoppedTimer" xml:space="preserve">
+        <value>タイマーは停止しています</value>
+    </data>
+    <data name="General" xml:space="preserve">
+        <value>一般</value>
+    </data>
+    <data name="SetSmartReminders" xml:space="preserve">
+        <value>スマートリマインダを設定</value>
+    </data>
+    <data name="SetSmartRemindersMessage" xml:space="preserve">
+        <value>イベントの時間を記録するためのリマインダ</value>
+    </data>
+    <data name="OpenAppAndStartAction" xml:space="preserve">
+        <value>アプリを起動して開始</value>
+    </data>
+    <data name="StartInBackgroundAction" xml:space="preserve">
+        <value>バックグラウンドで開始</value>
+    </data>
+    <data name="OpenAppAction" xml:space="preserve">
+        <value>アプリを開く</value>
+    </data>
+    <data name="IdleTimerNotification" xml:space="preserve">
+        <value>今なにしてる？</value>
+    </data>
+    <data name="DiscardMessage" xml:space="preserve">
+        <value>メッセージを破棄しますか？</value>
+    </data>
+    <data name="InaccessibleTimeEntryErrorMessage" xml:space="preserve">
+        <value>この記録は、アクセスできないワークスペースに属しているため、同期できません。 プロジェクトを変更するか削除して、別のワークスペースに移動してください</value>
+    </data>
+    <data name="TimeEntriesGroupSyncErrorMessage" xml:space="preserve">
+        <value>このグループの{1}個の記録のうち{0}個が同期に失敗しました。 記録の詳細を確認してください</value>
+    </data>
+    <data name="Calendar" xml:space="preserve">
+        <value>カレンダー</value>
+    </data>
+    <data name="CalendarCopyEventToTimeEntry" xml:space="preserve">
+        <value>記録をコピー</value>
+    </data>
+    <data name="CreateClient" xml:space="preserve">
+        <value>クライアントを作成</value>
+    </data>
+    <data name="NoWorries" xml:space="preserve">
+        <value>ご心配なく。</value>
+    </data>
+    <data name="EnableAccessLater" xml:space="preserve">
+        <value>あとで設定からアクセスを許可できます</value>
+    </data>
+    <data name="ContinueWithoutAccess" xml:space="preserve">
+        <value>アクセスを許可せずに継続</value>
+    </data>
+    <data name="AllowCalendarAccess" xml:space="preserve">
+        <value>カレンダーへのアクセスを許可する</value>
+    </data>
+    <data name="CalendarAccessExplanation" xml:space="preserve">
+        <value>Togglは、イベントを表示するためにカレンダーのアクセス権が必要です。 イベントは自分だけに表示され、レポートには表示されません</value>
+    </data>
+    <data name="Start" xml:space="preserve">
+        <value>開始</value>
+    </data>
+    <data name="StartTime" xml:space="preserve">
+        <value>開始時刻</value>
+    </data>
+    <data name="EndTime" xml:space="preserve">
+        <value>終了時刻</value>
+    </data>
+    <data name="Stop" xml:space="preserve">
+        <value>停止</value>
+    </data>
+    <data name="StartAndStopTime" xml:space="preserve">
+        <value>タイマーの開始と終了</value>
+    </data>
+    <data name="ProjectNameTakenError" xml:space="preserve">
+        <value>このプロジェクトはすでに存在するようです</value>
+    </data>
+    <data name="ProjectName" xml:space="preserve">
+        <value>プロジェクト名</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>編集</value>
+    </data>
+    <data name="Billable" xml:space="preserve">
+        <value>請求可能</value>
+    </data>
+    <data name="NonBillable" xml:space="preserve">
+        <value>請求できません</value>
+    </data>
+    <data name="Startdate" xml:space="preserve">
+        <value>開始日</value>
+    </data>
+    <data name="Duration" xml:space="preserve">
+        <value>期間</value>
+    </data>
+    <data name="AddProjectTask" xml:space="preserve">
+        <value>プロジェクト/タスクを追加</value>
+    </data>
+    <data name="ConfirmChanges" xml:space="preserve">
+        <value>変更の確認</value>
+    </data>
+    <data name="CategorizeYourTimeWithProjects" xml:space="preserve">
+        <value>プロジェクトで記録を分類する</value>
+    </data>
+    <data name="AddTags" xml:space="preserve">
+        <value>タグを追加</value>
+    </data>
+    <data name="EmailAddress" xml:space="preserve">
+        <value>メールアドレス</value>
+    </data>
+    <data name="Password" xml:space="preserve">
+        <value>パスワード</value>
+    </data>
+    <data name="Or" xml:space="preserve">
+        <value>Or</value>
+    </data>
+    <data name="DoNotHaveAnAccountWithQuestionMark" xml:space="preserve">
+        <value>アカウントを持ってない？</value>
+    </data>
+    <data name="YouHaveCreatedYourFirstTimeEntry" xml:space="preserve">
+        <value>最初の記録を作成しました</value>
+    </data>
+    <data name="TapToEditIt" xml:space="preserve">
+        <value>タップして編集</value>
+    </data>
+    <data name="TapToStartTimer" xml:space="preserve">
+        <value>タップしてタイマーを開始</value>
+    </data>
+    <data name="TapToStopTimer" xml:space="preserve">
+        <value>タップしてタイマーを停止</value>
+    </data>
+    <data name="DoneWithExclamationMark" xml:space="preserve">
+        <value>できました!</value>
+    </data>
+    <data name="ThankYouForTheFeedback" xml:space="preserve">
+        <value>フィードバックありがとうございます。もしフィードバックの内容が質問の場合は、すぐにお返事いたします。</value>
+    </data>
+    <data name="NotificationDisabledNotice" xml:space="preserve">
+        <value>通知が無効になっています。通知を受け取るためには、アプリの設定から有効にしてください</value>
+    </data>
+    <data name="OpenSettingsApp" xml:space="preserve">
+        <value>設定を開く</value>
+    </data>
+    <data name="UpcomingEvent" xml:space="preserve">
+        <value>今後のイベント</value>
+    </data>
+    <data name="NotificationSettingExplaination" xml:space="preserve">
+        <value>今後の予定が開始する前に通知</value>
+    </data>
+    <data name="CreateNewWorkspace" xml:space="preserve">
+        <value>新しいワークスペースを作成</value>
+    </data>
+    <data name="UhOh" xml:space="preserve">
+        <value>おっと。</value>
+    </data>
+    <data name="NoWorkspaceErrorMessage" xml:space="preserve">
+        <value>他のユーザーによってワークスペースから外されたようですが、ご安心ください。
+続行するには、新しいワークスペースを作成します。</value>
+    </data>
+    <data name="AppOutdatedMessage" xml:space="preserve">
+        <value>しばらくアプリを更新していないようですね...
+続行するにはアプリを更新してください</value>
+    </data>
+    <data name="UpdateTheApp" xml:space="preserve">
+        <value>アプリを更新</value>
+    </data>
+    <data name="RatingCallToActionTitle" xml:space="preserve">
+        <value>はい。案内してください</value>
+    </data>
+    <data name="NoThanks" xml:space="preserve">
+        <value>いらないです</value>
+    </data>
+    <data name="Total" xml:space="preserve">
+        <value>合計</value>
+    </data>
+    <data name="ClockedHours" xml:space="preserve">
+        <value>追跡した時間</value>
+    </data>
+    <data name="FirstDayOfTheWeek" xml:space="preserve">
+        <value>週の最初の曜日</value>
+    </data>
+    <data name="Clients" xml:space="preserve">
+        <value>クライアント</value>
+    </data>
+    <data name="ProjectColor" xml:space="preserve">
+        <value>プロジェクト色</value>
+    </data>
+    <data name="SearchObject" xml:space="preserve">
+        <value>{0}を検索する</value>
+    </data>
+    <data name="DateFormat" xml:space="preserve">
+        <value>日時のフォーマット</value>
+    </data>
+    <data name="SelectDefaultWorkspaceDescription" xml:space="preserve">
+        <value>記録は自動的にこのワークスペースにひも付けられます。あとで設定から変更することもできます</value>
+    </data>
+    <data name="DurationFormat" xml:space="preserve">
+        <value>期間のフォーマット</value>
+    </data>
+    <data name="SelectProjectTitle" xml:space="preserve">
+        <value>プロジェクトの一覧</value>
+    </data>
+    <data name="Projects" xml:space="preserve">
+        <value>プロジェクト</value>
+    </data>
+    <data name="Project" xml:space="preserve">
+        <value>プロジェクト</value>
+    </data>
+    <data name="EmptyProjectText" xml:space="preserve">
+        <value>プロジェクトがここに表示されます。
+プロジェクトで記録を分類する事ができます</value>
+    </data>
+    <data name="Tags" xml:space="preserve">
+        <value>タグ</value>
+    </data>
+    <data name="NoTags" xml:space="preserve">
+        <value>タグなし</value>
+    </data>
+    <data name="EmptyTagText" xml:space="preserve">
+        <value>ここにタグが表示されます。
+タグを使って記録にキーワードを追加する事ができます</value>
+    </data>
+    <data name="GroupTimeEntries" xml:space="preserve">
+        <value>類似の記録をまとめる</value>
+    </data>
+    <data name="EditingTimeEntryGroup" xml:space="preserve">
+        <value>{0}個の記録を編集しています</value>
+    </data>
+    <data name="SelectCalendars" xml:space="preserve">
+        <value>カレンダーを選択</value>
+    </data>
+    <data name="SelectCalendarsMessage" xml:space="preserve">
+        <value>Togglで記録したいイベントを含むカレンダーを選択</value>
+    </data>
+    <data name="ContactUsSomethingWentWrongTryAgain" xml:space="preserve">
+        <value>エラーが発生しました。もう一度お試しください</value>
+    </data>
+    <data name="FeedbackFieldPlaceholder" xml:space="preserve">
+        <value>Togglはいかがですか？感想や質問をお聞かせください
+
+追伸　カスタマーサポートは現在英語だけで運営しております。ご不便をかけて申し訳ございません。
+        </value>
+    </data>
+    <data name="FeedbackHint" xml:space="preserve">
+        <value>メッセージ</value>
+    </data>
+    <data name="SomethingWentWrongTryAgain" xml:space="preserve">
+        <value>エラーが発生しました。もう一度お試しください</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>送信</value>
+    </data>
+    <data name="YourProfile" xml:space="preserve">
+        <value>プロフィール</value>
+    </data>
+    <data name="Display" xml:space="preserve">
+        <value>表示</value>
+    </data>
+    <data name="Name" xml:space="preserve">
+        <value>名前</value>
+    </data>
+    <data name="DateAndTime" xml:space="preserve">
+        <value>日時</value>
+    </data>
+    <data name="Use24HourClock" xml:space="preserve">
+        <value>24時間表記を使用</value>
+    </data>
+    <data name="SwipeActions" xml:space="preserve">
+        <value>スワイプによるアクション</value>
+    </data>
+    <data name="ManualMode" xml:space="preserve">
+        <value>マニュアル</value>
+    </data>
+    <data name="TimerDefaults" xml:space="preserve">
+        <value>デフォルトのタイマー</value>
+    </data>
+    <data name="ManualModeDescription" xml:space="preserve">
+        <value>スタートボタンのデフォルトの動作を設定します。 ボタンを長押しすると、常に代替モードがアクティブになります</value>
+    </data>
+    <data name="SmartReminders" xml:space="preserve">
+        <value>スマートアラート</value>
+    </data>
+    <data name="SubmitFeedback" xml:space="preserve">
+        <value>フィードバックを送信</value>
+    </data>
+    <data name="LoggingOutSecurely" xml:space="preserve">
+        <value>ログアウトしています</value>
+    </data>
+    <data name="SignOutOfToggl" xml:space="preserve">
+        <value>Togglからログアウト</value>
+    </data>
+    <data name="AlreadyHaveAnAccountQuestionMark" xml:space="preserve">
+        <value>アカウントをお持ちですか？</value>
+    </data>
+    <data name="AddProjectBubbleText" xml:space="preserve">
+        <value>プロジェクトとタグをその場で追加できます</value>
+    </data>
+    <data name="ReviewTheTerms" xml:space="preserve">
+        <value>利用規約を確認</value>
+    </data>
+    <data name="IAgree" xml:space="preserve">
+        <value>同意します</value>
+    </data>
+    <data name="TokenResetInstruction" xml:space="preserve">
+        <value>パスワードを入力してアカウントに再ログイン</value>
+    </data>
+    <data name="OrSignOut" xml:space="preserve">
+        <value>サインアウト</value>
+    </data>
+    <data name="APITokenResetSuccess" xml:space="preserve">
+        <value>APIトークンはリセットされました</value>
+    </data>
+    <data name="StartTimerInvocationPhrase" xml:space="preserve">
+        <value>記録開始</value>
+    </data>
+    <data name="StopTimerInvocationPhrase" xml:space="preserve">
+        <value>記録終了</value>
+    </data>
+    <data name="ShowReportsInvocationPhrase" xml:space="preserve">
+        <value>記録を表示</value>
+    </data>
+    <data name="ContinueTimerInvocationPhrase">
+        <value>タイマーを継続する</value>
+    </data>
+    <data name="NumberOfTasksPlural" xml:space="preserve">
+        <value>{0} タスク</value>
+    </data>
+    <data name="NumberOfTasksSingular" xml:space="preserve">
+        <value>{0} タスク</value>
+    </data>
+    <data name="SiriShortcuts" xml:space="preserve">
+        <value>Siri のショートカット</value>
+    </data>
+    <data name="SiriShortcutsDescription" xml:space="preserve">
+        <value>SiriとショートカットアプリでTogglを制御するショートカットを追加する</value>
+    </data>
+    <data name="SiriShortcutCustomTimeEntryTitle" xml:space="preserve">
+        <value>記録の詳細</value>
+    </data>
+    <data name="SiriShortcutDescriptionFromClipboard" xml:space="preserve">
+        <value>クリップボードで詳細</value>
+    </data>
+    <data name="SiriClipboardInstructionTitle" xml:space="preserve">
+        <value>詳細をクリップボードから貼り付ける</value>
+    </data>
+    <data name="SiriClipboardInstructionDescription" xml:space="preserve">
+        <value>システムのクリップボードにコピーされたテキストが記録の説明として使用されます</value>
+    </data>
+    <data name="SiriClipboardInstructionDoNotShowAgain" xml:space="preserve">
+        <value>今後表示しない</value>
+    </data>
+    <data name="SiriClipboardHintLabel" xml:space="preserve">
+        <value>このショートカットを実行すると、詳細がクリップボードから貼り付けられます</value>
+    </data>
+    <data name="SiriTrackEntrySuggestedInvocationPhrase" xml:space="preserve">
+        <value>追跡中 {0}</value>
+    </data>
+    <data name="SiriShowReportSuggestedInvocationPhrase" xml:space="preserve">
+        <value>{0}の記録を表示</value>
+    </data>
+    <data name="SiriStartTimerConfirmationMessage" xml:space="preserve">
+        <value>{0}の記録を開始しますか？</value>
+    </data>
+    <data name="SiriStartTimerWithEmptyDescConfirmationMessage" xml:space="preserve">
+        <value>記録を開始しますか？</value>
+    </data>
+    <data name="SiriStopTimerConfirmationMessage" xml:space="preserve">
+        <value>{0}の記録を終了しますか？</value>
+    </data>
+    <data name="SiriStopTimerWithEmptyDescConfirmationMessage" xml:space="preserve">
+        <value>記録を終了しますか？</value>
+    </data>
+    <data name="SiriShortcutLoginToUseShortcut" xml:space="preserve">
+        <value>ショートカットを使うにはログインしてください</value>
+    </data>
+    <data name="SiriShortcutOpenTheAppToSync" xml:space="preserve">
+        <value>アプリを開いてデータを同期してから、もう一度お試しください</value>
+    </data>
+    <data name="SiriDurationWithSeconds" xml:space="preserve">
+        <value>{0} 秒</value>
+    </data>
+    <data name="SiriDurationWithMinutesAndSeconds" xml:space="preserve">
+        <value>{0} 分 {1} 秒</value>
+    </data>
+    <data name="SiriDurationWithHoursAndSeconds" xml:space="preserve">
+        <value>{0} 時間 {1} 秒</value>
+    </data>
+    <data name="SiriDurationWithHoursMinutesAndSeconds" xml:space="preserve">
+        <value>{0} 時間 {1} 分 {2} 秒</value>
+    </data>
+    <data name="SiriNoCurrentEntryRunning" xml:space="preserve">
+        <value>計測中のタイマーはありません</value>
+    </data>
+    <data name="WidgetApiError" xml:space="preserve">
+        <value>ネットワークの接続に失敗しました。
+アプリを開くとオフラインでも計測ができます</value>
+    </data>
+    <data name="WidgetNoRunningTimeEntryError" xml:space="preserve">
+        <value>計測中のタイマーは見つかりませんでした。
+アプリを開いて新しい計測を開始しましょう</value>
+    </data>
+    <data name="WidgetGenericError" xml:space="preserve">
+        <value>エラーが発生しました。
+計測するためにアプリを開いてください</value>
+    </data>
+    <data name="SuggestionAccessibilityHint" xml:space="preserve">
+        <value>新しい記録</value>
+    </data>
+    <data name="TimeEntryRowAccessibilityHint" xml:space="preserve">
+        <value>記録を編集</value>
+    </data>
+    <data name="Suggestion" xml:space="preserve">
+        <value>提案</value>
+    </data>
+    <data name="TrackedTime" xml:space="preserve">
+        <value>記録した時間</value>
+    </data>
+    <data name="HasTags" xml:space="preserve">
+        <value>タグ付き</value>
+    </data>
+    <data name="Task" xml:space="preserve">
+        <value>タスク</value>
+    </data>
+    <data name="Client" xml:space="preserve">
+        <value>クライアント</value>
+    </data>
+    <data name="TimeEntries" xml:space="preserve">
+        <value>記録</value>
+    </data>
+    <data name="TimeEntry" xml:space="preserve">
+        <value>記録</value>
+    </data>
+    <data name="ExpandTimeEntryGroup" xml:space="preserve">
+        <value>記録グループを展開</value>
+    </data>
+    <data name="CollapseTimeEntryGroup" xml:space="preserve">
+        <value>記録グループをたたむ</value>
+    </data>
+    <data name="Timer" xml:space="preserve">
+        <value>タイマー</value>
+    </data>
+    <data name="CurrentlyRunningTimeEntry" xml:space="preserve">
+        <value>現在計測中の記録</value>
+    </data>
+    <data name="StopCurrentlyRunningTimeEntry" xml:space="preserve">
+        <value>現在計測中の記録を停止する</value>
+    </data>
+    <data name="IsBillable" xml:space="preserve">
+        <value>請求可能？</value>
+    </data>
+    <data name="SyncFailed" xml:space="preserve">
+        <value>同期に失敗しました</value>
+    </data>
+    <data name="SyncFailedOffline" xml:space="preserve">
+        <value>同期に失敗しました。オフラインです</value>
+    </data>
+    <data name="SuccessfullySyncedData" xml:space="preserve">
+        <value>同期に成功しました</value>
+    </data>
+    <data name="UndoDeletedTimeEntry" xml:space="preserve">
+        <value>削除した記録をもとに戻す</value>
+    </data>
+    <data name="CalendarPermissionDeniedOr" xml:space="preserve">
+        <value>または {0}</value>
+    </data>
+    <data name="CalendarPermissionDeniedEnableButton" xml:space="preserve">
+        <value>イベントを見るために権限を与える</value>
+    </data>
+    <data name="NoWorkspaceOr" xml:space="preserve">
+        <value>または {0}</value>
+    </data>
+    <data name="NoWorkspaceTryAgain" xml:space="preserve">
+        <value>もう一度試す</value>
+    </data>
+    <data name="OutdatedAppTryTogglCom" xml:space="preserve">
+        <value>toggl.comに移動</value>
+    </data>
+    <data name="RatingTitle" xml:space="preserve">
+        <value>Togglはお役に立てていますか？</value>
+    </data>
+    <data name="RatingYes" xml:space="preserve">
+        <value>もちろん!</value>
+    </data>
+    <data name="RatingNotReally" xml:space="preserve">
+        <value>微妙..</value>
+    </data>
+    <data name="ReportsEmptyStateTitle" xml:space="preserve">
+        <value>レポートが存在しません</value>
+    </data>
+    <data name="ReportsEmptyStateDescription" xml:space="preserve">
+        <value>指定した期間には記録が見当たりませんでした</value>
+    </data>
+    <data name="SiriShortcutCellAdd" xml:space="preserve">
+        <value>追加</value>
+    </data>
+    <data name="CustomSiriShortcutCellIn" xml:space="preserve">
+        <value>{0}に</value>
+    </data>
+    <data name="SiriShortcutsStartTimer" xml:space="preserve">
+        <value>タイマーをスタート</value>
+    </data>
+    <data name="SiriShortcutsStartTimerWithName" xml:space="preserve">
+        <value>タイマーをスタート: {0}</value>
+    </data>
+    <data name="SiriShortcutsStartFromClipboard" xml:space="preserve">
+        <value>クリップボードから開始</value>
+    </data>
+    <data name="SiriShortcutsContinueTracking" xml:space="preserve">
+        <value>計測を続ける</value>
+    </data>
+    <data name="SiriShortcutsStopRunningEntry" xml:space="preserve">
+        <value>計測中の記録を停止</value>
+    </data>
+    <data name="SiriShortcutsStartTimerWithCustomDetails" xml:space="preserve">
+        <value>詳細をつけて記録を開始する</value>
+    </data>
+    <data name="SiriShortcutsShowReport" xml:space="preserve">
+        <value>レポートを表示</value>
+    </data>
+    <data name="SiriShortcutsShowCustomReport" xml:space="preserve">
+        <value>詳細レポートを表示</value>
+    </data>
+    <data name="SiriShortcutsTimerShortcuts" xml:space="preserve">
+        <value>タイマーへのショートカット</value>
+    </data>
+    <data name="SiriShortcutsReportsShortcuts" xml:space="preserve">
+        <value>レポートへのショートカット</value>
+    </data>
+    <data name="LinkCalendars" xml:space="preserve">
+        <value>カレンダーとリンク</value>
+    </data>
+    <data name="LinkCalendarsMessage" xml:space="preserve">
+        <value>Togglでカレンダーのイベントを見て、タップで取り込む</value>
+    </data>
+    <data name="AllowAccess" xml:space="preserve">
+        <value>アクセスを許可</value>
+    </data>
+    <data name="PrivateProjectHint" xml:space="preserve">
+        <value>個人プロジェクトは、プロジェクトメンバーだけが見ることが出来ます</value>
+    </data>
+    <data name="Username" xml:space="preserve">
+        <value>ユーザー名</value>
+    </data>
+    <data name="Email" xml:space="preserve">
+        <value>メールアドレス</value>
+    </data>
+    <data name="DefaultWorkspace" xml:space="preserve">
+        <value>デフォルトのワークスペース</value>
+    </data>
+    <data name="StartTimeAfterCurrentTimeWarning" xml:space="preserve">
+        <value>開始時刻は、現在時刻より前にしてください!</value>
+    </data>
+    <data name="StartTimeAfterStopTimeWarning" xml:space="preserve">
+        <value>開始時刻は、終了時刻より前にしてください!</value>
+    </data>
+    <data name="StopTimeBeforeStartTimeWarning" xml:space="preserve">
+        <value>終了時刻は、開始時刻より後にしてください!</value>
+    </data>
+    <data name="DurationTooLong" xml:space="preserve">
+        <value>期間は999時間を超えることはできません！</value>
+    </data>
+    <data name="CategorizeWithProjects" xml:space="preserve">
+        <value>プロジェクトを追加して記録を分類する</value>
+    </data>
+    <data name="GenericInternetConnectionErrorMessage" xml:space="preserve">
+        <value>インターネット接続がありません。もう一度試してみてください</value>
+    </data>
+    <data name="SendFeedbackSuccessMessage" xml:space="preserve">
+        <value>フィードバックありがとうございます。もしフィードバックの内容が質問の場合は、すぐにお返事いたします。</value>
+    </data>
+    <data name="Now" xml:space="preserve">
+        <value>今</value>
+    </data>
+    <data name="LoginToTrack" xml:space="preserve">
+        <value>時間を記録するためにログイン</value>
+    </data>
+    <data name="NoSuggestionsAvailable" xml:space="preserve">
+        <value>提案はありません</value>
+    </data>
+    <data name="ShowAllTimEntries" xml:space="preserve">
+        <value>すべての記録を表示</value>
+    </data>
+    <data name="LoginToShowSuggestions" xml:space="preserve">
+        <value>提案を表示するためにログイン</value>
+    </data>
+    <data name="NoRunningTimeEntry" xml:space="preserve">
+        <value>計測中記録はありません</value>
+    </data>
+</root>

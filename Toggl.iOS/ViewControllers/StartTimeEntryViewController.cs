@@ -28,6 +28,7 @@ namespace Toggl.iOS.ViewControllers
         private const double desiredIpadHeight = 360;
 
         private bool isUpdatingDescriptionField;
+        private bool inTheMiddleOfAHack;
 
         private UIImage greyCheckmarkButtonImage;
         private UIImage greenCheckmarkButtonImage;
@@ -200,25 +201,71 @@ namespace Toggl.iOS.ViewControllers
                 .Select(_ => DescriptionTextView.AttributedText) // Programatically changing the text doesn't send an event, that's why we do this, to get the last version of the text
                 .Do(updatePlaceholder)
                 .Select(text => text.AsSpans((int)DescriptionTextView.SelectedRange.Location).ToIImmutableList())
-                .Subscribe(ViewModel.SetTextSpans.Inputs)
+                .Subscribe(ViewModel.SetTextSpans)
                 .DisposedBy(DisposeBag);
         }
 
         private void onTextFieldInfo(TextFieldInfo textFieldInfo)
         {
-            var attributedText = textFieldInfo.AsAttributedTextAndCursorPosition();
-            if (DescriptionTextView.AttributedText.GetHashCode() == attributedText.GetHashCode())
-                return;
+            // When the user adds a token, then the cursor will be in an empty Text span. This is also
+            // true when the description is totally empty, so we have to take care of this special case.            
+            var likelyJustAddedToken =
+                textFieldInfo.Spans.Count > 1
+                    && textFieldInfo.GetSpanWithCurrentTextCursor()?.Text.Length == 0;
 
+            // When the user taps a button with the `@` or `#` symbol, we programatically adjust the description
+            // of the text field info object. We need to mirror this change by manually updating the text field text.
+            // When the user is typing letters or when he accepts autocorrect suggestions, the text view component
+            // already contains the same text as the text field info object at this point. Only when we add stuff
+            // to the text field info manually, there is an inconsistency at this point.
+            bool endsWithShortcutSymbol(string text)
+            {
+                if (text == null || text.Length == 0)
+                    return false;
+
+                if (text.Length == 1)
+                    return text.EndsWith(QuerySymbols.Projects) || text.EndsWith(QuerySymbols.Tags);
+
+                return text.EndsWith($" {QuerySymbols.Projects}", StringComparison.Ordinal)
+                    || text.EndsWith($" {QuerySymbols.Tags}", StringComparison.Ordinal);
+            }
+
+            // Unfortunately, this will cause a minor glitch when the user has a ` #` or ` @` somewhere in the middle
+            // of the text, holding backspace and deleting text will stop at these symbols, the user has to press the
+            // backspace again and continue deleting. I think that's a minor problem.
+            var likelyASymbolWasAppended = endsWithShortcutSymbol(textFieldInfo.GetSpanWithCurrentTextCursor()?.Text);
+
+            // Unless the user adds a token (a tag or a project) or the user tapped a button which appends a `@` or `#`,
+            // we want to let the OS handle the rendering (adding a character or removing some characters is easy for iOS)
+            // but when the user adds a project or tag token, we must update the attributed text manually and
+            // also make sure that we don't run into some problems with autocorrect.
+            var needsManuallyUpdating = likelyJustAddedToken || likelyASymbolWasAppended;
+            if (needsManuallyUpdating)
+            {
+                // We don't want to do this every time, because it might break the UX (for example when the user
+                // is holding the backspace key for a while) but if there is an extra manual update, it's not a big deal
+                // and the probably won't even notice. We're just doing our best to avoid it in most cases when it is
+                // unnecessary and do it in every case when we know it is necessary.
+
+                // tl;dr There might be false positives, but it's not a big deal - this is our best effort.
+                manuallyUpdateDescriptionText(textFieldInfo);
+            }
+        }
+
+        private void manuallyUpdateDescriptionText(TextFieldInfo textFieldInfo)
+        {
             //This line is needed for when the user selects from suggestion and
             // the iOS autocorrect is ready to add text at the same time.
             // Without this line both will happen.
             DescriptionTextView.InputDelegate = emptyInputDelegate;
-            DescriptionTextView.AttributedText = attributedText;
 
-            DescriptionTextView.RejectAutocorrect();
+            // if we override the attributed text, the cursor will jump to the end
+            DescriptionTextView.AttributedText = textFieldInfo.AsAttributedText();
+            DescriptionTextView.SelectedRange = textFieldInfo.CursorPosition();
 
-            updatePlaceholder();
+            inTheMiddleOfAHack = true;
+            DescriptionTextView.RejectAutocorrect(scratchView: TimeInput);
+            inTheMiddleOfAHack = false;
         }
 
         private void switchTimeLabelAndInput()
@@ -237,12 +284,18 @@ namespace Toggl.iOS.ViewControllers
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
         {
+            if (inTheMiddleOfAHack)
+                return;
+
             BottomDistanceConstraint.Constant = e.FrameEnd.Height;
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
         }
 
         protected override void KeyboardWillHide(object sender, UIKeyboardEventArgs e)
         {
+            if (inTheMiddleOfAHack)
+                return;
+
             BottomDistanceConstraint.Constant = 0;
             UIView.Animate(Animation.Timings.EnterTiming, () => View.LayoutIfNeeded());
         }
@@ -311,7 +364,12 @@ namespace Toggl.iOS.ViewControllers
         }
 
         private void onTimeInputLostFocus(object sender, EventArgs e)
-            => switchTimeLabelAndInput();
+        {
+            if (inTheMiddleOfAHack)
+                return;
+
+            switchTimeLabelAndInput();
+        }
 
         private IEnumerable<UIButton> getButtons()
         {
@@ -373,4 +431,3 @@ namespace Toggl.iOS.ViewControllers
         }
     }
 }
-

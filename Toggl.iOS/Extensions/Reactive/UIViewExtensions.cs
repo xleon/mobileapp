@@ -132,15 +132,29 @@ namespace Toggl.iOS.Extensions.Reactive
                 .Subscribe(action.Inputs);
         }
 
-        public static IDisposable BindAction<TInput, TOutput>(
+        public static IDisposable BindAction<TInput, TElement>(
             this IReactive<UIView> reactive,
-            RxAction<TInput, TOutput> action,
-            Func<TInput> transformationFunction)
+            RxAction<TInput, TElement> action,
+            Func<UIView, TInput> inputTransform,
+            ButtonEventType eventType = ButtonEventType.Tap,
+            bool useFeedback = false)
         {
+            IObservable<Unit> eventObservable = Observable.Empty<Unit>();
+            switch (eventType)
+            {
+                case ButtonEventType.Tap:
+                    eventObservable = reactive.Base.Rx().Tap();
+                    break;
+                case ButtonEventType.LongPress:
+                    eventObservable = reactive.Base.Rx().LongPress(useFeedback);
+                    break;
+            }
+
             return Observable.Using(
-                    () => action.Enabled.Subscribe(e => { reactive.Base.UserInteractionEnabled = e; }),
-                    _ => reactive.Base.Rx().Tap().Select(unit => transformationFunction())
+                    () => action.Enabled.Subscribe(),
+                    _ => eventObservable
                 )
+                .Select(_ => inputTransform(reactive.Base))
                 .Subscribe(action.Inputs);
         }
 

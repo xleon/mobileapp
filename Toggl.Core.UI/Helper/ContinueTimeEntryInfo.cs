@@ -1,6 +1,6 @@
 using System.Linq;
 using Toggl.Core.Analytics;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 
 namespace Toggl.Core.UI.Helper
 {
@@ -16,7 +16,7 @@ namespace Toggl.Core.UI.Helper
 
         public int DaysInThePast { get; }
 
-        public ContinueTimeEntryInfo(LogItemViewModel viewModel, ContinueTimeEntryMode continueMode)
+        public ContinueTimeEntryInfo(TimeEntryLogItemViewModel viewModel, ContinueTimeEntryMode continueMode)
         {
             Id = viewModel.RepresentedTimeEntriesIds.First();
             IndexInLog = viewModel.IndexInLog;

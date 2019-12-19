@@ -25,6 +25,8 @@ namespace Toggl.iOS.Cells
         {
         }
 
-        protected abstract void UpdateView();
+        protected virtual void UpdateView()
+        {
+        }
     }
 }

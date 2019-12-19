@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using System;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.Analytics;
@@ -9,6 +10,8 @@ using Toggl.Core.Models;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Sync;
+using Toggl.Core.Tests.UI;
+using Toggl.Shared;
 using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Models;
@@ -29,6 +32,7 @@ namespace Toggl.Core.Tests.DataSources
             protected ISubject<SyncProgress> ProgressSubject { get; } = new Subject<SyncProgress>();
             protected IApplicationShortcutCreator ApplicationShortcutCreator { get; } = Substitute.For<IApplicationShortcutCreator>();
             protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
+            protected ISchedulerProvider SchedulerProvider { get; } = new TestSchedulerProvider();
 
             public TogglDataSourceTest()
             {
@@ -36,7 +40,8 @@ namespace Toggl.Core.Tests.DataSources
                 DataSource = new TogglDataSource(
                     Database,
                     TimeService,
-                    AnalyticsService);
+                    AnalyticsService,
+                    SchedulerProvider);
             }
         }
 

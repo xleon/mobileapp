@@ -25,7 +25,7 @@ namespace Toggl.iOS.ViewControllers
 
             SearchView.InsertSeparator();
 
-            TitleLabel.Text = Resources.Projects;
+            TitleLabel.Text = Resources.SelectProjectTitle;
             EmptyStateLabel.Text = Resources.EmptyProjectText;
 
             var source = new SelectProjectTableViewSource();
