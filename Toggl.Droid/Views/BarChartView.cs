@@ -270,7 +270,7 @@ namespace Toggl.Droid.Views
                         canvas.DrawText(dayOfWeekText, middleOfTheBar, dayLabelsY, othersPaint);
 
                         var dateText = horizontalLabelElements[0];
-                        setTextSizeFromWidth(dateText, othersPaint, othersPaint.TextSize, actualBarWidth);
+                        othersPaint.UpdatePaintForTextToFitWidth(dateText, actualBarWidth, bounds);
                         othersPaint.GetTextBounds(dateText, 0, dateText.Length, bounds);
                         canvas.DrawText(dateText, middleOfTheBar, dayLabelsY + bounds.Height() + dateTopPadding, othersPaint);
                     }
@@ -299,24 +299,6 @@ namespace Toggl.Droid.Views
             return barHasRegularPercentage && !barHasAtLeast1PixelInHeight
                 ? regularTop - minHeightForBarsWithPercentages
                 : regularTop;
-        }
-
-        private void setTextSizeFromWidth(string text, Paint paint, float originalTextSize, float maxWidth)
-        {
-            // 48f is enough for reasonable resolution
-            // (older phones could have issues with memory if this number is much larger)
-            const float sampleTextSize = 48f;
-
-            paint.TextSize = originalTextSize;
-            paint.GetTextBounds(text, 0, text.Length, bounds);
-
-            if (bounds.Width() > maxWidth)
-            {
-                paint.TextSize = sampleTextSize;
-                paint.GetTextBounds(text, 0, text.Length, bounds);
-
-                paint.TextSize = (int)(sampleTextSize * maxWidth / bounds.Width());
-            }
         }
 
         private static IImmutableList<Bar> generatePlaceholderBars()

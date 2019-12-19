@@ -11,9 +11,17 @@ namespace Toggl.Core.UI.ViewModels.Reports
     public class ReportProjectsDonutChartElement : ReportDonutChartElement
     {
         public ReportProjectsDonutChartElement(ProjectSummaryReport summary, DurationFormat durationFormat)
-            : base(convertToSegments(summary), null, segments => createLegendItems(segments, durationFormat))
+            : base(
+                  convertToSegments(summary),
+                  segments => donutWithFormattedValue(segments, durationFormat),
+                  segments => createLegendItems(segments, durationFormat))
         {
         }
+
+        private static ReportDonutChartDonutElement donutWithFormattedValue(IEnumerable<Segment> segments, DurationFormat durationFormat)
+            => new ReportDonutChartDonutElement(
+                segments.ToImmutableList(),
+                duration => TimeSpan.FromSeconds(duration).ToFormattedString(durationFormat));
 
         private static IEnumerable<ProjectSegment> convertToSegments(ProjectSummaryReport summary)
             => summary.Segments.Select(segment =>

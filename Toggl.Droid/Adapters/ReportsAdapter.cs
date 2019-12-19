@@ -64,11 +64,11 @@ namespace Toggl.Droid.Fragments
                     var barChartCell = inflater.Inflate(Resource.Layout.ReportsBarChartElement, parent, false);
                     return new ReportBarChartViewHolder(barChartCell);
 
-                case ViewType.Donut:
+                case Donut:
                     var donutCell = inflater.Inflate(Resource.Layout.ReportDonutChartDonutElement, parent, false);
                     return new ReportDonutChartDonutViewHolder(donutCell);
 
-                case ViewType.DonutLegendItem:
+                case DonutLegendItem:
                     var donutLegendItemCell = inflater.Inflate(Resource.Layout.ReportDonutLegendItem, parent, false);
                     return new ReportDonutChartLegendItemViewHolder(donutLegendItemCell);
 

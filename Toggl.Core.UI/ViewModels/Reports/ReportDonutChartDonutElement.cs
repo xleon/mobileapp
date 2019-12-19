@@ -4,17 +4,21 @@ using System.Collections.Immutable;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using static Toggl.Core.UI.ViewModels.Reports.ReportDonutChartElement;
+using System;
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
     public class ReportDonutChartDonutElement : ReportElementBase
     {
-        public ImmutableList<Segment> Segments { get; } = ImmutableList<Segment>.Empty; 
+        public ImmutableList<Segment> Segments { get; } = ImmutableList<Segment>.Empty;
 
-        public ReportDonutChartDonutElement(ImmutableList<Segment> segments)
+        public Func<double, string> ValueFormatter { get; set; }
+
+        public ReportDonutChartDonutElement(ImmutableList<Segment> segments, Func<double, string> valueFormatter = null)
             : base(false)
         {
             Segments = segments;
+            ValueFormatter = valueFormatter;
         }
 
         private ReportDonutChartDonutElement(bool isLoading)

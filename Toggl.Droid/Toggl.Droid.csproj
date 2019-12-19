@@ -573,6 +573,7 @@
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
+    <Compile Include="Extensions\PaintExtensions.cs" />
     <Compile Include="Extensions\Reactive\PagerViewExtensions.cs" />
     <Compile Include="Extensions\SnackbarExtensions.cs" />
     <Compile Include="Extensions\SpannableExtensions.cs" />
@@ -717,7 +718,10 @@
       <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\DateRangePickerMonthView.cs" />
-    <Compile Include="Views\DonutChartView.cs" />
+    <Compile Include="Views\DonutChart\DonutChartView.cs" />
+    <Compile Include="Views\DonutChart\DonutChartView.Slice.cs" />
+    <Compile Include="Views\DonutChart\DonutChartView.SlicesCollection.cs" />
+    <Compile Include="Views\DonutChart\DonutChartView.SliceSelectionAnimator.cs" />
     <Compile Include="Views\EditDuration\Shapes\Arc.cs" />
     <Compile Include="Views\EditDuration\Shapes\Cap.cs" />
     <Compile Include="Views\EditDuration\Shapes\ClockDial.cs" />
