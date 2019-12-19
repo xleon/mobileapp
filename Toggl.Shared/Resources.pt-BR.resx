@@ -181,7 +181,7 @@
     <value>Você pode perder seus dados caso tente sair antes da sincronização dos dados terminar.</value>
   </data>
   <data name="GenericLoginError" xml:space="preserve">
-    <value>Foi mal, parece que estamos tendo algum problema ao tentar autentica-lo. Por favor, tente novamente.</value>
+    <value>Foi mal, parece que estamos tendo algum problema ao tentar autenticá-lo. Por favor, tente novamente.</value>
   </data>
   <data name="GenericSignUpError" xml:space="preserve">
     <value>Foi mal, parece que estamos tendo algum problema ao tentar criar sua conta. Por favor, tente novamente.</value>
@@ -190,7 +190,7 @@
     <value>Dados não sincronizados</value>
   </data>
   <data name="SettingsUnsyncedMessage" xml:space="preserve">
-    <value>Alguns dos seus dados ainda não foram sincronizadosdata e serão perdidos caso você saia.</value>
+    <value>Alguns dos seus dados ainda não foram sincronizados e serão perdidos caso você saia.</value>
   </data>
   <data name="SettingsDialogButtonSignOut" xml:space="preserve">
     <value>Sair</value>
@@ -256,7 +256,7 @@
     <value>Descartar</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Politica de privacidade</value>
+    <value>Política de privacidade</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
     <value>Termos de serviço</value>
@@ -313,7 +313,7 @@
     <value>Link enviado. Por favor verifique seu email para mudar sua senha.</value>
   </data>
   <data name="PasswordResetEmailDoesNotExistError" xml:space="preserve">
-    <value>Email desconhecido. Certifique-se de que o email está correto e tente novamente</value>
+    <value>Email desconhecido. Certifique-se de que o email está correto e tente novamente.</value>
   </data>
   <data name="PasswordResetGeneralError" xml:space="preserve">
     <value>Pedimos desculpas, ocorreu um problem ao tentar mudar sua senha. Tente novamente.</value>
@@ -355,6 +355,342 @@
     <value>Desconhecido</value>
   </data>
   <data name="ReportPeriod" xml:space="preserve">
-    <value>Periodo do relatório</value>
+    <value>Período do relatório</value>
+  </data>
+  <data name="YourProfile" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="YouHaveCreatedYourFirstTimeEntry" xml:space="preserve">
+    <value>Você crious seu primeiro registro de tempo</value>
+  </data>
+  <data name="WorkspaceChangedAlertTitle" xml:space="preserve">
+    <value>Você mudou o workspace</value>
+  </data>
+  <data name="WorkspaceChangedAlertMessage" xml:space="preserve">
+    <value>O projeto e o registro de tempo serão mudados para o workspace que foi selecionado</value>
+  </data>
+  <data name="WidgetNoRunningTimeEntryError" xml:space="preserve">
+    <value>Nenhum registro de tempo ativo.
+Abra o app para iniciar um.</value>
+  </data>
+  <data name="WidgetGenericError" xml:space="preserve">
+    <value>Ocorreu um erro.
+Abra o app para marcar seu tempo.</value>
+  </data>
+  <data name="WidgetApiError" xml:space="preserve">
+    <value>Erro de conexão.
+Abra o app para marcar o tempo offline.</value>
+  </data>
+  <data name="WhenEventStarts" xml:space="preserve">
+    <value>Quando o evento estiver para começar</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Quarta-feira</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Usuário</value>
+  </data>
+  <data name="Use24HourClock" xml:space="preserve">
+    <value>Usar o sistema de 24 horas</value>
+  </data>
+  <data name="UpdateTheApp" xml:space="preserve">
+    <value>Atualize o app</value>
+  </data>
+  <data name="UpcomingEvent" xml:space="preserve">
+    <value>Eventos próximos</value>
+  </data>
+  <data name="UndoDeletedTimeEntry" xml:space="preserve">
+    <value>Desfazer deleção</value>
+  </data>
+  <data name="UndoButtonTitle" xml:space="preserve">
+    <value>DESFAZER</value>
+  </data>
+  <data name="UhOh" xml:space="preserve">
+    <value>Eita.</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Terça-feira</value>
+  </data>
+  <data name="TrackedTime" xml:space="preserve">
+    <value>tempo marcado</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="TokenResetInstruction" xml:space="preserve">
+    <value>Digite sua senha para acessar novamente sua conta</value>
+  </data>
+  <data name="TimeEntryRowAccessibilityHint" xml:space="preserve">
+    <value>Edita o registro de tempo</value>
+  </data>
+  <data name="TimeEntry" xml:space="preserve">
+    <value>Registro de tempo</value>
+  </data>
+  <data name="TimeEntriesGroupSyncErrorMessage" xml:space="preserve">
+    <value>Dos {1} registros de tempo neste grupo, {0} não estão sincronizados. Abra os registros individualmente para obter mais detalhes.</value>
+  </data>
+  <data name="TimeEntries" xml:space="preserve">
+    <value>Registros de tempo</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Quinta-feira</value>
+  </data>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minutos antes</value>
+  </data>
+  <data name="ThankYouForTheFeedback" xml:space="preserve">
+    <value>Obrigado pelo seu feedback. Se você tinha alguma pergunta, nós entramos em contato em breve.</value>
+  </data>
+  <data name="TermsOfServiceDialogMessage" xml:space="preserve">
+    <value>Ao clicar em "Concordo". você entende e concorda com os {0} e {1} do Toggl</value>
+  </data>
+  <data name="TenMinutes" xml:space="preserve">
+    <value>10 minutos antes</value>
+  </data>
+  <data name="Task" xml:space="preserve">
+    <value>Tarefa</value>
+  </data>
+  <data name="TapToStopTimer" xml:space="preserve">
+    <value>Aperte para parar de marcar</value>
+  </data>
+  <data name="TapToStartTimer" xml:space="preserve">
+    <value>Aperte para começar a marcar</value>
+  </data>
+  <data name="TapToRetry" xml:space="preserve">
+    <value>Aperte para tentar novamente</value>
+  </data>
+  <data name="TapToEditIt" xml:space="preserve">
+    <value>Aperte para editar</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="SyncFailedOffline" xml:space="preserve">
+    <value>Falha ao sincronizar, você parece estar offline</value>
+  </data>
+  <data name="SyncFailed" xml:space="preserve">
+    <value>Falha ao sincronizar</value>
+  </data>
+  <data name="SyncCompleted" xml:space="preserve">
+    <value>Sincronização concluída</value>
+  </data>
+  <data name="SwipeActions" xml:space="preserve">
+    <value>Ações ao deslizar</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Domingo</value>
+  </data>
+  <data name="SuggestionAccessibilityHint" xml:space="preserve">
+    <value>Inicia um registro de tempo</value>
+  </data>
+  <data name="Suggestion" xml:space="preserve">
+    <value>Suggestão</value>
+  </data>
+  <data name="SuccessfullySyncedData" xml:space="preserve">
+    <value>Dados sincronizados com sucesso</value>
+  </data>
+  <data name="SubmitFeedback" xml:space="preserve">
+    <value>Enviar feedback</value>
+  </data>
+  <data name="StopTimeBeforeStartTimeWarning" xml:space="preserve">
+    <value>A hora final deve ser depois da hora de inicio!</value>
+  </data>
+  <data name="StopCurrentlyRunningTimeEntry" xml:space="preserve">
+    <value>Parar o registro de tempo atual</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Parar</value>
+  </data>
+  <data name="StartTimeEntry" xml:space="preserve">
+    <value>Iniciar um registro de tempo</value>
+  </data>
+  <data name="StartTimeAfterStopTimeWarning" xml:space="preserve">
+    <value>A hora de inicio deve ser anterior à hora final!</value>
+  </data>
+  <data name="StartTimeAfterCurrentTimeWarning" xml:space="preserve">
+    <value>A hora de inicio deve ser anterior à hora atual!</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Hora de inicio</value>
+  </data>
+  <data name="StartInBackgroundAction" xml:space="preserve">
+    <value>Criar </value>
+  </data>
+  <data name="Startdate" xml:space="preserve">
+    <value>Data de inicio</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Iniciar</value>
+  </data>
+  <data name="SomethingWentWrongTryAgain" xml:space="preserve">
+    <value>Algo deu errado. Por favor, tente novamente</value>
+  </data>
+  <data name="SmartReminders" xml:space="preserve">
+    <value>Alertas inteligentes</value>
+  </data>
+  <data name="SiriStopTimerWithEmptyDescConfirmationMessage" xml:space="preserve">
+    <value>Parar registro de tempo?</value>
+  </data>
+  <data name="SiriStopTimerConfirmationMessage" xml:space="preserve">
+    <value>Parar de marcar {0}?</value>
+  </data>
+  <data name="SiriStartTimerWithEmptyDescConfirmationMessage" xml:space="preserve">
+    <value>Iniciar registro de tempo?</value>
+  </data>
+  <data name="SiriStartTimerConfirmationMessage" xml:space="preserve">
+    <value>Iniciar a marcar {0}?</value>
+  </data>
+  <data name="SiriShortcutsReportsShortcuts" xml:space="preserve">
+    <value>Atalhos para relatórios</value>
+  </data>
+  <data name="SiriDurationWithSeconds" xml:space="preserve">
+    <value>{0} segundos</value>
+  </data>
+  <data name="SiriDurationWithMinutesAndSeconds" xml:space="preserve">
+    <value>{0} minutos e {1} segundos</value>
+  </data>
+  <data name="SiriDurationWithHoursMinutesAndSeconds" xml:space="preserve">
+    <value>{0} horas {1} minutos e {2} segundos</value>
+  </data>
+  <data name="SiriDurationWithHoursAndSeconds" xml:space="preserve">
+    <value>{0} horas e {1} segundos</value>
+  </data>
+  <data name="SignOutOfToggl" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Escolher país...</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Sábado</value>
+  </data>
+  <data name="ReviewTheTerms" xml:space="preserve">
+    <value>Revisar termos</value>
+  </data>
+  <data name="ReportsEmptyStateTitle" xml:space="preserve">
+    <value>Não tem nada aqui</value>
+  </data>
+  <data name="RatingYes" xml:space="preserve">
+    <value>Boa!</value>
+  </data>
+  <data name="RatingViewPositiveCallToActionTitle" xml:space="preserve">
+    <value>Legal!</value>
+  </data>
+  <data name="RatingViewPositiveCallToActionDescription" xml:space="preserve">
+    <value>Você daria aquela força avaliando o Toggl na {0}? Sua avalição faz a diferença.</value>
+  </data>
+  <data name="RatingViewPositiveCallToActionButtonTitle" xml:space="preserve">
+    <value>Avaliar o app</value>
+  </data>
+  <data name="RatingTitle" xml:space="preserve">
+    <value>Gostando do Toggl?</value>
+  </data>
+  <data name="RatingNotReally" xml:space="preserve">
+    <value>Não muito</value>
+  </data>
+  <data name="RatingCallToActionTitle" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="Projects" xml:space="preserve">
+    <value>Projectos</value>
+  </data>
+  <data name="RatingViewNegativeCallToActionTitle" xml:space="preserve">
+    <value>Sem problemas</value>
+  </data>
+  <data name="RatingViewNegativeCallToActionDescription" xml:space="preserve">
+    <value>Você gostaria de nos dar um feedback? Isso nos ajudaria a melhorar o Toggl.</value>
+  </data>
+  <data name="RatingViewNegativeCallToActionButtonTitle" xml:space="preserve">
+    <value>Diga-nos o que está errado</value>
+  </data>
+  <data name="ProjectNameTakenError" xml:space="preserve">
+    <value>Esse projeto já existe</value>
+  </data>
+  <data name="ProjectName" xml:space="preserve">
+    <value>Nome do projeto</value>
+  </data>
+  <data name="ProjectColor" xml:space="preserve">
+    <value>Cor do projeto</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Projeto</value>
+  </data>
+  <data name="PrivateProjectHint" xml:space="preserve">
+    <value>Projetos privados são acessíveis somente para os memberos do projeto</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="OrSignOut" xml:space="preserve">
+    <value>ou saia</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>Ou</value>
+  </data>
+  <data name="OpenSettingsApp" xml:space="preserve">
+    <value>Abrir o app de configurações</value>
+  </data>
+  <data name="OpenAppAndStartAction" xml:space="preserve">
+    <value>Abrir o app e iniciar</value>
+  </data>
+  <data name="OpenAppAction" xml:space="preserve">
+    <value>Abrir o app</value>
+  </data>
+  <data name="Oops" xml:space="preserve">
+    <value>Ops</value>
+  </data>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hora antes</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Ativo</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Inativo</value>
+  </data>
+  <data name="NumberOfTasksSingular" xml:space="preserve">
+    <value>{0} Tarefa</value>
+  </data>
+  <data name="NumberOfTasksPlural" xml:space="preserve">
+    <value>{0} Tarefas</value>
+  </data>
+  <data name="NoWorries" xml:space="preserve">
+    <value>Sem problemas</value>
+  </data>
+  <data name="NoWorkspaceOr" xml:space="preserve">
+    <value>Ou {0}</value>
+  </data>
+  <data name="NoWorkspaceErrorMessage" xml:space="preserve">
+    <value>Parece que você foi removido de um workspace. Crie um novo para continuar.</value>
+  </data>
+  <data name="Now" xml:space="preserve">
+    <value>Agora</value>
+  </data>
+  <data name="NotificationsStoppedTimer" xml:space="preserve">
+    <value>Nenhum registro de tempo ativo</value>
+  </data>
+  <data name="NotificationsRunningTimer" xml:space="preserve">
+    <value>Registro de tempo ativo</value>
+  </data>
+  <data name="NotificationSettingExplaination" xml:space="preserve">
+    <value>Seja notificado de eventos do seu calendário antes deles começarem.</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notificações</value>
+  </data>
+  <data name="NotificationDisabledNotice" xml:space="preserve">
+    <value>Notificações desabilitadas. Se você gostaria de recebe-las, por favor habilite-as no app de configurações.</value>
+  </data>
+  <data name="NonBillable" xml:space="preserve">
+    <value>Não faturável</value>
+  </data>
+  <data name="NewTimeEntry" xml:space="preserve">
+    <value>Novo registro de tempo</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nome</value>
   </data>
 </root>
