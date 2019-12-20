@@ -5,30 +5,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Reports;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
-using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
+using Toggl.Core.UI.ViewModels.DateRangePicker;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.Views;
 using Toggl.Networking.Models.Reports;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Xunit;
+using Toggl.Core.Analytics;
+using ReportPeriod = Toggl.Core.Models.ReportPeriod;
+using System.Reactive.Subjects;
+using Toggl.Core.UI.Helper;
+using System.Globalization;
 
 namespace Toggl.Core.Tests.UI.ViewModels.Reports
 {
+    using static Toggl.Core.UI.ViewModels.DateRangePicker.DateRangePickerViewModel;
     using WorkspaceOptions = IEnumerable<SelectOption<IThreadSafeWorkspace>>;
 
     public class ReportsViewModelTests
     {
-        public abstract class ReportsViewModelTest : BaseViewModelTests<ReportsViewModel>
+        public abstract class ReportsViewModelBaseTest : BaseViewModelTests<ReportsViewModel>
         {
             private List<MockWorkspace> workspaces;
 
@@ -39,8 +43,11 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             protected void SetupEnvironment(
                 Func<List<MockWorkspace>, IEnumerable<MockWorkspace>> adjustWorkspaces = null,
                 Func<List<MockWorkspace>, MockWorkspace> setDefaultWorkspace = null,
-                Func<WorkspaceOptions, IThreadSafeWorkspace> dialogWorkspaceSelection = null,
-                Func<DateFormat> selectDateFormat = null)
+                Func<WorkspaceOptions, IThreadSafeWorkspace> dialogWorkspaceSelector = null,
+                Func<DateFormat> dateFormatSelector = null,
+                Func<DateRange?> selectedDateRangeSelector = null,
+                Func<int> unsyncedProjectsCountSelector = null,
+                Action beforeViewModelCreation = null)
             {
                 workspaces = Enumerable.Range(0, 10)
                     .Select(id => new MockWorkspace(id, isInaccessible: id % 4 == 0))
@@ -51,6 +58,13 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
 
                 setDefaultWorkspace = setDefaultWorkspace ?? (ws => ws.First());
                 var defaultWorkspace = setDefaultWorkspace(workspaces);
+
+                selectedDateRangeSelector = selectedDateRangeSelector
+                    ?? (() => new DateRange(DateTime.Parse("2019-01-01"), DateTime.Parse("2019-01-08")));
+                var selectedRange = selectedDateRangeSelector();
+
+                unsyncedProjectsCountSelector = unsyncedProjectsCountSelector ?? (() => 0);
+                var unsyncedProjectsCount = unsyncedProjectsCountSelector();
 
                 InteractorFactory
                     .GetDefaultWorkspace()
@@ -90,25 +104,32 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                     .Execute()
                     .Returns(Observable.Return(totals));
 
-                var summaryData = new ProjectSummaryReport(Array.Empty<ChartSegment>(), 0);
+                var summaryData = new ProjectSummaryReport(Array.Empty<ChartSegment>(), unsyncedProjectsCount);
                 InteractorFactory
                     .GetProjectSummary(Arg.Any<long>(), Arg.Any<DateTimeOffset>(), Arg.Any<DateTimeOffset?>())
                     .Execute()
                     .Returns(Observable.Return(summaryData));
 
-                dialogWorkspaceSelection = dialogWorkspaceSelection ?? (ws => ws.First().Item);
+                dialogWorkspaceSelector = dialogWorkspaceSelector ?? (ws => ws.First().Item);
                 View.Select(Arg.Any<string>(), Arg.Any<WorkspaceOptions>(), Arg.Any<int>())
                     .Returns(c =>
                     {
                         var options = c.ArgAt<WorkspaceOptions>(1);
-                        var chosenElement = dialogWorkspaceSelection(options);
+                        var chosenElement = dialogWorkspaceSelector(options);
                         return Observable.Return(chosenElement);
                     });
 
-                selectDateFormat = selectDateFormat ?? (() => DateFormat.FromLocalizedDateFormat("YYYY-MM-DD"));
+                dateFormatSelector = dateFormatSelector ?? (() => DateFormat.FromLocalizedDateFormat("YYYY-MM-DD"));
                 var preferences = Substitute.For<IThreadSafePreferences>();
-                preferences.DateFormat.Returns(selectDateFormat());
+                preferences.DateFormat.Returns(dateFormatSelector());
                 DataSource.Preferences.Current.Returns(Observable.Return(preferences));
+
+                NavigationService
+                    .Navigate<DateRangePickerViewModel, Either<ReportPeriod, DateRange>, DateRangeSelectionResult>(
+                        Arg.Any<Either<ReportPeriod, DateRange>>(), Arg.Any<IView>())
+                    .Returns(new DateRangeSelectionResult(selectedRange, DateRangeSelectionSource.Calendar));
+
+                beforeViewModelCreation?.Invoke();
 
                 ViewModel = CreateViewModel();
                 ViewModel.AttachView(View);
@@ -126,7 +147,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                     CalendarShortcutsService);
         }
 
-        public sealed class TheConstructor : ReportsViewModelTest
+        public sealed class TheConstructor : ReportsViewModelBaseTest
         {
             [Theory, LogIfTooSlow]
             [ConstructorData]
@@ -164,7 +185,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             }
         }
 
-        public sealed class TheElementsProperty : ReportsViewModelTest
+        public sealed class TheElementsProperty : ReportsViewModelBaseTest
         {
             private bool isLoadingElements(IEnumerable<IReportElement> elements)
                 => elements.Cast<ReportElementBase>().All(element => element.IsLoading);
@@ -214,12 +235,84 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             }
         }
 
-        public sealed class TheFormattedTimeRangeProperty : ReportsViewModelTest
+        public sealed class TheFormattedTimeRangeProperty : ReportsViewModelBaseTest
         {
-            // TODO Add tests when the time range selector view model is implemented
+            private string removeDropDownCharacter(string dateRange) => dateRange[0..^2].Trim();
+
+            [Fact, LogIfTooSlow]
+            public async Task EmitsInitialTimeRange()
+            {
+                SetupEnvironment();
+                var observer = TestScheduler.CreateObserver<string>();
+
+                await ViewModel.Initialize();
+                ViewModel.FormattedTimeRange.Select(removeDropDownCharacter).Subscribe(observer);
+                TestScheduler.Start();
+
+                observer.FirstEmittedValue().Should().Be(Resources.ThisWeek);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task EmitsCorrectFormattedDateRangeWhenDateRangeIsSelected()
+            {
+                SetupEnvironment();
+                var observer = TestScheduler.CreateObserver<string>();
+
+                await ViewModel.Initialize();
+                ViewModel.FormattedTimeRange.Select(removeDropDownCharacter).Subscribe(observer);
+                ViewModel.SelectTimeRange.Execute();
+                TestScheduler.Start();
+
+                observer.LastEmittedValue().Should().Be("01-01 - 01-08");
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task EmitsWhenDateRangeSelectionIsCanceled()
+            {
+                SetupEnvironment(selectedDateRangeSelector: () => null);
+
+                var observer = TestScheduler.CreateObserver<string>();
+
+                await ViewModel.Initialize();
+                ViewModel.FormattedTimeRange.Select(removeDropDownCharacter).Subscribe(observer);
+                ViewModel.SelectTimeRange.Execute();
+                TestScheduler.Start();
+
+                observer.Messages.Count().Should().Be(1);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task EmitsWhenDateDateFormatIsChanged()
+            {
+                var initialFormat = DateFormat.ValidDateFormats.First();
+                var changedFormat = DateFormat.ValidDateFormats.Last();
+                var initialPreferences = Substitute.For<IThreadSafePreferences>();
+                var changedPreferences = Substitute.For<IThreadSafePreferences>();
+                initialPreferences.DateFormat.Returns(initialFormat);
+                changedPreferences.DateFormat.Returns(changedFormat);
+                var preferences = new BehaviorSubject<IThreadSafePreferences>(initialPreferences);
+                SetupEnvironment(beforeViewModelCreation: () =>
+                    DataSource.Preferences.Current.Returns(preferences.AsObservable())
+                );
+                var observer = TestScheduler.CreateObserver<string>();
+
+                await ViewModel.Initialize();
+                ViewModel.FormattedTimeRange.Select(removeDropDownCharacter).Subscribe(observer);
+                ViewModel.SelectTimeRange.Execute();
+                TestScheduler.Start();
+
+                preferences.OnNext(changedPreferences);
+                TestScheduler.Start();
+
+                observer.Messages.AssertEqual(
+                    OnNext(1, Resources.ThisWeek),
+                    OnNext(2, "01/01 - 01/08"),
+                    OnNext(3, "01.01 - 08.01")
+               );
+            }
         }
 
-        public sealed class TheHasMultipleWorkspacesProperty : ReportsViewModelTest
+        public sealed class TheHasMultipleWorkspacesProperty : ReportsViewModelBaseTest
         {
             [Fact, LogIfTooSlow]
             public async Task ReturnsTrueForMultipleWorkspaces()
@@ -267,7 +360,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             }
         }
 
-        public sealed class TheSelectWorkspaceAction : ReportsViewModelTest
+        public sealed class TheSelectWorkspaceAction : ReportsViewModelBaseTest
         {
             [Fact, LogIfTooSlow]
             public async Task CallsGetAllWorkspace()
@@ -319,10 +412,9 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             public async Task EmitsCorrectWorkspace()
             {
                 var chosenWorkspace = (IThreadSafeWorkspace)null;
-                SetupEnvironment(dialogWorkspaceSelection: workspaces =>
+                SetupEnvironment(dialogWorkspaceSelector: workspaces =>
                 {
                     chosenWorkspace = workspaces.Where(ws => !ws.Item.IsInaccessible).Last().Item;
-                    System.Diagnostics.Debug.WriteLine(chosenWorkspace.Id);
                     return chosenWorkspace;
                 });
                 var observer = TestScheduler.CreateObserver<IThreadSafeWorkspace>();
@@ -334,11 +426,83 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
 
                 observer.LastEmittedValue().Should().Be(chosenWorkspace);
             }
+
+            [Fact, LogIfTooSlow]
+            public async Task EmitsAnalyticsEvent()
+            {
+                var unsyncedProjects = 2;
+                var initialSelectionDays = 7;
+                var initialSource = DateRangeSelectionSource.Initial;
+                SetupEnvironment(unsyncedProjectsCountSelector: () => unsyncedProjects);
+
+                await ViewModel.Initialize();
+                ViewModel.Elements.Subscribe();
+                ViewModel.SelectWorkspace.Execute();
+                TestScheduler.Start();
+
+                AnalyticsService.ReportsSuccess.Received().Track(
+                    Arg.Is(initialSource),
+                    Arg.Is(initialSelectionDays),
+                    Arg.Is(unsyncedProjects),
+                    Arg.Any<double>());
+            }
         }
 
-        public sealed class TheSelectTimeRangeAction : ReportsViewModelTest
+        public sealed class TheSelectTimeRangeAction : ReportsViewModelBaseTest
         {
-            // TODO: Add tests when navigation to the correct viewmodel is implemented.
+            [Fact, LogIfTooSlow]
+            public async Task NavigatesToTheDateRangePicker()
+            {
+                SetupEnvironment();
+
+                await ViewModel.Initialize();
+                ViewModel.SelectTimeRange.Execute();
+                TestScheduler.Start();
+
+                await NavigationService.Received().Navigate<DateRangePickerViewModel, Either<ReportPeriod, DateRange>, DateRangeSelectionResult>(
+                    Arg.Any<Either<ReportPeriod, DateRange>>(), Arg.Any<IView>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task OutputsCorrectDate()
+            {
+                var range = new DateRange(DateTime.Parse("2018-02-06"), DateTime.Parse("2018-04-17"));
+                var expectedResult = new DateRangeSelectionResult(range, DateRangeSelectionSource.Calendar);
+                SetupEnvironment(selectedDateRangeSelector: () => range);
+                var observer = TestScheduler.CreateObserver<DateRangeSelectionResult>();
+
+                await ViewModel.Initialize();
+                ViewModel.SelectTimeRange.Elements.Subscribe(observer);
+                ViewModel.SelectTimeRange.Execute();
+                TestScheduler.Start();
+
+                var result = observer.LastEmittedValue();
+                result.Source.Should().Be(expectedResult.Source);
+                result.SelectedRange.Should().Be(expectedResult.SelectedRange);
+            }
+
+            [Fact, LogIfTooSlow]
+            public async Task EmitsAnalyticsEvent()
+            {
+                var unsyncedProjects = 2;
+                var range = new DateRange(DateTime.Parse("2018-02-06"), DateTime.Parse("2018-02-09"));
+                var expectedResult = new DateRangeSelectionResult(range, DateRangeSelectionSource.Calendar);
+
+                SetupEnvironment(
+                    selectedDateRangeSelector: () => range,
+                    unsyncedProjectsCountSelector: () => unsyncedProjects);
+
+                await ViewModel.Initialize();
+                ViewModel.Elements.Subscribe();
+                ViewModel.SelectTimeRange.Execute();
+                TestScheduler.Start();
+
+                AnalyticsService.ReportsSuccess.Received().Track(
+                    Arg.Is(expectedResult.Source),
+                    Arg.Is(range.Length),
+                    Arg.Is(unsyncedProjects),
+                    Arg.Any<double>());
+            }
         }
     }
 }

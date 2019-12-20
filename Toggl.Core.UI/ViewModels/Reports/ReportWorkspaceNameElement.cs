@@ -11,7 +11,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
         }
 
         public bool Equals(IReportElement other)
-            => other is ReportWorkspaceNameElement workspaceNameElement
+            => GetType() == other.GetType()
+            && other is ReportWorkspaceNameElement workspaceNameElement
             && workspaceNameElement.Name == Name;
     }
 }

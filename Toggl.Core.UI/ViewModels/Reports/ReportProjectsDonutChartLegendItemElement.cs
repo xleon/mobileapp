@@ -15,5 +15,10 @@ namespace Toggl.Core.UI.ViewModels.Reports
         {
             Client = client;
         }
+
+        public override bool Equals(IReportElement other)
+            => base.Equals(other)
+            && other is ReportProjectsDonutChartLegendItemElement legendItemElement
+            && legendItemElement.Client == Client;
     }
 }

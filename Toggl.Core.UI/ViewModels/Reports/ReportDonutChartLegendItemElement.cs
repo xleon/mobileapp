@@ -1,6 +1,6 @@
 ﻿namespace Toggl.Core.UI.ViewModels.Reports
 {
-    public class ReportDonutChartLegendItemElement : ReportElementBase
+    public class ReportDonutChartLegendItemElement : IReportElement
     {
         public string Name { get; private set; }
         public string Value { get; private set; }
@@ -8,7 +8,6 @@
         public double Percentage { get; private set; }
 
         public ReportDonutChartLegendItemElement(string name, string color, string value, double percentage)
-            : base(false)
         {
             Name = name;
             Color = color;
@@ -16,10 +15,11 @@
             Percentage = percentage;
         }
 
-        public override bool Equals(IReportElement other)
-            => other is ReportDonutChartLegendItemElement donutChartLegendItemElement
-            && donutChartLegendItemElement.IsLoading == IsLoading
+        public virtual bool Equals(IReportElement other)
+            => GetType() == other.GetType()
+            && other is ReportDonutChartLegendItemElement donutChartLegendItemElement
             && donutChartLegendItemElement.Name == Name
+            && donutChartLegendItemElement.Color == Color
             && donutChartLegendItemElement.Value == Value
             && donutChartLegendItemElement.Percentage == Percentage;
     }

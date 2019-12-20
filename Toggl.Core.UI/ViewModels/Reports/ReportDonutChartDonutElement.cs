@@ -30,7 +30,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
             => new ReportDonutChartDonutElement(true);
 
         public override bool Equals(IReportElement other)
-            => other is ReportDonutChartDonutElement donutChartDonutElement
+            => GetType() == other.GetType()
+            && other is ReportDonutChartDonutElement donutChartDonutElement
             && donutChartDonutElement.IsLoading == IsLoading
             && donutChartDonutElement.Segments.SequenceEqual(Segments);
     }

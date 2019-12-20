@@ -120,7 +120,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
             return slices
                 .Take(slices.Count - 1)
                 .Select(slice => slice.WithNormalizedPercentage(slice.OriginalPercentage * factor))
-                .Append(lastSlice)
+                .Append(lastSlice.WithNormalizedPercentage(GuaranteedForOtherThreshold))
                 .ToList();
         }
     }

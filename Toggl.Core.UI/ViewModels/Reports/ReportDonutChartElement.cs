@@ -22,7 +22,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             legendItemsSelector = legendItemsSelector ?? defaultLegendItemsSelector;
             legend = legendItemsSelector(segments).Cast<IReportElement>().ToImmutableList();
-            
+
             SubElements = legend.Prepend(donutElement)
                 .ToImmutableList();
         }
@@ -51,9 +51,10 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public static ReportDonutChartElement LoadingState
             => new ReportDonutChartElement(true);
-        
+
         public override bool Equals(IReportElement other)
-            => other is ReportDonutChartElement donutChartElement
+            => GetType() == other.GetType()
+            && other is ReportDonutChartElement donutChartElement
             && donutChartElement.IsLoading == IsLoading
             && donutChartElement.donutElement.Equals(donutElement)
             && donutChartElement.legend.SequenceEqual(legend);

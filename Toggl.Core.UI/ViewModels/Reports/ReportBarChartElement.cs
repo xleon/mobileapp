@@ -42,16 +42,19 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public static ReportBarChartElement LoadingState
             => new ReportBarChartElement(true);
 
-        private double upperValueLimit(List<Bar> bars) => bars.Count > 0 ? bars.Max(bar => bar.TotalValue) : 0;
+        private double upperValueLimit(List<Bar> bars)
+            => bars.Count > 0 ? bars.Max(bar => bar.TotalValue) : 0;
 
-        private Bar normalizeBar(Bar bar, double maxValue) => bar.Scaled(maxValue);
+        private Bar normalizeBar(Bar bar, double maxValue)
+            => bar.Scaled(maxValue);
 
         public override bool Equals(IReportElement other)
-            => other is ReportBarChartElement barChartElement
-               && barChartElement.IsLoading == IsLoading
-               && barChartElement.Bars.SequenceEqual(Bars)
-               && barChartElement.XLabels.SequenceEqual(XLabels)
-               && barChartElement.YLabels == YLabels;
+            => GetType() == other.GetType()
+            && other is ReportBarChartElement barChartElement
+            && barChartElement.IsLoading == IsLoading
+            && barChartElement.Bars.SequenceEqual(Bars)
+            && barChartElement.XLabels.SequenceEqual(XLabels)
+            && barChartElement.YLabels == YLabels;
 
         public struct Bar
         {

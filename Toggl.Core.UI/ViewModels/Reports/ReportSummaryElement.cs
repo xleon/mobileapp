@@ -17,7 +17,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 TotalTime = TimeSpan.FromSeconds(summary.TotalSeconds);
                 BillablePercentage = summary.BillablePercentage;
             }
-            
+
             DurationFormat = durationFormat;
         }
 
@@ -30,10 +30,11 @@ namespace Toggl.Core.UI.ViewModels.Reports
             => new ReportSummaryElement(true);
 
         public override bool Equals(IReportElement other)
-            => other is ReportSummaryElement summaryElement
-               && summaryElement.IsLoading == IsLoading
-               && summaryElement.BillablePercentage == BillablePercentage
-               && summaryElement.TotalTime == TotalTime
-               && summaryElement.DurationFormat == DurationFormat;
+            => GetType() == other.GetType()
+            && other is ReportSummaryElement summaryElement
+            && summaryElement.IsLoading == IsLoading
+            && summaryElement.BillablePercentage == BillablePercentage
+            && summaryElement.TotalTime == TotalTime
+            && summaryElement.DurationFormat == DurationFormat;
     }
 }

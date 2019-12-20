@@ -3,6 +3,6 @@
     public sealed class ReportNoDataElement : IReportElement
     {
         public bool Equals(IReportElement other)
-            => other is ReportNoDataElement;
+            => GetType() == other.GetType();
     }
 }

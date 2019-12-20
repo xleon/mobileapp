@@ -33,7 +33,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
         }
 
         public bool Equals(IReportElement other)
-            => other is ReportErrorElement errorElement
+            => GetType() == other.GetType()
+            && other is ReportErrorElement errorElement
             && errorElement.Type == Type;
     }
 }

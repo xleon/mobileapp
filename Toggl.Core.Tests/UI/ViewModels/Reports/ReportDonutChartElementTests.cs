@@ -12,45 +12,43 @@ using System.Collections.Generic;
 
 namespace Toggl.Core.Tests.UI.ViewModels.Reports
 {
-    public class ReportDonutElementsBaseTests
-    {
-        public class MockDonutElement : ReportDonutChartDonutElement
-        {
-            public MockDonutElement(ImmutableList<Segment> segments) : base(segments)
-            {
-            }
-        }
-
-        public class MockLegendItem : ReportDonutChartLegendItemElement
-        {
-            public MockLegendItem() : base("", "", "", 1)
-            {
-            }
-        }
-
-        protected IEnumerable<Segment> CreateSegments(
-            int count,
-            Func<int, double> valueSelector = null,
-            Func<int, string> labelSelector = null,
-            Func<int, string> colorSelector = null)
-        {
-            colorSelector ??= _ => "#000000";
-            labelSelector ??= x => $"Project-{x + 1}";
-            valueSelector ??= x => x + 1;
-
-            return Enumerable.Range(0, count)
-                .Select(i => new Segment(colorSelector(i), labelSelector(i), valueSelector(i)));
-        }
-
-        protected IEnumerable<Segment> CreateSegments(
-            double[] values,
-            Func<int, string> labelSelector = null,
-            Func<int, string> colorSelector = null)
-            => CreateSegments(values.Length, i => values[i], labelSelector, colorSelector);
-    }
-
     public sealed class ReportDonutChartElementTests
     {
+        public class ReportDonutChartElementsBaseTests
+        {
+            public class MockDonutElement : ReportDonutChartDonutElement
+            {
+                public MockDonutElement(ImmutableList<Segment> segments) : base(segments)
+                {
+                }
+
+                public override bool Equals(IReportElement other)
+                    => base.Equals(other) && other is MockDonutElement;
+            }
+
+            public class MockLegendItem : ReportDonutChartLegendItemElement
+            {
+                public MockLegendItem() : base("", "", "", 1)
+                {
+                }
+            }
+
+            protected List<Segment> CreateSegments(
+                int count = 5,
+                Func<int, double> valueSelector = null,
+                Func<int, string> labelSelector = null,
+                Func<int, string> colorSelector = null)
+            {
+                colorSelector ??= _ => "#000000";
+                labelSelector ??= x => $"Project-{x + 1}";
+                valueSelector ??= x => x + 1;
+
+                return Enumerable.Range(0, count)
+                    .Select(i => new Segment(colorSelector(i), labelSelector(i), valueSelector(i)))
+                    .ToList();
+            }
+        }
+
         public sealed class TheLoadingStateProperty
         {
             [Fact, LogIfTooSlow]
@@ -70,20 +68,20 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             }
         }
 
-        public sealed class TheConstructor : ReportDonutElementsBaseTests
+        public sealed class TheConstructor : ReportDonutChartElementsBaseTests
         {
             [Fact, LogIfTooSlow]
             public void SetsIsLoadingToFalse()
             {
-                var segments = CreateSegments(1);
+                var segments = CreateSegments();
                 new ReportDonutChartElement(segments).IsLoading.Should().BeFalse();
             }
 
             [Fact, LogIfTooSlow]
             public void DefaultOverloadCreatesCorrectNumberOfSubElements()
             {
-                var count = 4;
-                var elements = CreateSegments(count, _ => 1).ToList();
+                var count = 5;
+                var elements = CreateSegments(count, _ => 1);
 
                 var donutChart = new ReportDonutChartElement(elements);
 
@@ -95,7 +93,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             [Fact, LogIfTooSlow]
             public void CreatesCorrectDonutElement()
             {
-                var segments = CreateSegments(1).ToList();
+                var segments = CreateSegments();
 
                 var donutChart = new ReportDonutChartElement(segments, s => new MockDonutElement(s.ToImmutableList()));
 
@@ -108,13 +106,77 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             [Fact, LogIfTooSlow]
             public void CreatesCorrectLegendItemElements()
             {
-                var segments = CreateSegments(5).ToList();
+                var segments = CreateSegments();
                 var legendItems = segments.Select(_ => new MockLegendItem());
                 var donutChart = new ReportDonutChartElement(segments, null, s => legendItems);
 
                 var elements = donutChart.SubElements;
                 elements.Count.Should().Be(1 + segments.Count);
                 elements.Skip(1).Should().AllBeOfType<MockLegendItem>();
+            }
+        }
+
+        public sealed class TheEqualsMethod : ReportDonutChartElementsBaseTests
+        {
+            [Fact, LogIfTooSlow]
+            public void ReturnsTrueForEqualElements()
+            {
+                var segments = CreateSegments();
+                var donutChartA = new ReportDonutChartElement(segments, null, null);
+                var donutChartB = new ReportDonutChartElement(segments, null, null);
+
+                donutChartA.Equals(donutChartB).Should().BeTrue();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsFalseForElementsThatDifferInSegments()
+            {
+                var segmentsA = CreateSegments(5);
+                var segmentsB = CreateSegments(3);
+                var donutChartA = new ReportDonutChartElement(segmentsA, null, null);
+                var donutChartB = new ReportDonutChartElement(segmentsB, null, null);
+
+                donutChartA.Equals(donutChartB).Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsFalseForElementsThatDifferInIsLoading()
+            {
+                var segmentsA = CreateSegments();
+                var donutChartA = new ReportDonutChartElement(segmentsA, null, null);
+                var donutChartB = ReportDonutChartElement.LoadingState;
+
+                donutChartA.Equals(donutChartB).Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsFalseForElementsThatDifferInDonutPart()
+            {
+                var segments = CreateSegments();
+                var donutChartA = new ReportDonutChartElement(segments, segments => new MockDonutElement(segments.ToImmutableList()), null);
+                var donutChartB = new ReportDonutChartElement(segments);
+
+                donutChartA.Equals(donutChartB).Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsFalseForElementsThatDifferInLegendItemsPart()
+            {
+                var segments = CreateSegments();
+                var donutChartA = new ReportDonutChartElement(segments, null, segments => segments.Select(s => new MockLegendItem()));
+                var donutChartB = new ReportDonutChartElement(segments);
+
+                donutChartA.Equals(donutChartB).Should().BeFalse();
+            }
+
+            [Fact, LogIfTooSlow]
+            public void ReturnsFalseForElementsThatDifferInType()
+            {
+                var segments = CreateSegments().ToList();
+                var donutChart = new ReportDonutChartElement(segments, segments => new MockDonutElement(segments.ToImmutableList()), null);
+                var reportElement = new ReportErrorElement(new Exception());
+
+                donutChart.Equals(reportElement).Should().BeFalse();
             }
         }
     }

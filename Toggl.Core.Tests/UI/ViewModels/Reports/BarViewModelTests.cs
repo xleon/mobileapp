@@ -16,7 +16,6 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             [InlineData(-0.1, -0.3)]
             public void ThrowsForNegativeValues(double billable, double nonBillable)
             {
-                // ReSharper disable once ObjectCreationAsStatement
                 Action creatingBar = () => new BarViewModel(billable, nonBillable);
 
                 creatingBar.Should().Throw<ArgumentOutOfRangeException>();
@@ -27,7 +26,6 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             [InlineData(0.1, 3.1)]
             public void ThrowsForPositiveValuesGreaterThanOne(double billable, double nonBillable)
             {
-                // ReSharper disable once ObjectCreationAsStatement
                 Action creatingBar = () => new BarViewModel(billable, nonBillable);
 
                 creatingBar.Should().Throw<ArgumentOutOfRangeException>();
@@ -38,7 +36,6 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
             [InlineData(0.4, 0.7)]
             public void ThrowsForTheSumBeingMoreThanOne(double billable, double nonBillable)
             {
-                // ReSharper disable once ObjectCreationAsStatement
                 Action creatingBar = () => new BarViewModel(billable, nonBillable);
 
                 creatingBar.Should().Throw<ArgumentOutOfRangeException>();

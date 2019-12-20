@@ -18,7 +18,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
             }
 
             public override bool Equals(object obj)
-                => obj is Segment segment
+                => GetType() == obj.GetType()
+                && obj is Segment segment
                 && segment.Color == Color
                 && segment.Label == Label
                 && segment.Value == Value;

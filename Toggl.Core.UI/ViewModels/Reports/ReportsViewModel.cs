@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -26,7 +27,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 {
     public sealed class ReportsViewModel : ViewModel
     {
-        private const string dropdownCharacter = "▾";
+        public const string DownArrowCharacter = "▾";
         private long? selectedWorkspaceId;
         private Either<ReportPeriod, DateRange> selection;
 
@@ -96,8 +97,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             var timeRangeSelector = SelectTimeRange.Elements
                 .StartWith(initialSelection)
-                .WhereNotNull()
-                .Where(selectionResult => selectionResult.SelectedRange.HasValue);
+                .WhereNotNull();
 
             CurrentWorkspaceName = workspaceSelector
                 .Select(ws => ws.Name)
@@ -113,10 +113,10 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Current
                 .Select(preferences => preferences.DateFormat);
 
-            FormattedTimeRange = Observable.Merge(Observable.Return(initialSelection), SelectTimeRange.Elements.WhereNotNull())
+            FormattedTimeRange = timeRangeSelector
                 .CombineLatest(dateFormatObservable, resultSelector: formattedTimeRange)
                 .DistinctUntilChanged()
-                .Select(dateRange => $"{dateRange} {dropdownCharacter}")
+                .Select(dateRange => $"{dateRange} {DownArrowCharacter}")
                 .AsDriver("", schedulerProvider);
 
             selectedWorkspaceId = (await interactorFactory.GetDefaultWorkspace().Execute())?.Id;
@@ -174,8 +174,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
             if (knownShortcut != null)
                 return knownShortcut.Text;
 
-            var startDateText = range.Beginning.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
-            var endDateText = range.End.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
+            var startDateText = range.Beginning.ToString(dateFormat.Short, CultureInfo.InvariantCulture);
+            var endDateText = range.End.ToString(dateFormat.Short, CultureInfo.InvariantCulture);
             return $"{startDateText} - {endDateText}";
         }
 

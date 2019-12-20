@@ -11,7 +11,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
     {
         public sealed class TheConstructor
         {
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void SetsValuesToNullForNullReportSummary()
             {
                 var reportSummaryElement = new ReportSummaryElement(null, DurationFormat.Improved);
@@ -20,11 +20,10 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                 reportSummaryElement.TotalTime.Should().Be(null);
             }
 
-            [Fact]
+            [Fact, LogIfTooSlow]
             public void UpdatesValuesToTheOnesFromReportSummary()
             {
                 var eps = 0.0001f;
-
                 var chartSegment = new ChartSegment("", "", 100, 100, 50, "", DurationFormat.Classic);
                 var projectSummary = new ProjectSummaryReport(new[] { chartSegment }, 0);
 
@@ -32,6 +31,37 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
 
                 reportSummaryElement.BillablePercentage.Should().BeApproximately(50.0f, eps);
                 reportSummaryElement.TotalTime.Should().BeCloseTo(TimeSpan.FromSeconds(100.0f), TimeSpan.FromSeconds(eps));
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData(DurationFormat.Classic)]
+            [InlineData(DurationFormat.Improved)]
+            [InlineData(DurationFormat.Decimal)]
+            public void SetsTheCorrectDurationFormat(DurationFormat expectedFormat)
+            {
+                var reportSummaryElement = new ReportSummaryElement(null, expectedFormat);
+
+                reportSummaryElement.DurationFormat.Should().Be(expectedFormat);
+            }
+        }
+
+        public sealed class TheLoadingStateProperty
+        {
+            [Fact, LogIfTooSlow]
+            public void SetsIsLoadingToTrue()
+            {
+                ReportSummaryElement.LoadingState.IsLoading.Should().BeTrue();
+            }
+        }
+
+        public sealed class TheIsLoadingProperty
+        {
+            [Fact, LogIfTooSlow]
+            public void IsSetToFalseIfDefaultConstructorIsUsed()
+            {
+                var reportSummaryElement = new ReportSummaryElement(null, DurationFormat.Decimal);
+
+                reportSummaryElement.IsLoading.Should().BeFalse();
             }
         }
     }
