@@ -6,9 +6,9 @@ using Firebase.Messaging;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Helper;
 using Toggl.Storage.Settings;
-using static Toggl.Droid.Services.JobServicesConstants;
+using static Toggl.Droid.SystemServices.JobServicesConstants;
 
-namespace Toggl.Droid.Services
+namespace Toggl.Droid.SystemServices
 {
     [Service]
     [IntentFilter(new[] {"com.google.firebase.MESSAGING_EVENT"})]

@@ -21,6 +21,8 @@ namespace Toggl.iOS.ViewControllers
         : ReactiveViewController<EditDurationViewModel>,
           IUIGestureRecognizerDelegate
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         private const int stackViewSpacing = 26;
         private const double cardHeight = 450;
 

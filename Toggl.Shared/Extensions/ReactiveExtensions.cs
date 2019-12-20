@@ -33,32 +33,12 @@ namespace Toggl.Shared.Extensions
             public void OnNext(T value) { }
         }
 
-        public static IDisposable Subscribe<T1, T2>(this IObservable<(T1, T2)> observable, Action<T1, T2> action)
-            => observable.Subscribe(tuple => action(tuple.Item1, tuple.Item2));
-
-        public static IDisposable SubscribeToErrorsAndCompletion<T>(this IObservable<T> observable, Action<Exception> onError, Action onCompleted)
-        {
-            var observer = new Observer<T>(onError, onCompleted);
-            return observable.Subscribe(observer);
-        }
-
-        public static IDisposable SubscribeToErrors<T>(this IObservable<T> observable, Action<Exception> onError)
-        {
-            var observer = new Observer<T>(onError, () => { });
-            return observable.Subscribe(observer);
-        }
-
         public static IObservable<T> ConnectedReplay<T>(this IObservable<T> observable)
         {
             var replayed = observable.Replay();
             replayed.Connect();
             return replayed;
         }
-
-        public static IObservable<T> DelayIf<T>(this IObservable<T> observable, Predicate<T> predicate, TimeSpan delay)
-            => observable.SelectMany(value => predicate(value)
-                ? Observable.Return(value).Delay(delay)
-                : Observable.Return(value));
 
         public static IObservable<T> Share<T>(this IObservable<T> observable)
             => observable.Publish().RefCount();
@@ -76,10 +56,6 @@ namespace Toggl.Shared.Extensions
                 .Catch(Observable.Return(onErrorJustReturn))
                 .ObserveOn(schedulerProvider.MainScheduler);
         }
-
-        public static IObservable<TValue> NotNullable<TValue>(this IObservable<TValue?> observable)
-            where TValue : struct
-            => observable.Where(x => x != null).Select(x => x.Value);
 
         public static IObservable<U> SelectValue<T, U>(this IObservable<T> observable, U u)
             => observable.Select(_ => u);
@@ -134,28 +110,6 @@ namespace Toggl.Shared.Extensions
             disposeBag.Add(disposable);
         }
 
-        public static IObservable<T> ConditionalRetryWithBackoffStrategy<T>(
-            this IObservable<T> source,
-            int maxRetries,
-            Func<int, TimeSpan> backOffStrategy,
-            Func<Exception, bool> shouldRetryOn,
-            IScheduler scheduler)
-        {
-            return source.RetryWhen(errorSignal =>
-            {
-                return errorSignal.SelectMany((error, retryCount) =>
-                {
-                    var currentTry = retryCount + 1;
-                    if (!shouldRetryOn(error) || currentTry > maxRetries)
-                    {
-                        throw error;
-                    }
-
-                    return Observable.Return(Unit.Default).Delay(backOffStrategy(currentTry), scheduler);
-                });
-            });
-        }
-
         public static IObservable<T> Do<T>(this IObservable<T> observable, Action action)
             => observable.Do(_ => action());
 
@@ -164,17 +118,6 @@ namespace Toggl.Shared.Extensions
             observer.OnNext(item);
             observer.OnCompleted();
         }
-
-        public static void CompleteWithUnit(this IObserver<Unit> observer)
-            => observer.CompleteWith(Unit.Default);
-
-        public static IObservable<Unit> ToUnitObservable<T>(this Task<T> task)
-            => Observable
-            .FromAsync(async () => await task)
-            .SelectUnit();
-
-        public static IObservable<string> SelectToString<T>(this IObservable<T> observable)
-            => observable.Select(item => item.ToString());
 
         public static IObservable<TOther> SelectLatestFrom<TFirst, TOther>(this IObservable<TFirst> observable, IObservable<TOther> otherObservable)
             => observable.WithLatestFrom(otherObservable, (first, other) => other);

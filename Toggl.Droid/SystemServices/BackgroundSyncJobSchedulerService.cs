@@ -1,11 +1,10 @@
-﻿using Android.App;
-using Android.App.Job;
 using System;
-using System.Reactive.Linq;
+using Android.App;
+using Android.App.Job;
 using Toggl.Droid.Helper;
 using static Toggl.Shared.Extensions.CommonFunctions;
 
-namespace Toggl.Droid.Services
+namespace Toggl.Droid.SystemServices
 {
     [Service(Exported = true,
              Permission = "android.permission.BIND_JOB_SERVICE",

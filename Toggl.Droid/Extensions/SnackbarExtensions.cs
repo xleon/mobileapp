@@ -8,9 +8,9 @@ namespace Toggl.Droid.Extensions
         public static void ShowWithoutBottomInsetPadding(this Snackbar snackbar)
         {
             var snackbarView = (FrameLayout) snackbar.View;
-            snackbarView.DoOnApplyWindowInsets((v, insets, padding) =>
+            snackbarView.DoOnApplyWindowInsets((v, insets, initialSpacing) =>
             {
-                snackbarView.UpdatePadding(bottom: padding.Bottom - insets.SystemWindowInsetBottom);
+                snackbarView.UpdatePadding(bottom: initialSpacing.Padding.Bottom - insets.SystemWindowInsetBottom);
             });
             snackbar.Show();
         }

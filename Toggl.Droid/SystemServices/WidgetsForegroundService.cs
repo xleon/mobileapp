@@ -7,16 +7,16 @@ using Android.Content;
 using AndroidX.Core.App;
 using Toggl.Core;
 using Toggl.Core.Analytics;
+using Toggl.Core.Exceptions;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Droid.Helper;
 using Toggl.Droid.Widgets;
-using static Toggl.Droid.Services.JobServicesConstants;
+using static Toggl.Droid.SystemServices.JobServicesConstants;
 using static Toggl.Droid.Helper.NotificationsConstants;
 using static Toggl.Droid.Widgets.WidgetsConstants;
-using Toggl.Core.Exceptions;
 
-namespace Toggl.Droid.Services
+namespace Toggl.Droid.SystemServices
 {
     [Service(Permission = "android.permission.BIND_JOB_SERVICE", Exported = true)]
     public sealed class WidgetsForegroundService : IntentService

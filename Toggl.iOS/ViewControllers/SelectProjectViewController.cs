@@ -12,6 +12,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class SelectProjectViewController : ReactiveViewController<SelectProjectViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         public SelectProjectViewController(SelectProjectViewModel viewModel)
             : base(viewModel, nameof(SelectProjectViewController))
         {

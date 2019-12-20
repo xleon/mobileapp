@@ -1646,4 +1646,32 @@ No worries. Create a new workspace to continue.</value>
         <value>Continue timer</value>
         <comment>Siri invocation phrase to continue a time entry/timer</comment>
     </data>
+    <data name="StopRunningTimeEntry" xml:space="preserve">
+        <value>Stop running time entry</value>
+        <comment>Stop the running time entry</comment>
+    </data>
+    <data name="EditRunningTimeEntry" xml:space="preserve">
+        <value>Edit running time entry</value>
+        <comment>Edit the running time entry</comment>
+    </data>
+    <data name="Main" xml:space="preserve">
+        <value>Main</value>
+        <comment>The title of the main tab</comment>
+    </data>
+    <data name="Sync" xml:space="preserve">
+        <value>Sync</value>
+        <comment>Start syncing</comment>
+    </data>
+    <data name="DateRange" xml:space="preserve">
+        <value>Date range</value>
+        <comment>Date range in reports</comment>
+    </data>
+    <data name="Previous" xml:space="preserve">
+        <value>Previous</value>
+        <comment>The word `Previous` in the context of navigation</comment>
+    </data>
+    <data name="Next" xml:space="preserve">
+        <value>Next</value>
+        <comment>The word `Next` in the context of navigation</comment>
+    </data>
 </root>

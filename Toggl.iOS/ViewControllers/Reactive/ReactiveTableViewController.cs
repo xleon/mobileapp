@@ -28,6 +28,7 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
             ViewModel?.AttachView(this);
+            ConfigureKeyCommands();
         }
 
         public override void ViewWillAppear(bool animated)
@@ -96,5 +97,10 @@ namespace Toggl.iOS.ViewControllers
 
         public IObservable<string> GetGoogleToken()
             => throw new InvalidOperationException();
+
+
+        protected virtual void ConfigureKeyCommands()
+        {
+        }
     }
 }

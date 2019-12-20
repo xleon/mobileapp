@@ -55,7 +55,7 @@ namespace Toggl.Shared
             => hasValue == other.hasValue
             && EqualityComparer<T>.Default.Equals(value, other.value);
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => obj is Option<T> other && Equals(other);
 
         public override int GetHashCode()

@@ -10,7 +10,7 @@ namespace Toggl.Shared.Extensions
 {
     public sealed class ViewAction : RxAction<Unit, Unit>
     {
-        private ViewAction(Func<IObservable<Unit>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf)
+        private ViewAction(Func<IObservable<Unit>> workFactory, IScheduler mainScheduler, IObservable<bool>? enabledIf)
             : base(_ => workFactory(), mainScheduler, enabledIf)
         {
         }
@@ -21,7 +21,7 @@ namespace Toggl.Shared.Extensions
         public IObservable<Unit> ExecuteWithCompletion()
             => ExecuteWithCompletion(Unit.Default);
 
-        public static ViewAction FromAction(Action action, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        public static ViewAction FromAction(Action action, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
         {
             IObservable<Unit> workFactory()
                 => Observable.Create<Unit>(observer =>
@@ -34,7 +34,7 @@ namespace Toggl.Shared.Extensions
             return new ViewAction(workFactory, mainScheduler, enabledIf);
         }
 
-        public static ViewAction FromAsync(Func<Task> asyncAction, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        public static ViewAction FromAsync(Func<Task> asyncAction, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
         {
             IObservable<Unit> workFactory()
                 => asyncAction().ToObservable();
@@ -42,7 +42,7 @@ namespace Toggl.Shared.Extensions
             return new ViewAction(workFactory, mainScheduler, enabledIf);
         }
 
-        public static ViewAction FromObservable(Func<IObservable<Unit>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        public static ViewAction FromObservable(Func<IObservable<Unit>> workFactory, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
             => new ViewAction(workFactory, mainScheduler, enabledIf);
     }
 

@@ -24,6 +24,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public partial class EditTimeEntryViewController : KeyboardAwareViewController<EditTimeEntryViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         private const float nonScrollableContentHeight = 116f;
         private const double preferredIpadHeight = 228;
 

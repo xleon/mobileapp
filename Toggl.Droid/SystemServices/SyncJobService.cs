@@ -3,10 +3,9 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.App.Job;
-using Toggl.Core.Extensions;
-using static Toggl.Droid.Services.JobServicesConstants;
+using static Toggl.Droid.SystemServices.JobServicesConstants;
 
-namespace Toggl.Droid.Services
+namespace Toggl.Droid.SystemServices
 {
     [Service(
         Name = "com.toggl.giskard.SyncJobService",

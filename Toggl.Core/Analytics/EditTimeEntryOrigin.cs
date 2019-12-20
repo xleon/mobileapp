@@ -5,6 +5,7 @@
         RunningTimeEntryCard,
         SingleTimeEntry,
         GroupHeader,
-        GroupTimeEntry
+        GroupTimeEntry,
+        KeyboardShortcut
     }
 }
