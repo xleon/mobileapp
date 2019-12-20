@@ -91,16 +91,14 @@ namespace Toggl.Shared.Extensions
             => collection.Count == otherCollection.Count
                && collection.Except(otherCollection).None();
 
-        public static bool SetEquals<T>(this IEnumerable<T> first, IEnumerable<T> second, IEqualityComparer<T> comparer = null)
+        public static bool SetEquals<T>(this IEnumerable<T> first, IEnumerable<T> second, IEqualityComparer<T>? comparer = null)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            comparer = comparer ?? EqualityComparer<T>.Default;
-
-            var hashSet = new HashSet<T>(first, comparer);
+            var hashSet = new HashSet<T>(first, comparer ?? EqualityComparer<T>.Default);
 
             return hashSet.SetEquals(second);
         }
