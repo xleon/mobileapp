@@ -58,7 +58,9 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.FilterText
-                .Subscribe(TextField.Rx().TextObserver())
+                .Where(string.IsNullOrEmpty)
+                .SelectUnit()
+                .Subscribe(_ => TextField.Text = "")
                 .DisposedBy(DisposeBag);
 
             CloseButton.Rx().Tap()

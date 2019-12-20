@@ -8,7 +8,7 @@ namespace Toggl.iOS.Extensions
     {
         public static void RejectAutocorrect(this UITextView textView, UIResponder scratchView)
         {
-            var originalText = textView.Text;
+            var originalText = textView.AttributedText;
             NSRange originalRange = textView.SelectedRange;
             CGPoint originalOffset = textView.ContentOffset;
 
@@ -18,10 +18,10 @@ namespace Toggl.iOS.Extensions
             textView.BecomeFirstResponder();
 
             // now throw away what the autocorrect changed in the text view (if anything)
-            string finalText = textView.Text;
+            var finalText = textView.AttributedText;
             if (originalText != finalText)
             {
-                textView.Text = originalText;
+                textView.AttributedText = originalText;
                 textView.SelectedRange = originalRange;
                 textView.SetContentOffset(originalOffset, false);
             }
