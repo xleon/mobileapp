@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Security.Policy;
 using System.Threading;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Suggestions;
@@ -25,6 +26,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class StartTimeEntryViewController : KeyboardAwareViewController<StartTimeEntryViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         private const double desiredIpadHeight = 360;
 
         private bool isUpdatingDescriptionField;
@@ -208,7 +211,7 @@ namespace Toggl.iOS.ViewControllers
         private void onTextFieldInfo(TextFieldInfo textFieldInfo)
         {
             // When the user adds a token, then the cursor will be in an empty Text span. This is also
-            // true when the description is totally empty, so we have to take care of this special case.            
+            // true when the description is totally empty, so we have to take care of this special case.
             var likelyJustAddedToken =
                 textFieldInfo.Spans.Count > 1
                     && textFieldInfo.GetSpanWithCurrentTextCursor()?.Text.Length == 0;

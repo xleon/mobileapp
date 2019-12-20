@@ -99,13 +99,7 @@ namespace Toggl.Shared {
                 return ResourceManager.GetString("SignUpTitle", resourceCulture);
             }
         }
-
-        public static string NoRunningTimeEntry {
-            get {
-                return ResourceManager.GetString("NoRunningTimeEntry", resourceCulture);
-            }
-        }
-
+        
         public static string LoginForgotPassword {
             get {
                 return ResourceManager.GetString("LoginForgotPassword", resourceCulture);
@@ -1624,12 +1618,6 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string WidgetLogInToTrackTime {
-            get {
-                return ResourceManager.GetString("WidgetLogInToTrackTime", resourceCulture);
-            }
-        }
-        
         public static string WidgetApiError {
             get {
                 return ResourceManager.GetString("WidgetApiError", resourceCulture);
@@ -1645,6 +1633,12 @@ namespace Toggl.Shared {
         public static string WidgetGenericError {
             get {
                 return ResourceManager.GetString("WidgetGenericError", resourceCulture);
+            }
+        }
+        
+        public static string NoRunningTimeEntry {
+            get {
+                return ResourceManager.GetString("NoRunningTimeEntry", resourceCulture);
             }
         }
         
@@ -2212,24 +2206,6 @@ namespace Toggl.Shared {
             }
         }
         
-        public static string Download {
-            get {
-                return ResourceManager.GetString("Download", resourceCulture);
-            }
-        }
-        
-        public static string CantOpenWorkflowTitle {
-            get {
-                return ResourceManager.GetString("CantOpenWorkflowTitle", resourceCulture);
-            }
-        }
-        
-        public static string CantOpenWorkflowDescription {
-            get {
-                return ResourceManager.GetString("CantOpenWorkflowDescription", resourceCulture);
-            }
-        }
-        
         public static string StartTimerInvocationPhrase {
             get {
                 return ResourceManager.GetString("StartTimerInvocationPhrase", resourceCulture);
@@ -2251,6 +2227,48 @@ namespace Toggl.Shared {
         public static string ContinueTimerInvocationPhrase {
             get {
                 return ResourceManager.GetString("ContinueTimerInvocationPhrase", resourceCulture);
+            }
+        }
+        
+        public static string StopRunningTimeEntry {
+            get {
+                return ResourceManager.GetString("StopRunningTimeEntry", resourceCulture);
+            }
+        }
+        
+        public static string EditRunningTimeEntry {
+            get {
+                return ResourceManager.GetString("EditRunningTimeEntry", resourceCulture);
+            }
+        }
+        
+        public static string Main {
+            get {
+                return ResourceManager.GetString("Main", resourceCulture);
+            }
+        }
+        
+        public static string Sync {
+            get {
+                return ResourceManager.GetString("Sync", resourceCulture);
+            }
+        }
+        
+        public static string DateRange {
+            get {
+                return ResourceManager.GetString("DateRange", resourceCulture);
+            }
+        }
+        
+        public static string Previous {
+            get {
+                return ResourceManager.GetString("Previous", resourceCulture);
+            }
+        }
+        
+        public static string Next {
+            get {
+                return ResourceManager.GetString("Next", resourceCulture);
             }
         }
     }

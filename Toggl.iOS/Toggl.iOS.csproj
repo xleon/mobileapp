@@ -1539,9 +1539,25 @@
     <Compile Include="Startup\IOSSchedulerProvider.cs" />
     <Compile Include="Extensions\AnimationExtensions.cs" />
     <Compile Include="Transformations\ProjectTaskClientToAttributedString.cs" />
+    <Compile Include="ViewControllers\Calendar\CalendarViewController.KeyCommands.cs">
+      <DependentUpon>CalendarViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\Common\SelectorViewController.cs" />
+    <Compile Include="ViewControllers\Common\SelectorViewController.KeyCommands.cs" />
+    <Compile Include="ViewControllers\EditProjectViewController.KeyCommands.cs">
+      <DependentUpon>EditProjectViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\EditTimeEntryViewController.KeyCommands.cs">
+      <DependentUpon>EditTimeEntryViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\MainViewController.KeyCommands.cs">
+      <DependentUpon>MainViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.DialogProvider.cs">
+      <DependentUpon>ReactiveTableViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.KeyCommands.cs">
       <DependentUpon>ReactiveTableViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.PermissionsHandler.cs">
@@ -1554,8 +1570,14 @@
     <Compile Include="ViewControllers\Reactive\ReactiveViewController.GoogleTokenProvider.cs">
       <DependentUpon>ReactiveViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\Reactive\ReactiveViewController.KeyCommands.cs">
+      <DependentUpon>ReactiveViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\Reactive\ReactiveViewController.PermissionsHandler.cs">
       <DependentUpon>ReactiveViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\ReportsViewController.KeyCommands.cs">
+      <DependentUpon>ReportsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\Settings\Models\AnnotationRow.cs" />
     <Compile Include="ViewControllers\Settings\Models\ButtonRow.cs" />
@@ -1573,6 +1595,9 @@
       <DependentUpon>SiriShortcutsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\Settings\Siri\SiriShortcutViewModel.cs" />
+    <Compile Include="ViewControllers\StartTimeEntryViewController.KeyCommands.cs">
+      <DependentUpon>StartTimeEntryViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\SyncFailuresViewController.cs" />
     <Compile Include="ViewSources\CalendarWeeklyViewDayCollectionViewSource.cs" />
     <Compile Include="ViewSources\Generic\CollectionView\ReloadCollectionViewSource.cs" />

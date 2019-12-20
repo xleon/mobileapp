@@ -184,23 +184,6 @@ namespace Toggl.iOS.ViewControllers
                 UserActivity = userActivity;
                 UserActivity.BecomeCurrent();
             }
-
-            void toggleCalendar()
-            {
-                if (calendarIsVisible)
-                {
-                    HideCalendar();
-                    return;
-                }
-
-                if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact)
-                {
-                    ShowCalendar();
-                    return;
-                }
-
-                ShowPopoverCalendar();
-            }
         }
 
         public override void ViewDidAppear(bool animated)
@@ -367,6 +350,23 @@ namespace Toggl.iOS.ViewControllers
         private void updateWorkspaceButtonInsets(bool workspacesButtonIsShown)
         {
             source.UpdateContentInset(workspacesButtonIsShown);
+        }
+
+        private void toggleCalendar()
+        {
+            if (calendarIsVisible)
+            {
+                HideCalendar();
+                return;
+            }
+
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact)
+            {
+                ShowCalendar();
+                return;
+            }
+
+            ShowPopoverCalendar();
         }
     }
 }

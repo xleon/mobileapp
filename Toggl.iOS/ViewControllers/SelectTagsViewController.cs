@@ -13,6 +13,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class SelectTagsViewController : ReactiveViewController<SelectTagsViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         public SelectTagsViewController(SelectTagsViewModel viewModel)
             : base(viewModel, nameof(SelectTagsViewController))
         {
