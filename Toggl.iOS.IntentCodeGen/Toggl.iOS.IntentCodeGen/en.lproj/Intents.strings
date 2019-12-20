@@ -34,7 +34,7 @@
 
 "A6lrEf" = "in ${workspace}";
 
-"ArvZvi" = "Start timer";
+"ArvZvi" = "Start timer: ${entryDescription}";
 
 "C2Ujo0" = "Log in to use this shortcut.";
 
@@ -66,7 +66,7 @@
 
 "HVyNMs" = "App data is outdated.";
 
-"IUEfYE" = "Start timer";
+"IUEfYE" = "Start timer: ${entryDescription}";
 
 "JErccw" = "Start timer from clipboard";
 
@@ -108,7 +108,7 @@
 
 "ciMjmD" = "in ${workspace}";
 
-"dZOAcx" = "Start timer";
+"dZOAcx" = "Start timer: ${entryDescription}";
 
 "ftAUTw" = "Start timer from clipboard";
 
@@ -144,7 +144,7 @@
 
 "sC56D6" = "Log in to use this shortcut.";
 
-"tjn3qS" = "Start timer";
+"tjn3qS" = "Start timer: ${entryDescription}";
 
 "ttEh92" = "Log in to use this shortcut.";
 
@@ -154,7 +154,7 @@
 
 "vvtqdG" = "Show report";
 
-"xGukxu" = "Start timer";
+"xGukxu" = "Start timer: ${entryDescription}";
 
 "yhKeN0" = "App data is outdated.";
 
