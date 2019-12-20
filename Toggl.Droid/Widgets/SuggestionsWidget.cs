@@ -2,7 +2,7 @@ using Android.App;
 using Android.Appwidget;
 using Android.Content;
 using Android.OS;
-using Toggl.Droid.Widgets.Services;
+using Toggl.Droid.SystemServices;
 
 namespace Toggl.Droid.Widgets
 {

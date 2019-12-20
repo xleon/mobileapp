@@ -1,10 +1,11 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content;
 using AndroidX.Core.App;
+using Java.Lang;
 using Toggl.Droid.Extensions;
-using static Toggl.Droid.Services.JobServicesConstants;
+using static Toggl.Droid.SystemServices.JobServicesConstants;
 
-namespace Toggl.Droid.Widgets.Services
+namespace Toggl.Droid.SystemServices
 {
     [Service(Permission = "android.permission.BIND_JOB_SERVICE", Exported = true)]
     public sealed class WidgetsAnalyticsService : JobIntentService
@@ -26,18 +27,26 @@ namespace Toggl.Droid.Widgets.Services
 
         protected override void OnHandleWork(Intent intent)
         {
-            var action = intent.Action;
-            switch (action)
+            try
             {
-                case TimerWidgetInstallAction:
-                    handleTrackTimerWidgetInstallState(intent);
-                    break;
-                case TimerWidgetResizeAction:
-                    handleTrackTimerWidgetResize(intent);
-                    break;
-                case SuggestionsWidgetInstallAction:
-                    handleTrackSuggestionsWidgetInstallState(intent);
-                    break;
+                var action = intent.Action;
+                switch (action)
+                {
+                    case TimerWidgetInstallAction:
+                        handleTrackTimerWidgetInstallState(intent);
+                        break;
+                    case TimerWidgetResizeAction:
+                        handleTrackTimerWidgetResize(intent);
+                        break;
+                    case SuggestionsWidgetInstallAction:
+                        handleTrackSuggestionsWidgetInstallState(intent);
+                        break;
+                }
+            }
+            catch (SecurityException timedOut)
+            {
+                //Nothing, if the services times out, we are not doing anything
+                //Other exceptions should crash the app/be reported
             }
         }
 

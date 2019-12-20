@@ -1,13 +1,11 @@
 using System;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Android.App;
 using Firebase.Iid;
-using Toggl.Core.Extensions;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Droid.Services
+namespace Toggl.Droid.SystemServices
 {
     [Service]
     [IntentFilter(new[] { "com.google.firebase.INSTANCE_ID_EVENT" })]

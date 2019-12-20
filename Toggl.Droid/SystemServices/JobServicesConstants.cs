@@ -1,4 +1,4 @@
-namespace Toggl.Droid.Services
+namespace Toggl.Droid.SystemServices
 {
     public static class JobServicesConstants
     {
