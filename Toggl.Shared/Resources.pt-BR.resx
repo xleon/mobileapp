@@ -856,7 +856,7 @@ Use-as para marcar seus registros de tempo com palavras-chave.</value>
   <data name="FeedbackFieldPlaceholder" xml:space="preserve">
     <value>Conte-nos o que você está achando do app. Use esse espaço para dar feedback e fazer perguntas.
 
-PS. Nosso suporte atualmente só atende em inglês. Nos desculpamos por qualquer inconvêniencia.</value>
+PS. Nosso suporte atualmente só atende em inglês. Nos desculpamos por qualquer inconvêniencia!</value>
   </data>
   <data name="ArchivedProjectDecorator" xml:space="preserve">
     <value>(arquivado)</value>
@@ -893,5 +893,149 @@ PS. Nosso suporte atualmente só atende em inglês. Nos desculpamos por qualquer
   </data>
   <data name="DeleteThisTimeEntry" xml:space="preserve">
     <value>Deletar esse registro de tempo?</value>
+  </data>
+  <data name="ClockedHours" xml:space="preserve">
+    <value>Horas registradas</value>
+  </data>
+  <data name="CalendarCopyEventToTimeEntry" xml:space="preserve">
+    <value>Copiar como registro de tempo</value>
+  </data>
+  <data name="AppOutdatedMessage" xml:space="preserve">
+    <value>Parece que você não atualiza o app há algum tempo...
+Por favor atualize o app para continuar.</value>
+  </data>
+  <data name="AddProjectBubbleText" xml:space="preserve">
+    <value>Adicione projetos e tags</value>
+  </data>
+  <data name="AddProjectTask" xml:space="preserve">
+    <value>Adicionar projeto/tarefa</value>
+  </data>
+  <data name="AddTags" xml:space="preserve">
+    <value>Adicionar tags</value>
+  </data>
+  <data name="ContactUsSomethingWentWrongTryAgain" xml:space="preserve">
+    <value>Algo deu errado. Por favor, tente novamente</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continuar</value>
+  </data>
+  <data name="ContinueTimerInvocationPhrase" xml:space="preserve">
+    <value>Continuar registro</value>
+  </data>
+  <data name="CountryOfResidence" xml:space="preserve">
+    <value>País de residência</value>
+  </data>
+  <data name="CreateNewWorkspace" xml:space="preserve">
+    <value>Criar um novo workspace</value>
+  </data>
+  <data name="CurrentlyRunningTimeEntry" xml:space="preserve">
+    <value>Registro de tempo ativo</value>
+  </data>
+  <data name="DateAndTime" xml:space="preserve">
+    <value>Data e tempo</value>
+  </data>
+  <data name="DateFormat" xml:space="preserve">
+    <value>Formatação de datas</value>
+  </data>
+  <data name="DefaultWorkspace" xml:space="preserve">
+    <value>Workspace padrão</value>
+  </data>
+  <data name="DifferentWorkspaceAlertTitle" xml:space="preserve">
+    <value>Você selecionou um projeto de outro workspace.</value>
+  </data>
+  <data name="DiscardMessage" xml:space="preserve">
+    <value>Descartar mensagem?</value>
+  </data>
+  <data name="Display" xml:space="preserve">
+    <value>Exibição</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Concluir</value>
+  </data>
+  <data name="DoNotHaveAnAccountWithQuestionMark" xml:space="preserve">
+    <value>Não possui uma conta?</value>
+  </data>
+  <data name="DurationFormat" xml:space="preserve">
+    <value>Formatação da duração</value>
+  </data>
+  <data name="DurationTooLong" xml:space="preserve">
+    <value>A duração não pode exceder 999 horas!</value>
+  </data>
+  <data name="EditRunningTimeEntry" xml:space="preserve">
+    <value>Editar registro de tempo ativo</value>
+  </data>
+  <data name="EmptyProjectText" xml:space="preserve">
+    <value>Seus projetos aparecerão aqui.
+Use-os para categorizar o seu tempo.</value>
+  </data>
+  <data name="GenericInternetConnectionErrorMessage" xml:space="preserve">
+    <value>Sem conexão a internet. Por favor, tente novamente.</value>
+  </data>
+  <data name="HasTags" xml:space="preserve">
+    <value>Possui tags</value>
+  </data>
+  <data name="IdleTimerNotification" xml:space="preserve">
+    <value>Em que você está trabalhando?</value>
+  </data>
+  <data name="InaccessibleTimeEntryErrorMessage" xml:space="preserve">
+    <value>Esse registro de tempo pertence a um workspace a qual você não possui mais acesso e, portanto, não pode ser sincronizado. Mova-o para um workspace diferente mudando o projeto ou delete-o.</value>
+  </data>
+  <data name="FirstDayOfTheWeek" xml:space="preserve">
+    <value>Primerio dia da semana</value>
+  </data>
+  <data name="LinkCalendarsMessage" xml:space="preserve">
+    <value>Veja os eventos do seu calendário no Toggl e transforme-os em registros de tempo de forma prática</value>
+  </data>
+  <data name="LogEmptyStateText" xml:space="preserve">
+    <value>Parece que você não possui registros de tempo recentes.
+Comece a marcar seu tempo e os registros mais usados aparecerão aqui.</value>
+  </data>
+  <data name="LoggingOutSecurely" xml:space="preserve">
+    <value>Saindo do app de forma segura...</value>
+  </data>
+  <data name="ManualMode" xml:space="preserve">
+    <value>Modo manual</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Próximo</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Outros</value>
+  </data>
+  <data name="NoRunningTimeEntry" xml:space="preserve">
+    <value>Nenhum registro de tempo ativo</value>
+  </data>
+  <data name="NoTagsInfoMessage" xml:space="preserve">
+    <value>Adicione palavras-chave aos registros de tempo com # tags.</value>
+  </data>
+  <data name="NoProjectsInfoMessage" xml:space="preserve">
+    <value>Crie um projeto @ e categorize seus registros de tempo.</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Anterior</value>
+  </data>
+  <data name="ReportsEmptyStateDescription" xml:space="preserve">
+    <value>Você não possui registros de tempo para o periodo selecionado.</value>
+  </data>
+  <data name="SearchObject" xml:space="preserve">
+    <value>Buscar {0}</value>
+  </data>
+  <data name="SelectDefaultWorkspaceDescription" xml:space="preserve">
+    <value>Seu tempo será registrado automaticamente nesse workspace. Você pode mudar isso mais tarde nas configuração.</value>
+  </data>
+  <data name="SelectWorkspace" xml:space="preserve">
+    <value>Selecione o workspace</value>
+  </data>
+  <data name="ShowAllTimEntries" xml:space="preserve">
+    <value>Mostrar todos registros de tempo</value>
+  </data>
+  <data name="StopRunningTimeEntry" xml:space="preserve">
+    <value>Parar registro de tempo ativo</value>
+  </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Começar sincronização</value>
+  </data>
+  <data name="Timer" xml:space="preserve">
+    <value>Registros</value>
   </data>
 </root>
