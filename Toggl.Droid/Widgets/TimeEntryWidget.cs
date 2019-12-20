@@ -6,7 +6,7 @@ using Toggl.Droid.SystemServices;
 
 namespace Toggl.Droid.Widgets
 {
-    [BroadcastReceiver(Label = "Toggl Time Entry Widget", Exported = true)]
+    [BroadcastReceiver(Label = "@string/running_time_entry", Exported = true)]
     [IntentFilter(new string[] { AppWidgetManager.ActionAppwidgetUpdate })]
     [MetaData("android.appwidget.provider", Resource = "@xml/timeentrywidgetprovider")]
     public class TimeEntryWidget : AppWidgetProvider

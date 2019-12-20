@@ -6,7 +6,7 @@ using Toggl.Droid.SystemServices;
 
 namespace Toggl.Droid.Widgets
 {
-    [BroadcastReceiver(Label = "Toggl Suggestions Widget", Exported = true)]
+    [BroadcastReceiver(Label = "@string/suggestions", Exported = true)]
     [IntentFilter(new string[] { AppWidgetManager.ActionAppwidgetUpdate })]
     [MetaData("android.appwidget.provider", Resource = "@xml/suggestionswidgetprovider")]
     public class SuggestionsWidget : AppWidgetProvider
