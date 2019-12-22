@@ -2,7 +2,7 @@ using Toggl.Shared;
 
 namespace Toggl.Core.Models
 {
-    public enum ReportPeriod
+    public enum DateRangePeriod
     {
         Unknown = 0,
         Today,
@@ -15,20 +15,20 @@ namespace Toggl.Core.Models
         LastYear
     }
 
-    public static class ReportPeriodExtensions
+    public static class DateRangePeriodExtensions
     {
-        public static string ToHumanReadableString(this ReportPeriod period)
+        public static string ToHumanReadableString(this DateRangePeriod period)
         {
             return period switch
             {
-                ReportPeriod.LastMonth => Resources.LastMonth,
-                ReportPeriod.LastWeek => Resources.LastWeek,
-                ReportPeriod.Yesterday => Resources.Yesterday,
-                ReportPeriod.Today => Resources.Today,
-                ReportPeriod.ThisWeek => Resources.ThisWeek,
-                ReportPeriod.ThisMonth => Resources.ThisMonth,
-                ReportPeriod.ThisYear => Resources.ThisYear,
-                ReportPeriod.LastYear => Resources.LastYear,
+                DateRangePeriod.LastMonth => Resources.LastMonth,
+                DateRangePeriod.LastWeek => Resources.LastWeek,
+                DateRangePeriod.Yesterday => Resources.Yesterday,
+                DateRangePeriod.Today => Resources.Today,
+                DateRangePeriod.ThisWeek => Resources.ThisWeek,
+                DateRangePeriod.ThisMonth => Resources.ThisMonth,
+                DateRangePeriod.ThisYear => Resources.ThisYear,
+                DateRangePeriod.LastYear => Resources.LastYear,
                 _ => Resources.Unknown,
             };
         }

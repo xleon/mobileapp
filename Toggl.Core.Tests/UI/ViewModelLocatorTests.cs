@@ -73,7 +73,7 @@ namespace Toggl.Core.Tests.UI
                 MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>(),
                 MockUpdateRemoteConfigCacheService = Substitute.For<IUpdateRemoteConfigCacheService>(),
                 MockWidgetsService = Substitute.For<IWidgetsService>(),
-                MockCalendarShortcutsService = new MockCalendarShortcutsService()
+                MockDateRangeShortcutsService = new MockDateRangeShortcutsService()
             };
 
             container.MockLicenseProvider.GetAppLicenses().Returns(new Dictionary<string, string>());

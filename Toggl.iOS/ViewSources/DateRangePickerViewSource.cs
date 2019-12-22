@@ -1,12 +1,9 @@
 ﻿using Foundation;
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.DateRangePicker;
-using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.iOS.Views;
 using UIKit;
 
@@ -14,7 +11,7 @@ namespace Toggl.iOS.ViewSources
 {
     public sealed class DateRangePickerViewSource : UICollectionViewSource
     {
-        private const string cellIdentifier = nameof(ReportsCalendarViewCell);
+        private const string cellIdentifier = nameof(DateRangePickerCell);
 
         private readonly UICollectionView collectionView;
         private readonly ISubject<DateRangePickerMonthInfo> currentMonthSubject = new Subject<DateRangePickerMonthInfo>();
@@ -30,7 +27,7 @@ namespace Toggl.iOS.ViewSources
         {
             this.collectionView = collectionView;
 
-            collectionView.RegisterNibForCell(ReportsCalendarViewCell.Nib, cellIdentifier);
+            collectionView.RegisterNibForCell(DateRangePickerCell.Nib, cellIdentifier);
 
             DayTaps = dayTaps.AsObservable();
             CurrentMonthObservable = currentMonthSubject.AsObservable().DistinctUntilChanged();
@@ -49,7 +46,7 @@ namespace Toggl.iOS.ViewSources
                 month.IsDateTheLastSelectedDate(date),
                 month.IsSelectionPartial);
 
-            var cell = collectionView.DequeueReusableCell(cellIdentifier, indexPath) as ReportsCalendarViewCell;
+            var cell = collectionView.DequeueReusableCell(cellIdentifier, indexPath) as DateRangePickerCell;
 
             cell.Item = data;
             return cell;

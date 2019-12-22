@@ -40,12 +40,12 @@ namespace Toggl.Droid.Fragments
             monthsPager.Adapter = adapter;
 
             var shortcutsAdapter = new SimpleAdapter<Shortcut>(
-                Resource.Layout.ReportsCalendarShortcutCell,
+                Resource.Layout.DateRangePickerShortcutCell,
                 view => new DateRangePickerShortcutViewHolder(view, Context));
 
             shortcutsAdapter.ItemTapObservable
-                .Select(shortcut => shortcut.ReportPeriod)
-                .Subscribe(ViewModel.SetReportPeriod.Inputs)
+                .Select(shortcut => shortcut.DateRangePeriod)
+                .Subscribe(ViewModel.SetDateRangePeriod.Inputs)
                 .DisposedBy(DisposeBag);
 
             ViewModel.Shortcuts

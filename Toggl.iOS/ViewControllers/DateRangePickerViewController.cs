@@ -20,7 +20,7 @@ namespace Toggl.iOS.ViewControllers
         private CGSize popoverPreferedSize = new CGSize(319, 397);
 
         private DateRangePickerViewSource calendarCollectionViewSource;
-        private ReportsCalendarCollectionViewLayout calendarCollectionViewLayout;
+        private DateRangePickerCollectionViewLayout calendarCollectionViewLayout;
 
         private bool firstLayoutNotDone = true;
 
@@ -41,7 +41,7 @@ namespace Toggl.iOS.ViewControllers
             setupDayHeaders(ViewModel.WeekDaysLabels);
 
             calendarCollectionViewSource = new DateRangePickerViewSource(CalendarCollectionView);
-            calendarCollectionViewLayout = new ReportsCalendarCollectionViewLayout();
+            calendarCollectionViewLayout = new DateRangePickerCollectionViewLayout();
             CalendarCollectionView.Delegate = calendarCollectionViewSource;
             CalendarCollectionView.DataSource = calendarCollectionViewSource;
             CalendarCollectionView.CollectionViewLayout = calendarCollectionViewLayout;
@@ -69,8 +69,8 @@ namespace Toggl.iOS.ViewControllers
 
             quickSelectCollectionViewSource.ShortcutTaps
                 .Do(updateSiriShortcut)
-                .Select(s => s.ReportPeriod)
-                .Subscribe(ViewModel.SetReportPeriod.Inputs)
+                .Select(s => s.DateRangePeriod)
+                .Subscribe(ViewModel.SetDateRangePeriod.Inputs)
                 .DisposedBy(DisposeBag);
 
             AcceptButton.Rx().Tap()
@@ -130,7 +130,7 @@ namespace Toggl.iOS.ViewControllers
         }
 
         private void updateSiriShortcut(Shortcut shortcut)
-            => IosDependencyContainer.Instance.IntentDonationService.DonateShowReport(shortcut.ReportPeriod);
+            => IosDependencyContainer.Instance.IntentDonationService.DonateShowReport(shortcut.DateRangePeriod);
     }
 }
 

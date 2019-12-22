@@ -6,7 +6,7 @@ using UIKit;
 
 namespace Toggl.iOS
 {
-    public class ReportsCalendarCollectionViewLayout : UICollectionViewLayout
+    public class DateRangePickerCollectionViewLayout : UICollectionViewLayout
     {
         public const float CellHeight = 42;
         private const int columnCount = 7;

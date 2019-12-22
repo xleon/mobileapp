@@ -152,7 +152,7 @@ namespace Toggl.iOS.Services
             donateRelevantShortcuts(shortcut);
         }
 
-        public void DonateShowReport(ReportPeriod period)
+        public void DonateShowReport(DateRangePeriod period)
         {
             if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
                 return;
@@ -160,28 +160,28 @@ namespace Toggl.iOS.Services
             var intent = new ShowReportPeriodIntent();
             switch (period)
             {
-                case ReportPeriod.Today:
+                case DateRangePeriod.Today:
                     intent.Period = ShowReportPeriodReportPeriod.Today;
                     break;
-                case ReportPeriod.Yesterday:
+                case DateRangePeriod.Yesterday:
                     intent.Period = ShowReportPeriodReportPeriod.Yesterday;
                     break;
-                case ReportPeriod.LastWeek:
+                case DateRangePeriod.LastWeek:
                     intent.Period = ShowReportPeriodReportPeriod.LastWeek;
                     break;
-                case ReportPeriod.LastMonth:
+                case DateRangePeriod.LastMonth:
                     intent.Period = ShowReportPeriodReportPeriod.LastMonth;
                     break;
-                case ReportPeriod.ThisMonth:
+                case DateRangePeriod.ThisMonth:
                     intent.Period = ShowReportPeriodReportPeriod.ThisMonth;
                     break;
-                case ReportPeriod.ThisWeek:
+                case DateRangePeriod.ThisWeek:
                     intent.Period = ShowReportPeriodReportPeriod.ThisWeek;
                     break;
-                case ReportPeriod.ThisYear:
+                case DateRangePeriod.ThisYear:
                     intent.Period = ShowReportPeriodReportPeriod.ThisYear;
                     break;
-                case ReportPeriod.Unknown:
+                case DateRangePeriod.Unknown:
                     intent.Period = ShowReportPeriodReportPeriod.Unknown;
                     break;
             }

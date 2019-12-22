@@ -20,7 +20,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Xunit;
 using Toggl.Core.Analytics;
-using ReportPeriod = Toggl.Core.Models.ReportPeriod;
+using DateRangePeriod = Toggl.Core.Models.DateRangePeriod;
 using System.Reactive.Subjects;
 using Toggl.Core.UI.Helper;
 using System.Globalization;
@@ -36,7 +36,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
         {
             private List<MockWorkspace> workspaces;
 
-            protected new ICalendarShortcutsService CalendarShortcutsService { get; private set; } = Substitute.For<ICalendarShortcutsService>();
+            protected new IDateRangeShortcutsService DateRangeShortcutsService { get; private set; } = Substitute.For<IDateRangeShortcutsService>();
 
             protected new ReportsViewModel ViewModel { get; set; }
 
@@ -96,7 +96,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                     .CurrentDateTime
                     .Returns(new DateTimeOffset(2019, 1, 1, 0, 0, 0, TimeSpan.Zero));
 
-                CalendarShortcutsService = new CalendarShortcutsService(DataSource, TimeService);
+                DateRangeShortcutsService = new DateRangeShortcutsService(DataSource, TimeService);
 
                 var totals = new TimeEntriesTotals();
                 InteractorFactory
@@ -125,8 +125,8 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                 DataSource.Preferences.Current.Returns(Observable.Return(preferences));
 
                 NavigationService
-                    .Navigate<DateRangePickerViewModel, Either<ReportPeriod, DateRange>, DateRangeSelectionResult>(
-                        Arg.Any<Either<ReportPeriod, DateRange>>(), Arg.Any<IView>())
+                    .Navigate<DateRangePickerViewModel, Either<DateRangePeriod, DateRange>, DateRangeSelectionResult>(
+                        Arg.Any<Either<DateRangePeriod, DateRange>>(), Arg.Any<IView>())
                     .Returns(new DateRangeSelectionResult(selectedRange, DateRangeSelectionSource.Calendar));
 
                 beforeViewModelCreation?.Invoke();
@@ -144,7 +144,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                     RxActionFactory,
                     AnalyticsService,
                     TimeService,
-                    CalendarShortcutsService);
+                    DateRangeShortcutsService);
         }
 
         public sealed class TheConstructor : ReportsViewModelBaseTest
@@ -159,7 +159,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                 bool useRxActionFactory,
                 bool useAnalyticsService,
                 bool useTimeService,
-                bool useCalendarShortcutsService)
+                bool useDateRangeShortcutsService)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var navigationService = useNavigationService ? NavigationService : null;
@@ -168,7 +168,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
                 var timeService = useTimeService ? TimeService : null;
-                var calendarShortcutsService = useCalendarShortcutsService ? CalendarShortcutsService : null;
+                var dateRangeShortcutsService = useDateRangeShortcutsService ? DateRangeShortcutsService : null;
 
                 Action tryingToConstructWithEmptyParameters = () => new ReportsViewModel(
                     dataSource,
@@ -178,7 +178,7 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                     rxActionFactory,
                     analyticsService,
                     timeService,
-                    calendarShortcutsService);
+                    dateRangeShortcutsService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -459,8 +459,8 @@ namespace Toggl.Core.Tests.UI.ViewModels.Reports
                 ViewModel.SelectTimeRange.Execute();
                 TestScheduler.Start();
 
-                await NavigationService.Received().Navigate<DateRangePickerViewModel, Either<ReportPeriod, DateRange>, DateRangeSelectionResult>(
-                    Arg.Any<Either<ReportPeriod, DateRange>>(), Arg.Any<IView>());
+                await NavigationService.Received().Navigate<DateRangePickerViewModel, Either<DateRangePeriod, DateRange>, DateRangeSelectionResult>(
+                    Arg.Any<Either<DateRangePeriod, DateRange>>(), Arg.Any<IView>());
             }
 
             [Fact, LogIfTooSlow]

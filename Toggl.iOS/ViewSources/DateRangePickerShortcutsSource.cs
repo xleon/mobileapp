@@ -16,7 +16,7 @@ namespace Toggl.iOS.ViewSources
     {
         private const int cellWidth = 96;
         private const int cellHeight = 32;
-        private const string cellIdentifier = nameof(ReportsCalendarQuickSelectViewCell);
+        private const string cellIdentifier = nameof(DateRangePickerShortcutCell);
 
         private readonly ISubject<Shortcut> shortcutTaps = new Subject<Shortcut>();
         private readonly UICollectionView collectionView;
@@ -28,7 +28,7 @@ namespace Toggl.iOS.ViewSources
         {
             Ensure.Argument.IsNotNull(collectionView, nameof(collectionView));
 
-            collectionView.RegisterNibForCell(ReportsCalendarQuickSelectViewCell.Nib, cellIdentifier);
+            collectionView.RegisterNibForCell(DateRangePickerShortcutCell.Nib, cellIdentifier);
             ShortcutTaps = shortcutTaps.AsObservable();
             this.collectionView = collectionView;
         }
@@ -36,7 +36,7 @@ namespace Toggl.iOS.ViewSources
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
             var item = shortcuts[indexPath.Row];
-            var cell = collectionView.DequeueReusableCell(cellIdentifier, indexPath) as ReportsCalendarQuickSelectViewCell;
+            var cell = collectionView.DequeueReusableCell(cellIdentifier, indexPath) as DateRangePickerShortcutCell;
 
             cell.Item = item;
 

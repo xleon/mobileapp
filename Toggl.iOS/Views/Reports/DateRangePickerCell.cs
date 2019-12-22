@@ -1,8 +1,6 @@
 ﻿using Foundation;
 using System;
 using Toggl.Core.UI.Helper;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.iOS.Extensions;
 using UIKit;
 
@@ -37,21 +35,21 @@ namespace Toggl.iOS.Views
         }
     }
 
-    public sealed partial class ReportsCalendarViewCell :
+    public sealed partial class DateRangePickerCell :
         ReactiveCollectionViewCell<DatePickerCellData>
     {
         private const int backgroundCornerRadius = 16;
         private const int todayCornerRadius = 14;
 
-        public static readonly NSString Key = new NSString(nameof(ReportsCalendarViewCell));
+        public static readonly NSString Key = new NSString(nameof(DateRangePickerCell));
         public static readonly UINib Nib;
 
-        static ReportsCalendarViewCell()
+        static DateRangePickerCell()
         {
-            Nib = UINib.FromName(nameof(ReportsCalendarViewCell), NSBundle.MainBundle);
+            Nib = UINib.FromName(nameof(DateRangePickerCell), NSBundle.MainBundle);
         }
 
-        public ReportsCalendarViewCell(IntPtr handle) : base(handle)
+        public DateRangePickerCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }

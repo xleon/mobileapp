@@ -10,11 +10,11 @@ using Toggl.Shared;
 
 namespace Toggl.Core.Tests.Mocks.Services
 {
-    public sealed class MockCalendarShortcutsService : ICalendarShortcutsService
+    public sealed class MockDateRangeShortcutsService : IDateRangeShortcutsService
     {
-        private ICalendarShortcutsService wrappedService;
+        private IDateRangeShortcutsService wrappedService;
 
-        public MockCalendarShortcutsService()
+        public MockDateRangeShortcutsService()
         {
             var dataSource = Substitute.For<ITogglDataSource>();
             var timeService = Substitute.For<ITimeService>();
@@ -25,16 +25,16 @@ namespace Toggl.Core.Tests.Mocks.Services
             var currentTime = new DateTimeOffset(2019, 1, 1, 0, 0, 0, TimeSpan.Zero);
             timeService.CurrentDateTime.Returns(currentTime);
 
-            wrappedService = new CalendarShortcutsService(dataSource, timeService);
+            wrappedService = new DateRangeShortcutsService(dataSource, timeService);
         }
 
-        public CalendarShortcut GetShortcutFrom(ReportPeriod period)
+        public DateRangeShortcut GetShortcutFrom(DateRangePeriod period)
             => wrappedService.GetShortcutFrom(period);
 
-        public CalendarShortcut GetShortcutFrom(DateRange range)
+        public DateRangeShortcut GetShortcutFrom(DateRange range)
             => wrappedService.GetShortcutFrom(range);
 
-        public ImmutableList<CalendarShortcut> Shortcuts
+        public ImmutableList<DateRangeShortcut> Shortcuts
             => wrappedService.Shortcuts;
 
         public void Dispose()

@@ -7,17 +7,17 @@ using static Toggl.Core.UI.ViewModels.DateRangePicker.DateRangePickerViewModel;
 
 namespace Toggl.iOS.Views.Reports
 {
-    public sealed partial class ReportsCalendarQuickSelectViewCell : ReactiveCollectionViewCell<Shortcut>
+    public sealed partial class DateRangePickerShortcutCell : ReactiveCollectionViewCell<Shortcut>
     {
-        public static readonly NSString Key = new NSString(nameof(ReportsCalendarQuickSelectViewCell));
+        public static readonly NSString Key = new NSString(nameof(DateRangePickerShortcutCell));
         public static readonly UINib Nib;
 
-        static ReportsCalendarQuickSelectViewCell()
+        static DateRangePickerShortcutCell()
         {
-            Nib = UINib.FromName(nameof(ReportsCalendarQuickSelectViewCell), NSBundle.MainBundle);
+            Nib = UINib.FromName(nameof(DateRangePickerShortcutCell), NSBundle.MainBundle);
         }
 
-        public ReportsCalendarQuickSelectViewCell(IntPtr handle)
+        public DateRangePickerShortcutCell(IntPtr handle)
             : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.

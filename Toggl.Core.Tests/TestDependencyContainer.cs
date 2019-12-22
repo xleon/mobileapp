@@ -150,8 +150,8 @@ namespace Toggl.Core.UI
         protected override IWidgetsService CreateWidgetsService()
             => MockWidgetsService;
 
-        internal ICalendarShortcutsService MockCalendarShortcutsService { get; set; }
-        protected override ICalendarShortcutsService CreateCalendarShortcutsService()
-            => MockCalendarShortcutsService;
+        internal IDateRangeShortcutsService MockDateRangeShortcutsService { get; set; }
+        protected override IDateRangeShortcutsService CreateDateRangeShortcutsService()
+            => MockDateRangeShortcutsService;
     }
 }

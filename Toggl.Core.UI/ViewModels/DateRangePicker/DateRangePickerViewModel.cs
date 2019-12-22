@@ -14,12 +14,12 @@ using Toggl.Core.UI.Models;
 using SelectionState = Toggl.Shared.Either<System.DateTime, Toggl.Shared.DateRange>;
 using DateRangeSelectionResult = Toggl.Core.UI.ViewModels.DateRangePicker.DateRangePickerViewModel.DateRangeSelectionResult;
 using Toggl.Core.UI.Services;
-using static Toggl.Core.Models.ReportPeriod;
+using static Toggl.Core.Models.DateRangePeriod;
 using static Toggl.Core.Analytics.DateRangeSelectionSource;
 
 namespace Toggl.Core.UI.ViewModels.DateRangePicker
 {
-    public sealed partial class DateRangePickerViewModel : ViewModel<Either<ReportPeriod, DateRange>, DateRangeSelectionResult>
+    public sealed partial class DateRangePickerViewModel : ViewModel<Either<DateRangePeriod, DateRange>, DateRangeSelectionResult>
     {
         private const int daysInWeek = 7;
         private static readonly string[] dayHeaders =
@@ -35,7 +35,7 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
 
         private readonly IInteractorFactory interactorFactory;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly ICalendarShortcutsService calendarShortcutsService;
+        private readonly IDateRangeShortcutsService dateRangeShortcutsService;
 
         private BeginningOfWeek beginningOfWeek;
         private SelectionState selectionState;
@@ -50,7 +50,7 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
 
         public IObservable<DateTime?> LastSelectedDate { get; private set; }
 
-        public RxAction<ReportPeriod, SelectionState> SetReportPeriod { get; }
+        public RxAction<DateRangePeriod, SelectionState> SetDateRangePeriod { get; }
         public RxAction<DateTime, SelectionState> SelectDate { get; }
         public ViewAction Accept { get; }
         public ViewAction Cancel { get; }
@@ -60,26 +60,26 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
             IInteractorFactory interactorFactory,
             IRxActionFactory rxActionFactory,
             ISchedulerProvider schedulerProvider,
-            ICalendarShortcutsService calendarShortcutsService)
+            IDateRangeShortcutsService dateRangeShortcutsService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(calendarShortcutsService, nameof(calendarShortcutsService));
+            Ensure.Argument.IsNotNull(dateRangeShortcutsService, nameof(dateRangeShortcutsService));
 
             this.interactorFactory = interactorFactory;
             this.schedulerProvider = schedulerProvider;
-            this.calendarShortcutsService = calendarShortcutsService;
+            this.dateRangeShortcutsService = dateRangeShortcutsService;
 
             SelectDate = rxActionFactory.FromFunction<DateTime, SelectionState>(selectDate);
-            SetReportPeriod = rxActionFactory.FromFunction<ReportPeriod, SelectionState>(setReportPeriod);
+            SetDateRangePeriod = rxActionFactory.FromFunction<DateRangePeriod, SelectionState>(setDateRangePeriod);
 
             Accept = rxActionFactory.FromAction(accept);
             Cancel = rxActionFactory.FromAction(cancel);
         }
 
-        public override async Task Initialize(Either<ReportPeriod, DateRange> initialSelection)
+        public override async Task Initialize(Either<DateRangePeriod, DateRange> initialSelection)
         {
             beginningOfWeek = await interactorFactory.GetCurrentUser().Execute()
                 .Select(u => u.BeginningOfWeek)
@@ -94,7 +94,7 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
 
             var initialSelectionObservable = Observable.Return(selectionState);
 
-            var selectionChange = Observable.Merge(initialSelectionObservable, SelectDate.Elements, SetReportPeriod.Elements)
+            var selectionChange = Observable.Merge(initialSelectionObservable, SelectDate.Elements, SetDateRangePeriod.Elements)
                 .Do(saveSelectedRange);
 
             Months = selectionChange
@@ -102,7 +102,7 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
                 .AsDriver(ImmutableList<DateRangePickerMonthInfo>.Empty, schedulerProvider);
 
             Shortcuts = selectionChange
-                .Select(reportPeriodFromSelection)
+                .Select(dateRangePeriodFromSelection)
                 .Select(shortcutsFromSelectedPeriod)
                 .AsDriver(shortcutsFromSelectedPeriod(Unknown), schedulerProvider);
 
@@ -111,9 +111,9 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
                 .AsDriver(null, schedulerProvider);
         }
 
-        private DateRange unwrapInitialRange(Either<ReportPeriod, DateRange> initialSelection)
+        private DateRange unwrapInitialRange(Either<DateRangePeriod, DateRange> initialSelection)
             => initialSelection.Match(
-                period => calendarShortcutsService.GetShortcutFrom(period).DateRange,
+                period => dateRangeShortcutsService.GetShortcutFrom(period).DateRange,
                 range => range);
 
         private void saveSelectedRange(SelectionState selection)
@@ -143,14 +143,14 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
             Close(new DateRangeSelectionResult(selectedRange, dateRangeSelectionSource));
         }
 
-        private SelectionState setReportPeriod(ReportPeriod period)
+        private SelectionState setDateRangePeriod(DateRangePeriod period)
         {
-            var selectedShortcut = calendarShortcutsService.GetShortcutFrom(period);
+            var selectedShortcut = dateRangeShortcutsService.GetShortcutFrom(period);
             dateRangeSelectionSource = getSelectionSource(selectedShortcut);
             return SelectionState.WithRight(selectedShortcut.DateRange);
         }
 
-        private DateRangeSelectionSource getSelectionSource(CalendarShortcut selectedShortcut)
+        private DateRangeSelectionSource getSelectionSource(DateRangeShortcut selectedShortcut)
         {
             if (selectedShortcut == null)
                 return DateRangeSelectionSource.Calendar;
@@ -169,13 +169,13 @@ namespace Toggl.Core.UI.ViewModels.DateRangePicker
             };
         }
 
-        private ReportPeriod reportPeriodFromSelection(SelectionState state)
+        private DateRangePeriod dateRangePeriodFromSelection(SelectionState state)
             => state.Match(
-                beginning => ReportPeriod.Unknown,
-                range => calendarShortcutsService.GetShortcutFrom(range)?.Period ?? ReportPeriod.Unknown);
+                beginning => DateRangePeriod.Unknown,
+                range => dateRangeShortcutsService.GetShortcutFrom(range)?.Period ?? DateRangePeriod.Unknown);
 
-        private ImmutableList<Shortcut> shortcutsFromSelectedPeriod(ReportPeriod period)
-            => calendarShortcutsService
+        private ImmutableList<Shortcut> shortcutsFromSelectedPeriod(DateRangePeriod period)
+            => dateRangeShortcutsService
                 .Shortcuts
                 .Select(shortcut => Shortcut.From(shortcut, shortcut.Period == period))
                 .ToImmutableList();

@@ -10,20 +10,20 @@ using System.Linq;
 
 namespace Toggl.Core.UI.Services
 {
-    public partial class CalendarShortcutsService : ICalendarShortcutsService
+    public partial class DateRangeShortcutsService : IDateRangeShortcutsService
     {
         private readonly ITimeService timeService;
         private IDisposable userDisposable;
 
-        public ImmutableList<CalendarShortcut> Shortcuts { get; private set; }
+        public ImmutableList<DateRangeShortcut> Shortcuts { get; private set; }
 
-        public CalendarShortcut GetShortcutFrom(DateRange range)
+        public DateRangeShortcut GetShortcutFrom(DateRange range)
             => Shortcuts.FirstOrDefault(s => s.MatchesDateRange(range));
 
-        public CalendarShortcut GetShortcutFrom(ReportPeriod period)
+        public DateRangeShortcut GetShortcutFrom(DateRangePeriod period)
             => Shortcuts.FirstOrDefault(s => s.Period == period);
 
-        public CalendarShortcutsService(ITogglDataSource dataSource, ITimeService timeService)
+        public DateRangeShortcutsService(ITogglDataSource dataSource, ITimeService timeService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
@@ -53,18 +53,18 @@ namespace Toggl.Core.UI.Services
             Dispose(true);
         }
 
-        private IEnumerable<CalendarShortcut> createShortcuts(BeginningOfWeek beginningOfWeek)
+        private IEnumerable<DateRangeShortcut> createShortcuts(BeginningOfWeek beginningOfWeek)
         {
             var today = timeService.CurrentDateTime.ToLocalTime().Date;
 
-            yield return new TodayCalendarShortcut(today);
-            yield return new YesterdayCalendarShortcut(today);
-            yield return new ThisWeekCalendarShortcut(today, beginningOfWeek);
-            yield return new LastWeekCalendarShortcut(today, beginningOfWeek);
-            yield return new ThisMonthCalendarShortcut(today);
-            yield return new LastMonthCalendarShortcut(today);
-            yield return new ThisYearCalendarShortcut(today);
-            yield return new LastYearCalendarShortcut(today);
+            yield return new TodayDateRangeShortcut(today);
+            yield return new YesterdayDateRangeShortcut(today);
+            yield return new ThisWeekDateRangeShortcut(today, beginningOfWeek);
+            yield return new LastWeekDateRangeShortcut(today, beginningOfWeek);
+            yield return new ThisMonthDateRangeShortcut(today);
+            yield return new LastMonthDateRangeShortcut(today);
+            yield return new ThisYearDateRangeShortcut(today);
+            yield return new LastYearDateRangeShortcut(today);
         }
     }
 }

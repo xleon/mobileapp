@@ -34,7 +34,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     PlatformInfo,
                     WidgetsService,
                     LastTimeUsageStorage,
-                    CalendarShortcutsService
+                    DateRangeShortcutsService
                 );
         }
 
@@ -65,7 +65,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool usePlatformInfo,
                     bool useWidgetsService,
                     bool useLastTimeUsageStorage,
-                    bool useCalendarShortcutsService)
+                    bool useDateRangeShortcutsService)
             {
                 var timeService = useTimeService ? TimeService : null;
                 var dataSource = useDataSource ? DataSource : null;
@@ -89,7 +89,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var platformInfo = usePlatformInfo ? PlatformInfo : null;
                 var widgetsService = useWidgetsService ? WidgetsService : null;
                 var lastTimeUsageStorage = useLastTimeUsageStorage ? LastTimeUsageStorage : null;
-                var calendarShortcutsService = useCalendarShortcutsService ? CalendarShortcutsService : null;
+                var dateRangeShortcutsService = useDateRangeShortcutsService ? DateRangeShortcutsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainTabBarViewModel(
@@ -115,7 +115,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         platformInfo,
                         widgetsService,
                         lastTimeUsageStorage,
-                        calendarShortcutsService
+                        dateRangeShortcutsService
                     );
 
                 tryingToConstructWithEmptyParameters

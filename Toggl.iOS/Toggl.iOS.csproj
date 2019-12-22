@@ -1412,7 +1412,6 @@
     <InterfaceDefinition Include="ViewControllers\SelectClientViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\OutdatedAppViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\TokenResetViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\ReportsViewControllerOld.xib" />
     <InterfaceDefinition Include="Views\Color\ColorSelectionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\ProjectSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\StartTimeEntryEmptyViewCell.xib" />
@@ -1422,11 +1421,8 @@
     <InterfaceDefinition Include="Views\StartTimeEntry\WorkspaceHeaderViewCell.xib" />
     <InterfaceDefinition Include="Views\Suggestions\SuggestionsEmptyViewCell.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\WorkspaceViewCell.xib" />
-    <InterfaceDefinition Include="ViewControllers\ReportsCalendarViewController.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsCalendarViewCell.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsCalendarQuickSelectViewCell.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsLegendViewCell.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsHeaderView.xib" />
+    <InterfaceDefinition Include="Views\Reports\DateRangePickerCell.xib" />
+    <InterfaceDefinition Include="Views\Reports\DateRangePickerShortcutCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\NoEntityInfoViewCell.xib" />
     <InterfaceDefinition Include="Views\Suggestions\SuggestionView.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\SettingsViewController.xib" />
@@ -1468,8 +1464,6 @@
     <InterfaceDefinition Include="Views\StartTimeEntry\ReactiveTaskSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.xib" />
     <InterfaceDefinition Include="Cells\TimeEntriesLog\TimeEntriesLogViewCell.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsOverviewCardView.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsBarChartCardView.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\CreateEntityViewCell.xib" />
     <InterfaceDefinition Include="Views\Settings\SiriShortcutCell.xib" />
     <InterfaceDefinition Include="Views\Settings\CustomSiriShortcutCell.xib" />
@@ -1689,7 +1683,7 @@
     <Compile Include="ViewControllers\SelectClientViewController.designer.cs">
       <DependentUpon>SelectClientViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reports\ReportsCalendarCollectionViewLayout.cs" />
+    <Compile Include="Views\Reports\DateRangePickerCollectionViewLayout.cs" />
     <Compile Include="Views\TextViewWithPlaceholder.cs" />
     <Compile Include="Startup\AppDelegate.cs" />
     <Compile Include="Startup\AppDelegate.Analytics.cs">
@@ -1720,10 +1714,6 @@
     <Compile Include="ViewControllers\LoginViewController.cs" />
     <Compile Include="ViewControllers\LoginViewController.designer.cs">
       <DependentUpon>LoginViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\ReportsViewControllerOld.cs" />
-    <Compile Include="ViewControllers\ReportsViewControllerOld.designer.cs">
-      <DependentUpon>ReportsViewControllerOld.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Color\ColorSelectionViewCell.cs" />
     <Compile Include="Views\Color\ColorSelectionViewCell.designer.cs">
@@ -1764,32 +1754,15 @@
       <DependentUpon>WorkspaceViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\KeyboardAwareViewController.cs" />
-    <Compile Include="ViewControllers\ReportsCalendarViewController.cs" />
-    <Compile Include="ViewControllers\ReportsCalendarViewController.designer.cs">
-      <DependentUpon>ReportsCalendarViewController.cs</DependentUpon>
+    <Compile Include="Views\Reports\DateRangePickerCell.cs" />
+    <Compile Include="Views\Reports\DateRangePickerCell.designer.cs">
+      <DependentUpon>DateRangePickerCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewSources\ReportsCalendarCollectionViewSource.cs" />
-    <Compile Include="Views\Reports\ReportsCalendarViewCell.cs" />
-    <Compile Include="Views\Reports\ReportsCalendarViewCell.designer.cs">
-      <DependentUpon>ReportsCalendarViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewSources\ReportsCalendarQuickSelectCollectionViewSource.cs" />
-    <Compile Include="Views\Reports\ReportsCalendarQuickSelectViewCell.cs" />
-    <Compile Include="Views\Reports\ReportsCalendarQuickSelectViewCell.designer.cs">
-      <DependentUpon>ReportsCalendarQuickSelectViewCell.cs</DependentUpon>
+    <Compile Include="Views\Reports\DateRangePickerShortcutCell.cs" />
+    <Compile Include="Views\Reports\DateRangePickerShortcutCell.designer.cs">
+      <DependentUpon>DateRangePickerShortcutCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\RoundedView.cs" />
-    <Compile Include="Views\Reports\PieChartView.cs" />
-    <Compile Include="Views\Reports\PercentageView.cs" />
-    <Compile Include="Views\Reports\ReportsLegendViewCell.cs" />
-    <Compile Include="Views\Reports\ReportsLegendViewCell.designer.cs">
-      <DependentUpon>ReportsLegendViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Reports\ReportsHeaderView.cs" />
-    <Compile Include="Views\Reports\ReportsHeaderView.designer.cs">
-      <DependentUpon>ReportsHeaderView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewSources\ReportsTableViewSource.cs" />
     <Compile Include="Views\StartTimeEntry\NoEntityInfoViewCell.cs" />
     <Compile Include="Views\StartTimeEntry\NoEntityInfoViewCell.designer.cs">
       <DependentUpon>NoEntityInfoViewCell.cs</DependentUpon>
@@ -1797,7 +1770,6 @@
     <Compile Include="Views\EditDuration\WheelBackgroundView.cs" />
     <Compile Include="Views\EditDuration\BaseWheelView.cs" />
     <Compile Include="Views\EditDuration\WheelForegroundView.cs" />
-    <Compile Include="Views\Reports\LoadingPieChartView.cs" />
     <Compile Include="Views\SpiderOnARopeView.cs" />
     <Compile Include="ApplicationShortcutCreator.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
@@ -2014,15 +1986,6 @@
     <Compile Include="Views\EntityCreation\CreateEntityViewCell.cs" />
     <Compile Include="Views\EntityCreation\CreateEntityViewCell.designer.cs">
       <DependentUpon>CreateEntityViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Reports\ReportsOverviewCardView.cs" />
-    <Compile Include="Views\Reports\ReportsOverviewCardView.designer.cs">
-      <DependentUpon>ReportsOverviewCardView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Cells\BaseReportsCardView.cs" />
-    <Compile Include="Views\Reports\ReportsBarChartCardView.cs" />
-    <Compile Include="Views\Reports\ReportsBarChartCardView.designer.cs">
-      <DependentUpon>ReportsBarChartCardView.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentation\IScrollableToTop.cs" />
     <Compile Include="Views\Settings\SiriShortcutCell.cs" />

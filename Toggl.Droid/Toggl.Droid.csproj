@@ -1196,7 +1196,7 @@
     <AndroidResource Include="Resources\layout\SelectClientActivityCell.axml" />
     <AndroidResource Include="Resources\layout\ReportDonutLegendItem.axml" />
     <AndroidResource Include="Resources\layout\ReportDonutChartDonutElement.axml" />
-    <AndroidResource Include="Resources\layout\ReportsCalendarShortcutCell.axml" />
+    <AndroidResource Include="Resources\layout\DateRangePickerShortcutCell.axml" />
     <AndroidResource Include="Resources\drawable-hdpi\book.png" />
     <AndroidResource Include="Resources\drawable-hdpi\timer.png" />
     <AndroidResource Include="Resources\drawable-mdpi\book.png" />

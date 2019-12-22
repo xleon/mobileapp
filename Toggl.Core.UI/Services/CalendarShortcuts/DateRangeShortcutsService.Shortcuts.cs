@@ -6,13 +6,13 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.Services
 {
-    public partial class CalendarShortcutsService
+    public partial class DateRangeShortcutsService
     {
-        private class TodayCalendarShortcut : CalendarShortcut
+        private class TodayDateRangeShortcut : DateRangeShortcut
         {
-            public TodayCalendarShortcut(DateTime today)
+            public TodayDateRangeShortcut(DateTime today)
             {
-                Period = ReportPeriod.Today;
+                Period = DateRangePeriod.Today;
 
                 DateRange = new DateRange(today, today);
 
@@ -20,100 +20,100 @@ namespace Toggl.Core.UI.Services
             }
         }
 
-        private class YesterdayCalendarShortcut : CalendarShortcut
+        private class YesterdayDateRangeShortcut : DateRangeShortcut
         {
-            public YesterdayCalendarShortcut(DateTime today)
+            public YesterdayDateRangeShortcut(DateTime today)
             {
                 var yesterday = today.AddDays(-1);
                 DateRange = new DateRange(yesterday, yesterday);
 
-                Period = ReportPeriod.Yesterday;
+                Period = DateRangePeriod.Yesterday;
 
                 Text = Resources.Yesterday;
             }
         }
 
-        private class ThisWeekCalendarShortcut : CalendarShortcut
+        private class ThisWeekDateRangeShortcut : DateRangeShortcut
         {
-            public ThisWeekCalendarShortcut(DateTime today, BeginningOfWeek beginningOfWeek)
+            public ThisWeekDateRangeShortcut(DateTime today, BeginningOfWeek beginningOfWeek)
             {
                 var beginning = today.BeginningOfWeek(beginningOfWeek);
                 var end = beginning.AddDays(6);
                 DateRange = new DateRange(beginning, end);
 
-                Period = ReportPeriod.ThisWeek;
+                Period = DateRangePeriod.ThisWeek;
 
                 Text = Resources.ThisWeek;
             }
         }
 
-        private class LastWeekCalendarShortcut : CalendarShortcut
+        private class LastWeekDateRangeShortcut : DateRangeShortcut
         {
-            public LastWeekCalendarShortcut(DateTime today, BeginningOfWeek beginningOfWeek)
+            public LastWeekDateRangeShortcut(DateTime today, BeginningOfWeek beginningOfWeek)
             {
                 var beginning = today.BeginningOfWeek(beginningOfWeek).AddDays(-7);
                 var end = beginning.AddDays(6);
                 DateRange = new DateRange(beginning, end);
 
-                Period = ReportPeriod.LastWeek;
+                Period = DateRangePeriod.LastWeek;
 
                 Text = Resources.LastWeek;
             }
         }
 
-        private class ThisMonthCalendarShortcut : CalendarShortcut
+        private class ThisMonthDateRangeShortcut : DateRangeShortcut
         {
-            public ThisMonthCalendarShortcut(DateTime today)
+            public ThisMonthDateRangeShortcut(DateTime today)
             {
                 var firstDayOfMonth = today.FirstDayOfSameMonth();
                 var lastDayOfMonth = today.LastDayOfSameMonth();
                 DateRange = new DateRange(firstDayOfMonth, lastDayOfMonth);
 
-                Period = ReportPeriod.ThisMonth;
+                Period = DateRangePeriod.ThisMonth;
 
                 Text = Resources.ThisMonth;
             }
         }
 
-        private class LastMonthCalendarShortcut : CalendarShortcut
+        private class LastMonthDateRangeShortcut : DateRangeShortcut
         {
-            public LastMonthCalendarShortcut(DateTime today)
+            public LastMonthDateRangeShortcut(DateTime today)
             {
                 var firstDayOfMonth = today.FirstDayOfSameMonth().AddMonths(-1);
                 var lastDayOfMonth = firstDayOfMonth.LastDayOfSameMonth();
                 DateRange = new DateRange(firstDayOfMonth, lastDayOfMonth);
 
-                Period = ReportPeriod.LastMonth;
+                Period = DateRangePeriod.LastMonth;
 
                 Text = Resources.LastMonth;
             }
         }
 
-        private class ThisYearCalendarShortcut : CalendarShortcut
+        private class ThisYearDateRangeShortcut : DateRangeShortcut
         {
-            public ThisYearCalendarShortcut(DateTime today)
+            public ThisYearDateRangeShortcut(DateTime today)
             {
                 var year = today.Year;
                 var firstDayOfYear = new DateTime(year, 1, 1);
                 var lastDayOfYear = new DateTime(year, 12, 31);
                 DateRange = new DateRange(firstDayOfYear, lastDayOfYear);
 
-                Period = ReportPeriod.ThisYear;
+                Period = DateRangePeriod.ThisYear;
 
                 Text = Resources.ThisYear;
             }
         }
 
-        private class LastYearCalendarShortcut : CalendarShortcut
+        private class LastYearDateRangeShortcut : DateRangeShortcut
         {
-            public LastYearCalendarShortcut(DateTime today)
+            public LastYearDateRangeShortcut(DateTime today)
             {
                 var year = today.Year - 1;
                 var firstDayOfYear = new DateTime(year, 1, 1);
                 var lastDayOfYear = new DateTime(year, 12, 31);
                 DateRange = new DateRange(firstDayOfYear, lastDayOfYear);
 
-                Period = ReportPeriod.LastYear;
+                Period = DateRangePeriod.LastYear;
 
                 Text = Resources.LastYear;
             }

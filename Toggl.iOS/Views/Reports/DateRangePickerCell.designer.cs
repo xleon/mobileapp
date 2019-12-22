@@ -9,8 +9,8 @@ using System.CodeDom.Compiler;
 
 namespace Toggl.iOS.Views
 {
-	[Register ("ReportsCalendarViewCell")]
-	partial class ReportsCalendarViewCell
+	[Register ("DateRangePickerCell")]
+	partial class DateRangePickerCell
 	{
 		[Outlet]
 		Toggl.iOS.Views.RoundedView BackgroundView { get; set; }

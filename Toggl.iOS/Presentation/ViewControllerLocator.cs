@@ -55,8 +55,6 @@ namespace Toggl.iOS.Presentation
                     return new PasteFromClipboardViewController(vm);
                 case ReportsViewModel vm:
                     return new ReportsViewController(vm);
-                case ReportsCalendarViewModel vm:
-                    return new ReportsCalendarViewController(vm);
                 case SelectClientViewModel vm:
                     return new SelectClientViewController(vm);
                 case SelectColorViewModel vm:

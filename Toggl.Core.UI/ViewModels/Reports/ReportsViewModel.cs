@@ -29,10 +29,10 @@ namespace Toggl.Core.UI.ViewModels.Reports
     {
         public const string DownArrowCharacter = "▾";
         private long? selectedWorkspaceId;
-        private Either<ReportPeriod, DateRange> selection;
+        private Either<DateRangePeriod, DateRange> selection;
 
         private readonly IInteractorFactory interactorFactory;
-        private readonly ICalendarShortcutsService calendarShortcutsService;
+        private readonly IDateRangeShortcutsService dateRangeShortcutsService;
         private readonly ITimeService timeService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ITogglDataSource dataSource;
@@ -55,7 +55,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
             IRxActionFactory rxActionFactory,
             IAnalyticsService analyticsService,
             ITimeService timeService,
-            ICalendarShortcutsService calendarShortcutsService)
+            IDateRangeShortcutsService dateRangeShortcutsService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -65,14 +65,14 @@ namespace Toggl.Core.UI.ViewModels.Reports
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(calendarShortcutsService, nameof(calendarShortcutsService));
+            Ensure.Argument.IsNotNull(dateRangeShortcutsService, nameof(dateRangeShortcutsService));
 
             this.dataSource = dataSource;
             this.interactorFactory = interactorFactory;
             this.schedulerProvider = schedulerProvider;
             this.timeService = timeService;
             this.analyticsService = analyticsService;
-            this.calendarShortcutsService = calendarShortcutsService;
+            this.dateRangeShortcutsService = dateRangeShortcutsService;
 
             HasMultipleWorkspaces = interactorFactory.ObserveAllWorkspaces().Execute()
                 .Select(workspaces => workspaces.Where(w => !w.IsInaccessible))
@@ -92,7 +92,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
             var beginningOfWeek = (await interactorFactory.GetCurrentUser().Execute()).BeginningOfWeek;
 
             var initialSelection = new DateRangeSelectionResult(
-                    calendarShortcutsService.GetShortcutFrom(ReportPeriod.ThisWeek).DateRange,
+                    dateRangeShortcutsService.GetShortcutFrom(DateRangePeriod.ThisWeek).DateRange,
                     DateRangeSelectionSource.Initial);
 
             var timeRangeSelector = SelectTimeRange.Elements
@@ -121,7 +121,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             selectedWorkspaceId = (await interactorFactory.GetDefaultWorkspace().Execute())?.Id;
 
-            selection = Either<ReportPeriod, DateRange>.WithLeft(ReportPeriod.ThisWeek);
+            selection = Either<DateRangePeriod, DateRange>.WithLeft(DateRangePeriod.ThisWeek);
         }
 
         private async Task<IThreadSafeWorkspace> selectWorkspace()
@@ -147,11 +147,11 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private async Task<DateRangeSelectionResult> selectTimeRange()
         {
-            var dateRangeSelection = await Navigate<DateRangePickerViewModel, Either<ReportPeriod, DateRange>, DateRangeSelectionResult>(selection);
+            var dateRangeSelection = await Navigate<DateRangePickerViewModel, Either<DateRangePeriod, DateRange>, DateRangeSelectionResult>(selection);
             if (dateRangeSelection?.SelectedRange == null)
                 return null;
 
-            selection = Either<ReportPeriod, DateRange>.WithRight(dateRangeSelection.SelectedRange.Value);
+            selection = Either<DateRangePeriod, DateRange>.WithRight(dateRangeSelection.SelectedRange.Value);
 
             return dateRangeSelection;
         }
@@ -170,7 +170,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private string formattedTimeRange(DateRangeSelectionResult dateRangeSelectionResult, DateFormat dateFormat)
         {
             var range = dateRangeSelectionResult.SelectedRange.Value;
-            var knownShortcut = calendarShortcutsService.GetShortcutFrom(range);
+            var knownShortcut = dateRangeShortcutsService.GetShortcutFrom(range);
             if (knownShortcut != null)
                 return knownShortcut.Text;
 

@@ -9,8 +9,8 @@ using System.CodeDom.Compiler;
 
 namespace Toggl.iOS.Views.Reports
 {
-	[Register ("ReportsCalendarQuickSelectViewCell")]
-	partial class ReportsCalendarQuickSelectViewCell
+	[Register ("DateRangePickerShortcutCell")]
+	partial class DateRangePickerShortcutCell
 	{
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
