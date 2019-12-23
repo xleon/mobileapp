@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
@@ -181,7 +182,12 @@ namespace Toggl.Core
         protected abstract IAccessRestrictionStorage CreateAccessRestrictionStorage();
         protected abstract IPrivateSharedStorageService CreatePrivateSharedStorageService();
         protected abstract IPushNotificationsTokenService CreatePushNotificationsTokenService();
-        protected abstract HttpClient CreateHttpClient();
+
+        protected virtual HttpClient CreateHttpClient()
+        {
+            var handler = new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate };
+            return new HttpClient(handler);
+        }
 
         protected virtual ITimeService CreateTimeService()
             => new TimeService(SchedulerProvider.DefaultScheduler);
