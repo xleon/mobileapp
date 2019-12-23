@@ -1,5 +1,6 @@
+using System.Net;
+using System.Net.Http;
 using Foundation;
-using Toggl.iOS.Shared;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 
@@ -24,7 +25,20 @@ namespace Toggl.iOS.Shared
             var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"].ToString();
             var userAgent = new UserAgent("Daneel", $"{version} SiriExtension");
             var apiConfiguration = new ApiConfiguration(environment, Credentials.WithApiToken(apiToken), userAgent);
-            return TogglApiFactory.WithConfiguration(apiConfiguration);
+
+            var httpHandler =
+#if USE_PRODUCTION_API
+                new NSUrlSessionHandler(
+                    NSUrlSessionConfiguration.BackgroundSessionConfiguration("com.toggl.daneel"));
+#else
+                new HttpClientHandler
+                {
+                    AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip
+                };
+#endif
+
+            var httpClient = new HttpClient(httpHandler);
+            return TogglApiFactory.WithConfiguration(apiConfiguration, httpClient);
         }
     }
 }
