@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

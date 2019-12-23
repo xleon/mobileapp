@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using CoreGraphics;
+using Foundation;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.iOS.Helper;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Views.Reports;
 using Toggl.iOS.ViewSources;
@@ -71,6 +75,13 @@ namespace Toggl.iOS.ViewControllers
             ViewModel.Elements
                 .Subscribe(source.SetNewElements)
                 .DisposedBy(DisposeBag);
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            IosDependencyContainer.Instance.IntentDonationService.DonateShowReport();
         }
 
         public void ScrollToTop() { }

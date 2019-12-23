@@ -16,6 +16,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class SelectColorViewController : ReactiveViewController<SelectColorViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         private const int customColorEnabledHeightPad = 490;
         private const int customColorEnabledHeight = 365;
         private const int customColorDisabledHeight = 233;

@@ -13,6 +13,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public partial class SelectDateTimeViewController : ReactiveViewController<SelectDateTimeViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         public SelectDateTimeViewController(SelectDateTimeViewModel viewModel)
             : base(viewModel, nameof(SelectDateTimeViewController))
         {

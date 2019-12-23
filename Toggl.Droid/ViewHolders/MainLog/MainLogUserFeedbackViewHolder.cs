@@ -9,7 +9,7 @@ using AndroidX.RecyclerView.Widget;
 using System.Reactive.Subjects;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 using static Toggl.Shared.Extensions.CommonFunctions;
@@ -143,7 +143,7 @@ namespace Toggl.Droid.ViewHolders.MainLog
                 return string.Empty;
 
             return impressionIsPositive.Value
-                   ? Shared.Resources.RatingViewPositiveCallToActionDescriptionDroid
+                   ? string.Format(Shared.Resources.RatingViewPositiveCallToActionDescription, Shared.Resources.AndroidStoreName)
                    : Shared.Resources.RatingViewNegativeCallToActionDescription;
         }
 

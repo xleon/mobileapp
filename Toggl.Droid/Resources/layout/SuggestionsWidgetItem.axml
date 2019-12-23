@@ -57,7 +57,7 @@
                 android:lineSpacingExtra="5sp"
                 android:singleLine="true"
                 android:ellipsize="end"
-                tools:textColor="@color/clientName"
+                android:textColor="@color/clientName"
                 tools:text="Client with a long name" />
         </LinearLayout>
         <ImageView

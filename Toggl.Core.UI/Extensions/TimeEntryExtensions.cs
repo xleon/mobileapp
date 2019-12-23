@@ -3,7 +3,7 @@ using System.Linq;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Transformations;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Shared;
 using Toggl.Storage;
 

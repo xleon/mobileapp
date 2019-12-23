@@ -1,7 +1,7 @@
 ﻿using Android.Graphics;
 using Android.Runtime;
 using System;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using AndroidX.RecyclerView.Widget;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.ViewHolders;

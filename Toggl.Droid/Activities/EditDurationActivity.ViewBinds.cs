@@ -32,9 +32,9 @@ namespace Toggl.Droid.Activities
             wheelNumericInput = FindViewById<WheelDurationInput>(Resource.Id.WheelDurationInput);
             durationLabel = FindViewById<TextView>(Resource.Id.DurationLabel);
 
-            startLabel.Text = Shared.Resources.Start;
-            stopLabel.Text = Shared.Resources.Stop;
-            stopTimerLabel.Text = Shared.Resources.StopTimer;
+            startLabel.Text = Shared.Resources.StartTime;
+            stopLabel.Text = Shared.Resources.EndTime;
+            stopTimerLabel.Text = Shared.Resources.Stop;
             durationLabel.Text = Shared.Resources.Duration;
             
             SetupToolbar(title: Shared.Resources.StartAndStopTime);

@@ -558,10 +558,6 @@
     <Compile Include="Activities\SettingsActivity.ViewBinds.cs">
       <DependentUpon>SettingsActivity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Adapters\Calendar\Anchor.cs" />
-    <Compile Include="Adapters\Calendar\AnchorData.cs" />
-    <Compile Include="Adapters\Calendar\CalendarAdapter.cs" />
-    <Compile Include="Adapters\Calendar\LayoutAnchorsCalculator.cs" />
     <Compile Include="Adapters\DiffingStrategies\EquatableDiffingStrategy.cs" />
     <Compile Include="Adapters\DiffingStrategies\IdentifierEqualityDiffingStrategy.cs" />
     <Compile Include="Adapters\DiffingStrategies\IDiffingStrategy.cs" />
@@ -603,13 +599,8 @@
     <Compile Include="Helper\IBackPressHandler.cs" />
     <Compile Include="Presentation\ActivityTransitions.cs" />
     <Compile Include="Presentation\RunningTimeEntrySheetBehavior.cs" />
-    <Compile Include="Services\JobServicesConstants.cs" />
     <Compile Include="Services\FetchRemoteConfigServiceAndroid.cs" />
-    <Compile Include="Services\SyncJobService.cs" />
-    <Compile Include="Services\WidgetsForegroundService.cs" />
     <Compile Include="Services\WidgetsServiceAndroid.cs" />
-    <Compile Include="Services\TogglFirebaseIIDService.cs" />
-    <Compile Include="Services\TogglFirebaseMessagingService.cs" />
     <Compile Include="Services\PushNotificationsTokenServiceAndroid.cs" />
     <Compile Include="Extensions\PermissionRequesterComponentExtensions.cs" />
     <Compile Include="Helper\IPermissionRequesterComponent.cs" />
@@ -617,10 +608,17 @@
     <Compile Include="Presentation\AndroidPresenter.cs" />
     <Compile Include="Presentation\DialogFragmentPresenter.cs" />
     <Compile Include="Presentation\ViewModelCache.cs" />
-    <Compile Include="Services\WidgetsAnalyticsService.cs" />
     <Compile Include="Startup\AndroidDependencyContainer.cs" />
     <Compile Include="Extensions\FloatingActionButtonExtensions.cs" />
     <Compile Include="Presentation\IScrollableToStart.cs" />
+    <Compile Include="SystemServices\BackgroundSyncJobSchedulerService.cs" />
+    <Compile Include="SystemServices\JobServicesConstants.cs" />
+    <Compile Include="SystemServices\ScheduleEventNotificationsService.cs" />
+    <Compile Include="SystemServices\SyncJobService.cs" />
+    <Compile Include="SystemServices\TogglFirebaseIIDService.cs" />
+    <Compile Include="SystemServices\TogglFirebaseMessagingService.cs" />
+    <Compile Include="SystemServices\WidgetsAnalyticsService.cs" />
+    <Compile Include="SystemServices\WidgetsForegroundService.cs" />
     <Compile Include="ViewHelpers\CalendarItemRectAttributes.cs" />
     <Compile Include="ViewHolders\CalendarMenuActionCellViewHolder.cs" />
     <Compile Include="ViewHolders\CalendarWeekSectionViewHolder.cs" />
@@ -688,7 +686,6 @@
     <Compile Include="ViewHelpers\SuggestionsRecyclerViewSnapHelper.cs" />
     <Compile Include="ViewHolders\AnchorViewHolder.cs" />
     <Compile Include="ViewHelpers\TimePickerListener.cs" />
-    <Compile Include="ViewHolders\CalendarEntryViewHolder.cs" />
     <Compile Include="ViewHolders\Client\ClientCreationSelectionViewHolder.cs" />
     <Compile Include="ViewHolders\Client\ClientSelectionViewHolder.cs" />
     <Compile Include="ViewHelpers\TimeEntryViewData.cs" />
@@ -701,22 +698,6 @@
     <Compile Include="Views\Calendar\CalendarDayView.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.EditItem.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.Events.cs" />
-    <Compile Include="Views\Calendar\CalendarLayoutManager.cs" />
-    <Compile Include="Views\Calendar\CalendarLayoutManager.AnchorInfo.cs">
-      <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Calendar\CalendarLayoutManager.LayoutState.cs">
-      <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Calendar\CalendarLayoutManager.AnchorSavedState.cs">
-      <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Calendar\CalendarLayoutManager.Recycler.cs">
-      <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Calendar\CalendarLayoutManager.ScrollHelper.cs">
-      <DependentUpon>CalendarLayoutManager.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\DateRangePickerMonthView.cs" />
     <Compile Include="Views\DonutChart\DonutChartView.cs" />
     <Compile Include="Views\DonutChart\DonutChartView.Slice.cs" />
@@ -823,7 +804,6 @@
     <Compile Include="Extensions\TimeEntryExtensions.cs" />
     <Compile Include="PlatformInfoAndroid.cs" />
     <Compile Include="Services\BackgroundSyncServiceAndroid.cs" />
-    <Compile Include="Services\BackgroundSyncJobSchedulerService.cs" />
     <Compile Include="ViewHolders\Tags\TagCreationSelectionViewHolder.cs" />
     <Compile Include="ViewHolders\Tags\TagSelectionViewHolder.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
@@ -876,7 +856,6 @@
       <DependentUpon>CalendarSettingsActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="BroadcastReceivers\BootCompletedBroadcastReceiver.cs" />
-    <Compile Include="Services\ScheduleEventNotificationsService.cs" />
     <Compile Include="Views\VerticallyCenteredImageSpan.cs" />
     <Compile Include="Widgets\ISuggestionsWidgetFormFactor.cs" />
     <Compile Include="Widgets\SuggestionsWidget.cs" />
@@ -1381,8 +1360,6 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\GrayBorderRoundedRectangle.xml" />
     <AndroidResource Include="Resources\layout\CalendarFragment.axml" />
-    <AndroidResource Include="Resources\drawable\CalendarEntryBackground.xml" />
-    <AndroidResource Include="Resources\layout\CalendarEntryCell.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\ic_launcher.xml" />
@@ -1433,12 +1410,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values-notnight\Colors.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\values-night\Styles.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
@@ -1451,12 +1422,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values-notnight\Styles.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\login_background.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -1464,6 +1429,7 @@
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\values-ja\strings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\Fody.2.4.6\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.6\build\Fody.targets')" />

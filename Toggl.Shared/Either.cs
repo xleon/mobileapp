@@ -19,12 +19,14 @@ namespace Toggl.Shared
         private Either(TLeft left)
         {
             this.left = left;
+            right = default!;
             useLeft = true;
         }
 
         private Either(TRight right)
         {
             this.right = right;
+            left = default!;
             useLeft = false;
         }
 

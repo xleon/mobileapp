@@ -8,7 +8,19 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:background="@drawable/TimerWidgetBackground">
+    <TextView
+        android:id="@+id/NoRunningTimeEntryLabel"
+        android:text="No running time entry"
+        android:textSize="16sp"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent" />
     <LinearLayout
+            android:id="@+id/TimeEntryInfoContainer"
+            tools:visibility="gone"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -55,7 +67,7 @@
                     android:layout_gravity="center_vertical" />
             <TextView
                     android:id="@+id/ProjectTextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
                     android:textSize="15sp"
@@ -66,20 +78,20 @@
                     android:ellipsize="end"
                     tools:textColor="#c56bff"
                     tools:text="A very long project with stuff there, much more longer than this"/>
+            <TextView
+                android:id="@+id/ClientTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="normal"
+                android:lineSpacingExtra="5sp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="@color/clientName"
+                tools:text="A big fat client Shia La boeuf"/>
         </LinearLayout>
-        <TextView
-            android:id="@+id/ClientTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:textSize="15sp"
-            android:fontFamily="sans-serif-medium"
-            android:textStyle="normal"
-            android:lineSpacingExtra="5sp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            tools:textColor="#5e5b5b"
-            tools:text="A big fat client Shia La boeuf"/>
     </LinearLayout>
     <FrameLayout
             android:layout_width="wrap_content"

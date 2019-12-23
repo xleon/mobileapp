@@ -14,6 +14,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public partial class SelectClientViewController : ReactiveViewController<SelectClientViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         public SelectClientViewController(SelectClientViewModel viewModel)
             : base(viewModel, nameof(SelectClientViewController))
         {
