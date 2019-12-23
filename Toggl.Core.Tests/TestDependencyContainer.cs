@@ -1,4 +1,5 @@
-﻿using Toggl.Core.Analytics;
+﻿using System.Net.Http;
+using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
@@ -149,5 +150,8 @@ namespace Toggl.Core.UI
         internal IWidgetsService MockWidgetsService { get; set; }
         protected override IWidgetsService CreateWidgetsService()
             => MockWidgetsService;
+
+        protected override HttpClient CreateHttpClient()
+            => new HttpClient();
     }
 }
