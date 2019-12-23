@@ -202,7 +202,7 @@ namespace Toggl.Core
             => new RxActionFactory(SchedulerProvider);
 
         protected virtual IApiFactory CreateApiFactory()
-            => new ApiFactory(ApiEnvironment, userAgent);
+            => new ApiFactory(ApiEnvironment, userAgent, HttpClient);
 
         protected virtual IUpdateRemoteConfigCacheService CreateUpdateRemoteConfigCacheService()
             => new UpdateRemoteConfigCacheService(TimeService, KeyValueStorage, FetchRemoteConfigService);
