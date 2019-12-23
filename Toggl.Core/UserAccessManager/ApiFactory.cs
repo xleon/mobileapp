@@ -30,7 +30,7 @@ namespace Toggl.Core.Login
         public ITogglApi CreateApiWith(Credentials credentials)
         {
             var configuration = new ApiConfiguration(Environment, credentials, UserAgent);
-            return TogglApiFactory.WithConfiguration(configuration);
+            return TogglApiFactory.WithConfiguration(configuration, httpClient);
         }
     }
 }
