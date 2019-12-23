@@ -63,7 +63,7 @@ namespace Toggl.Shared
         public static bool operator !=(CalendarMonth m1, CalendarMonth m2)
             => !(m1 == m2);
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is CalendarMonth calendarMonth)
                 return this == calendarMonth;

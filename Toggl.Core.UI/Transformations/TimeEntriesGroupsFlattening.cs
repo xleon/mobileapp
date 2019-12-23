@@ -6,12 +6,12 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.UI.ViewModels.MainLog;
+using Toggl.Core.UI.ViewModels.MainLog.Identity;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
-using static Toggl.Core.UI.ViewModels.TimeEntriesLog.LogItemVisualizationIntent;
+using static Toggl.Core.UI.ViewModels.MainLog.LogItemVisualizationIntent;
 
 namespace Toggl.Core.UI.Transformations
 {

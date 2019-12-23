@@ -4,8 +4,8 @@ using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.Suggestions;
 using Toggl.Core.UI.Collections;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.UI.ViewModels.MainLog;
+using Toggl.Core.UI.ViewModels.MainLog.Identity;
 using Toggl.Shared;
 
 

@@ -12,7 +12,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public class MainTabBarController : UITabBarController
+    public sealed partial class MainTabBarController : UITabBarController
     {
         public MainTabBarViewModel ViewModel { get; set; }
 

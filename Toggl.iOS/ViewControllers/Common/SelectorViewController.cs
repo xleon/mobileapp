@@ -18,7 +18,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers.Common
 {
-    public sealed class SelectorViewController<T> : UIViewController
+    public sealed partial class SelectorViewController<T> : UIViewController
     {
         private readonly ImmutableList<SelectOption<T>> options;
         private readonly string title;
@@ -61,6 +61,8 @@ namespace Toggl.iOS.ViewControllers.Common
 
             Observable.Return(options.Select(item => item.ItemName).ToImmutableList())
                 .Subscribe(tableView.Rx().ReloadItems(source));
+
+            configureKeyCommands();
         }
 
         public override void ViewWillDisappear(bool animated)

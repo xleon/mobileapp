@@ -48,7 +48,7 @@ namespace Toggl.Shared
         public bool Equals(DateRange other)
             => Beginning == other.Beginning && End == other.End;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => obj is DateRange date
                 ? Equals(date)
                 : false;

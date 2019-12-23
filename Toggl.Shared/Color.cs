@@ -68,7 +68,7 @@ namespace Toggl.Shared
         public static bool operator !=(Color color, Color otherColor)
             => !(color == otherColor);
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is Color color)
                 return this == color;

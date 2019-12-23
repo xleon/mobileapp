@@ -7,10 +7,8 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
 using Toggl.Core;
 using Toggl.Core.UI.Calendar;
-using Toggl.Core.UI.Extensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -169,8 +167,9 @@ namespace Toggl.iOS.Views.Calendar
             InvalidateLayout(context);
         }
 
+        // We should invalidate the whole layout only when the collectionview's width changes
         public override bool ShouldInvalidateLayoutForBoundsChange(CGRect newBounds)
-            => true;
+            => CollectionView.Bounds.Width != newBounds.Width;
 
         public override UICollectionViewLayoutAttributes[] LayoutAttributesForElementsInRect(CGRect rect)
         {

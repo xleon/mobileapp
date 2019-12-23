@@ -7,7 +7,7 @@ using System.Reactive.Subjects;
 using AndroidX.ConstraintLayout.Widget;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Helper;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
 using static Toggl.Droid.Resource.Id;

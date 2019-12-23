@@ -25,6 +25,8 @@ namespace Toggl.iOS.ViewControllers
 
     public partial class SettingsViewController : ReactiveViewController<SettingsViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+        
         private readonly float bottomInset = 24;
 
         public SettingsViewController(SettingsViewModel viewModel)

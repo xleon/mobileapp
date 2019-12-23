@@ -28,7 +28,7 @@ namespace Toggl.iOS.ViewControllers.Settings
             FeedbackPlaceholderTextView.Text = Resources.FeedbackFieldPlaceholder;
             ErrorTitleLabel.Text = Resources.SubmitFeedback.ToUpper();
             ErrorMessageLabel.Text = Resources.ContactUsSomethingWentWrongTryAgain;
-            SendButton.SetTitle(Resources.ContactUsSend, UIControlState.Normal);
+            SendButton.SetTitle(Resources.Send, UIControlState.Normal);
 
             prepareViews();
             prepareIndicatorView();
