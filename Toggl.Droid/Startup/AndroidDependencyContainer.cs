@@ -140,7 +140,7 @@ namespace Toggl.Droid
         protected override IWidgetsService CreateWidgetsService()
             => new WidgetsServiceAndroid(DataSource);
 
-#ifdef USE_PRODUCTION_API
+#if USE_PRODUCTION_API
         protected override HttpClient CreateHttpClient()
         {
             var httpHandler = new AndroidClientHandler
