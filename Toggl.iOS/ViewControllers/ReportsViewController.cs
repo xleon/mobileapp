@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CoreGraphics;
 using Foundation;
+using Toggl.Core.Analytics;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.iOS.Extensions;
@@ -12,8 +13,10 @@ using Toggl.iOS.Helper;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Views.Reports;
 using Toggl.iOS.ViewSources;
+using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
+using static Toggl.Core.UI.ViewModels.DateRangePicker.DateRangePickerViewModel;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -23,6 +26,8 @@ namespace Toggl.iOS.ViewControllers
 
         private ReportsCollectionViewRegularLayout regularLayout;
         private ReportsCollectionViewCompactLayout compactLayout;
+
+        private Subject<Unit> viewDidAppearSubject = new Subject<Unit>();
 
         public ReportsViewController(ReportsViewModel viewModel) : base(viewModel, nameof(ReportsViewController))
         {
@@ -75,6 +80,37 @@ namespace Toggl.iOS.ViewControllers
             ViewModel.Elements
                 .Subscribe(source.SetNewElements)
                 .DisposedBy(DisposeBag);
+
+            var workspaceObservable = IosDependencyContainer.Instance.InteractorFactory.GetDefaultWorkspace().Execute()
+                .Merge(ViewModel.SelectWorkspace.Elements);
+
+            var dateRangeSelectionResultObservable = ViewModel.SelectTimeRange.Elements
+                .StartWith(new DateRangeSelectionResult(
+                    new DateRange(DateTime.Now.AddDays(-7), DateTime.Now),
+                    DateRangeSelectionSource.ShortcutThisWeek)
+                );
+
+            //Handoff
+            viewDidAppearSubject.AsObservable()
+                .CombineLatest(
+                    workspaceObservable,
+                    dateRangeSelectionResultObservable,
+                    (_, ws, tr) => createUserActivity(ws.Id, tr.SelectedRange.Value.Beginning, tr.SelectedRange.Value.End))
+                .Subscribe(updateUserActivity);
+
+            NSUserActivity createUserActivity(long workspaceId, DateTimeOffset start, DateTimeOffset end)
+            {
+                var userActivity = new NSUserActivity(Handoff.Action.Reports);
+                userActivity.EligibleForHandoff = true;
+                userActivity.WebPageUrl = Handoff.Url.Reports(workspaceId, start, end);
+                return userActivity;
+            }
+
+            void updateUserActivity(NSUserActivity userActivity)
+            {
+                UserActivity = userActivity;
+                UserActivity.BecomeCurrent();
+            }
         }
 
         public override void ViewDidAppear(bool animated)
@@ -82,6 +118,8 @@ namespace Toggl.iOS.ViewControllers
             base.ViewDidAppear(animated);
 
             IosDependencyContainer.Instance.IntentDonationService.DonateShowReport();
+
+            viewDidAppearSubject.OnNext(Unit.Default);
         }
 
         public void ScrollToTop() { }

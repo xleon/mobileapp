@@ -46,6 +46,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public OutputAction<IThreadSafeWorkspace> SelectWorkspace { get; private set; }
         public OutputAction<DateRangeSelectionResult> SelectTimeRange { get; private set; }
+        public InputAction<DateRangeSelectionResult> SetTimeRange { get; private set; }
 
         public ReportsViewModel(
             ITogglDataSource dataSource,
@@ -82,6 +83,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
             SelectWorkspace = rxActionFactory.FromAsync(selectWorkspace);
             SelectTimeRange = rxActionFactory.FromAsync(selectTimeRange);
+            SetTimeRange = rxActionFactory.FromAction<DateRangeSelectionResult>(setTimeRange);
         }
 
         public override async Task Initialize()
@@ -96,6 +98,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                     DateRangeSelectionSource.Initial);
 
             var timeRangeSelector = SelectTimeRange.Elements
+                .Merge(SetTimeRange.Inputs)
                 .StartWith(initialSelection)
                 .WhereNotNull();
 
@@ -154,6 +157,11 @@ namespace Toggl.Core.UI.ViewModels.Reports
             selection = Either<DateRangePeriod, DateRange>.WithRight(dateRangeSelection.SelectedRange.Value);
 
             return dateRangeSelection;
+        }
+
+        private void setTimeRange(DateRangeSelectionResult result)
+        {
+            selection = Either<DateRangePeriod, DateRange>.WithRight(result.SelectedRange.Value);
         }
 
         private ImmutableList<IReportElement> createLoadingStateReportElements()
