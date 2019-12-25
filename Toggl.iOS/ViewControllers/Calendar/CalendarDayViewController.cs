@@ -29,7 +29,6 @@ namespace Toggl.iOS.ViewControllers
         private const double minimumOffsetOfCurrentTimeIndicatorFromScreenEdge = 0.2;
         private const double middleOfTheDay = 12;
         private const float collectionViewDefaultInset = 20;
-        private const float maxWidth = 834;
         private const float additionalContentOffsetWhenContextualMenuIsVisible = 128;
 
         private readonly ITimeService timeService;
@@ -275,12 +274,7 @@ namespace Toggl.iOS.ViewControllers
         private void updateContentInset(bool animate = false)
         {
             var topInset = collectionViewDefaultInset;
-
-            var leftInset = CalendarCollectionView.Frame.Width <= maxWidth
-                ? collectionViewDefaultInset
-                : (CalendarCollectionView.Frame.Width - maxWidth) / 2;
-
-            var rightInset = leftInset;
+            var sideInset = 0;
 
             var bottomInset = contextualMenuVisible.Value
                 ? collectionViewDefaultInset * 2 + ContextualMenu.Frame.Height
@@ -292,13 +286,13 @@ namespace Toggl.iOS.ViewControllers
                     Animation.Timings.EnterTiming,
                     Animation.Curves.EaseOut,
                     () => CalendarCollectionView.ContentInset = new UIEdgeInsets(
-                        topInset, leftInset, bottomInset, rightInset)
+                        topInset, sideInset, bottomInset, sideInset)
                     );
             }
             else
             {
                 CalendarCollectionView.ContentInset = new UIEdgeInsets(
-                    topInset, leftInset, bottomInset, rightInset);
+                    topInset, sideInset, bottomInset, sideInset);
             }
         }
 
