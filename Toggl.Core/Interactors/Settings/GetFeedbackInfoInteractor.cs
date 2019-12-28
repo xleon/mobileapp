@@ -34,6 +34,7 @@ namespace Toggl.Core.Interactors.Settings
         public const string UserId = "User Id";
 
         private const string unspecified = "[unspecified]";
+        private const string dateTimeFormat = "MM/dd/yyyy HH:mm:ss K";
 
         private readonly ITimeService timeService;
         private readonly IPlatformInfo platformInfo;
@@ -129,7 +130,7 @@ namespace Toggl.Core.Interactors.Settings
                 [NumberOfUnsyncableTimeEntries] = unsyncableTimeEntriesCount.ToString(),
                 [LastSyncAttempt] = lastTimeUsageStorage.LastSyncAttempt?.ToString() ?? "never",
                 [LastSuccessfulSync] = lastTimeUsageStorage.LastSuccessfulSync?.ToString() ?? "never",
-                [DeviceTime] = timeService.CurrentDateTime.ToString(),
+                [DeviceTime] = timeService.CurrentDateTime.ToString(dateTimeFormat),
                 [ManualModeIsOn] = userPreferences.IsManualModeEnabled ? "yes" : "no",
                 [LastLogin] = lastTimeUsageStorage.LastLogin?.ToString() ?? "never",
                 [UserId] = user.Id.ToString()
