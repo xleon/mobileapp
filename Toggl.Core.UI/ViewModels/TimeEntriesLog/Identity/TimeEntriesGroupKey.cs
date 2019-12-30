@@ -23,5 +23,8 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
             if (ReferenceEquals(this, obj)) return true;
             return obj is TimeEntriesGroupKey other && Equals(other);
         }
+
+        public override int GetHashCode()
+            => groupId.GetHashCode();
     }
 }

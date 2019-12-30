@@ -21,5 +21,8 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
             if (ReferenceEquals(this, obj)) return true;
             return obj is SuggestionKey other && Equals(other);
         }
+
+        public override int GetHashCode()
+            => suggestionId.GetHashCode();
     }
 }
