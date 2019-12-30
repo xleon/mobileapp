@@ -73,12 +73,12 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsLoading
-                .Select(inverse)
+                .Select(CommonFunctions.Invert)
                 .Subscribe(emailEditText.Rx().Enabled())
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsLoading
-                .Select(inverse)
+                .Select(CommonFunctions.Invert)
                 .Subscribe(passwordEditText.Rx().Enabled())
                 .DisposedBy(DisposeBag);
 
@@ -113,8 +113,6 @@ namespace Toggl.Droid.Activities
 
             string loginButtonTitle(bool isLoading)
                 => isLoading ? "" : Shared.Resources.LoginTitle;
-
-            bool inverse(bool x) => !x;
 
             this.CancelAllNotifications();
         }
