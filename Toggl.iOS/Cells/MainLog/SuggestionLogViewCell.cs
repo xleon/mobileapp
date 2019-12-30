@@ -23,7 +23,7 @@ namespace Toggl.iOS.Views
             Nib = UINib.FromName(nameof(SuggestionLogViewCell), NSBundle.MainBundle);
         }
 
-        protected SuggestionLogViewCell(IntPtr handle)
+        public SuggestionLogViewCell(IntPtr handle)
             : base(handle)
         {
         }

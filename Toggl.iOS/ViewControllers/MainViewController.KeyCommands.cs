@@ -110,7 +110,7 @@ namespace Toggl.iOS.ViewControllers
         }
 
         [Export(nameof(openSettings))]
-        private async void openSettings()
+        private void openSettings()
         {
             ViewModel.OpenSettings.Execute();
         }

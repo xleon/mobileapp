@@ -67,10 +67,8 @@ namespace Toggl.Droid.Adapters
 
         private void setupAdapter(ReportsCalendarRecyclerView calendarRecyclerView, int position)
         {
-            var adapter = new ReportsCalendarRecyclerAdapter(currentDateRange)
-            {
-                Items = currentMonths[position].Days
-            };
+            var adapter = new ReportsCalendarRecyclerAdapter(currentDateRange);
+            adapter.SetItems(currentMonths[position].Days);
 
             var disposeBag = new CompositeDisposable();
             disposableBags[position] = disposeBag;
