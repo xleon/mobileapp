@@ -6,7 +6,9 @@ namespace Toggl.Shared.Extensions.RxAction
 {
     public static class NameValueCollectionExtensions
     {
-        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this NameValueCollection nvc, Func<string, TKey> extractKey, Func<string, TValue> extractValue)
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(
+            this NameValueCollection nvc, Func<string, TKey> extractKey, Func<string, TValue> extractValue)
+            where TKey : notnull
         {
             var result = new Dictionary<TKey, TValue>();
 

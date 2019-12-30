@@ -95,6 +95,7 @@ namespace Toggl.Shared.Extensions
         }
 
         public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
+            where TKey : notnull
         {
             if (dictionary.ContainsKey(key))
                 return dictionary[key];
