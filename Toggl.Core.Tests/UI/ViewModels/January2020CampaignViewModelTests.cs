@@ -29,7 +29,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheConstructor : BaseJanuary2020ViewModelTest
         {
-            [NUnit.Framework.Theory]
+            [Theory]
             [ConstructorData]
             public void ThrowsIfSomeOfTheArgumentsIsNull(
                 bool useOnboardingStorage,
