@@ -183,11 +183,7 @@ namespace Toggl.Core
         protected abstract IPrivateSharedStorageService CreatePrivateSharedStorageService();
         protected abstract IPushNotificationsTokenService CreatePushNotificationsTokenService();
 
-        protected virtual HttpClient CreateHttpClient()
-        {
-            var handler = new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate };
-            return new HttpClient(handler);
-        }
+        protected abstract HttpClient CreateHttpClient();
 
         protected virtual ITimeService CreateTimeService()
             => new TimeService(SchedulerProvider.DefaultScheduler);

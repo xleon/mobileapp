@@ -140,13 +140,11 @@ namespace Toggl.iOS
         protected override IWidgetsService CreateWidgetsService()
             => new WidgetsServiceIos(DataSource);
 
-#if USE_PRODUCTION_API
         protected override HttpClient CreateHttpClient()
         {
             var config = NSUrlSessionConfiguration.BackgroundSessionConfiguration("com.toggl.daneel");
             var handler = new NSUrlSessionHandler(config);
             return new HttpClient(handler, true);
         }
-#endif
     }
 }
