@@ -10,12 +10,12 @@ namespace Toggl.Shared.Extensions
 
         public static TimeSpan? TimeSpanDuration(this ITimeEntry timeEntry)
             => timeEntry.Duration.HasValue
-            ? TimeSpan.FromSeconds(timeEntry.Duration.Value)
-            : (TimeSpan?)null;
+                ? TimeSpan.FromSeconds(timeEntry.Duration.Value)
+                : (TimeSpan?)null;
 
         public static DateTimeOffset? StopTime(this ITimeEntry timeEntry)
-            => timeEntry.IsRunning()
-                ? (DateTimeOffset?)null
-                : timeEntry.Start + timeEntry.TimeSpanDuration().Value;
+            => timeEntry.Duration.HasValue
+                ? timeEntry.Start + TimeSpan.FromSeconds(timeEntry.Duration.Value)
+                : (DateTimeOffset?)null;
     }
 }

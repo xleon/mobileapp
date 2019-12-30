@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 
 namespace Toggl.Shared.Extensions
 {
@@ -45,7 +46,12 @@ namespace Toggl.Shared.Extensions
             => self.Where(either => either.IsLeft).Select(either => either.Left);
 
         public static IEnumerable<T> SelectNonNulls<T>(this IEnumerable<T?> self) where T : struct
-            => self.Where(nullable => nullable.HasValue).Select(nullable => nullable.Value);
+            => self
+                .Select(nullable => nullable.HasValue
+                    ? Either<T, Unit>.WithLeft(nullable.Value)
+                    : Either<T, Unit>.WithRight(Unit.Default))
+                .Where(either => either.IsLeft)
+                .Select(either => either.Left);
 
         public static bool None<T>(this IEnumerable<T> collection, Func<T, bool> condition)
             => !collection.Any(condition);

@@ -59,7 +59,12 @@ namespace Toggl.Shared.Extensions
 
         public static IObservable<TValue> NotNullable<TValue>(this IObservable<TValue?> observable)
             where TValue : struct
-            => observable.Where(x => x != null).Select(x => x.Value);
+            => observable
+                .Select(nullable => nullable.HasValue
+                    ? Either<TValue, Unit>.WithLeft(nullable.Value)
+                    : Either<TValue, Unit>.WithRight(Unit.Default))
+                .Where(either => either.IsLeft)
+                .Select(either => either.Left);
 
         public static IObservable<TValue> SelectValue<TInput, TValue>(this IObservable<TInput> observable, TValue u)
             => observable.Select(_ => u);
