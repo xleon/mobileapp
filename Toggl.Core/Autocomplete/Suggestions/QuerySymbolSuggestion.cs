@@ -1,4 +1,5 @@
-﻿using Toggl.Shared;
+﻿using System;
+using Toggl.Shared;
 
 namespace Toggl.Core.Autocomplete.Suggestions
 {
@@ -6,8 +7,8 @@ namespace Toggl.Core.Autocomplete.Suggestions
     {
         internal static QuerySymbolSuggestion[] Suggestions { get; } =
         {
-            new QuerySymbolSuggestion(QuerySymbols.ProjectsString, nameof(QuerySymbols.Projects)),
-            new QuerySymbolSuggestion(QuerySymbols.TagsString, nameof(QuerySymbols.Tags))
+            new QuerySymbolSuggestion(QuerySymbols.ProjectsString, Resources.Projects),
+            new QuerySymbolSuggestion(QuerySymbols.TagsString, Resources.Tags)
         };
 
         public string Symbol { get; }
@@ -17,11 +18,11 @@ namespace Toggl.Core.Autocomplete.Suggestions
         private QuerySymbolSuggestion(string symbol, string suggestionName)
         {
             Symbol = symbol;
-            Description = $"{Resources.Search} {suggestionName}";
+            Description = string.Format(Resources.SearchObject, suggestionName);
         }
 
         public override int GetHashCode()
-            => HashCode.From(Symbol, Description);
+            => HashCode.Combine(Symbol, Description);
     }
 
     public static class QuerySymbolSuggestionExtensions

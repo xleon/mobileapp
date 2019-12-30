@@ -10,6 +10,8 @@ using Toggl.Shared;
 using UIKit;
 using UserNotifications;
 using Firebase.CloudMessaging;
+using Google.SignIn;
+using System.Reactive;
 
 namespace Toggl.iOS
 {
@@ -25,19 +27,22 @@ namespace Toggl.iOS
                 += (sender, certificate, chain, sslPolicyErrors) => true;
 #endif
 
-            #if !DEBUG
-                Firebase.Core.App.Configure();
-            #endif
+#if !DEBUG
+            Firebase.Core.App.Configure();
+            Messaging.SharedInstance.Delegate = this;
+#endif
 
             UNUserNotificationCenter.Current.Delegate = this;
             UIApplication.SharedApplication.RegisterForRemoteNotifications();
-            Messaging.SharedInstance.Delegate = this;
+
+            var googleServiceDictionary = NSDictionary.FromFile("GoogleService-Info.plist");
+            SignIn.SharedInstance.ClientId = googleServiceDictionary["CLIENT_ID"].ToString();
 
             initializeAnalytics();
 
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
             Window.MakeKeyAndVisible();
-            
+
             IosDependencyContainer.EnsureInitialized(Window, this);
             var app = new AppStart(IosDependencyContainer.Instance);
             app.LoadLocalizationConfiguration();
@@ -77,8 +82,7 @@ namespace Toggl.iOS
             }
 
 #if USE_ANALYTICS
-            var openUrlOptions = new UIKit.UIApplicationOpenUrlOptions(options);
-            return Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
+            return SignIn.SharedInstance.HandleUrl(url);
 #endif
 
             return false;
@@ -96,28 +100,24 @@ namespace Toggl.iOS
 
         private void navigateAccordingToAccessLevel(AccessLevel accessLevel, AppStart app)
         {
-            var navigationService = IosDependencyContainer.Instance.NavigationService;
+            if (accessLevel == AccessLevel.LoggedIn) app.ForceFullSync();
 
-            switch (accessLevel)
+            var vc = accessLevel switch
             {
-                case AccessLevel.AccessRestricted:
-                    navigationService.Navigate<OutdatedAppViewModel>(null);
-                    return;
-                case AccessLevel.NotLoggedIn:
-                    navigationService.Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty, null);
-                    return;
-                case AccessLevel.TokenRevoked:
-                    navigationService.Navigate<TokenResetViewModel>(null);
-                    return;
-                case AccessLevel.LoggedIn:
-                    app.ForceFullSync();
-                    var viewModel = IosDependencyContainer.Instance
-                        .ViewModelLoader
-                        .Load<MainTabBarViewModel>();
-                    viewModel.Initialize();
-                    Window.RootViewController = ViewControllerLocator.GetViewController(viewModel);
-                    return;
-            }
+                AccessLevel.AccessRestricted => loadRootViewController<OutdatedAppViewModel, Unit>(),
+                AccessLevel.NotLoggedIn => loadRootViewController<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty),
+                AccessLevel.TokenRevoked => loadRootViewController<TokenResetViewModel, Unit>(),
+                AccessLevel.LoggedIn => loadRootViewController<MainTabBarViewModel, Unit>()
+            };
+            Window.RootViewController = vc;
+        }
+
+        private UIViewController loadRootViewController<T, TInput>(TInput input = default) where T : ViewModel<TInput, Unit>
+        {
+            var viewModelLoader = IosDependencyContainer.Instance.ViewModelLoader;
+            var viewModel = viewModelLoader.Load<T>();
+            viewModel.Initialize(input);
+            return ViewControllerLocator.GetViewController(viewModel);
         }
     }
 }

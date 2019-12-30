@@ -1,4 +1,5 @@
-﻿using Toggl.Core.Models.Interfaces;
+﻿using System;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 
@@ -37,7 +38,7 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         public override int GetHashCode()
-            => HashCode.From(
+            => HashCode.Combine(
                 WorkspaceId,
                 WorkspaceName ?? string.Empty,
                 Selected

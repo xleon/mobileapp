@@ -6,20 +6,22 @@ namespace Toggl.iOS.Extensions
 {
     public static class TextViewExtensions
     {
-        public static void RejectAutocorrect(this UITextView textView)
+        public static void RejectAutocorrect(this UITextView textView, UIResponder scratchView)
         {
-            var originalText = textView.Text;
+            var originalText = textView.AttributedText;
             NSRange originalRange = textView.SelectedRange;
             CGPoint originalOffset = textView.ContentOffset;
 
-            //Force any pending autocorrection to be applied
-            textView.ResignFirstResponder();
+            // force iOS to accept the autocorrect suggestion by changing the focus
+            // to a differnent view - the keyboard won't hide and reappear
+            scratchView.BecomeFirstResponder();
             textView.BecomeFirstResponder();
 
-            string finalText = textView.Text;
+            // now throw away what the autocorrect changed in the text view (if anything)
+            var finalText = textView.AttributedText;
             if (originalText != finalText)
             {
-                textView.Text = originalText;
+                textView.AttributedText = originalText;
                 textView.SelectedRange = originalRange;
                 textView.SetContentOffset(originalOffset, false);
             }

@@ -31,10 +31,6 @@ namespace Toggl.Core.UI.Helper
             public static readonly Color InvocationPhrase = brownishGrey;
             public static readonly Color HeaderLabel = silver;
             public static readonly Color HeaderBackground = paleGreyTwo;
-
-            public static readonly Color WorkflowPink = mediumPink;
-            public static readonly Color WorkflowPurple = easterPurple;
-            public static readonly Color WorkflowBlue = azure;
         }
 
         public static class Onboarding
@@ -249,19 +245,15 @@ namespace Toggl.Core.UI.Helper
                 public static readonly Color[] Rainbow =
                 {
                     new Color("F1F2F3"),
-                    new Color("EDE4F0"),
                     new Color("DFC3E6"),
                     new Color("CA99D7"),
-                    new Color("B599D7"),
                     new Color("8799E5"),
                     new Color("5168C5"),
                     new Color("55BBDF"),
                     new Color("95D0E5"),
-                    new Color("B0DCEC"),
                     new Color("BFDBD7"),
                     new Color("7FC5BC"),
                     new Color("E5F0BA"),
-                    new Color("F0E3BA"),
                     new Color("F8DAB8"),
                     new Color("F0D06C"),
                     new Color("EFBA7A"),

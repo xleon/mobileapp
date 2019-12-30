@@ -7,10 +7,8 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
 using Toggl.Core;
 using Toggl.Core.UI.Calendar;
-using Toggl.Core.UI.Extensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -57,6 +55,8 @@ namespace Toggl.iOS.Views.Calendar
 
         private UICollectionViewLayoutAttributes currentTimeLayoutAttributes;
 
+        private bool isToday => date.ToLocalTime().Date == timeService.CurrentDateTime.ToLocalTime().Date;
+
         private bool isEditing;
         public bool IsEditing
         {
@@ -69,6 +69,7 @@ namespace Toggl.iOS.Views.Calendar
         }
 
         public CalendarCollectionViewLayout(
+            DateTime date,
             ITimeService timeService,
             ICalendarCollectionViewLayoutDataSource dataSource)
             : base()
@@ -76,22 +77,22 @@ namespace Toggl.iOS.Views.Calendar
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
 
-            this.timeService = timeService;
+            this.date = date;
             this.dataSource = dataSource;
-
-            date = timeService.CurrentDateTime.ToLocalTime().Date;
+            this.timeService = timeService;
 
             timeService
                 .MidnightObservable
                 .Subscribe(dateChanged)
                 .DisposedBy(disposeBag);
 
-            timeService
-                .CurrentDateTimeObservable
-                .DistinctUntilChanged(offset => offset.Minute)
-                .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler)
-                .Subscribe(_ => InvalidateCurrentTimeLayout())
-                .DisposedBy(disposeBag);
+            if (isToday)
+                timeService
+                    .CurrentDateTimeObservable
+                    .DistinctUntilChanged(offset => offset.Minute)
+                    .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler)
+                    .Subscribe(_ => InvalidateCurrentTimeLayout())
+                    .DisposedBy(disposeBag);
 
             currentTimeLayoutAttributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(CurrentTimeSupplementaryViewKind, NSIndexPath.FromItemSection(0, 0));
         }
@@ -108,7 +109,7 @@ namespace Toggl.iOS.Views.Calendar
         {
             get
             {
-                var width = CollectionView.Bounds.Width;
+                var width = CollectionView.Bounds.Width - (CollectionView.ContentInset.Left + CollectionView.ContentInset.Right);
                 var height = ContentViewHeight + hourSupplementaryLabelHeight;
                 return new CGSize(width, height);
             }
@@ -128,7 +129,8 @@ namespace Toggl.iOS.Views.Calendar
 
             InvalidateLayout();
             InvalidateLayoutForVisibleItems();
-            InvalidateCurrentTimeLayout();
+            if (isToday)
+                InvalidateCurrentTimeLayout();
         }
 
         public DateTimeOffset DateAtPoint(CGPoint point)
@@ -165,8 +167,9 @@ namespace Toggl.iOS.Views.Calendar
             InvalidateLayout(context);
         }
 
+        // We should invalidate the whole layout only when the collectionview's width changes
         public override bool ShouldInvalidateLayoutForBoundsChange(CGRect newBounds)
-            => true;
+            => CollectionView.Bounds.Width != newBounds.Width;
 
         public override UICollectionViewLayoutAttributes[] LayoutAttributesForElementsInRect(CGRect rect)
         {
@@ -183,8 +186,10 @@ namespace Toggl.iOS.Views.Calendar
 
             var attributes = itemsAttributes
                 .Concat(hoursAttributes)
-                .Concat(editingHoursAttributes)
-                .Append(currentTimeLayoutAttributes);
+                .Concat(editingHoursAttributes);
+
+            if (isToday)
+                attributes = attributes.Append(currentTimeLayoutAttributes);
 
             return attributes.ToArray();
         }
@@ -218,8 +223,15 @@ namespace Toggl.iOS.Views.Calendar
             }
             else
             {
-                currentTimeLayoutAttributes.Frame = FrameForCurrentTime();
-                currentTimeLayoutAttributes.ZIndex = 300;
+                if (isToday)
+                {
+                    currentTimeLayoutAttributes.Frame = FrameForCurrentTime();
+                    currentTimeLayoutAttributes.ZIndex = 600;
+                }
+                else
+                {
+                    currentTimeLayoutAttributes.Hidden = true;
+                }
                 return currentTimeLayoutAttributes;
             }
         }

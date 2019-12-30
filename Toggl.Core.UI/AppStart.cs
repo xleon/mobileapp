@@ -42,7 +42,7 @@ namespace Toggl.Core.UI
                         cultureInfo = new CultureInfo(twoLettersLanguageCode);
                 }
 
-                if (SupportedLanguageCodes.Contains(cultureInfo.Name))
+                if (SupportedTwoLettersLanguageCodes.Contains(cultureInfo.TwoLetterISOLanguageName, StringComparer.InvariantCultureIgnoreCase))
                 {
                     dateFormatCultureInfo = cultureInfo;
                 }
@@ -116,8 +116,8 @@ namespace Toggl.Core.UI
 
         private void setLocale(CultureInfo cultureInfo, CultureInfo dateFormatCultureInfo)
         {
-            Thread.CurrentThread.CurrentCulture = cultureInfo;
-            Thread.CurrentThread.CurrentUICulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
             DateFormatCultureInfo.CurrentCulture = dateFormatCultureInfo;
         }
     }

@@ -1,9 +1,5 @@
 ﻿using FluentAssertions;
-using NSubstitute;
 using System;
-using System.Linq;
-using System.Reactive.Linq;
-using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.ViewModels;
 using Xunit;
@@ -36,7 +32,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     UserAccessManager,
                     PrivateSharedStorageService,
                     PlatformInfo,
-                    WidgetsService
+                    WidgetsService,
+                    LastTimeUsageStorage
                 );
         }
 
@@ -65,7 +62,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool useUserAccessManager,
                     bool usePrivateSharedStorageService,
                     bool usePlatformInfo,
-                    bool useWidgetsService)
+                    bool useWidgetsService,
+                    bool useLastTimeUsageStorage)
             {
                 var timeService = useTimeService ? TimeService : null;
                 var dataSource = useDataSource ? DataSource : null;
@@ -88,6 +86,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
                 var platformInfo = usePlatformInfo ? PlatformInfo : null;
                 var widgetsService = useWidgetsService ? WidgetsService : null;
+                var lastTimeUsageStorage = useLastTimeUsageStorage ? LastTimeUsageStorage : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainTabBarViewModel(
@@ -111,28 +110,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         userAccessManager,
                         privateSharedStorageService,
                         platformInfo,
-                        widgetsService
+                        widgetsService,
+                        lastTimeUsageStorage
                     );
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
-            }
-        }
-
-        public sealed class TheTabsProperty : MainTabViewModelTest
-        {
-            [Theory]
-            [InlineData(Platform.Daneel, false)]
-            [InlineData(Platform.Giskard, true)]
-            public void ShouldContainTheSettingsViewModelBasedOntheRemoteConfigService(Platform platform, bool includesSettings)
-            {
-                PlatformInfo.Platform.Returns(platform);
-
-                var viewModel = CreateViewModel();
-
-                var expectedTabCount = 3 + (includesSettings ? 1 : 0);
-
-                viewModel.Tabs.Count().Should().Be(expectedTabCount);
             }
         }
     }

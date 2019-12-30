@@ -1,18 +1,12 @@
-﻿using Android.Animation;
+using System;
 using Android.Content;
-using Android.Graphics;
-using Android.Graphics.Drawables;
-using Android.Support.Design.Widget;
-using Android.Support.V4.Widget;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Views.InputMethods;
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Shared;
-using Color = Toggl.Shared.Color;
 using AndroidColor = Android.Graphics.Color;
-using Android.App;
+using AndroidX.Core.Widget;
+using Google.Android.Material.AppBar;
 using Toggl.Droid.Helper;
 
 namespace Toggl.Droid.Extensions
@@ -75,17 +69,162 @@ namespace Toggl.Droid.Extensions
 
             public void OnScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY)
             {
-                if (v is RecyclerView recyclerView)
-                {
-                    var targetElevation = recyclerView.CanScrollVertically(-1) ?  defaultToolbarElevationInDPs.DpToPixels(appBarLayout.Context) : 0f;
-                    appBarLayout.Elevation = targetElevation;
-                }
+                var targetElevation = v.CanScrollVertically(-1) ?  defaultToolbarElevationInDPs.DpToPixels(appBarLayout.Context) : 0f;
+                appBarLayout.Elevation = targetElevation;
+            }
+        }
 
-                if (v is NestedScrollView scrollView)
-                {
-                    var targetElevation = scrollView.CanScrollVertically(-1) ? defaultToolbarElevationInDPs.DpToPixels(appBarLayout.Context) : 0f;
-                    appBarLayout.Elevation = targetElevation;
-                }
+        public static void UpdateMargin(this View view, int? left = null, int? top = null, int? right = null, int? bottom = null)
+        {
+            if (!(view.LayoutParameters is ViewGroup.MarginLayoutParams)) return;
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.LayoutParameters;
+            p.SetMargins(
+                left.GetValueOrDefault(p.LeftMargin),
+                top.GetValueOrDefault(p.TopMargin),
+                right.GetValueOrDefault(p.RightMargin),
+                bottom.GetValueOrDefault(p.BottomMargin)
+            );
+            view.RequestLayout();
+        }
+
+        public static void UpdatePadding(this View view, int? left = null, int? top = null, int? right = null, int? bottom = null)
+        {
+            view.SetPadding(
+                left.GetValueOrDefault(view.PaddingLeft),
+                top.GetValueOrDefault(view.PaddingTop),
+                right.GetValueOrDefault(view.PaddingRight),
+                bottom.GetValueOrDefault(view.PaddingBottom)
+                );
+        }
+
+        public static void FitBottomPaddingInset(this View view)
+        {
+            view.DoOnApplyWindowInsets((v, insets, initialSpacing) =>
+            {
+                view.UpdatePadding(bottom: initialSpacing.Padding.Bottom + insets.SystemWindowInsetBottom);
+            });
+        }
+
+        public static void FitTopPaddingInset(this View view)
+        {
+            view.DoOnApplyWindowInsets((v, insets, initialSpacing) =>
+            {
+                v.UpdatePadding(top: initialSpacing.Padding.Top + insets.SystemWindowInsetTop);
+            });
+        }
+
+        public static void FitBottomMarginInset(this View view)
+        {
+            view.DoOnApplyWindowInsets((v, insets, initialSpacing) =>
+            {
+                view.UpdateMargin(bottom: initialSpacing.Margin.Bottom + insets.SystemWindowInsetBottom);
+            });
+        }
+
+        public static void FitTopMarginInset(this View view)
+        {
+            view.DoOnApplyWindowInsets((v, insets, initialSpacing) =>
+            {
+                view.UpdateMargin(top: initialSpacing.Margin.Top + insets.SystemWindowInsetBottom);
+            });
+        }
+
+        public static void DoOnApplyWindowInsets(this View view, Action<View, WindowInsets, PaddingAndMargin> insetsHandler)
+        {
+            // Create a snapshot of the view's padding state
+            var initialPaddingAndMargin = view.recordInitialPaddingAndMarginForView();
+            // Set the actual Listener which proxies to insetsHandler, also passing in the original padding state
+            view.SetOnApplyWindowInsetsListener(new OnApplyWindowInsetsListener(insetsHandler, initialPaddingAndMargin));
+            // request some insets
+            view.RequestApplyInsetsWhenAttached();
+        }
+
+        private class OnApplyWindowInsetsListener : Java.Lang.Object, View.IOnApplyWindowInsetsListener
+        {
+            private readonly Action<View, WindowInsets, PaddingAndMargin> insetsHandler;
+            private readonly PaddingAndMargin paddingAndMargin;
+
+            public OnApplyWindowInsetsListener(Action<View, WindowInsets, PaddingAndMargin> insetsHandler, PaddingAndMargin paddingAndMargin)
+            {
+                this.insetsHandler = insetsHandler;
+                this.paddingAndMargin = paddingAndMargin;
+            }
+
+            public WindowInsets OnApplyWindowInsets(View v, WindowInsets insets)
+            {
+                insetsHandler(v, insets, paddingAndMargin);
+                // Always return the insets, so that children can also use them
+                return insets;
+            }
+        }
+
+        private static PaddingAndMargin recordInitialPaddingAndMarginForView(this View view)
+            => new PaddingAndMargin(recordInitialPaddingForView(view), recordInitialMarginForView(view));
+
+        private static SpacingDimensions recordInitialPaddingForView(this View view)
+            => new SpacingDimensions(view.PaddingLeft, view.PaddingTop, view.PaddingRight, view.PaddingBottom);
+
+        private static SpacingDimensions recordInitialMarginForView(this View view)
+        {
+            if (!(view.LayoutParameters is ViewGroup.MarginLayoutParams)) {
+                return new SpacingDimensions(0,0,0,0);
+            }
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.LayoutParameters;
+            return new SpacingDimensions(p.LeftMargin, p.TopMargin, p.RightMargin, p.BottomMargin);
+        }
+
+        public struct PaddingAndMargin
+        {
+            public SpacingDimensions Padding { get; }
+            public SpacingDimensions Margin { get; }
+            public PaddingAndMargin(SpacingDimensions padding, SpacingDimensions margin)
+            {
+                Padding = padding;
+                Margin = margin;
+            }
+        }
+
+        public struct SpacingDimensions
+        {
+            public int Left { get; }
+            public int Top { get; }
+            public int Right { get; }
+            public int Bottom { get; }
+
+            public SpacingDimensions(int left, int top, int right, int bottom)
+            {
+                Left = left;
+                Top = top;
+                Right = right;
+                Bottom = bottom;
+            }
+        }
+
+        public static void RequestApplyInsetsWhenAttached(this View view)
+        {
+            if (view.IsAttachedToWindow)
+            {
+                // We're already attached, just request as normal
+                view.RequestApplyInsets();
+            }
+            else
+            {
+                // We're not attached to the hierarchy, add a listener to
+                // request when we are
+                view.AddOnAttachStateChangeListener(new OnAttachStateChangeListener());
+            }
+        }
+
+        private class OnAttachStateChangeListener : Java.Lang.Object, View.IOnAttachStateChangeListener
+        {
+            public void OnViewAttachedToWindow(View attachedView)
+            {
+                attachedView.RemoveOnAttachStateChangeListener(this);
+                attachedView.RequestApplyInsets();
+            }
+
+            public void OnViewDetachedFromWindow(View detachedView)
+            {
             }
         }
     }

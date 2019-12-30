@@ -16,7 +16,7 @@ namespace Toggl.Shared
         public bool Equals(PushNotificationsToken other)
             => token == other.token;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => obj is PushNotificationsToken pushNotificationsToken && Equals(pushNotificationsToken);
 
         public override int GetHashCode()

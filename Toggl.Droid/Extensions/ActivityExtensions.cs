@@ -1,16 +1,17 @@
 ﻿using Android.App;
 using Android.App.Job;
 using Android.Content;
-using Android.Support.V4.App;
 using Android.Util;
 using Android.Views;
 using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using AndroidX.Core.App;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Helper;
 using Toggl.Droid.Services;
+using Toggl.Droid.SystemServices;
 using Toggl.Droid.Views;
 using Toggl.Shared.Extensions;
 using static Toggl.Droid.Helper.NotificationsConstants;
@@ -154,6 +155,20 @@ namespace Toggl.Droid.Extensions
             }
 
             throw new ArgumentOutOfRangeException(nameof(type));
+        }
+
+        public static void SetQFlags(this Activity activity)
+        {
+            if (QApis.AreAvailable)
+            {
+                var uiOptions = SystemUiFlags.LayoutHideNavigation | SystemUiFlags.LayoutStable;
+                if (activity.Resources.GetBoolean(Resource.Boolean.is_light_theme))
+                {
+                    uiOptions |= SystemUiFlags.LightNavigationBar;
+                    uiOptions |= SystemUiFlags.LightStatusBar;
+                }
+                activity.Window.DecorView.SystemUiVisibility = (StatusBarVisibility) (int) uiOptions;
+            }
         }
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/CalendarDayPage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <ViewStub 
+        android:id="@+id/CalendarDayViewStub"
+        android:inflatedId="@+id/CalendarDayView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout="@layout/CalendarDayViewPageFragmentDayView" />
+
+    <ViewStub
+        android:id="@+id/ContextualMenuStub" 
+        android:inflatedId="@+id/ContextualMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="148dp"
+        android:layout="@layout/CalendarDayViewPageFragmentContextualMenu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

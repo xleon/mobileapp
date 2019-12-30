@@ -7,6 +7,8 @@ namespace Toggl.Core.Analytics
         Siri,
         Widget,
         EditView,
-        Wheel
+        Wheel,
+        CalendarContextualMenu,
+        Keyboard
     }
 }

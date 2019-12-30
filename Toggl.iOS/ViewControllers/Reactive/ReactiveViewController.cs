@@ -33,6 +33,7 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
             ViewModel?.AttachView(this);
+            ConfigureKeyCommands();
         }
 
         public override void ViewWillAppear(bool animated)
@@ -81,7 +82,7 @@ namespace Toggl.iOS.ViewControllers
             ViewModel?.ViewDestroyed();
         }
 
-        public Task<bool> DismissFromNavigationController()
+        public virtual Task<bool> DismissFromNavigationController()
             => ViewModel.CloseWithDefaultResult();
 
         public void ViewcontrollerWasPopped()
@@ -100,6 +101,14 @@ namespace Toggl.iOS.ViewControllers
 
             if (!disposing) return;
             DisposeBag?.Dispose();
+        }
+
+        protected virtual void ConfigureKeyCommands()
+        {
+            if (AcceptsCancelKeyCommand)
+            {
+                AddKeyCommand(CancelKeyCommand);
+            }
         }
     }
 }

@@ -47,9 +47,6 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UIButton SelectCountryButton { get; set; }
 
 		[Outlet]
-		UIKit.UIButton ShowPasswordButton { get; set; }
-
-		[Outlet]
 		UIKit.UIButton SignupButton { get; set; }
 
 		[Outlet]
@@ -114,11 +111,6 @@ namespace Toggl.iOS.ViewControllers
 			if (SelectCountryButton != null) {
 				SelectCountryButton.Dispose ();
 				SelectCountryButton = null;
-			}
-
-			if (ShowPasswordButton != null) {
-				ShowPasswordButton.Dispose ();
-				ShowPasswordButton = null;
 			}
 
 			if (SignupButton != null) {

@@ -12,6 +12,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class SelectProjectViewController : ReactiveViewController<SelectProjectViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         public SelectProjectViewController(SelectProjectViewModel viewModel)
             : base(viewModel, nameof(SelectProjectViewController))
         {
@@ -25,7 +27,7 @@ namespace Toggl.iOS.ViewControllers
 
             SearchView.InsertSeparator();
 
-            TitleLabel.Text = Resources.Projects;
+            TitleLabel.Text = Resources.SelectProjectTitle;
             EmptyStateLabel.Text = Resources.EmptyProjectText;
 
             var source = new SelectProjectTableViewSource();

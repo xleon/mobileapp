@@ -83,3 +83,9 @@ These endpoints are prefixed with `https://mobile.toggl.com/reports/api/v3/` (`m
 # Timezone Endpoints
 
 * `GET /timezones` 
+
+## Push Notifications
+
+* `GET me/push_services`
+* `POST me/push_services`
+* `DELETE me/push_services`

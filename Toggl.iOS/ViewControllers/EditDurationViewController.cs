@@ -21,6 +21,8 @@ namespace Toggl.iOS.ViewControllers
         : ReactiveViewController<EditDurationViewModel>,
           IUIGestureRecognizerDelegate
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         private const int stackViewSpacing = 26;
         private const double cardHeight = 450;
 
@@ -39,8 +41,8 @@ namespace Toggl.iOS.ViewControllers
 
             PreferredContentSize = new CGSize(0, cardHeight);
 
-            StartLabel.Text = Resources.Start;
-            EndLabel.Text = Resources.End;
+            StartLabel.Text = Resources.StartTime;
+            EndLabel.Text = Resources.EndTime;
             TitleLabel.Text = Resources.StartAndStopTime;
             SetEndButton.SetTitle(Resources.Stop, UIControlState.Normal);
             SaveButton.SetTitle(Resources.Save, UIControlState.Normal);

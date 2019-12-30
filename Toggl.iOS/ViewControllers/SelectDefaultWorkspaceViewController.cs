@@ -11,6 +11,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class SelectDefaultWorkspaceViewController : ReactiveViewController<SelectDefaultWorkspaceViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         private const int heightAboveTableView = 127;
         private const int width = 288;
         private readonly int maxHeight = UIScreen.MainScreen.Bounds.Width > 320 ? 627 : 528;

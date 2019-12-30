@@ -40,11 +40,11 @@ namespace Toggl.Core.DataSources
 
         protected override IRivalsResolver<IDatabaseTimeEntry> RivalsResolver { get; }
 
-        public TimeEntriesDataSource(
-            IRepository<IDatabaseTimeEntry> repository,
+        public TimeEntriesDataSource(IRepository<IDatabaseTimeEntry> repository,
             ITimeService timeService,
-            IAnalyticsService analyticsService)
-            : base(repository)
+            IAnalyticsService analyticsService, 
+            ISchedulerProvider schedulerProvider)
+            : base(repository, schedulerProvider)
         {
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(repository, nameof(repository));

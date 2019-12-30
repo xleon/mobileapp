@@ -1,6 +1,7 @@
-﻿using Android.Support.Design.Widget;
-using Android.Views;
+﻿using Android.Views;
 using Android.Widget;
+using Google.Android.Material.TextField;
+using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Activities
 {
@@ -8,7 +9,8 @@ namespace Toggl.Droid.Activities
     {
         private Button signupButton;
 
-        private View loginCard;
+        private ViewGroup loginCard;
+        private ViewGroup loginSignupContainer;
         private View googleSignupButton;
 
         private ImageView countryErrorView;
@@ -34,7 +36,9 @@ namespace Toggl.Droid.Activities
         {
             signUpEmailLabel = FindViewById<TextInputLayout>(Resource.Id.SignUpEmail);
             signUpPasswordLabel = FindViewById<TextInputLayout>(Resource.Id.SignUpPassword);
-            loginCard = FindViewById(Resource.Id.LoginSignupCardView);
+            loginCard = FindViewById<ViewGroup>(Resource.Id.LoginSignupCardView);
+            loginSignupContainer = FindViewById<ViewGroup>(Resource.Id.LoginSignupContainer);
+            loginSignupContainer.FitBottomPaddingInset();
             errorTextView = FindViewById<TextView>(Resource.Id.SignUpError);
             countryNameTextView = FindViewById<TextView>(Resource.Id.SignUpCountryName);
             signUpOrLabel = FindViewById<TextView>(Resource.Id.SignUpOrLabel);
@@ -48,7 +52,7 @@ namespace Toggl.Droid.Activities
             emailEditText = FindViewById<EditText>(Resource.Id.SignUpEmailEditText);
             passwordEditText = FindViewById<EditText>(Resource.Id.SignUpPasswordEditText);
             countryErrorView = FindViewById<ImageView>(Resource.Id.SignUpCountryErrorView);
-            
+
             signUpEmailLabel.Hint = Shared.Resources.Email;
             signUpPasswordLabel.Hint = Shared.Resources.Password;
             signUpOrLabel.Text = Shared.Resources.Or;

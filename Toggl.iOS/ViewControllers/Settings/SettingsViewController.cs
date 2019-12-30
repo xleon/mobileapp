@@ -25,6 +25,8 @@ namespace Toggl.iOS.ViewControllers
 
     public partial class SettingsViewController : ReactiveViewController<SettingsViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+        
         private readonly float bottomInset = 24;
 
         public SettingsViewController(SettingsViewModel viewModel)
@@ -40,9 +42,8 @@ namespace Toggl.iOS.ViewControllers
             ((ReactiveNavigationController)NavigationController).SetBackgroundColor(ColorAssets.TableBackground);
 
             NavigationItem.RightBarButtonItem = ReactiveNavigationController.CreateSystemItem(
-                UIBarButtonSystemItem.Done,
-                () => ViewModel.Close()
-            );
+                Resources.Done, UIBarButtonItemStyle.Done, ViewModel.Close);
+            NavigationItem.BackBarButtonItem.Title = Resources.Back;
 
             var source = new SettingsTableViewSource(tableView);
             tableView.Source = source;
@@ -123,16 +124,15 @@ namespace Toggl.iOS.ViewControllers
 
             sections.Add(timerDefaultsSection);
 
-            if (ViewModel.CalendarSettingsEnabled)
-            {
-                var calendarSection = new SettingSection(Resources.Calendar, new ISettingRow[]
-                {
-                    new NavigationRow(Resources.CalendarSettingsTitle, ViewModel.OpenCalendarSettings),
-                    new NavigationRow(Resources.SmartReminders, ViewModel.OpenNotificationSettings),
-                });
 
-                sections.Add(Observable.Return(calendarSection));
-            }
+            var calendarSection = new SettingSection(Resources.Calendar, new ISettingRow[]
+            {
+                new NavigationRow(Resources.CalendarSettingsTitle, ViewModel.OpenCalendarSettings),
+                new NavigationRow(Resources.SmartReminders, ViewModel.OpenNotificationSettings),
+            });
+
+            sections.Add(Observable.Return(calendarSection));
+
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
             {
@@ -179,7 +179,7 @@ namespace Toggl.iOS.ViewControllers
 # if DEBUG
             recognizer = new UILongPressGestureRecognizer(recognizer =>
             {
-                if (recognizer.State != UIGestureRecognizerState.Recognized)
+                if (recognizer.State != UIGestureRecognizerState.Began)
                     return;
 
                 showErrorTriggeringView();

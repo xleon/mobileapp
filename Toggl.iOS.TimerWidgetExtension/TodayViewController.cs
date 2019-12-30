@@ -59,6 +59,8 @@ namespace Toggl.iOS.TimerWidgetExtension
             dataSource.Suggestions = suggestions;
             dataSource.Callback = continueSuggestion;
             SuggestionsTableView.Source = dataSource;
+
+            SharedStorage.Instance.ObserveChangesToCurrentRunningTimeEntry(renderRunningTimeEntry);
         }
 
         public override void ViewWillAppear(bool animated)
@@ -67,7 +69,7 @@ namespace Toggl.iOS.TimerWidgetExtension
             ExtensionContext.SetWidgetLargestAvailableDisplayMode(NCWidgetDisplayMode.Expanded);
             if (SharedStorage.Instance.GetApiToken() == null)
             {
-                renderErrorState(Resources.WidgetLogInToTrackTime);
+                renderErrorState(Resources.LoginToTrack);
             }
             else
             {
@@ -95,8 +97,11 @@ namespace Toggl.iOS.TimerWidgetExtension
         public override void ViewDidDisappear(bool animated)
         {
             base.ViewDidDisappear(animated);
+
             elapsedTimeTimer?.Invalidate();
             elapsedTimeTimer = null;
+
+            SharedStorage.Instance.StopObservingChangesToCurrentRunningTimeEntry();
         }
 
         [Export("widgetActiveDisplayModeDidChange:withMaximumSize:")]

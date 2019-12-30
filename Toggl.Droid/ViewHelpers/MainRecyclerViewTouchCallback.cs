@@ -1,23 +1,24 @@
 ﻿using Android.Graphics;
 using Android.Runtime;
-using Android.Support.V7.Widget;
-using Android.Support.V7.Widget.Helper;
 using System;
+using Toggl.Core.UI.ViewModels.MainLog;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.ViewHolders;
+using Toggl.Droid.ViewHolders.MainLog;
 
 namespace Toggl.Droid.ViewHelpers
 {
     public class MainRecyclerViewTouchCallback : ItemTouchHelper.SimpleCallback
     {
-        private MainRecyclerAdapter adapter;
+        private MainLogRecyclerAdapter adapter;
         public bool AreSwipeActionsEnabled { get; set; }
 
         public MainRecyclerViewTouchCallback(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {
         }
 
-        public MainRecyclerViewTouchCallback(MainRecyclerAdapter adapter) : base(0, ItemTouchHelper.Left | ItemTouchHelper.Right)
+        public MainRecyclerViewTouchCallback(MainLogRecyclerAdapter adapter) : base(0, ItemTouchHelper.Left | ItemTouchHelper.Right)
         {
             this.adapter = adapter;
         }
@@ -30,7 +31,7 @@ namespace Toggl.Droid.ViewHelpers
         {
             if (viewHolder is MainLogCellViewHolder mainLogCellViewHolder && mainLogCellViewHolder.CanSync)
             {
-                return !mainLogCellViewHolder.Item.ViewModel.CanContinue ? ItemTouchHelper.Left : base.GetSwipeDirs(recyclerView, viewHolder);
+                return !((TimeEntryLogItemViewModel) mainLogCellViewHolder.Item).CanContinue ? ItemTouchHelper.Left : base.GetSwipeDirs(recyclerView, viewHolder);
             }
 
             return ItemTouchHelper.ActionStateIdle;

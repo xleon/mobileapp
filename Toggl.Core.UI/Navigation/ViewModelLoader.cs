@@ -107,7 +107,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.UserAccessManager,
                     dependencyContainer.PrivateSharedStorageService,
                     dependencyContainer.PlatformInfo,
-                    dependencyContainer.WidgetsService);
+                    dependencyContainer.WidgetsService,
+                    dependencyContainer.LastTimeUsageStorage);
             }
 
             if (viewModelType == typeof(MainViewModel))
@@ -131,7 +132,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.BackgroundService,
                     dependencyContainer.PlatformInfo,
-                    dependencyContainer.WidgetsService);
+                    dependencyContainer.WidgetsService,
+                    dependencyContainer.LastTimeUsageStorage);
             }
 
             if (viewModelType == typeof(NoWorkspaceViewModel))
@@ -322,26 +324,13 @@ namespace Toggl.Core.UI.Navigation
                 return new CalendarViewModel(
                     dependencyContainer.DataSource,
                     dependencyContainer.TimeService,
+                    dependencyContainer.RxActionFactory,
                     dependencyContainer.UserPreferences,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.BackgroundService,
                     dependencyContainer.InteractorFactory,
-                    dependencyContainer.OnboardingStorage,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.PermissionsChecker,
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.RxActionFactory);
-            }
-
-            if (viewModelType == typeof(SelectUserCalendarsViewModel))
-            {
-                return new SelectUserCalendarsViewModel(
-                    dependencyContainer.UserPreferences,
-                    dependencyContainer.AnalyticsService,
-                    dependencyContainer.OnboardingStorage,
-                    dependencyContainer.InteractorFactory,
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.NavigationService);
             }
 
             if (viewModelType == typeof(ReportsViewModel))
@@ -372,7 +361,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RxActionFactory,
-                    dependencyContainer.PermissionsChecker);
+                    dependencyContainer.PermissionsChecker,
+                    dependencyContainer.SchedulerProvider);
             }
 
             if (viewModelType == typeof(LicensesViewModel))
@@ -411,7 +401,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.UserPreferences,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.InteractorFactory,
-                    dependencyContainer.OnboardingStorage,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.PermissionsChecker,
@@ -445,11 +434,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService);
             }
 
-            if (viewModelType == typeof(SiriWorkflowsViewModel))
-            {
-                return new SiriWorkflowsViewModel(dependencyContainer.NavigationService);
-            }
-
             if (viewModelType == typeof(SiriShortcutsCustomTimeEntryViewModel))
             {
                 return new SiriShortcutsCustomTimeEntryViewModel(
@@ -466,6 +450,17 @@ namespace Toggl.Core.UI.Navigation
                 return new PasteFromClipboardViewModel(
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.OnboardingStorage,
+                    dependencyContainer.NavigationService);
+            }
+
+            if (viewModelType == typeof(January2020CampaignViewModel))
+            {
+                return new January2020CampaignViewModel(
+                    dependencyContainer.OnboardingStorage,
+                    dependencyContainer.AnalyticsService,
+                    dependencyContainer.RemoteConfigService,
+                    dependencyContainer.PlatformInfo,
+                    dependencyContainer.SchedulerProvider,
                     dependencyContainer.NavigationService);
             }
 

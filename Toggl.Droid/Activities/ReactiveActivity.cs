@@ -2,13 +2,15 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Android.Support.V7.App;
-using Android.Support.V7.Widget;
+using AndroidX.AppCompat.App;
+using AndroidX.AppCompat.Widget;
 using Android.Views;
 using System;
 using System.Reactive.Disposables;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.Extensions;
 using Toggl.Droid.Presentation;
 
 namespace Toggl.Droid.Activities
@@ -57,11 +59,12 @@ namespace Toggl.Droid.Activities
 
             ViewModel?.AttachView(this);
             SetContentView(layoutResId);
+            setupRootViewInsets();
             OverridePendingTransition(transitions.SelfIn, transitions.OtherOut);
-
             InitializeViews();
             RestoreViewModelStateFromBundle(bundle);
             InitializeBindings();
+            this.SetQFlags();
         }
 
         /// <summary>
@@ -168,6 +171,15 @@ namespace Toggl.Droid.Activities
 
             SupportActionBar.SetDisplayHomeAsUpEnabled(showHomeAsUp);
             SupportActionBar.SetDisplayShowHomeEnabled(showHomeAsUp);
+        }
+
+        private void setupRootViewInsets()
+        {
+            var rootContentView = (ViewGroup) FindViewById(Android.Resource.Id.Content);
+            if (rootContentView != null && rootContentView.ChildCount > 0)
+            {
+                rootContentView.GetChildAt(0).FitTopPaddingInset();
+            }
         }
 
         private void bailOutToSplashScreen()

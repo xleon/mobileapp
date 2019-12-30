@@ -13,7 +13,9 @@ namespace Toggl.iOS
     {
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
+#if !DEBUG
             Messaging.SharedInstance.ApnsToken = deviceToken;
+#endif
         }
 
         public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
@@ -63,6 +65,11 @@ namespace Toggl.iOS
                 completionHandler(UIBackgroundFetchResult.NoData);
                 return;
             }
+
+            // The widgets service will listen for changes to the running
+            // time entry and it will update the data in the shared database
+            // and that way the widget will show correct information after we sync.
+            dependencyContainer.WidgetsService.Start();
 
             var syncInteractor = application.ApplicationState == UIApplicationState.Active
                 ? interactorFactory.RunPushNotificationInitiatedSyncInForeground()
