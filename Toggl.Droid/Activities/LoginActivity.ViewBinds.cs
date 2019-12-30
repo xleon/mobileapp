@@ -6,6 +6,8 @@ namespace Toggl.Droid.Activities
 {
     public sealed partial class LoginActivity
     {
+        private ViewGroup loginRoot;
+
         private Button loginButton;
 
         private TextInputLayout loginEmail;
@@ -28,6 +30,7 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeViews()
         {
+            loginRoot = FindViewById<ViewGroup>(Resource.Id.LoginRoot);
             signupCard = FindViewById(Resource.Id.LoginSignupCardView);
             errorTextView = FindViewById<TextView>(Resource.Id.LoginError);
             loginButton = FindViewById<Button>(Resource.Id.LoginLoginButton);
@@ -42,7 +45,7 @@ namespace Toggl.Droid.Activities
             emailEditText = FindViewById<EditText>(Resource.Id.LoginEmailEditText);
             loginPassword = FindViewById<TextInputLayout>(Resource.Id.LoginPassword);
             passwordEditText = FindViewById<EditText>(Resource.Id.LoginPasswordEditText);
-            
+
             loginEmail.Hint = Shared.Resources.Email;
             loginPassword.Hint = Shared.Resources.Password;
             forgotPasswordView.Text = Shared.Resources.LoginForgotPassword;

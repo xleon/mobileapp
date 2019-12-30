@@ -4,6 +4,7 @@ using Android.Runtime;
 using Android.Views;
 using System;
 using System.Reactive.Linq;
+using Android.Support.Design.Widget;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
@@ -107,6 +108,7 @@ namespace Toggl.Droid.Activities
             if (ViewModel.IsLoginInProgress)
             {
                 ViewModel.CancelLoginAtEarliestOpportunity();
+                Snackbar.Make(loginRoot, Shared.Resources.CancellingLoginAttempt, Snackbar.LengthLong).Show();
             }
             else
             {

@@ -1320,4 +1320,7 @@ to project members</value>
     <data name="LoginToShowSuggestions" xml:space="preserve">
         <value>Log in to show suggestions</value>
     </data>
+    <data name="CancellingLoginAttempt" xml:space="preserve">
+        <value>Cancelling your login attempt</value>
+    </data>
 </root>
