@@ -72,8 +72,22 @@ namespace Toggl.Droid.Activities
                 .Subscribe(progressBar.Rx().IsVisible(useGone: false))
                 .DisposedBy(DisposeBag);
 
+            ViewModel.IsLoading
+                .Select(inverse)
+                .Subscribe(emailEditText.Rx().Enabled())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.IsLoading
+                .Select(inverse)
+                .Subscribe(passwordEditText.Rx().Enabled())
+                .DisposedBy(DisposeBag);
+
             ViewModel.LoginEnabled
                 .Subscribe(loginButton.Rx().Enabled())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.LoginEnabled
+                .Subscribe(googleLoginButton.Rx().Enabled())
                 .DisposedBy(DisposeBag);
 
             //Commands
@@ -99,6 +113,8 @@ namespace Toggl.Droid.Activities
 
             string loginButtonTitle(bool isLoading)
                 => isLoading ? "" : Shared.Resources.LoginTitle;
+
+            bool inverse(bool x) => !x;
 
             this.CancelAllNotifications();
         }
