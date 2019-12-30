@@ -22,7 +22,7 @@ namespace Toggl.Droid.Services
                 {
                     runSync(parameters);
                 }
-                catch (Exception)
+                catch
                 {
                     finishJobClearingPendingSyncJobLock(parameters);
                 }
