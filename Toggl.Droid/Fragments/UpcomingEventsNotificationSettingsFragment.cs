@@ -21,8 +21,8 @@ namespace Toggl.Droid.Fragments
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-            
-            adapter.Items = ViewModel.AvailableOptions;
+
+            adapter.SetItems(ViewModel.AvailableOptions);
             adapter
                 .ItemTapObservable
                 .Subscribe(ViewModel.SelectOption.Inputs)

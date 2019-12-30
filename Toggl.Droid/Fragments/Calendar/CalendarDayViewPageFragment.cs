@@ -212,7 +212,7 @@ namespace Toggl.Droid.Fragments.Calendar
 
         private void updateMenuBindings(CalendarContextualMenu contextualMenu)
         {
-            menuActionsAdapter.Items = contextualMenu.Actions;
+            menuActionsAdapter.SetItems(contextualMenu.Actions);
             dismissActionDisposeBag?.Dispose();
             dismissActionDisposeBag = dismissButton.Rx().Tap()
                 .Subscribe(contextualMenu.Dismiss.Inputs);
@@ -295,15 +295,9 @@ namespace Toggl.Droid.Fragments.Calendar
         {
             private IImmutableList<CalendarMenuAction> items = ImmutableList<CalendarMenuAction>.Empty;
 
-            public override IImmutableList<CalendarMenuAction> Items
+            public override void SetItems(IImmutableList<CalendarMenuAction> newItems)
             {
-                get => items;
-                set => SetItems(value ?? ImmutableList<CalendarMenuAction>.Empty);
-            }
-            
-            protected override void SetItems(IImmutableList<CalendarMenuAction> newItems)
-            {
-                items = newItems;
+                items = newItems ?? ImmutableList<CalendarMenuAction>.Empty;
                 NotifyDataSetChanged();
             }
 

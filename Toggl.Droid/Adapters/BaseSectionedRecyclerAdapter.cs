@@ -34,11 +34,6 @@ namespace Toggl.Droid.Adapters
         private readonly Subject<Unit> itemsUpdateCompletedSubject = new Subject<Unit>();
         public IObservable<Unit> ItemsUpdateCompleted { get; }
 
-        public IImmutableList<SectionModel<TSection, TItem>> Items
-        {
-            set => setItems(value ?? ImmutableList<SectionModel<TSection, TItem>>.Empty);
-        }
-
         public IObservable<TItem> ItemTapObservable => itemTapSubject.AsObservable();
 
         protected virtual HashSet<int> ItemViewTypes { get; } = new HashSet<int> { ItemViewType };
@@ -117,8 +112,10 @@ namespace Toggl.Droid.Adapters
             }
         }
 
-        private void setItems(IImmutableList<SectionModel<TSection, TItem>> newItems)
+        public void SetItems(IImmutableList<SectionModel<TSection, TItem>> newItems)
         {
+            newItems = newItems ?? ImmutableList<SectionModel<TSection, TItem>>.Empty;
+
             lock (updateLock)
             {
                 var flatNewItems = flattenItems(newItems);

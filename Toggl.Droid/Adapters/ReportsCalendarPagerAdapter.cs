@@ -95,7 +95,7 @@ namespace Toggl.Droid.Adapters
                 var recyclerView = recyclerViewInfo.Value;
 
                 var adapter = recyclerView.GetAdapter() as ReportsCalendarRecyclerAdapter;
-                adapter.Items = currentMonths[position].Days;
+                adapter.SetItems(currentMonths[position].Days);
             }
         }
 

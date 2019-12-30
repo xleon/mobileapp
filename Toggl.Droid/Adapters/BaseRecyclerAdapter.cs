@@ -32,12 +32,6 @@ namespace Toggl.Droid.Adapters
 
         private readonly object updateLock = new object();
 
-        public virtual IImmutableList<T> Items
-        {
-            get => items;
-            set => SetItems(value ?? ImmutableList<T>.Empty);
-        }
-
         protected BaseRecyclerAdapter(IDiffingStrategy<T> diffingStrategy = null)
         {
             this.diffingStrategy = normalizeDiffingStrategy(diffingStrategy);
@@ -89,8 +83,10 @@ namespace Toggl.Droid.Adapters
         public virtual T GetItem(int viewPosition)
             => items[viewPosition];
 
-        protected virtual void SetItems(IImmutableList<T> newItems)
+        public virtual void SetItems(IImmutableList<T> newItems)
         {
+            newItems = newItems ?? ImmutableList<T>.Empty;
+
             lock (updateLock)
             {
                 if (!isUpdateRunning)
