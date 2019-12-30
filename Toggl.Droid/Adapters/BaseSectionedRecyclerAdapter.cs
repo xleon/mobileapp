@@ -114,7 +114,7 @@ namespace Toggl.Droid.Adapters
 
         public void SetItems(IImmutableList<SectionModel<TSection, TItem>> newItems)
         {
-            newItems = newItems ?? ImmutableList<SectionModel<TSection, TItem>>.Empty;
+            newItems ??= ImmutableList<SectionModel<TSection, TItem>>.Empty;
 
             lock (updateLock)
             {

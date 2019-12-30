@@ -85,7 +85,7 @@ namespace Toggl.Droid.Adapters
 
         public virtual void SetItems(IImmutableList<T> newItems)
         {
-            newItems = newItems ?? ImmutableList<T>.Empty;
+            newItems ??= ImmutableList<T>.Empty;
 
             lock (updateLock)
             {
