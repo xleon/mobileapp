@@ -12,8 +12,7 @@ namespace Toggl.Shared.Extensions
     {
     }
 
-    public class
-        RxAction<TInput, TElement> : IDisposable
+    public class RxAction<TInput, TElement> : IDisposable
     {
         public IObservable<Exception> Errors { get; }
         public IObservable<TElement> Elements { get; }
@@ -27,9 +26,8 @@ namespace Toggl.Shared.Extensions
 
         public RxAction(Func<TInput, IObservable<TElement>> workFactory, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
         {
-
             enabledIf ??= Observable.Return(true);
-            
+
             disposeBag = new CompositeDisposable();
             Inputs = new Subject<TInput>();
 
