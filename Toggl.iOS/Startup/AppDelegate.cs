@@ -12,6 +12,7 @@ using UserNotifications;
 using Firebase.CloudMessaging;
 using Google.SignIn;
 using System.Reactive;
+using System;
 
 namespace Toggl.iOS
 {
@@ -107,7 +108,8 @@ namespace Toggl.iOS
                 AccessLevel.AccessRestricted => loadRootViewController<OutdatedAppViewModel, Unit>(),
                 AccessLevel.NotLoggedIn => loadRootViewController<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty),
                 AccessLevel.TokenRevoked => loadRootViewController<TokenResetViewModel, Unit>(),
-                AccessLevel.LoggedIn => loadRootViewController<MainTabBarViewModel, Unit>()
+                AccessLevel.LoggedIn => loadRootViewController<MainTabBarViewModel, Unit>(),
+                _ => throw new ArgumentOutOfRangeException($"Unknown access level '{accessLevel}'")
             };
             Window.RootViewController = vc;
         }

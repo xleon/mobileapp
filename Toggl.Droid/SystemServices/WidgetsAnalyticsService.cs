@@ -43,7 +43,7 @@ namespace Toggl.Droid.SystemServices
                         break;
                 }
             }
-            catch (SecurityException timedOut)
+            catch (SecurityException)
             {
                 //Nothing, if the services times out, we are not doing anything
                 //Other exceptions should crash the app/be reported
