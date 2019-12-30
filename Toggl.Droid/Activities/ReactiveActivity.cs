@@ -177,7 +177,7 @@ namespace Toggl.Droid.Activities
             var rootContentView = (ViewGroup) FindViewById(Android.Resource.Id.Content);
             if (rootContentView != null && rootContentView.ChildCount > 0)
             {
-                rootContentView.GetChildAt(0).FitTopInset();
+                rootContentView.GetChildAt(0).FitTopPaddingInset();
             }
         }
 

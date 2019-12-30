@@ -5,6 +5,7 @@ using Android.Widget;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Helper;
 using Toggl.Droid.Services;
+using Toggl.Droid.SystemServices;
 using Toggl.Shared;
 using static Android.App.PendingIntentFlags;
 using static Android.Content.ActivityFlags;

@@ -31,7 +31,7 @@ namespace Toggl.Droid.Activities
             selectBillableToolbarButton = FindViewById<ImageView>(ToolbarBillableButton);
 
             durationCard = FindViewById<ViewGroup>(DurationCard);
-            durationCard.FitBottomInset();
+            durationCard.FitBottomPaddingInset();
 
             durationLabel = FindViewById<TextView>(DurationText);
 

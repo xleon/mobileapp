@@ -69,7 +69,7 @@ namespace Toggl.iOS.TimerWidgetExtension
             ExtensionContext.SetWidgetLargestAvailableDisplayMode(NCWidgetDisplayMode.Expanded);
             if (SharedStorage.Instance.GetApiToken() == null)
             {
-                renderErrorState(Resources.WidgetLogInToTrackTime);
+                renderErrorState(Resources.LoginToTrack);
             }
             else
             {

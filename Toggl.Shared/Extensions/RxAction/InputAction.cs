@@ -10,7 +10,7 @@ namespace Toggl.Shared.Extensions
 {
     public class InputAction<TInput> : RxAction<TInput, Unit>
     {
-        private InputAction(Func<TInput, IObservable<Unit>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        private InputAction(Func<TInput, IObservable<Unit>> workFactory, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
             : base(workFactory, mainScheduler, enabledIf)
         {
         }
@@ -28,7 +28,7 @@ namespace Toggl.Shared.Extensions
             return new InputAction<TInput>(workFactory, mainScheduler);
         }
 
-        public static InputAction<TInput> FromAsync(Func<TInput, Task> asyncAction, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        public static InputAction<TInput> FromAsync(Func<TInput, Task> asyncAction, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
         {
             IObservable<Unit> workFactory(TInput input)
                 => asyncAction(input).ToObservable();
@@ -36,7 +36,7 @@ namespace Toggl.Shared.Extensions
             return new InputAction<TInput>(workFactory, mainScheduler, enabledIf);
         }
 
-        public static new InputAction<TInput> FromObservable(Func<TInput, IObservable<Unit>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        public static new InputAction<TInput> FromObservable(Func<TInput, IObservable<Unit>> workFactory, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
             => new InputAction<TInput>(workFactory, mainScheduler, enabledIf);
     }
 

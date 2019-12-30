@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="reports">レポート</string>
+  <string name="new_time_entry">あたらしい記録</string>
+  <string name="running_time_entry">現在計測中の記録</string>
+  <string name="suggestions">提案</string>
+</resources>

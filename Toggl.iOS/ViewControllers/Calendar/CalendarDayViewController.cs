@@ -194,6 +194,7 @@ namespace Toggl.iOS.ViewControllers
             base.ViewDidLayoutSubviews();
 
             updateContentInset();
+            layout.InvalidateLayoutForVisibleItems();
 
             if (contextualMenuInitialised) return;
             contextualMenuInitialised = true;

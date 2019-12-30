@@ -7,7 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Toggl.Core.Suggestions;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.ViewHolders.MainLog

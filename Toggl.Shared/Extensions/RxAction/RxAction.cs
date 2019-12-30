@@ -25,13 +25,11 @@ namespace Toggl.Shared.Extensions
 
         private readonly IObservable<IObservable<TElement>> executionObservables;
 
-        public RxAction(Func<TInput, IObservable<TElement>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        public RxAction(Func<TInput, IObservable<TElement>> workFactory, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
         {
-            if (enabledIf == null)
-            {
-                enabledIf = Observable.Return(true);
-            }
 
+            enabledIf ??= Observable.Return(true);
+            
             disposeBag = new CompositeDisposable();
             Inputs = new Subject<TInput>();
 
@@ -127,7 +125,7 @@ namespace Toggl.Shared.Extensions
             return new RxAction<TInput, TElement>(workFactory, mainScheduler);
         }
 
-        public static RxAction<TInput, TElement> FromAsync(Func<TInput, Task<TElement>> asyncFunction, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        public static RxAction<TInput, TElement> FromAsync(Func<TInput, Task<TElement>> asyncFunction, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
         {
             IObservable<TElement> workFactory(TInput input)
                 => asyncFunction(input).ToObservable();
@@ -135,7 +133,7 @@ namespace Toggl.Shared.Extensions
             return new RxAction<TInput, TElement>(workFactory, mainScheduler, enabledIf);
         }
 
-        public static RxAction<TInput, TElement> FromObservable(Func<TInput, IObservable<TElement>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        public static RxAction<TInput, TElement> FromObservable(Func<TInput, IObservable<TElement>> workFactory, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
             => new RxAction<TInput, TElement>(workFactory, mainScheduler, enabledIf);
     }
 }

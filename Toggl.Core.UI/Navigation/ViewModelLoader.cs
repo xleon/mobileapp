@@ -434,11 +434,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService);
             }
 
-            if (viewModelType == typeof(SiriWorkflowsViewModel))
-            {
-                return new SiriWorkflowsViewModel(dependencyContainer.NavigationService);
-            }
-
             if (viewModelType == typeof(SiriShortcutsCustomTimeEntryViewModel))
             {
                 return new SiriShortcutsCustomTimeEntryViewModel(

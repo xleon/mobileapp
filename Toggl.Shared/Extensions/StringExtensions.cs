@@ -61,7 +61,7 @@ namespace Toggl.Shared.Extensions
         public static int CountOccurrences(this string text, char token)
             => text.Count(c => c == token);
 
-        public static string ToNullIfEmpty(this string text)
+        public static string? ToNullIfEmpty(this string text)
             => text?.Length == 0 ? null : text;
     }
 }
