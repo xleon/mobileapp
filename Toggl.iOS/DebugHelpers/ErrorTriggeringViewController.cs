@@ -1,4 +1,4 @@
-﻿#if !DEBUG
+﻿#if !USE_PRODUCTION_API
 using System;
 using System.Reactive.Disposables;
 using CoreGraphics;

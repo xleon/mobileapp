@@ -52,7 +52,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.PlayStore|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>bin\Release.PlayStore</OutputPath>
-    <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API;USE_APPCENTER</DefineConstants>
+    <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
@@ -1272,7 +1272,7 @@
     <AndroidResource Include="Resources\drawable\ic_thumbs_up.xml" />
     <AndroidResource Include="Resources\layout\MainUserFeedbackCard.axml" />
     <AndroidResource Include="Resources\xml\RemoteConfigDefaults.xml" />
-    <AndroidResource Include="Resources\xml\NetworkSecurityConfig.xml" />
+    <AndroidResource Include="Resources\xml\network_security_config.xml" />
     <AndroidResource Include="Resources\layout\MainLogEmptyView.axml" />
     <AndroidResource Include="Resources\drawable\TagsBackground.xml" />
     <AndroidResource Include="Resources\drawable\EmptyViewRoundedRectangle.xml" />
