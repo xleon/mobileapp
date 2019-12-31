@@ -16,6 +16,7 @@ using Toggl.Networking.Tests.Integration.Helper;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
+using static System.Net.DecompressionMethods;
 
 namespace Toggl.Core.Tests.Sync.Helpers
 {
@@ -259,7 +260,8 @@ namespace Toggl.Core.Tests.Sync.Helpers
 
             private static IApiClient createApiClient()
             {
-                var httpClient = new HttpClient();
+                var httpHandler = new HttpClientHandler { AutomaticDecompression = GZip | Deflate };
+                var httpClient = new HttpClient(httpHandler);
                 var realApiClient = new ApiClient(httpClient, userAgent);
 
                 return new SlowApiClient(new RetryingApiClient(realApiClient));

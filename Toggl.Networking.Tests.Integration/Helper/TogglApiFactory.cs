@@ -1,5 +1,6 @@
 using System.Net.Http;
 using Toggl.Networking.Network;
+using static System.Net.DecompressionMethods;
 
 namespace Toggl.Networking.Tests.Integration.Helper
 {
@@ -8,7 +9,8 @@ namespace Toggl.Networking.Tests.Integration.Helper
         public static ITogglApi TogglApiWith(Credentials credentials)
         {
             var apiConfiguration = configurationFor(credentials);
-            var httpClient = new HttpClient();
+            var httpHandler = new HttpClientHandler { AutomaticDecompression = GZip | Deflate };
+            var httpClient = new HttpClient(httpHandler);
             var apiClient = new ApiClient(httpClient, apiConfiguration.UserAgent);
             var retryingApiClient = new RetryingApiClient(apiClient);
 
