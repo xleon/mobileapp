@@ -12,9 +12,11 @@ namespace Toggl.iOS.Views.Reports
     {
         private const int horizontalCellInset = 16;
         private const int verticalCellInset = 12;
+        private const int workspaceButtonInset = 49;
 
         private List<UICollectionViewLayoutAttributes> layoutAttributes = new List<UICollectionViewLayoutAttributes>();
         private ReportsCollectionViewSource source;
+        private bool hasMultipleWorkspaces = false;
 
         public ReportsCollectionViewCompactLayout(ReportsCollectionViewSource source)
         {
@@ -35,7 +37,8 @@ namespace Toggl.iOS.Views.Reports
                         + ReportsBarChartCollectionViewCell.Height
                         + verticalCellInset * 3
                         + ReportsDonutChartCollectionViewCell.Height
-                        + ReportsDonutChartLegendCollectionViewCell.Height * source.NumberOfDonutChartLegendItems();
+                        + ReportsDonutChartLegendCollectionViewCell.Height * source.NumberOfDonutChartLegendItems()
+                        + (hasMultipleWorkspaces ? workspaceButtonInset + verticalCellInset * 2 : 0);
                 }
                 return new CGSize(width, height);
             }
@@ -121,5 +124,11 @@ namespace Toggl.iOS.Views.Reports
 
         public override UICollectionViewLayoutAttributes LayoutAttributesForItem(NSIndexPath indexPath)
             => layoutAttributes[(int)indexPath.Item];
+
+        public void SetHasMultipleWorkspaces(bool value)
+        {
+            hasMultipleWorkspaces = value;
+            InvalidateLayout();
+        }
     }
 }

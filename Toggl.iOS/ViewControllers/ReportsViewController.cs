@@ -81,6 +81,10 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(source.SetNewElements)
                 .DisposedBy(DisposeBag);
 
+            ViewModel.HasMultipleWorkspaces
+                .Subscribe(compactLayout.SetHasMultipleWorkspaces)
+                .DisposedBy(DisposeBag);
+
             var workspaceObservable = IosDependencyContainer.Instance.InteractorFactory.GetDefaultWorkspace().Execute()
                 .Merge(ViewModel.SelectWorkspace.Elements);
 
