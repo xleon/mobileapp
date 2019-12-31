@@ -142,8 +142,7 @@ namespace Toggl.iOS
 
         protected override HttpClient CreateHttpClient()
         {
-            var config = NSUrlSessionConfiguration.BackgroundSessionConfiguration("com.toggl.daneel");
-            var handler = new NSUrlSessionHandler(config);
+            var handler = new NSUrlSessionHandler(NSUrlSessionConfiguration.DefaultSessionConfiguration);
             return new HttpClient(handler, true);
         }
     }

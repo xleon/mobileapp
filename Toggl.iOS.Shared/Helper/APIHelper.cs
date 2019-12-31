@@ -26,19 +26,9 @@ namespace Toggl.iOS.Shared
             var userAgent = new UserAgent("Daneel", $"{version} SiriExtension");
             var apiConfiguration = new ApiConfiguration(environment, Credentials.WithApiToken(apiToken), userAgent);
 
-            var httpHandler =
-#if USE_PRODUCTION_API
-                new NSUrlSessionHandler(
-                    NSUrlSessionConfiguration.BackgroundSessionConfiguration("com.toggl.daneel"));
-#else
-                new HttpClientHandler
-                {
-                    AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip
-                };
-#endif
-
+            var httpHandler = new NSUrlSessionHandler(NSUrlSessionConfiguration.DefaultSessionConfiguration);
             var httpClient = new HttpClient(httpHandler);
-            return TogglApiFactory.Withh((apiConfiguration, httpClient);
+            return TogglApiFactory.With(apiConfiguration, httpClient);
         }
     }
 }
