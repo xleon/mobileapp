@@ -1990,6 +1990,42 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string StopRunningTimeEntry {
+            get {
+                return ResourceManager.GetString("StopRunningTimeEntry", resourceCulture);
+            }
+        }
+        
+        public static string EditRunningTimeEntry {
+            get {
+                return ResourceManager.GetString("EditRunningTimeEntry", resourceCulture);
+            }
+        }
+        
+        public static string Sync {
+            get {
+                return ResourceManager.GetString("Sync", resourceCulture);
+            }
+        }
+        
+        public static string DateRange {
+            get {
+                return ResourceManager.GetString("DateRange", resourceCulture);
+            }
+        }
+        
+        public static string Previous {
+            get {
+                return ResourceManager.GetString("Previous", resourceCulture);
+            }
+        }
+        
+        public static string Next {
+            get {
+                return ResourceManager.GetString("Next", resourceCulture);
+            }
+        }
+        
         public static string Siri {
             get {
                 return ResourceManager.GetString("Siri", resourceCulture);
@@ -2227,48 +2263,6 @@ namespace Toggl.Shared {
         public static string ContinueTimerInvocationPhrase {
             get {
                 return ResourceManager.GetString("ContinueTimerInvocationPhrase", resourceCulture);
-            }
-        }
-        
-        public static string StopRunningTimeEntry {
-            get {
-                return ResourceManager.GetString("StopRunningTimeEntry", resourceCulture);
-            }
-        }
-        
-        public static string EditRunningTimeEntry {
-            get {
-                return ResourceManager.GetString("EditRunningTimeEntry", resourceCulture);
-            }
-        }
-        
-        public static string Main {
-            get {
-                return ResourceManager.GetString("Main", resourceCulture);
-            }
-        }
-        
-        public static string Sync {
-            get {
-                return ResourceManager.GetString("Sync", resourceCulture);
-            }
-        }
-        
-        public static string DateRange {
-            get {
-                return ResourceManager.GetString("DateRange", resourceCulture);
-            }
-        }
-        
-        public static string Previous {
-            get {
-                return ResourceManager.GetString("Previous", resourceCulture);
-            }
-        }
-        
-        public static string Next {
-            get {
-                return ResourceManager.GetString("Next", resourceCulture);
             }
         }
     }

@@ -18,7 +18,7 @@ namespace Toggl.iOS.ViewControllers
                 propertyList: null);
 
         protected readonly UIKeyCommand ShowMainLogKeyCommand = UIKeyCommand.Create(
-            title: Resources.Main,
+            title: Resources.Timer,
             image: null,
             action: new Selector(nameof(showMainLog)),
             input: "1",

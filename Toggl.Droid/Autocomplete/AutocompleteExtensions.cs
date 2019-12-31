@@ -19,6 +19,19 @@ namespace Toggl.Droid.Extensions
         public static IImmutableList<ISpan> AsImmutableSpans(this ICharSequence text, int cursorPosition)
             => text.AsSpans(cursorPosition).ToImmutableList();
 
+        public static bool IsEqualTo(this ISpannable first, ISpannable second)
+        {
+            if (first.ToString() != second.ToString())
+                return false;
+
+            var firstSpans = first.AsImmutableSpans(0);
+            var secondSpans = second.AsImmutableSpans(0);
+
+            if (firstSpans.Count != secondSpans.Count) return false;
+            return firstSpans.Zip(secondSpans, (f, s) => f.Equals(s))
+                .All(CommonFunctions.Identity);
+        }
+
         private static IEnumerable<ISpan> AsSpans(this ICharSequence text, int cursorPosition)
         {
             var spannable = text as SpannableStringBuilder;

@@ -1169,4 +1169,22 @@
     <data name="NoRunningTimeEntry" xml:space="preserve">
         <value>計測中記録はありません</value>
     </data>
+    <data name="StopRunningTimeEntry" xml:space="preserve">
+        <value>計測中の記録を停止</value>
+    </data>
+    <data name="EditRunningTimeEntry" xml:space="preserve">
+        <value>計測中の記録を編集</value>
+    </data>
+    <data name="Sync" xml:space="preserve">
+        <value>同期する</value>
+    </data>
+    <data name="DateRange" xml:space="preserve">
+        <value>日付範囲</value>
+    </data>
+    <data name="Previous" xml:space="preserve">
+        <value>前</value>
+    </data>
+    <data name="Next" xml:space="preserve">
+        <value>次</value>
+    </data>
 </root>
