@@ -1,3 +1,4 @@
+using System.Net.Http;
 using Toggl.Networking.Network;
 
 namespace Toggl.Networking.Tests.Integration.Helper
@@ -7,7 +8,8 @@ namespace Toggl.Networking.Tests.Integration.Helper
         public static ITogglApi TogglApiWith(Credentials credentials)
         {
             var apiConfiguration = configurationFor(credentials);
-            var apiClient = Networking.TogglApiFactory.CreateDefaultApiClient(apiConfiguration.UserAgent);
+            var httpClient = new HttpClient();
+            var apiClient = new ApiClient(httpClient, apiConfiguration.UserAgent);
             var retryingApiClient = new RetryingApiClient(apiClient);
 
             return new TogglApi(apiConfiguration, retryingApiClient);

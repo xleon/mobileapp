@@ -38,7 +38,7 @@ namespace Toggl.iOS.Shared
 #endif
 
             var httpClient = new HttpClient(httpHandler);
-            return TogglApiFactory.WithConfiguration(apiConfiguration, httpClient);
+            return TogglApiFactory.Withh((apiConfiguration, httpClient);
         }
     }
 }

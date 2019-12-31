@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Exceptions;
@@ -258,7 +259,8 @@ namespace Toggl.Core.Tests.Sync.Helpers
 
             private static IApiClient createApiClient()
             {
-                var realApiClient = Networking.TogglApiFactory.CreateDefaultApiClient(userAgent);
+                var httpClient = new HttpClient();
+                var realApiClient = new ApiClient(httpClient, userAgent);
 
                 return new SlowApiClient(new RetryingApiClient(realApiClient));
             }

@@ -59,20 +59,9 @@ namespace Toggl.Networking
 
     public static class TogglApiFactory
     {
-        internal static IApiClient CreateDefaultApiClient(UserAgent userAgent, HttpClient httpClient = null)
+        public static ITogglApi With(ApiConfiguration configuration, HttpClient httpClient)
         {
-            if (httpClient == null)
-            {
-                var httpHandler = new HttpClientHandler { AutomaticDecompression = GZip | Deflate };
-                httpClient = new HttpClient(httpHandler);
-            }
-
-            return new ApiClient(httpClient, userAgent);
-        }
-
-        public static ITogglApi WithConfiguration(ApiConfiguration configuration, HttpClient httpClient = null)
-        {
-            var apiClient = CreateDefaultApiClient(configuration.UserAgent, httpClient);
+            var apiClient = new ApiClient(httpClient, configuration.UserAgent);
             return new TogglApi(configuration, apiClient);
         }
     }
