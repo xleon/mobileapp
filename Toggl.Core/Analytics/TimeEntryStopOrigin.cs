@@ -8,6 +8,7 @@ namespace Toggl.Core.Analytics
         Widget,
         EditView,
         Wheel,
-        CalendarContextualMenu
+        CalendarContextualMenu,
+        Keyboard
     }
 }

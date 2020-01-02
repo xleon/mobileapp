@@ -18,14 +18,14 @@ using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Shared.Extensions;
 using Xunit;
 using ThreadingTask = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
-    using TimeEntriesLog = IEnumerable<ISectionModel<DaySummaryViewModel, LogItemViewModel>>;
+    using TimeEntriesLog = IEnumerable<ISectionModel<MainLogSectionViewModel, MainLogItemViewModel>>;
 
     public sealed class TimeEntriesViewModelTests
     {

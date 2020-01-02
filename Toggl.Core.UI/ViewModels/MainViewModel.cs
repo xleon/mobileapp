@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive;
@@ -15,6 +14,7 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
+using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
@@ -22,16 +22,14 @@ using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.Reports;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.UI.ViewModels.MainLog;
+using Toggl.Core.UI.ViewModels.MainLog.Identity;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Shared.Models;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Services;
 using System.ComponentModel;
-using System.Globalization;
 using System.Threading;
 using static Toggl.Core.Analytics.ContinueTimeEntryMode;
 using static Toggl.Core.Analytics.ContinueTimeEntryOrigin;
@@ -39,7 +37,7 @@ using static Toggl.Core.Analytics.ContinueTimeEntryOrigin;
 
 namespace Toggl.Core.UI.ViewModels
 {
-    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
+    using MainLogSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
 
     [Preserve(AllMembers = true)]
     public sealed class MainViewModel : ViewModel
@@ -71,6 +69,8 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly ISubject<Unit> hideRatingView = new Subject<Unit>();
 
+        private readonly MainLogSection userFeedbackMainLogSection;
+
         public IObservable<bool> LogEmpty { get; }
         public IObservable<int> TimeEntriesCount { get; }
         public IObservable<bool> IsInManualMode { get; private set; }
@@ -86,7 +86,10 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<IThreadSafeTimeEntry> CurrentRunningTimeEntry { get; private set; }
         public IObservable<bool> ShouldShowRatingView { get; private set; }
         public IObservable<bool> SwipeActionsEnabled { get; }
+        [Obsolete("Use MainLogItems instead to get all types of main log entities")]
         public IObservable<IImmutableList<MainLogSection>> TimeEntries { get; }
+
+        public IObservable<IImmutableList<MainLogSection>> MainLogItems { get; private set; }
 
         public RatingViewModel RatingViewModel { get; }
         public SuggestionsViewModel SuggestionsViewModel { get; }
@@ -178,6 +181,9 @@ namespace Toggl.Core.UI.ViewModels
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService, updateRemoteConfigCacheService);
 
             SwipeActionsEnabled = userPreferences.SwipeActionsEnabled.AsDriver(schedulerProvider);
+
+            userFeedbackMainLogSection = new MainLogSection(new UserFeedbackSectionViewModel(),
+                new [] { new UserFeedbackViewModel(RatingViewModel) });
         }
 
         public override async Task Initialize()
@@ -284,6 +290,13 @@ namespace Toggl.Core.UI.ViewModels
             SyncProgressState
                 .Subscribe(postAccessibilityAnnouncementAboutSync)
                 .DisposedBy(disposeBag);
+
+            MainLogItems = TimeEntriesViewModel.TimeEntries
+                .MergeToMainLogSections(
+                    SuggestionsViewModel.Suggestions,
+                    ShouldShowRatingView,
+                    userFeedbackMainLogSection)
+                .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider);
         }
 
         public void Track(ITrackableEvent e)
@@ -459,7 +472,7 @@ namespace Toggl.Core.UI.ViewModels
                 .ContinueTimeEntry(continueInfo.Id, continueInfo.ContinueMode)
                 .Execute()
                 .ConfigureAwait(false);
-               
+
             analyticsService.TimeEntryContinued.Track(
                 originFromContinuationMode(continueInfo.ContinueMode),
                 continueInfo.IndexInLog,

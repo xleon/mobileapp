@@ -118,6 +118,12 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(editItemHelper.StartEditingItem.Inputs)
                 .DisposedBy(DisposeBag);
 
+            ViewModel.ContextualMenuViewModel.MenuVisible
+                .Where(isVisible => !isVisible)
+                .SelectUnit()
+                .Subscribe(editItemHelper.StopEditing.Inputs)
+                .DisposedBy(DisposeBag);
+
             editItemHelper.ItemUpdated
                 .Subscribe(dataSource.UpdateItemView)
                 .DisposedBy(DisposeBag);
@@ -189,6 +195,7 @@ namespace Toggl.iOS.ViewControllers
             base.ViewDidLayoutSubviews();
 
             updateContentInset();
+            layout.InvalidateLayoutForVisibleItems();
 
             if (contextualMenuInitialised) return;
             contextualMenuInitialised = true;

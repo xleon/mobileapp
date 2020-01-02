@@ -4,6 +4,7 @@ using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -20,20 +21,25 @@ using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
+using Toggl.Core.UI.ViewModels.MainLog;
+using Toggl.Core.UI.ViewModels.MainLog.Identity;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
-using Toggl.Storage.Settings;
 using Xunit;
 using static Toggl.Core.Helper.Constants;
 using ThreadingTask = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
+    using MainLogSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
+
     public sealed class MainViewModelTests
     {
         public abstract class MainViewModelTest : BaseViewModelTests<MainViewModel>
@@ -477,6 +483,135 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 await task;
 
                 await NavigationService.DidNotReceive().Navigate<January2020CampaignViewModel, Unit, Unit>(Unit.Default, Arg.Any<IView>());
+            }
+        }
+
+        public sealed class MainLogCreation : MainViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public void EmptyLog()
+            {
+                var observer = TestScheduler.CreateObserver<IImmutableList<MainLogSection>>();
+
+                Observable.Return(ImmutableList<MainLogSection>.Empty)
+                    .MergeToMainLogSections(
+                        Observable.Return(ImmutableList<Suggestion>.Empty),
+                        Observable.Return(false),
+                        null)
+                    .Subscribe(observer);
+
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+
+                observer.Messages.Count.Should().Be(2);
+                observer.LastEmittedValue().Should().BeEquivalentTo(ImmutableList<MainLogSection>.Empty);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void FeedbackSectionOnly()
+            {
+                var observer = TestScheduler.CreateObserver<IImmutableList<MainLogSection>>();
+
+                Observable.Return(ImmutableList<MainLogSection>.Empty)
+                    .MergeToMainLogSections(
+                        Observable.Return(ImmutableList<Suggestion>.Empty),
+                        Observable.Return(true),
+                        userFeedbackSection)
+                    .Subscribe(observer);
+
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+
+                observer.Messages.Count.Should().Be(2);
+                observer.LastEmittedValue().Should().BeEquivalentTo(ImmutableList.Create(userFeedbackSection));
+
+            }
+
+            [Fact, LogIfTooSlow]
+            public void TimeEntriesWithoutSuggestions()
+            {
+                var observer = TestScheduler.CreateObserver<IImmutableList<MainLogSection>>();
+
+                Observable.Return(timeEntryList).MergeToMainLogSections(Observable.Return(ImmutableList<Suggestion>.Empty), Observable.Return(true), userFeedbackSection)
+                    .Subscribe(observer);
+
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+
+                var expected = timeEntryList
+                    .Prepend(userFeedbackSection);
+
+                observer.Messages.Count.Should().Be(2);
+                observer.LastEmittedValue().Should().BeEquivalentTo(expected);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void SuggestionsWithoutTimeEntries()
+            {
+                var observer = TestScheduler.CreateObserver<IImmutableList<MainLogSection>>();
+
+                var suggestions = Observable.Return(ImmutableList.Create(suggestion));
+
+                Observable.Return(ImmutableList<MainLogSection>.Empty).MergeToMainLogSections(suggestions, Observable.Return(true), userFeedbackSection)
+                    .Subscribe(observer);
+
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+
+                var expected = ImmutableList.Create(suggestionsSection, userFeedbackSection);
+
+                observer.Messages.Count.Should().Be(2);
+                observer.LastEmittedValue().Should().BeEquivalentTo(expected);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void AllLogItemsTogether()
+            {
+                var observer = TestScheduler.CreateObserver<IImmutableList<MainLogSection>>();
+
+                var timeEntries = Observable.Return(timeEntryList);
+                var suggestions = Observable.Return(ImmutableList.Create(suggestion));
+                var shouldShowRatingView = Observable.Return(true);
+
+                timeEntries.MergeToMainLogSections(suggestions, shouldShowRatingView, userFeedbackSection)
+                    .Subscribe(observer);
+
+                TestScheduler.AdvanceBy(TimeSpan.FromMilliseconds(50).Ticks);
+
+                var expected = timeEntryList
+                    .Prepend(userFeedbackSection)
+                    .Prepend(suggestionsSection);
+
+                observer.Messages.Count.Should().Be(2);
+                observer.LastEmittedValue().Should().BeEquivalentTo(expected);
+            }
+
+            private static readonly IImmutableList<MainLogSection> timeEntryList = ImmutableList.Create(section1, section2);
+
+            private static readonly Suggestion suggestion =
+                new Suggestion(timeEntry, SuggestionProviderType.MostUsedTimeEntries);
+
+            private static readonly MainLogSection suggestionsSection = new MainLogSection(
+                new SuggestionsHeaderViewModel(""),
+                ImmutableList.Create(new SuggestionLogItemViewModel(0, suggestion)));
+
+            private readonly MainLogSection userFeedbackSection = new MainLogSection(new UserFeedbackViewModel(null), Enumerable.Empty<UserFeedbackViewModel>());
+
+            private static readonly MainLogItemViewModel mainLogItem1 = Substitute.For<MainLogItemViewModel>();
+            private static readonly MainLogItemViewModel mainLogItem2 = Substitute.For<MainLogItemViewModel>();
+            private static readonly MainLogItemViewModel mainLogItem3 = Substitute.For<MainLogItemViewModel>();
+            private static readonly MainLogItemViewModel mainLogItem4 = Substitute.For<MainLogItemViewModel>();
+
+            private static readonly DaySummaryViewModel daySummary1 = new DaySummaryViewModel(DateTime.Now, "First", "1:00");
+            private static readonly DaySummaryViewModel daySummary2 = new DaySummaryViewModel(DateTime.Today, "Second", "2:00");
+
+            private static readonly MainLogSection section1 = new MainLogSection(daySummary1, new[] { mainLogItem1, mainLogItem2, mainLogItem3 });
+            private static readonly MainLogSection section2 = new MainLogSection(daySummary2, new[] { mainLogItem4 });
+
+            private static IThreadSafeTimeEntry timeEntry
+            {
+                get
+                {
+                    var te = Substitute.For<IThreadSafeTimeEntry>();
+                    te.Id.Returns(123);
+                    return te;
+                }
             }
         }
 

@@ -24,6 +24,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public partial class EditTimeEntryViewController : KeyboardAwareViewController<EditTimeEntryViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         private const float nonScrollableContentHeight = 116f;
         private const double preferredIpadHeight = 228;
 
@@ -245,7 +247,7 @@ namespace Toggl.iOS.ViewControllers
                 {
                     if (tags.Any())
                     {
-                        return string.Format(Resources.TagsList, string.Join(", ", tags));
+                        return $"{Resources.Tags}: {string.Join(", ", tags)}";
                     }
                     else
                     {
@@ -306,8 +308,8 @@ namespace Toggl.iOS.ViewControllers
             BillableLabel.Text = Resources.Billable;
             StartDateDescriptionLabel.Text = Resources.Startdate;
             DurationDescriptionLabel.Text = Resources.Duration;
-            StartDescriptionLabel.Text = Resources.Start;
-            EndDescriptionLabel.Text = Resources.End;
+            StartDescriptionLabel.Text = Resources.StartTime;
+            EndDescriptionLabel.Text = Resources.EndTime;
             ErrorMessageTitleLabel.Text = Resources.Oops;
             AddProjectTaskLabel.Text = Resources.AddProjectTask;
             CategorizeWithProjectsLabel.Text = Resources.CategorizeYourTimeWithProjects;

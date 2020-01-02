@@ -66,6 +66,7 @@
     <Compile Include="Exceptions\NoRunningEntryException.cs" />
     <Compile Include="Extensions\DateExtensions.cs" />
     <Compile Include="Extensions\NSDictionaryExtensions.cs" />
+    <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Helper\APIHelper.cs" />
     <Compile Include="Models\Suggestion.cs" />
     <Compile Include="Models\TimeEntry.cs" />

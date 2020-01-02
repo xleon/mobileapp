@@ -38,7 +38,7 @@ namespace Toggl.Droid.Activities
             signUpPasswordLabel = FindViewById<TextInputLayout>(Resource.Id.SignUpPassword);
             loginCard = FindViewById<ViewGroup>(Resource.Id.LoginSignupCardView);
             loginSignupContainer = FindViewById<ViewGroup>(Resource.Id.LoginSignupContainer);
-            loginSignupContainer.FitBottomInset();
+            loginSignupContainer.FitBottomPaddingInset();
             errorTextView = FindViewById<TextView>(Resource.Id.SignUpError);
             countryNameTextView = FindViewById<TextView>(Resource.Id.SignUpCountryName);
             signUpOrLabel = FindViewById<TextView>(Resource.Id.SignUpOrLabel);
