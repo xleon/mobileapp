@@ -60,7 +60,7 @@ namespace Toggl.iOS.TimerWidgetExtension
             dataSource.Callback = continueSuggestion;
             SuggestionsTableView.Source = dataSource;
 
-            SharedStorage.Instance.ObserveChangesToCurrentRunningTimeEntry(renderRunningTimeEntry);
+            SharedStorage.Instance.ObserveChangesToCurrentRunningTimeEntry(onDataChanged);
         }
 
         public override void ViewWillAppear(bool animated)
@@ -222,6 +222,20 @@ namespace Toggl.iOS.TimerWidgetExtension
 
             StartButton.Hidden = false;
             StopButton.Hidden = true;
+        }
+
+        private void onDataChanged(TimeEntryViewModel timeEntry)
+        {
+            if (timeEntry != null)
+            {
+                renderRunningTimeEntry(timeEntry);
+            }
+            else
+            {
+                elapsedTimeTimer?.Invalidate();
+                elapsedTimeTimer = null;
+                renderEmptyTimeEntry();
+            }
         }
 
         private void renderRunningTimeEntry(TimeEntryViewModel timeEntry)

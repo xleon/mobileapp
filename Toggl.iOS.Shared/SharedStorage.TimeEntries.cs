@@ -86,10 +86,7 @@ namespace Toggl.iOS.Shared
                     change =>
                     {
                         var dict = change.NewValue as NSDictionary;
-                        if (dict != null)
-                        {
-                            onUpdate(getTimeEntryViewModel(dict));
-                        }
+                        onUpdate(getTimeEntryViewModel(dict));
                     });
         }
 
