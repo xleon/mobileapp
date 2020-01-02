@@ -7,6 +7,7 @@ using Toggl.Networking.Tests.Integration.Helper;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
+using static Toggl.Networking.Tests.Integration.Helper.TogglApiFactory;
 
 namespace Toggl.Networking.Tests.Integration
 {
@@ -30,7 +31,7 @@ namespace Toggl.Networking.Tests.Integration
             var message = AuthorizedRequestBuilder.CreateRequest(Credentials.WithApiToken(user.ApiToken),
                 "https://toggl.space/api/v8/reset_token", HttpMethod.Post);
 
-            using (var client = new HttpClient())
+            using (var client = CreateHttpClientForIntegrationTests())
             {
                 await client.SendAsync(message);
             }
@@ -41,7 +42,7 @@ namespace Toggl.Networking.Tests.Integration
 
         private static async Task<IUser> createUser(Email email, Password password)
         {
-            var api = Helper.TogglApiFactory.TogglApiWith(Credentials.None);
+            var api = CreateTogglApiWith(Credentials.None);
             var timeZone = TimeZoneInfo.Local.Id;
             var user = await api.User.SignUp(email, password, true, 237, timeZone);
 

@@ -1,6 +1,8 @@
 ﻿using Android.App;
 using Android.Content;
 using System;
+using System.Net;
+using System.Net.Http;
 using Realms;
 using Toggl.Core;
 using Toggl.Core.Analytics;
@@ -19,6 +21,7 @@ using Toggl.Storage.Queries;
 using Toggl.Storage.Realm;
 using Toggl.Storage.Realm.Queries;
 using Toggl.Storage.Settings;
+using Xamarin.Android.Net;
 
 namespace Toggl.Droid
 {
@@ -136,5 +139,15 @@ namespace Toggl.Droid
 
         protected override IWidgetsService CreateWidgetsService()
             => new WidgetsServiceAndroid(DataSource);
+
+        protected override HttpClient CreateHttpClient()
+        {
+            var httpHandler = new AndroidClientHandler
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+
+            return new HttpClient(httpHandler, true);
+        }
     }
 }
