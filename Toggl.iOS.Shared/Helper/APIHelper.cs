@@ -27,7 +27,7 @@ namespace Toggl.iOS.Shared
             var apiConfiguration = new ApiConfiguration(environment, Credentials.WithApiToken(apiToken), userAgent);
 
             var httpHandler = new NSUrlSessionHandler(NSUrlSessionConfiguration.DefaultSessionConfiguration);
-            var httpClient = new HttpClient(httpHandler);
+            var httpClient = new HttpClient(httpHandler, true);
             return TogglApiFactory.With(apiConfiguration, httpClient);
         }
     }

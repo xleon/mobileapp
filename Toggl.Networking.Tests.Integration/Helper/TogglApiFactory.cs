@@ -6,12 +6,16 @@ namespace Toggl.Networking.Tests.Integration.Helper
 {
     internal static class TogglApiFactory
     {
-        public static ITogglApi TogglApiWith(Credentials credentials)
+        public static HttpClient CreateHttpClientForIntegrationTests()
+        {
+            var httpHandler = new HttpClientHandler { AutomaticDecompression = GZip | Deflate };
+            return new HttpClient(httpHandler, true);
+        }
+
+        public static ITogglApi CreateTogglApiWith(Credentials credentials)
         {
             var apiConfiguration = configurationFor(credentials);
-            var httpHandler = new HttpClientHandler { AutomaticDecompression = GZip | Deflate };
-            var httpClient = new HttpClient(httpHandler);
-            var apiClient = new ApiClient(httpClient, apiConfiguration.UserAgent);
+            var apiClient = new ApiClient(CreateHttpClientForIntegrationTests(), apiConfiguration.UserAgent);
             var retryingApiClient = new RetryingApiClient(apiClient);
 
             return new TogglApi(apiConfiguration, retryingApiClient);
