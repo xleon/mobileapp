@@ -295,8 +295,8 @@ namespace Toggl.Core.UI.ViewModels
                 .MergeToMainLogSections(
                     SuggestionsViewModel.Suggestions,
                     ShouldShowRatingView,
-                    userFeedbackMainLogSection)
-                .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider);
+                    userFeedbackMainLogSection);
+                // .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider);
         }
 
         public void Track(ITrackableEvent e)
