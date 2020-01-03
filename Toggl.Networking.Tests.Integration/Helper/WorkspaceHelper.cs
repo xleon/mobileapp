@@ -10,6 +10,7 @@ using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
 using Toggl.Shared.Models;
 using Task = System.Threading.Tasks.Task;
+using static Toggl.Networking.Tests.Integration.Helper.TogglApiFactory;
 
 namespace Toggl.Networking.Tests.Integration.Helper
 {
@@ -53,7 +54,7 @@ namespace Toggl.Networking.Tests.Integration.Helper
             if (json != null)
                 requestMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            using (var client = new HttpClient())
+            using (var client = CreateHttpClientForIntegrationTests())
             {
                 var response = await client.SendAsync(requestMessage);
                 var data = await response.Content.ReadAsStringAsync();
