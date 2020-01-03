@@ -51,8 +51,6 @@ namespace Toggl.iOS.ViewControllers
             DontHaveAnAccountLabel.Text = Resources.DoNotHaveAnAccountWithQuestionMark;
             SignUpForFreeLabel.Text = Resources.SignUpTitle;
 
-            NavigationController.NavigationBarHidden = true;
-
             UIKeyboard.Notifications.ObserveWillShow(KeyboardWillShow);
             UIKeyboard.Notifications.ObserveWillHide(KeyboardWillHide);
 
@@ -235,8 +233,6 @@ namespace Toggl.iOS.ViewControllers
 
         private void prepareViews()
         {
-            NavigationController.NavigationBarHidden = true;
-
             LoginButton.SetTitleColor(
                 UIColor.White.ColorWithAlpha((nfloat)0.5),
                 UIControlState.Disabled
