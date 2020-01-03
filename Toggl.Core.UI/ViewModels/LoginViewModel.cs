@@ -162,6 +162,15 @@ namespace Toggl.Core.UI.ViewModels
         public void SetIsShowPasswordButtonVisible(bool visible)
             => isShowPasswordButtonVisibleSubject.OnNext(visible);
 
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            if (userAccessManager.CheckIfLoggedIn())
+            {
+                Navigate<MainTabBarViewModel>();
+            }
+        }
+
         public void Login()
         {
             var shakeTargets = ShakeTargets.None;
