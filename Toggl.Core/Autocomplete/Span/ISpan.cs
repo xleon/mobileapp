@@ -1,6 +1,8 @@
-﻿namespace Toggl.Core.Autocomplete.Span
+﻿using System;
+
+namespace Toggl.Core.Autocomplete.Span
 {
-    public interface ISpan
+    public interface ISpan : IEquatable<ISpan>
     {
     }
 

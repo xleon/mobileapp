@@ -8,7 +8,7 @@ namespace Toggl.iOS.ViewControllers
     public partial class ReactiveTableViewController<TViewModel>
     {
         protected readonly UIKeyCommand ShowMainLogKeyCommand = UIKeyCommand.Create(
-            title: Resources.Main,
+            title: Resources.Timer,
             image: null,
             action: new Selector(nameof(showMainLog)),
             input: "1",
