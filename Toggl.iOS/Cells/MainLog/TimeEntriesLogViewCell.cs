@@ -54,6 +54,8 @@ namespace Toggl.iOS.Views
 
             DescriptionFadeView.FadeRight = true;
             ProjectTaskClientFadeView.FadeRight = true;
+            DescriptionFadeView.FadeWidth = 16;
+            ProjectTaskClientFadeView.FadeWidth = 16;
 
             TimeLabel.Font = TimeLabel.Font.GetMonospacedDigitFont();
 
