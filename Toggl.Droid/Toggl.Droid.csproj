@@ -687,6 +687,7 @@
     <Compile Include="ViewHolders\ReportsItemCellViewHolder.cs" />
     <Compile Include="ViewHolders\ReportsWorkspaceNameViewHolder.cs" />
     <Compile Include="ViewHolders\StringViewHolder.cs" />
+    <Compile Include="Views\AnimatedFloatingActionButton.cs" />
     <Compile Include="Views\BarChartView.cs" />
     <Compile Include="Views\CalendarRecyclerView.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.Background.cs" />

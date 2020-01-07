@@ -5,7 +5,7 @@ using AndroidX.RecyclerView.Widget;
 using AndroidX.SwipeRefreshLayout.Widget;
 using Google.Android.Material.AppBar;
 using Google.Android.Material.FloatingActionButton;
-
+using Toggl.Droid.Views;
 using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
 
 namespace Toggl.Droid.Fragments
@@ -13,7 +13,7 @@ namespace Toggl.Droid.Fragments
     public sealed partial class MainFragment
     {
         private View runningEntryCardFrame;
-        private FloatingActionButton playButton;
+        private AnimatedFloatingActionButton playButton;
         private FloatingActionButton stopButton;
         private CoordinatorLayout coordinatorLayout;
         private TextView timeEntryCardTimerLabel;
@@ -37,7 +37,7 @@ namespace Toggl.Droid.Fragments
         {
             mainRecyclerView = fragmentView.FindViewById<RecyclerView>(Resource.Id.MainRecyclerView);
             runningEntryCardFrame = fragmentView.FindViewById(Resource.Id.MainRunningTimeEntrySheet);
-            playButton = fragmentView.FindViewById<FloatingActionButton>(Resource.Id.MainPlayButton);
+            playButton = fragmentView.FindViewById<AnimatedFloatingActionButton>(Resource.Id.MainPlayButton);
             stopButton = fragmentView.FindViewById<FloatingActionButton>(Resource.Id.MainStopButton);
             coordinatorLayout = fragmentView.FindViewById<CoordinatorLayout>(Resource.Id.MainCoordinatorLayout);
             timeEntryCardTimerLabel = fragmentView.FindViewById<TextView>(Resource.Id.MainRunningTimeEntryTimerLabel);
@@ -51,7 +51,7 @@ namespace Toggl.Droid.Fragments
             welcomeBackStub = fragmentView.FindViewById<ViewStub>(Resource.Id.WelcomeBackViewStub);
             toolbar = fragmentView.FindViewById<Toolbar>(Resource.Id.Toolbar);
             appBarLayout = fragmentView.FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
-            
+
             timeEntryCardAddDescriptionLabel.Text = Shared.Resources.AddDescription;
         }
     }
