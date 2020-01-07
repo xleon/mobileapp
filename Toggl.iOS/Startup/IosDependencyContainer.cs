@@ -1,5 +1,6 @@
 ﻿using Foundation;
 using System;
+using System.Net.Http;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Services;
@@ -138,5 +139,11 @@ namespace Toggl.iOS
 
         protected override IWidgetsService CreateWidgetsService()
             => new WidgetsServiceIos(DataSource);
+
+        protected override HttpClient CreateHttpClient()
+        {
+            var handler = new NSUrlSessionHandler(NSUrlSessionConfiguration.DefaultSessionConfiguration);
+            return new HttpClient(handler, true);
+        }
     }
 }

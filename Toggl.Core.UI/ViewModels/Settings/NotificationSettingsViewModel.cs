@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Toggl.Core.Extensions;
 using Toggl.Core.Services;
@@ -16,6 +17,9 @@ namespace Toggl.Core.UI.ViewModels.Settings
     [Preserve(AllMembers = true)]
     public sealed class NotificationSettingsViewModel : ViewModel
     {
+        private Subject<Unit> checkPermissionsSubject = new Subject<Unit>();
+        public IObservable<string> ButtonTitle { get; }
+
         public IObservable<bool> PermissionGranted { get; }
         public IObservable<string> UpcomingEvents { get; }
 
@@ -37,11 +41,20 @@ namespace Toggl.Core.UI.ViewModels.Settings
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
-            PermissionGranted = backgroundService.AppResumedFromBackground
+            var permissionStatus = backgroundService.AppResumedFromBackground
                 .SelectUnit()
+                .Merge(checkPermissionsSubject)
                 .StartWith(Unit.Default)
                 .SelectMany(_ => permissionsChecker.NotificationPermissionGranted)
+                .DistinctUntilChanged();
+
+            PermissionGranted = permissionStatus
+                .Select(s => s == PermissionStatus.Authorized)
+                .AsDriver(schedulerProvider);
+
+            ButtonTitle = permissionStatus
                 .DistinctUntilChanged()
+                .Select(buttonTitle)
                 .AsDriver(schedulerProvider);
 
             UpcomingEvents = userPreferences.CalendarNotificationsSettings()
@@ -49,18 +62,32 @@ namespace Toggl.Core.UI.ViewModels.Settings
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
-            RequestAccess = rxActionFactory.FromAction(requestAccess);
+            RequestAccess = rxActionFactory.FromAsync(requestAccess);
             OpenUpcomingEvents = rxActionFactory.FromAsync(openUpcomingEvents);
         }
 
-        private void requestAccess()
+        private async Task requestAccess()
         {
-            View.OpenAppSettings();
+            var status = await View.RequestNotificationAuthorization(true);
+            checkPermissionsSubject.OnNext(Unit.Default);
         }
 
         private async Task openUpcomingEvents()
         {
             await Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
+        }
+
+        private string buttonTitle(PermissionStatus permissionStatus)
+        {
+            switch (permissionStatus)
+            {
+                case Services.PermissionStatus.Unknown:
+                    return Resources.AllowAccess;
+                case Services.PermissionStatus.Rejected:
+                    return Resources.OpenSettingsApp;
+                default:
+                    return "";
+            }
         }
     }
 }

@@ -16,6 +16,6 @@ namespace Toggl.Networking.Tests.Integration.BaseTests
         }
 
         protected ITogglApi TogglApiWith(Credentials credentials)
-            => Helper.TogglApiFactory.TogglApiWith(credentials);
+            => Helper.TogglApiFactory.CreateTogglApiWith(credentials);
     }
 }
