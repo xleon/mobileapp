@@ -180,9 +180,10 @@ namespace Toggl.Droid.Fragments
                 if (viewHolder == null)
                     return null;
 
-                return isVisible(viewHolder)
-                    ? viewHolder
-                    : null;
+                if (isFullyVisible(viewHolder))
+                {
+                    return viewHolder;
+                }
             }
 
             return null;
@@ -201,10 +202,9 @@ namespace Toggl.Droid.Fragments
             return null;
         }
 
-        private bool isVisible(RecyclerView.ViewHolder view)
+        private bool isFullyVisible(RecyclerView.ViewHolder view)
         {
-            return layoutManager.IsViewPartiallyVisible(view.ItemView, true, true)
-                   || layoutManager.IsViewPartiallyVisible(view.ItemView, false, true);
+            return layoutManager.IsViewPartiallyVisible(view.ItemView, true, true);
         }
     }
 }
