@@ -1,6 +1,7 @@
 using Foundation;
 using ObjCRuntime;
 using System;
+using Toggl.iOS.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views
@@ -9,6 +10,13 @@ namespace Toggl.iOS.Views
     {
         public TimeEntriesEmptyLogView(IntPtr handle) : base(handle)
         {
+        }
+
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+
+            HeaderContainer.InsertSeparator();
         }
 
         public static TimeEntriesEmptyLogView Create()

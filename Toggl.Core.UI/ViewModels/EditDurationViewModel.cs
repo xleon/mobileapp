@@ -140,11 +140,12 @@ namespace Toggl.Core.UI.ViewModels
             MaximumStopTime = startTime.Select(v => v.AddHours(MaxTimeEntryDurationInHours)).AsDriver(schedulerProvider);
         }
 
-        public override void CloseWithDefaultResult()
+        public override Task<bool> CloseWithDefaultResult()
         {
             analyticsEvent = analyticsEvent.With(result: EditDurationEvent.Result.Cancel);
             analyticsService.Track(analyticsEvent);
             Close(defaultResult);
+            return Task.FromResult(true);
         }
 
         private void updateStopTime(DateTimeOffset stopTime)
@@ -211,6 +212,7 @@ namespace Toggl.Core.UI.ViewModels
             stopTime.OnNext(timeService.CurrentDateTime);
             isRunning.OnNext(false);
             analyticsEvent = analyticsEvent.With(stoppedRunningEntry: true);
+            analyticsService.TimeEntryStopped.Track(TimeEntryStopOrigin.Wheel);
         }
 
         private void editStartTime()

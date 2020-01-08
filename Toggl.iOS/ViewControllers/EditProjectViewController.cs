@@ -15,6 +15,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class EditProjectViewController : ReactiveViewController<EditProjectViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         private const double desiredIpadHeight = 360;
         private static readonly nfloat errorVisibleHeight = 16;
 
@@ -26,6 +28,8 @@ namespace Toggl.iOS.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            CloseButton.SetTemplateColor(ColorAssets.Text2);
 
             TitleLabel.Text = Resources.NewProject;
             NameTextField.Placeholder = Resources.ProjectName;
@@ -63,7 +67,7 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(ProjectNameUsedErrorTextHeight.Rx().Constant())
                 .DisposedBy(DisposeBag);
 
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
                 ViewModel.Error
                     .Select(e => string.IsNullOrEmpty(e) ? desiredIpadHeight : errorVisibleHeight + desiredIpadHeight)
@@ -102,17 +106,13 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(PrivateProjectSwitchContainer.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
-            ViewModel.CanCreatePublicProjects
-                .Subscribe(BottomSeparator.Rx().IsVisible())
-                .DisposedBy(DisposeBag);
-
             // Save
             DoneButton.Rx()
                 .BindAction(ViewModel.Save)
                 .DisposedBy(DisposeBag);
 
             CloseButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             NSAttributedString attributedClientName(string clientName)
@@ -122,6 +122,11 @@ namespace Toggl.iOS.ViewControllers
 
                 return new NSAttributedString(clientName);
             }
+
+            NameView.InsertSeparator();
+            WorkspaceView.InsertSeparator();
+            ClientView.InsertSeparator();
+            PrivateProjectSwitchContainer.InsertSeparator();
         }
     }
 }

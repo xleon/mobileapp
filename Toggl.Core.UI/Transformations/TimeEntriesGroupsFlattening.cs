@@ -6,17 +6,17 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.UI.ViewModels.MainLog;
+using Toggl.Core.UI.ViewModels.MainLog.Identity;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
-using static Toggl.Core.UI.ViewModels.TimeEntriesLog.LogItemVisualizationIntent;
+using static Toggl.Core.UI.ViewModels.MainLog.LogItemVisualizationIntent;
 
 namespace Toggl.Core.UI.Transformations
 {
     using LogGrouping = IGrouping<DateTime, IThreadSafeTimeEntry>;
-    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
+    using MainLogSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
 
     internal sealed class TimeEntriesGroupsFlattening
     {
@@ -84,12 +84,12 @@ namespace Toggl.Core.UI.Transformations
             return TimeSpan.FromSeconds(trackedSeconds);
         }
 
-        private IEnumerable<LogItemViewModel> flattenGroups(IImmutableList<IImmutableList<IThreadSafeTimeEntry>> groups, int dayInLog, int daysInThePast)
+        private IEnumerable<TimeEntryLogItemViewModel> flattenGroups(IImmutableList<IImmutableList<IThreadSafeTimeEntry>> groups, int dayInLog, int daysInThePast)
         {
             return groups.SelectMany(group => flattenGroup(group, dayInLog, daysInThePast));
         }
 
-        private IEnumerable<LogItemViewModel> flattenGroup(IImmutableList<IThreadSafeTimeEntry> group, int dayInLog, int daysInThePast)
+        private IEnumerable<TimeEntryLogItemViewModel> flattenGroup(IImmutableList<IThreadSafeTimeEntry> group, int dayInLog, int daysInThePast)
         {
             var sample = group.First();
             var groupId = new GroupId(sample);
@@ -114,7 +114,7 @@ namespace Toggl.Core.UI.Transformations
             return new[] { item };
         }
 
-        private LogItemViewModel collapsedHeader(
+        private TimeEntryLogItemViewModel collapsedHeader(
             GroupId groupId,
             IImmutableList<IThreadSafeTimeEntry> group,
             int indexInLog,
@@ -122,7 +122,7 @@ namespace Toggl.Core.UI.Transformations
             int daysInThePast)
             => header(groupId, group, CollapsedGroupHeader, indexInLog, dayInLog, daysInThePast);
 
-        private LogItemViewModel expandedHeader(
+        private TimeEntryLogItemViewModel expandedHeader(
             GroupId groupId,
             IImmutableList<IThreadSafeTimeEntry> group,
             int indexInLog,
@@ -130,7 +130,7 @@ namespace Toggl.Core.UI.Transformations
             int daysInThePast)
             => header(groupId, group, ExpandedGroupHeader, indexInLog, dayInLog, daysInThePast);
 
-        private LogItemViewModel header(
+        private TimeEntryLogItemViewModel header(
             GroupId groupId,
             IImmutableList<IThreadSafeTimeEntry> group,
             LogItemVisualizationIntent visualizationIntent,
@@ -139,7 +139,7 @@ namespace Toggl.Core.UI.Transformations
             int daysInThePast)
         {
             var sample = group.First();
-            return new LogItemViewModel(
+            return new TimeEntryLogItemViewModel(
                 groupId: groupId,
                 representedTimeEntriesIds: group.Select(timeEntry => timeEntry.Id).ToArray(),
                 visualizationIntent: visualizationIntent,
@@ -171,7 +171,7 @@ namespace Toggl.Core.UI.Transformations
                 .OrderByDescending(group => group.Max(timeEntry => timeEntry.Start))
                 .Select(group => group.ToIImmutableList())
                 .ToImmutableList();
-        
+
         private static IImmutableList<IImmutableList<IThreadSafeTimeEntry>> withJustSingleTimeEntries(
             IEnumerable<IThreadSafeTimeEntry> timeEntries)
             => timeEntries
@@ -192,7 +192,7 @@ namespace Toggl.Core.UI.Transformations
 
             public int GetHashCode(IThreadSafeTimeEntry timeEntry)
             {
-                var hashCode = HashCode.From(
+                var hashCode = HashCode.Combine(
                     timeEntry.Workspace.Id,
                     timeEntry.Description,
                     timeEntry.Project?.Id,
@@ -202,7 +202,7 @@ namespace Toggl.Core.UI.Transformations
                 var tags = timeEntry.TagIds.OrderBy(id => id);
                 foreach (var tag in tags)
                 {
-                    hashCode = HashCode.From(hashCode, tag);
+                    hashCode = HashCode.Combine(hashCode, tag);
                 }
 
                 return hashCode;

@@ -2,13 +2,13 @@
 using Intents;
 using System;
 using System.Linq;
-using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Intents;
+using Toggl.Shared;
 using UIKit;
 
 namespace Toggl.iOS
@@ -23,7 +23,9 @@ namespace Toggl.iOS
             var navigationService = IosDependencyContainer.Instance.NavigationService;
 
             var interaction = userActivity.GetInteraction();
-            if (interaction == null || interaction.IntentHandlingStatus != INIntentHandlingStatus.DeferredToApplication)
+            if (interaction == null ||
+                (interaction.IntentHandlingStatus != INIntentHandlingStatus.DeferredToApplication
+                && interaction.IntentHandlingStatus != INIntentHandlingStatus.Unspecified))
             {
                 return false;
             }
@@ -41,7 +43,7 @@ namespace Toggl.iOS
                 case ShowReportPeriodIntent periodIntent:
                     long? parseLong(string val) => long.TryParse(val, out var i) ? i : (long?)null;
                     long? workspaceId = parseLong(periodIntent.Workspace?.Identifier);
-                    var period = periodIntent.Period.ToReportPeriod();
+                    var period = periodIntent.Period.ToDateRangePeriod();
                     var viewPresenter = IosDependencyContainer.Instance.ViewPresenter;
                     var change = new ShowReportsPresentationChange(workspaceId, period);
                     viewPresenter.ChangePresentation(change);

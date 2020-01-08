@@ -27,6 +27,25 @@ Below is a list of all the environment variables you need to configure before bu
 `TOGGL_APP_CENTER_ID_IOS`
 `TOGGL_APP_CENTER_ID_DROID`
 
+# Adhoc builds that use the staging environment
+
+We are using a separate Firebase project for the staging env. Targets that are currently using that project are:
+- `Build.Release.iOS.AdHoc`
+- `Build.Release.Android.AdHoc`.
+
+The two targets listed above will use a staging version of the Google Services env vars. These vars are:
+```
+TOGGL_GCM_SENDER_ID_STAGING
+TOGGL_DATABASE_URL_STAGING
+TOGGL_PROJECT_ID_STAGING
+TOGGL_STORAGE_BUCKET_STAGING
+TOGGL_DROID_GOOGLE_SERVICES_API_KEY_STAGING
+TOGGL_CLIENT_ID_STAGING
+TOGGL_REVERSED_CLIENT_ID_STAGING
+TOGGL_API_KEY_STAGING
+TOGGL_GOOGLE_APP_ID_STAGING
+```
+
 # new 'puter who dis? :computer:
 
 To configure this on a macOS:
@@ -56,6 +75,15 @@ export TOGGL_DROID_GOOGLE_SERVICES_MOBILE_SDK_APP_ID=""
 export TOGGL_DROID_GOOGLE_SERVICES_PROJECT_NUMBER=""
 export TOGGL_DROID_GOOGLE_SERVICES_PROJECT_ID=""
 export TOGGL_ADJUST_APP_TOKEN=""
+export TOGGL_GCM_SENDER_ID_STAGING=""
+export TOGGL_DATABASE_URL_STAGING=""
+export TOGGL_PROJECT_ID_STAGING=""
+export TOGGL_STORAGE_BUCKET_STAGING=""
+export TOGGL_DROID_GOOGLE_SERVICES_API_KEY_STAGING=""
+export TOGGL_CLIENT_ID_STAGING=""
+export TOGGL_REVERSED_CLIENT_ID_STAGING=""
+export TOGGL_API_KEY_STAGING=""
+export TOGGL_GOOGLE_APP_ID_STAGING=""
 ```
 
 Finish it off with:

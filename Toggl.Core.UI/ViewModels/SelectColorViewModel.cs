@@ -105,9 +105,10 @@ namespace Toggl.Core.UI.ViewModels
             return base.Initialize(parameter);
         }
 
-        public override void CloseWithDefaultResult()
+        public override Task<bool> CloseWithDefaultResult()
         {
             Close(defaultColor);
+            return Task.FromResult(true);
         }
 
         private IEnumerable<Color> combineAllColors(Color[] defaultColors, Color custom)

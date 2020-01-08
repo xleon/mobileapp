@@ -1,6 +1,7 @@
 using System;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.DateRangePicker;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.ViewModels.Settings.Siri;
@@ -54,8 +55,6 @@ namespace Toggl.iOS.Presentation
                     return new PasteFromClipboardViewController(vm);
                 case ReportsViewModel vm:
                     return new ReportsViewController(vm);
-                case ReportsCalendarViewModel vm:
-                    return new ReportsCalendarViewController(vm);
                 case SelectClientViewModel vm:
                     return new SelectClientViewController(vm);
                 case SelectColorViewModel vm:
@@ -70,8 +69,6 @@ namespace Toggl.iOS.Presentation
                     return new SelectProjectViewController(vm);
                 case SelectTagsViewModel vm:
                     return new SelectTagsViewController(vm);
-                case SelectUserCalendarsViewModel vm:
-                    return new SelectUserCalendarsViewController(vm);
                 case SendFeedbackViewModel vm:
                     return new SendFeedbackViewController(vm);
                 case SettingsViewModel vm:
@@ -84,8 +81,6 @@ namespace Toggl.iOS.Presentation
                     return new SiriShortcutsSelectReportPeriodViewController(vm);
                 case SiriShortcutsViewModel vm:
                     return new SiriShortcutsViewController(vm);
-                case SiriWorkflowsViewModel vm:
-                    return new SiriWorkflowsViewController(vm);
                 case StartTimeEntryViewModel vm:
                     return new StartTimeEntryViewController(vm);
                 case SyncFailuresViewModel vm:
@@ -96,6 +91,10 @@ namespace Toggl.iOS.Presentation
                     return new TokenResetViewController(vm);
                 case UpcomingEventsNotificationSettingsViewModel vm:
                     return new UpcomingEventsNotificationSettingsViewController(vm);
+                case January2020CampaignViewModel vm:
+                    return new January2020CampaignViewController(vm);
+                case DateRangePickerViewModel vm:
+                    return new DateRangePickerViewController(vm);
                 default:
                     throw new Exception($"Failed to create ViewController for ViewModel of type {viewModel.GetType().Name}");
             }
@@ -106,6 +105,11 @@ namespace Toggl.iOS.Presentation
             => GetViewController(viewModel).Apply(wrapInNavigationController);
 
         private static UIViewController wrapInNavigationController(UIViewController viewController)
-            => new ReactiveNavigationController(viewController);
+        {
+            if (viewController is CalendarViewController)
+                return viewController;
+
+            return  new ReactiveNavigationController(viewController);
+        }
     }
 }

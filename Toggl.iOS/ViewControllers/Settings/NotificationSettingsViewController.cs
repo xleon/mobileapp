@@ -19,6 +19,8 @@ namespace Toggl.iOS.ViewControllers.Settings
         {
             base.ViewDidLoad();
 
+            View.BackgroundColor = ColorAssets.TableBackground;
+
             NavigationItem.Title = Resources.SmartReminders;
             NotificationDisabledLabel.Text = Resources.NotificationDisabledNotice;
             OpenSettingsButton.SetTitle(Resources.OpenSettingsApp, UIControlState.Normal);
@@ -32,6 +34,10 @@ namespace Toggl.iOS.ViewControllers.Settings
 
             ViewModel.PermissionGranted
                 .Subscribe(CalendarNotificationsContainer.Rx().IsVisible())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.ButtonTitle
+                .Subscribe(OpenSettingsButton.Rx().Title())
                 .DisposedBy(DisposeBag);
 
             OpenSettingsButton.Rx()

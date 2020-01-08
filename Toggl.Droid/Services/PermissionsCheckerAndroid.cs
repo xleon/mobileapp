@@ -2,9 +2,9 @@
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
-using Android.Support.V4.Content;
 using System;
 using System.Reactive.Linq;
+using AndroidX.Core.Content;
 using Toggl.Core.UI.Services;
 using Toggl.Droid.Helper;
 
@@ -16,8 +16,8 @@ namespace Toggl.Droid.Services
         public IObservable<bool> CalendarPermissionGranted
             => Observable.Start(() => checkPermissions(Manifest.Permission.ReadCalendar));
 
-        public IObservable<bool> NotificationPermissionGranted
-            => Observable.Return(true);
+        public IObservable<PermissionStatus> NotificationPermissionGranted
+            => Observable.Return(PermissionStatus.Authorized);
 
         private bool checkPermissions(params string[] permissionsToCheck)
         {

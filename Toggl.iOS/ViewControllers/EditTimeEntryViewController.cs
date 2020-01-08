@@ -24,6 +24,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public partial class EditTimeEntryViewController : KeyboardAwareViewController<EditTimeEntryViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         private const float nonScrollableContentHeight = 116f;
         private const double preferredIpadHeight = 228;
 
@@ -44,6 +46,8 @@ namespace Toggl.iOS.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            CloseButton.SetTemplateColor(ColorAssets.Text2);
 
             projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
                 ProjectTaskClientLabel.Font.CapHeight,
@@ -66,7 +70,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             CloseButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             ConfirmButton.Rx()
@@ -125,7 +129,8 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             var containsTags = ViewModel.Tags
-                .Select(tags => tags.Any());
+                .Select(tags => tags.Any())
+                .ObserveOn(IosDependencyContainer.Instance.SchedulerProvider.MainScheduler);
 
             containsTags
                 .Invert()
@@ -242,7 +247,7 @@ namespace Toggl.iOS.ViewControllers
                 {
                     if (tags.Any())
                     {
-                        return string.Format(Resources.TagsList, string.Join(", ", tags));
+                        return $"{Resources.Tags}: {string.Join(", ", tags)}";
                     }
                     else
                     {
@@ -280,12 +285,18 @@ namespace Toggl.iOS.ViewControllers
             DescriptionTextView.PlaceholderText = Resources.AddDescription;
 
             TimeEntryTimes.Hidden = ViewModel.IsEditingGroup;
-            TimeEntryTimesSeparator.Hidden = ViewModel.IsEditingGroup;
             GroupDuration.Hidden = !ViewModel.IsEditingGroup;
             DurationView.Hidden = ViewModel.IsEditingGroup;
             StartDateView.Hidden = ViewModel.IsEditingGroup;
-            DurationSeparator.Hidden = ViewModel.IsEditingGroup;
-            StartDateSeparator.Hidden = ViewModel.IsEditingGroup;
+
+            DescriptionView.InsertSeparator();
+            SelectProject.InsertSeparator();
+            TagsContainerView.InsertSeparator();
+            TimeEntryTimes.InsertSeparator();
+            DurationView.InsertSeparator();
+            StartDateView.InsertSeparator();
+            BillableView.InsertSeparator();
+            StartTimeView.InsertSeparator(UIRectEdge.Right);
         }
 
         private void localizeLabels()
@@ -297,8 +308,8 @@ namespace Toggl.iOS.ViewControllers
             BillableLabel.Text = Resources.Billable;
             StartDateDescriptionLabel.Text = Resources.Startdate;
             DurationDescriptionLabel.Text = Resources.Duration;
-            StartDescriptionLabel.Text = Resources.Start;
-            EndDescriptionLabel.Text = Resources.End;
+            StartDescriptionLabel.Text = Resources.StartTime;
+            EndDescriptionLabel.Text = Resources.EndTime;
             ErrorMessageTitleLabel.Text = Resources.Oops;
             AddProjectTaskLabel.Text = Resources.AddProjectTask;
             CategorizeWithProjectsLabel.Text = Resources.CategorizeYourTimeWithProjects;
@@ -321,8 +332,8 @@ namespace Toggl.iOS.ViewControllers
             AddTagsView.Hidden = isInaccessible;
 
             var textColor = isInaccessible
-                ? Colors.Common.Disabled.ToNativeColor()
-                : Colors.Common.TextColor.ToNativeColor();
+                ? ColorAssets.Text3
+                : ColorAssets.Text;
 
             DescriptionTextView.TextColor = textColor;
 

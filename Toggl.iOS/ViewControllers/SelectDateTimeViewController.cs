@@ -13,6 +13,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public partial class SelectDateTimeViewController : ReactiveViewController<SelectDateTimeViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         public SelectDateTimeViewController(SelectDateTimeViewModel viewModel)
             : base(viewModel, nameof(SelectDateTimeViewController))
         {
@@ -43,7 +45,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             CloseButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
         }
 

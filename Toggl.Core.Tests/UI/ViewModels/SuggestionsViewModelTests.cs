@@ -29,7 +29,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class SuggestionsViewModelTest : BaseViewModelTests<SuggestionsViewModel>
         {
             protected override SuggestionsViewModel CreateViewModel()
-                => new SuggestionsViewModel(InteractorFactory, OnboardingStorage, SchedulerProvider, RxActionFactory, AnalyticsService, TimeService, PermissionsChecker, NavigationService, BackgroundService, UserPreferences, SyncManager);
+                => new SuggestionsViewModel(InteractorFactory, OnboardingStorage, SchedulerProvider, RxActionFactory, AnalyticsService, TimeService, PermissionsChecker, NavigationService, BackgroundService, UserPreferences, SyncManager, WidgetsService);
 
             protected override void AdditionalViewModelSetup()
             {
@@ -55,7 +55,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useNavigationService,
                 bool useBackgroundService,
                 bool useUserPreferences,
-                bool useSyncManager)
+                bool useSyncManager,
+                bool useWidgetsService)
             {
                 var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
@@ -68,9 +69,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var backgroundService = useBackgroundService ? BackgroundService : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var syncManager = useSyncManager ? SyncManager : null;
+                var widgetsService = useWidgetsService ? WidgetsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new SuggestionsViewModel(interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager);
+                    () => new SuggestionsViewModel(interactorFactory, onboardingStorage, schedulerProvider, rxActionFactory, analyticsService, timeService, permissionsChecker, navigationService, backgroundService, userPreferences, syncManager, widgetsService);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -342,7 +344,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ExecutesTheContinueTimeEntryInteractor()
             {
                 var suggestion = createSuggestion();
-                var mockedInteractor = Substitute.For<IInteractor<IObservable<IThreadSafeTimeEntry>>>();
+                var mockedInteractor = Substitute.For<IInteractor<Task<IThreadSafeTimeEntry>>>();
                 InteractorFactory.StartSuggestion(Arg.Any<Suggestion>()).Returns(mockedInteractor);
                 await ViewModel.Initialize();
 
@@ -357,10 +359,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var suggestion = createSuggestion();
                 var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
-                var mockedInteractor = Substitute.For<IInteractor<IObservable<IThreadSafeTimeEntry>>>();
+                var mockedInteractor = Substitute.For<IInteractor<Task<IThreadSafeTimeEntry>>>();
                 InteractorFactory.StartSuggestion(Arg.Any<Suggestion>()).Returns(mockedInteractor);
                 mockedInteractor.Execute()
-                    .Returns(Observable.Return(timeEntry));
+                    .ReturnsTaskOf(timeEntry);
                 await ViewModel.Initialize();
 
                 var auxObservable = TestScheduler.CreateObserver<IThreadSafeTimeEntry>();

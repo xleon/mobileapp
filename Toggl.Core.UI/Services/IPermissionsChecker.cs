@@ -6,6 +6,6 @@ namespace Toggl.Core.UI.Services
     {
         IObservable<bool> CalendarPermissionGranted { get; }
 
-        IObservable<bool> NotificationPermissionGranted { get; }
+        IObservable<PermissionStatus> NotificationPermissionGranted { get; }
     }
 }

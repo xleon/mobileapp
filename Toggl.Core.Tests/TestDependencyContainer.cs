@@ -1,4 +1,5 @@
-﻿using Toggl.Core.Analytics;
+﻿using System.Net.Http;
+using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
@@ -11,6 +12,7 @@ using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Storage;
+using Toggl.Storage.Queries;
 using Toggl.Storage.Settings;
 
 namespace Toggl.Core.UI
@@ -91,6 +93,10 @@ namespace Toggl.Core.UI
         protected override IPlatformInfo CreatePlatformInfo()
             => MockPlatformInfo;
 
+        internal IQueryFactory MockQueryFactory { get; set; }
+        protected override IQueryFactory CreateQueryFactory()
+            => MockQueryFactory;
+
         internal IPrivateSharedStorageService MockPrivateSharedStorageService { get; set; }
         protected override IPrivateSharedStorageService CreatePrivateSharedStorageService()
             => MockPrivateSharedStorageService;
@@ -110,7 +116,7 @@ namespace Toggl.Core.UI
         internal IApplicationShortcutCreator MockShortcutCreator { get; set; }
         protected override IApplicationShortcutCreator CreateShortcutCreator()
             => MockShortcutCreator;
-        
+
         internal IPushNotificationsTokenService MockPushNotificationsTokenService { get; set; }
         protected override IPushNotificationsTokenService CreatePushNotificationsTokenService()
             => MockPushNotificationsTokenService;
@@ -140,7 +146,15 @@ namespace Toggl.Core.UI
             => MockAccessibilityService;
 
         internal IPushNotificationsTokenStorage MockPushNotificationsTokenStorage { get; set; }
-        protected override IPushNotificationsTokenStorage CreatePushNotificationsTokenStorage()
-            => MockPushNotificationsTokenStorage;
+
+        internal IWidgetsService MockWidgetsService { get; set; }
+        protected override IWidgetsService CreateWidgetsService()
+            => MockWidgetsService;
+
+        internal IDateRangeShortcutsService MockDateRangeShortcutsService { get; set; }
+        protected override IDateRangeShortcutsService CreateDateRangeShortcutsService()
+            => MockDateRangeShortcutsService;
+        protected override HttpClient CreateHttpClient()
+            => new HttpClient();
     }
 }

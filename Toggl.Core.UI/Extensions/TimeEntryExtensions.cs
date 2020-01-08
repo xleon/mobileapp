@@ -3,7 +3,7 @@ using System.Linq;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.UI.Transformations;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Shared;
 using Toggl.Storage;
 
@@ -11,7 +11,7 @@ namespace Toggl.Core.UI.Extensions
 {
     public static class TimeEntryExtensions
     {
-        public static LogItemViewModel ToViewModel(
+        public static TimeEntryLogItemViewModel ToViewModel(
             this IThreadSafeTimeEntry timeEntry,
             GroupId groupId,
             LogItemVisualizationIntent visualizationIntent,
@@ -19,7 +19,7 @@ namespace Toggl.Core.UI.Extensions
             int indexInLog,
             int dayInLog,
             int daysInThePast)
-            => new LogItemViewModel(
+            => new TimeEntryLogItemViewModel(
                 groupId,
                 new[] { timeEntry.Id },
                 visualizationIntent,

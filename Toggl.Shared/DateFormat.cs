@@ -52,7 +52,7 @@ namespace Toggl.Shared
         public bool Equals(DateFormat other)
             => Localized == other.Localized;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is DateFormat dateFormat)
                 return Equals(dateFormat);

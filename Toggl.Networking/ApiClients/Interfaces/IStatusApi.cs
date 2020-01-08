@@ -1,10 +1,9 @@
-﻿using System;
-using System.Reactive;
+﻿using System.Threading.Tasks;
 
 namespace Toggl.Networking.ApiClients
 {
     public interface IStatusApi
     {
-        IObservable<Unit> IsAvailable();
+        Task IsAvailable();
     }
 }

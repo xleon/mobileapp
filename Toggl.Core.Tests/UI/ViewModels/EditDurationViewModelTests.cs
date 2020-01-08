@@ -454,6 +454,18 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
                 stopObserver.LastEmittedValue().Should().Be(now);
             }
+
+            [Fact, LogIfTooSlow]
+            public void TracksTimeEntryStoppedEvent()
+            {
+                var runningTEParameter = DurationParameter.WithStartAndDuration(parameter.Start, null);
+                ViewModel.Initialize(new EditDurationParameters(runningTEParameter));
+
+                ViewModel.StopTimeEntry.Execute();
+                TestScheduler.Start();
+
+                AnalyticsService.Received().TimeEntryStopped.Track(TimeEntryStopOrigin.Wheel);
+            }
         }
 
         public sealed class TheEditStopTimeCommand : EditDurationViewModelTest

@@ -15,8 +15,8 @@ using Toggl.Core.Services;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Transformations;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.UI.ViewModels.MainLog;
+using Toggl.Core.UI.ViewModels.MainLog.Identity;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
@@ -37,7 +37,7 @@ namespace Toggl.Core.UI.ViewModels
         private IDisposable delayedDeletionDisposable;
         private long[] timeEntriesToDelete;
 
-        public IObservable<IImmutableList<AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>>> TimeEntries { get; }
+        public IObservable<IImmutableList<AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>>> TimeEntries { get; }
         public IObservable<bool> Empty { get; }
         public IObservable<int> Count { get; }
         public IObservable<int?> TimeEntriesPendingDeletion { get; }

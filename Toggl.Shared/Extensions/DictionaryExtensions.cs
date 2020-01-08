@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Toggl.Shared.Extensions
@@ -36,7 +37,7 @@ namespace Toggl.Shared.Extensions
                 return values;
             }
 
-            return null;
+            return new long[0];
         }
 
         public static DateTimeOffset? GetValueAsDateTimeOffset(this Dictionary<string, string> dictionary, string key)
@@ -76,7 +77,7 @@ namespace Toggl.Shared.Extensions
             return null;
         }
 
-        public static string GetValueAsString(this Dictionary<string, string> dictionary, string key)
+        public static string? GetValueAsString(this Dictionary<string, string> dictionary, string key)
         {
             if (dictionary.TryGetValue(key, out var value))
                 return value;
@@ -91,6 +92,13 @@ namespace Toggl.Shared.Extensions
                 return source;
 
             return defaultCase;
+        }
+
+        public static U GetOrDefault<T, U>(this IDictionary<T, U> dictionary, T key, U defaultValue)
+        {
+            if (dictionary.ContainsKey(key))
+                return dictionary[key];
+            return defaultValue;
         }
     }
 }

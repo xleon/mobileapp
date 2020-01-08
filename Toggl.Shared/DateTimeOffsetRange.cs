@@ -16,7 +16,7 @@ namespace Toggl.Shared
         public bool Equals(DateTimeOffsetRange other)
             => Minimum == other.Minimum && Maximum == other.Maximum;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => obj is DateTimeOffsetRange dateFormat
                 ? Equals(dateFormat)
                 : false;
@@ -28,7 +28,7 @@ namespace Toggl.Shared
             => !range.Equals(other);
 
         public override int GetHashCode()
-            => HashCode.From(Minimum, Maximum);
+            => HashCode.Combine(Minimum, Maximum);
 
         public override string ToString()
             => $"[{Minimum}, {Maximum}]";

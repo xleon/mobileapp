@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
@@ -14,6 +15,7 @@ using Toggl.Networking.Network;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
+using Toggl.Storage.Queries;
 using Toggl.Storage.Settings;
 
 namespace Toggl.Core
@@ -34,6 +36,7 @@ namespace Toggl.Core
         private readonly Lazy<ITogglDatabase> database;
         private readonly Lazy<ITimeService> timeService;
         private readonly Lazy<IPlatformInfo> platformInfo;
+        private readonly Lazy<IQueryFactory> queryFactory;
         private readonly Lazy<IRatingService> ratingService;
         private readonly Lazy<ICalendarService> calendarService;
         private readonly Lazy<IKeyValueStorage> keyValueStorage;
@@ -59,6 +62,7 @@ namespace Toggl.Core
         private readonly Lazy<IPrivateSharedStorageService> privateSharedStorageService;
         private readonly Lazy<IPushNotificationsTokenService> pushNotificationsTokenService;
         private readonly Lazy<IPushNotificationsTokenStorage> pushNotificationsTokenStorage;
+        private readonly Lazy<HttpClient> httpClient;
 
         // Non lazy
         public virtual IUserAccessManager UserAccessManager { get; }
@@ -70,6 +74,7 @@ namespace Toggl.Core
         public IApiFactory ApiFactory => apiFactory.Value;
         public ITogglDatabase Database => database.Value;
         public ITimeService TimeService => timeService.Value;
+        public IQueryFactory QueryFactory => queryFactory.Value;
         public IPlatformInfo PlatformInfo => platformInfo.Value;
         public ITogglDataSource DataSource => dataSource.Value;
         public IRatingService RatingService => ratingService.Value;
@@ -94,6 +99,7 @@ namespace Toggl.Core
         public IPrivateSharedStorageService PrivateSharedStorageService => privateSharedStorageService.Value;
         public IPushNotificationsTokenService PushNotificationsTokenService => pushNotificationsTokenService.Value;
         public IPushNotificationsTokenStorage PushNotificationsTokenStorage => pushNotificationsTokenStorage.Value;
+        public HttpClient HttpClient => httpClient.Value;
 
         protected DependencyContainer(ApiEnvironment apiEnvironment, UserAgent userAgent)
         {
@@ -106,6 +112,7 @@ namespace Toggl.Core
             syncManager = new Lazy<ISyncManager>(CreateSyncManager);
             timeService = new Lazy<ITimeService>(CreateTimeService);
             dataSource = new Lazy<ITogglDataSource>(CreateDataSource);
+            queryFactory = new Lazy<IQueryFactory>(CreateQueryFactory);
             platformInfo = new Lazy<IPlatformInfo>(CreatePlatformInfo);
             ratingService = new Lazy<IRatingService>(CreateRatingService);
             calendarService = new Lazy<ICalendarService>(CreateCalendarService);
@@ -134,6 +141,7 @@ namespace Toggl.Core
             pushNotificationsTokenService = new Lazy<IPushNotificationsTokenService>(CreatePushNotificationsTokenService);
             pushNotificationsTokenStorage =
                 new Lazy<IPushNotificationsTokenStorage>(CreatePushNotificationsTokenStorage);
+            httpClient = new Lazy<HttpClient>(CreateHttpClient);
 
             api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
             UserAccessManager = new UserAccessManager(
@@ -143,17 +151,18 @@ namespace Toggl.Core
 
             UserAccessManager
                 .UserLoggedIn
-                .Subscribe(recreateLazyDependenciesForLogin)
+                .Subscribe(RecreateLazyDependenciesForLogin)
                 .DisposedBy(disposeBag);
 
             UserAccessManager
                 .UserLoggedOut
-                .Subscribe(_ => recreateLazyDependenciesForLogout())
+                .Subscribe(_ => RecreateLazyDependenciesForLogout())
                 .DisposedBy(disposeBag);
         }
 
         protected abstract ITogglDatabase CreateDatabase();
         protected abstract IPlatformInfo CreatePlatformInfo();
+        protected abstract IQueryFactory CreateQueryFactory();
         protected abstract IRatingService CreateRatingService();
         protected abstract ICalendarService CreateCalendarService();
         protected abstract IKeyValueStorage CreateKeyValueStorage();
@@ -174,6 +183,8 @@ namespace Toggl.Core
         protected abstract IPrivateSharedStorageService CreatePrivateSharedStorageService();
         protected abstract IPushNotificationsTokenService CreatePushNotificationsTokenService();
 
+        protected abstract HttpClient CreateHttpClient();
+
         protected virtual ITimeService CreateTimeService()
             => new TimeService(SchedulerProvider.DefaultScheduler);
 
@@ -187,13 +198,13 @@ namespace Toggl.Core
             => new SyncErrorHandlingService(ErrorHandlingService);
 
         protected virtual ITogglDataSource CreateDataSource()
-            => new TogglDataSource(Database, TimeService, AnalyticsService);
+            => new TogglDataSource(Database, TimeService, AnalyticsService, SchedulerProvider);
 
         protected virtual IRxActionFactory CreateRxActionFactory()
             => new RxActionFactory(SchedulerProvider);
 
         protected virtual IApiFactory CreateApiFactory()
-            => new ApiFactory(ApiEnvironment, userAgent);
+            => new ApiFactory(ApiEnvironment, userAgent, HttpClient);
 
         protected virtual IUpdateRemoteConfigCacheService CreateUpdateRemoteConfigCacheService()
             => new UpdateRemoteConfigCacheService(TimeService, KeyValueStorage, FetchRemoteConfigService);
@@ -240,7 +251,7 @@ namespace Toggl.Core
             pushNotificationsTokenStorage
         );
 
-        private void recreateLazyDependenciesForLogin(ITogglApi api)
+        protected virtual void RecreateLazyDependenciesForLogin(ITogglApi api)
         {
             this.api = new Lazy<ITogglApi>(() => api);
 
@@ -254,7 +265,7 @@ namespace Toggl.Core
             });
         }
 
-        private void recreateLazyDependenciesForLogout()
+        protected virtual void RecreateLazyDependenciesForLogout()
         {
             api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
 

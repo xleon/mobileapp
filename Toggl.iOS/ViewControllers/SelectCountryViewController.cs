@@ -23,8 +23,12 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            SearchView.InsertSeparator();
+
+            CloseButton.SetTemplateColor(ColorAssets.Text2);
+            SearchTextField.TintColor = ColorAssets.Text2;
+
             TitleLabel.Text = Resources.CountryOfResidence;
-            SearchTextField.Placeholder = Resources.Search;
 
             CountriesTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             CountriesTableView.RegisterNibForCellReuse(CountryViewCell.Nib, CountryViewCell.Identifier);
@@ -44,7 +48,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             CloseButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             SearchTextField.Rx().Text()

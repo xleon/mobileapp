@@ -140,10 +140,11 @@ namespace Toggl.Droid.Debug
             noWorkspaceFragment.Show(FragmentManager, nameof(NoWorkspaceFragment));
         }
 
-        private void noDefaultWorkspaceErrorTriggered()
+        private async void noDefaultWorkspaceErrorTriggered()
         {
             var container = AndroidDependencyContainer.Instance;
             var noWorkspaceViewModel = container.ViewModelLoader.Load<SelectDefaultWorkspaceViewModel>();
+            await noWorkspaceViewModel.Initialize();
             var noWorkspaceFragment = new SelectDefaultWorkspaceFragment();
             container.ViewModelCache.Cache(noWorkspaceViewModel);
             noWorkspaceFragment.Show(FragmentManager, nameof(SelectDefaultWorkspaceFragment));

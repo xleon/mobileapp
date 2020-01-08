@@ -22,24 +22,30 @@ namespace Toggl.iOS.Presentation
             typeof(OutdatedAppViewModel),
         };
 
+        private HashSet<Type> viewModelsNotWrappedInNavigationController { get; } = new HashSet<Type>
+        {
+            typeof(MainTabBarViewModel),
+            typeof(OutdatedAppViewModel),
+        };
+
         public RootPresenter(UIWindow window, AppDelegate appDelegate) : base(window, appDelegate)
         {
         }
 
         protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView view)
         {
-            var shouldWrapInNavigationController = !(viewModel is MainTabBarViewModel);
-            var rootViewController = shouldWrapInNavigationController
+            var rootViewController = !viewModelsNotWrappedInNavigationController.Contains(viewModel.GetType())
                 ? ViewControllerLocator.GetNavigationViewController(viewModel)
                 : ViewControllerLocator.GetViewController(viewModel);
 
             var oldRootViewController = Window.RootViewController;
+            Window.RootViewController = rootViewController;
 
             UIView.Transition(
                 Window,
                 Animation.Timings.EnterTiming,
                 UIViewAnimationOptions.TransitionCrossDissolve,
-                () => Window.RootViewController = rootViewController,
+                () => { },
                 () => detachOldRootViewController(oldRootViewController)
             );
         }
@@ -61,15 +67,6 @@ namespace Toggl.iOS.Presentation
                         var endDate = showReportsPresentationChange.EndDate;
                         var period = showReportsPresentationChange.Period;
                         var workspaceId = showReportsPresentationChange.WorkspaceId;
-
-                        if (startDate.HasValue && endDate.HasValue)
-                        {
-                            reportsViewModel.LoadReport(workspaceId, startDate.Value, endDate.Value, ReportsSource.Other);
-                        }
-                        else if (period.HasValue)
-                        {
-                            reportsViewModel.LoadReport(workspaceId, period.Value);
-                        }
 
                         return true;
 

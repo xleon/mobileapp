@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Extensions;
@@ -55,7 +56,7 @@ namespace Toggl.Core.Sync.States.Push
             return delete(entity)
                 .SelectMany(_ => dataSource.Delete(entity.Id))
                 .Track(AnalyticsService.EntitySynced, Delete, entity.GetSafeTypeName())
-                .Track(AnalyticsService.EntitySyncStatus, entity.GetSafeTypeName(), $"{Delete}:{Resources.Success}")
+                .Track(AnalyticsService.EntitySyncStatus, entity.GetSafeTypeName(), $"{Delete}:Success")
                 .Select(_ => Done.Transition())
                 .Catch(Fail(entity, Delete));
         }
@@ -64,6 +65,6 @@ namespace Toggl.Core.Sync.States.Push
             => entity == null
                 ? Observable.Throw<Unit>(new ArgumentNullException(nameof(entity)))
                 : limiter.WaitForFreeSlot()
-                    .ThenExecute(() => api.Delete(entity));
+                    .ThenExecute(() => api.Delete(entity).ToObservable());
     }
 }

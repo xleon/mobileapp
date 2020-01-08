@@ -10,7 +10,7 @@ namespace Toggl.Shared.Extensions
 {
     public sealed class OutputAction<TElement> : RxAction<Unit, TElement>
     {
-        private OutputAction(Func<IObservable<TElement>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        private OutputAction(Func<IObservable<TElement>> workFactory, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
             : base(_ => workFactory(), mainScheduler, enabledIf)
         {
         }
@@ -28,7 +28,7 @@ namespace Toggl.Shared.Extensions
             return new OutputAction<TElement>(workFactory, mainScheduler);
         }
 
-        public static OutputAction<TElement> FromAsync(Func<Task<TElement>> asyncFunction, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        public static OutputAction<TElement> FromAsync(Func<Task<TElement>> asyncFunction, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
         {
             IObservable<TElement> workFactory()
                 => asyncFunction().ToObservable();
@@ -36,7 +36,7 @@ namespace Toggl.Shared.Extensions
             return new OutputAction<TElement>(workFactory, mainScheduler, enabledIf);
         }
 
-        public static OutputAction<TElement> FromObservable(Func<IObservable<TElement>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        public static OutputAction<TElement> FromObservable(Func<IObservable<TElement>> workFactory, IScheduler mainScheduler, IObservable<bool>? enabledIf = null)
             => new OutputAction<TElement>(workFactory, mainScheduler, enabledIf);
     }
 

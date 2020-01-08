@@ -10,11 +10,13 @@ using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks.Services;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
 using Toggl.Shared;
 using Toggl.Storage;
+using Toggl.Storage.Queries;
 using Toggl.Storage.Settings;
 using Xunit;
 
@@ -52,6 +54,7 @@ namespace Toggl.Core.Tests.UI
                 MockKeyValueStorage = Substitute.For<IKeyValueStorage>(),
                 MockLastTimeUsageStorage = Substitute.For<ILastTimeUsageStorage>(),
                 MockLicenseProvider = Substitute.For<ILicenseProvider>(),
+                MockQueryFactory = Substitute.For<IQueryFactory>(),
                 MockNavigationService = Substitute.For<INavigationService>(),
                 MockNotificationService = Substitute.For<INotificationService>(),
                 MockAccessibilityService = Substitute.For<IAccessibilityService>(),
@@ -68,7 +71,9 @@ namespace Toggl.Core.Tests.UI
                 MockTimeService = Substitute.For<ITimeService>(),
                 MockSyncManager = Substitute.For<ISyncManager>(),
                 MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>(),
-                MockUpdateRemoteConfigCacheService = Substitute.For<IUpdateRemoteConfigCacheService>()
+                MockUpdateRemoteConfigCacheService = Substitute.For<IUpdateRemoteConfigCacheService>(),
+                MockWidgetsService = Substitute.For<IWidgetsService>(),
+                MockDateRangeShortcutsService = new MockDateRangeShortcutsService()
             };
 
             container.MockLicenseProvider.GetAppLicenses().Returns(new Dictionary<string, string>());

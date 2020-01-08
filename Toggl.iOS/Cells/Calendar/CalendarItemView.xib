@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,6 +17,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="381" height="38"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dp3-Ip-39O">
+                        <rect key="frame" x="0.0" y="36" width="381" height="2"/>
+                        <color key="backgroundColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="2" id="MzS-6j-lmV"/>
+                        </constraints>
+                    </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" image="icCalendarSmall" translatesAutoresizingMaskIntoConstraints="NO" id="BRg-DN-wNT">
                         <rect key="frame" x="5" y="3.5" width="14" height="14"/>
                         <constraints>
@@ -27,7 +33,7 @@
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EdB-CQ-dXu">
                         <rect key="frame" x="365" y="-4" width="8" height="8"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="CellBackground"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="8" id="7yT-A1-fec"/>
                             <constraint firstAttribute="height" constant="8" id="g8c-Bn-0wC"/>
@@ -40,7 +46,7 @@
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ftH-hb-JkM">
                         <rect key="frame" x="8" y="34" width="8" height="8"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="CellBackground"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="8" id="iJj-Ha-Wcv"/>
                             <constraint firstAttribute="width" constant="8" id="jas-2I-uo6"/>
@@ -62,14 +68,17 @@
                     </label>
                 </subviews>
             </view>
-            <color key="backgroundColor" red="0.86420355900000001" green="0.7443847656" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" name="CellBackground"/>
             <constraints>
                 <constraint firstItem="BRg-DN-wNT" firstAttribute="baseline" secondItem="sob-Bq-eUc" secondAttribute="firstBaseline" id="20g-ZE-uFH"/>
                 <constraint firstItem="sob-Bq-eUc" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="24" id="5hY-Qw-D80"/>
                 <constraint firstAttribute="trailing" secondItem="EdB-CQ-dXu" secondAttribute="trailing" constant="8" id="BdH-Gs-onQ"/>
                 <constraint firstItem="ftH-hb-JkM" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="8" id="Bxu-MG-OxF"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sob-Bq-eUc" secondAttribute="bottom" constant="6" id="Cbs-P9-Q2X"/>
+                <constraint firstItem="Dp3-Ip-39O" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" id="NcS-09-n0f"/>
                 <constraint firstAttribute="bottom" secondItem="ftH-hb-JkM" secondAttribute="top" constant="4" id="QGa-uA-Ast"/>
+                <constraint firstAttribute="bottom" secondItem="Dp3-Ip-39O" secondAttribute="bottom" id="RQu-Hc-Ufz"/>
+                <constraint firstAttribute="trailing" secondItem="Dp3-Ip-39O" secondAttribute="trailing" id="Zuu-yo-a3m"/>
                 <constraint firstAttribute="trailing" secondItem="sob-Bq-eUc" secondAttribute="trailing" constant="6" id="a5G-aI-edH"/>
                 <constraint firstAttribute="top" secondItem="EdB-CQ-dXu" secondAttribute="bottom" constant="-4" id="apn-Rs-dhc"/>
                 <constraint firstItem="BRg-DN-wNT" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="5" id="fNB-5f-4hR"/>
@@ -89,6 +98,7 @@
             </variation>
             <connections>
                 <outlet property="BottomDragIndicator" destination="ftH-hb-JkM" id="qab-cG-Hu5"/>
+                <outlet property="BottomLine" destination="Dp3-Ip-39O" id="8ff-Da-xef"/>
                 <outlet property="CalendarIconBaselineConstraint" destination="20g-ZE-uFH" id="o5h-5z-VYe"/>
                 <outlet property="CalendarIconCenterVerticallyConstraint" destination="y9Z-2d-x6z" id="dki-E5-yRN"/>
                 <outlet property="CalendarIconHeightConstrarint" destination="5iW-EI-Uvb" id="Wpr-Cp-VKp"/>
@@ -106,5 +116,8 @@
     </objects>
     <resources>
         <image name="icCalendarSmall" width="10" height="11"/>
+        <namedColor name="CellBackground">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

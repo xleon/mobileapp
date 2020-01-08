@@ -44,6 +44,11 @@ namespace Toggl.Droid.Extensions.Reactive
                 }
             };
 
+        public static IObservable<TouchEventArgs> TouchEvents(this IReactive<View> reactive)
+            => Observable
+                .FromEventPattern<TouchEventArgs>(e => reactive.Base.Touch += e, e => reactive.Base.Touch -= e)
+                .Select(touchEventArgs => touchEventArgs.EventArgs);
+
         public static IDisposable BindAction(this IReactive<View> reactive, ViewAction action, ButtonEventType eventType = ButtonEventType.Tap)
         {
             IObservable<Unit> eventObservable = Observable.Empty<Unit>();

@@ -1,4 +1,5 @@
 using System;
+using System.Reactive.Threading.Tasks;
 using Toggl.Networking.ApiClients.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Models.Reports;
@@ -18,19 +19,18 @@ namespace Toggl.Core.Interactors.Reports
             ITimeEntriesReportsApi api,
             long userId,
             long workspaceId,
-            DateTimeOffset startDate,
-            DateTimeOffset endDate)
+            DateTimeOffsetRange timeRange)
         {
             Ensure.Argument.IsNotNull(api, nameof(api));
 
             this.api = api;
             this.userId = userId;
             this.workspaceId = workspaceId;
-            this.startDate = startDate;
-            this.endDate = endDate;
+            startDate = timeRange.Minimum;
+            endDate = timeRange.Maximum;
         }
 
         public IObservable<ITimeEntriesTotals> Execute()
-            => api.GetTotals(userId, workspaceId, startDate, endDate);
+            => api.GetTotals(userId, workspaceId, startDate, endDate).ToObservable();
     }
 }

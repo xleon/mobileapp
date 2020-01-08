@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using CoreFoundation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
@@ -27,6 +28,7 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
             ViewModel?.AttachView(this);
+            ConfigureKeyCommands();
         }
 
         public override void ViewWillAppear(bool animated)
@@ -72,9 +74,12 @@ namespace Toggl.iOS.ViewControllers
             ViewModel?.ViewDestroyed();
         }
 
-        public void DismissFromNavigationController()
+        public Task<bool> DismissFromNavigationController()
+            => ViewModel.CloseWithDefaultResult();
+
+        public void ViewcontrollerWasPopped()
         {
-            ViewModel.CloseWithDefaultResult();
+            ViewModel.ViewWasClosed();
         }
 
         public void Close()
@@ -92,5 +97,10 @@ namespace Toggl.iOS.ViewControllers
 
         public IObservable<string> GetGoogleToken()
             => throw new InvalidOperationException();
+
+
+        protected virtual void ConfigureKeyCommands()
+        {
+        }
     }
 }

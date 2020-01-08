@@ -16,12 +16,18 @@ namespace Toggl.iOS.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            NavigationItem.BackBarButtonItem.Title = Resources.Back;
 
             Title = Resources.About;
 
             PrivacyPolicyLabel.Text = Resources.PrivacyPolicy;
             TermsOfServiceLabel.Text = Resources.TermsOfService;
             LicensesLabel.Text = Resources.Licenses;
+
+            PrivacyPolicyView.InsertSeparator(UIKit.UIRectEdge.Top);
+            PrivacyPolicyView.InsertSeparator();
+            TermsOfServiceView.InsertSeparator();
+            LicensesView.InsertSeparator();
 
             LicensesView.Rx()
                 .BindAction(ViewModel.OpenLicensesView)

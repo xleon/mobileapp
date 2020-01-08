@@ -12,7 +12,27 @@
   <color name="separator">#26FFFFFF</color>
   <color name="stopTimeEntryButtonBackground">#FFFF453A</color>
   <color name="startTimeEntryButtonBackground">#FF32D74B</color>
+  <color name="startTimeEntryButtonAnimation">#FF00A415</color>
   <color name="licensesBorder">#BBFFFFFF</color>
   <color name="licensesBackground">#FF303030</color>
   <color name="tagToken">#DDFFFFFF</color>
+  <color name="darkBackground">#DDFFFFFF</color>
+  <color name="primaryTextOnDarkBackground">#FF000000</color>
+  <color name="weekStripeDisabledDayColor">#656565</color>
+
+  <!-- Reports page-->
+  <color name="placeholderBarFilled">#19FFFFFF</color>
+  <color name="placeholderBarRegular">#0FFFFFFF</color>
+  <color name="placeholderDonut">#FF4E4E4E</color>
+  <color name="donutSelectionDurationText">#E0E0E0</color>
+
+  <!-- DateRange picker -->
+  <color name="dateRangePickerBackground">#323232</color>
+  <color name="monthTextColor">#FFFFFF</color>
+  <color name="extraMonthTextColor">#959595</color>
+  <color name="selectedTextColor">#FFFFFF</color>
+  <color name="todayMarkerBackground">#E0E0E0</color>
+  <color name="selectionBackground">#328FFF</color>
+  <color name="shortcutBackground">#3E3E3E</color>
+  
 </resources>

@@ -32,7 +32,7 @@ namespace Toggl.iOS.Cells.Settings
             base.AwakeFromNib();
 
             GrayBackground.Layer.BorderWidth = 1;
-            GrayBackground.Layer.BorderColor = Core.UI.Helper.Colors.Licenses.Border.ToNativeColor().CGColor;
+            GrayBackground.Layer.BorderColor = ColorAssets.Separator.CGColor;
         }
 
         protected override void UpdateView()

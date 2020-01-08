@@ -1,18 +1,17 @@
-﻿using Android.Support.V7.Widget;
-using Android.Widget;
+﻿using Android.Widget;
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core.Sync;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Onboarding.MainView;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Helper;
 using Toggl.Droid.ViewHolders;
+using Toggl.Droid.ViewHolders.MainLog;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
@@ -68,7 +67,7 @@ namespace Toggl.Droid.Fragments
 
         private void setupMainLogObservables()
         {
-            var collectionChanges = ViewModel.TimeEntries.SelectUnit();
+            var collectionChanges = ViewModel.MainLogItems.SelectUnit();
             mainRecyclerViewChangesObservable = mainRecyclerViewScrollChanges
                 .Merge(collectionChanges);
         }
@@ -164,15 +163,15 @@ namespace Toggl.Droid.Fragments
 
         private MainLogCellViewHolder findOldestTimeEntryView()
         {
-            if (mainRecyclerAdapter == null)
+            if (mainLogRecyclerAdapter == null)
             {
                 return null;
             }
 
             for (var position = layoutManager.FindLastVisibleItemPosition(); position >= 0; position--)
             {
-                var viewType = mainRecyclerAdapter.GetItemViewType(position);
-                if (viewType != MainRecyclerAdapter.ItemViewType)
+                var viewType = mainLogRecyclerAdapter.GetItemViewType(position);
+                if (viewType != MainLogRecyclerAdapter.TimeEntryLogItemViewType)
                 {
                     continue;
                 }

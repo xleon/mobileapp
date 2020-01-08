@@ -77,18 +77,32 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(_ => EmailTextField.BecomeFirstResponder())
                 .DisposedBy(DisposeBag);
 
+            ViewModel.PasswordResetSuccessful
+                .Where(successful => successful)
+                .Subscribe(_ => EmailTextField.ResignFirstResponder())
+                .DisposedBy(DisposeBag);
+
             ViewModel.Reset.Executing
                 .Subscribe(ActivityIndicator.Rx().IsVisibleWithFade())
                 .DisposedBy(DisposeBag);
+
+            //Colors
+            ViewModel.EmailValid
+                .Select(resetButtonTitleColor)
+                .Subscribe(ResetPasswordButton.Rx().TitleColor());
 
             //Commands
             ResetPasswordButton.Rx()
                 .BindAction(ViewModel.Reset)
                 .DisposedBy(DisposeBag);
 
-            ResetPasswordButton.Rx().Tap()
-                .Subscribe(resetPasswordButtonTapped)
+            ViewModel.PasswordResetWithInvalidEmail
+                .Subscribe(_ => EmailTextField.Shake())
                 .DisposedBy(DisposeBag);
+
+                UIColor resetButtonTitleColor(bool enabled) => enabled
+                    ? Colors.Login.EnabledButtonColor.ToNativeColor()
+                    : Colors.Login.DisabledButtonColor.ToNativeColor();
         }
 
         public override void ViewDidLayoutSubviews()
@@ -98,13 +112,6 @@ namespace Toggl.iOS.ViewControllers
             if (viewInitialized) return;
 
             viewInitialized = true;
-        }
-
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-
-            EmailTextField.BecomeFirstResponder();
         }
 
         protected override void KeyboardWillShow(object sender, UIKeyboardEventArgs e)
@@ -128,6 +135,7 @@ namespace Toggl.iOS.ViewControllers
                 UIControlState.Disabled
             );
 
+            EmailTextField.BecomeFirstResponder();
             EmailTextField.Rx().ShouldReturn()
                 .Subscribe(ViewModel.Reset.Inputs)
                 .DisposedBy(DisposeBag);
@@ -136,8 +144,5 @@ namespace Toggl.iOS.ViewControllers
 
             ErrorLabel.Hidden = true;
         }
-
-        private void resetPasswordButtonTapped()
-            => EmailTextField.ResignFirstResponder();
     }
 }

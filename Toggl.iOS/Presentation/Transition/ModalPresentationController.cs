@@ -24,6 +24,8 @@ namespace Toggl.iOS.Presentation.Transition
         private const double iPadTopMarginLarge = 76;
         private const double iPadStackModalViewSpacing = 40;
 
+        private const double keyboardMargin = 10;
+
         private double topiPadMargin
             => UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeLeft
                || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeRight
@@ -43,7 +45,7 @@ namespace Toggl.iOS.Presentation.Transition
 
         private readonly UIView dimmingView = new UIView
         {
-            BackgroundColor = Core.UI.Helper.Colors.ModalDialog.BackgroundOverlay.ToNativeColor(),
+            BackgroundColor = ColorAssets.CustomGray4,
             Alpha = 0
         };
 
@@ -136,25 +138,7 @@ namespace Toggl.iOS.Presentation.Transition
         }
 
         public override CGSize GetSizeForChildContentContainer(IUIContentContainer contentContainer, CGSize parentContainerSize)
-        {
-            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
-            {
-                var preferredContentHeight = PresentedViewController.PreferredContentSize.Height != 0
-                    ? PresentedViewController.PreferredContentSize.Height
-                    : iPadMaxHeight;
-
-                var height = preferredContentHeight;
-                var width = Min(iPadMaxWidth, parentContainerSize.Width);
-                var stackingDepth = iPadStackModalViewSpacing * levelsOfModalViews();
-
-                height = Min(height, iPadMaxHeight - stackingDepth);
-                return new CGSize(width, height);
-            }
-
-            var maxHeight = PresentingViewController.View.Bounds.Height - PresentingViewController.View.SafeAreaInsets.Top;
-            var preferredHeight = Min(maxHeight, PresentedViewController.PreferredContentSize.Height);
-            return new CGSize(parentContainerSize.Width, preferredHeight == 0 ? maxHeight : preferredHeight);
-        }
+            => calculateSize(contentContainer, parentContainerSize, 0f);
 
         public override CGRect FrameOfPresentedViewInContainerView
         {
@@ -165,14 +149,14 @@ namespace Toggl.iOS.Presentation.Transition
 
                 var containerSize = ContainerView.Bounds.Size;
                 var frame = CGRect.Empty;
-                frame.Size = GetSizeForChildContentContainer(PresentedViewController, containerSize);
+                frame.Size = calculateSize(PresentedViewController, containerSize, 0f);
 
                 if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
                 {
                     frame.X = (containerSize.Width - frame.Size.Width) / 2;
                     frame.Y = (containerSize.Height - frame.Size.Height) / 2 + (nfloat)iPadStackModalViewSpacing * levelsOfModalViews();
 
-                    if (isKeyboardVisible || PresentingViewController.PresentingViewController != null)
+                    if (isKeyboardVisible)
                     {
                         frame.Y = (nfloat)topiPadMargin + (nfloat)iPadStackModalViewSpacing * levelsOfModalViews();
                     }
@@ -189,14 +173,40 @@ namespace Toggl.iOS.Presentation.Transition
                         {
                             var firstResponderFrame =
                                 firstResponder.ConvertRectToView(firstResponder.Frame, PresentedView);
-                            var newY = containerSize.Height - keyboardHeight - firstResponderFrame.Y - firstResponderFrame.Height;
-                            frame.Y = (nfloat)Min(frame.Y, newY);
+                            var newY = containerSize.Height - keyboardHeight - firstResponderFrame.Y - firstResponderFrame.Height - keyboardMargin;
+                            frame.Y = (nfloat)Min(newY, frame.Y);
                         }
                     }
+
+                    frame.Y = (nfloat)Max(frame.Y, UIApplication.SharedApplication.StatusBarFrame.Height);
+
+                    // re-calculate the size now, that we know the final vertical offset
+                    frame.Size = calculateSize(PresentedViewController, containerSize, frame.Y);
                 }
 
                 return frame;
             }
+        }
+
+        private CGSize calculateSize(IUIContentContainer contentContainer, CGSize parentContainerSize, nfloat verticalOffset)
+        {
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
+            {
+                var preferredContentHeight = contentContainer.PreferredContentSize.Height != 0
+                    ? contentContainer.PreferredContentSize.Height
+                    : iPadMaxHeight;
+
+                var height = preferredContentHeight;
+                var width = Min(iPadMaxWidth, parentContainerSize.Width);
+                var stackingDepth = iPadStackModalViewSpacing * levelsOfModalViews();
+
+                height = Min(height, iPadMaxHeight - stackingDepth);
+                return new CGSize(width, height);
+            }
+
+            var maxHeight = ContainerView.Bounds.Height - verticalOffset;
+            var preferredHeight = Min(maxHeight, contentContainer.PreferredContentSize.Height);
+            return new CGSize(parentContainerSize.Width, preferredHeight == 0 ? maxHeight : preferredHeight);
         }
 
         private int levelsOfModalViews()
@@ -231,9 +241,8 @@ namespace Toggl.iOS.Presentation.Transition
                     break;
                 case UIGestureRecognizerState.Ended:
                 case UIGestureRecognizerState.Cancelled:
-                    if (percent > impactThreshold)
+                    if (percent > impactThreshold && await dismiss())
                     {
-                        dismiss();
                         feedbackGenerator.ImpactOccurred();
                     }
                     else
@@ -244,15 +253,15 @@ namespace Toggl.iOS.Presentation.Transition
             }
         }
 
-        private void dismiss()
+        private async Task<bool> dismiss()
         {
             if (PresentedViewController is IReactiveViewController reactiveViewController)
             {
-                reactiveViewController.DismissFromNavigationController();
-                return;
+                return await reactiveViewController.DismissFromNavigationController();
             }
 
             PresentedViewController.DismissViewController(true, null);
+            return true;
         }
 
         private void resetPosition(UIGestureRecognizer recognizer)

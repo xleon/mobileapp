@@ -1,6 +1,7 @@
-﻿using Android.Support.Design.Widget;
-using Android.Views;
+﻿using Android.Views;
 using Android.Widget;
+using Google.Android.Material.TextField;
+using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Activities
 {
@@ -11,7 +12,8 @@ namespace Toggl.Droid.Activities
         private TextInputLayout loginEmail;
         private TextInputLayout loginPassword;
 
-        private View signupCard;
+        private ViewGroup signupCard;
+        private ViewGroup loginSignupContainer;
         private View googleLoginButton;
 
         private EditText emailEditText;
@@ -20,7 +22,7 @@ namespace Toggl.Droid.Activities
         private TextView errorTextView;
         private TextView forgotPasswordView;
         private TextView googleLoginLabel;
-        private TextView haveAnAccountLabel;
+        private TextView doNotHaveAnAccountLabel;
         private TextView orLabel;
         private TextView signUpLabel;
 
@@ -28,26 +30,28 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeViews()
         {
-            signupCard = FindViewById(Resource.Id.LoginSignupCardView);
+            signupCard = FindViewById<ViewGroup>(Resource.Id.LoginSignupCardView);
+            loginSignupContainer = FindViewById<ViewGroup>(Resource.Id.LoginSignupContainer);
+            loginSignupContainer.FitBottomPaddingInset();
             errorTextView = FindViewById<TextView>(Resource.Id.LoginError);
             loginButton = FindViewById<Button>(Resource.Id.LoginLoginButton);
             forgotPasswordView = FindViewById<TextView>(Resource.Id.LoginForgotPassword);
             orLabel = FindViewById<TextView>(Resource.Id.LoginOrLabel);
             googleLoginButton = FindViewById<View>(Resource.Id.LoginGoogleLogin);
             googleLoginLabel = FindViewById<TextView>(Resource.Id.LoginGoogleLoginLabel);
-            haveAnAccountLabel = FindViewById<TextView>(Resource.Id.HaveAnAccountLabel);
+            doNotHaveAnAccountLabel = FindViewById<TextView>(Resource.Id.DoNotHaveAnAccountLabel);
             signUpLabel = FindViewById<TextView>(Resource.Id.SignUpLabel);
             progressBar = FindViewById<ProgressBar>(Resource.Id.LoginProgressBar);
             loginEmail = FindViewById<TextInputLayout>(Resource.Id.LoginEmail);
             emailEditText = FindViewById<EditText>(Resource.Id.LoginEmailEditText);
             loginPassword = FindViewById<TextInputLayout>(Resource.Id.LoginPassword);
             passwordEditText = FindViewById<EditText>(Resource.Id.LoginPasswordEditText);
-            
+
             loginEmail.Hint = Shared.Resources.Email;
             loginPassword.Hint = Shared.Resources.Password;
             forgotPasswordView.Text = Shared.Resources.LoginForgotPassword;
             googleLoginLabel.Text = Shared.Resources.GoogleLogin;
-            haveAnAccountLabel.Text = Shared.Resources.AlreadyHaveAnAccountQuestionMark;
+            doNotHaveAnAccountLabel.Text = Shared.Resources.DoNotHaveAnAccountWithQuestionMark;
             orLabel.Text = Shared.Resources.Or;
             signUpLabel.Text = Shared.Resources.SignUpTitle;
         }

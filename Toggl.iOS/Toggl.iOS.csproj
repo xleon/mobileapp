@@ -10,7 +10,7 @@
     <RootNamespace>Toggl.iOS</RootNamespace>
     <AssemblyName>Toggl.iOS</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,7 +22,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\Toggl.ruleset</CodeAnalysisRuleSet>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <DeviceSpecificBuild>false</DeviceSpecificBuild>
+    <DeviceSpecificBuild>true</DeviceSpecificBuild>
     <MtouchDebug>true</MtouchDebug>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchFastDev>true</MtouchFastDev>
@@ -43,14 +43,14 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\Toggl.ruleset</CodeAnalysisRuleSet>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <DeviceSpecificBuild>false</DeviceSpecificBuild>
+    <DeviceSpecificBuild>true</DeviceSpecificBuild>
     <MtouchDebug>true</MtouchDebug>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchFastDev>true</MtouchFastDev>
     <MtouchFloat32>true</MtouchFloat32>
     <MtouchLink>Full</MtouchLink>
     <MtouchExtraArgs>--linkskip Toggl.iOS --linkskip=Toggl.Storage.Realm --registrar:static</MtouchExtraArgs>
-    <MtouchArch>ARMv7, ARM64</MtouchArch>
+    <MtouchArch>ARM64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.AppStore|AnyCPU' ">
@@ -58,18 +58,21 @@
     <OutputPath>bin\Release.AppStore</OutputPath>
     <DefineConstants>__UNIFIED__;__MOBILE__;__IOS__;USE_PRODUCTION_API;USE_ANALYTICS;USE_APPCENTER</DefineConstants>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Distribution: Toggl OU (B227VTMZ94)</CodesignKey>
-    <MtouchExtraArgs>--linkskip Toggl.iOS --linkskip=Toggl.Storage.Realm --registrar:static</MtouchExtraArgs>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+    <MtouchExtraArgs>--linkskip=Toggl.Storage.Realm --registrar:static</MtouchExtraArgs>
     <MtouchFloat32>true</MtouchFloat32>
     <MtouchLink>Full</MtouchLink>
-    <MtouchArch>ARMv7, ARM64</MtouchArch>
+    <MtouchArch>ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <CodesignProvision>Daneel AppStore</CodesignProvision>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <MtouchArch>ARMv7</MtouchArch>
+    <MtouchArch>ARM64</MtouchArch>
     <OutputPath>..\bin\Release</OutputPath>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
+    <MtouchFloat32>true</MtouchFloat32>
+    <MtouchLink>Full</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.AdHoc|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -84,8 +87,9 @@
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>Full</MtouchLink>
-    <MtouchArch>ARMv7, ARM64</MtouchArch>
+    <MtouchArch>ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=null">
@@ -109,44 +113,24 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.2.1.1\lib\Xamarin.iOS10\Microsoft.AppCenter.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.2.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Analytics, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.1.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Analytics.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Analytics.iOS.Bindings, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.1.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Analytics.iOS.Bindings.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Analytics.iOS.Bindings.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Crashes, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.1.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Crashes.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Crashes.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Crashes.iOS.Bindings, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.1.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Crashes.iOS.Bindings.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.Crashes.iOS.Bindings.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.iOS.Bindings, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AppCenter.2.1.1\lib\Xamarin.iOS10\Microsoft.AppCenter.iOS.Bindings.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.2.6.1\lib\Xamarin.iOS10\Microsoft.AppCenter.iOS.Bindings.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Reactive, Version=4.1.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263">
-      <HintPath>..\packages\System.Reactive.4.1.2\lib\netstandard2.0\System.Reactive.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.Interfaces, Version=3.0.6000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263">
-      <HintPath>..\packages\System.Reactive.Interfaces.4.1.2\lib\netstandard2.0\System.Reactive.Interfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.Linq, Version=3.0.6000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263">
-      <HintPath>..\packages\System.Reactive.Linq.4.1.2\lib\netstandard2.0\System.Reactive.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.PlatformServices, Version=3.0.6000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263">
-      <HintPath>..\packages\System.Reactive.PlatformServices.4.1.2\lib\netstandard2.0\System.Reactive.PlatformServices.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.1\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
       <Private>True</Private>
@@ -161,16 +145,13 @@
     <Reference Include="System.IO.Compression" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Google.Core">
       <HintPath>..\packages\Xamarin.Google.iOS.Core.3.1.0\lib\Xamarin.iOS10\Google.Core.dll</HintPath>
     </Reference>
     <Reference Include="Google.SignIn">
-      <HintPath>..\packages\Xamarin.Google.iOS.SignIn.4.4.0\lib\Xamarin.iOS10\Google.SignIn.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetCross.Memory.Unsafe">
-      <HintPath>..\packages\DotNetCross.Memory.Unsafe.0.2.3.4\lib\netstandard1.0\DotNetCross.Memory.Unsafe.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Google.iOS.SignIn.5.0.1\lib\xamarinios10\Google.SignIn.dll</HintPath>
     </Reference>
     <Reference Include="Realm.DataBinding">
       <HintPath>..\packages\Realm.DataBinding.1.2.0\lib\Xamarin.iOS10\Realm.DataBinding.dll</HintPath>
@@ -187,41 +168,45 @@
     <Reference Include="Google.Core">
       <HintPath>..\packages\Xamarin.Google.iOS.Core.3.1.0.1\lib\Xamarin.iOS10\Google.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Calabash">
-      <HintPath>..\packages\Xamarin.TestCloud.Agent.0.21.5\lib\Xamarin.iOS\Calabash.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Core">
-      <HintPath>..\packages\System.Reactive.Core.4.0.0\lib\netstandard2.0\System.Reactive.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Firebase.Core">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.Core.5.2.0\lib\Xamarin.iOS10\Firebase.Core.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.Core.6.1.0\lib\xamarinios10\Firebase.Core.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.InstanceID">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.InstanceID.3.4.0\lib\Xamarin.iOS10\Firebase.InstanceID.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.InstanceID.4.2.1\lib\xamarinios10\Firebase.InstanceID.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.Analytics">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.Analytics.5.5.0\lib\Xamarin.iOS10\Firebase.Analytics.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.Analytics.6.0.4\lib\xamarinios10\Firebase.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.RemoteConfig">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.RemoteConfig.3.0.1\lib\Xamarin.iOS10\Firebase.RemoteConfig.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.RemoteConfig.4.2.1\lib\xamarinios10\Firebase.RemoteConfig.dll</HintPath>
     </Reference>
     <Reference Include="System.Collections.Immutable">
-      <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+      <HintPath>..\packages\System.Collections.Immutable.1.6.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.PerformanceMonitoring">
       <HintPath>..\packages\Xamarin.Firebase.iOS.PerformanceMonitoring.2.1.2\lib\Xamarin.iOS10\Firebase.PerformanceMonitoring.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Essentials">
-      <HintPath>..\packages\Xamarin.Essentials.1.0.0\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Essentials.1.3.1\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
     </Reference>
     <Reference Include="AdjustSdk.Xamarin.iOS">
-      <HintPath>..\packages\AdjustSdk.Xamarin.iOS.4.17.0\lib\xamarinios10\AdjustSdk.Xamarin.iOS.dll</HintPath>
+      <HintPath>..\packages\AdjustSdk.Xamarin.iOS.4.18.0\lib\xamarinios10\AdjustSdk.Xamarin.iOS.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.CloudMessaging">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.CloudMessaging.3.1.2\lib\Xamarin.iOS10\Firebase.CloudMessaging.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.CloudMessaging.4.1.1.1\lib\xamarinios10\Firebase.CloudMessaging.dll</HintPath>
     </Reference>
     <Reference Include="Firebase.ABTesting">
-      <HintPath>..\packages\Xamarin.Firebase.iOS.ABTesting.2.0.0.2\lib\Xamarin.iOS10\Firebase.ABTesting.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Firebase.iOS.ABTesting.3.0.0\lib\xamarinios10\Firebase.ABTesting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive">
+      <HintPath>..\packages\System.Reactive.4.2.0\lib\netstandard2.0\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq">
+      <HintPath>..\packages\System.Reactive.Linq.4.2.0\lib\netstandard2.0\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK-1.0" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -472,12 +457,6 @@
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo%402x.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo%403x.png">
@@ -1284,6 +1263,128 @@
     <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_1024pt.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\x.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\x.imageset\x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata.png" />
+    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\stop.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop.png" />
+    <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\continue.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\continue.imageset\continue.png" />
+    <ImageAsset Include="Resources\Images.xcassets\continue.imageset\continue%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\continue.imageset\continue%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\discard.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\discard.imageset\discard.png" />
+    <ImageAsset Include="Resources\Images.xcassets\discard.imageset\discard%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\discard.imageset\discard%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\copy.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\copy.imageset\copy.png" />
+    <ImageAsset Include="Resources\Images.xcassets\copy.imageset\copy%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\copy.imageset\copy%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\save.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\save.imageset\save.png" />
+    <ImageAsset Include="Resources\Images.xcassets\save.imageset\save%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\save.imageset\save%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\edit.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\edit.imageset\edit%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\edit.imageset\edit%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\edit.imageset\edit.png" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete.png" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete%403x-1.png" />
+    <ImageAsset Include="Resources\Colors.xcassets\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Background.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text2.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Separator.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\OpaqueSeparator.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\TableBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CellBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text3.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text4.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray2.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray3.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray4.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray5.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray6.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo.png" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogo%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpiderDark.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpiderDark%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icJustSpider.imageset\icJustSpiderDark%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\icIllustrationSpiderDark.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\icIllustrationSpiderDark%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationSpider.imageset\icIllustrationSpiderDark%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorSpider.imageset\icIllustrationErrorSpiderDark.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorSpider.imageset\icIllustrationErrorSpiderDark%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorSpider.imageset\icIllustrationErrorSpiderDark%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogoDark-1.png" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogoDark%402x-1.png" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogo.imageset\togglLogoDark%403x-1.png" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogoBig.imageset\logoBigDark-1.png" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogoBig.imageset\logoBigDark%402x-1.png" />
+    <ImageAsset Include="Resources\Images.xcassets\togglLogoBig.imageset\logoBigDark%403x-1.png" />
+    <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark.png" />
+    <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\bike.imageset\bikeDark%403x.png" />
+    <ImageAsset Include="Resources\Colors.xcassets\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Spider.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text4.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\TableBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CellBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Background.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text2.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text3.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray6.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Separator.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray2.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray3.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\InverseText.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray5.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CustomGray4.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\OpaqueSeparator.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text1.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\Text.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ErrorText.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ErrorBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboard.imageset\pasteFromClipboard_Dark.pdf" />
+    <ImageAsset Include="Resources\Images.xcassets\pasteFromClipboardEnabled.imageset\pasteFromClipboardEnabled_Dark.pdf" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationProject.imageset\icIllustrationProjects_Dark.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationProject.imageset\icIllustrationProjects_Dark%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationProject.imageset\icIllustrationProjects_Dark%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationProjects_Dark.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationProjects_Dark%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icIllustrationErrorWorkspace.imageset\icIllustrationProjects_Dark%403x.png" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarDeleteAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarEditAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarSaveAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarContinueAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarDiscardAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarStopAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarCopyAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarStartAction.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarSelectedTodayBackground.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarUnavailableDayText.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarUnselectedTodayText.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\CalendarHeaderLabel.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartFilled.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartTotal.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartFilledPlaceholder.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartTotalPlaceholder.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorBadData.imageset\error_baddata-2.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorBadData.imageset\error_baddata-1.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorBadData.imageset\error_baddata.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorBadData.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -1306,7 +1407,6 @@
     <InterfaceDefinition Include="ViewControllers\SelectClientViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\OutdatedAppViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\TokenResetViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\ReportsViewController.xib" />
     <InterfaceDefinition Include="Views\Color\ColorSelectionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\ProjectSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\StartTimeEntryEmptyViewCell.xib" />
@@ -1314,20 +1414,14 @@
     <InterfaceDefinition Include="Views\StartTimeEntry\TagSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\TaskSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\WorkspaceHeaderViewCell.xib" />
-    <InterfaceDefinition Include="Views\Suggestions\SuggestionsEmptyViewCell.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\WorkspaceViewCell.xib" />
-    <InterfaceDefinition Include="ViewControllers\ReportsCalendarViewController.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsCalendarViewCell.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsCalendarQuickSelectViewCell.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsLegendViewCell.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsHeaderView.xib" />
+    <InterfaceDefinition Include="Views\Reports\DateRangePickerCell.xib" />
+    <InterfaceDefinition Include="Views\Reports\DateRangePickerShortcutCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\NoEntityInfoViewCell.xib" />
-    <InterfaceDefinition Include="Views\Suggestions\SuggestionView.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\SettingsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\AboutViewController.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntriesEmptyLogView.xib" />
     <InterfaceDefinition Include="Views\Log\TimeEntryMockView.xib" />
-    <InterfaceDefinition Include="Views\Rating\RatingView.xib" />
     <InterfaceDefinition Include="ViewControllers\SelectCountryViewController.xib" />
     <InterfaceDefinition Include="Views\CountrySelection\CountryViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\ForgotPasswordViewController.xib" />
@@ -1339,13 +1433,12 @@
     <InterfaceDefinition Include="Cells\Settings\LicensesViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\NoWorkspaceViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\SendFeedbackViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\Calendar\CalendarViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Calendar\CalendarDayViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Calendar\CalendarPermissionDeniedViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\CalendarItemView.xib" />
     <InterfaceDefinition Include="Cells\Calendar\CurrentTimeSupplementaryView.xib" />
     <InterfaceDefinition Include="Cells\Calendar\HourSupplementaryView.xib" />
     <InterfaceDefinition Include="Views\SnackBar.xib" />
-    <InterfaceDefinition Include="ViewControllers\Calendar\SelectUserCalendarsViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\SelectableUserCalendarViewCell.xib" />
     <InterfaceDefinition Include="Cells\Calendar\UserCalendarListHeaderViewCell.xib" />
     <InterfaceDefinition Include="Views\Settings\CalendarSettingsTableViewHeader.xib" />
@@ -1361,25 +1454,35 @@
     <InterfaceDefinition Include="Views\StartTimeEntry\ReactiveProjectSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\ReactiveWorkspaceHeaderViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\ReactiveTaskSuggestionViewCell.xib" />
-    <InterfaceDefinition Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.xib" />
-    <InterfaceDefinition Include="Cells\TimeEntriesLog\TimeEntriesLogViewCell.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsOverviewCardView.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsBarChartCardView.xib" />
+    <InterfaceDefinition Include="Cells\MainLog\TimeEntriesLogHeaderView.xib" />
+    <InterfaceDefinition Include="Cells\MainLog\TimeEntriesLogViewCell.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\CreateEntityViewCell.xib" />
     <InterfaceDefinition Include="Views\Settings\SiriShortcutCell.xib" />
     <InterfaceDefinition Include="Views\Settings\CustomSiriShortcutCell.xib" />
     <InterfaceDefinition Include="Views\Settings\SiriShortcutTableViewHeader.xib" />
     <InterfaceDefinition Include="Views\Settings\SiriShortcutReportPeriodCell.xib" />
-    <InterfaceDefinition Include="Views\Settings\SiriWorkflowCell.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\Siri\PasteFromClipboardViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\Settings\Siri\SiriWorkflowsViewController.xib" />
     <InterfaceDefinition Include="Cells\Settings\SettingCell.xib" />
     <InterfaceDefinition Include="Cells\Settings\SettingsSectionHeader.xib" />
     <InterfaceDefinition Include="Cells\Settings\SettingsSyncCell.xib" />
     <InterfaceDefinition Include="Cells\Settings\SettingsAnnotationCell.xib" />
     <InterfaceDefinition Include="Cells\Settings\SettingsButtonCell.xib" />
     <InterfaceDefinition Include="Cells\Common\SelectorCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\Calendar\CalendarViewController.xib" />
+    <InterfaceDefinition Include="Cells\Calendar\CalendarWeeklyViewDayCollectionViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\ReportsViewController.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsSummaryCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsBarChartCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsDonutChartCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsNoDataCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsErrorCollectionViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\January2020CampaignViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\DateRangePickerViewController.xib" />
+    <InterfaceDefinition Include="Cells\MainLog\SuggestionLogViewCell.xib" />
+    <InterfaceDefinition Include="Cells\MainLog\SuggestionsHeaderView.xib" />
+    <InterfaceDefinition Include="Cells\MainLog\UserFeedbackTableViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1392,6 +1495,13 @@
     <Compile Include="Analytics\SiriIntentErrorTrackingEvent.cs" />
     <Compile Include="Analytics\SiriTrackingEventExtensions.cs" />
     <Compile Include="Cells\BaseCollectionViewCell.cs" />
+    <Compile Include="Cells\MainLog\SuggestionLogViewCell.cs" />
+    <Compile Include="Cells\MainLog\SuggestionLogViewCell.designer.cs">
+      <DependentUpon>SuggestionLogViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\ButtonExtensions.cs" />
+    <Compile Include="Extensions\ColorAssets.cs" />
+    <Compile Include="Extensions\ImageViewExtensions.cs" />
     <Compile Include="Extensions\IntentPeriod.cs" />
     <Compile Include="Extensions\Reactive\DurationFieldExtensions.cs" />
     <Compile Include="Extensions\Reactive\HueSaturationPickerViewExtensions.cs" />
@@ -1400,6 +1510,8 @@
     <Compile Include="Extensions\Reactive\UISliderExtensions.cs" />
     <Compile Include="Extensions\Reactive\WheelForegroundViewExtensions.cs" />
     <Compile Include="Extensions\SectionedIndexExtensions.cs" />
+    <Compile Include="Extensions\TimeEntryDisplayInfoExtensions.cs" />
+    <Compile Include="Extensions\SuggestionExtensions.cs" />
     <Compile Include="Extensions\ViewControllerExtensions.cs" />
     <Compile Include="Helper\PermissionsHelper.cs" />
     <Compile Include="Presentation\IosPresenter.cs" />
@@ -1424,6 +1536,7 @@
     <Compile Include="Services\PushNotificationsTokenServiceIos.cs" />
     <Compile Include="Services\IntentDonationService.cs" />
     <Compile Include="Services\FetchRemoteConfigServiceIos.cs" />
+    <Compile Include="Services\WidgetsServiceIos.cs" />
     <Compile Include="Services\UserDefaultsStorageIos.cs" />
     <Compile Include="Services\WatchService.cs" />
     <Compile Include="Startup\AppDelegate.Deeplink.cs">
@@ -1436,10 +1549,25 @@
     <Compile Include="Startup\IOSSchedulerProvider.cs" />
     <Compile Include="Extensions\AnimationExtensions.cs" />
     <Compile Include="Transformations\ProjectTaskClientToAttributedString.cs" />
+    <Compile Include="ViewControllers\Calendar\CalendarViewController.KeyCommands.cs">
+      <DependentUpon>CalendarViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\Common\SelectorViewController.cs" />
-    <Compile Include="ViewControllers\Navigation\OnboardingFlowNavigationController.cs" />
+    <Compile Include="ViewControllers\Common\SelectorViewController.KeyCommands.cs" />
+    <Compile Include="ViewControllers\EditProjectViewController.KeyCommands.cs">
+      <DependentUpon>EditProjectViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\EditTimeEntryViewController.KeyCommands.cs">
+      <DependentUpon>EditTimeEntryViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\MainViewController.KeyCommands.cs">
+      <DependentUpon>MainViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.DialogProvider.cs">
+      <DependentUpon>ReactiveTableViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.KeyCommands.cs">
       <DependentUpon>ReactiveTableViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\Reactive\ReactiveTableViewController.PermissionsHandler.cs">
@@ -1452,8 +1580,14 @@
     <Compile Include="ViewControllers\Reactive\ReactiveViewController.GoogleTokenProvider.cs">
       <DependentUpon>ReactiveViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\Reactive\ReactiveViewController.KeyCommands.cs">
+      <DependentUpon>ReactiveViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\Reactive\ReactiveViewController.PermissionsHandler.cs">
       <DependentUpon>ReactiveViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\ReportsViewController.KeyCommands.cs">
+      <DependentUpon>ReportsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\Settings\Models\AnnotationRow.cs" />
     <Compile Include="ViewControllers\Settings\Models\ButtonRow.cs" />
@@ -1471,7 +1605,11 @@
       <DependentUpon>SiriShortcutsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\Settings\Siri\SiriShortcutViewModel.cs" />
+    <Compile Include="ViewControllers\StartTimeEntryViewController.KeyCommands.cs">
+      <DependentUpon>StartTimeEntryViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\SyncFailuresViewController.cs" />
+    <Compile Include="ViewSources\CalendarWeeklyViewDayCollectionViewSource.cs" />
     <Compile Include="ViewSources\Generic\CollectionView\ReloadCollectionViewSource.cs" />
     <Compile Include="ViewSources\Generic\TableView\BaseTableViewSource.cs" />
     <Compile Include="ViewSources\SettingsTableViewSource.cs" />
@@ -1517,7 +1655,9 @@
       <DependentUpon>SelectTagsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\SelectTagsTableViewSource.cs" />
+    <Compile Include="Views\Calendar\CalendarCollectionViewContextualMenuDismissHelper.cs" />
     <Compile Include="Views\Calendar\CalendarCollectionViewLayout.cs" />
+    <Compile Include="Views\Calendar\CalendarContextualMenuActionView.cs" />
     <Compile Include="Views\Client\ClientViewCell.cs" />
     <Compile Include="Views\Client\ClientViewCell.designer.cs">
       <DependentUpon>ClientViewCell.cs</DependentUpon>
@@ -1565,13 +1705,10 @@
     <Compile Include="ViewControllers\SelectClientViewController.designer.cs">
       <DependentUpon>SelectClientViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reports\ReportsCalendarCollectionViewLayout.cs" />
+    <Compile Include="Views\Reports\DateRangePickerCollectionViewLayout.cs" />
     <Compile Include="Views\TextViewWithPlaceholder.cs" />
     <Compile Include="Startup\AppDelegate.cs" />
     <Compile Include="Startup\AppDelegate.Analytics.cs">
-      <DependentUpon>AppDelegate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Startup\AppDelegate.UI.cs">
       <DependentUpon>AppDelegate.cs</DependentUpon>
     </Compile>
     <Compile Include="Startup\AppDelegate.Siri.cs">
@@ -1599,10 +1736,6 @@
     <Compile Include="ViewControllers\LoginViewController.cs" />
     <Compile Include="ViewControllers\LoginViewController.designer.cs">
       <DependentUpon>LoginViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\ReportsViewController.cs" />
-    <Compile Include="ViewControllers\ReportsViewController.designer.cs">
-      <DependentUpon>ReportsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Color\ColorSelectionViewCell.cs" />
     <Compile Include="Views\Color\ColorSelectionViewCell.designer.cs">
@@ -1633,42 +1766,21 @@
     <Compile Include="Views\StartTimeEntry\WorkspaceHeaderViewCell.designer.cs">
       <DependentUpon>WorkspaceHeaderViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Suggestions\SuggestionsEmptyViewCell.cs" />
-    <Compile Include="Views\Suggestions\SuggestionsEmptyViewCell.designer.cs">
-      <DependentUpon>SuggestionsEmptyViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\Color\ValueSliderView.cs" />
     <Compile Include="Views\EntityCreation\WorkspaceViewCell.cs" />
     <Compile Include="Views\EntityCreation\WorkspaceViewCell.designer.cs">
       <DependentUpon>WorkspaceViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\KeyboardAwareViewController.cs" />
-    <Compile Include="ViewControllers\ReportsCalendarViewController.cs" />
-    <Compile Include="ViewControllers\ReportsCalendarViewController.designer.cs">
-      <DependentUpon>ReportsCalendarViewController.cs</DependentUpon>
+    <Compile Include="Views\Reports\DateRangePickerCell.cs" />
+    <Compile Include="Views\Reports\DateRangePickerCell.designer.cs">
+      <DependentUpon>DateRangePickerCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewSources\ReportsCalendarCollectionViewSource.cs" />
-    <Compile Include="Views\Reports\ReportsCalendarViewCell.cs" />
-    <Compile Include="Views\Reports\ReportsCalendarViewCell.designer.cs">
-      <DependentUpon>ReportsCalendarViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewSources\ReportsCalendarQuickSelectCollectionViewSource.cs" />
-    <Compile Include="Views\Reports\ReportsCalendarQuickSelectViewCell.cs" />
-    <Compile Include="Views\Reports\ReportsCalendarQuickSelectViewCell.designer.cs">
-      <DependentUpon>ReportsCalendarQuickSelectViewCell.cs</DependentUpon>
+    <Compile Include="Views\Reports\DateRangePickerShortcutCell.cs" />
+    <Compile Include="Views\Reports\DateRangePickerShortcutCell.designer.cs">
+      <DependentUpon>DateRangePickerShortcutCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\RoundedView.cs" />
-    <Compile Include="Views\Reports\PieChartView.cs" />
-    <Compile Include="Views\Reports\PercentageView.cs" />
-    <Compile Include="Views\Reports\ReportsLegendViewCell.cs" />
-    <Compile Include="Views\Reports\ReportsLegendViewCell.designer.cs">
-      <DependentUpon>ReportsLegendViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Reports\ReportsHeaderView.cs" />
-    <Compile Include="Views\Reports\ReportsHeaderView.designer.cs">
-      <DependentUpon>ReportsHeaderView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewSources\ReportsTableViewSource.cs" />
     <Compile Include="Views\StartTimeEntry\NoEntityInfoViewCell.cs" />
     <Compile Include="Views\StartTimeEntry\NoEntityInfoViewCell.designer.cs">
       <DependentUpon>NoEntityInfoViewCell.cs</DependentUpon>
@@ -1676,7 +1788,6 @@
     <Compile Include="Views\EditDuration\WheelBackgroundView.cs" />
     <Compile Include="Views\EditDuration\BaseWheelView.cs" />
     <Compile Include="Views\EditDuration\WheelForegroundView.cs" />
-    <Compile Include="Views\Reports\LoadingPieChartView.cs" />
     <Compile Include="Views\SpiderOnARopeView.cs" />
     <Compile Include="ApplicationShortcutCreator.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
@@ -1686,11 +1797,6 @@
     <Compile Include="Views\AutocompleteTextViewPlaceholder.cs" />
     <Compile Include="Views\EditDuration\DurationField.cs" />
     <Compile Include="Views\EditDuration\NumberKeyPressedEventArgs.cs" />
-    <Compile Include="Views\Suggestions\SuggestionsView.cs" />
-    <Compile Include="Views\Suggestions\SuggestionView.cs" />
-    <Compile Include="Views\Suggestions\SuggestionView.designer.cs">
-      <DependentUpon>SuggestionView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Services\LicenseProviderIos.cs" />
     <Compile Include="Views\Log\TimeEntriesEmptyLogView.cs" />
     <Compile Include="Views\Log\TimeEntriesEmptyLogView.designer.cs">
@@ -1720,10 +1826,6 @@
       <DependentUpon>CountryViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginTextField.cs" />
-    <Compile Include="Views\Rating\RatingView.cs" />
-    <Compile Include="Views\Rating\RatingView.designer.cs">
-      <DependentUpon>RatingView.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\ForgotPasswordViewController.cs" />
     <Compile Include="ViewControllers\ForgotPasswordViewController.designer.cs">
       <DependentUpon>ForgotPasswordViewController.cs</DependentUpon>
@@ -1764,9 +1866,9 @@
       <DependentUpon>SendFeedbackViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ReactiveCollectionViewCell.cs" />
-    <Compile Include="ViewControllers\Calendar\CalendarViewController.cs" />
-    <Compile Include="ViewControllers\Calendar\CalendarViewController.designer.cs">
-      <DependentUpon>CalendarViewController.cs</DependentUpon>
+    <Compile Include="ViewControllers\Calendar\CalendarDayViewController.cs" />
+    <Compile Include="ViewControllers\Calendar\CalendarDayViewController.designer.cs">
+      <DependentUpon>CalendarDayViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\Calendar\CalendarPermissionDeniedViewController.cs" />
     <Compile Include="ViewControllers\Calendar\CalendarPermissionDeniedViewController.designer.cs">
@@ -1794,10 +1896,6 @@
     <Compile Include="ViewControllers\NoWorkspaceViewController.cs" />
     <Compile Include="ViewControllers\NoWorkspaceViewController.designer.cs">
       <DependentUpon>NoWorkspaceViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\Calendar\SelectUserCalendarsViewController.cs" />
-    <Compile Include="ViewControllers\Calendar\SelectUserCalendarsViewController.designer.cs">
-      <DependentUpon>SelectUserCalendarsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewSources\SelectUserCalendarsTableViewSource.cs" />
     <Compile Include="Cells\Calendar\SelectableUserCalendarViewCell.cs" />
@@ -1869,7 +1967,6 @@
     <Compile Include="Views\Tag\NewTagViewCell.designer.cs">
       <DependentUpon>NewTagViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Views\StartTimeEntry\ReactiveProjectSuggestionViewCell.cs" />
     <Compile Include="Views\StartTimeEntry\ReactiveProjectSuggestionViewCell.designer.cs">
       <DependentUpon>ReactiveProjectSuggestionViewCell.cs</DependentUpon>
@@ -1885,12 +1982,12 @@
     </Compile>
     <Compile Include="Views\Calendar\CalendarCollectionViewZoomHelper.cs" />
     <Compile Include="ViewSources\Generic\TableView\CustomTableViewSource.cs" />
-    <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.cs" />
-    <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogHeaderView.designer.cs">
+    <Compile Include="Cells\MainLog\TimeEntriesLogHeaderView.cs" />
+    <Compile Include="Cells\MainLog\TimeEntriesLogHeaderView.designer.cs">
       <DependentUpon>TimeEntriesLogHeaderView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogViewCell.cs" />
-    <Compile Include="Cells\TimeEntriesLog\TimeEntriesLogViewCell.designer.cs">
+    <Compile Include="Cells\MainLog\TimeEntriesLogViewCell.cs" />
+    <Compile Include="Cells\MainLog\TimeEntriesLogViewCell.designer.cs">
       <DependentUpon>TimeEntriesLogViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\Reactive\UIViewControllerExtensions.cs" />
@@ -1898,15 +1995,6 @@
     <Compile Include="Views\EntityCreation\CreateEntityViewCell.cs" />
     <Compile Include="Views\EntityCreation\CreateEntityViewCell.designer.cs">
       <DependentUpon>CreateEntityViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Reports\ReportsOverviewCardView.cs" />
-    <Compile Include="Views\Reports\ReportsOverviewCardView.designer.cs">
-      <DependentUpon>ReportsOverviewCardView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Cells\BaseReportsCardView.cs" />
-    <Compile Include="Views\Reports\ReportsBarChartCardView.cs" />
-    <Compile Include="Views\Reports\ReportsBarChartCardView.designer.cs">
-      <DependentUpon>ReportsBarChartCardView.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentation\IScrollableToTop.cs" />
     <Compile Include="Views\Settings\SiriShortcutCell.cs" />
@@ -1925,10 +2013,6 @@
     <Compile Include="Views\Settings\SiriShortcutReportPeriodCell.designer.cs">
       <DependentUpon>SiriShortcutReportPeriodCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Settings\SiriWorkflowCell.cs" />
-    <Compile Include="Views\Settings\SiriWorkflowCell.designer.cs">
-      <DependentUpon>SiriWorkflowCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.cs" />
     <Compile Include="ViewControllers\Settings\Siri\SiriShortcutsCustomTimeEntryViewController.designer.cs">
       <DependentUpon>SiriShortcutsCustomTimeEntryViewController.cs</DependentUpon>
@@ -1938,10 +2022,6 @@
       <DependentUpon>PasteFromClipboardViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\EmailTextField.cs" />
-    <Compile Include="ViewControllers\Settings\Siri\SiriWorkflowsViewController.cs" />
-    <Compile Include="ViewControllers\Settings\Siri\SiriWorkflowsViewController.designer.cs">
-      <DependentUpon>SiriWorkflowsViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\Reactive\IReactiveViewController.cs" />
     <Compile Include="ViewControllers\Reactive\ReactiveNavigationController.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringViewController.cs" />
@@ -1975,6 +2055,67 @@
     </Compile>
     <Compile Include="ViewSources\Generic\Common\SelectorTableViewSource.cs" />
     <Compile Include="Helper\Handoff.cs" />
+    <Compile Include="ViewControllers\Calendar\CalendarViewController.cs" />
+    <Compile Include="ViewControllers\Calendar\CalendarViewController.designer.cs">
+      <DependentUpon>CalendarViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Calendar\CalendarWeeklyViewDayCollectionViewCell.cs" />
+    <Compile Include="Cells\Calendar\CalendarWeeklyViewDayCollectionViewCell.designer.cs">
+      <DependentUpon>CalendarWeeklyViewDayCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\TextViewExtensions.cs" />
+    <Compile Include="Analytics\WidgetTrackingEventExtensions.cs" />
+    <Compile Include="Analytics\WidgetErrorTrackingEvent.cs" />
+    <Compile Include="ViewControllers\ReportsViewController.cs" />
+    <Compile Include="ViewControllers\ReportsViewController.designer.cs">
+      <DependentUpon>ReportsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reports\ReportsCollectionViewRegularLayout.cs" />
+    <Compile Include="ViewSources\ReportsCollectionViewSource.cs" />
+    <Compile Include="Cells\Reports\ReportsSummaryCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsSummaryCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsSummaryCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsBarChartCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsBarChartCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsBarChartCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsDonutChartCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsDonutChartCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsDonutChartCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsDonutChartLegendCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reports\ReportsCollectionViewCompactLayout.cs" />
+    <Compile Include="Cells\Reports\ReportsNoDataCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsNoDataCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsNoDataCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsErrorCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsErrorCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsErrorCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\January2020CampaignViewController.cs" />
+    <Compile Include="ViewControllers\January2020CampaignViewController.designer.cs">
+      <DependentUpon>January2020CampaignViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reports\DonutChartView.cs" />
+    <Compile Include="ViewControllers\DateRangePickerViewController.cs" />
+    <Compile Include="ViewControllers\DateRangePickerViewController.designer.cs">
+      <DependentUpon>DateRangePickerViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\DateRangePickerShortcutsSource.cs" />
+    <Compile Include="ViewSources\DateRangePickerViewSource.cs" />
+    <Compile Include="Cells\MainLog\SuggestionsHeaderView.cs" />
+    <Compile Include="Cells\MainLog\SuggestionsHeaderView.designer.cs">
+      <DependentUpon>SuggestionsHeaderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\MainLog\UserFeedbackTableViewCell.cs" />
+    <Compile Include="Cells\MainLog\UserFeedbackTableViewCell.designer.cs">
+      <DependentUpon>UserFeedbackTableViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">
@@ -1984,6 +2125,10 @@
     <ProjectReference Include="..\Toggl.Core\Toggl.Core.csproj">
       <Project>{09D75C0B-3367-4678-97EF-6EADE64AF09C}</Project>
       <Name>Toggl.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Toggl.iOS.Shared\Toggl.iOS.Shared.csproj">
+      <Project>{aca2821e-0ff9-4036-bff6-e775bb4e6732}</Project>
+      <Name>Toggl.iOS.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\Toggl.Storage\Toggl.Storage.csproj">
       <Project>{3A603451-31B2-4975-9366-3212BEA78F57}</Project>
@@ -2010,14 +2155,15 @@
       <Project>{48C970FE-E13F-4664-A2FD-4EBFD2DD131E}</Project>
       <Name>Toggl.iOS.SiriExtension</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Toggl.iOS.ExtensionKit\Toggl.iOS.ExtensionKit.csproj">
-      <Project>{ACA2821E-0FF9-4036-BFF6-E775BB4E6732}</Project>
-      <Name>Toggl.iOS.ExtensionKit</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Toggl.iOS.SiriExtension.UI\Toggl.iOS.SiriExtension.UI.csproj">
       <IsAppExtension>true</IsAppExtension>
       <Project>{BC329A24-95D6-4D02-95B5-2AA699D8873A}</Project>
       <Name>Toggl.iOS.SiriExtension.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Toggl.iOS.TimerWidgetExtension\Toggl.iOS.TimerWidgetExtension.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Project>{0C219958-CAD1-4B1B-BBCB-D12CC6E11F49}</Project>
+      <Name>Toggl.iOS.TimerWidgetExtension</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -2053,6 +2199,53 @@
     <Folder Include="Resources\Images.xcassets\thumbsdown.imageset\" />
     <Folder Include="Resources\Images.xcassets\thumbsup.imageset\" />
     <Folder Include="Resources\Images.xcassets\togglLogoBig.imageset\" />
+    <Folder Include="Resources\Images.xcassets\x.imageset\" />
+    <Folder Include="Resources\Images.xcassets\stop.imageset\" />
+    <Folder Include="Resources\Images.xcassets\continue.imageset\" />
+    <Folder Include="Resources\Images.xcassets\discard.imageset\" />
+    <Folder Include="Resources\Images.xcassets\copy.imageset\" />
+    <Folder Include="Resources\Images.xcassets\save.imageset\" />
+    <Folder Include="Resources\Images.xcassets\edit.imageset\" />
+    <Folder Include="Resources\Images.xcassets\delete.imageset\" />
+    <Folder Include="Resources\Colors.xcassets\Background.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Text.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Text2.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Separator.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\NavigationBarShadow.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\OpaqueSeparator.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\TableBackground.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CellBackground.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Text3.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Text4.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CustomGray.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CustomGray2.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CustomGray3.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CustomGray4.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CustomGray5.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CustomGray6.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\InverseText.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\InverseBackground.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Text1.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\Spider.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ErrorText.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ErrorBackground.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarDeleteAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarEditAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarSaveAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarContinueAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarDiscardAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarStopAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarCopyAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarStartAction.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarSelectedTodayBackground.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarUnavailableDayText.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarUnselectedTodayText.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\CalendarHeaderLabel.colorset\" />
+    <Folder Include="Cells\Reports\" />
+    <Folder Include="Resources\Colors.xcassets\ReportsBarChartFilled.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ReportsBarChartTotal.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ReportsBarChartFilledPlaceholder.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ReportsBarChartTotalPlaceholder.colorset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />
@@ -2063,11 +2256,6 @@
   <Import Project="..\packages\Realm.3.0.0\build\Realm.targets" Condition="Exists('..\packages\Realm.3.0.0\build\Realm.targets')" />
   <Import Project="..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.targets" Condition="Exists('..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.targets')" />
   <Import Project="..\packages\Xamarin.Google.iOS.Core.3.1.0.1\build\Xamarin.Google.iOS.Core.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.Core.3.1.0.1\build\Xamarin.Google.iOS.Core.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.RemoteConfig.3.0.1\build\Xamarin.Firebase.iOS.RemoteConfig.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.RemoteConfig.3.0.1\build\Xamarin.Firebase.iOS.RemoteConfig.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.InstanceID.3.4.0\build\Xamarin.Firebase.iOS.InstanceID.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.InstanceID.3.4.0\build\Xamarin.Firebase.iOS.InstanceID.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.Analytics.5.5.0\build\Xamarin.Firebase.iOS.Analytics.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.Analytics.5.5.0\build\Xamarin.Firebase.iOS.Analytics.targets')" />
-  <Import Project="..\packages\Xamarin.Google.iOS.SignIn.4.4.0\build\Xamarin.Google.iOS.SignIn.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.SignIn.4.4.0\build\Xamarin.Google.iOS.SignIn.targets')" />
-  <Import Project="..\packages\Xamarin.Firebase.iOS.ABTesting.2.0.0.2\build\Xamarin.Firebase.iOS.ABTesting.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.ABTesting.2.0.0.2\build\Xamarin.Firebase.iOS.ABTesting.targets')" />
   <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -2075,4 +2263,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.0\build\Accord.targets'))" />
   </Target>
+  <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.Core.6.1.0\build\Xamarin.Firebase.iOS.Core.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.Core.6.1.0\build\Xamarin.Firebase.iOS.Core.targets')" />
+  <Import Project="..\packages\Xamarin.Google.iOS.SignIn.5.0.1\build\Xamarin.Google.iOS.SignIn.targets" Condition="Exists('..\packages\Xamarin.Google.iOS.SignIn.5.0.1\build\Xamarin.Google.iOS.SignIn.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.ABTesting.3.0.0\build\Xamarin.Firebase.iOS.ABTesting.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.ABTesting.3.0.0\build\Xamarin.Firebase.iOS.ABTesting.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.Analytics.6.0.4\build\Xamarin.Firebase.iOS.Analytics.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.Analytics.6.0.4\build\Xamarin.Firebase.iOS.Analytics.targets')" />
+  <Import Project="..\packages\Xamarin.Firebase.iOS.RemoteConfig.4.2.1\build\Xamarin.Firebase.iOS.RemoteConfig.targets" Condition="Exists('..\packages\Xamarin.Firebase.iOS.RemoteConfig.4.2.1\build\Xamarin.Firebase.iOS.RemoteConfig.targets')" />
 </Project>

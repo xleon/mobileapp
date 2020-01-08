@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Reactive;
+using System.Reactive.Linq;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Services;
@@ -20,6 +21,7 @@ namespace Toggl.Core.Calendar
         public IObservable<Unit> Schedule(IImmutableList<Notification> notifications)
             => permissionsChecker
                 .NotificationPermissionGranted
+                .Select(status => status == PermissionStatus.Authorized)
                 .DeferAndThrowIfPermissionNotGranted(
                     () => NativeSchedule(notifications)
                 );
@@ -27,6 +29,7 @@ namespace Toggl.Core.Calendar
         public IObservable<Unit> UnscheduleAllNotifications()
             => permissionsChecker
                 .NotificationPermissionGranted
+                .Select(status => status == PermissionStatus.Authorized)
                 .DeferAndThrowIfPermissionNotGranted(NativeUnscheduleAllNotifications);
 
         protected abstract IObservable<Unit> NativeSchedule(IImmutableList<Notification> notifications);

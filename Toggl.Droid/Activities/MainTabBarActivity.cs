@@ -7,6 +7,7 @@ using Android.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Android.Util;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
@@ -14,9 +15,10 @@ using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Fragments;
+using Toggl.Droid.Helper;
 using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
-using Fragment = Android.Support.V4.App.Fragment;
+using Fragment = AndroidX.Fragment.App.Fragment;
 
 namespace Toggl.Droid.Activities
 {
@@ -126,9 +128,6 @@ namespace Toggl.Droid.Activities
                     case CalendarFragment calendarFragment:
                         calendarFragment.ViewModel = getTabViewModel<CalendarViewModel>();
                         break;
-                    case SettingsFragment settingsFragment:
-                        settingsFragment.ViewModel = getTabViewModel<SettingsViewModel>();
-                        break;
                 }
             }
         }
@@ -142,30 +141,12 @@ namespace Toggl.Droid.Activities
                 navigationView.SelectedItemId = requestedInitialTab ?? Resource.Id.MainTabTimerItem;
                 activityResumedBefore = true;
                 requestedInitialTab = null;
-                loadReportsIfNeeded();
                 return;
             }
 
             if (requestedInitialTab == null) return;
             navigationView.SelectedItemId = requestedInitialTab.Value;
             requestedInitialTab = null;
-            loadReportsIfNeeded();
-        }
-
-        private void loadReportsIfNeeded()
-        {
-            if (reportsRequestedStartDate == null || reportsRequestedEndDate == null)
-                return;
-
-            var reportsViewModel = getTabViewModel<ReportsViewModel>();
-            if (reportsViewModel != null && navigationView.SelectedItemId == Resource.Id.MainTabReportsItem)
-            {
-                reportsViewModel.LoadReport(reportsRequestedWorkspaceId, reportsRequestedStartDate.Value, reportsRequestedEndDate.Value, ReportsSource.Other);
-            }
-
-            reportsRequestedWorkspaceId = null;
-            reportsRequestedStartDate = null;
-            reportsRequestedEndDate = null;
         }
 
         private Fragment getCachedFragment(int itemId)
@@ -183,9 +164,6 @@ namespace Toggl.Droid.Activities
                     break;
                 case Resource.Id.MainTabCalendarItem:
                     fragment = new CalendarFragment { ViewModel = getTabViewModel<CalendarViewModel>() };
-                    break;
-                case Resource.Id.MainTabSettinsItem:
-                    fragment = new SettingsFragment { ViewModel = getTabViewModel<SettingsViewModel>() };
                     break;
                 default:
                     throw new ArgumentException($"Unexpected item id {itemId}");
@@ -206,7 +184,15 @@ namespace Toggl.Droid.Activities
                 return;
             }
 
+            if (navigationView.SelectedItemId == Resource.Id.MainTabCalendarItem)
+            {
+                var calendarFragment = getCachedFragment(Resource.Id.MainTabCalendarItem) as IBackPressHandler;
+                if (calendarFragment?.HandledBackPress() == true)
+                    return;
+            }
+
             var fragment = getCachedFragment(Resource.Id.MainTabTimerItem);
+
             showFragment(fragment);
 
             navigationView.SelectedItemId = Resource.Id.MainTabTimerItem;
@@ -221,14 +207,15 @@ namespace Toggl.Droid.Activities
                 return;
             }
 
-            if (fragment is IScrollableToTop scrollableToTop)
+            if (fragment is IScrollableToStart scrollableToTop)
             {
-                scrollableToTop.ScrollToTop();
+                scrollableToTop.ScrollToStart();
             }
         }
 
         private void showFragment(Fragment fragment)
         {
+            SupportFragmentManager.ExecutePendingTransactions();
             var transaction = SupportFragmentManager.BeginTransaction();
 
             if (activeFragment is MainFragment mainFragmentToHide)
@@ -250,6 +237,7 @@ namespace Toggl.Droid.Activities
         private void showInitialFragment(int initialTabItemId)
         {
             SupportFragmentManager.RemoveAllFragments();
+            SupportFragmentManager.ExecutePendingTransactions();
 
             var initialFragment = getCachedFragment(initialTabItemId);
             if (!initialFragment.IsAdded)
@@ -263,9 +251,19 @@ namespace Toggl.Droid.Activities
             if (initialFragment is MainFragment mainFragment)
                 mainFragment.SetFragmentIsVisible(true);
 
+            if (!(initialFragment is CalendarFragment))
+            {
+                ChangeBottomBarVisibility(true);
+            }
+
             requestedInitialTab = initialTabItemId;
             navigationView.SelectedItemId = initialTabItemId;
             activeFragment = initialFragment;
+        }
+
+        public void ChangeBottomBarVisibility(bool isVisible)
+        {
+            navigationView.Visibility = isVisible.ToVisibility();
         }
     }
 }

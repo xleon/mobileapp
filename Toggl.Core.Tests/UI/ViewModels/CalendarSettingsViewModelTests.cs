@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
+using Microsoft.Reactive.Testing;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class CalendarSettingsViewModelTest : BaseViewModelTests<CalendarSettingsViewModel, bool, string[]>
         {
             protected override CalendarSettingsViewModel CreateViewModel()
-                => new CalendarSettingsViewModel(UserPreferences, InteractorFactory, NavigationService, RxActionFactory, PermissionsChecker);
+                => new CalendarSettingsViewModel(UserPreferences, InteractorFactory, OnboardingStorage, AnalyticsService, NavigationService, RxActionFactory, PermissionsChecker, SchedulerProvider);
         }
 
         public sealed class TheConstructor : CalendarSettingsViewModelTest
@@ -32,36 +33,59 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useUserPreferences,
                 bool useInteractorFactory,
+                bool useOnboardingStorage,
+                bool useAnalyticsService,
                 bool useNavigationService,
                 bool useRxActionFactory,
-                bool usePermissionsChecker)
+                bool usePermissionsChecker,
+                bool useSchedulerProvider)
             {
                 Action tryingToConstructWithEmptyParameters =
                     () => new CalendarSettingsViewModel(
                         useUserPreferences ? UserPreferences : null,
                         useInteractorFactory ? InteractorFactory : null,
+                        useOnboardingStorage ? OnboardingStorage : null,
+                        useAnalyticsService ? AnalyticsService : null,
                         useNavigationService ? NavigationService : null,
                         useRxActionFactory ? RxActionFactory : null,
-                        usePermissionsChecker ? PermissionsChecker : null
+                        usePermissionsChecker ? PermissionsChecker : null,
+                        useSchedulerProvider ? SchedulerProvider : null
                     );
 
                 tryingToConstructWithEmptyParameters.Should().Throw<ArgumentNullException>();
             }
         }
 
-        public sealed class ThePermissionGrantedProperty : CalendarSettingsViewModelTest
+        public sealed class ThePermissionGrantedObservable : CalendarSettingsViewModelTest
         {
             [Theory]
             [InlineData(true)]
             [InlineData(false)]
-            public async Task GetsInitialisedToTheProperValue(bool permissionGranted)
+            public async Task EmitsTheProperValue(bool permissionGranted)
             {
+                var observer = TestScheduler.CreateObserver<bool>();
+                ViewModel.PermissionGranted.Subscribe(observer);
+
                 UserPreferences.EnabledCalendarIds().Returns(new List<string>());
                 PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(permissionGranted));
 
                 await ViewModel.Initialize(false);
 
-                ViewModel.PermissionGranted.Should().Be(permissionGranted);
+                TestScheduler.Start();
+
+                if (permissionGranted)
+                {
+                    observer.Messages.AssertEqual(
+                        ReactiveTest.OnNext(1, false),
+                        ReactiveTest.OnNext(2, true)
+                    );
+                }
+                else
+                {
+                    observer.Messages.AssertEqual(
+                        ReactiveTest.OnNext(1, false)
+                    );
+                }
             }
         }
 
@@ -139,32 +163,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheSelectCalendarAction : CalendarSettingsViewModelTest
-        {
-            [Fact, LogIfTooSlow]
-            public async Task StoresTheEnabledCalendarsInUserPreferences()
-            {
-                var firstCalendar = new UserCalendar("1", "1", "1");
-                var secondCalendar = new UserCalendar("2", "2", "2");
-
-                var observer = TestScheduler.CreateObserver<Unit>();
-                ViewModel.SelectCalendar.ExecuteSequentally(
-                        new SelectableUserCalendarViewModel(firstCalendar, false),
-                        new SelectableUserCalendarViewModel(secondCalendar, false)
-                    )
-                    .Subscribe(observer);
-
-
-                TestScheduler.Start();
-
-                Received.InOrder(() =>
-                {
-                    UserPreferences.SetEnabledCalendars(new string[] { "1" });
-                    UserPreferences.SetEnabledCalendars(new string[] { "1", "2" });
-                });
-            }
-        }
-
         public sealed class TheCloseWithDefaultResultMethod : CalendarSettingsViewModelTest
         {
             [Fact, LogIfTooSlow]
@@ -239,9 +237,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 Received.InOrder(() =>
                 {
-                    UserPreferences.SetEnabledCalendars(new[] { "0", "2" });
-                    UserPreferences.SetEnabledCalendars(new[] { "0", "2", "4" });
-                    UserPreferences.SetEnabledCalendars(new[] { "0", "2", "4", "7" });
                     UserPreferences.SetEnabledCalendars(new[] { "0", "2", "4", "7" });
                 });
             }
@@ -282,9 +277,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 Received.InOrder(() =>
                 {
-                    UserPreferences.SetEnabledCalendars(new[] { "0", "2" });
-                    UserPreferences.SetEnabledCalendars(new[] { "0", "2", "4" });
-                    UserPreferences.SetEnabledCalendars(new[] { "0", "2", "4", "7" });
                     UserPreferences.SetEnabledCalendars();
                 });
             }

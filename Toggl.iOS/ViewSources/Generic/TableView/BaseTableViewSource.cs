@@ -15,6 +15,10 @@ namespace Toggl.iOS.ViewSources
 
         public EventHandler<TModel> OnItemTapped { get; set; }
         public EventHandler<CGPoint> OnScrolled { get; set; }
+        public EventHandler OnDragStarted { get; set; }
+
+        // This one is emitted from UITableViewExtensions whenever the datasource changes are applied
+        public EventHandler OnItemsChanged { get; set; }
 
         public BaseTableViewSource()
             : this(ImmutableList<TModel>.Empty)
@@ -58,6 +62,11 @@ namespace Toggl.iOS.ViewSources
         public override void Scrolled(UIScrollView scrollView)
         {
             OnScrolled?.Invoke(this, scrollView.ContentOffset);
+        }
+
+        public override void DraggingStarted(UIScrollView scrollView)
+        {
+            OnDragStarted?.Invoke(this, new EventArgs());
         }
 
         public override nint NumberOfSections(UITableView tableView)

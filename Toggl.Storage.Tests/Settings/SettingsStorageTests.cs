@@ -251,7 +251,6 @@ namespace Toggl.Storage.Tests.Settings
             [Theory]
             [InlineData("id1", "id2", "id0", "id")]
             [InlineData("id1")]
-            [InlineData]
             [InlineData(null)]
             public void ReturnsTheStoredCalendars(params string[] ids)
             {
@@ -414,6 +413,25 @@ namespace Toggl.Storage.Tests.Settings
                     observer.OnNext(TimeSpan.FromMinutes(10));
                     observer.OnNext(timeSpan);
                 });
+            }
+        }
+
+        public sealed class TheUserPreferencesResetMethod : SettingsStorageTest
+        {
+            private IUserPreferences userPreferences;
+            private IKeyValueStorage keyValueStorage;
+
+            public TheUserPreferencesResetMethod()
+            {
+                keyValueStorage = Substitute.For<IKeyValueStorage>();
+                userPreferences = new SettingsStorage(Version.Parse(VersionString), keyValueStorage);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void RemovesAllSelectedCalendarIdsWhenResetIsCalled()
+            {
+                userPreferences.Reset();
+                keyValueStorage.Received().Remove("EnabledCalendars");
             }
         }
     }

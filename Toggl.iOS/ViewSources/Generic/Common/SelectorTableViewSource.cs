@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Reactive;
 using Foundation;
 using Toggl.Core.UI.Collections;
@@ -11,12 +12,12 @@ using UIKit;
 
 namespace Toggl.iOS.ViewSources.Common
 {
-    public sealed class SelectorTableViewSource<T> : BaseTableViewSource<SectionModel<Unit, SelectOption<T>>, Unit, SelectOption<T>>
+    public sealed class SelectorTableViewSource : BaseTableViewSource<SectionModel<Unit, string>, Unit, string>
     {
         private readonly int initialSelection;
         private readonly Action<int> selectItem;
 
-        public SelectorTableViewSource(UITableView tableView, ImmutableList<SelectOption<T>> items, int initialSelection, Action<int> selectItem) : base(items)
+        public SelectorTableViewSource(UITableView tableView, int initialSelection, Action<int> selectItem)
         {
             this.initialSelection = initialSelection;
             this.selectItem = selectItem;
@@ -28,7 +29,7 @@ namespace Toggl.iOS.ViewSources.Common
         {
             var model = ModelAt(indexPath);
             var cell = (SelectorCell)tableView.DequeueReusableCell(SelectorCell.Identifier);
-            cell.Item = model.ItemName;
+            cell.Item = model;
             cell.OptionSelected = indexPath.Row == initialSelection;
             if (indexPath.Row == Sections[indexPath.Section].Items.Count - 1)
             {
@@ -43,16 +44,16 @@ namespace Toggl.iOS.ViewSources.Common
             base.RowSelected(tableView, indexPath);
             selectItem(indexPath.Row);
         }
-        
+
         public override nfloat GetHeightForHeader(UITableView tableView, nint section)
         {
-            return 1;
+            return 1 / UIScreen.MainScreen.Scale;
         }
 
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             var headerView = new UIView();
-            headerView.BackgroundColor = Colors.Settings.SeparatorColor.ToNativeColor();
+            headerView.BackgroundColor = ColorAssets.Separator;
             return headerView;
         }
     }

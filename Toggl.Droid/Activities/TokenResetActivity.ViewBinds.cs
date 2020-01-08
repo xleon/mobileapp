@@ -1,5 +1,7 @@
-﻿using Android.Support.Design.Widget;
-using Android.Widget;
+﻿using Android.Widget;
+using Google.Android.Material.FloatingActionButton;
+using Google.Android.Material.TextField;
+using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Activities
 {
@@ -23,14 +25,16 @@ namespace Toggl.Droid.Activities
             tokenResetMessageEnterPasswordLabel = FindViewById<TextView>(Resource.Id.TokenResetMessageEnterPasswordLabel);
             emailLabel = FindViewById<TextView>(Resource.Id.TokenResetEmailLabel);
             signoutLabel = FindViewById<TextView>(Resource.Id.TokenResetSignOutLabel);
+            signoutLabel.FitBottomMarginInset();
             doneButton = FindViewById<FloatingActionButton>(Resource.Id.TokenResetDoneButton);
+            doneButton.FitBottomMarginInset();
 
             tokenResetPasswordLayout.Hint = Shared.Resources.Password;
             passwordEditText.Hint = Shared.Resources.Password;
             tokenResetMessageWarning.Text = Shared.Resources.APITokenResetSuccess;
             tokenResetMessageEnterPasswordLabel.Text = Shared.Resources.TokenResetInstruction;
             signoutLabel.Text = Shared.Resources.OrSignOut;
-            
+
             SetupToolbar(Shared.Resources.LoginTitle, showHomeAsUp: false);
         }
     }

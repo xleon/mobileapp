@@ -67,7 +67,7 @@ namespace Toggl.Core.UI.ViewModels
         private BehaviorSubject<DateTimeOffset> startTimeSubject;
         public IObservable<DateTimeOffset> StartTime { get; private set; }
 
-        private ISubject<TimeSpan?> durationSubject;
+        private ReplaySubject<TimeSpan?> durationSubject;
         public IObservable<TimeSpan> Duration { get; private set; }
 
         public IObservable<DateTimeOffset?> StopTime { get; private set; }
@@ -427,6 +427,8 @@ namespace Toggl.Core.UI.ViewModels
 
         private void stopTimeEntry()
         {
+            analyticsService.TimeEntryStopped.Track(TimeEntryStopOrigin.EditView);
+            analyticsService.EditViewTapped.Track(EditViewTapSource.StopTimeLabel);
             var duration = timeService.CurrentDateTime - startTimeSubject.Value;
             durationSubject.OnNext(duration);
         }
@@ -436,26 +438,30 @@ namespace Toggl.Core.UI.ViewModels
             syncErrorMessageSubject.OnNext(null);
         }
 
-        public override async void CloseWithDefaultResult()
+        public override async Task<bool> ConfirmCloseRequest()
         {
-            if (await isDirty())
+            if (isDirty())
             {
                 var view = View;
-                if (view != null)
-                {
-                    var userConfirmedDiscardingChanges = await view.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
-                    if (!userConfirmedDiscardingChanges)
-                        return;
-                }
+                if (view == null)
+                    return true;
+
+                return await view
+                    .ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
             }
 
-            analyticsService.EditViewClosed.Track(closeReason(EditViewCloseReason.Close));
-            base.CloseWithDefaultResult();
+            return true;
         }
 
-        private async Task<bool> isDirty()
+        public override Task<bool> CloseWithDefaultResult()
         {
-            var duration = await durationSubject.FirstAsync();
+            analyticsService.EditViewClosed.Track(closeReason(EditViewCloseReason.Close));
+            return base.CloseWithDefaultResult();
+        }
+
+        private bool isDirty()
+        {
+            var duration = durationSubject.FirstAsync().GetAwaiter().GetResult();
             return originalTimeEntry == null
                 || originalTimeEntry.Description != Description.Value
                 || originalTimeEntry.WorkspaceId != workspaceId
@@ -469,7 +475,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async Task save()
         {
-            var reason = await isDirty()
+            var reason = isDirty()
                 ? EditViewCloseReason.Save
                 : EditViewCloseReason.SaveWithoutChange;
 
@@ -535,7 +541,7 @@ namespace Toggl.Core.UI.ViewModels
                 close(EditViewCloseReason.Delete);
         }
 
-        private async Task<bool> delete(ActionType actionType, int entriesCount, IInteractor<IObservable<Unit>> deletionInteractor)
+        private async Task<bool> delete(ActionType actionType, int entriesCount, IInteractor<Task> deletionInteractor)
         {
             var isDeletionConfirmed = await View.ConfirmDestructiveAction(actionType, entriesCount);
 

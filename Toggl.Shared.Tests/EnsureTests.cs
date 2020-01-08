@@ -18,7 +18,7 @@ namespace Toggl.Shared.Tests
 
                 whenTheCalledArgumentIsNull
                     .Should().Throw<ArgumentException>()
-                    .WithMessage("Value cannot be null.\nParameter name: argument");
+                    .WithMessage("Value cannot be null. (Parameter 'argument')");
             }
 
             [Fact, LogIfTooSlow]
@@ -50,7 +50,7 @@ namespace Toggl.Shared.Tests
 
                 whenTheCalledArgumentIsNull
                     .Should().Throw<ArgumentException>()
-                    .WithMessage("String cannot be empty.\nParameter name: argument");
+                    .WithMessage("String cannot be empty. (Parameter 'argument')");
             }
 
             [Fact, LogIfTooSlow]
@@ -61,7 +61,7 @@ namespace Toggl.Shared.Tests
 
                 whenTheCalledArgumentIsNull
                     .Should().Throw<ArgumentException>()
-                    .WithMessage("String cannot be empty.\nParameter name: argument");
+                    .WithMessage("String cannot be empty. (Parameter 'argument')");
             }
 
             [Fact, LogIfTooSlow]
@@ -74,7 +74,7 @@ namespace Toggl.Shared.Tests
 
                 whenTheCalledArgumentIsNull
                     .Should().Throw<ArgumentException>()
-                    .WithMessage("Value cannot be null.\nParameter name: argument");
+                    .WithMessage("Value cannot be null. (Parameter 'argument')");
             }
 
             [Fact, LogIfTooSlow]
@@ -99,7 +99,7 @@ namespace Toggl.Shared.Tests
 
                 whenTheCalledArgumentIsNull
                     .Should().Throw<ArgumentException>()
-                    .WithMessage("Uri must be absolute.\nParameter name: argument");
+                    .WithMessage("Uri must be absolute. (Parameter 'argument')");
             }
 
             [Fact, LogIfTooSlow]
@@ -119,7 +119,7 @@ namespace Toggl.Shared.Tests
 
                 whenTheCalledArgumentIsNull
                     .Should().Throw<ArgumentException>()
-                    .WithMessage("Value cannot be null.\nParameter name: argument");
+                    .WithMessage("Value cannot be null. (Parameter 'argument')");
             }
         }
 
@@ -135,7 +135,7 @@ namespace Toggl.Shared.Tests
 
                 whenTheCalledArgumentIsNotADefinedEnumValue
                     .Should().Throw<ArgumentException>()
-                    .WithMessage("Invalid enum value.\nParameter name: argument");
+                    .WithMessage("Invalid enum value. (Parameter 'argument')");
             }
 
             [Fact, LogIfTooSlow]

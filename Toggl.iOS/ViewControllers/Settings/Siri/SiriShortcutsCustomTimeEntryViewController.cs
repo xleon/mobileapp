@@ -180,6 +180,13 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
 
             DescriptionTextView.TintColor = Colors.StartTimeEntry.Cursor.ToNativeColor();
             DescriptionTextView.PlaceholderText = Resources.AddDescription;
+            DescriptionTextView.TextColor = ColorAssets.Text;
+
+            DescriptionView.InsertSeparator();
+            PasteFromClipboardHintView.InsertSeparator();
+            SelectProjectView.InsertSeparator();
+            SelectTagsView.InsertSeparator();
+            BillableView.InsertSeparator();
         }
 
         private void centerTextVertically(UITextView textView)
@@ -197,7 +204,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
             {
                 Text = Resources.SiriCustomTimeEntryInstruction,
                 Font = UIFont.SystemFontOfSize(12),
-                TextColor = Colors.Siri.InvocationPhrase.ToNativeColor()
+                TextColor = ColorAssets.Text
             };
             descriptionLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 

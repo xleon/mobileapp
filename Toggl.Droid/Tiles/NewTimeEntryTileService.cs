@@ -2,12 +2,12 @@
 using Android.Content;
 using Android.Net;
 using Android.Service.QuickSettings;
-using Toggl.Core;
+using Toggl.Shared;
 
 namespace Toggl.Droid.Tiles
 {
     [Service(Name = "toggl.giskard.Tiles.NewTimeEntryTileService",
-             Label = "@string/NewTimeEntry",
+             Label = "@string/new_time_entry",
              Icon = "@drawable/play",
              Permission = "android.permission.BIND_QUICK_SETTINGS_TILE")]
     [IntentFilter(new[] { "android.service.quicksettings.action.QS_TILE" })]

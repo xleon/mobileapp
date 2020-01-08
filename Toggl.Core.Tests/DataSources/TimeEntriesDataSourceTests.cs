@@ -4,7 +4,9 @@ using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
+using NUnit.Framework.Internal;
 using Toggl.Core.DataSources;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
@@ -35,7 +37,7 @@ namespace Toggl.Core.Tests.DataSources
 
             protected ITimeEntriesSource TimeEntriesSource { get; }
 
-            protected TestScheduler TestScheduler { get; } = new TestScheduler();
+            protected TestScheduler TestScheduler => SchedulerProvider.TestScheduler;
 
             protected static DateTimeOffset Now { get; } = new DateTimeOffset(2018, 05, 14, 18, 00, 00, TimeSpan.Zero);
 
@@ -54,7 +56,7 @@ namespace Toggl.Core.Tests.DataSources
 
             protected TimeEntryDataSourceTest()
             {
-                TimeEntriesSource = new TimeEntriesDataSource(Repository, TimeService, AnalyticsService);
+                TimeEntriesSource = new TimeEntriesDataSource(Repository, TimeService, AnalyticsService, SchedulerProvider);
 
                 IdProvider.GetNextIdentifier().Returns(-1);
                 Repository.GetById(Arg.Is(TimeEntry.Id)).Returns(Observable.Return(TimeEntry));
@@ -76,14 +78,16 @@ namespace Toggl.Core.Tests.DataSources
             public void ThrowsIfAnyOfTheArgumentsIsNull(
                 bool useRepository,
                 bool useTimeService,
-                bool useAnalyticsService)
+                bool useAnalyticsService,
+                bool useSchedulerProvider)
             {
                 var repository = useRepository ? Repository : null;
                 var timeService = useTimeService ? TimeService : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
+                var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
 
                 Action tryingToConstructWithEmptyParameters =
-                    () => new TimeEntriesDataSource(repository, timeService, analyticsService);
+                    () => new TimeEntriesDataSource(repository, timeService, analyticsService, schedulerProvider);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -105,7 +109,7 @@ namespace Toggl.Core.Tests.DataSources
                         }));
 
                 // ReSharper disable once ObjectCreationAsStatement
-                new TimeEntriesDataSource(Repository, TimeService, AnalyticsService);
+                new TimeEntriesDataSource(Repository, TimeService, AnalyticsService, SchedulerProvider);
 
                 Repository.Received().BatchUpdate(
                     Arg.Is<IEnumerable<(long Id, IDatabaseTimeEntry Entity)>>(
@@ -128,7 +132,7 @@ namespace Toggl.Core.Tests.DataSources
                         }));
 
                 // ReSharper disable once ObjectCreationAsStatement
-                new TimeEntriesDataSource(Repository, TimeService, AnalyticsService);
+                new TimeEntriesDataSource(Repository, TimeService, AnalyticsService, SchedulerProvider);
 
                 AnalyticsService.TwoRunningTimeEntriesInconsistencyFixed.DidNotReceive().Track();
             }
@@ -154,7 +158,7 @@ namespace Toggl.Core.Tests.DataSources
             [Fact]
             public async ThreadingTask EmitsObservableEventsForTheNewlyCreatedRunningTimeEntry()
             {
-                var createdObserver = TestScheduler.CreateObserver<IThreadSafeTimeEntry>();
+                var itemsChangedObserver = TestScheduler.CreateObserver<Unit>();
                 var newTimeEntry = new MockTimeEntry { Id = -1, Duration = null };
                 Repository.BatchUpdate(
                     Arg.Any<IEnumerable<(long, IDatabaseTimeEntry)>>(),
@@ -165,19 +169,19 @@ namespace Toggl.Core.Tests.DataSources
                         new CreateResult<IDatabaseTimeEntry>(newTimeEntry)
                     }));
 
-                var timeEntriesSource = new TimeEntriesDataSource(Repository, TimeService, AnalyticsService);
-                timeEntriesSource.Created.Subscribe(createdObserver);
+                var timeEntriesSource = new TimeEntriesDataSource(Repository, TimeService, AnalyticsService, SchedulerProvider);
+                timeEntriesSource.ItemsChanged.Subscribe(itemsChangedObserver);
                 await timeEntriesSource.Create(newTimeEntry);
 
-                createdObserver.SingleEmittedValue().Id.Should().Be(newTimeEntry.Id);
-                createdObserver.SingleEmittedValue().Duration.Should().BeNull();
+                TestScheduler.Start();
+                itemsChangedObserver.SingleEmittedValue().Should().Be(Unit.Default);
             }
 
             [Fact]
             public async ThreadingTask EmitsObservableEventsForTheNewRunningTimeEntryAndTheStoppedTimeEntry()
             {
                 var durationAfterStopping = 100;
-                var updatedObserver = TestScheduler.CreateObserver<EntityUpdate<IThreadSafeTimeEntry>>();
+                var itemsChangedObserver = TestScheduler.CreateObserver<Unit>();
                 var createdObserver = TestScheduler.CreateObserver<IThreadSafeTimeEntry>();
                 var runningTimeEntry = new MockTimeEntry { Id = 1, Duration = null };
                 var newTimeEntry = new MockTimeEntry { Id = -2, Duration = null };
@@ -192,15 +196,13 @@ namespace Toggl.Core.Tests.DataSources
                         new UpdateResult<IDatabaseTimeEntry>(runningTimeEntry.Id, runningTimeEntry.With(durationAfterStopping)),
                         new CreateResult<IDatabaseTimeEntry>(newTimeEntry)
                     }));
+                var timeEntriesSource = new TimeEntriesDataSource(Repository, TimeService, AnalyticsService, SchedulerProvider);
+                timeEntriesSource.ItemsChanged.Subscribe(itemsChangedObserver);
 
-                var timeEntriesSource = new TimeEntriesDataSource(Repository, TimeService, AnalyticsService);
-                timeEntriesSource.Updated.Subscribe(updatedObserver);
-                timeEntriesSource.Created.Subscribe(createdObserver);
                 await timeEntriesSource.Create(newTimeEntry);
 
-                updatedObserver.SingleEmittedValue().Entity.Duration.Should().Be(durationAfterStopping);
-                createdObserver.SingleEmittedValue().Id.Should().Be(newTimeEntry.Id);
-                createdObserver.SingleEmittedValue().Duration.Should().BeNull();
+                TestScheduler.Start();
+                itemsChangedObserver.SingleEmittedValue().Should().Be(Unit.Default);
             }
         }
 
@@ -231,6 +233,31 @@ namespace Toggl.Core.Tests.DataSources
                     .Select(tes => tes.Where(x => x.Id > 10));
 
                 timeEntries.Should().HaveCount(5);
+            }
+        }
+
+        public sealed class TheBatchUpdateMethod : TimeEntryDataSourceTest
+        {
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask DoesNotReportThatItemsChangedExactlyOnce()
+
+            {
+                var observer = TestScheduler.CreateObserver<Unit>();
+                TimeEntriesSource.ItemsChanged.Subscribe(observer);
+                var timeEntries = Enumerable.Range(0, 10)
+                    .Select(id => new MockTimeEntry { Id = id, IsDeleted = false, At = DateTimeOffset.Now, Duration = 1 })
+                    .ToList();
+                var conflictResolutionResult = Observable.Return(timeEntries.Select(te => new UpdateResult<IDatabaseTimeEntry>(te.Id, te)));
+                Repository.BatchUpdate(
+                    Arg.Any<IEnumerable<(long, IDatabaseTimeEntry)>>(),
+                    Arg.Any<Func<IDatabaseTimeEntry, IDatabaseTimeEntry, ConflictResolutionMode>>(),
+                    Arg.Any<IRivalsResolver<IDatabaseTimeEntry>>())
+                    .Returns(conflictResolutionResult);
+
+                await TimeEntriesSource.BatchUpdate(timeEntries);
+
+                TestScheduler.Start();
+                observer.Messages.Should().HaveCount(1);
             }
         }
     }

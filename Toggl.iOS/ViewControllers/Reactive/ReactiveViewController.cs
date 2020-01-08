@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using CoreFoundation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
@@ -32,6 +33,7 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
             ViewModel?.AttachView(this);
+            ConfigureKeyCommands();
         }
 
         public override void ViewWillAppear(bool animated)
@@ -80,9 +82,12 @@ namespace Toggl.iOS.ViewControllers
             ViewModel?.ViewDestroyed();
         }
 
-        public void DismissFromNavigationController()
+        public virtual Task<bool> DismissFromNavigationController()
+            => ViewModel.CloseWithDefaultResult();
+
+        public void ViewcontrollerWasPopped()
         {
-            ViewModel.CloseWithDefaultResult();
+            ViewModel.ViewWasClosed();
         }
 
         public void Close()
@@ -96,6 +101,14 @@ namespace Toggl.iOS.ViewControllers
 
             if (!disposing) return;
             DisposeBag?.Dispose();
+        }
+
+        protected virtual void ConfigureKeyCommands()
+        {
+            if (AcceptsCancelKeyCommand)
+            {
+                AddKeyCommand(CancelKeyCommand);
+            }
         }
     }
 }

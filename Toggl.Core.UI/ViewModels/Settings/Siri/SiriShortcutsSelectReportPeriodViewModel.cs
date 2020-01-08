@@ -25,7 +25,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
         private readonly IInteractorFactory interactorFactory;
 
         public BehaviorRelay<IThreadSafeWorkspace> SelectedWorkspace { get; } = new BehaviorRelay<IThreadSafeWorkspace>(null);
-        public BehaviorRelay<ReportPeriod> SelectReportPeriod { get; } = new BehaviorRelay<ReportPeriod>(ReportPeriod.Today);
+        public BehaviorRelay<DateRangePeriod> SelectReportPeriod { get; } = new BehaviorRelay<DateRangePeriod>(DateRangePeriod.Today);
         public IObservable<IImmutableList<SelectableReportPeriodViewModel>> ReportPeriods { get; }
         public ViewAction PickWorkspace { get; }
 
@@ -47,9 +47,9 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
             PickWorkspace = rxActionFactory.FromAsync(pickWorkspace);
 
-            var reportPeriods = Enum.GetValues(typeof(ReportPeriod))
-                .Cast<ReportPeriod>()
-                .Where(p => p != ReportPeriod.Unknown)
+            var reportPeriods = Enum.GetValues(typeof(DateRangePeriod))
+                .Cast<DateRangePeriod>()
+                .Where(p => p != DateRangePeriod.Unknown)
                 .ToImmutableList();
 
             ReportPeriods = SelectReportPeriod

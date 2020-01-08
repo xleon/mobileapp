@@ -42,7 +42,6 @@ namespace Toggl.iOS.Views.EditDuration
             {
                 if (startTime == value) return;
                 startTime = value.Clamp(MinimumStartTime, MaximumStartTime);
-                StartTimeChanged?.Invoke(this, new EventArgs());
                 SetNeedsLayout();
             }
         }
@@ -54,7 +53,6 @@ namespace Toggl.iOS.Views.EditDuration
             {
                 if (endTime == value) return;
                 endTime = value.Clamp(MinimumEndTime, MaximumEndTime);
-                EndTimeChanged?.Invoke(this, new EventArgs());
                 SetNeedsLayout();
             }
         }
@@ -144,8 +142,10 @@ namespace Toggl.iOS.Views.EditDuration
         {
             startCap.Position = startTimePosition;
             startCap.Color = foregroundColor;
+            startCap.Angle = startTimeAngle;
             endCap.Position = endTimePosition;
             endCap.Color = foregroundColor;
+            endCap.Angle = endTimeAngle;
             endCap.ShowOnlyBackground = IsRunning;
 
             fullWheel.FillColor = backgroundColor;
@@ -174,7 +174,7 @@ namespace Toggl.iOS.Views.EditDuration
 
         private void calculateEndPointPositions()
         {
-            var center = Center.ToTogglPoint();
+            var center = Center.ToSharedPoint();
 
             startTimePosition = PointOnCircumference(center, startTimeAngle, endPointsRadius).ToCGPoint();
             endTimePosition = PointOnCircumference(center, endTimeAngle, endPointsRadius).ToCGPoint();
@@ -231,7 +231,7 @@ namespace Toggl.iOS.Views.EditDuration
                     break;
             }
 
-            var currentAngle = AngleBetween(position.ToTogglPoint(), Center.ToTogglPoint());
+            var currentAngle = AngleBetween(position.ToSharedPoint(), Center.ToSharedPoint());
 
             var angleChange = currentAngle - previousAngle;
             while (angleChange < -Math.PI) angleChange += FullCircle;
@@ -273,7 +273,7 @@ namespace Toggl.iOS.Views.EditDuration
                 if (updateType == WheelUpdateType.EditBothAtOnce)
                 {
                     editBothAtOnceStartTimeAngleOffset =
-                        AngleBetween(position.ToTogglPoint(), Center.ToTogglPoint()) - startTimeAngle;
+                        AngleBetween(position.ToSharedPoint(), Center.ToSharedPoint()) - startTimeAngle;
                 }
 
                 return true;
@@ -312,11 +312,11 @@ namespace Toggl.iOS.Views.EditDuration
             => (extendedRadius ? extendedRadiusMultiplier : 1) * (Thickness / 2);
 
         private static bool isCloseEnough(CGPoint tapPosition, CGPoint endPoint, nfloat radius)
-            => DistanceSq(tapPosition.ToTogglPoint(), endPoint.ToTogglPoint()) <= radius * radius;
+            => DistanceSq(tapPosition.ToSharedPoint(), endPoint.ToSharedPoint()) <= radius * radius;
 
         private bool isOnTheWheelBetweenStartAndStop(CGPoint point)
         {
-            var distanceFromCenterSq = DistanceSq(Center.ToTogglPoint(), point.ToTogglPoint());
+            var distanceFromCenterSq = DistanceSq(Center.ToSharedPoint(), point.ToSharedPoint());
 
             if (distanceFromCenterSq < SmallRadius * SmallRadius
                 || distanceFromCenterSq > Radius * Radius)
@@ -324,7 +324,7 @@ namespace Toggl.iOS.Views.EditDuration
                 return false;
             }
 
-            var angle = AngleBetween(point.ToTogglPoint(), Center.ToTogglPoint());
+            var angle = AngleBetween(point.ToSharedPoint(), Center.ToSharedPoint());
             return isFullCircle || angle.IsBetween(startTimeAngle, endTimeAngle);
         }
 
@@ -338,19 +338,19 @@ namespace Toggl.iOS.Views.EditDuration
             {
                 var nextStartTime = (StartTime + diff).RoundToClosestMinute();
                 giveFeedback = nextStartTime != StartTime;
-                StartTime = nextStartTime;
+                updateStartTime(nextStartTime);
             }
 
             if (updateType == WheelUpdateType.EditEndTime)
             {
                 var nextEndTime = (EndTime + diff).RoundToClosestMinute();
                 giveFeedback = nextEndTime != EndTime;
-                EndTime = nextEndTime;
+                updateEndTime(nextEndTime);
             }
 
             if (updateType == WheelUpdateType.EditBothAtOnce)
             {
-                EndTime = StartTime + duration;
+                updateEndTime(StartTime + duration);
             }
 
             if (giveFeedback)
@@ -358,6 +358,18 @@ namespace Toggl.iOS.Views.EditDuration
                 feedbackGenerator.SelectionChanged();
                 feedbackGenerator.Prepare();
             }
+        }
+
+        private void updateStartTime(DateTimeOffset time)
+        {
+            StartTime = time;
+            StartTimeChanged?.Invoke(this, new EventArgs());
+        }
+
+        private void updateEndTime(DateTimeOffset time)
+        {
+            EndTime = time;
+            EndTimeChanged?.Invoke(this, new EventArgs());
         }
 
         private void finishTouchEditing()

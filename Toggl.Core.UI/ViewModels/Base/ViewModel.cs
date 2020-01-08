@@ -8,7 +8,8 @@ namespace Toggl.Core.UI.ViewModels
 {
     public abstract class ViewModel<TInput, TOutput> : IViewModel
     {
-        private readonly INavigationService navigationService;
+        protected INavigationService NavigationService { get; }
+
         private readonly TaskCompletionSource<TOutput> resultCompletionSource =
             new TaskCompletionSource<TOutput>();
 
@@ -20,15 +21,23 @@ namespace Toggl.Core.UI.ViewModels
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
-            this.navigationService = navigationService;
+            this.NavigationService = navigationService;
         }
 
         public virtual Task Initialize(TInput payload)
             => Task.CompletedTask;
 
-        public virtual void CloseWithDefaultResult()
+        public virtual Task<bool> ConfirmCloseRequest()
+            => Task.FromResult(true);
+
+        public virtual async Task<bool> CloseWithDefaultResult()
         {
-            Close(default(TOutput));
+            var shouldClose = await ConfirmCloseRequest();
+            if (!shouldClose)
+                return false;
+
+            Close(default);
+            return true;
         }
 
         public virtual void Close(TOutput output)
@@ -67,9 +76,15 @@ namespace Toggl.Core.UI.ViewModels
         {
         }
 
+        public void ViewWasClosed()
+        {
+            resultCompletionSource.TrySetResult(default);
+            View = null;
+        }
+
         public Task<TNavigationOutput> Navigate<TViewModel, TNavigationInput, TNavigationOutput>(TNavigationInput payload)
             where TViewModel : ViewModel<TNavigationInput, TNavigationOutput>
-            => navigationService.Navigate<TViewModel, TNavigationInput, TNavigationOutput>(payload, View);
+            => NavigationService.Navigate<TViewModel, TNavigationInput, TNavigationOutput>(payload, View);
 
         public Task Navigate<TViewModel>()
             where TViewModel : ViewModel<Unit, Unit>
@@ -90,7 +105,10 @@ namespace Toggl.Core.UI.ViewModels
         {
         }
 
-        public virtual void Close() => base.Close(Unit.Default);
+        public virtual void Close()
+        {
+            base.Close(Unit.Default);
+        }
 
         public virtual Task Initialize()
             => Task.CompletedTask;

@@ -4,6 +4,7 @@ using System.Reactive;
 using Toggl.Core.Login;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
+using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 using Toggl.Networking;
@@ -25,11 +26,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
         protected IBackgroundService BackgroundService { get; } = Substitute.For<IBackgroundService>();
         protected IPlatformInfo PlatformInfo { get; } = Substitute.For<IPlatformInfo>();
         protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
+        protected ILastTimeUsageStorage LastTimeUsageStorage { get; } = Substitute.For<ILastTimeUsageStorage>();
         protected IRemoteConfigService RemoteConfigService { get; } = Substitute.For<IRemoteConfigService>();
         protected IAccessibilityService AccessibilityService { get; } = Substitute.For<IAccessibilityService>();
         protected IUpdateRemoteConfigCacheService UpdateRemoteConfigCacheService { get; } = Substitute.For<IUpdateRemoteConfigCacheService>();
         protected IErrorHandlingService ErrorHandlingService { get; } = Substitute.For<IErrorHandlingService>();
         protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
+        protected IDateRangeShortcutsService DateRangeShortcutsService { get; } = Substitute.For<IDateRangeShortcutsService>();
+
+        protected IWidgetsService WidgetsService { get; } = Substitute.For<IWidgetsService>();
 
         protected TestScheduler TestScheduler { get; }
         protected IRxActionFactory RxActionFactory { get; }

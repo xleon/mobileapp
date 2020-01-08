@@ -24,6 +24,13 @@ namespace Toggl.iOS.Views.Settings
             // Note: this .ctor should not contain any initialization logic.
         }
 
+
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+            ContentView.InsertSeparator();
+        }
+
         protected override void UpdateView()
         {
             TitleLabel.Text = Item.Title;
@@ -36,7 +43,7 @@ namespace Toggl.iOS.Views.Settings
             else
             {
                 DetailLabel.Text = $"\"{Item.InvocationPhrase}\"";
-                DetailLabel.TextColor = Colors.Siri.InvocationPhrase.ToNativeColor();
+                DetailLabel.TextColor = ColorAssets.Text2;
             }
         }
     }

@@ -31,7 +31,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
             );
 
             OkayButton.Rx().Tap()
-                .Subscribe(ViewModel.CloseWithDefaultResult)
+                .Subscribe(() => ViewModel.CloseWithDefaultResult())
                 .DisposedBy(DisposeBag);
 
             DoNotShowAgainButton.Rx()
@@ -43,7 +43,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
         {
             TitleLabel.Text = Resources.SiriClipboardInstructionTitle;
             DescriptionLabel.Text = Resources.SiriClipboardInstructionDescription;
-            OkayButton.SetTitle(Resources.SiriClipboardInstructionConfirm, UIControlState.Normal);
+            OkayButton.SetTitle(Resources.Ok, UIControlState.Normal);
             DoNotShowAgainButton.SetTitle(Resources.SiriClipboardInstructionDoNotShowAgain, UIControlState.Normal);
         }
     }

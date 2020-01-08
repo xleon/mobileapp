@@ -2,12 +2,12 @@
 using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.iOS.Services;
+using Toggl.Shared;
 using UserNotifications;
 
 namespace Toggl.iOS
