@@ -63,15 +63,15 @@ namespace Toggl.Shared.Tests
                 => new List<object[]>
                 {
                     new object[] { Point.Zero, Point.Zero, 0 },
-                    new object[] { new Point { X = 5, Y = 3 }, new Point { X = 5, Y = 3 }, 0 },
-                    new object[] { new Point { X = System.Math.Sqrt(3), Y = 1 }, Point.Zero, FullCircle / 12.0 }, // 30 deg
-                    new object[] { new Point { X = 2, Y = 3 }, new Point { X = 1, Y = 2 }, FullCircle / 8.0 }, // 45 deg
-                    new object[] { new Point { X = 1, Y = System.Math.Sqrt(3) }, Point.Zero, FullCircle / 6.0 }, // 60 deg
-                    new object[] { new Point { X = 0, Y = 120 }, Point.Zero, QuarterOfCircle }, // 90 deg
+                    new object[] { new Point(5, 3), new Point(5, 3), 0 },
+                    new object[] { new Point(System.Math.Sqrt(3), 1), Point.Zero, FullCircle / 12.0 }, // 30 deg
+                    new object[] { new Point(2, 3), new Point(1, 2), FullCircle / 8.0 }, // 45 deg
+                    new object[] { new Point(1, System.Math.Sqrt(3)), Point.Zero, FullCircle / 6.0 }, // 60 deg
+                    new object[] { new Point(0,120), Point.Zero, QuarterOfCircle }, // 90 deg
                 };
         }
 
-        public sealed class TheDistasnceSqMethod
+        public sealed class TheDistanceSqMethod
         {
             [Property]
             public void CalculatesTheSquaredDistanceBetweenTwoPointsCorrectly(NormalFloat nx1, NormalFloat ny1, NormalFloat nx2, NormalFloat ny2)
@@ -84,8 +84,8 @@ namespace Toggl.Shared.Tests
                 if (x1 > 10000000 || y1 > 10000000 || x2 > 10000000 || y2 > 10000000
                     || x1 < -10000000 || y1 < -10000000 || x2 < -10000000 || y2 < -10000000) return;
 
-                var a = new Point { X = x1, Y = y1 };
-                var b = new Point { X = x2, Y = y2 };
+                var a = new Point(x1, y1);
+                var b = new Point(x2, y2);
                 var dx = x1 - x2;
                 var dy = y1 - y2;
                 var correctDistance = System.Math.Sqrt(dx * dx + dy * dy);
@@ -113,14 +113,14 @@ namespace Toggl.Shared.Tests
                 {
                     new object[] { 0, 0, Point.Zero },
                     new object[] { System.Math.PI, 0, Point.Zero },
-                    new object[] { 0, 1, new Point { X = 1, Y = 0 } },
-                    new object[] { 0.5 * System.Math.PI, 1, new Point { X = 0, Y = 1 } },
-                    new object[] { System.Math.PI, 1, new Point { X = -1, Y = 0 } },
-                    new object[] { 1.5 * System.Math.PI, 1, new Point { X = 0, Y = -1 } },
-                    new object[] { 2 * System.Math.PI, 1, new Point { X = 1, Y = 0 } },
-                    new object[] { 4 * System.Math.PI, 1, new Point { X = 1, Y = 0 } },
-                    new object[] { 4 * System.Math.PI, 25, new Point { X = 25, Y = 0 } },
-                    new object[] { 1.0 / 6.0 * System.Math.PI, 6, new Point { X = 3 * System.Math.Sqrt(3), Y = 3 } },
+                    new object[] { 0, 1, new Point(1, 0) },
+                    new object[] { 0.5 * System.Math.PI, 1, new Point(0, 1) },
+                    new object[] { System.Math.PI, 1, new Point( -1, 0) },
+                    new object[] { 1.5 * System.Math.PI, 1, new Point(0, -1) },
+                    new object[] { 2 * System.Math.PI, 1, new Point(1, 0) },
+                    new object[] { 4 * System.Math.PI, 1, new Point(1, 0) },
+                    new object[] { 4 * System.Math.PI, 25, new Point(25, 0) },
+                    new object[] { 1.0 / 6.0 * System.Math.PI, 6, new Point (3 * System.Math.Sqrt(3), 3) },
                 };
         }
 

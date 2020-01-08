@@ -32,6 +32,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         protected IUpdateRemoteConfigCacheService UpdateRemoteConfigCacheService { get; } = Substitute.For<IUpdateRemoteConfigCacheService>();
         protected IErrorHandlingService ErrorHandlingService { get; } = Substitute.For<IErrorHandlingService>();
         protected IAccessRestrictionStorage AccessRestrictionStorage { get; } = Substitute.For<IAccessRestrictionStorage>();
+        protected IDateRangeShortcutsService DateRangeShortcutsService { get; } = Substitute.For<IDateRangeShortcutsService>();
 
         protected IWidgetsService WidgetsService { get; } = Substitute.For<IWidgetsService>();
 

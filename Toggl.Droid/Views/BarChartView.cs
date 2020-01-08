@@ -5,9 +5,13 @@ using Android.Util;
 using Android.Views;
 using System;
 using System.Collections.Immutable;
-using Toggl.Core.UI.ViewModels.Reports;
+using System.Linq;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
+using Toggl.Shared;
+using Color = Android.Graphics.Color;
+using static Toggl.Core.UI.ViewModels.Reports.ReportBarChartElement;
+using Math = System.Math;
 
 namespace Toggl.Droid.Views
 {
@@ -18,8 +22,10 @@ namespace Toggl.Droid.Views
         private const float defaultBarSpacingRatio = 0.2f;
         private const float minHeightForBarsWithPercentages = 1f;
 
-        private readonly Paint billablePaint = new Paint();
-        private readonly Paint nonBillablePaint = new Paint();
+        private readonly Paint filledValuePaint = new Paint();
+        private readonly Paint regularValuePaint = new Paint();
+        private readonly Paint filledValuePlaceholderPaint = new Paint();
+        private readonly Paint regularValuePlaceholderPaint = new Paint();
         private readonly Paint othersPaint = new Paint();
 
         private readonly Rect bounds = new Rect();
@@ -34,7 +40,6 @@ namespace Toggl.Droid.Views
         private float textBottomMargin;
         private float bottomLabelMarginTop;
         private float dateTopPadding;
-        private string hourSymbol;
 
         private int barsCount;
         private bool willDrawBarChart;
@@ -50,30 +55,22 @@ namespace Toggl.Droid.Views
         private float barsBottom;
         private float hoursLabelsX;
         private float hoursBottomMargin;
-        private bool willDrawDayLabels;
+        private bool willDrawIndividualLabels;
         private float startEndDatesY;
         private float barsStartingLeft;
-        private IImmutableList<BarViewModel> bars;
-        private IImmutableList<BarChartDayLabel> horizontalLabels;
-        private string maxHours;
-        private string halfHours;
-        private string zeroHours;
+
+        private IImmutableList<Bar> bars;
+        private IImmutableList<string> xLabels;
+        private YAxisLabels yLabels;
+        private double maxValue;
         private string startDate;
         private string endDate;
         private float dayLabelsY;
 
-        private BarChartData? barChartData;
-
-        public BarChartData? BarChartData
-        {
-            get => barChartData;
-            set
-            {
-                barChartData = value;
-                updateBarChartDrawingData();
-                PostInvalidate();
-            }
-        }
+        private static YAxisLabels placeholderYLabels = new YAxisLabels("10 h", "5 h", "0 h");
+        private static IImmutableList<string> placeholderXLabels = new string[] { "", "" }.ToImmutableList();
+        private static IImmutableList<Bar> placeholderBars = generatePlaceholderBars();
+        private bool isDrawingPlaceholders() => bars == placeholderBars;
 
         public BarChartView(Context context) : base(context)
         {
@@ -91,8 +88,8 @@ namespace Toggl.Droid.Views
 
         private Color horizontalLineColor;
         private Color hoursTextColor;
-        private Color primaryTextColor;
         private Color emptyBarColor;
+        private Color xAxisLegendColor;
 
         private void initialize(Context context)
         {
@@ -105,19 +102,22 @@ namespace Toggl.Droid.Views
             textLeftMargin = 12.DpToPixels(context);
             textBottomMargin = 4.DpToPixels(context);
             bottomLabelMarginTop = 12.DpToPixels(context);
-            hourSymbol = Shared.Resources.UnitHour;
             dateTopPadding = 4.DpToPixels(context);
 
             othersPaint.TextSize = textSize;
-            billablePaint.Color = context.SafeGetColor(Resource.Color.billableChartBar);
-            nonBillablePaint.Color = context.SafeGetColor(Resource.Color.nonBillableChartBar);
-            nonBillablePaint.SetStyle(Paint.Style.FillAndStroke);
-            billablePaint.SetStyle(Paint.Style.FillAndStroke);
+            filledValuePaint.Color = context.SafeGetColor(Resource.Color.filledChartBar);
+            regularValuePaint.Color = context.SafeGetColor(Resource.Color.regularChartBar);
+            filledValuePlaceholderPaint.Color = context.SafeGetColor(Resource.Color.placeholderBarFilled);
+            regularValuePlaceholderPaint.Color = context.SafeGetColor(Resource.Color.placeholderBarRegular);
+            regularValuePaint.SetStyle(Paint.Style.FillAndStroke);
+            filledValuePaint.SetStyle(Paint.Style.FillAndStroke);
+            regularValuePlaceholderPaint.SetStyle(Paint.Style.FillAndStroke);
+            filledValuePlaceholderPaint.SetStyle(Paint.Style.FillAndStroke);
 
             emptyBarColor = context.SafeGetColor(Resource.Color.placeholderText);
-            primaryTextColor = context.SafeGetColor(Resource.Color.primaryText);
             horizontalLineColor = context.SafeGetColor(Resource.Color.separator);
             hoursTextColor = context.SafeGetColor(Resource.Color.placeholderText);
+            xAxisLegendColor = context.SafeGetColor(Resource.Color.secondaryText);
         }
 
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
@@ -127,28 +127,32 @@ namespace Toggl.Droid.Views
             PostInvalidate();
         }
 
+        public void updateBars(IImmutableList<Bar> newBars, double maxValue, IImmutableList<string> xLabels, YAxisLabels yLabels)
+        {
+            this.maxValue = maxValue;
+            bars = newBars;
+            this.yLabels = yLabels;
+            this.xLabels = xLabels;
+
+            updateBarChartDrawingData();
+            PostInvalidate();
+        }
+
         private void updateBarChartDrawingData()
         {
-            if (!barChartData.HasValue)
+            if (bars == null)
             {
                 willDrawBarChart = false;
                 return;
             }
 
-            var barChartDataValue = barChartData.Value;
-
-            barsCount = barChartDataValue.Bars.Count;
+            barsCount = bars.Count;
             willDrawBarChart = barsCount > 0;
 
             if (!willDrawBarChart) return;
 
-            bars = barChartDataValue.Bars;
-            horizontalLabels = barChartDataValue.HorizontalLabels;
-            maxHours = $"{barChartDataValue.MaximumHoursPerBar} {hourSymbol}";
-            halfHours = $"{barChartDataValue.MaximumHoursPerBar / 2} {hourSymbol}";
-            zeroHours = $"0 {hourSymbol}";
-            startDate = barChartDataValue.StartDate ?? string.Empty;
-            endDate = barChartDataValue.EndDate ?? string.Empty;
+            startDate = xLabels[0];
+            endDate = xLabels[xLabels.Count - 1];
 
             barsWidth = MeasuredWidth - barsLeftMargin - barsRightMargin;
             barsHeight = MeasuredHeight - barsTopMargin - barsBottomMargin;
@@ -166,7 +170,7 @@ namespace Toggl.Droid.Views
             hoursLabelsX = MeasuredWidth - barsRightMargin + textLeftMargin;
             hoursBottomMargin = textBottomMargin * 2f;
 
-            willDrawDayLabels = horizontalLabels.Count > 0;
+            willDrawIndividualLabels = xLabels.Count > 2;
             startEndDatesY = barsBottom + bottomLabelMarginTop * 2f;
             dayLabelsY = barsBottom + bottomLabelMarginTop * 1.25f;
             barsStartingLeft = barsLeftMargin + (barsWidth - (actualBarWidth * barsCount + spaces * spacing)) / 2f;
@@ -175,115 +179,166 @@ namespace Toggl.Droid.Views
         protected override void OnDraw(Canvas canvas)
         {
             base.OnDraw(canvas);
-            if (!willDrawBarChart) return;
 
+            if (!willDrawBarChart)
+            {
+                bars = placeholderBars;
+                xLabels = placeholderXLabels;
+                yLabels = placeholderYLabels;
+                maxValue = placeholderBars.Max(bar => bar.TotalValue);
+                updateBarChartDrawingData();
+            }
+
+            drawHorizontalLines(canvas);
+            drawYAxisLegend(canvas);
+            drawXAxisLegendIfNotDrawingIndividualLabels(canvas);
+            drawBarsAndXAxisLegend(canvas);
+        }
+
+        private void drawHorizontalLines(Canvas canvas)
+        {
             othersPaint.Color = horizontalLineColor;
             canvas.DrawLine(0f, barsTopMargin, Width, barsTopMargin, othersPaint);
             canvas.DrawLine(0f, middleHorizontalLineY, Width, middleHorizontalLineY, othersPaint);
             canvas.DrawLine(0f, barsBottom, Width, barsBottom, othersPaint);
+        }
 
+        private void drawYAxisLegend(Canvas canvas)
+        {
             othersPaint.Color = hoursTextColor;
-            canvas.DrawText(zeroHours, hoursLabelsX, barsBottom - hoursBottomMargin, othersPaint);
-            canvas.DrawText(halfHours, hoursLabelsX, middleHorizontalLineY - hoursBottomMargin, othersPaint);
-            canvas.DrawText(maxHours, hoursLabelsX, barsTopMargin - hoursBottomMargin, othersPaint);
+            canvas.DrawText(yLabels.BottomLabel, hoursLabelsX, barsBottom - hoursBottomMargin, othersPaint);
+            canvas.DrawText(yLabels.MiddleLabel, hoursLabelsX, middleHorizontalLineY - hoursBottomMargin, othersPaint);
+            canvas.DrawText(yLabels.TopLabel, hoursLabelsX, barsTopMargin - hoursBottomMargin, othersPaint);
+        }
 
-            othersPaint.Color = primaryTextColor;
-
-            if (!willDrawDayLabels)
+        private void drawXAxisLegendIfNotDrawingIndividualLabels(Canvas canvas)
+        {
+            if (!willDrawIndividualLabels && !isDrawingPlaceholders())
             {
+                othersPaint.Color = xAxisLegendColor;
                 othersPaint.TextAlign = Paint.Align.Left;
                 canvas.DrawText(startDate, barsLeftMargin, startEndDatesY, othersPaint);
                 othersPaint.TextAlign = Paint.Align.Right;
                 canvas.DrawText(endDate, Width - barsRightMargin, startEndDatesY, othersPaint);
             }
+        }
 
+        private void drawBarsAndXAxisLegend(Canvas canvas)
+        {
             var left = barsStartingLeft;
 
             othersPaint.TextAlign = Paint.Align.Center;
             var originalTextSize = othersPaint.TextSize;
 
             var barsToRender = bars;
-            var labelsToRender = horizontalLabels;
-            var numberOfLabels = labelsToRender.Count;
+            var labelsToRender = xLabels;
+            var numberOfLabels = xLabels.Count;
+            var filledPaintToUse = isDrawingPlaceholders() ? filledValuePlaceholderPaint : filledValuePaint;
+            var regularPaintToUse = isDrawingPlaceholders() ? regularValuePlaceholderPaint : regularValuePaint;
 
             for (var i = 0; i < barsToRender.Count; i++)
             {
                 var bar = barsToRender[i];
                 var barRight = left + actualBarWidth;
-                var barHasBillablePercentage = bar.BillablePercent > 0f;
-                var barHasNonBillablePercentage = bar.NonBillablePercent > 0f;
-                if (!barHasBillablePercentage && !barHasNonBillablePercentage)
+                var barHasFilledPercentage = bar.FilledValue > 0;
+                var barHasTransparentPercentage = bar.TotalValue > bar.FilledValue;
+                if (!barHasFilledPercentage && !barHasTransparentPercentage)
                 {
                     othersPaint.Color = emptyBarColor;
                     canvas.DrawLine(left, barsBottom, barRight, barsBottom, othersPaint);
                 }
                 else
                 {
-                    var billableBarHeight = (float)(barsHeight * bar.BillablePercent);
-                    var billableTop = calculateBillableTop(billableBarHeight, barHasBillablePercentage);
-                    canvas.DrawRect(left, billableTop, barRight, barsBottom + barDrawingYTranslationAdjustmentInPixels, billablePaint);
+                    var filledBarHeight = (float)(barsHeight * bar.FilledValue);
+                    var filledTop = calculateFilledTop(filledBarHeight, barHasFilledPercentage);
+                    canvas.DrawRect(left, filledTop, barRight, barsBottom + barDrawingYTranslationAdjustmentInPixels, filledPaintToUse);
 
-                    var nonBillableBarHeight = (float)(barsHeight * bar.NonBillablePercent);
-                    var nonBillableTop = calculateNonBillableTop(billableTop, nonBillableBarHeight, barHasNonBillablePercentage);
-                    canvas.DrawRect(left, nonBillableTop, barRight, billableTop, nonBillablePaint);
+                    var regularBarHeight = (float)(barsHeight * (bar.TotalValue - bar.FilledValue));
+                    var regularTop = calculateRegularTop(filledTop, regularBarHeight, barHasTransparentPercentage);
+                    canvas.DrawRect(left, regularTop, barRight, filledTop, regularPaintToUse);
                 }
 
-                if (willDrawDayLabels && i < numberOfLabels)
+                if (willDrawIndividualLabels && i < numberOfLabels)
                 {
-                    var horizontalLabel = labelsToRender[i];
+                    var horizontalLabelElements = labelsToRender[i].Split("\n");
+                    if (horizontalLabelElements.Length == 2)
+                    {
+                        othersPaint.Color = xAxisLegendColor;
+                        var middleOfTheBar = left + (barRight - left) / 2f;
+                        var dayOfWeekText = horizontalLabelElements[1];
+                        othersPaint.TextSize = originalTextSize;
+                        canvas.DrawText(dayOfWeekText, middleOfTheBar, dayLabelsY, othersPaint);
 
-                    var middleOfTheBar = left + (barRight - left) / 2f;
-                    var dayOfWeekText = horizontalLabel.DayOfWeek;
-                    othersPaint.TextSize = originalTextSize;
-                    canvas.DrawText(dayOfWeekText, middleOfTheBar, dayLabelsY, othersPaint);
-
-                    var dateText = horizontalLabel.Date;
-                    setTextSizeFromWidth(dateText, othersPaint, othersPaint.TextSize, actualBarWidth);
-                    othersPaint.GetTextBounds(dateText, 0, dateText.Length, bounds);
-                    canvas.DrawText(dateText, middleOfTheBar, dayLabelsY + bounds.Height() + dateTopPadding, othersPaint);
+                        var dateText = horizontalLabelElements[0];
+                        othersPaint.UpdatePaintForTextToFitWidth(dateText, actualBarWidth, bounds);
+                        othersPaint.GetTextBounds(dateText, 0, dateText.Length, bounds);
+                        canvas.DrawText(dateText, middleOfTheBar, dayLabelsY + bounds.Height() + dateTopPadding, othersPaint);
+                    }
                 }
 
                 left += actualBarWidth + spacing;
             }
         }
 
-        private float calculateBillableTop(float billableBarHeight, bool barHasBillablePercentage)
+        private float calculateFilledTop(float filledBarHeight, bool barHasFilledPercentage)
         {
-            var billableTop = barsBottom - billableBarHeight + barDrawingYTranslationAdjustmentInPixels;
-            var barHasAtLeast1PixelInHeight = billableBarHeight >= minHeightForBarsWithPercentages;
+            var filledTop = barsBottom - filledBarHeight + barDrawingYTranslationAdjustmentInPixels;
+            var barHasAtLeast1PixelInHeight = filledBarHeight >= minHeightForBarsWithPercentages;
 
-            return barHasBillablePercentage && !barHasAtLeast1PixelInHeight
-                ? billableTop - minHeightForBarsWithPercentages
-                : billableTop;
+            return barHasFilledPercentage && !barHasAtLeast1PixelInHeight
+                ? filledTop - minHeightForBarsWithPercentages
+                : filledTop;
         }
 
-        private float calculateNonBillableTop(float billableTop, float nonBillableBarHeight, bool barHasNonBillablePercentage)
+        private float calculateRegularTop(float filledTop, float regularBarHeight, bool barHasRegularPercentage)
         {
-            //Non billable-top doesn't need the extra Y translation because the billableTop accounts for it.
-            var nonBillableTop = billableTop - nonBillableBarHeight;
-            var barHasAtLeast1PixelInHeight = nonBillableBarHeight >= minHeightForBarsWithPercentages;
+            //Regular top doesn't need the extra Y translation because the filledTop accounts for it.
+            var regularTop = filledTop - regularBarHeight;
+            var barHasAtLeast1PixelInHeight = regularBarHeight >= minHeightForBarsWithPercentages;
 
-            return barHasNonBillablePercentage && !barHasAtLeast1PixelInHeight
-                ? nonBillableTop - minHeightForBarsWithPercentages
-                : nonBillableTop;
+            return barHasRegularPercentage && !barHasAtLeast1PixelInHeight
+                ? regularTop - minHeightForBarsWithPercentages
+                : regularTop;
         }
 
-        private void setTextSizeFromWidth(string text, Paint paint, float originalTextSize, float maxWidth)
+        private static IImmutableList<Bar> generatePlaceholderBars()
         {
-            // 48f is enough for reasonable resolution
-            // (older phones could have issues with memory if this number is much larger)
-            const float sampleTextSize = 48f;
-
-            paint.TextSize = originalTextSize;
-            paint.GetTextBounds(text, 0, text.Length, bounds);
-
-            if (bounds.Width() > maxWidth)
-            {
-                paint.TextSize = sampleTextSize;
-                paint.GetTextBounds(text, 0, text.Length, bounds);
-
-                paint.TextSize = (int)(sampleTextSize * maxWidth / bounds.Width());
+            var maxTotal = 78.2 + 67.3;
+            return new (double Filled, double Regular)[] {
+                (12.4, 6.9),
+                (7.6, 13.5),
+                (12.4, 6.9),
+                (15.1, 18.9),
+                (15.1, 20.1),
+                (14.6, 24.5),
+                (9.5, 28.2),
+                (11.3, 23.9),
+                (11.5, 32.9),
+                (10.5, 22.8),
+                (35.5, 24.5),
+                (36.1, 24.2),
+                (41.5, 31.2),
+                (40, 33.3),
+                (8.3, 43),
+                (39.9, 35.6),
+                (10, 50.9),
+                (14.2, 46.7),
+                (39.7, 50.2),
+                (40.8, 44),
+                (7.6, 43.9),
+                (56.1, 55.7),
+                (52.7, 53.2),
+                (66.5, 50.7),
+                (53.3, 54.6),
+                (59, 64),
+                (73, 61),
+                (71.1, 70),
+                (73.8, 72),
+                (64.5, 79.8),
+                (78.2, 67.3),
             }
+            .Select(tuple => new Bar(tuple.Filled / maxTotal, (tuple.Filled + tuple.Regular) / maxTotal))
+            .ToImmutableList();
         }
     }
 }

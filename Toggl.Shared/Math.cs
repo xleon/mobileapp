@@ -14,6 +14,9 @@ namespace Toggl.Shared
 
         public const int SecondsInAMinute = 60;
 
+        private const float degreesToRadians = MathF.PI / 180;
+        private const float radiansToDegrees = 180 / MathF.PI;
+
         public static double ToAngleOnTheDial(this TimeSpan time)
             => time.ToAngle() - QuarterOfCircle;
 
@@ -24,6 +27,17 @@ namespace Toggl.Shared
         {
             while (angle < 0) angle += FullCircle;
             return angle;
+        }
+
+        public static float NormalizedAngle(this float degrees)
+        {
+            while (degrees < 0.0)
+                degrees += 360.0f;
+
+            while (degrees >= 360.0)
+                degrees -= 360.0f;
+
+            return degrees;
         }
 
         public static TimeSpan AngleToTime(this double angle)
@@ -45,11 +59,7 @@ namespace Toggl.Shared
         }
 
         public static Point PointOnCircumference(Point center, double angle, double radius)
-            => new Point
-            {
-                X = center.X + radius * System.Math.Cos(angle),
-                Y = center.Y + radius * System.Math.Sin(angle)
-            };
+            => new Point(center.X + radius * System.Math.Cos(angle), center.Y + radius * System.Math.Sin(angle));
 
         public static bool IsBetween(this double angle, double startAngle, double endAngle)
         {
@@ -72,5 +82,17 @@ namespace Toggl.Shared
             var indexInFoldedSequence = number % lengthOfFoldedSequence;
             return indexInFoldedSequence < length ? indexInFoldedSequence : lengthOfFoldedSequence - indexInFoldedSequence;
         }
+
+        public static float ToRadians(this float degrees)
+            => degrees * degreesToRadians;
+
+        public static float ToDegrees(this float radians)
+            => radians * radiansToDegrees;
+
+        public static double ToRadians(this double degrees)
+            => degrees * degreesToRadians;
+
+        public static double ToDegrees(this double radians)
+             => radians * radiansToDegrees;
     }
 }

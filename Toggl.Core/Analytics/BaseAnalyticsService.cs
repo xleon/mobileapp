@@ -66,9 +66,9 @@ namespace Toggl.Core.Analytics
 
         public IAnalyticsEvent RatingViewSecondStepDontSendFeedback { get; }
 
-        public IAnalyticsEvent<ReportsSource, int, int, double> ReportsSuccess { get; }
+        public IAnalyticsEvent<DateRangeSelectionSource, int, int, double> ReportsSuccess { get; }
 
-        public IAnalyticsEvent<ReportsSource, int, double> ReportsFailure { get; }
+        public IAnalyticsEvent<DateRangeSelectionSource, int, double> ReportsFailure { get; }
 
         public IAnalyticsEvent OfflineModeDetected { get; }
 
@@ -257,8 +257,8 @@ namespace Toggl.Core.Analytics
             RatingViewSecondStepDontRate = new AnalyticsEvent(this, nameof(RatingViewSecondStepDontRate));
             RatingViewSecondStepSendFeedback = new AnalyticsEvent(this, nameof(RatingViewSecondStepSendFeedback));
             RatingViewSecondStepDontSendFeedback = new AnalyticsEvent(this, nameof(RatingViewSecondStepDontSendFeedback));
-            ReportsSuccess = new AnalyticsEvent<ReportsSource, int, int, double>(this, nameof(ReportsSuccess), "Source", "TotalDays", "ProjectsNotSynced", "LoadingTime");
-            ReportsFailure = new AnalyticsEvent<ReportsSource, int, double>(this, nameof(ReportsFailure), "Source", "TotalDays", "LoadingTime");
+            ReportsSuccess = new AnalyticsEvent<DateRangeSelectionSource, int, int, double>(this, nameof(ReportsSuccess), "Source", "TotalDays", "ProjectsNotSynced", "LoadingTime");
+            ReportsFailure = new AnalyticsEvent<DateRangeSelectionSource, int, double>(this, nameof(ReportsFailure), "Source", "TotalDays", "LoadingTime");
             OfflineModeDetected = new AnalyticsEvent(this, nameof(OfflineModeDetected));
             EditViewTapped = new AnalyticsEvent<EditViewTapSource>(this, nameof(EditViewTapped), "TapSource");
             EditViewClosed = new AnalyticsEvent<EditViewCloseReason>(this, nameof(EditViewClosed), "Reason");

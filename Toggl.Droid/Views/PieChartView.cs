@@ -139,21 +139,17 @@ namespace Toggl.Droid.Views
                     {
                         canvas.Rotate(endDegrees >= 0 ? endDegrees : -endDegrees);
 
-                        nameCoordinates.X = radius - horizontalPadding - textWidth;
-                        nameCoordinates.Y = -verticalPadding + textHeight;
-
-                        percentageCoordinates.X = radius - horizontalPadding - percentWidth;
-                        percentageCoordinates.Y = -(verticalPadding + linesSeparatorHeight) + -textHeight + percentHeight;
+                        nameCoordinates = new Point(radius - horizontalPadding - textWidth, -verticalPadding + textHeight);
+                        percentageCoordinates = new Point(
+                            radius - horizontalPadding - percentWidth,
+                            -(verticalPadding + linesSeparatorHeight) + -textHeight + percentHeight);
                     }
                     else
                     {
                         canvas.Rotate(endDegrees + 180.0f);
 
-                        nameCoordinates.X = -radius + horizontalPadding;
-                        nameCoordinates.Y = verticalPadding;
-
-                        percentageCoordinates.X = -radius + horizontalPadding;
-                        percentageCoordinates.Y = textHeight + verticalPadding + linesSeparatorHeight;
+                        nameCoordinates = new Point(-radius + horizontalPadding,  verticalPadding);
+                        percentageCoordinates = new Point(-radius + horizontalPadding, textHeight + verticalPadding + linesSeparatorHeight);
                     }
 
                     canvas.DrawText(nameToDraw, (float) nameCoordinates.X, (float) nameCoordinates.Y, textPaint);
