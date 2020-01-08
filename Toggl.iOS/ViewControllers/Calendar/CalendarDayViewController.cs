@@ -86,7 +86,7 @@ namespace Toggl.iOS.ViewControllers
             ContextualMenu.Layer.ShadowOpacity = 0.1f;
             ContextualMenu.Layer.ShadowOffset = new CGSize(0, -2);
 
-            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
+            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height - 10;
 
             ContextualMenuFadeView.FadeLeft = true;
             ContextualMenuFadeView.FadeRight = true;
@@ -199,7 +199,8 @@ namespace Toggl.iOS.ViewControllers
 
             if (contextualMenuInitialised) return;
             contextualMenuInitialised = true;
-            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
+            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height - 10;
+            ContextualMenu.Layer.ShadowPath = CGPath.FromRect(ContextualMenu.Layer.Bounds);
             View.LayoutIfNeeded();
         }
 
@@ -234,7 +235,7 @@ namespace Toggl.iOS.ViewControllers
         {
             if (!contextualMenuInitialised) return;
 
-            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
+            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height - 10;
             AnimationExtensions.Animate(
                 Animation.Timings.EnterTiming,
                 Animation.Curves.EaseOut,
