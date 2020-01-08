@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.Navigation;
+using Toggl.Core.UI.Services;
 using Toggl.Core.UI.ViewModels.Settings;
 using Xunit;
 
@@ -54,7 +55,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task GetsInitialisedToTheProperValue(bool permissionGranted)
             {
                 var observer = TestScheduler.CreateObserver<bool>();
-                PermissionsChecker.NotificationPermissionGranted.Returns(Observable.Return(permissionGranted));
+                PermissionsChecker.NotificationPermissionGranted.Returns(Observable.Return(permissionGranted ? PermissionStatus.Authorized : PermissionStatus.Rejected));
 
                 var viewModel = new NotificationSettingsViewModel(NavigationService, BackgroundService, PermissionsChecker, UserPreferences, SchedulerProvider, RxActionFactory);
                 viewModel.PermissionGranted.Subscribe(observer);
@@ -69,12 +70,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public sealed class TheRequestAccessAction : NotificationSettingsViewModelTest
         {
             [Fact, LogIfTooSlow]
-            public async Task OpensAppSettings()
+            public async Task RequestThePermission()
             {
                 ViewModel.RequestAccess.Execute(Unit.Default);
                 TestScheduler.Start();
 
-                View.Received().OpenAppSettings();
+                View.Received().RequestNotificationAuthorization(true);
             }
         }
 

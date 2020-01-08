@@ -16,8 +16,8 @@ namespace Toggl.Droid.Services
         public IObservable<bool> CalendarPermissionGranted
             => Observable.Start(() => checkPermissions(Manifest.Permission.ReadCalendar));
 
-        public IObservable<bool> NotificationPermissionGranted
-            => Observable.Return(true);
+        public IObservable<PermissionStatus> NotificationPermissionGranted
+            => Observable.Return(PermissionStatus.Authorized);
 
         private bool checkPermissions(params string[] permissionsToCheck)
         {
