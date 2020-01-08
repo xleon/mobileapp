@@ -126,6 +126,7 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             calendarWeekStripeLabelsContainer.Rx().TouchEvents()
+                .Select(eventArgs => eventArgs.Event)
                 .Subscribe(touch => calendarWeekStripePager.OnTouchEvent(touch))
                 .DisposedBy(DisposeBag);
         }

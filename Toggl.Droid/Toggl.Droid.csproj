@@ -693,6 +693,7 @@
     <Compile Include="ViewHolders\Country\CountrySelectionViewHolder.cs" />
     <Compile Include="ViewHolders\SimpleTextViewHolder.cs" />
     <Compile Include="ViewHolders\StringViewHolder.cs" />
+    <Compile Include="Views\AnimatedFloatingActionButton.cs" />
     <Compile Include="Views\BarChartView.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.Background.cs" />
     <Compile Include="Views\Calendar\CalendarDayView.cs" />

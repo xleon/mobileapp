@@ -30,6 +30,8 @@ using FoundationResources = Toggl.Shared.Resources;
 using AndroidX.Core.Content;
 using AndroidX.RecyclerView.Widget;
 using Google.Android.Material.Snackbar;
+using Toggl.Core;
+using Toggl.Droid.Views;
 
 namespace Toggl.Droid.Fragments
 {
@@ -172,8 +174,8 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             refreshLayout.Rx().Refreshed()
-                 .Subscribe(ViewModel.Refresh.Inputs)
-                 .DisposedBy(DisposeBag);
+                .Subscribe(ViewModel.Refresh.Inputs)
+                .DisposedBy(DisposeBag);
 
             ViewModel.MainLogItems
                 .Subscribe(mainLogRecyclerAdapter.UpdateCollection)
@@ -211,7 +213,34 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(onEmptyStateVisibilityChanged)
                 .DisposedBy(DisposeBag);
 
+            playButton.Rx().TouchEvents()
+                .Subscribe(handlePlayFabEvent)
+                .DisposedBy(DisposeBag);
+
+            playButton.Rx().LongPress()
+                .Subscribe(_ => playButton.StopAnimation())
+                .DisposedBy(DisposeBag);
+
             setupOnboardingSteps();
+        }
+
+        private void handlePlayFabEvent(View.TouchEventArgs eventArgs)
+        {
+            if (eventArgs == null)
+            {
+                return;
+            }
+
+            eventArgs.Handled = false;
+
+            if (eventArgs.Event.Action == MotionEventActions.Up)
+            {
+                playButton.StopAnimation();
+            }
+            else
+            {
+                playButton.TryStartAnimation();
+            }
         }
 
         public void ScrollToStart()

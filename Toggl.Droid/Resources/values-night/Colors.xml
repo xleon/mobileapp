@@ -12,6 +12,7 @@
   <color name="separator">#26FFFFFF</color>
   <color name="stopTimeEntryButtonBackground">#FFFF453A</color>
   <color name="startTimeEntryButtonBackground">#FF32D74B</color>
+  <color name="startTimeEntryButtonAnimation">#FF00A415</color>
   <color name="licensesBorder">#BBFFFFFF</color>
   <color name="licensesBackground">#FF303030</color>
   <color name="tagToken">#DDFFFFFF</color>
