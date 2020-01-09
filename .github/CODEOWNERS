@@ -1,8 +1,8 @@
 
-* @toggl/random-mobile-dev
+* @toggl/mobile
 
-/Toggl.iOS* @toggl/random-ios-dev
+/Toggl.iOS* @toggl/ios-senseis
 
-/Toggl.Droid* @toggl/random-android-dev
+/Toggl.Droid* @toggl/androids
 
-/Toggl.Core.UI* @toggl/random-ios-dev @toggl/random-android-dev
+/Toggl.Core.UI* @toggl/ios-senseis @toggl/androids
