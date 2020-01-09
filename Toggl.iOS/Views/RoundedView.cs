@@ -19,7 +19,7 @@ namespace Toggl.iOS.Views
             {
                 if (roundLeft == value) return;
                 roundLeft = value;
-                updateMaskingLayer();
+                updateMaskedCorners();
             }
         }
 
@@ -31,7 +31,7 @@ namespace Toggl.iOS.Views
             {
                 if (roungRight == value) return;
                 roungRight = value;
-                updateMaskingLayer();
+                updateMaskedCorners();
             }
         }
 
@@ -43,7 +43,7 @@ namespace Toggl.iOS.Views
             {
                 if (cornerRadius == value) return;
                 cornerRadius = value;
-                updateMaskingLayer();
+                updateMaskedCorners();
             }
         }
 
@@ -53,7 +53,7 @@ namespace Toggl.iOS.Views
             set
             {
                 base.BackgroundColor = value;
-                updateMaskingLayer();
+                updateMaskedCorners();
             }
         }
 
@@ -63,52 +63,25 @@ namespace Toggl.iOS.Views
 
         public RoundedView(CGRect frame) : base(frame)
         {
-            Layer.AddSublayer(maskingLayer);
-
-            updateMaskingLayer();
+            updateMaskedCorners();
         }
 
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
-
-            Layer.AddSublayer(maskingLayer);
-
-            updateMaskingLayer();
+            updateMaskedCorners();
         }
 
-        private void updateMaskingLayer()
+        private void updateMaskedCorners()
         {
-            // iOS tries to animate things without our consent
-            // Trying to create a Core Animation context caused deadlocks
-            // which froze the app. Speeding it up fixes the problem.
-            maskingLayer.Speed = 999;
-
-            if (!RoundLeft && !RoundRight)
-            {
-                Layer.CornerRadius = 0;
-                maskingLayer.Opacity = 0;
-                return;
-            }
-
             Layer.CornerRadius = CornerRadius;
+            Layer.MaskedCorners = 0;
 
-            if (RoundLeft && RoundRight)
-            {
-                maskingLayer.Opacity = 0;
-                return;
-            }
+            if (RoundLeft)
+                Layer.MaskedCorners |= CACornerMask.MinXMaxYCorner | CACornerMask.MinXMinYCorner;
 
-            maskingLayer.Opacity = 1;
-            maskingLayer.BackgroundColor = BackgroundColor.CGColor;
-            var maskingLayerWidth = Bounds.Width - CornerRadius;
-            maskingLayer.Frame = new CGRect
-            {
-                X = RoundLeft ? maskingLayerWidth : 0,
-                Y = 0,
-                Width = maskingLayerWidth,
-                Height = Bounds.Height
-            };
+            if (RoundRight)
+                Layer.MaskedCorners |= CACornerMask.MaxXMaxYCorner | CACornerMask.MaxXMinYCorner;
         }
     }
 }

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="cZE-iV-UFb" customClass="ReportsErrorCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="284" height="373"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="284" height="373"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r98-Fx-nR3">
+                        <rect key="frame" x="0.0" y="0.0" width="284" height="373"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="hYr-vD-P06" userLabel="ContentsStack">
+                                <rect key="frame" x="16" y="117" width="252" height="139.5"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icErrorBadData" translatesAutoresizingMaskIntoConstraints="NO" id="bz2-z8-UVx">
+                                        <rect key="frame" x="102" y="0.0" width="48" height="48"/>
+                                        <color key="tintColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="ELb-Oc-dEJ"/>
+                                            <constraint firstAttribute="width" constant="48" id="Sf4-La-aPi"/>
+                                        </constraints>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="idY-6D-ddC" userLabel="spacer">
+                                        <rect key="frame" x="123.5" y="48" width="5" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="24" id="moE-9W-kuM"/>
+                                            <constraint firstAttribute="width" constant="5" id="yXc-xt-6OB"/>
+                                        </constraints>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ooooops!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EOU-Z2-579" userLabel="TitleLabel">
+                                        <rect key="frame" x="6" y="72" width="240" height="19.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zWL-ma-INC" userLabel="spacer">
+                                        <rect key="frame" x="123.5" y="91.5" width="5" height="12"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="12" id="SBt-7b-GV6"/>
+                                            <constraint firstAttribute="width" constant="5" id="oYy-Aa-Y1r"/>
+                                        </constraints>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You have no entries for the selected time period" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0hq-vh-TMd" userLabel="MessageLabel">
+                                        <rect key="frame" x="6" y="103.5" width="240" height="36"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" name="CustomGray"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="EOU-Z2-579" secondAttribute="trailing" constant="6" id="3Qd-qi-7Zj"/>
+                                    <constraint firstItem="0hq-vh-TMd" firstAttribute="leading" secondItem="hYr-vD-P06" secondAttribute="leading" constant="6" id="5ch-ml-Sl5"/>
+                                    <constraint firstItem="EOU-Z2-579" firstAttribute="leading" secondItem="hYr-vD-P06" secondAttribute="leading" constant="6" id="kMK-6e-VX8"/>
+                                    <constraint firstAttribute="trailing" secondItem="0hq-vh-TMd" secondAttribute="trailing" constant="6" id="pbJ-xW-0w6"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="hYr-vD-P06" firstAttribute="centerY" secondItem="r98-Fx-nR3" secondAttribute="centerY" id="Bhr-0B-tjJ"/>
+                            <constraint firstAttribute="trailing" secondItem="hYr-vD-P06" secondAttribute="trailing" constant="16" id="RGW-KP-Mbf"/>
+                            <constraint firstItem="hYr-vD-P06" firstAttribute="centerX" secondItem="r98-Fx-nR3" secondAttribute="centerX" id="g1N-9P-tjB"/>
+                            <constraint firstItem="hYr-vD-P06" firstAttribute="leading" secondItem="r98-Fx-nR3" secondAttribute="leading" constant="16" id="mKz-do-i7c"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="r98-Fx-nR3" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" id="5me-O8-bfu"/>
+                <constraint firstItem="r98-Fx-nR3" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" id="Jrq-01-3Z1"/>
+                <constraint firstAttribute="bottom" secondItem="r98-Fx-nR3" secondAttribute="bottom" id="Yw4-fU-fXk"/>
+                <constraint firstAttribute="trailing" secondItem="r98-Fx-nR3" secondAttribute="trailing" id="oMr-nS-Lsr"/>
+            </constraints>
+            <connections>
+                <outlet property="ErrorMessageLabel" destination="0hq-vh-TMd" id="xIg-ee-OKZ"/>
+                <outlet property="ErrorTitleLabel" destination="EOU-Z2-579" id="5e9-Hi-rwI"/>
+            </connections>
+            <point key="canvasLocation" x="34" y="54"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="icErrorBadData" width="36" height="36"/>
+        <namedColor name="CustomGray">
+            <color red="0.55686277151107788" green="0.55686277151107788" blue="0.57647061347961426" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

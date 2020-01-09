@@ -5,52 +5,52 @@ namespace Toggl.iOS.Extensions
 {
     public static class IntentPeriodExtension
     {
-        public static ShowReportPeriodReportPeriod ToShowReportPeriodReportPeriod(this ReportPeriod p)
+        public static ShowReportPeriodReportPeriod ToShowReportPeriodReportPeriod(this DateRangePeriod p)
         {
             switch (p)
             {
-                case ReportPeriod.LastMonth:
+                case DateRangePeriod.LastMonth:
                     return ShowReportPeriodReportPeriod.LastMonth;
-                case ReportPeriod.LastWeek:
+                case DateRangePeriod.LastWeek:
                     return ShowReportPeriodReportPeriod.LastWeek;
-                case ReportPeriod.Yesterday:
+                case DateRangePeriod.Yesterday:
                     return ShowReportPeriodReportPeriod.Yesterday;
-                case ReportPeriod.Today:
+                case DateRangePeriod.Today:
                     return ShowReportPeriodReportPeriod.Today;
-                case ReportPeriod.ThisWeek:
+                case DateRangePeriod.ThisWeek:
                     return ShowReportPeriodReportPeriod.ThisWeek;
-                case ReportPeriod.ThisMonth:
+                case DateRangePeriod.ThisMonth:
                     return ShowReportPeriodReportPeriod.ThisMonth;
-                case ReportPeriod.ThisYear:
+                case DateRangePeriod.ThisYear:
                     return ShowReportPeriodReportPeriod.ThisYear;
-                case ReportPeriod.LastYear:
+                case DateRangePeriod.LastYear:
                     return ShowReportPeriodReportPeriod.LastYear;
                 default:
                     return ShowReportPeriodReportPeriod.Unknown;
             }
         }
-        public static ReportPeriod ToReportPeriod(this ShowReportPeriodReportPeriod intentPeriod)
+        public static DateRangePeriod ToDateRangePeriod(this ShowReportPeriodReportPeriod intentPeriod)
         {
             switch (intentPeriod)
             {
                 case ShowReportPeriodReportPeriod.Today:
-                    return ReportPeriod.Today;
+                    return DateRangePeriod.Today;
                 case ShowReportPeriodReportPeriod.Yesterday:
-                    return ReportPeriod.Yesterday;
+                    return DateRangePeriod.Yesterday;
                 case ShowReportPeriodReportPeriod.LastMonth:
-                    return ReportPeriod.LastMonth;
+                    return DateRangePeriod.LastMonth;
                 case ShowReportPeriodReportPeriod.ThisMonth:
-                    return ReportPeriod.ThisMonth;
+                    return DateRangePeriod.ThisMonth;
                 case ShowReportPeriodReportPeriod.LastWeek:
-                    return ReportPeriod.LastWeek;
+                    return DateRangePeriod.LastWeek;
                 case ShowReportPeriodReportPeriod.ThisWeek:
-                    return ReportPeriod.ThisWeek;
+                    return DateRangePeriod.ThisWeek;
                 case ShowReportPeriodReportPeriod.ThisYear:
-                    return ReportPeriod.ThisYear;
+                    return DateRangePeriod.ThisYear;
                 case ShowReportPeriodReportPeriod.LastYear:
-                    return ReportPeriod.LastYear;
+                    return DateRangePeriod.LastYear;
                 default:
-                    return ReportPeriod.Unknown;
+                    return DateRangePeriod.Unknown;
             }
         }
     }

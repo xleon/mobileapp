@@ -67,9 +67,9 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<ProjectTagSuggestionSource> StartEntrySelectTag { get; }
 
-        IAnalyticsEvent<ReportsSource, int, int, double> ReportsSuccess { get; }
+        IAnalyticsEvent<DateRangeSelectionSource, int, int, double> ReportsSuccess { get; }
 
-        IAnalyticsEvent<ReportsSource, int, double> ReportsFailure { get; }
+        IAnalyticsEvent<DateRangeSelectionSource, int, double> ReportsFailure { get; }
 
         IAnalyticsEvent OfflineModeDetected { get; }
 

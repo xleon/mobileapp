@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/SummaryCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/cardElevation"
+    android:layout_marginTop="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="24dp"
+    app:cardBackgroundColor="@color/cardBackground">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/ReportsSummaryCenterView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/ReportsSummaryTotalLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:letterSpacing="0.04"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/reportsLabel"
+            android:textAllCaps="true"
+            tools:text="Total"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:id="@+id/ReportsSummaryTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            tools:text="104:23:12"
+            tools:textColor="#1ad180"
+            app:layout_constraintLeft_toLeftOf="@id/ReportsSummaryTotalLabel"
+            app:layout_constraintTop_toBottomOf="@id/ReportsSummaryTotalLabel" />
+
+        <TextView
+            android:id="@+id/ReportsSummaryBillableLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:textSize="12sp"
+            android:letterSpacing="0.04"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/reportsLabel"
+            android:textAllCaps="true"
+            tools:text="Billable"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/ReportsSummaryCenterView" />
+
+        <TextView
+            android:id="@+id/ReportsSummaryBillable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="normal"
+            android:textColor="#328fff"
+            android:fontFamily="sans-serif"
+            tools:text="86%"
+            app:layout_constraintTop_toBottomOf="@id/ReportsSummaryBillableLabel"
+            app:layout_constraintLeft_toLeftOf="@id/ReportsSummaryBillableLabel" />
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>
+    

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="cZE-iV-UFb" customClass="ReportsDonutChartLegendCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sbM-qW-gEy">
+                        <rect key="frame" x="16" y="25" width="6" height="6"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="6" id="OWb-Xd-CyA"/>
+                            <constraint firstAttribute="height" constant="6" id="Oil-e8-n4X"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="3"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FnO-pt-aLQ" customClass="FadeView">
+                        <rect key="frame" x="28" y="19" width="144.5" height="18"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Project" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sl0-BP-bp9">
+                                <rect key="frame" x="0.0" y="0.0" width="49" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Client" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eDJ-vH-Obl">
+                                <rect key="frame" x="53" y="0.0" width="40" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" name="CustomGray"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Sl0-BP-bp9" firstAttribute="top" secondItem="FnO-pt-aLQ" secondAttribute="top" id="1ck-dY-xgA"/>
+                            <constraint firstItem="Sl0-BP-bp9" firstAttribute="centerY" secondItem="FnO-pt-aLQ" secondAttribute="centerY" id="61a-aI-Ri5"/>
+                            <constraint firstItem="Sl0-BP-bp9" firstAttribute="leading" secondItem="FnO-pt-aLQ" secondAttribute="leading" id="fn1-bj-CcG"/>
+                            <constraint firstAttribute="height" constant="18" id="mQC-55-g9g"/>
+                            <constraint firstItem="eDJ-vH-Obl" firstAttribute="leading" secondItem="Sl0-BP-bp9" secondAttribute="trailing" constant="4" id="pRD-b1-jUq"/>
+                            <constraint firstItem="eDJ-vH-Obl" firstAttribute="firstBaseline" secondItem="Sl0-BP-bp9" secondAttribute="firstBaseline" id="psP-ua-yVQ"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="49%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fL7-pL-BXA">
+                        <rect key="frame" x="188.5" y="19.5" width="29.5" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" name="CustomGray"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="999:99:99" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H3y-hL-4D1">
+                        <rect key="frame" x="234" y="19.5" width="70" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="fY2-Pc-S55"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <color key="backgroundColor" name="CellBackground"/>
+            <constraints>
+                <constraint firstItem="FnO-pt-aLQ" firstAttribute="centerY" secondItem="cZE-iV-UFb" secondAttribute="centerY" id="Jxc-W3-xbL"/>
+                <constraint firstItem="FnO-pt-aLQ" firstAttribute="leading" secondItem="sbM-qW-gEy" secondAttribute="trailing" constant="6" id="K0j-Od-v6g"/>
+                <constraint firstItem="fL7-pL-BXA" firstAttribute="centerY" secondItem="cZE-iV-UFb" secondAttribute="centerY" id="KBe-YM-zSV"/>
+                <constraint firstItem="sbM-qW-gEy" firstAttribute="centerY" secondItem="cZE-iV-UFb" secondAttribute="centerY" id="U1U-Kj-Ozp"/>
+                <constraint firstItem="sbM-qW-gEy" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="16" id="UIz-XL-X6p"/>
+                <constraint firstItem="H3y-hL-4D1" firstAttribute="leading" secondItem="fL7-pL-BXA" secondAttribute="trailing" constant="16" id="Xzf-Ch-0hl"/>
+                <constraint firstItem="fL7-pL-BXA" firstAttribute="leading" secondItem="FnO-pt-aLQ" secondAttribute="trailing" constant="16" id="Zk5-qw-epU"/>
+                <constraint firstAttribute="trailing" secondItem="H3y-hL-4D1" secondAttribute="trailing" constant="16" id="lxZ-KR-Dub"/>
+                <constraint firstItem="H3y-hL-4D1" firstAttribute="centerY" secondItem="cZE-iV-UFb" secondAttribute="centerY" id="nSg-3U-ZLx"/>
+            </constraints>
+            <connections>
+                <outlet property="CircleView" destination="sbM-qW-gEy" id="sK0-24-e8Y"/>
+                <outlet property="ClientLabel" destination="eDJ-vH-Obl" id="pmT-kK-WbK"/>
+                <outlet property="FadeView" destination="FnO-pt-aLQ" id="DTs-z4-V5p"/>
+                <outlet property="PercentageLabel" destination="fL7-pL-BXA" id="3gA-41-xj1"/>
+                <outlet property="ProjectLabel" destination="Sl0-BP-bp9" id="0rF-ja-409"/>
+                <outlet property="TotalTimeLabel" destination="H3y-hL-4D1" id="wU3-gf-BSI"/>
+            </connections>
+            <point key="canvasLocation" x="106" y="54"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="CellBackground">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="CustomGray">
+            <color red="0.55686277151107788" green="0.55686277151107788" blue="0.57647061347961426" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

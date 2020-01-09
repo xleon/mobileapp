@@ -324,6 +324,11 @@ namespace Toggl.Core.UI.Helper
 
             public static readonly Color OtherProjectsSegmentBackground = pinkishGrey;
 
+            public static class Donut
+            {
+                public static readonly Color InnerCircle = White;
+            }
+
             public static class Loading
             {
                 public static readonly Color LightColor = new Color(250, 251, 252);

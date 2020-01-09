@@ -10,6 +10,9 @@ namespace Toggl.Core.Tests.TestExtensions
         public static T SingleEmittedValue<T>(this ITestableObserver<T> observer)
             => observer.Values().Single();
 
+        public static T FirstEmittedValue<T>(this ITestableObserver<T> observer)
+            => observer.Values().First();
+
         public static T LastEmittedValue<T>(this ITestableObserver<T> observer)
             => observer.Values().Last();
 

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="cZE-iV-UFb" customClass="ReportsDonutChartCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="307" height="307"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="307" height="307"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L3W-X5-kt2" customClass="DonutChartView">
+                        <rect key="frame" x="27" y="27" width="253" height="253"/>
+                        <color key="backgroundColor" name="CellBackground"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="L3W-X5-kt2" secondAttribute="height" multiplier="1:1" id="Na6-Z6-cfy"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <color key="backgroundColor" name="CellBackground"/>
+            <constraints>
+                <constraint firstItem="L3W-X5-kt2" firstAttribute="height" secondItem="cZE-iV-UFb" secondAttribute="height" constant="-54" id="LwN-Yb-4S8"/>
+                <constraint firstItem="L3W-X5-kt2" firstAttribute="centerX" secondItem="cZE-iV-UFb" secondAttribute="centerX" id="VPW-ib-CMw"/>
+                <constraint firstItem="L3W-X5-kt2" firstAttribute="centerY" secondItem="cZE-iV-UFb" secondAttribute="centerY" id="tJJ-ga-HLW"/>
+            </constraints>
+            <connections>
+                <outlet property="DonutChartView" destination="L3W-X5-kt2" id="FcB-IV-fk7"/>
+            </connections>
+            <point key="canvasLocation" x="105.79710144927537" y="53.571428571428569"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="CellBackground">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

@@ -1,6 +1,7 @@
 ﻿using System;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.DateRangePicker;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.ViewModels.Settings.Siri;
@@ -108,7 +109,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PrivateSharedStorageService,
                     dependencyContainer.PlatformInfo,
                     dependencyContainer.WidgetsService,
-                    dependencyContainer.LastTimeUsageStorage);
+                    dependencyContainer.LastTimeUsageStorage,
+                    dependencyContainer.DateRangeShortcutsService);
             }
 
             if (viewModelType == typeof(MainViewModel))
@@ -165,16 +167,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.RxActionFactory);
-            }
-
-            if (viewModelType == typeof(ReportsCalendarViewModel))
-            {
-                return new ReportsCalendarViewModel(
-                    dependencyContainer.TimeService,
-                    dependencyContainer.DataSource,
-                    dependencyContainer.RxActionFactory,
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.SchedulerProvider);
             }
 
             if (viewModelType == typeof(SelectClientViewModel))
@@ -333,16 +325,27 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService);
             }
 
+            if (viewModelType == typeof(DateRangePickerViewModel))
+            {
+                return new DateRangePickerViewModel(
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.SchedulerProvider,
+                    dependencyContainer.DateRangeShortcutsService);
+            }
+
             if (viewModelType == typeof(ReportsViewModel))
             {
                 return new ReportsViewModel(
                     dependencyContainer.DataSource,
-                    dependencyContainer.TimeService,
                     dependencyContainer.NavigationService,
                     dependencyContainer.InteractorFactory,
-                    dependencyContainer.AnalyticsService,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.AnalyticsService,
+                    dependencyContainer.TimeService,
+                    dependencyContainer.DateRangeShortcutsService);
             }
 
             if (viewModelType == typeof(AboutViewModel))
