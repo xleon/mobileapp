@@ -53,6 +53,12 @@ namespace Toggl.iOS.ViewControllers.Settings
                 .DisposedBy(DisposeBag);
 
             ViewModel.RequestCalendarPermissionsIfNeeded.Execute();
+
+            if (ViewModel is IndependentCalendarSettingsViewModel)
+            {
+                NavigationItem.RightBarButtonItem = ReactiveNavigationController.CreateSystemItem(
+                    Resources.Done, UIBarButtonItemStyle.Done, () => ViewModel.Close(null));
+            }
         }
 
         public override void DidMoveToParentViewController(UIViewController parent)

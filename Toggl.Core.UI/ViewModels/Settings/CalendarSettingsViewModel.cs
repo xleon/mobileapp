@@ -18,7 +18,7 @@ using Toggl.Storage.Settings;
 namespace Toggl.Core.UI.ViewModels.Settings
 {
     [Preserve(AllMembers = true)]
-    public sealed class CalendarSettingsViewModel : SelectUserCalendarsViewModelBase
+    public class CalendarSettingsViewModel : SelectUserCalendarsViewModelBase
     {
         private readonly IPermissionsChecker permissionsChecker;
         private readonly IRxActionFactory rxActionFactory;

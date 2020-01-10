@@ -311,6 +311,19 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory);
             }
 
+            if (viewModelType == typeof(IndependentCalendarSettingsViewModel))
+            {
+                return new IndependentCalendarSettingsViewModel(
+                    dependencyContainer.UserPreferences,
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.OnboardingStorage,
+                    dependencyContainer.AnalyticsService,
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.PermissionsChecker,
+                    dependencyContainer.SchedulerProvider);
+            }
+
             if (viewModelType == typeof(CalendarViewModel))
             {
                 return new CalendarViewModel(
@@ -322,6 +335,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.BackgroundService,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.SchedulerProvider,
+                    dependencyContainer.OnboardingStorage,
+                    dependencyContainer.PermissionsChecker,
                     dependencyContainer.NavigationService);
             }
 

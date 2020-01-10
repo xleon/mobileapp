@@ -120,6 +120,8 @@ namespace Toggl.Core.UI.ViewModels
                 backgroundService,
                 interactorFactory,
                 schedulerProvider,
+                onboardingStorage,
+                permissionsChecker,
                 navigationService);
 
             Tabs = getViewModels().ToList();

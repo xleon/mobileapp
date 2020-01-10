@@ -22,7 +22,6 @@ namespace Toggl.Storage.Settings
         private const string lastAccessDateKey = "LastAccessDate";
         private const string firstAccessDateKey = "FirstAccessDate";
         private const string completedOnboardingKey = "CompletedOnboarding";
-        private const string completedCalendarOnboardingKey = "CompletedCalendarOnboarding";
 
         private const string preferManualModeKey = "PreferManualMode";
         private const string runningTimerNotificationsKey = "RunningTimerNotifications";
@@ -51,6 +50,7 @@ namespace Toggl.Storage.Settings
         private const string enabledCalendarsKey = "EnabledCalendars";
         private const char calendarIdSeparator = ';';
         private const string isFirstTimeConnectingCalendarsKey = "IsFirstTimeConnectingCalendars";
+        private const string calendarViewWasOpenedBeforeKey = "CalendarViewWasOpenedBefore";
 
         private const string calendarNotificationsEnabledKey = "CalendarNotificationsEnabled";
         private const string timeSpanBeforeCalendarNotificationsKey = "TimeSpanBeforeCalendarNotifications";
@@ -190,6 +190,12 @@ namespace Toggl.Storage.Settings
 
         public IObservable<bool> HasTimeEntryBeenContinued { get; }
 
+        public bool CalendarViewWasOpenedBefore()
+            => keyValueStorage.GetBool(calendarViewWasOpenedBeforeKey);
+
+        public void SetCalendarViewWasOpenedBefore()
+        => keyValueStorage.SetBool(calendarViewWasOpenedBeforeKey, true);
+
         public void SetLastOpened(DateTimeOffset date)
         {
             keyValueStorage.SetDateTimeOffset(lastAccessDateKey, date);
@@ -230,14 +236,7 @@ namespace Toggl.Storage.Settings
             keyValueStorage.SetBool(completedOnboardingKey, true);
         }
 
-        public void SetCompletedCalendarOnboarding()
-        {
-            keyValueStorage.SetBool(completedCalendarOnboardingKey, true);
-        }
-
         public bool CompletedOnboarding() => keyValueStorage.GetBool(completedOnboardingKey);
-
-        public bool CompletedCalendarOnboarding() => keyValueStorage.GetBool(completedCalendarOnboardingKey);
 
         public DateTimeOffset? GetLastOpened() => keyValueStorage.GetDateTimeOffset(lastAccessDateKey);
 
