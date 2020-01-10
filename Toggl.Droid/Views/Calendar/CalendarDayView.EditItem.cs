@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Android.Animation;
 using Android.Graphics;
 using Android.Views;
 using Toggl.Core.Calendar;
@@ -15,24 +16,103 @@ namespace Toggl.Droid.Views.Calendar
 {
     public partial class CalendarDayView
     {
-        private const int smoothAutoScrollDurationInMillis = 300;
         private readonly RectF dragTopRect = new RectF();
         private readonly RectF dragBottomRect = new RectF();
-
+        private readonly RectF eventStartingRect = new RectF();
+        private const float dragAcceleration = 0.1f;
+        private const float dragMaxSpeed = 15f;
+        
         private string startHourLabel = string.Empty;
         private string endHourLabel = string.Empty;
-        private int distanceFromItemTopAndFirstTouch;
         private int handleTouchExtraMargins;
-        private int autoScrollExtraDelta;
-        private bool shouldTryToAutoScrollToEvent = false;
+        private bool shouldTryToAutoScrollToEvent;
         private DateTimeOffset previousStartTime;
         private DateTimeOffset previousEndTime;
         private EditAction editAction = EditAction.None;
+        private ValueAnimator autoScrollAnimator;
+        private bool autoScrollWasCancelled;
+        private bool isDragging;
+        private float draggingScrollDelta;
+        private float draggingDelta;
+        private float draggingSpeed;
+        private float currentTouchY;
+        private float dragStartingTouchY;
+        private float dragStartingScrollOffset;
+        private int draggingDirection;
 
         partial void initEventEditionBackingFields()
         {
-            handleTouchExtraMargins = 24.DpToPixels(Context);
-            autoScrollExtraDelta = 5.DpToPixels(Context);
+            handleTouchExtraMargins = Context.GetDimen(Resource.Dimension.calendarEditingHandleTouchExtraMargins);
+            autoScrollAnimator = ValueAnimator.OfFloat(0f, 1f);
+            autoScrollAnimator.SetDuration(240);
+            autoScrollAnimator.AnimationStart += (sender, args) => onAnimationStarted();
+            autoScrollAnimator.Update += (sender, args) => continueAutoScroll();
+            autoScrollAnimator.AnimationEnd += (sender, args) => restartAutoScroll();
+            autoScrollAnimator.AnimationCancel += (sender, args) => onAnimationCancelled();
+        }
+
+        private void onAnimationStarted()
+        {
+            autoScrollWasCancelled = false;
+        }
+        
+        private void onAnimationCancelled()
+        {
+            autoScrollWasCancelled = true;
+        }
+
+        private void restartAutoScroll()
+        {
+            if (autoScrollWasCancelled || !isDragging || autoScrollAnimator.IsRunning)
+                return;
+
+            if (scrollOffset > 0 && scrollOffset < maxHeight - Height && itemInEditModeRect.Top > 0 && itemInEditModeRect.Bottom < maxHeight)
+            {
+                autoScrollAnimator.Start();
+            }
+        }
+
+        private void continueAutoScroll()
+        {
+            if (!isDragging)
+                return;
+
+            draggingSpeed = (draggingSpeed + dragAcceleration * draggingDirection).Clamp(-dragMaxSpeed, dragMaxSpeed);
+            scrollOffsetSubject.OnNext((int) (scrollOffset + draggingSpeed).Clamp(0f, maxHeight - Height));
+            draggingScrollDelta = scrollOffset - dragStartingScrollOffset;
+
+            if (draggingDirection == -1 && scrollOffset <= 0 || draggingDirection == 1 && scrollOffset >= maxHeight - Height)
+            {
+                cancelDraggingAndAutoScroll();
+                PostInvalidate();
+                return;
+            }
+
+            switch (editAction)
+            {
+                case EditAction.ChangeStart:
+                    updateItemInEditModeStartTime();
+                    break;
+                case EditAction.ChangeEnd:
+                    updateItemInEditModeEndTime();
+                    break;
+                case EditAction.ChangeOffset:
+                    updateItemInEditModeOffset();
+                    break;
+            }
+
+            PostInvalidate();
+        }
+        
+        private void cancelDraggingAndAutoScroll()
+        {
+            draggingSpeed = 0;
+            draggingDirection = 0;
+            if (autoScrollAnimator.IsRunning)
+            {
+                autoScrollAnimator.Cancel();
+            }
+            Invalidate();
         }
 
         private void onTouchDownWhileEditingItem(MotionEvent e1)
@@ -46,6 +126,10 @@ namespace Toggl.Droid.Views.Calendar
 
             var touchX = e1.GetX();
             var touchY = e1.GetY();
+
+            dragStartingTouchY = touchY;
+            dragStartingScrollOffset = scrollOffset;
+            eventStartingRect.Set(itemInEditModeRect);
 
             if (dragTopRect.Contains(touchX, touchY + scrollOffset))
             {
@@ -61,15 +145,14 @@ namespace Toggl.Droid.Views.Calendar
             }
             else if (tapCheckRectF.Contains(touchX, touchY + scrollOffset))
             {
-                var topDuringOffsetChangeStart = (int)tapCheckRectF.Top;
-                var firstTouchYDuringOffsetChangeStart = (int) e1.GetY() + scrollOffset;
-                distanceFromItemTopAndFirstTouch = firstTouchYDuringOffsetChangeStart - topDuringOffsetChangeStart;
                 editAction = EditAction.ChangeOffset;
             }
             else
             {
                 editAction = EditAction.None;
             }
+
+            isDragging = editAction != EditAction.None;
         }
 
         private void calculateTopDragRect(CalendarItemEditInfo activeItemEditInfo)
@@ -90,61 +173,80 @@ namespace Toggl.Droid.Views.Calendar
             dragBottomRect.Left -= handleTouchExtraMargins;
         }
 
-        private bool handleDragInEditMode(MotionEvent e1, MotionEvent e2, float deltaX, float deltaY)
+        private void dragEvent(MotionEvent e)
         {
             var calendarItemInfoInEditMode = itemEditInEditMode;
-            if (!calendarItemInfoInEditMode.IsValid) return false;
+            if (!calendarItemInfoInEditMode.IsValid) return;
 
-            var histCount = e2.HistorySize;
+            var histCount = e.HistorySize;
             var avgYtouch = 0f;
             for (var i = 0; i < histCount; i++)
             {
-                avgYtouch += e2.GetHistoricalY(0, i);
+                avgYtouch += e.GetHistoricalY(0, i);
             }
 
-            var touchY = histCount > 0 ? avgYtouch / histCount : e2.GetY();
-
+            var touchY = histCount > 0 ? avgYtouch / histCount : e.GetY();
+            currentTouchY = touchY;
+            draggingDelta = touchY - dragStartingTouchY;
+            draggingScrollDelta = scrollOffset - dragStartingScrollOffset;
             switch (editAction)
             {
                 case EditAction.ChangeStart:
-                    changeStartTime(touchY - deltaY + scrollOffset);
+                    updateItemInEditModeStartTime();
                     break;
 
                 case EditAction.ChangeEnd:
-                    changeEndTime(touchY - deltaY + scrollOffset);
+                    updateItemInEditModeEndTime();
                     break;
 
                 case EditAction.ChangeOffset:
-                    changeOffset(touchY + -deltaY + scrollOffset - distanceFromItemTopAndFirstTouch);
+                    updateItemInEditModeOffset();
                     break;
-
-                case EditAction.None:
-                    return false;
-
-                default:
-                    return false;
             }
 
+            if (shouldAutoScrollUp())
+            {
+                draggingDirection = -1;
+            }
+            else if (shouldAutoScrollDown())
+            {
+                draggingDirection = 1;
+            }
+            else
+            {
+                cancelDraggingAndAutoScroll();
+            }
+
+            if (draggingDirection != 0 && !autoScrollAnimator.IsRunning)
+                autoScrollAnimator.Start();
+
             Invalidate();
-            return true;
         }
 
-        private void changeStartTime(float touchY)
+        private bool shouldAutoScrollUp()
+            => currentTouchY + scrollOffset < topAreaTriggerLine
+               && scrollOffset > 0
+               && itemInEditModeRect.Top > 0;
+
+        private bool shouldAutoScrollDown()
+            => currentTouchY + scrollOffset > bottomAreaTriggerLine
+               && scrollOffset < maxHeight - Height
+               && itemInEditModeRect.Bottom < maxHeight;
+
+        private void updateItemInEditModeStartTime()
         {
             if (!itemEditInEditMode.IsValid)
                 return;
 
-            if (touchY < 0 || touchY >= maxHeight)
-                return;
-
-            itemInEditModeRect.Top = touchY;
+            var newTop = (eventStartingRect.Top + draggingDelta + draggingScrollDelta).Clamp(0f, itemInEditModeRect.Bottom);
+            itemInEditModeRect.Top = newTop;
 
             var itemToEdit = itemEditInEditMode;
             var calendarItem = itemToEdit.CalendarItem;
 
             var now = timeService.CurrentDateTime;
 
-            var newStartTime = newStartTimeWithDynamicDuration(touchY, allItemsStartAndEndTime);
+            var newStartTime = newStartTimeWithDynamicDuration(itemInEditModeRect.Top, allItemsStartAndEndTime);
             var newDuration = calendarItem.Duration.HasValue ? calendarItem.EndTime(now) - newStartTime : null as TimeSpan?;
 
             if (newDuration != null && newDuration <= TimeSpan.Zero ||
@@ -164,15 +266,13 @@ namespace Toggl.Droid.Views.Calendar
                 shouldTryToAutoScrollToEvent = true;
             }
 
-            if (isScrolling) return;
-
-            if (touchY < scrollOffset)
-                autoScroll((int) -(scrollOffset - touchY + autoScrollExtraDelta));
-            else
-                stopScroll();
+            if (newTop <= 0)
+            {
+                cancelDraggingAndAutoScroll();
+            }
         }
 
-        private void changeEndTime(float touchY)
+        private void updateItemInEditModeEndTime()
         {
             if (!itemEditInEditMode.IsValid)
                 return;
@@ -181,15 +281,13 @@ namespace Toggl.Droid.Views.Calendar
             if (itemToEdit.CalendarItem.Duration == null)
                 return;
 
-            if (touchY < 0 || touchY >= maxHeight)
-                return;
-            
-            itemInEditModeRect.Bottom = touchY;
+            var newBottom = (eventStartingRect.Bottom + draggingDelta + draggingScrollDelta).Clamp(itemInEditModeRect.Top, maxHeight);
+            itemInEditModeRect.Bottom = newBottom;
 
             var now = timeService.CurrentDateTime;
             var calendarItem = itemToEdit.CalendarItem;
 
-            var newEndTime = newEndTimeWithDynamicDuration(touchY, allItemsStartAndEndTime);
+            var newEndTime = newEndTimeWithDynamicDuration(itemInEditModeRect.Bottom, allItemsStartAndEndTime);
             var newDuration = newEndTime - calendarItem.StartTime;
 
             if (newDuration <= TimeSpan.Zero || newEndTime >= currentDate.AddDays(1))
@@ -208,33 +306,30 @@ namespace Toggl.Droid.Views.Calendar
                 shouldTryToAutoScrollToEvent = true;
             }
 
-            if (isScrolling) return;
-
-            if (touchY > Height + scrollOffset)
-                autoScroll((int) (touchY - (Height + scrollOffset) + autoScrollExtraDelta));
-            else
-                stopScroll();
+            if (newBottom >= maxHeight)
+                cancelDraggingAndAutoScroll();
         }
 
-        private void changeOffset(float touchY)
+        private void updateItemInEditModeOffset()
         {
             if (!itemEditInEditMode.IsValid)
                 return;
 
             var itemToEdit = itemEditInEditMode;
             var calendarItem = itemToEdit.CalendarItem;
-            
-            if (touchY < 0 || touchY >= maxHeight)
-                return;
-            
-            var newBottom = touchY + itemInEditModeRect.Height();
-            if (newBottom < 0 || newBottom >= maxHeight)
-                return;
-            
-            itemInEditModeRect.Top = touchY;
-            itemInEditModeRect.Bottom = newBottom;
 
-            var newStartTime = newStartTimeWithStaticDuration(touchY, allItemsStartAndEndTime, calendarItem.Duration);
+            var newTop = eventStartingRect.Top + draggingDelta + draggingScrollDelta;
+            var newBottom = eventStartingRect.Bottom + draggingDelta + draggingScrollDelta;
+
+            if (newTop <= 0 || newBottom >= maxHeight)
+            {
+                cancelDraggingAndAutoScroll();
+                return;
+            }
+
+            itemInEditModeRect.Top = newTop;
+            itemInEditModeRect.Bottom = newBottom;
+            var newStartTime = newStartTimeWithStaticDuration(itemInEditModeRect.Top, allItemsStartAndEndTime, calendarItem.Duration);
 
             var now = timeService.CurrentDateTime;
 
@@ -252,38 +347,6 @@ namespace Toggl.Droid.Views.Calendar
                 previousStartTime = newStartTime;
                 shouldTryToAutoScrollToEvent = true;
             }
-
-            var duration = calendarItem.Duration(now);
-            var durationInPx = duration.TotalHours * hourHeight;
-            
-            if (isScrolling) return;
-            
-            if (touchY < scrollOffset)
-                autoScroll((int) -(scrollOffset - touchY + autoScrollExtraDelta));
-            else if (touchY + durationInPx > Height + scrollOffset)
-                autoScroll((int) (touchY + durationInPx - (Height + scrollOffset) + autoScrollExtraDelta));
-            else
-                stopScroll();
-        }
-
-        private void autoScroll(int deltaY, bool smoothly = false)
-        {
-            if (isScrolling) return;
-            
-            scroller.ForceFinished(true);
-            isScrolling = true;
-            if (smoothly)
-                scroller.StartScroll(0, scrollOffset, 0, deltaY);
-            else
-                scroller.StartScroll(0, scrollOffset, 0, deltaY, smoothAutoScrollDurationInMillis);
-
-            handler.Post(continueScroll);
-        }
-
-        private void stopScroll()
-        {
-            scroller.ForceFinished(true);
-            isScrolling = false;
         }
 
         private void updateItemInEditMode(DateTimeOffset startTime, TimeSpan duration)
