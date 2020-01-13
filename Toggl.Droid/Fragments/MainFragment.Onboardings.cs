@@ -10,7 +10,6 @@ using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Helper;
-using Toggl.Droid.ViewHolders;
 using Toggl.Droid.ViewHolders.MainLog;
 using Toggl.Shared.Extensions;
 
@@ -116,12 +115,8 @@ namespace Toggl.Droid.Fragments
 
         private void setupTapToEditOnboardingStep()
         {
-            tapToEditPopup = PopupWindowFactory.PopupWindowWithText(
-                Context,
-                Resource.Layout.TooltipWithLeftTopArrow,
-                Resource.Id.TooltipText,
-                Shared.Resources.TapToEditIt);
-
+            tapToEditPopup ??= createTapToEditPopup();
+            
             editTimeEntryOnboardingStep = new EditTimeEntryOnboardingStep(
                 ViewModel.OnboardingStorage, Observable.Return(false));
 
@@ -142,7 +137,8 @@ namespace Toggl.Droid.Fragments
 
         private void updateTapToEditOnboardingStep(MainLogCellViewHolder oldestVisibleTimeEntryViewHolder)
         {
-            tapToEditPopup?.Dismiss();
+            tapToEditPopup?.Dismiss(); 
+            tapToEditPopup ??= createTapToEditPopup();
 
             if (oldestVisibleTimeEntryViewHolder == null)
                 return;
@@ -160,6 +156,13 @@ namespace Toggl.Droid.Fragments
                     oldestVisibleTimeEntryViewHolder.ItemView,
                     (window, view) => PopupOffsets.FromDp(16, -4, Context));
         }
+
+        private PopupWindow createTapToEditPopup()
+            => PopupWindowFactory.PopupWindowWithText(
+                Context,
+                Resource.Layout.TooltipWithLeftTopArrow,
+                Resource.Id.TooltipText,
+                Shared.Resources.TapToEditIt);
 
         private MainLogCellViewHolder findOldestTimeEntryView()
         {
