@@ -242,6 +242,7 @@ namespace Toggl.Core
             calendarService,
             userPreferences,
             analyticsService,
+            onboardingStorage,
             notificationService,
             lastTimeUsageStorage,
             shortcutCreator,
