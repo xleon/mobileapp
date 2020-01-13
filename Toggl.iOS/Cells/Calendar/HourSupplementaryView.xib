@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,9 +16,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="607" height="20"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D8j-S2-83X">
-                        <rect key="frame" x="16" y="0.0" width="32" height="20"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D8j-S2-83X">
+                        <rect key="frame" x="6" y="0.0" width="42" height="20"/>
                         <constraints>
+                            <constraint firstAttribute="width" constant="42" id="0RV-R9-HD0"/>
                             <constraint firstAttribute="height" constant="20" id="RfK-Sg-N0I"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -40,7 +39,7 @@
                 <constraint firstItem="zwI-f9-qCG" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="76" id="2kJ-Jh-N1S"/>
                 <constraint firstItem="D8j-S2-83X" firstAttribute="centerY" secondItem="cZE-iV-UFb" secondAttribute="centerY" id="2mS-df-lw3"/>
                 <constraint firstAttribute="trailing" secondItem="zwI-f9-qCG" secondAttribute="trailing" id="3zi-IR-U7b"/>
-                <constraint firstItem="D8j-S2-83X" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="16" id="8Mu-oO-E2j"/>
+                <constraint firstItem="D8j-S2-83X" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="6" id="8Mu-oO-E2j"/>
                 <constraint firstItem="D8j-S2-83X" firstAttribute="centerY" secondItem="cZE-iV-UFb" secondAttribute="centerY" id="BS2-aN-nhV"/>
                 <constraint firstItem="zwI-f9-qCG" firstAttribute="centerY" secondItem="cZE-iV-UFb" secondAttribute="centerY" id="Edr-wz-RB4"/>
                 <constraint firstItem="D8j-S2-83X" firstAttribute="top" secondItem="cZE-iV-UFb" secondAttribute="top" id="ebs-e1-gGh"/>
