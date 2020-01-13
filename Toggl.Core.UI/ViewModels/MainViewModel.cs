@@ -68,6 +68,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         private readonly ISubject<Unit> hideRatingView = new Subject<Unit>();
+        private IObservable<bool> shouldShowRatingViewObservable;
 
         private readonly MainLogSection userFeedbackMainLogSection;
 
@@ -270,14 +271,18 @@ namespace Toggl.Core.UI.ViewModels
             StopTimeEntry = rxActionFactory.FromObservable<TimeEntryStopOrigin>(stopTimeEntry, IsTimeEntryRunning);
             ContinueTimeEntry = rxActionFactory.FromAsync<ContinueTimeEntryInfo, IThreadSafeTimeEntry>(continueTimeEntry);
 
-            ShouldShowRatingView = Observable.Merge(
+            shouldShowRatingViewObservable = Observable.Merge(
                     ratingViewExperiment.RatingViewShouldBeVisible,
                     RatingViewModel.HideRatingView.SelectValue(false),
                     hideRatingView.AsObservable().SelectValue(false)
                 )
+                .StartWith(false)
                 .Select(canPresentRating)
                 .DistinctUntilChanged()
-                .Do(trackRatingViewPresentation)
+                .Do(trackRatingViewPresentation);
+
+            ShouldShowRatingView =
+                shouldShowRatingViewObservable
                 .AsDriver(schedulerProvider);
 
             OnboardingStorage.StopButtonWasTappedBefore
@@ -294,7 +299,7 @@ namespace Toggl.Core.UI.ViewModels
             MainLogItems = TimeEntriesViewModel.TimeEntries
                 .MergeToMainLogSections(
                     SuggestionsViewModel.Suggestions,
-                    ShouldShowRatingView,
+                    shouldShowRatingViewObservable,
                     userFeedbackMainLogSection)
                 .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider);
         }
