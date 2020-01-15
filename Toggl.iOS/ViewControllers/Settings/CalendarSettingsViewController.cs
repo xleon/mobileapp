@@ -1,4 +1,5 @@
 using System;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Extensions;
@@ -32,6 +33,7 @@ namespace Toggl.iOS.ViewControllers.Settings
             header.TranslatesAutoresizingMaskIntoConstraints = false;
             header.HeightAnchor.ConstraintEqualTo(tableViewHeaderHeight).Active = true;
             header.WidthAnchor.ConstraintEqualTo(UserCalendarsTableView.WidthAnchor).Active = true;
+            header.SetCalendarIntegrationStatus(IosDependencyContainer.Instance.UserPreferences.CalendarIntegrationEnabled());
 
             var source = new SelectUserCalendarsTableViewSource(UserCalendarsTableView, ViewModel.SelectCalendar);
             UserCalendarsTableView.Source = source;
@@ -40,24 +42,23 @@ namespace Toggl.iOS.ViewControllers.Settings
                 .Subscribe(UserCalendarsTableView.Rx().ReloadSections(source))
                 .DisposedBy(DisposeBag);
 
-            ViewModel.PermissionGranted
-                .Subscribe(header.SetCalendarPermissionStatus)
-                .DisposedBy(DisposeBag);
-
-            header.EnableCalendarAccessTapped
-                .Subscribe(ViewModel.RequestAccess.Inputs)
-                .DisposedBy(DisposeBag);
+            header.LinkCalendarsSwitchTapped
+                .Subscribe(ViewModel.ToggleCalendarIntegration.Execute);
 
             source.Rx().ModelSelected()
                 .Subscribe(ViewModel.SelectCalendar.Inputs)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.RequestCalendarPermissionsIfNeeded.Execute();
+            IosDependencyContainer.Instance.BackgroundService
+                .AppResumedFromBackground
+                .Select(_ => IosDependencyContainer.Instance.UserPreferences.CalendarIntegrationEnabled())
+                .Subscribe(header.SetCalendarIntegrationStatus)
+                .DisposedBy(DisposeBag);
 
             if (ViewModel is IndependentCalendarSettingsViewModel)
             {
                 NavigationItem.RightBarButtonItem = ReactiveNavigationController.CreateSystemItem(
-                    Resources.Done, UIBarButtonItemStyle.Done, () => ViewModel.Close(null));
+                    Resources.Done, UIBarButtonItemStyle.Done, Close);
             }
         }
 

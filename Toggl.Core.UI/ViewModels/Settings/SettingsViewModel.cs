@@ -309,7 +309,7 @@ namespace Toggl.Core.UI.ViewModels
         }
 
         private Task openCalendarSettings()
-            => Navigate<CalendarSettingsViewModel, bool, string[]>(false);
+            => Navigate<CalendarSettingsViewModel>();
 
         private Task openCalendarSmartReminders()
             => Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();

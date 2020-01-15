@@ -30,11 +30,11 @@ namespace Toggl.Droid.Activities
         protected override void InitializeBindings()
         {
             toggleCalendarsView.Rx()
-                .BindAction(ViewModel.TogglCalendarIntegration)
+                .BindAction(ViewModel.ToggleCalendarIntegration)
                 .DisposedBy(DisposeBag);
 
             toggleCalendarsSwitch.Rx()
-                .BindAction(ViewModel.TogglCalendarIntegration)
+                .BindAction(ViewModel.ToggleCalendarIntegration)
                 .DisposedBy(DisposeBag);
 
             ViewModel.CalendarListVisible

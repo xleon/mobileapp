@@ -269,7 +269,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Select(calendar => new SelectableUserCalendarViewModel(calendar, false));
 
                 ViewModel.SelectCalendar.ExecuteSequentally(calendars)
-                    .PrependAction(ViewModel.TogglCalendarIntegration)
+                    .PrependAction(ViewModel.ToggleCalendarIntegration)
                     .PrependAction(ViewModel.Save)
                     .Subscribe();
 

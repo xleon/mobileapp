@@ -51,8 +51,8 @@ namespace Toggl.Storage.Settings
         bool DidShowSiriClipboardInstruction();
         void SetDidShowSiriClipboardInstruction(bool value);
 
-        bool CalendarViewWasOpenedBefore();
-        void SetCalendarViewWasOpenedBefore();
+        bool CalendarPermissionWasAskedBefore();
+        void SetCalendarPermissionWasAskedBefore();
         bool IsFirstTimeConnectingCalendars();
         void SetIsFirstTimeConnectingCalendars();
 

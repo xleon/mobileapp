@@ -47,6 +47,7 @@ namespace Toggl.Storage.Settings
         private const string lastLoginKey = "LastLogin";
         private const string lastTimePlaceholdersWereCreated = "LastPullTimeEntries";
 
+        private const string calendarIntegrationEnabledKey = "CalendarIntegrationEnabled";
         private const string enabledCalendarsKey = "EnabledCalendars";
         private const char calendarIdSeparator = ';';
         private const string isFirstTimeConnectingCalendarsKey = "IsFirstTimeConnectingCalendars";
@@ -77,6 +78,7 @@ namespace Toggl.Storage.Settings
         private readonly ISubject<bool> areStoppedTimerNotificationsEnabledSubject;
         private readonly ISubject<bool> hasTimeEntryBeenContinuedSubject;
         private readonly ISubject<bool> navigatedAwayFromMainViewAfterTappingStopButtonSubject;
+        private readonly ISubject<bool> calendarIntegrationEnabledSubject;
         private readonly ISubject<List<string>> enabledCalendarsSubject;
         private readonly ISubject<bool> calendarNotificationsEnabledSubject;
         private readonly ISubject<TimeSpan> timeSpanBeforeCalendarNotificationsSubject;
@@ -103,6 +105,7 @@ namespace Toggl.Storage.Settings
             (userSignedUpUsingTheAppSubject, UserSignedUpUsingTheApp) = prepareSubjectAndObservable(userSignedUpUsingTheAppKey, keyValueStorage.GetBool);
             (startButtonWasTappedSubject, StartButtonWasTappedBefore) = prepareSubjectAndObservable(startButtonWasTappedBeforeKey, keyValueStorage.GetBool);
             (projectOrTagWasAddedSubject, ProjectOrTagWasAddedBefore) = prepareSubjectAndObservable(projectOrTagWasAddedBeforeKey, keyValueStorage.GetBool);
+            (calendarIntegrationEnabledSubject, CalendarIntegrationEnabledObservable) = prepareSubjectAndObservable(calendarIntegrationEnabledKey, keyValueStorage.GetBool);
             (calendarNotificationsEnabledSubject, CalendarNotificationsEnabled) = prepareSubjectAndObservable(calendarNotificationsEnabledKey, keyValueStorage.GetBool);
             (navigatedAwayFromMainViewAfterTappingStopButtonSubject, NavigatedAwayFromMainViewAfterTappingStopButton) = prepareSubjectAndObservable(navigatedAwayFromMainViewAfterTappingStopButtonKey, keyValueStorage.GetBool);
             (hasTimeEntryBeenContinuedSubject, HasTimeEntryBeenContinued) = prepareSubjectAndObservable(hasTimeEntryBeenContinuedKey, keyValueStorage.GetBool);
@@ -190,10 +193,10 @@ namespace Toggl.Storage.Settings
 
         public IObservable<bool> HasTimeEntryBeenContinued { get; }
 
-        public bool CalendarViewWasOpenedBefore()
+        public bool CalendarPermissionWasAskedBefore()
             => keyValueStorage.GetBool(calendarViewWasOpenedBeforeKey);
 
-        public void SetCalendarViewWasOpenedBefore()
+        public void SetCalendarPermissionWasAskedBefore()
         => keyValueStorage.SetBool(calendarViewWasOpenedBeforeKey, true);
 
         public void SetLastOpened(DateTimeOffset date)
@@ -359,6 +362,7 @@ namespace Toggl.Storage.Settings
         public IObservable<bool> AreRunningTimerNotificationsEnabledObservable { get; }
         public IObservable<bool> AreStoppedTimerNotificationsEnabledObservable { get; }
         public IObservable<bool> SwipeActionsEnabled { get; }
+        public IObservable<bool> CalendarIntegrationEnabledObservable { get; }
         public IObservable<List<string>> EnabledCalendars { get; }
         public IObservable<bool> CalendarNotificationsEnabled { get; }
         public IObservable<TimeSpan> TimeSpanBeforeCalendarNotifications { get; }
@@ -406,6 +410,15 @@ namespace Toggl.Storage.Settings
             SetRunningTimerNotifications(false);
             isManualModeEnabledSubject.OnNext(false);
             SetEnabledCalendars();
+        }
+
+        bool IUserPreferences.CalendarIntegrationEnabled()
+            => keyValueStorage.GetBool(calendarIntegrationEnabledKey);
+
+        public void SetCalendarIntegrationEnabled(bool enabled)
+        {
+            keyValueStorage.SetBool(calendarIntegrationEnabledKey, enabled);
+            calendarIntegrationEnabledSubject.OnNext(enabled);
         }
 
         public List<string> EnabledCalendarIds()
