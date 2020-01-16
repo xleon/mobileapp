@@ -189,7 +189,7 @@ namespace Toggl.Core
             => new TimeService(SchedulerProvider.DefaultScheduler);
 
         protected virtual IBackgroundService CreateBackgroundService()
-            => new BackgroundService(TimeService, AnalyticsService, UpdateRemoteConfigCacheService);
+            => new BackgroundService(TimeService, AnalyticsService, UpdateRemoteConfigCacheService, InteractorFactory);
 
         protected virtual IAutomaticSyncingService CreateAutomaticSyncingService()
             => new AutomaticSyncingService(BackgroundService, TimeService, LastTimeUsageStorage);
