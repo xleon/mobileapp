@@ -87,6 +87,17 @@ namespace Toggl.Core.UI.ViewModels.Settings
             CalendarIntegrationEnabled = userPreferences.CalendarIntegrationEnabledObservable
                 .StartWith(userPreferences.CalendarIntegrationEnabled())
                 .DistinctUntilChanged();
+
+            userPreferences.EnabledCalendars
+                .Take(1)
+                .Subscribe(setEnabledCalendars);
+        }
+
+        private void setEnabledCalendars(IEnumerable<string> enabledCalendarIds)
+        {
+            initialSelectedCalendarIds.AddRange(enabledCalendarIds);
+            selectedCalendarIds.AddRange(enabledCalendarIds);
+            reloadCalendars();
         }
 
         public override void ViewAppeared()
@@ -112,6 +123,12 @@ namespace Toggl.Core.UI.ViewModels.Settings
         {
             userPreferences.SetEnabledCalendars(initialSelectedCalendarIds.ToArray());
             return base.CloseWithDefaultResult();
+        }
+
+        public override void Close()
+        {
+            userPreferences.SetEnabledCalendars(selectedCalendarIds.ToArray());
+            base.Close();
         }
 
         private void disableCalendarIntegartionIfNeeded(bool calendarPermissionGranted)

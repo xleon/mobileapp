@@ -138,9 +138,14 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private void onCalendarPermission(bool granted)
         {
             if (granted)
+            {
+                userPreferences.SetCalendarIntegrationEnabled(true);
                 Navigate<IndependentCalendarSettingsViewModel>();
+            }
             else
+            {
                 Navigate<CalendarPermissionDeniedViewModel>();
+            }
         }
 
         public override void ViewDestroyed()
