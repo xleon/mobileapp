@@ -37,6 +37,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     BackgroundService,
                     InteractorFactory,
                     SchedulerProvider,
+                    OnboardingStorage,
+                    PermissionsChecker,
                     NavigationService
                 );
 
@@ -79,6 +81,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useBackgroundService,
                 bool useInteractorFactory,
                 bool useSchedulerProvider,
+                bool useOnboardingStorage,
+                bool usePermissionChecker,
                 bool useNavigationService,
                 bool useRxActionFactory)
             {
@@ -90,6 +94,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var backgroundService = useBackgroundService ? BackgroundService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
+                var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
+                var permissionChecker = usePermissionChecker ? PermissionsChecker : null;
                 var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
@@ -102,6 +108,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         backgroundService,
                         interactorFactory,
                         schedulerProvider,
+                        onboardingStorage,
+                        permissionChecker,
                         navigationService);
 
                 tryingToConstructWithEmptyParameters.Should().Throw<ArgumentNullException>();

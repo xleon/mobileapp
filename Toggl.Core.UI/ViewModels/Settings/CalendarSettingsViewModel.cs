@@ -28,7 +28,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
     [Preserve(AllMembers = true)]
     public class CalendarSettingsViewModel : ViewModel
     {
-        private readonly IRxActionFactory rxActionFactory;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly IOnboardingStorage onboardingStorage;
@@ -42,7 +41,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
         private HashSet<string> initialSelectedCalendarIds { get; } = new HashSet<string>();
         private HashSet<string> selectedCalendarIds { get; } = new HashSet<string>();
 
-        public IObservable<bool> CalendarIntegrationEnabled { get; }
         public IObservable<ImmutableCalendarSectionModel> Calendars { get; }
 
         public ViewAction ToggleCalendarIntegration { get; }
@@ -68,7 +66,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
 
-            this.rxActionFactory = rxActionFactory;
             this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
             this.onboardingStorage = onboardingStorage;
@@ -80,9 +77,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
             ToggleCalendarIntegration = rxActionFactory.FromAsync(toggleCalendarIntegration);
 
             Calendars = calendarsSubject.AsObservable().DistinctUntilChanged();
-            CalendarIntegrationEnabled = userPreferences.CalendarIntegrationEnabledObservable
-                .StartWith(userPreferences.CalendarIntegrationEnabled())
-                .DistinctUntilChanged();
         }
 
         public override async Task Initialize()
