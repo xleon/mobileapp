@@ -48,7 +48,7 @@ After creating this issue, and reading thru the above comments and warnings, fee
 * [ ] 🔳 Make sure the project contains all the necessary columns for the issues (according to what the project lead and all the involved developers find to be most effective).
 * [ ] 📎 Make sure that all the related issues are assigned to the created project.
 * [ ] 🔀 Order the issues the way you think is **most effective** in your current project team, but do not forget about the **critical path**. If possible, put less important features to the end of the queue, in case something needs to be cut because of the delays.
-* [ ] ⌚ Estimate the require time for each issue. 
+* [ ] ⌚ Estimate the required time for each issue. 
     * [ ] Double-check those estimates with the rest of the project team to make sure that everyone agrees on them.
 * [ ] 🕓 `[Project Lead]` Schedule the project in coordination with the team lead, taking into account all the ongoing projects and the schedule of all participants.
 
