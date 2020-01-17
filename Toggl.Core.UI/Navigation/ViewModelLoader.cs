@@ -109,7 +109,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PrivateSharedStorageService,
                     dependencyContainer.PlatformInfo,
                     dependencyContainer.WidgetsService,
-                    dependencyContainer.LastTimeUsageStorage,
                     dependencyContainer.DateRangeShortcutsService);
             }
 
@@ -134,8 +133,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.BackgroundService,
                     dependencyContainer.PlatformInfo,
-                    dependencyContainer.WidgetsService,
-                    dependencyContainer.LastTimeUsageStorage);
+                    dependencyContainer.WidgetsService);
             }
 
             if (viewModelType == typeof(NoWorkspaceViewModel))
@@ -468,17 +466,6 @@ namespace Toggl.Core.UI.Navigation
                 return new PasteFromClipboardViewModel(
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.OnboardingStorage,
-                    dependencyContainer.NavigationService);
-            }
-
-            if (viewModelType == typeof(January2020CampaignViewModel))
-            {
-                return new January2020CampaignViewModel(
-                    dependencyContainer.OnboardingStorage,
-                    dependencyContainer.AnalyticsService,
-                    dependencyContainer.RemoteConfigService,
-                    dependencyContainer.PlatformInfo,
-                    dependencyContainer.SchedulerProvider,
                     dependencyContainer.NavigationService);
             }
 

@@ -1267,10 +1267,6 @@
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x.png" />
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%403x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata.png" />
-    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\stop.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop.png" />
     <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop%403x.png" />
@@ -1478,7 +1474,6 @@
     <InterfaceDefinition Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.xib" />
     <InterfaceDefinition Include="Cells\Reports\ReportsNoDataCollectionViewCell.xib" />
     <InterfaceDefinition Include="Cells\Reports\ReportsErrorCollectionViewCell.xib" />
-    <InterfaceDefinition Include="ViewControllers\January2020CampaignViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\DateRangePickerViewController.xib" />
     <InterfaceDefinition Include="Cells\MainLog\SuggestionLogViewCell.xib" />
     <InterfaceDefinition Include="Cells\MainLog\SuggestionsHeaderView.xib" />
@@ -2096,10 +2091,6 @@
     <Compile Include="Cells\Reports\ReportsErrorCollectionViewCell.cs" />
     <Compile Include="Cells\Reports\ReportsErrorCollectionViewCell.designer.cs">
       <DependentUpon>ReportsErrorCollectionViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\January2020CampaignViewController.cs" />
-    <Compile Include="ViewControllers\January2020CampaignViewController.designer.cs">
-      <DependentUpon>January2020CampaignViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Reports\DonutChartView.cs" />
     <Compile Include="ViewControllers\DateRangePickerViewController.cs" />

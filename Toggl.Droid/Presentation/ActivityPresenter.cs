@@ -79,7 +79,14 @@ namespace Toggl.Droid.Presentation
                 .ViewModelCache
                 .Cache(viewModel);
 
-            getContextFromView(sourceView).StartActivity(intent);
+            var context = getContextFromView(sourceView);
+
+            if (context == Application.Context)
+            {
+                intent.AddFlags(ActivityFlags.NewTask);
+            }
+
+            context.StartActivity(intent);
         }
 
         private Context getContextFromView(IView view)

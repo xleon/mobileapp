@@ -36,7 +36,8 @@ namespace Toggl.Droid.Views.Calendar
         private readonly BehaviorSubject<int> scrollOffsetSubject = new BehaviorSubject<int>(0);
         private readonly RectF tapCheckRectF = new RectF();
         private readonly TimeSpan defaultDuration = TimeSpan.FromMinutes(30);
-
+        private readonly RectF viewFrame = new RectF();
+        
         private BehaviorSubject<int> hourHeightSubject;
         private GestureDetector gestureDetector;
         private ScaleGestureDetector scaleGestureDetector;
@@ -47,10 +48,16 @@ namespace Toggl.Droid.Views.Calendar
         private DateTime currentDate = DateTime.Now;
         private Paint currentHourPaint;
         private Vibrator hapticFeedbackProvider;
-        private bool shouldDrawCurrentHourIndicator = false;
+        private ImmutableList<DateTimeOffset> allItemsStartAndEndTime = ImmutableList<DateTimeOffset>.Empty;
+        private bool shouldDrawCurrentHourIndicator;
         private bool isScrolling;
         private bool flingWasCalled;
         private float availableWidth;
+        private float distanceFromEdgesToTriggerAutoScroll;
+        private float topAreaTriggerLine;
+        private float bottomAreaTriggerLine;
+        private int currentHourCircleRadius;
+        private int autoScrollToFrameExtraDistance;
         private int baseHourHeight;
         private int maxHourHeight;
 
@@ -105,10 +112,12 @@ namespace Toggl.Droid.Views.Calendar
 
         private void init()
         {
-            baseHourHeight = 56.DpToPixels(Context);
+            baseHourHeight = Context.GetDimen(Resource.Dimension.calendarBaseHourHeight);
             hourHeightSubject = new BehaviorSubject<int>(baseHourHeight);
-            maxHourHeight = 112.DpToPixels(Context);
-
+            maxHourHeight = Context.GetDimen(Resource.Dimension.calendarMaxHourHeight);
+            distanceFromEdgesToTriggerAutoScroll = Context.GetDimen(Resource.Dimension.calendarEdgeDistanceToTriggerAutoScroll);
+            autoScrollToFrameExtraDistance = Context.GetDimen(Resource.Dimension.calendarEventAutoScrollToFrameExtraDistance);
+            currentHourCircleRadius = Context.GetDimen(Resource.Dimension.calendarCurrentHourCircleRadius);
             timeService = AndroidDependencyContainer.Instance.TimeService;
             calendarLayoutCalculator = new CalendarLayoutCalculator(timeService);
             hapticFeedbackProvider = (Vibrator)Context.GetSystemService(Context.VibratorService);
@@ -126,7 +135,7 @@ namespace Toggl.Droid.Views.Calendar
             handler = new Handler(Looper.MainLooper);
             currentHourPaint = new Paint(PaintFlags.AntiAlias);
             currentHourPaint.Color = Context.SafeGetColor(Resource.Color.currentHourColor);
-            currentHourPaint.StrokeWidth = 1.DpToPixels(Context);
+            currentHourPaint.StrokeWidth = Context.GetDimen(Resource.Dimension.calendarCurrentHourIndicatorStrokeSize);
             currentHourPaint.SetStyle(Paint.Style.FillAndStroke);
 
             initBackgroundBackingFields();
@@ -239,7 +248,10 @@ namespace Toggl.Droid.Views.Calendar
         protected override void OnDraw(Canvas canvas)
         {
             base.OnDraw(canvas);
-
+            viewFrame.Set(0f, scrollOffset, Width, scrollOffset + Height);
+            topAreaTriggerLine = viewFrame.Top + distanceFromEdgesToTriggerAutoScroll;
+            bottomAreaTriggerLine = viewFrame.Bottom - distanceFromEdgesToTriggerAutoScroll;
+            
             canvas.Save();
             canvas.Translate(0f, -scrollOffset);
 
@@ -275,7 +287,7 @@ namespace Toggl.Droid.Views.Calendar
             
             var currentHourY = calculateCurrentHourOffset();
             canvas.DrawLine(timeSliceStartX, currentHourY, Width, currentHourY, currentHourPaint);
-            canvas.DrawCircle(timeSliceStartX, currentHourY, 4.DpToPixels(Context), currentHourPaint);
+            canvas.DrawCircle(timeSliceStartX, currentHourY, currentHourCircleRadius, currentHourPaint);
         }
         
         partial void drawHourLines(Canvas canvas);
@@ -359,9 +371,7 @@ namespace Toggl.Droid.Views.Calendar
             
             Invalidate();
         }
-
-        private ImmutableList<DateTimeOffset> allItemsStartAndEndTime = ImmutableList<DateTimeOffset>.Empty;
-
+        
         private void onLongPress(MotionEvent e1)
         {
             var touchX = e1.GetX();
@@ -477,7 +487,7 @@ namespace Toggl.Droid.Views.Calendar
 
         private void scrollView(MotionEvent e1, MotionEvent e2, float deltaX, float deltaY)
         {
-            if (handleDragInEditMode(e1, e2, deltaX, deltaY)) 
+            if (isDragging) 
                 return;
 
             var oldScrollOffset = scrollOffset;
@@ -518,6 +528,8 @@ namespace Toggl.Droid.Views.Calendar
                     return true;
 
                 case MotionEventActions.Up:
+                    isDragging = false;
+                    cancelDraggingAndAutoScroll();
                     gestureDetector.OnTouchEvent(e);
                     updateLayoutIfNeededDuringEdition();
                     if (scrollFrameToDisplayItemInEditModeIfNeeded())
@@ -533,9 +545,15 @@ namespace Toggl.Droid.Views.Calendar
 
                 case MotionEventActions.Move:
                     gestureDetector.OnTouchEvent(e);
+                    if (isDragging)
+                    {
+                        dragEvent(e);
+                    }
                     return true;
 
                 case MotionEventActions.Cancel:
+                    isDragging = false;
+                    cancelDraggingAndAutoScroll();
                     gestureDetector.OnTouchEvent(e);
                     isScrolling = false;
                     return true;
@@ -545,7 +563,7 @@ namespace Toggl.Droid.Views.Calendar
             }
         }
 
-        bool scrollFrameToDisplayItemInEditModeIfNeeded()
+        private bool scrollFrameToDisplayItemInEditModeIfNeeded()
         {
             var currentItemInEditMode = itemEditInEditMode;
             if (!currentItemInEditMode.IsValid || !shouldTryToAutoScrollToEvent) return false;
@@ -562,7 +580,7 @@ namespace Toggl.Droid.Views.Calendar
             {
                 scroller.ForceFinished(true);
                 isScrolling = false;
-                autoScroll((int)-(Math.Abs(frameTop - eventTop) + autoScrollExtraDelta), true);
+                scrollVerticallyBy((int)-(Math.Abs(frameTop - eventTop) + autoScrollToFrameExtraDistance));
                 return true;
             }
 
@@ -570,14 +588,24 @@ namespace Toggl.Droid.Views.Calendar
             {
                 scroller.ForceFinished(true);
                 isScrolling = false;
-                autoScroll((int)Math.Abs(frameBottom - eventBottom) + autoScrollExtraDelta, true);
+                scrollVerticallyBy((int)Math.Abs(frameBottom - eventBottom) + autoScrollToFrameExtraDistance);
                 return true;
             }
 
             return false;
         }
+        
+        private void scrollVerticallyBy(int deltaY)
+        {
+            if (isScrolling) return;
+            
+            scroller.ForceFinished(true);
+            isScrolling = true;
+            scroller.StartScroll(0, scrollOffset, 0, deltaY);
+            handler.Post(continueScroll);
+        }
 
-        void updateLayoutIfNeededDuringEdition()
+        private void updateLayoutIfNeededDuringEdition()
         {
             var currentItemInEditMode = itemEditInEditMode;
             if (!currentItemInEditMode.IsValid) return;
