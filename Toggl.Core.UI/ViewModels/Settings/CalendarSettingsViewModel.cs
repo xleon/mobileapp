@@ -79,24 +79,31 @@ namespace Toggl.Core.UI.ViewModels.Settings
             SelectCalendar = rxActionFactory.FromAction<SelectableUserCalendarViewModel>(selectCalendar);
             ToggleCalendarIntegration = rxActionFactory.FromAsync(toggleCalendarIntegration);
 
-            permissionsChecker.CalendarPermissionGranted
-                .Subscribe(disableCalendarIntegartionIfNeeded)
-                .DisposedBy(disposeBag);
-
             Calendars = calendarsSubject.AsObservable().DistinctUntilChanged();
             CalendarIntegrationEnabled = userPreferences.CalendarIntegrationEnabledObservable
                 .StartWith(userPreferences.CalendarIntegrationEnabled())
                 .DistinctUntilChanged();
-
-            userPreferences.EnabledCalendars
-                .Take(1)
-                .Subscribe(setEnabledCalendars);
         }
 
-        private void setEnabledCalendars(IEnumerable<string> enabledCalendarIds)
+        public override async Task Initialize()
         {
-            initialSelectedCalendarIds.AddRange(enabledCalendarIds);
-            selectedCalendarIds.AddRange(enabledCalendarIds);
+            await base.Initialize();
+
+            var calendarPermissionGranted = await permissionsChecker.CalendarPermissionGranted;
+            if (calendarPermissionGranted)
+            {
+                var enabledCalendars = userPreferences.EnabledCalendarIds();
+                if (enabledCalendars != null)
+                {
+                    initialSelectedCalendarIds.AddRange(enabledCalendars);
+                    selectedCalendarIds.AddRange(enabledCalendars);
+                }
+            }
+            else
+            {
+                userPreferences.SetCalendarIntegrationEnabled(false);
+                userPreferences.SetEnabledCalendars(null);
+            }
             reloadCalendars();
         }
 
@@ -123,18 +130,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
         {
             userPreferences.SetEnabledCalendars(initialSelectedCalendarIds.ToArray());
             return base.CloseWithDefaultResult();
-        }
-
-        public override void Close()
-        {
-            userPreferences.SetEnabledCalendars(selectedCalendarIds.ToArray());
-            base.Close();
-        }
-
-        private void disableCalendarIntegartionIfNeeded(bool calendarPermissionGranted)
-        {
-            if (!calendarPermissionGranted)
-                userPreferences.SetCalendarIntegrationEnabled(false);
         }
 
         private async Task reloadCalendars()
@@ -169,7 +164,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
         private SelectableUserCalendarViewModel toSelectable(UserCalendar calendar)
             => new SelectableUserCalendarViewModel(calendar, selectedCalendarIds.Contains(calendar.Id));
 
-
         private void save()
         {
             if (!userPreferences.CalendarIntegrationEnabled())
@@ -187,8 +181,6 @@ namespace Toggl.Core.UI.ViewModels.Settings
             }
 
             onboardingStorage.SetIsFirstTimeConnectingCalendars();
-
-            Close(Unit.Default);
         }
 
         private void selectCalendar(SelectableUserCalendarViewModel calendar)
@@ -206,6 +198,8 @@ namespace Toggl.Core.UI.ViewModels.Settings
             if (userPreferences.CalendarIntegrationEnabled())
             {
                 userPreferences.SetCalendarIntegrationEnabled(false);
+                userPreferences.SetEnabledCalendars(null);
+                selectedCalendarIds.Clear();
                 reloadCalendars();
                 return;
             }
