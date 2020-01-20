@@ -1,8 +1,10 @@
 using Android.Views;
 using Android.Widget;
 using System;
+using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
+using Android.Gms.Auth.Api;
 using Android.Runtime;
 using Toggl.Core.Sync;
 using Toggl.Core.UI.Extensions;
@@ -98,6 +100,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.LoggingOut
+                .SelectMany( x => GoogleLogout())
                 .Subscribe(this.CancelAllNotifications)
                 .DisposedBy(DisposeBag);
 

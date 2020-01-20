@@ -30,21 +30,7 @@ namespace Toggl.Droid.Activities
         {
             ensureApiClientExists();
 
-            return logOutIfNeeded().SelectMany(getGoogleToken);
-
-            IObservable<Unit> logOutIfNeeded()
-            {
-                if (!googleApiClient.IsConnected)
-                    return Observable.Return(Unit.Default);
-
-                var logoutSubject = new Subject<Unit>();
-                var logoutCallback = new LogOutCallback(() => logoutSubject.CompleteWith(Unit.Default));
-                Auth.GoogleSignInApi
-                    .SignOut(googleApiClient)
-                    .SetResultCallback(logoutCallback);
-
-                return logoutSubject.AsObservable();
-            }
+            return GoogleLogout().SelectMany(getGoogleToken);
 
             IObservable<string> getGoogleToken(Unit _)
             {
@@ -66,6 +52,20 @@ namespace Toggl.Droid.Activities
                     return loginSubject.AsObservable();
                 }
             }
+        }
+
+        public IObservable<Unit> GoogleLogout()
+        {
+            if (!googleApiClient.IsConnected)
+                return Observable.Return(Unit.Default);
+
+            var logoutSubject = new Subject<Unit>();
+            var logoutCallback = new LogOutCallback(() => logoutSubject.CompleteWith(Unit.Default));
+            Auth.GoogleSignInApi
+                .SignOut(googleApiClient)
+                .SetResultCallback(logoutCallback);
+
+            return logoutSubject.AsObservable();
         }
 
         private void onGoogleSignInResult(Intent data)
