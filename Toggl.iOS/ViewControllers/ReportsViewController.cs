@@ -92,7 +92,8 @@ namespace Toggl.iOS.ViewControllers
                 .StartWith(new DateRangeSelectionResult(
                     new DateRange(DateTime.Now.AddDays(-7), DateTime.Now),
                     DateRangeSelectionSource.ShortcutThisWeek)
-                );
+                )
+                .WhereNotNull();
 
             //Handoff
             viewDidAppearSubject.AsObservable()
