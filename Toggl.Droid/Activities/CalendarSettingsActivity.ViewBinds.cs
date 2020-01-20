@@ -31,12 +31,12 @@ namespace Toggl.Droid.Activities
             userCalendarsAdapter = new UserCalendarsRecyclerAdapter();
             calendarsRecyclerView.SetAdapter(userCalendarsAdapter);
             calendarsRecyclerView.SetLayoutManager(new LinearLayoutManager(this));
-            
+
             linkCalendarsTitle.Text = Shared.Resources.LinkCalendars;
             linkCalendarsMessage.Text = Shared.Resources.LinkCalendarsMessage;
             selectCalendarsTitle.Text = Shared.Resources.SelectCalendars;
             selectCalendarsMessage.Text = Shared.Resources.SelectCalendarsMessage;
-            
+
             SetupToolbar(Shared.Resources.CalendarSettingsTitle);
         }
     }

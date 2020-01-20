@@ -43,6 +43,8 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
         public IObservable<ImmutableCalendarSectionModel> Calendars { get; }
 
+        public IObservable<bool> CalendarIntegrationEnabled { get;}
+
         public ViewAction ToggleCalendarIntegration { get; }
         public ViewAction Save { get; }
         public InputAction<SelectableUserCalendarViewModel> SelectCalendar { get; }
@@ -77,6 +79,8 @@ namespace Toggl.Core.UI.ViewModels.Settings
             ToggleCalendarIntegration = rxActionFactory.FromAsync(toggleCalendarIntegration);
 
             Calendars = calendarsSubject.AsObservable().DistinctUntilChanged();
+            CalendarIntegrationEnabled = userPreferences.CalendarIntegrationEnabledObservable
+                .StartWith(userPreferences.CalendarIntegrationEnabled());
         }
 
         public override async Task Initialize()

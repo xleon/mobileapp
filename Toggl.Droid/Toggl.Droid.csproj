@@ -1261,7 +1261,6 @@
     <AndroidResource Include="Resources\layout\UpcomingEventsNotificationSettingsFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectCalendarNotificationsOptionItem.axml" />
     <AndroidResource Include="Resources\layout\CalendarSettingsActivity.axml" />
-    <AndroidResource Include="Resources\layout\SelectUserCalendarsBase.axml" />
     <AndroidResource Include="Resources\menu\CalendarSettingsMenu.xml" />
     <AndroidResource Include="Resources\layout\CalendarHeaderView.axml" />
     <AndroidResource Include="Resources\drawable\CalendarHeaderDayBackground.xml" />

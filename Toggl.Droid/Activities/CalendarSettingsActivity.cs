@@ -37,17 +37,17 @@ namespace Toggl.Droid.Activities
                 .BindAction(ViewModel.ToggleCalendarIntegration)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.CalendarListVisible
-                .Subscribe(toggleCalendarsSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
-                .DisposedBy(DisposeBag);
-
-            ViewModel.CalendarListVisible
-                .Subscribe(calendarsContainer.Rx().IsVisible())
-                .DisposedBy(DisposeBag);
-
             ViewModel
                 .Calendars
                 .Subscribe(userCalendarsAdapter.Rx().Items())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.CalendarIntegrationEnabled
+                .Subscribe(toggleCalendarsSwitch.Rx().CheckedObserver())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.CalendarIntegrationEnabled
+                .Subscribe(calendarsContainer.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
             userCalendarsAdapter
