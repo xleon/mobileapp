@@ -54,8 +54,10 @@ namespace Toggl.iOS.ViewSources
 
         public void UpdateMonths(ImmutableList<DateRangePickerMonthInfo> newMonths)
         {
+            var shouldScroll = !months.IsEmpty;
             months = newMonths;
             collectionView.ReloadData();
+            ScrollToCurrentPage(shouldScroll);
         }
 
         public void ScrollToCurrentPage(bool animated = false)
