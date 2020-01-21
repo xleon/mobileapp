@@ -60,12 +60,14 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analytics\SiriTrackingEvent.cs" />
     <Compile Include="Exceptions\NoRunningEntryException.cs" />
     <Compile Include="Extensions\DateExtensions.cs" />
     <Compile Include="Extensions\NSDictionaryExtensions.cs" />
+    <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Helper\APIHelper.cs" />
     <Compile Include="Models\Suggestion.cs" />
     <Compile Include="Models\TimeEntry.cs" />

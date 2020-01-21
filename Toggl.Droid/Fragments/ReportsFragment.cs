@@ -4,21 +4,14 @@ using System.Reactive.Linq;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Reports;
-using Toggl.Droid.Adapters;
-using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
-using Toggl.Droid.LayoutManagers;
 using Toggl.Droid.Presentation;
-using Toggl.Droid.ViewHelpers;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
 {
     public sealed partial class ReportsFragment : ReactiveTabFragment<ReportsViewModel>, IScrollableToStart
     {
-        private static readonly TimeSpan toggleCalendarThrottleDuration = TimeSpan.FromMilliseconds(300);
-        private ReportsRecyclerAdapter reportsRecyclerAdapter;
-
         public ReportsFragment(MainTabBarViewModel tabBarViewModel)
             : base(tabBarViewModel)
         {
@@ -30,107 +23,27 @@ namespace Toggl.Droid.Fragments
         }
 
         protected override void InitializationFinished()
-        {
-            reportsRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
-
-            ViewModel?.CalendarViewModel.AttachView(this);
-
+        {            
             selectWorkspaceFab.Rx().Tap()
                 .Subscribe(ViewModel.SelectWorkspace.Inputs)
                 .DisposedBy(DisposeBag);
 
-            setupReportsRecyclerView();
-            ViewModel.StartDate.CombineLatest(
-                    ViewModel.EndDate,
-                    ViewModel.WorkspaceHasBillableFeatureEnabled,
-                    ViewModel.BarChartViewModel.DateFormat,
-                    ViewModel.BarChartViewModel.Bars,
-                    ViewModel.BarChartViewModel.MaximumHoursPerBar,
-                    ViewModel.BarChartViewModel.HorizontalLegend,
-                    BarChartData.Create)
-                .Subscribe(reportsRecyclerAdapter.UpdateBarChart)
-                .DisposedBy(DisposeBag);
-
-            ViewModel.WorkspaceNameObservable
-                .Subscribe(reportsRecyclerAdapter.UpdateWorkspaceName)
-                .DisposedBy(DisposeBag);
-
-            ViewModel.SegmentsObservable.CombineLatest(
-                    ViewModel.ShowEmptyStateObservable,
-                    ViewModel.TotalTimeObservable,
-                    ViewModel.TotalTimeIsZeroObservable,
-                    ViewModel.BillablePercentageObservable,
-                    ViewModel.DurationFormatObservable,
-                    ReportsSummaryData.Create)
-                .Subscribe(reportsRecyclerAdapter.UpdateReportsSummary)
-                .DisposedBy(DisposeBag);
-
-            toolbarCurrentDateRangeText.Rx().Tap()
-                .Subscribe(showCalendar)
-                .DisposedBy(DisposeBag);
-
-            ViewModel.CurrentDateRange
+            ViewModel.FormattedTimeRange
                 .Subscribe(toolbarCurrentDateRangeText.Rx().TextObserver())
                 .DisposedBy(DisposeBag);
-        }
 
-        public override void OnStart()
-        {
-            base.OnStart();
-            ViewModel?.CalendarViewModel.ViewAppearing();
-        }
+            ViewModel.Elements
+                .Subscribe(adapter.Rx().Items())
+                .DisposedBy(DisposeBag);
 
-        public override void OnResume()
-        {
-            base.OnResume();
-
-            if (IsHidden) return;
-
-            ViewModel?.CalendarViewModel.ViewAppeared();
-        }
-
-        public override void OnStop()
-        {
-            base.OnStop();
-            ViewModel?.CalendarViewModel.ViewDisappeared();
-        }
-
-        public override void OnDestroy()
-        {
-            ViewModel?.CalendarViewModel.DetachView();
-            base.OnDestroy();
-        }
-
-        public override void OnHiddenChanged(bool hidden)
-        {
-            base.OnHiddenChanged(hidden);
-            if (hidden)
-                ViewModel.CalendarViewModel.ViewDisappeared();
-            else
-                ViewModel.CalendarViewModel.ViewAppeared();
+            toolbarCurrentDateRangeText.Rx()
+                .BindAction(ViewModel.SelectTimeRange)
+                .DisposedBy(DisposeBag);
         }
 
         public void ScrollToStart()
         {
             reportsRecyclerView?.SmoothScrollToPosition(0);
-        }
-
-        private void setupReportsRecyclerView()
-        {
-            reportsRecyclerAdapter = new ReportsRecyclerAdapter(Context);
-            reportsRecyclerView.SetLayoutManager(new UnpredictiveLinearLayoutManager(Context));
-            reportsRecyclerView.SetAdapter(reportsRecyclerAdapter);
-        }
-
-        private void showCalendar()
-        {
-            AndroidDependencyContainer
-                .Instance
-                .ViewModelCache
-                .Cache(ViewModel.CalendarViewModel);
-
-            new ReportsCalendarFragment()
-                .Show(ChildFragmentManager, nameof(ReportsCalendarFragment));
         }
     }
 }

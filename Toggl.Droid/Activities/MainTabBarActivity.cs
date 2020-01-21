@@ -144,30 +144,12 @@ namespace Toggl.Droid.Activities
                 navigationView.SelectedItemId = requestedInitialTab ?? Resource.Id.MainTabTimerItem;
                 activityResumedBefore = true;
                 requestedInitialTab = null;
-                loadReportsIfNeeded();
                 return;
             }
 
             if (requestedInitialTab == null) return;
             navigationView.SelectedItemId = requestedInitialTab.Value;
             requestedInitialTab = null;
-            loadReportsIfNeeded();
-        }
-
-        private void loadReportsIfNeeded()
-        {
-            if (reportsRequestedStartDate == null || reportsRequestedEndDate == null)
-                return;
-
-            var reportsViewModel = getTabViewModel<ReportsViewModel>();
-            if (reportsViewModel != null && navigationView.SelectedItemId == Resource.Id.MainTabReportsItem)
-            {
-                reportsViewModel.LoadReport(reportsRequestedWorkspaceId, reportsRequestedStartDate.Value, reportsRequestedEndDate.Value, ReportsSource.Other);
-            }
-
-            reportsRequestedWorkspaceId = null;
-            reportsRequestedStartDate = null;
-            reportsRequestedEndDate = null;
         }
 
         private Fragment getCachedFragment(int itemId)

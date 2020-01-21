@@ -1,4 +1,5 @@
-﻿using Toggl.Core.Models.Interfaces;
+﻿using System;
+using Toggl.Core.Models.Interfaces;
 
 namespace Toggl.Core.Autocomplete.Span
 {
@@ -18,5 +19,16 @@ namespace Toggl.Core.Autocomplete.Span
             : this(tag.Id, tag.Name)
         {
         }
+
+        public bool Equals(ISpan other)
+            => other is TagSpan otherSpan
+               && otherSpan.TagId == TagId
+               && otherSpan.TagName == TagName;
+
+        public override bool Equals(object obj)
+            => Equals(obj as ISpan);
+
+        public override int GetHashCode()
+            => HashCode.Combine(TagId, TagName);
     }
 }

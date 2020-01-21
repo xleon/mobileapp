@@ -13,7 +13,6 @@ namespace Toggl.Droid.Fragments
         protected override View LoadingPlaceholderView { get; set; }
 
         private FloatingActionButton selectWorkspaceFab;
-        private TextView workspaceName;
         private TextView toolbarCurrentDateRangeText;
         private RecyclerView reportsRecyclerView;
         private AppBarLayout appBarLayout;
@@ -21,7 +20,6 @@ namespace Toggl.Droid.Fragments
         protected override void InitializeViews(View fragmentView)
         {
             selectWorkspaceFab = fragmentView.FindViewById<FloatingActionButton>(Resource.Id.SelectWorkspaceFAB);
-            workspaceName = fragmentView.FindViewById<TextView>(Resource.Id.ReportsFragmentWorkspaceName);
             toolbarCurrentDateRangeText = fragmentView.FindViewById<TextView>(Resource.Id.ToolbarCurrentDateRangeText);
             reportsRecyclerView = fragmentView.FindViewById<RecyclerView>(Resource.Id.ReportsFragmentRecyclerView);
             appBarLayout = fragmentView.FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);

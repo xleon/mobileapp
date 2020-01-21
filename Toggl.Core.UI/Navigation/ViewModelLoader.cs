@@ -1,6 +1,7 @@
 ﻿using System;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.DateRangePicker;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.ViewModels.Settings.Siri;
@@ -108,8 +109,7 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.PermissionsChecker,
                     dependencyContainer.BackgroundService,
                     dependencyContainer.PlatformInfo,
-                    dependencyContainer.WidgetsService,
-                    dependencyContainer.LastTimeUsageStorage);
+                    dependencyContainer.WidgetsService);
             }
 
             if (viewModelType == typeof(NoWorkspaceViewModel))
@@ -141,16 +141,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.RxActionFactory);
-            }
-
-            if (viewModelType == typeof(ReportsCalendarViewModel))
-            {
-                return new ReportsCalendarViewModel(
-                    dependencyContainer.TimeService,
-                    dependencyContainer.DataSource,
-                    dependencyContainer.RxActionFactory,
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.SchedulerProvider);
             }
 
             if (viewModelType == typeof(SelectClientViewModel))
@@ -309,16 +299,27 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService);
             }
 
+            if (viewModelType == typeof(DateRangePickerViewModel))
+            {
+                return new DateRangePickerViewModel(
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.SchedulerProvider,
+                    dependencyContainer.DateRangeShortcutsService);
+            }
+
             if (viewModelType == typeof(ReportsViewModel))
             {
                 return new ReportsViewModel(
                     dependencyContainer.DataSource,
-                    dependencyContainer.TimeService,
                     dependencyContainer.NavigationService,
                     dependencyContainer.InteractorFactory,
-                    dependencyContainer.AnalyticsService,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.AnalyticsService,
+                    dependencyContainer.TimeService,
+                    dependencyContainer.DateRangeShortcutsService);
             }
 
             if (viewModelType == typeof(AboutViewModel))
@@ -410,11 +411,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService);
             }
 
-            if (viewModelType == typeof(SiriWorkflowsViewModel))
-            {
-                return new SiriWorkflowsViewModel(dependencyContainer.NavigationService);
-            }
-
             if (viewModelType == typeof(SiriShortcutsCustomTimeEntryViewModel))
             {
                 return new SiriShortcutsCustomTimeEntryViewModel(
@@ -431,17 +427,6 @@ namespace Toggl.Core.UI.Navigation
                 return new PasteFromClipboardViewModel(
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.OnboardingStorage,
-                    dependencyContainer.NavigationService);
-            }
-
-            if (viewModelType == typeof(January2020CampaignViewModel))
-            {
-                return new January2020CampaignViewModel(
-                    dependencyContainer.OnboardingStorage,
-                    dependencyContainer.AnalyticsService,
-                    dependencyContainer.RemoteConfigService,
-                    dependencyContainer.PlatformInfo,
-                    dependencyContainer.SchedulerProvider,
                     dependencyContainer.NavigationService);
             }
 

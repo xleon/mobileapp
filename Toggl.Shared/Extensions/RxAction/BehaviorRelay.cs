@@ -15,9 +15,9 @@ namespace Toggl.Shared.Extensions.Reactive
     public class BehaviorRelay<T> : IObservable<T>
     {
         private readonly BehaviorSubject<T> subject;
-        private readonly Func<T, T> sanitizationFunction;
+        private readonly Func<T, T>? sanitizationFunction;
 
-        public BehaviorRelay(T value, Func<T, T> sanitizationFunction = null)
+        public BehaviorRelay(T value, Func<T, T>? sanitizationFunction = null)
         {
             this.sanitizationFunction = sanitizationFunction;
             subject = new BehaviorSubject<T>(value);

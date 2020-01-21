@@ -1,19 +1,21 @@
 using Android.Views;
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Droid.ViewHolders.MainLog;
 using Android.Runtime;
 using Android.Support.V7.Widget;
+using Toggl.Core.Extensions;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Interfaces;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Core.UI.ViewModels.MainLog.Identity;
 using Toggl.Droid.Adapters.DiffingStrategies;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared;
@@ -29,6 +31,13 @@ namespace Toggl.Droid.Adapters
         public const int DaySummaryViewType = 3;
         public const int SuggestionsHeaderViewType = 4;
         public const int UserFeedbackViewType = 5;
+
+        // The following list includes the types of section headers that should not be rendered.
+        // They will not be added to the list of items the adapter holds.
+        private readonly ImmutableList<Type> nonRenderableHeaderTypes = new List<Type>()
+        {
+            typeof(UserFeedbackSectionViewModel)
+        }.ToImmutableList();
 
         public IObservable<TimeEntryLogItemViewModel> EditTimeEntry
             => editTimeEntrySubject.AsObservable();
@@ -76,7 +85,7 @@ namespace Toggl.Droid.Adapters
                 case UserFeedbackViewModel _:
                     return UserFeedbackViewType;
                 default:
-                    throw new Exception("Invalid item type");
+                    throw new Exception($"Invalid item type {item.GetSafeTypeName()}");
             }
         }
 
@@ -114,13 +123,18 @@ namespace Toggl.Droid.Adapters
                         .Inflate(Resource.Layout.MainUserFeedbackCard, parent, false);
                     return new MainLogUserFeedbackViewHolder(userFeedbackView);
                 default:
-                    throw new Exception("Invalid view type");
+                    throw new Exception($"Invalid view type: {viewType}");
             }
         }
 
         public void UpdateCollection(IImmutableList<MainLogSection> items)
         {
-            var flattenItems = items.Aggregate(ImmutableList<MainLogItemViewModel>.Empty, (acc, nextSection) => acc.AddRange(nextSection.Items.Prepend(nextSection.Header)));
+            var flattenItems = items.Aggregate(ImmutableList<MainLogItemViewModel>.Empty,
+                (acc, nextSection) =>
+                    nonRenderableHeaderTypes.Contains(nextSection.Header.GetType())
+                        ? acc.AddRange(nextSection.Items)
+                        : acc.AddRange(nextSection.Items.Prepend(nextSection.Header))
+            );
             SetItems(flattenItems);
         }
 

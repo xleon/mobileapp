@@ -13,6 +13,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class SelectTagsViewController : ReactiveViewController<SelectTagsViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         public SelectTagsViewController(SelectTagsViewModel viewModel)
             : base(viewModel, nameof(SelectTagsViewController))
         {
@@ -58,7 +60,9 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.FilterText
-                .Subscribe(TextField.Rx().TextObserver())
+                .Where(string.IsNullOrEmpty)
+                .SelectUnit()
+                .Subscribe(_ => TextField.Text = "")
                 .DisposedBy(DisposeBag);
 
             CloseButton.Rx().Tap()

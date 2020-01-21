@@ -17,3 +17,5 @@ The recommended reading order is this:
 1. [Background sync](bg-sync.md)
 1. [Background Fetch on iOS](bg-fetch-ios.md)
 1. [Background Fetch on Android](bg-fetch-android.md)
+
+For better debugging experience, make use of [Intercepting HTTP requests](intercepting-http-requests.md).

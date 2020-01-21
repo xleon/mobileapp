@@ -134,6 +134,8 @@ namespace Toggl.iOS.ViewControllers.Settings.Siri
                 .Subscribe(ViewModel.Description.Accept)
                 .DisposedBy(DisposeBag);
 
+            PasteFromClipboardButton.Hidden = UIDevice.CurrentDevice.CheckSystemVersion(13, 0);
+
             PasteFromClipboardButton.Rx()
                 .BindAction(ViewModel.SelectClipboard)
                 .DisposedBy(DisposeBag);

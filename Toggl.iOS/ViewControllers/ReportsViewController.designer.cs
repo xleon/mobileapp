@@ -6,7 +6,6 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
-using Toggl.iOS.Views;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -14,59 +13,19 @@ namespace Toggl.iOS.ViewControllers
 	partial class ReportsViewController
 	{
 		[Outlet]
-		UIKit.UIView BarChartsContainerView { get; set; }
-
-		[Outlet]
-		UIKit.UIView CalendarContainer { get; set; }
-
-		[Outlet]
-		UIKit.NSLayoutConstraint ContentWidthConstraint { get; set; }
-
-		[Outlet]
-		UIKit.UIView OverviewContainerView { get; set; }
-
-		[Outlet]
-		UIKit.UITableView ReportsTableView { get; set; }
-
-		[Outlet]
-		UIKit.NSLayoutConstraint TopCalendarConstraint { get; set; }
+		UIKit.UICollectionView CollectionView { get; set; }
 
 		[Outlet]
 		UIKit.UIView WorkspaceButton { get; set; }
 
 		[Outlet]
-		FadeView WorkspaceFadeView { get; set; }
+		Toggl.iOS.Views.FadeView WorkspaceFadeView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel WorkspaceLabel { get; set; }
-
+		
 		void ReleaseDesignerOutlets ()
 		{
-			if (BarChartsContainerView != null) {
-				BarChartsContainerView.Dispose ();
-				BarChartsContainerView = null;
-			}
-
-			if (CalendarContainer != null) {
-				CalendarContainer.Dispose ();
-				CalendarContainer = null;
-			}
-
-			if (OverviewContainerView != null) {
-				OverviewContainerView.Dispose ();
-				OverviewContainerView = null;
-			}
-
-			if (ReportsTableView != null) {
-				ReportsTableView.Dispose ();
-				ReportsTableView = null;
-			}
-
-			if (TopCalendarConstraint != null) {
-				TopCalendarConstraint.Dispose ();
-				TopCalendarConstraint = null;
-			}
-
 			if (WorkspaceButton != null) {
 				WorkspaceButton.Dispose ();
 				WorkspaceButton = null;
@@ -82,9 +41,9 @@ namespace Toggl.iOS.ViewControllers
 				WorkspaceLabel = null;
 			}
 
-			if (ContentWidthConstraint != null) {
-				ContentWidthConstraint.Dispose ();
-				ContentWidthConstraint = null;
+			if (CollectionView != null) {
+				CollectionView.Dispose ();
+				CollectionView = null;
 			}
 		}
 	}

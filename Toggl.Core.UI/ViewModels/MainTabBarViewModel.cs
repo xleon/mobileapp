@@ -42,18 +42,18 @@ namespace Toggl.Core.UI.ViewModels
                 dependencyContainer.RxActionFactory,
                 dependencyContainer.PermissionsChecker,
                 dependencyContainer.BackgroundService,
-                platformInfo,
-                dependencyContainer.WidgetsService,
-                dependencyContainer.LastTimeUsageStorage));
+                dependencyContainer.PlatformInfo,
+                dependencyContainer.WidgetsService));
 
             reportsViewModel = new Lazy<ViewModel>(() => new ReportsViewModel(
                 dependencyContainer.DataSource,
-                dependencyContainer.TimeService,
                 dependencyContainer.NavigationService,
                 dependencyContainer.InteractorFactory,
-                dependencyContainer.AnalyticsService,
                 dependencyContainer.SchedulerProvider,
-                dependencyContainer.RxActionFactory));
+                dependencyContainer.RxActionFactory,
+                dependencyContainer.AnalyticsService,
+                dependencyContainer.TimeService,
+                dependencyContainer.DateRangeShortcutsService));
 
             calendarViewModel = new Lazy<ViewModel>(() => new CalendarViewModel(
                 dependencyContainer.DataSource,

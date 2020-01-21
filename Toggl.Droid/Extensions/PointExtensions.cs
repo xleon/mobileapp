@@ -11,6 +11,6 @@ namespace Toggl.Droid.Extensions
         }
 
         public static TogglPoint ToPoint(this PointF point)
-            => new TogglPoint { X = point.X, Y = point.Y };
+            => new TogglPoint(point.X, point.Y);
     }
 }

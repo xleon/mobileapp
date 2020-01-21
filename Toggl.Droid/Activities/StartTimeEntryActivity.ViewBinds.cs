@@ -31,7 +31,7 @@ namespace Toggl.Droid.Activities
             selectBillableToolbarButton = FindViewById<ImageView>(ToolbarBillableButton);
 
             durationCard = FindViewById<ViewGroup>(DurationCard);
-            durationCard.FitBottomInset();
+            durationCard.FitBottomPaddingInset();
 
             durationLabel = FindViewById<TextView>(DurationText);
 
@@ -44,7 +44,7 @@ namespace Toggl.Droid.Activities
             recyclerView.SetAdapter(adapter);
 
             SetupToolbar();
-            SupportActionBar.SetHomeAsUpIndicator(Resource.Drawable.toolbar_close);
+            SupportActionBar.SetHomeAsUpIndicator(Resource.Drawable.ic_close);
         }
     }
 }

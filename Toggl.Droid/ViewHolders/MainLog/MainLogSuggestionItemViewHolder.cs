@@ -5,7 +5,7 @@ using Android.Graphics;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.ViewHolders.MainLog

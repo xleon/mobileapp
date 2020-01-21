@@ -7,8 +7,8 @@ using Toggl.Shared;
 namespace Toggl.Droid.Tiles
 {
     [Service(Name = "toggl.giskard.Tiles.ReportsTileService",
-             Label = "@string/Reports",
-             Icon = "@drawable/reports_dark",
+             Label = "@string/reports",
+             Icon = "@drawable/ic_reports",
              Permission = "android.permission.BIND_QUICK_SETTINGS_TILE")]
     [IntentFilter(new[] { "android.service.quicksettings.action.QS_TILE" })]
     public sealed class ReportsTileService : TileService

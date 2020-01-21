@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.DateRangePicker;
 using Toggl.Core.UI.ViewModels.Settings.Siri;
 using Toggl.Core.UI.Views;
 using Toggl.iOS.Presentation.Transition;
@@ -20,7 +21,7 @@ namespace Toggl.iOS.Presentation
             typeof(PasteFromClipboardViewModel),
             typeof(SelectDefaultWorkspaceViewModel),
             typeof(TermsOfServiceViewModel),
-            typeof(January2020CampaignViewModel),
+            typeof(DateRangePickerViewModel),
         };
 
         public ModalDialogPresenter(UIWindow window, AppDelegate appDelegate) : base(window, appDelegate)

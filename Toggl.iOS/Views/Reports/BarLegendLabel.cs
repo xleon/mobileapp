@@ -6,9 +6,13 @@ namespace Toggl.iOS.Views.Reports
 {
     internal sealed class BarLegendLabel : UILabel
     {
-        public BarLegendLabel(string dayInitial, string shortDate)
+        public BarLegendLabel(string dayInitial, string shortDate) : this($"{dayInitial}\n{shortDate}")
         {
-            Text = $"{dayInitial}\n{shortDate}";
+        }
+
+        public BarLegendLabel(string text)
+        {
+            Text = text;
             TextAlignment = UITextAlignment.Center;
             Lines = 2;
             TextColor = ColorAssets.Text3;

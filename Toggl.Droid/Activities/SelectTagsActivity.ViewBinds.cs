@@ -17,7 +17,7 @@ namespace Toggl.Droid.Activities
             textField = FindViewById<EditText>(Resource.Id.TextField);
             selectTagsRecyclerView = FindViewById<RecyclerView>(Resource.Id.SelectTagsRecyclerView);
 
-            textField.Hint = Shared.Resources.AddTags;
+            textField.Hint = Shared.Resources.AddFilterTags;
             var layoutManager = new UnpredictiveLinearLayoutManager(this);
             layoutManager.ItemPrefetchEnabled = true;
             layoutManager.InitialPrefetchItemCount = 4;

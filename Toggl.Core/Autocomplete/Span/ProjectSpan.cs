@@ -1,4 +1,5 @@
-﻿using Toggl.Core.Models.Interfaces;
+﻿using System;
+using Toggl.Core.Models.Interfaces;
 
 namespace Toggl.Core.Autocomplete.Span
 {
@@ -44,5 +45,19 @@ namespace Toggl.Core.Autocomplete.Span
             : this(task.ProjectId, project.Name, project.Color, task.Id, task.Name)
         {
         }
+
+        public bool Equals(ISpan other)
+            => other is ProjectSpan projectSpanOther &&
+               ProjectId == projectSpanOther.ProjectId &&
+               ProjectColor == projectSpanOther.ProjectColor &&
+               ProjectName == projectSpanOther.ProjectName &&
+               TaskId == projectSpanOther.TaskId &&
+               TaskName == projectSpanOther.TaskName;
+
+        public override bool Equals(object obj)
+            => Equals(obj as ISpan);
+
+        public override int GetHashCode()
+            => HashCode.Combine(ProjectId, ProjectColor, ProjectName, TaskId, TaskName);
     }
 }

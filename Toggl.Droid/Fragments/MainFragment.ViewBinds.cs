@@ -5,7 +5,7 @@ using AndroidX.RecyclerView.Widget;
 using AndroidX.SwipeRefreshLayout.Widget;
 using Google.Android.Material.AppBar;
 using Google.Android.Material.FloatingActionButton;
-
+using Toggl.Droid.Views;
 using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
 
 namespace Toggl.Droid.Fragments
@@ -17,7 +17,7 @@ namespace Toggl.Droid.Fragments
         protected override View LoadingPlaceholderView { get; set; }
 
         private View runningEntryCardFrame;
-        private FloatingActionButton playButton;
+        private AnimatedFloatingActionButton playButton;
         private FloatingActionButton stopButton;
         private CoordinatorLayout coordinatorLayout;
         private TextView timeEntryCardTimerLabel;
@@ -41,7 +41,7 @@ namespace Toggl.Droid.Fragments
         {
             mainRecyclerView = fragmentView.FindViewById<RecyclerView>(Resource.Id.MainRecyclerView);
             runningEntryCardFrame = fragmentView.FindViewById(Resource.Id.MainRunningTimeEntrySheet);
-            playButton = fragmentView.FindViewById<FloatingActionButton>(Resource.Id.MainPlayButton);
+            playButton = fragmentView.FindViewById<AnimatedFloatingActionButton>(Resource.Id.MainPlayButton);
             stopButton = fragmentView.FindViewById<FloatingActionButton>(Resource.Id.MainStopButton);
             coordinatorLayout = fragmentView.FindViewById<CoordinatorLayout>(Resource.Id.MainCoordinatorLayout);
             timeEntryCardTimerLabel = fragmentView.FindViewById<TextView>(Resource.Id.MainRunningTimeEntryTimerLabel);

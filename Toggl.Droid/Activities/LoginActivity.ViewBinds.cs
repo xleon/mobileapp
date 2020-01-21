@@ -32,7 +32,7 @@ namespace Toggl.Droid.Activities
         {
             signupCard = FindViewById<ViewGroup>(Resource.Id.LoginSignupCardView);
             loginSignupContainer = FindViewById<ViewGroup>(Resource.Id.LoginSignupContainer);
-            loginSignupContainer.FitBottomInset();
+            loginSignupContainer.FitBottomPaddingInset();
             errorTextView = FindViewById<TextView>(Resource.Id.LoginError);
             loginButton = FindViewById<Button>(Resource.Id.LoginLoginButton);
             forgotPasswordView = FindViewById<TextView>(Resource.Id.LoginForgotPassword);

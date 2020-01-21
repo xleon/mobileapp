@@ -1,0 +1,8 @@
+
+* @toggl/mobile
+
+/Toggl.iOS* @toggl/ios-senseis
+
+/Toggl.Droid* @toggl/androids
+
+/Toggl.Core.UI* @toggl/ios-senseis @toggl/androids

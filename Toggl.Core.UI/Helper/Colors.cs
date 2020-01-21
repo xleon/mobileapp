@@ -31,10 +31,6 @@ namespace Toggl.Core.UI.Helper
             public static readonly Color InvocationPhrase = brownishGrey;
             public static readonly Color HeaderLabel = silver;
             public static readonly Color HeaderBackground = paleGreyTwo;
-
-            public static readonly Color WorkflowPink = mediumPink;
-            public static readonly Color WorkflowPurple = easterPurple;
-            public static readonly Color WorkflowBlue = azure;
         }
 
         public static class Onboarding
@@ -327,6 +323,11 @@ namespace Toggl.Core.UI.Helper
             }
 
             public static readonly Color OtherProjectsSegmentBackground = pinkishGrey;
+
+            public static class Donut
+            {
+                public static readonly Color InnerCircle = White;
+            }
 
             public static class Loading
             {

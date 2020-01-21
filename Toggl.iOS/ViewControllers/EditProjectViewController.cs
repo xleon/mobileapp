@@ -15,6 +15,8 @@ namespace Toggl.iOS.ViewControllers
 {
     public sealed partial class EditProjectViewController : ReactiveViewController<EditProjectViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+
         private const double desiredIpadHeight = 360;
         private static readonly nfloat errorVisibleHeight = 16;
 

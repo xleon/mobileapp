@@ -19,72 +19,66 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/DurationCard"
         android:background="@color/cardBackground"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:paddingBottom="4dp"
         android:layout_width="match_parent">
+        
         <TextView
             android:id="@+id/DurationText"
-            tools:text="999:00:00"
-            android:textSize="20sp"
-            android:textColor="#328fff"
-            android:paddingStart="16dp"
-            android:lineSpacingExtra="4sp"
-            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="4sp"
+            android:paddingTop="10dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            android:textColor="#328fff"
+            android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/ButtonsHolder"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="999:00:00" />
+        
+        <ImageView
+            android:id="@+id/ToolbarProjectButton"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_project"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:scaleType="center"
+            app:layout_constraintStart_toEndOf="@+id/DurationText"
+            app:layout_constraintTop_toTopOf="@+id/DurationText"
+            app:layout_constraintBottom_toBottomOf="@+id/DurationText"/>
 
-        <LinearLayout
-            android:id="@+id/ButtonsHolder"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/DurationText">
+        <ImageView
+            android:id="@+id/ToolbarTagButton"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_tag"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:scaleType="center"
+            app:layout_constraintStart_toEndOf="@+id/ToolbarProjectButton"
+            app:layout_constraintTop_toTopOf="@+id/DurationText"
+            app:layout_constraintBottom_toBottomOf="@+id/DurationText"/>
 
-            <ImageView
-                android:id="@+id/ToolbarProjectButton"
-                android:paddingTop="16dp"
-                android:scaleType="center"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="16dp"
-                android:src="@drawable/project"
-                android:foreground="?android:attr/selectableItemBackgroundBorderless"
-                android:layout_width="40dp"
-                android:layout_height="match_parent" />
-
-            <ImageView
-                android:id="@+id/ToolbarTagButton"
-                android:paddingTop="16dp"
-                android:scaleType="center"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:src="@drawable/tag"
-                android:paddingBottom="16dp"
-                android:foreground="?android:attr/selectableItemBackgroundBorderless"
-                android:layout_width="40dp"
-                android:layout_height="match_parent" />
-
-            <ImageView
-                android:id="@+id/ToolbarBillableButton"
-                android:paddingTop="16dp"
-                android:scaleType="center"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="16dp"
-                android:src="@drawable/billable"
-                android:foreground="?android:attr/selectableItemBackgroundBorderless"
-                android:layout_width="40dp"
-                android:layout_height="match_parent" />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/ToolbarBillableButton"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_billable"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:scaleType="center"
+            app:layout_constraintStart_toEndOf="@+id/ToolbarTagButton"
+            app:layout_constraintTop_toTopOf="@+id/DurationText"
+            app:layout_constraintBottom_toBottomOf="@+id/DurationText"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
@@ -110,7 +104,7 @@
             android:scrollHorizontally="true"
             android:textColor="@color/primaryText"
             android:background="@null"
-            android:textCursorDrawable="@drawable/EditTextCursor"
+            android:textCursorDrawable="@drawable/shape_edit_text_cursor"
             android:textColorHint="@color/placeholderText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

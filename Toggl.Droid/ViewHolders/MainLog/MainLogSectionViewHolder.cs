@@ -2,7 +2,7 @@
 using Android.Views;
 using Android.Widget;
 using System;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 
 namespace Toggl.Droid.ViewHolders.MainLog
 {

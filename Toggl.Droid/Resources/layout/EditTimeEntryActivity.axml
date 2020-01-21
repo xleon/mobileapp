@@ -47,7 +47,7 @@
                 android:scrollHorizontally="true"
                 android:textColor="@color/primaryText"
                 android:textColorHint="@color/placeholderText"
-                android:textCursorDrawable="@drawable/EditTextCursor"
+                android:textCursorDrawable="@drawable/shape_edit_text_cursor"
                 android:textSize="19sp" />
         </FrameLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -117,7 +117,7 @@
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="16dp"
                         android:scaleType="center"
-                        android:src="@drawable/error_baddata"
+                        android:src="@drawable/ic_unsyncable"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -195,7 +195,7 @@
                 android:layout_width="56dp"
                 android:layout_height="48dp"
                 android:scaleType="center"
-                android:src="@drawable/project"
+                android:src="@drawable/ic_project"
                 app:layout_constraintTop_toBottomOf="@id/GroupCount"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -250,7 +250,7 @@
                 android:layout_width="56dp"
                 android:layout_height="48dp"
                 android:scaleType="center"
-                android:src="@drawable/tag"
+                android:src="@drawable/ic_tag"
                 app:layout_constraintTop_toBottomOf="@id/ProjectBottomBorder"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -299,7 +299,7 @@
                 android:layout_width="56dp"
                 android:layout_height="48dp"
                 android:scaleType="center"
-                android:src="@drawable/billable"
+                android:src="@drawable/ic_billable"
                 app:layout_constraintTop_toBottomOf="@id/TagsBottomBorder"
                 app:layout_constraintLeft_toLeftOf="parent"
                 />
@@ -359,7 +359,8 @@
                 android:layout_width="56dp"
                 android:layout_height="48dp"
                 android:scaleType="center"
-                android:src="@drawable/timer_dark"
+                android:src="@drawable/ic_timer"
+                android:tint="#757575"
                 app:layout_constraintTop_toBottomOf="@id/BillableBottomBorder"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -522,7 +523,7 @@
                 android:layout_width="56dp"
                 android:layout_height="48dp"
                 android:scaleType="center"
-                android:src="@drawable/delete"
+                android:src="@drawable/ic_delete"
                 app:layout_constraintTop_toBottomOf="@id/DurationBottomBorder"
                 app:layout_constraintLeft_toLeftOf="parent" />
 

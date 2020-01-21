@@ -16,8 +16,6 @@ namespace Toggl.Shared.Extensions
 
         public static bool NotNull(object obj) => obj != null;
 
-        public static string ToString<T>(T obj) => obj.ToString();
-
         public static void DoNothing<T>(T x) { }
         
         public static void DoNothing() { }

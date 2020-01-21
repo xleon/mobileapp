@@ -10,6 +10,7 @@ using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Sync;
 using Toggl.Core.Tests.Generators;
+using Toggl.Core.Tests.Mocks.Services;
 using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
@@ -71,7 +72,8 @@ namespace Toggl.Core.Tests.UI
                 MockSyncManager = Substitute.For<ISyncManager>(),
                 MockPushNotificationsTokenService = Substitute.For<IPushNotificationsTokenService>(),
                 MockUpdateRemoteConfigCacheService = Substitute.For<IUpdateRemoteConfigCacheService>(),
-                MockWidgetsService = Substitute.For<IWidgetsService>()
+                MockWidgetsService = Substitute.For<IWidgetsService>(),
+                MockDateRangeShortcutsService = new MockDateRangeShortcutsService()
             };
 
             container.MockLicenseProvider.GetAppLicenses().Returns(new Dictionary<string, string>());

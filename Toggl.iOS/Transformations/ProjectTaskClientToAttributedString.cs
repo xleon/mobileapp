@@ -5,7 +5,7 @@ using CoreGraphics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Suggestions;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
 using UIKit;

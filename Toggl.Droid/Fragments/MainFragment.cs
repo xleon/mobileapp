@@ -14,7 +14,7 @@ using Toggl.Core.Sync;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog;
+using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
@@ -31,6 +31,8 @@ using Android.Runtime;
 using AndroidX.Core.Content;
 using AndroidX.RecyclerView.Widget;
 using Google.Android.Material.Snackbar;
+using Toggl.Core;
+using Toggl.Droid.Views;
 
 namespace Toggl.Droid.Fragments
 {
@@ -119,8 +121,8 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(timeEntryCardDotView.Rx().DrawableColor())
                 .DisposedBy(DisposeBag);
 
-            addDrawable = ContextCompat.GetDrawable(Context, Resource.Drawable.add_white);
-            playDrawable = ContextCompat.GetDrawable(Context, Resource.Drawable.play_white);
+            addDrawable = ContextCompat.GetDrawable(Context, Resource.Drawable.ic_add);
+            playDrawable = ContextCompat.GetDrawable(Context, Resource.Drawable.ic_play_big);
 
             ViewModel.IsInManualMode
                 .Select(isManualMode => isManualMode ? addDrawable : playDrawable)
@@ -172,8 +174,8 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             refreshLayout.Rx().Refreshed()
-                 .Subscribe(ViewModel.Refresh.Inputs)
-                 .DisposedBy(DisposeBag);
+                .Subscribe(ViewModel.Refresh.Inputs)
+                .DisposedBy(DisposeBag);
 
             ViewModel.MainLogItems
                 .Subscribe(mainLogRecyclerAdapter.UpdateCollection)
@@ -211,7 +213,34 @@ namespace Toggl.Droid.Fragments
             //    .Subscribe(onEmptyStateVisibilityChanged)
             //    .DisposedBy(DisposeBag);
 
+            playButton.Rx().TouchEvents()
+                .Subscribe(handlePlayFabEvent)
+                .DisposedBy(DisposeBag);
+
+            playButton.Rx().LongPress()
+                .Subscribe(_ => playButton.StopAnimation())
+                .DisposedBy(DisposeBag);
+
             setupOnboardingSteps();
+        }
+
+        private void handlePlayFabEvent(View.TouchEventArgs eventArgs)
+        {
+            if (eventArgs == null)
+            {
+                return;
+            }
+
+            eventArgs.Handled = false;
+
+            if (eventArgs.Event.Action == MotionEventActions.Up)
+            {
+                playButton.StopAnimation();
+            }
+            else
+            {
+                playButton.TryStartAnimation();
+            }
         }
 
         public void ScrollToStart()

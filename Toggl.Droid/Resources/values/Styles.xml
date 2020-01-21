@@ -2,7 +2,7 @@
 <resources>
     <style name="Theme.Splash" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@drawable/Splash</item>
+        <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:statusBarColor">@color/background</item>
         <item name="android:navigationBarColor">@color/background</item>
     </style>
@@ -69,6 +69,16 @@
         <item name="android:textColor">@color/secondaryText</item>
     </style>
 
+    <style name="DateRangePickerDayNameHeader">
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+  
     <style name="BottomAuthCard">
         <item name="cardBackgroundColor">@color/cardBackground</item>
         <item name="cardCornerRadius">8dp</item>
@@ -78,5 +88,35 @@
         <item name="android:layout_marginLeft">24dp</item>
         <item name="android:layout_marginRight">24dp</item>
         <item name="android:layout_marginBottom">-8dp</item>
+    </style>
+    
+    <style name="AppBarPopupTheme" parent="ThemeOverlay.AppCompat">
+    </style>
+
+    <style name="AppBarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:actionMenuTextColor">@color/ToolbarButtonTextColor</item>
+        <item name="actionMenuTextColor">@color/ToolbarButtonTextColor</item>
+        <item name="android:colorControlNormal">@color/primaryText</item>
+        <item name="colorControlNormal">@color/primaryText</item>
+    </style>
+
+    <style name="WheelDialogStyle" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">#328fff</item>
+        <item name="android:headerTimeTextAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:headerDayOfMonthTextAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:headerAmPmTextAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:headerMonthTextAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:headerYearTextAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:timePickerStyle">@style/WheelTimePicker</item>
+        <item name="android:datePickerStyle">@style/WheelDatePicker</item>
+    </style>
+
+    <style name="WheelDatePicker" parent="@android:style/Widget.Material.Light.DatePicker">
+        <item name="android:headerBackground">@drawable/background_picker_header</item>
+    </style>
+
+    <style name="WheelTimePicker" parent="@android:style/Widget.Material.Light.TimePicker">
+        <item name="android:headerBackground">@drawable/background_picker_header</item>
+        <item name="android:numbersSelectorColor">@color/accent</item>
     </style>
 </resources>

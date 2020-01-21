@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:src="@drawable/ic_unsyncable"
+        android:layout_marginBottom="16dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
+    <TextView
+        android:id="@+id/Title"
+        android:textSize="20sp"
+        android:textStyle="normal"
+        android:lineSpacingExtra="4sp"
+        android:fontFamily="sans-serif"
+        tools:text="Oooops!"
+        android:textColor="@color/primaryText"
+        android:layout_marginBottom="6dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/Message"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        android:singleLine="false"
+        android:lineSpacingExtra="5sp"
+        android:gravity="center"
+        android:layout_marginRight="48dp"
+        android:layout_marginLeft="48dp"
+        android:fontFamily="sans-serif"
+        tools:text="Your internet connection is not\nhappy about all of this."
+        android:textColor="@color/secondaryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
