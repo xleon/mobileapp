@@ -291,6 +291,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private async void onAuthenticated()
         {
+            Console.WriteLine("DEBUG - SignupViewModel: onAuthenticated");
             successfulSignupSubject.OnNext(Unit.Default);
 
             lastTimeUsageStorage.SetLogin(timeService.CurrentDateTime);
@@ -305,6 +306,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private void onError(Exception exception)
         {
+            Console.WriteLine("DEBUG - SignupViewModel: onError");
             isLoadingSubject.OnNext(false);
             onCompleted();
 
@@ -332,6 +334,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private void onCompleted()
         {
+            Console.WriteLine("DEBUG - SignupViewModel: onCompleted");
             signupDisposable?.Dispose();
             signupDisposable = null;
         }
@@ -352,8 +355,10 @@ namespace Toggl.Core.UI.ViewModels
             errorMessageSubject.OnNext(string.Empty);
 
             signupDisposable = View.GetGoogleToken()
+                .Do(t => Console.WriteLine ("DEBUG - SignupViewModel:" + t))
                 .SelectMany(googleToken => userAccessManager
                     .SignUpWithGoogle(googleToken, termsOfServiceAccepted, (int)countryId.Value, timezone))
+                .Do(t => Console.WriteLine ("DEBUG - SignupViewModel: after SignUpWithGoogle"))
                 .Track(analyticsService.SignUp, AuthenticationMethod.Google)
                 .Subscribe(_ => onAuthenticated(), onError, onCompleted);
         }

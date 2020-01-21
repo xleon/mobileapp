@@ -30,12 +30,17 @@ namespace Toggl.Droid.Activities
         {
             ensureApiClientExists();
 
-            return logOutIfNeeded().SelectMany(getGoogleToken);
+            return logOutIfNeeded()
+                .Do(x => Console.WriteLine("DEBUG - ReactiveActivity: after logOutIfNeeded"))
+                .SelectMany(getGoogleToken);
 
             IObservable<Unit> logOutIfNeeded()
             {
                 if (!googleApiClient.IsConnected)
+                {
+                    Console.WriteLine("DEBUG - ReactiveActivity: login");
                     return Observable.Return(Unit.Default);
+                }
 
                 var logoutSubject = new Subject<Unit>();
                 var logoutCallback = new LogOutCallback(() => logoutSubject.CompleteWith(Unit.Default));
@@ -51,17 +56,22 @@ namespace Toggl.Droid.Activities
                 lock (lockable)
                 {
                     if (isLoggingIn)
+                    {
+                        Console.WriteLine("DEBUG - ReactiveActivity: getGoogleToken if (isLoggingIn)");
                         return loginSubject.AsObservable();
+                    }
 
                     isLoggingIn = true;
                     loginSubject = new Subject<string>();
 
                     if (googleApiClient.IsConnected)
                     {
+                        Console.WriteLine("DEBUG - ReactiveActivity: getGoogleToken if (googleApiClient.IsConnected)");
                         login();
                         return loginSubject.AsObservable();
                     }
 
+                    Console.WriteLine("DEBUG - ReactiveActivity: getGoogleToken end");
                     googleApiClient.Connect();
                     return loginSubject.AsObservable();
                 }
@@ -72,9 +82,13 @@ namespace Toggl.Droid.Activities
         {
             lock (lockable)
             {
+                Console.WriteLine("DEBUG - ReactiveActivity: onGoogleSignInResult");
+
                 var signInData = Auth.GoogleSignInApi.GetSignInResultFromIntent(data);
                 if (!signInData.IsSuccess)
                 {
+                    Console.WriteLine("DEBUG - ReactiveActivity: if (!signInData.IsSuccess)");
+
                     loginSubject.OnError(new GoogleLoginException(signInData.Status.IsCanceled));
                     isLoggingIn = false;
                     return;
@@ -84,16 +98,22 @@ namespace Toggl.Droid.Activities
                 {
                     try
                     {
+                        Console.WriteLine("DEBUG - ReactiveActivity: onGoogleSignInResult try");
+
                         var token = GoogleAuthUtil.GetToken(Application.Context, signInData.SignInAccount.Account, scope);
                         loginSubject.OnNext(token);
                         loginSubject.OnCompleted();
                     }
                     catch (Exception e)
                     {
+                        Console.WriteLine("DEBUG - ReactiveActivity: onGoogleSignInResult catch" + e.Message);
+
                         loginSubject.OnError(e);
                     }
                     finally
                     {
+                        Console.WriteLine("DEBUG - ReactiveActivity: onGoogleSignInResult finally");
+
                         isLoggingIn = false;
                     }
                 });
@@ -102,10 +122,19 @@ namespace Toggl.Droid.Activities
 
         private void login()
         {
-            if (!isLoggingIn) return;
+            Console.WriteLine("DEBUG - ReactiveActivity: login");
+
+            if (!isLoggingIn)
+            {
+                Console.WriteLine("DEBUG - ReactiveActivity: !isLoggingIn");
+
+                return;
+            }
 
             if (!googleApiClient.IsConnected)
             {
+                Console.WriteLine("DEBUG - ReactiveActivity: !googleApiClient.IsConnected");
+
                 throw new GoogleLoginException(false);
             }
 
@@ -117,6 +146,8 @@ namespace Toggl.Droid.Activities
         {
             lock (lockable)
             {
+                Console.WriteLine("DEBUG - ReactiveActivity: onError");
+
                 loginSubject.OnError(new GoogleLoginException(false));
                 isLoggingIn = false;
             }
@@ -124,8 +155,13 @@ namespace Toggl.Droid.Activities
 
         private void ensureApiClientExists()
         {
+            Console.WriteLine("DEBUG - ReactiveActivity: ensureApiClientExists");
+
             if (googleApiClient != null)
+            {
+                Console.WriteLine("DEBUG - ReactiveActivity: googleApiClient != null");
                 return;
+            }
 
             var signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DefaultSignIn)
                 .RequestIdToken("{TOGGL_DROID_GOOGLE_SERVICES_CLIENT_ID}")
