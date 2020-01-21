@@ -3,12 +3,16 @@ using Android.Widget;
 using AndroidX.RecyclerView.Widget;
 using Google.Android.Material.AppBar;
 using Google.Android.Material.FloatingActionButton;
+using Toggl.Droid.Extensions;
+using Toggl.Droid.LayoutManagers;
 
 namespace Toggl.Droid.Fragments
 {
     public sealed partial class ReportsFragment
     {
-        protected override int LayoutId => Resource.Layout.CalendarFragment;
+        private readonly ReportsAdapter adapter = new ReportsAdapter();
+
+        protected override int LayoutId => Resource.Layout.ReportsFragment;
 
         protected override View LoadingPlaceholderView { get; set; }
 
@@ -24,7 +28,16 @@ namespace Toggl.Droid.Fragments
             reportsRecyclerView = fragmentView.FindViewById<RecyclerView>(Resource.Id.ReportsFragmentRecyclerView);
             appBarLayout = fragmentView.FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
 
-            LoadingPlaceholderView = fragmentView;
+            LoadingPlaceholderView = fragmentView.FindViewById(Resource.Id.TabLoadingIndicator);
+
+            setupRecyclerView();
+        }
+
+        private void setupRecyclerView()
+        {
+            reportsRecyclerView.AttachMaterialScrollBehaviour(appBarLayout);
+            reportsRecyclerView.SetLayoutManager(new UnpredictiveLinearLayoutManager(Context));
+            reportsRecyclerView.SetAdapter(adapter);
         }
     }
 }

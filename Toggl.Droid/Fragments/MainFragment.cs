@@ -31,8 +31,6 @@ using Android.Runtime;
 using AndroidX.Core.Content;
 using AndroidX.RecyclerView.Widget;
 using Google.Android.Material.Snackbar;
-using Toggl.Core;
-using Toggl.Droid.Views;
 
 namespace Toggl.Droid.Fragments
 {
