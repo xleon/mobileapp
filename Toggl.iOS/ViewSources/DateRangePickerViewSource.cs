@@ -62,6 +62,9 @@ namespace Toggl.iOS.ViewSources
 
         public void ScrollToCurrentPage(bool animated = false)
         {
+            if (months.IsEmpty) 
+                return;
+
             page = months.FindLastIndex(m => m.IsSelectionBeginningBoundary);
 
             if (page < 0)
