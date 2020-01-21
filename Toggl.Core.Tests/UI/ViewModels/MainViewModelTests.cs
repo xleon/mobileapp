@@ -34,6 +34,7 @@ using Toggl.Storage;
 using Xunit;
 using static Toggl.Core.Helper.Constants;
 using ThreadingTask = System.Threading.Tasks.Task;
+using Toggl.Core.Exceptions;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -43,7 +44,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
     {
         public abstract class MainViewModelTest : BaseViewModelTests<MainViewModel>
         {
-            protected ISubject<SyncProgress> ProgressSubject { get; } = new Subject<SyncProgress>();
+            protected ISubject<Exception> SyncErrorSubject { get; } = new Subject<Exception>();
 
             protected override MainViewModel CreateViewModel()
             {
@@ -77,8 +78,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 base.AdditionalSetup();
 
-                var syncManager = Substitute.For<ISyncManager>();
-                syncManager.ProgressObservable.Returns(ProgressSubject.AsObservable());
+                SyncManager.Errors.Returns(SyncErrorSubject.AsObservable());
 
                 var defaultRemoteConfiguration = new RatingViewConfiguration(5, RatingViewCriterion.None);
                 RemoteConfigService
@@ -174,18 +174,22 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async ThreadingTask NavigatesToNoWorkspaceViewModelWhenNoWorkspaceStateIsSet()
             {
                 AccessRestrictionStorage.HasNoWorkspace().Returns(true);
-
+                SyncErrorSubject.OnNext(new NoWorkspaceException());
                 ViewModel.ViewAppearing();
 
-                await NavigationService.Received().Navigate<NoWorkspaceViewModel, Unit>(View);
+                TestScheduler.Start();
+
+                await NavigationService.Received(1).Navigate<NoWorkspaceViewModel, Unit>(View);
             }
 
             [Fact, LogIfTooSlow]
             public async ThreadingTask DoesNotNavigateToNoWorkspaceViewModelWhenNoWorkspaceStateIsNotSet()
             {
+                SyncErrorSubject.OnNext(new NoWorkspaceException());
+                ViewModel.ViewAppearing();
                 AccessRestrictionStorage.HasNoWorkspace().Returns(false);
 
-                ViewModel.ViewAppearing();
+                TestScheduler.Start();
 
                 await NavigationService.DidNotReceive().Navigate<NoWorkspaceViewModel, Unit>(View);
             }
@@ -197,10 +201,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var task = new TaskCompletionSource<Unit>().Task;
                 NavigationService.Navigate<NoWorkspaceViewModel, Unit>(View).Returns(task);
 
+                SyncErrorSubject.OnNext(new NoWorkspaceException());
+                SyncErrorSubject.OnNext(new NoWorkspaceException());
                 ViewModel.ViewAppearing();
                 ViewModel.ViewAppearing();
-                ViewModel.ViewAppearing();
-                ViewModel.ViewAppearing();
+                TestScheduler.Start();
 
                 await NavigationService.Received(1).Navigate<NoWorkspaceViewModel, Unit>(View);
             }
@@ -208,10 +213,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async ThreadingTask NavigatesToSelectDefaultWorkspaceViewModelWhenNoDefaultWorkspaceStateIsSet()
             {
-                AccessRestrictionStorage.HasNoWorkspace().Returns(false);
                 AccessRestrictionStorage.HasNoDefaultWorkspace().Returns(true);
+                SyncErrorSubject.OnNext(new NoDefaultWorkspaceException());
+                ViewModel.ViewAppearing();
 
-                await ViewModel.ViewAppearingAsync();
+                TestScheduler.Start();
 
                 await NavigationService.Received().Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
@@ -220,8 +226,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async ThreadingTask DoesNotNavigateToSelectDefaultWorkspaceViewModelWhenNoDefaultWorkspaceStateIsNotSet()
             {
                 AccessRestrictionStorage.HasNoDefaultWorkspace().Returns(false);
+                SyncErrorSubject.OnNext(new Exception());
 
-                ViewModel.ViewAppearing();
+                TestScheduler.Start();
 
                 await NavigationService.DidNotReceive().Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
@@ -234,12 +241,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var task = new TaskCompletionSource<Unit>().Task;
                 NavigationService.Navigate<SelectDefaultWorkspaceViewModel, Unit>(View).Returns(task);
 
+                SyncErrorSubject.OnNext(new NoDefaultWorkspaceException());
+                SyncErrorSubject.OnNext(new NoDefaultWorkspaceException());
                 ViewModel.ViewAppearing();
                 ViewModel.ViewAppearing();
-                ViewModel.ViewAppearing();
-                ViewModel.ViewAppearing();
-                //ViewAppearing calls an async method. The delay is here to ensure that the async method completes before the assertion
-                await ThreadingTask.Delay(200);
+                TestScheduler.Start();
 
                 await NavigationService.Received(1).Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
             }
@@ -248,9 +254,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async ThreadingTask DoesNotNavigateToSelectDefaultWorkspaceViewModelWhenTheresNoWorkspaceAvaialable()
             {
                 AccessRestrictionStorage.HasNoWorkspace().Returns(true);
-                AccessRestrictionStorage.HasNoDefaultWorkspace().Returns(true);
+                SyncErrorSubject.OnNext(new NoWorkspaceException());
+                ViewModel.ViewAppearing();
 
-                await ViewModel.ViewAppearingAsync();
+                TestScheduler.Start();
 
                 await NavigationService.Received().Navigate<NoWorkspaceViewModel, Unit>(View);
                 await NavigationService.DidNotReceive().Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);

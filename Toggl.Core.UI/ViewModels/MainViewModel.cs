@@ -9,7 +9,6 @@ using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.Experiments;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
@@ -25,14 +24,15 @@ using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Core.UI.ViewModels.MainLog.Identity;
 using Toggl.Shared;
-using Toggl.Shared.Extensions;
-using Toggl.Storage;
-using Toggl.Storage.Settings;
-using Toggl.Core.UI.Services;
 using System.ComponentModel;
 using static Toggl.Core.Analytics.ContinueTimeEntryMode;
 using static Toggl.Core.Analytics.ContinueTimeEntryOrigin;
-
+using Toggl.Core.Exceptions;
+using Toggl.Storage.Settings;
+using Toggl.Core.UI.Services;
+using Toggl.Core.Experiments;
+using Toggl.Shared.Extensions;
+using Toggl.Storage;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -289,6 +289,12 @@ namespace Toggl.Core.UI.ViewModels
                 .Subscribe(postAccessibilityAnnouncementAboutSync)
                 .DisposedBy(disposeBag);
 
+            syncManager.Errors
+                .AsDriver(schedulerProvider)
+                .SelectMany(handleSyncError)
+                .Subscribe()
+                .DisposedBy(disposeBag);
+
             MainLogItems = TimeEntriesViewModel.TimeEntries
                 .MergeToMainLogSections(
                     SuggestionsViewModel.Suggestions,
@@ -361,6 +367,15 @@ namespace Toggl.Core.UI.ViewModels
         {
             base.ViewAppeared();
             SuggestionsViewModel.ViewAppeared();
+            ViewAppearingAsync();
+        }
+
+        internal async Task ViewAppearingAsync()
+        {
+            hideRatingViewIfStillVisibleAfterDelay();
+
+            await handleNoWorkspaceState();
+            handleNoDefaultWorkspaceState();
         }
 
         private async Task viewDisappearedAsync()
@@ -371,14 +386,7 @@ namespace Toggl.Core.UI.ViewModels
         public override void ViewAppearing()
         {
             base.ViewAppearing();
-            ViewAppearingAsync();
-        }
-
-        internal async Task ViewAppearingAsync()
-        {
             hideRatingViewIfStillVisibleAfterDelay();
-            await handleNoWorkspaceState();
-            handleNoDefaultWorkspaceState();
         }
 
         private void hideRatingViewIfStillVisibleAfterDelay()
@@ -536,6 +544,14 @@ namespace Toggl.Core.UI.ViewModels
             }
 
             accessibilityService.PostAnnouncement(message);
+        }
+
+        private async Task<Unit> handleSyncError(Exception exception)
+        {
+            await handleNoWorkspaceState();
+            handleNoDefaultWorkspaceState();
+
+            return Unit.Default;
         }
     }
 }
