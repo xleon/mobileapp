@@ -48,7 +48,8 @@
     <toggl.droid.views.AnimatedFloatingActionButton
         android:id="@+id/MainPlayButton"
         app:elevation="4dp"
-        android:src="@drawable/play_white"
+        android:src="@drawable/ic_play_big"
+        android:tint="@android:color/white"
         app:backgroundTint="@color/startTimeEntryButtonBackground"
         android:layout_width="56dp"
         android:layout_height="56dp"
