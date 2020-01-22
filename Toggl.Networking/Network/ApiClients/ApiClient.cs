@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Toggl.Networking.Extensions;
@@ -28,8 +30,7 @@ namespace Toggl.Networking.Network
             var requestMessage = createRequestMessage(request);
             var responseMessage = await httpClient.SendAsync(requestMessage).ConfigureAwait(false);
 
-            var response = await createResponse(responseMessage).ConfigureAwait(false);
-            return response;
+            return await createResponse(responseMessage).ConfigureAwait(false);
         }
 
         public void Dispose()
@@ -62,7 +63,6 @@ namespace Toggl.Networking.Network
             var rawResponseString = "";
             var isSuccess = responseMessage.IsSuccessStatusCode;
             var contentType = responseMessage.Content?.Headers?.ContentType?.MediaType ?? defaultContentType;
-            var headers = responseMessage.Headers;
 
             using (var content = responseMessage.Content)
             {
@@ -72,8 +72,13 @@ namespace Toggl.Networking.Network
                 }
             }
 
-            var response = new Response(rawResponseString, isSuccess, contentType, headers, responseMessage.StatusCode);
-            return response;
+            return new Response(
+                rawResponseString,
+                isSuccess,
+                contentType,
+                responseMessage.Headers,
+                responseMessage.StatusCode);
         }
+
     }
 }
