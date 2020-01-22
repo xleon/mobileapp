@@ -33,7 +33,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     PrivateSharedStorageService,
                     PlatformInfo,
                     WidgetsService,
-                    LastTimeUsageStorage,
                     DateRangeShortcutsService
                 );
         }
@@ -64,7 +63,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     bool usePrivateSharedStorageService,
                     bool usePlatformInfo,
                     bool useWidgetsService,
-                    bool useLastTimeUsageStorage,
                     bool useDateRangeShortcutsService)
             {
                 var timeService = useTimeService ? TimeService : null;
@@ -88,7 +86,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var privateSharedStorageService = usePrivateSharedStorageService ? PrivateSharedStorageService : null;
                 var platformInfo = usePlatformInfo ? PlatformInfo : null;
                 var widgetsService = useWidgetsService ? WidgetsService : null;
-                var lastTimeUsageStorage = useLastTimeUsageStorage ? LastTimeUsageStorage : null;
                 var dateRangeShortcutsService = useDateRangeShortcutsService ? DateRangeShortcutsService : null;
 
                 Action tryingToConstructWithEmptyParameters =
@@ -114,7 +111,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         privateSharedStorageService,
                         platformInfo,
                         widgetsService,
-                        lastTimeUsageStorage,
                         dateRangeShortcutsService
                     );
 

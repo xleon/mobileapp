@@ -29,7 +29,7 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/ErrorIcon"
-                android:src="@drawable/error_baddata"
+                android:src="@drawable/ic_unsyncable"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintTop_toTopOf="@+id/OopsTextView"

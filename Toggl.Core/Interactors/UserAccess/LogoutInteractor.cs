@@ -25,6 +25,7 @@ namespace Toggl.Core.Interactors.UserAccess
         private readonly IUserAccessManager userAccessManager;
         private readonly IInteractorFactory interactorFactory;
         private readonly LogoutSource source;
+        private readonly IOnboardingStorage onboardingStorage;
 
         public LogoutInteractor(
             IAnalyticsService analyticsService,
@@ -36,7 +37,8 @@ namespace Toggl.Core.Interactors.UserAccess
             IPrivateSharedStorageService privateSharedStorageService,
             IUserAccessManager userAccessManager,
             IInteractorFactory interactorFactory,
-            LogoutSource source)
+            LogoutSource source,
+            IOnboardingStorage onboardingStorage)
         {
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(notificationService, nameof(notificationService));
@@ -48,6 +50,7 @@ namespace Toggl.Core.Interactors.UserAccess
             Ensure.Argument.IsNotNull(userAccessManager, nameof(userAccessManager));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
             Ensure.Argument.IsADefinedEnumValue(source, nameof(source));
+            Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
 
             this.analyticsService = analyticsService;
             this.shortcutCreator = shortcutCreator;
@@ -59,6 +62,7 @@ namespace Toggl.Core.Interactors.UserAccess
             this.userAccessManager = userAccessManager;
             this.interactorFactory = interactorFactory;
             this.source = source;
+            this.onboardingStorage = onboardingStorage;
         }
 
         public IObservable<Unit> Execute()
@@ -68,6 +72,7 @@ namespace Toggl.Core.Interactors.UserAccess
                 .Do(shortcutCreator.OnLogout)
                 .Do(userPreferences.Reset)
                 .Do(privateSharedStorageService.ClearAll)
+                .Do(onboardingStorage.Reset)
                 .Do(_ => analyticsService.Logout.Track(source))
                 .SelectMany(_ =>
                     notificationService

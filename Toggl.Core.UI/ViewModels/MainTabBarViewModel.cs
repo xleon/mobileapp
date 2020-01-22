@@ -51,7 +51,6 @@ namespace Toggl.Core.UI.ViewModels
             IPrivateSharedStorageService privateSharedStorageService,
             IPlatformInfo platformInfo,
             IWidgetsService widgetsService,
-            ILastTimeUsageStorage lastTimeUsageStorage,
             IDateRangeShortcutsService dateRangeShortcutsService)
             : base(navigationService)
         {
@@ -76,7 +75,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
             Ensure.Argument.IsNotNull(widgetsService, nameof(widgetsService));
-            Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
             Ensure.Argument.IsNotNull(dateRangeShortcutsService, nameof(dateRangeShortcutsService));
 
             mainViewModel = new MainViewModel(
@@ -98,8 +96,7 @@ namespace Toggl.Core.UI.ViewModels
                 permissionsChecker,
                 backgroundService,
                 platformInfo,
-                widgetsService,
-                lastTimeUsageStorage);
+                widgetsService);
 
             reportsViewModel = new ReportsViewModel(
                 dataSource,

@@ -179,6 +179,8 @@ namespace Toggl.Core.Interactors
 
         IInteractor<IObservable<Unit>> ScheduleEventNotificationsForNextWeek();
 
+        IInteractor<Task> UpdateEventNotificationsSchedules();
+
         #endregion
 
         #region Clients

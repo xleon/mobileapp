@@ -9,7 +9,6 @@ using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
-using Toggl.Core.Experiments;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
@@ -25,15 +24,15 @@ using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.MainLog;
 using Toggl.Core.UI.ViewModels.MainLog.Identity;
 using Toggl.Shared;
-using Toggl.Shared.Extensions;
-using Toggl.Storage;
-using Toggl.Storage.Settings;
-using Toggl.Core.UI.Services;
 using System.ComponentModel;
-using System.Threading;
 using static Toggl.Core.Analytics.ContinueTimeEntryMode;
 using static Toggl.Core.Analytics.ContinueTimeEntryOrigin;
-
+using Toggl.Core.Exceptions;
+using Toggl.Storage.Settings;
+using Toggl.Core.UI.Services;
+using Toggl.Core.Experiments;
+using Toggl.Shared.Extensions;
+using Toggl.Storage;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -61,13 +60,12 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IAccessibilityService accessibilityService;
         private readonly IAccessRestrictionStorage accessRestrictionStorage;
         private readonly IWidgetsService widgetsService;
-        private readonly IRemoteConfigService remoteConfigService;
-        private readonly ILastTimeUsageStorage lastTimeUsageStorage;
 
         private readonly RatingViewExperiment ratingViewExperiment;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         private readonly ISubject<Unit> hideRatingView = new Subject<Unit>();
+        private IObservable<bool> shouldShowRatingViewObservable;
 
         private readonly MainLogSection userFeedbackMainLogSection;
 
@@ -126,8 +124,7 @@ namespace Toggl.Core.UI.ViewModels
             IPermissionsChecker permissionsChecker,
             IBackgroundService backgroundService,
             IPlatformInfo platformInfo,
-            IWidgetsService widgetsService,
-            ILastTimeUsageStorage lastTimeUsageStorage)
+            IWidgetsService widgetsService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
@@ -148,7 +145,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
             Ensure.Argument.IsNotNull(widgetsService, nameof(widgetsService));
-            Ensure.Argument.IsNotNull(lastTimeUsageStorage, nameof(lastTimeUsageStorage));
 
             this.dataSource = dataSource;
             this.syncManager = syncManager;
@@ -161,8 +157,6 @@ namespace Toggl.Core.UI.ViewModels
             this.accessibilityService = accessibilityService;
             this.accessRestrictionStorage = accessRestrictionStorage;
             this.widgetsService = widgetsService;
-            this.remoteConfigService = remoteConfigService;
-            this.lastTimeUsageStorage = lastTimeUsageStorage;
 
             TimeService = timeService;
             OnboardingStorage = onboardingStorage;
@@ -183,7 +177,7 @@ namespace Toggl.Core.UI.ViewModels
             SwipeActionsEnabled = userPreferences.SwipeActionsEnabled.AsDriver(schedulerProvider);
 
             userFeedbackMainLogSection = new MainLogSection(new UserFeedbackSectionViewModel(),
-                new [] { new UserFeedbackViewModel(RatingViewModel) });
+                new[] { new UserFeedbackViewModel(RatingViewModel) });
         }
 
         public override async Task Initialize()
@@ -270,14 +264,18 @@ namespace Toggl.Core.UI.ViewModels
             StopTimeEntry = rxActionFactory.FromObservable<TimeEntryStopOrigin>(stopTimeEntry, IsTimeEntryRunning);
             ContinueTimeEntry = rxActionFactory.FromAsync<ContinueTimeEntryInfo, IThreadSafeTimeEntry>(continueTimeEntry);
 
-            ShouldShowRatingView = Observable.Merge(
+            shouldShowRatingViewObservable = Observable.Merge(
                     ratingViewExperiment.RatingViewShouldBeVisible,
                     RatingViewModel.HideRatingView.SelectValue(false),
                     hideRatingView.AsObservable().SelectValue(false)
                 )
+                .StartWith(false)
                 .Select(canPresentRating)
                 .DistinctUntilChanged()
-                .Do(trackRatingViewPresentation)
+                .Do(trackRatingViewPresentation);
+
+            ShouldShowRatingView =
+                shouldShowRatingViewObservable
                 .AsDriver(schedulerProvider);
 
             OnboardingStorage.StopButtonWasTappedBefore
@@ -291,10 +289,16 @@ namespace Toggl.Core.UI.ViewModels
                 .Subscribe(postAccessibilityAnnouncementAboutSync)
                 .DisposedBy(disposeBag);
 
+            syncManager.Errors
+                .AsDriver(schedulerProvider)
+                .SelectMany(handleSyncError)
+                .Subscribe()
+                .DisposedBy(disposeBag);
+
             MainLogItems = TimeEntriesViewModel.TimeEntries
                 .MergeToMainLogSections(
                     SuggestionsViewModel.Suggestions,
-                    ShouldShowRatingView,
+                    shouldShowRatingViewObservable,
                     userFeedbackMainLogSection)
                 .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider);
         }
@@ -363,6 +367,15 @@ namespace Toggl.Core.UI.ViewModels
         {
             base.ViewAppeared();
             SuggestionsViewModel.ViewAppeared();
+            ViewAppearingAsync();
+        }
+
+        internal async Task ViewAppearingAsync()
+        {
+            hideRatingViewIfStillVisibleAfterDelay();
+
+            await handleNoWorkspaceState();
+            handleNoDefaultWorkspaceState();
         }
 
         private async Task viewDisappearedAsync()
@@ -373,19 +386,7 @@ namespace Toggl.Core.UI.ViewModels
         public override void ViewAppearing()
         {
             base.ViewAppearing();
-            ViewAppearingAsync();
-        }
-
-        internal async Task ViewAppearingAsync()
-        {
             hideRatingViewIfStillVisibleAfterDelay();
-            await handleNoWorkspaceState();
-            handleNoDefaultWorkspaceState();
-
-            if (await shouldShowJanuary2020Campaign())
-            {
-                await navigate<January2020CampaignViewModel>();
-            }
         }
 
         private void hideRatingViewIfStillVisibleAfterDelay()
@@ -415,30 +416,6 @@ namespace Toggl.Core.UI.ViewModels
                 await Navigate<SelectDefaultWorkspaceViewModel, Unit>();
                 noDefaultWorkspaceViewPresented = false;
             }
-        }
-
-        private async Task<bool> shouldShowJanuary2020Campaign()
-        {
-            var isTheAppShownInJapanese = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.Equals("JA", StringComparison.InvariantCultureIgnoreCase);
-            if (isTheAppShownInJapanese)
-                return false;
-
-            var isDisabled = remoteConfigService.GetJanuary2020CampaignConfiguration().Option == January2020CampaignConfiguration.AvailableOption.None;
-            if (isDisabled)
-                return false;
-
-            var wasAlreadyShown = OnboardingStorage.WasJanuary2020CampaignShown();
-            if (wasAlreadyShown)
-                return false;
-
-            if (!lastTimeUsageStorage.LastLogin.HasValue)
-                return false;
-
-            var isNotANewUser =
-                TimeService.CurrentDateTime - lastTimeUsageStorage.LastLogin.Value > TimeSpan.FromHours(48)
-                    && await TimeEntriesCount.FirstAsync() >= 2;
-
-            return isNotANewUser;
         }
 
         private Task openSettings()
@@ -567,6 +544,14 @@ namespace Toggl.Core.UI.ViewModels
             }
 
             accessibilityService.PostAnnouncement(message);
+        }
+
+        private async Task<Unit> handleSyncError(Exception exception)
+        {
+            await handleNoWorkspaceState();
+            handleNoDefaultWorkspaceState();
+
+            return Unit.Default;
         }
     }
 }
