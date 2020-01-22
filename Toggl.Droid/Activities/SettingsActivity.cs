@@ -98,7 +98,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
             
             ViewModel.AreStoppedTimerNotificationsEnabled
-                .Select(stoppedTimerNotificationsEnabled => new ToggleRow(NotificationsRunningTimer, stoppedTimerNotificationsEnabled, ViewModel.ToggleRunningTimerNotifications))
+                .Select(stoppedTimerNotificationsEnabled => new ToggleRow(NotificationsRunningTimer, stoppedTimerNotificationsEnabled, ViewModel.ToggleStoppedTimerNotifications))
                 .Subscribe(stoppedTimerRow.SetRowData)
                 .DisposedBy(DisposeBag);
 
