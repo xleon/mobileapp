@@ -26,6 +26,7 @@ namespace Toggl.Droid.ViewHolders.Settings
             description = ItemView.FindViewById<TextView>(Resource.Id.Description);
             switchView = ItemView.FindViewById<Switch>(Resource.Id.Switch);
             ItemView.Click += OnItemViewClick;
+            switchView.Click += OnItemViewClick;
         }
 
         protected override void OnRowDataChanged()
@@ -49,6 +50,7 @@ namespace Toggl.Droid.ViewHolders.Settings
 
             if (!disposing || ItemView == null) return;
             ItemView.Click -= OnItemViewClick;
+            switchView.Click -= OnItemViewClick;
         }
     }
 }
