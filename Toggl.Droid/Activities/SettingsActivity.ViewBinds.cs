@@ -33,12 +33,34 @@ namespace Toggl.Droid.Activities
         private NavigationRowViewView helpRow;
         private LogoutRowViewView logoutRowViewView;
 
+        private HeaderRowView profileHeaderRow;
+        private HeaderRowView dateTimeHeaderRow;
+        private HeaderRowView timerDefaultsHeaderRow;
+        private HeaderRowView calendarHeaderRow;
+        private HeaderRowView generalHeaderRow;
+
+
         protected override void InitializeViews()
         {
             appBarLayout = FindViewById<AppBarLayout>(Resource.Id.AppBarLayout);
             scrollView = FindViewById<NestedScrollView>(Resource.Id.ScrollView);
             settingsContainer = FindViewById<LinearLayout>(Resource.Id.settingsContainer);
 
+            profileHeaderRow = HeaderRowView.Create(this);
+            profileHeaderRow.SetRowData(new HeaderRow(Shared.Resources.YourProfile));
+            
+            dateTimeHeaderRow = HeaderRowView.Create(this);
+            dateTimeHeaderRow.SetRowData(new HeaderRow(Shared.Resources.DateAndTime));
+            
+            timerDefaultsHeaderRow = HeaderRowView.Create(this);
+            timerDefaultsHeaderRow.SetRowData(new HeaderRow(Shared.Resources.TimerDefaults));
+            
+            calendarHeaderRow = HeaderRowView.Create(this);
+            calendarHeaderRow.SetRowData(new HeaderRow(Shared.Resources.Calendar));
+            
+            generalHeaderRow = HeaderRowView.Create(this);
+            generalHeaderRow.SetRowData(new HeaderRow(Shared.Resources.General));
+            
             nameRow = InfoRowViewView.Create(this);
             emailRow = InfoRowViewView.Create(this);
             workspaceRow = NavigationRowViewView.Create(this);
@@ -58,18 +80,31 @@ namespace Toggl.Droid.Activities
             helpRow = NavigationRowViewView.Create(this, viewLayout: Resource.Layout.SettingsButtonRowView);
             logoutRowViewView = LogoutRowViewView.Create(this);
 
+            settingsContainer.AddView(profileHeaderRow.ItemView);
             settingsContainer.AddView(nameRow.ItemView);
             settingsContainer.AddView(emailRow.ItemView);
             settingsContainer.AddView(workspaceRow.ItemView);
+            settingsContainer.AddView(DividerRowView.Create(this).ItemView);
+
+            settingsContainer.AddView(dateTimeHeaderRow.ItemView);
             settingsContainer.AddView(dateFormatRow.ItemView);
             settingsContainer.AddView(use24HoursFormatRow.ItemView);
             settingsContainer.AddView(durationFormatRow.ItemView);
             settingsContainer.AddView(beginningOfWeekRow.ItemView);
+            settingsContainer.AddView(DividerRowView.Create(this).ItemView);
+
+            settingsContainer.AddView(timerDefaultsHeaderRow.ItemView);
             settingsContainer.AddView(isGroupingTimeEntriesRow.ItemView);
             settingsContainer.AddView(swipeActionsRow.ItemView);
             settingsContainer.AddView(isManualModeEnabledRowView.ItemView);
+            settingsContainer.AddView(DividerRowView.Create(this).ItemView);
+
+            settingsContainer.AddView(calendarHeaderRow.ItemView);
             settingsContainer.AddView(calendarSettingsRow.ItemView);
             settingsContainer.AddView(smartRemindersRow.ItemView);
+            settingsContainer.AddView(DividerRowView.Create(this).ItemView);
+
+            settingsContainer.AddView(generalHeaderRow.ItemView);
             settingsContainer.AddView(submitFeedbackRow.ItemView);
             settingsContainer.AddView(aboutRow.ItemView);
             settingsContainer.AddView(helpRow.ItemView);
