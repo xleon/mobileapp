@@ -1,6 +1,7 @@
 using Android.Views;
 using Android.Widget;
 using System;
+using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
@@ -11,6 +12,8 @@ using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
+using Toggl.Core.UI.Views.Settings;
+using Toggl.Droid.ViewHolders.Settings;
 using static Toggl.Shared.Resources;
 
 namespace Toggl.Droid.Activities
@@ -35,68 +38,88 @@ namespace Toggl.Droid.Activities
         {
             scrollView.AttachMaterialScrollBehaviour(appBarLayout);
 
-            versionTextView.Text = ViewModel.Version;
-
+            // profile section
             ViewModel.Name
-                .Subscribe(nameTextView.Rx().TextObserver())
+                .Select(name => new InfoRow(Name, name))
+                .Subscribe(nameRow.SetRowData)
                 .DisposedBy(DisposeBag);
-
+            
             ViewModel.Email
-                .Subscribe(emailTextView.Rx().TextObserver())
+                .Select(email => new InfoRow(Email, email))
+                .Subscribe(emailRow.SetRowData)
                 .DisposedBy(DisposeBag);
-
+            
             ViewModel.WorkspaceName
-                .Subscribe(defaultWorkspaceNameTextView.Rx().TextObserver())
+                .Select(workspaceName => new NavigationRow(Workspace, workspaceName, ViewModel.PickDefaultWorkspace))
+                .Subscribe(workspaceRow.SetRowData)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.SwipeActionsEnabled
-                .Subscribe(swipeActionsSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
-                .DisposedBy(DisposeBag);
-
-            ViewModel.IsManualModeEnabled
-                .Subscribe(manualModeSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
-                .DisposedBy(DisposeBag);
-
-            ViewModel.IsGroupingTimeEntries
-               .Subscribe(groupTimeEntriesSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
-               .DisposedBy(DisposeBag);
-
-            ViewModel.UseTwentyFourHourFormat
-                .Subscribe(is24hoursModeSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
-                .DisposedBy(DisposeBag);
-
-            ViewModel.AreRunningTimerNotificationsEnabled
-                .Subscribe(runningTimerNotificationsSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
-                .DisposedBy(DisposeBag);
-
-            ViewModel.AreStoppedTimerNotificationsEnabled
-                .Subscribe(stoppedTimerNotificationsSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
-                .DisposedBy(DisposeBag);
-
+            // date and time section
             ViewModel.DateFormat
-                .Subscribe(dateFormatTextView.Rx().TextObserver())
+                .Select(dateFormat => new NavigationRow(DateFormat, dateFormat, ViewModel.SelectDateFormat))
+                .Subscribe(dateFormatRow.SetRowData)
                 .DisposedBy(DisposeBag);
-
-            ViewModel.BeginningOfWeek
-                .Subscribe(beginningOfWeekTextView.Rx().TextObserver())
-                .DisposedBy(DisposeBag);
-
+            
+            ViewModel.UseTwentyFourHourFormat
+            .Select(use24HourFormat => new ToggleRow(Use24HourClock, use24HourFormat, ViewModel.ToggleTwentyFourHourSettings))
+            .Subscribe(use24HoursFormatRow.SetRowData)
+            .DisposedBy(DisposeBag);
+              
             ViewModel.DurationFormat
-                .Subscribe(durationFormatTextView.Rx().TextObserver())
+            .Select(durationFormat => new NavigationRow(DurationFormat, durationFormat, ViewModel.SelectDurationFormat))
+            .Subscribe(durationFormatRow.SetRowData)
+            .DisposedBy(DisposeBag);
+              
+            ViewModel.BeginningOfWeek
+            .Select(beginningOfWeek => new NavigationRow(FirstDayOfTheWeek, beginningOfWeek, ViewModel.SelectBeginningOfWeek))
+            .Subscribe(beginningOfWeekRow.SetRowData)
+            .DisposedBy(DisposeBag);
+              
+            ViewModel.IsGroupingTimeEntries
+            .Select(groupTEs => new ToggleRow(GroupTimeEntries, groupTEs, ViewModel.ToggleTimeEntriesGrouping))
+            .Subscribe(isGroupingTimeEntriesRow.SetRowData)
+            .DisposedBy(DisposeBag);
+
+            
+            // timer defaults section 
+            ViewModel.IsManualModeEnabled
+                .Select(isManualModeEnabled => new ToggleRowWithDescription(ManualMode, ManualModeDescription, isManualModeEnabled, ViewModel.ToggleManualMode))
+                .Subscribe(isManualModeEnabledRowView.SetRowData)
+                .DisposedBy(DisposeBag);
+            
+            ViewModel.SwipeActionsEnabled
+                .Select(areSwipeActionsEnabled => new ToggleRow(SwipeActions, areSwipeActionsEnabled, ViewModel.ToggleSwipeActions))
+                .Subscribe(swipeActionsRow.SetRowData)
+                .DisposedBy(DisposeBag);
+            
+            ViewModel.AreRunningTimerNotificationsEnabled
+                .Select(runningTimerNotificationsEnabled => new ToggleRow(NotificationsRunningTimer, runningTimerNotificationsEnabled, ViewModel.ToggleRunningTimerNotifications))
+                .Subscribe(runningTimeEntryRow.SetRowData)
+                .DisposedBy(DisposeBag);
+            
+            ViewModel.AreStoppedTimerNotificationsEnabled
+                .Select(stoppedTimerNotificationsEnabled => new ToggleRow(NotificationsRunningTimer, stoppedTimerNotificationsEnabled, ViewModel.ToggleRunningTimerNotifications))
+                .Subscribe(stoppedTimerRow.SetRowData)
                 .DisposedBy(DisposeBag);
 
+            // calendar section 
+            
+            calendarSettingsRow.SetRowData(new NavigationRow(CalendarSettingsTitle, ViewModel.OpenCalendarSettings));
+            
             ViewModel.IsCalendarSmartRemindersVisible
-                .Subscribe(smartRemindersView.Rx().IsVisible())
+                .Subscribe(smartRemindersRow.ItemView.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
-
-            ViewModel.IsCalendarSmartRemindersVisible
-                .Subscribe(smartRemindersViewSeparator.Rx().IsVisible())
-                .DisposedBy(DisposeBag);
-
+            
             ViewModel.CalendarSmartReminders
-                .Subscribe(smartRemindersTextView.Rx().TextObserver())
+                .Select(smartReminders => new NavigationRow(SmartReminders, smartReminders, ViewModel.OpenCalendarSmartReminders))
+                .Subscribe(smartRemindersRow.SetRowData)
                 .DisposedBy(DisposeBag);
 
+            // general section
+            submitFeedbackRow.SetRowData(new NavigationRow(SubmitFeedback, ViewModel.SubmitFeedback)); 
+            aboutRow.SetRowData(new NavigationRow(About, ViewModel.Version, ViewModel.OpenAboutView)); 
+            helpRow.SetRowData(new NavigationRow(Help, ViewModel.OpenHelpView));
+            
             ViewModel.LoggingOut
                 .Subscribe(this.CancelAllNotifications)
                 .DisposedBy(DisposeBag);
@@ -105,107 +128,10 @@ namespace Toggl.Droid.Activities
                 .Subscribe(showFeedbackSuccessToast)
                 .DisposedBy(DisposeBag);
 
-            logoutView.Rx()
-                .BindAction(ViewModel.TryLogout)
-                .DisposedBy(DisposeBag);
-
-            helpView.Rx()
-                .BindAction(ViewModel.OpenHelpView)
-                .DisposedBy(DisposeBag);
-
-            aboutView.Rx()
-                .BindAction(ViewModel.OpenAboutView)
-                .DisposedBy(DisposeBag);
-
-            defaultWorkspaceView.Rx()
-                .BindAction(ViewModel.PickDefaultWorkspace)
-                .DisposedBy(DisposeBag);
-
-            feedbackView.Rx()
-                .BindAction(ViewModel.SubmitFeedback)
-                .DisposedBy(DisposeBag);
-
-            swipeActionsView.Rx()
-                .BindAction(ViewModel.ToggleSwipeActions)
-                .DisposedBy(DisposeBag);
-
-            swipeActionsSwitch.Rx()
-                .BindAction(ViewModel.ToggleSwipeActions)
-                .DisposedBy(DisposeBag);
-
-            manualModeView.Rx()
-                .BindAction(ViewModel.ToggleManualMode)
-                .DisposedBy(DisposeBag);
-
-            manualModeSwitch.Rx()
-                .BindAction(ViewModel.ToggleManualMode)
-                .DisposedBy(DisposeBag);
-
-            groupTimeEntriesView.Rx()
-                .BindAction(ViewModel.ToggleTimeEntriesGrouping)
-                .DisposedBy(DisposeBag);
-
-            groupTimeEntriesSwitch.Rx()
-                .BindAction(ViewModel.ToggleTimeEntriesGrouping)
-                .DisposedBy(DisposeBag);
-
-            is24hoursModeView.Rx()
-                .BindAction(ViewModel.ToggleTwentyFourHourSettings)
-                .DisposedBy(DisposeBag);
-
-            is24hoursModeSwitch.Rx()
-                .BindAction(ViewModel.ToggleTwentyFourHourSettings)
-                .DisposedBy(DisposeBag);
-
-            runningTimerNotificationsView.Rx().Tap()
-                .Subscribe(ViewModel.ToggleRunningTimerNotifications)
-                .DisposedBy(DisposeBag);
-
-            runningTimerNotificationsSwitch.Rx().Tap()
-                .Subscribe(ViewModel.ToggleRunningTimerNotifications)
-                .DisposedBy(DisposeBag);
-
-            stoppedTimerNotificationsView.Rx().Tap()
-                .Subscribe(ViewModel.ToggleStoppedTimerNotifications)
-                .DisposedBy(DisposeBag);
-
-            stoppedTimerNotificationsSwitch.Rx().Tap()
-                .Subscribe(ViewModel.ToggleStoppedTimerNotifications)
-                .DisposedBy(DisposeBag);
-
-            dateFormatView.Rx().Tap()
-                .Subscribe(ViewModel.SelectDateFormat.Inputs)
-                .DisposedBy(DisposeBag);
-
-            beginningOfWeekView.Rx()
-                .BindAction(ViewModel.SelectBeginningOfWeek)
-                .DisposedBy(DisposeBag);
-
-            durationFormatView.Rx().Tap()
-                .Subscribe(ViewModel.SelectDurationFormat.Inputs)
-                .DisposedBy(DisposeBag);
-
-            calendarSettingsView.Rx().Tap()
-                .Subscribe(ViewModel.OpenCalendarSettings.Inputs)
-                .DisposedBy(DisposeBag);
-
-            smartRemindersView.Rx().Tap()
-                .Subscribe(ViewModel.OpenCalendarSmartReminders.Inputs)
-                .DisposedBy(DisposeBag);
-
             ViewModel.CurrentSyncStatus
-                .Subscribe(setSyncStatusView)
+                .Select(syncStatus => new CustomRow<PresentableSyncStatus>(syncStatus, ViewModel.TryLogout))
+                .Subscribe(logoutRowViewView.SetRowData)
                 .DisposedBy(DisposeBag);
-        }
-
-        private void setSyncStatusView(PresentableSyncStatus status)
-        {
-            syncStateViews.Values.ForEach(view => view.Visibility = ViewStates.Gone);
-
-            txtStateInProgress.Text = status == PresentableSyncStatus.Syncing ? Syncing : LoggingOutSecurely;
-
-            var visibleView = syncStateViews[status];
-            visibleView.Visibility = ViewStates.Visible;
         }
 
         private void showFeedbackSuccessToast(bool succeeded)
