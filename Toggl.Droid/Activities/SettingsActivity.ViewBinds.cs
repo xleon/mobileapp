@@ -96,6 +96,8 @@ namespace Toggl.Droid.Activities
             settingsContainer.AddView(timerDefaultsHeaderRow.ItemView);
             settingsContainer.AddView(isGroupingTimeEntriesRow.ItemView);
             settingsContainer.AddView(swipeActionsRow.ItemView);
+            settingsContainer.AddView(runningTimeEntryRow.ItemView);
+            settingsContainer.AddView(stoppedTimerRow.ItemView);
             settingsContainer.AddView(isManualModeEnabledRowView.ItemView);
             settingsContainer.AddView(DividerRowView.Create(this).ItemView);
 
