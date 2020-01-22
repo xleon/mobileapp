@@ -1,6 +1,7 @@
 using Android.Views;
 using Android.Widget;
 using System;
+using System.Reactive.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
@@ -98,6 +99,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.LoggingOut
+                .Do(x => LogoutGoogle())
                 .Subscribe(this.CancelAllNotifications)
                 .DisposedBy(DisposeBag);
 
@@ -108,6 +110,7 @@ namespace Toggl.Droid.Activities
             logoutView.Rx()
                 .BindAction(ViewModel.TryLogout)
                 .DisposedBy(DisposeBag);
+
 
             helpView.Rx()
                 .BindAction(ViewModel.OpenHelpView)

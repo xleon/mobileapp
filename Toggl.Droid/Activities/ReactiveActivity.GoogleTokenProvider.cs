@@ -10,6 +10,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Android.Widget;
 using Toggl.Core.Exceptions;
 using Toggl.Shared.Extensions;
 using Object = Java.Lang.Object;
@@ -66,6 +67,24 @@ namespace Toggl.Droid.Activities
                     return loginSubject.AsObservable();
                 }
             }
+        }
+
+        public void LogoutGoogle()
+        {
+            if (!googleApiClient.IsConnected)
+            {
+                Toast.MakeText(this, "if (!googleApiClient.IsConnected)", ToastLength.Short);
+                return;
+            }
+
+            var logoutCallback = new LogOutCallback(() =>
+            {
+                Toast.MakeText(this, "LogOutCallback completed", ToastLength.Short);
+                googleApiClient.Disconnect();
+            });
+            Auth.GoogleSignInApi
+                .SignOut(googleApiClient)
+                .SetResultCallback(logoutCallback);
         }
 
         private void onGoogleSignInResult(Intent data)
