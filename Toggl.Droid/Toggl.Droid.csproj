@@ -602,6 +602,13 @@
     <Compile Include="ViewHolders\MainLog\MainLogSuggestionItemViewHolder.cs" />
     <Compile Include="ViewHolders\MainLog\MainLogSuggestionSectionViewHolder.cs" />
     <Compile Include="ViewHolders\MainLog\MainLogUserFeedbackViewHolder.cs" />
+    <Compile Include="ViewHolders\Settings\InfoRowViewView.cs" />
+    <Compile Include="ViewHolders\Settings\LogoutRowViewView.cs" />
+    <Compile Include="ViewHolders\Settings\NavigationRowViewView.cs" />
+    <Compile Include="ViewHolders\Settings\SettingsRowView.cs" />
+    <Compile Include="ViewHolders\Settings\ToggleRowViewView.cs" />
+    <Compile Include="ViewHolders\Settings\ToggleRowWithDescription.cs" />
+    <Compile Include="ViewHolders\Settings\ToggleRowViewWithDescriptionView.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\SuggestionRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\ProjectSuggestionViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\TimeEntrySuggestionViewHolder.cs" />
