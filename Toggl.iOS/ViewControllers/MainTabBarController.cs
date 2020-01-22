@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
@@ -8,6 +9,7 @@ using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Presentation;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
@@ -35,11 +37,16 @@ namespace Toggl.iOS.ViewControllers
         public MainTabBarController(MainTabBarViewModel viewModel)
         {
             ViewModel = viewModel;
-            ViewControllers = ViewModel.Tabs.Select(createTabFor).ToArray();
+            ViewControllers = ViewModel.Tabs
+                .Select(createTabFor)
+                .Apply(Task.WhenAll)
+                .GetAwaiter()
+                .GetResult();
 
-            UIViewController createTabFor(Lazy<ViewModel> lazViewModel)
+            async Task<UIViewController> createTabFor(Lazy<ViewModel> lazViewModel)
             {
                 var childViewModel = lazViewModel.Value;
+                await childViewModel.Initialize();
                 var viewController = ViewControllerLocator.GetNavigationViewController(childViewModel);
                 var childViewModelType = childViewModel.GetType();
                 var item = new UITabBarItem();
