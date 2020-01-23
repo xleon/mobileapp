@@ -167,7 +167,7 @@ namespace Toggl.iOS.Views.Calendar
         {
             var context = new UICollectionViewLayoutInvalidationContext();
             context.InvalidateItems(CollectionView.IndexPathsForVisibleItems);
-            CollectionView.IndexPathsForVisibleItems.Select(ip => itemLayoutAttributes.Remove(ip));
+            CollectionView.IndexPathsForVisibleItems.Select(indexPath => itemLayoutAttributes.Remove(indexPath));
             context.InvalidateSupplementaryElements(EditingHourSupplementaryViewKind, indexPathsForEditingHours().ToArray());
             indexPathsForEditingHours().Select(indexPath => supplementaryViewLayoutAttributes[EditingHourSupplementaryViewKind].Remove(indexPath));
             InvalidateLayout(context);
