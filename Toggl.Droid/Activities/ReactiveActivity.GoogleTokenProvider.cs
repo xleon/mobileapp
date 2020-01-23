@@ -95,6 +95,10 @@ namespace Toggl.Droid.Activities
                     finally
                     {
                         isLoggingIn = false;
+                        if (googleApiClient.IsConnected)
+                        {
+                            googleApiClient.ClearDefaultAccountAndReconnect();
+                        }
                     }
                 });
             }
