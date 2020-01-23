@@ -11,63 +11,87 @@
     <AssemblyName>Toggl.Droid</AssemblyName>
     <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
-    <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
+    <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidLinkMode>Full</AndroidLinkMode>
-    <AndroidLinkSkip>Toggl.Giskard;Toggl.Storage.Realm</AndroidLinkSkip>
-    <EnableProguard>true</EnableProguard>
     <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
-    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\bin\Debug</OutputPath>
     <DefineConstants>DEBUG;__DROID__</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
+    <DebugType>portable</DebugType>
     <WarningLevel>4</WarningLevel>
+    <EnableLLVM>false</EnableLLVM>
+    <AndroidDexTool>d8</AndroidDexTool>
+    <AotAssemblies>false</AotAssemblies>
+    <AndroidLinkTool>r8</AndroidLinkTool>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <BundleAssemblies>false</BundleAssemblies>
+    <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
+    <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <AndroidSupportedAbis>arm64-v8a;armeabi-v7a;x86;x86_64</AndroidSupportedAbis>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
-    <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
-    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
+    <DefineConstants>USE_APPCENTER;ADHOC</DefineConstants>
+    <OutputPath>..\bin</OutputPath>
+    <Optimize>true</Optimize>
     <DebugType>
     </DebugType>
-    <OutputPath>..\bin</OutputPath>
-    <DefineConstants>USE_APPCENTER;ADHOC</DefineConstants>
     <AndroidKeyStore>True</AndroidKeyStore>
     <AndroidSigningKeyStore>../giskard.keystore</AndroidSigningKeyStore>
     <AndroidSigningStorePass>{KEYSTORE_PASSWORD}</AndroidSigningStorePass>
     <AndroidSigningKeyAlias>{KEYSTORE_ALIAS}</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>{KEYSTORE_ALIAS_PASSWORD}</AndroidSigningKeyPass>
+    <EnableLLVM>true</EnableLLVM>
+    <AotAssemblies>true</AotAssemblies>
+    <AndroidDexTool>d8</AndroidDexTool>
+    <EnableProguard>true</EnableProguard>
+    <AndroidLinkTool>r8</AndroidLinkTool>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <AndroidLinkMode>Full</AndroidLinkMode>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+    <AndroidLinkSkip>Toggl.Giskard;Toggl.Storage.Realm</AndroidLinkSkip>
+    <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.PlayStore|AnyCPU' ">
-    <Optimize>false</Optimize>
+    <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API;USE_APPCENTER</DefineConstants>
     <OutputPath>bin\Release.PlayStore</OutputPath>
-    <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
-    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
+    <Optimize>true</Optimize>
     <DebugType>
     </DebugType>
-    <DefineConstants>USE_ANALYTICS;USE_PRODUCTION_API;USE_APPCENTER</DefineConstants>
     <AndroidKeyStore>True</AndroidKeyStore>
     <AndroidSigningKeyStore>../giskard.keystore</AndroidSigningKeyStore>
     <AndroidSigningStorePass>{KEYSTORE_PASSWORD}</AndroidSigningStorePass>
     <AndroidSigningKeyAlias>{KEYSTORE_ALIAS}</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>{KEYSTORE_ALIAS_PASSWORD}</AndroidSigningKeyPass>
-    <AndroidCreatePackagePerAbi>true</AndroidCreatePackagePerAbi>
-    <AotAssemblies>true</AotAssemblies>
     <EnableLLVM>true</EnableLLVM>
+    <AotAssemblies>true</AotAssemblies>
+    <AndroidDexTool>d8</AndroidDexTool>
+    <EnableProguard>true</EnableProguard>
+    <AndroidLinkTool>r8</AndroidLinkTool>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <AndroidLinkMode>Full</AndroidLinkMode>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+    <AndroidLinkSkip>Toggl.Giskard;Toggl.Storage.Realm</AndroidLinkSkip>
+    <AndroidSupportedAbis>armeabi-v7a;x86_64;x86;arm64-v8a</AndroidSupportedAbis>
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=null">
@@ -850,20 +874,22 @@
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml" />
+    <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\color\FlatButtonTextColor.xml" />
     <AndroidResource Include="Resources\color\ToolbarButtonTextColor.xml" />
     <AndroidResource Include="Resources\drawable\ic_calendar.xml" />
-    <AndroidResource Include="Resources\drawable\ic_copy.xml" />
+    <AndroidResource Include="Resources\drawable\ic_copy_time_entry.xml" />
     <AndroidResource Include="Resources\drawable\ic_delete.xml" />
-    <AndroidResource Include="Resources\drawable\ic_edit.xml" />
+    <AndroidResource Include="Resources\drawable\ic_edit_time_entry.xml" />
+    <AndroidResource Include="Resources\drawable\ic_play_big.xml" />
     <AndroidResource Include="Resources\drawable\ic_save.xml" />
     <AndroidResource Include="Resources\drawable\ic_settings.xml" />
-    <AndroidResource Include="Resources\drawable\toolbar_close.xml" />
-    <AndroidResource Include="Resources\drawable\TimerWidgetBackground.xml" />
-    <AndroidResource Include="Resources\drawable\toolbar_close.xml" />
-    <AndroidResource Include="Resources\drawable\Dot.xml" />
+    <AndroidResource Include="Resources\drawable\background_timer_widget.xml" />
+    <AndroidResource Include="Resources\drawable\ic_close.xml" />
+    <AndroidResource Include="Resources\drawable\ic_stop_big.xml" />
+    <AndroidResource Include="Resources\drawable\shape_dot.xml" />
     <AndroidResource Include="Resources\drawable\ic_archived.xml" />
-    <AndroidResource Include="Resources\drawable\Splash.xml" />
+    <AndroidResource Include="Resources\drawable\splash_screen.xml" />
     <AndroidResource Include="Resources\drawable\text_placeholder.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
     <AndroidResource Include="Resources\layout\ReportSummaryElement.axml" />
@@ -880,8 +906,7 @@
     <AndroidResource Include="Resources\layout\SelectProjectActivityProjectCell.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityTaskCell.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivityWorkspaceHeader.axml" />
-    <AndroidResource Include="Resources\drawable\TransparentToBackgroundGradient.xml" />
-    <GoogleServicesJson Include="google-services.json" />
+    <AndroidResource Include="Resources\drawable\gradient_transparent_to_bg.xml" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportWorkspaceNameElement.axml" />
     <AndroidResource Include="Resources\layout\ReportNoDataElement.axml" />
@@ -893,228 +918,34 @@
     <AndroidResource Include="Resources\menu\SettingsMenu.xml" />
     <AndroidResource Include="Resources\menu\DoneOrClearMenu.xml" />
     <AndroidResource Include="Resources\menu\OneButtonMenu.xml" />
-    <AndroidResource Include="Resources\values-night\Environment.xml">
-      <SubType>Designer</SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values-v23\Styles.xml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values-v27\Styles.xml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values-v29\Styles.xml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
+    <AndroidResource Include="Resources\values-night\Environment.xml" />
+    <AndroidResource Include="Resources\values-v23\Styles.xml" />
+    <AndroidResource Include="Resources\values-v27\Styles.xml" />
+    <AndroidResource Include="Resources\values-v29\Styles.xml" />
     <AndroidResource Include="Resources\values\Environment.xml" />
     <AndroidResource Include="Resources\values\Strings.xml" />
+    <AndroidResource Include="Resources\values-ja\strings.xml" />
     <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\reports_total_chart.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\reports_total_chart.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\reports_total_chart.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\reports_total_chart.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\reports_total_chart.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\illustration_reports_total_chart.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\illustration_reports_total_chart.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\illustration_reports_total_chart.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\illustration_reports_total_chart.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\illustration_reports_total_chart.png" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />
-    <AndroidResource Include="Resources\drawable-hdpi\padlock.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\padlock.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\padlock.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\padlock.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\padlock.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\workspace.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\workspace.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\workspace.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\workspace.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\workspace.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\check.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\check.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\check.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\check.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\check.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\client.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\client.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\client.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\client.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\client.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\add_new.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\add_new.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\add_new.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\add_new.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\add_new.png" />
     <AndroidResource Include="Resources\layout\MainFragment.axml" />
     <AndroidResource Include="Resources\layout\LoginActivity.axml" />
     <AndroidResource Include="Resources\values\Styles.xml" />
-    <AndroidResource Include="Resources\drawable-hdpi\arrow_back.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\billable.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\check_light.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\checkbox_off.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\checkbox_on.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\close.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\date.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\delete.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\description.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\description_active.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\dropdown.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\error_baddata.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\next_light.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\play.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\play_white.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\project.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\project_active.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\reports_dark.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\reports_light.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\settings_dark.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\settings_light.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\stop_white.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\tag.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\tag_active.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\te_billable_active.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\te_project_active.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\te_tag_active.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\timer_dark.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\timer_light.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\unsynced.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\arrow_back.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\billable.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\check_light.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\checkbox_off.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\checkbox_on.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\close.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\date.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\delete.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\description.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\description_active.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\dropdown.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\error_baddata.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\next_light.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\play.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\play_white.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\project.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\project_active.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\reports_dark.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\reports_light.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\settings_dark.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\settings_light.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\stop_white.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\tag.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\tag_active.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\te_billable_active.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\te_project_active.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\te_tag_active.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\timer_dark.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\timer_light.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\unsynced.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\arrow_back.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\billable.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\check_light.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\checkbox_off.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\checkbox_on.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\close.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\date.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\delete.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\description.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\description_active.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\dropdown.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\error_baddata.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\next_light.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\play.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\play_white.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\project.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\project_active.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\reports_dark.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\reports_light.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\settings_dark.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\settings_light.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\stop_white.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\tag.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\tag_active.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\te_billable_active.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\te_project_active.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\te_tag_active.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\timer_dark.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\timer_light.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\unsynced.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\arrow_back.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\billable.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\check_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\checkbox_off.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\checkbox_on.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\close.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\date.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\delete.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\description.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\description_active.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\dropdown.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\error_baddata.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\next_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\play.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\play_white.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\project.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\project_active.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\reports_dark.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\reports_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\settings_dark.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\settings_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\stop_white.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\tag.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\tag_active.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\te_billable_active.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\te_project_active.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\te_tag_active.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\timer_dark.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\timer_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\unsynced.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\arrow_back.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\billable.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\check_light.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\checkbox_off.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\checkbox_on.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\close.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\date.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\delete.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\description.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\description_active.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\dropdown.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\error_baddata.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\google.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\next_light.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\play.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\play_white.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\project.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\project_active.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\reports_dark.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\reports_light.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\settings_dark.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\settings_light.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\stop_white.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\tag.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\tag_active.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\te_billable_active.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\te_project_active.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\te_tag_active.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\timer_dark.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\timer_light.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\unsynced.png" />
     <AndroidResource Include="Resources\values\Colors.xml" />
     <AndroidResource Include="Resources\layout\MainLogCell.axml" />
-    <AndroidResource Include="Resources\drawable\TransparentToCardColorGradient.xml" />
+    <AndroidResource Include="Resources\drawable\gradient_transparent_to_card_color.xml" />
     <AndroidResource Include="Resources\layout\MainLogHeader.axml" />
-    <AndroidResource Include="Resources\drawable\SmallDot.xml" />
     <AndroidResource Include="Resources\layout\MainSuggestionsCard.axml" />
     <AndroidResource Include="Resources\layout\MainRunningTimeEntry.axml" />
     <AndroidResource Include="Resources\layout\SettingsActivity.axml" />
-    <AndroidResource Include="Resources\drawable\TopShadow.xml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivity.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityTimeEntryCell.axml" />
     <AndroidResource Include="Resources\layout\StartTimeEntryActivityTimeEntryWithPartialContentCell.axml" />
@@ -1131,84 +962,54 @@
     <AndroidResource Include="Resources\layout\AbcCreateEntityCell.axml" />
     <AndroidResource Include="Resources\layout\SelectColorFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectColorFragmentCell.axml" />
-    <AndroidResource Include="Resources\drawable\ValueSliderThumb.xml" />
+    <AndroidResource Include="Resources\drawable\shape_value_slider_thumb.xml" />
     <AndroidResource Include="Resources\layout\SelectClientActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectClientActivityCell.axml" />
-    <AndroidResource Include="Resources\layout\ReportDonutLegendItem.axml" />
-    <AndroidResource Include="Resources\layout\ReportDonutChartDonutElement.axml" />
-    <AndroidResource Include="Resources\layout\DateRangePickerShortcutCell.axml" />
-    <AndroidResource Include="Resources\drawable-hdpi\book.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\timer.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\book.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\timer.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\book.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\timer.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\book.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\timer.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\book.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\timer.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\ic_illustration_error_spider.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\ic_illustration_error_spider.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\ic_illustration_error_spider.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\ic_illustration_error_spider.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_spider.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\illustration_outdated_error.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\illustration_outdated_error.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\illustration_outdated_error.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\illustration_outdated_error.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\illustration_outdated_error.png" />
     <AndroidResource Include="Resources\layout\OutdatedAppActivity.axml" />
     <AndroidResource Include="Resources\layout\TokenResetActivity.axml" />
     <AndroidResource Include="Resources\layout\EditTimeEntryTagCell.axml" />
-    <AndroidResource Include="Resources\drawable\EditTextCursor.xml" />
-    <AndroidResource Include="Resources\drawable-hdpi\date_light.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\date_light.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\date_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\date_light.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\date_light.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\visibility_off.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\visibility_off.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\visibility_off.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\visibility_off.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\visibility_off.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\visibility_on.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\visibility_on.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\visibility_on.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\visibility_on.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\visibility_on.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\bike.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\bike.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\bike.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\bike.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\bike.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\paws.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\paws.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\paws.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\paws.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\paws.png" />
-    <AndroidResource Include="Resources\drawable\RoundedRectangle.xml" />
+    <AndroidResource Include="Resources\drawable\shape_edit_text_cursor.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\illustration_bike.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\illustration_bike.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\illustration_bike.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\illustration_bike.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\illustration_bike.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\illustration_paws.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\illustration_paws.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\illustration_paws.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\illustration_paws.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\illustration_paws.png" />
     <AndroidResource Include="Resources\layout\ForgotPasswordActivity.axml" />
     <AndroidResource Include="Resources\color\RaisedButtonTextColor.xml" />
     <AndroidResource Include="Resources\layout\SignUpActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectCountryActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectCountryActivityCountryCell.axml" />
     <AndroidResource Include="Resources\layout\TermsOfServiceFragment.axml" />
-    <AndroidResource Include="Resources\drawable\ProjectRoundedRectangle.xml" />
-    <AndroidResource Include="Resources\drawable\ReportsCalendarShortcutRoundedRectangle.xml" />
+    <AndroidResource Include="Resources\drawable\shape_rounded_rectangle_projects.xml" />
+    <AndroidResource Include="Resources\drawable\background_rounded_rectangle_reports_calendar_shortcut.xml" />
     <AndroidResource Include="Resources\values\Attrs.xml" />
-    <AndroidResource Include="Resources\drawable-hdpi\logo_googleg_48_dp.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\logo_googleg_48_dp.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\logo_googleg_48_dp.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\logo_googleg_48_dp.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\logo_googleg_48_dp.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\reports.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\reports.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\reports.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\reports.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\reports.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\logo_google.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\logo_google.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\logo_google.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\logo_google.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\logo_google.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\illustration_reports.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\illustration_reports.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\illustration_reports.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\illustration_reports.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\illustration_reports.png" />
     <AndroidResource Include="Resources\drawable-hdpi\logo_splash.png" />
     <AndroidResource Include="Resources\drawable-mdpi\logo_splash.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\logo_splash.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\logo_splash.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\logo_splash.png" />
-    <AndroidResource Include="Resources\drawable\black_diamond.xml" />
-    <AndroidResource Include="Resources\drawable\TooltipShape.xml" />
-    <AndroidResource Include="Resources\drawable\white_close.xml" />
+    <AndroidResource Include="Resources\drawable\shape_diamond.xml" />
+    <AndroidResource Include="Resources\drawable\background_tooltip.xml" />
     <AndroidResource Include="Resources\layout\TooltipWithCenteredBottomArrow.axml" />
     <AndroidResource Include="Resources\layout\TooltipWithLeftTopArrow.axml" />
     <AndroidResource Include="Resources\layout\TooltipWithRightTopArrow.axml" />
@@ -1218,17 +1019,17 @@
     <AndroidResource Include="Resources\anim\abc_slide_out_left.xml" />
     <AndroidResource Include="Resources\anim\abc_slide_in_left.xml" />
     <AndroidResource Include="Resources\anim\abc_slide_out_right.xml" />
-    <AndroidResource Include="Resources\drawable\ic_icon_running.xml" />
-    <AndroidResource Include="Resources\drawable\ic_icon_notrunning.xml" />
+    <AndroidResource Include="Resources\drawable\ic_running.xml" />
+    <AndroidResource Include="Resources\drawable\ic_not_running.xml" />
     <AndroidResource Include="Resources\layout\SendFeedbackActivity.axml" />
     <AndroidResource Include="Resources\menu\SendFeedbackMenu.xml" />
     <AndroidResource Include="Resources\layout\NoWorkspaceFragment.axml" />
-    <AndroidResource Include="Resources\drawable-hdpi\ic_illustration_error_workspace.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\ic_illustration_error_workspace.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\ic_illustration_error_workspace.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\ic_illustration_error_workspace.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_workspace.png" />
-    <AndroidResource Include="Resources\drawable\workspace_white.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\illustration_no_workspace_error.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\illustration_no_workspace_error.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\illustration_no_workspace_error.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\illustration_no_workspace_error.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\illustration_no_workspace_error.png" />
+    <AndroidResource Include="Resources\drawable\ic_workspace.xml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragmentCell.axml" />
     <AndroidResource Include="Resources\drawable\ic_thumbs_down.xml" />
@@ -1237,13 +1038,13 @@
     <AndroidResource Include="Resources\xml\RemoteConfigDefaults.xml" />
     <AndroidResource Include="Resources\xml\network_security_config.xml" />
     <AndroidResource Include="Resources\layout\MainLogEmptyView.axml" />
-    <AndroidResource Include="Resources\drawable\TagsBackground.xml" />
-    <AndroidResource Include="Resources\drawable\EmptyViewRoundedRectangle.xml" />
-    <AndroidResource Include="Resources\drawable-hdpi\toggl_spider.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\toggl_spider.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\toggl_spider.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\toggl_spider.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\toggl_spider.png" />
+    <AndroidResource Include="Resources\drawable\background_tags.xml" />
+    <AndroidResource Include="Resources\drawable\background_empty_view.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\illustration_spider.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\illustration_spider.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\illustration_spider.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\illustration_spider.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\illustration_spider.png" />
     <AndroidResource Include="Resources\layout\WelcomeBackPlaceholder.axml" />
     <AndroidResource Include="Resources\layout\UserCalendarItem.axml" />
     <AndroidResource Include="Resources\layout\UserCalendarHeader.axml" />
@@ -1251,25 +1052,52 @@
     <AndroidResource Include="Resources\layout\MainTabBarActivity.axml" />
     <AndroidResource Include="Resources\menu\MainTabBarBottomMenu.xml" />
     <AndroidResource Include="Resources\color\MainTabBarItemTextColor.xml" />
-    <AndroidResource Include="Resources\drawable-hdpi\calendar_light.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\calendar_light.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\calendar_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\calendar_light.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\calendar_light.png" />
-    <AndroidResource Include="Resources\drawable\RaisedButton.axml" />
+    <AndroidResource Include="Resources\drawable\raised_button.axml" />
     <AndroidResource Include="Resources\layout\CalendarPermissionDeniedFragment.axml" />
     <AndroidResource Include="Resources\layout\UpcomingEventsNotificationSettingsFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectCalendarNotificationsOptionItem.axml" />
     <AndroidResource Include="Resources\layout\CalendarSettingsActivity.axml" />
     <AndroidResource Include="Resources\menu\CalendarSettingsMenu.xml" />
     <AndroidResource Include="Resources\layout\CalendarHeaderView.axml" />
-    <AndroidResource Include="Resources\drawable\CalendarHeaderDayBackground.xml" />
-    <AndroidResource Include="Resources\drawable\WidgetStartButton.xml" />
-    <AndroidResource Include="Resources\drawable\WidgetStopButton.xml" />
-    <AndroidResource Include="Resources\layout\ReportsBarChartElement.axml" />
-    <AndroidResource Include="Resources\layout\DateRangePicker.axml" />
-    <AndroidResource Include="Resources\layout\DatePickerShortcutCell.axml" />
-    <AndroidResource Include="Resources\layout\DateRangePickerMonthView.axml" />
+    <AndroidResource Include="Resources\drawable\shape_widget_start_button.xml" />
+    <AndroidResource Include="Resources\drawable\shape_widget_stop_button.xml" />
+    <AndroidResource Include="Resources\layout\EditDurationActivity.axml" />
+    <AndroidResource Include="Resources\drawable\background_picker_header.xml" />
+    <AndroidResource Include="Resources\drawable\ic_play.xml" />
+    <AndroidResource Include="Resources\drawable\ic_stop.xml" />
+    <AndroidResource Include="Resources\drawable\background_rounded_rectangle_gray_border.xml" />
+    <AndroidResource Include="Resources\layout\CalendarFragment.axml" />
+    <AndroidResource Include="Resources\drawable\background_calendar_entry.xml" />
+    <AndroidResource Include="Resources\drawable\ic_launcher.xml" />
+    <AndroidResource Include="Resources\animator\Collapse.xml" />
+    <AndroidResource Include="Resources\animator\Expand.xml" />
+    <AndroidResource Include="Resources\layout\TimeEntryWidget.axml" />
+    <AndroidResource Include="Resources\drawable\ic_toggl_logo.xml" />
+    <AndroidResource Include="Resources\layout\LicensesActivity.axml" />
+    <AndroidResource Include="Resources\layout\LicensesActivityCell.axml" />
+    <AndroidResource Include="Resources\drawable\background_license.xml" />
+    <AndroidResource Include="Resources\values-night\Colors.xml" />
+    <AndroidResource Include="Resources\values-night\Styles.xml" />
+    <AndroidResource Include="Resources\xml\SuggestionsWidgetProvider.xml" />
+    <AndroidResource Include="Resources\xml\TimeEntryWidgetProvider.xml" />
+    <AndroidResource Include="Resources\drawable\background_login.xml" />
+    <AndroidResource Include="Resources\values-v26\Styles.xml" />
+    <AndroidResource Include="Resources\drawable\ic_reports.xml" />
+    <AndroidResource Include="Resources\drawable\ic_timer.xml" />
+    <AndroidResource Include="Resources\drawable\ic_add.xml" />
+    <AndroidResource Include="Resources\drawable\ic_project.xml" />
+    <AndroidResource Include="Resources\drawable\ic_tag.xml" />
+    <AndroidResource Include="Resources\drawable\ic_billable.xml" />
+    <AndroidResource Include="Resources\drawable\ic_billable_active.xml" />
+    <AndroidResource Include="Resources\drawable\ic_project_active.xml" />
+    <AndroidResource Include="Resources\drawable\ic_tag_active.xml" />
+    <AndroidResource Include="Resources\drawable\ic_client.xml" />
+    <AndroidResource Include="Resources\drawable\ic_unsyncable.xml" />
+    <AndroidResource Include="Resources\drawable\ic_unsynced.xml" />
+    <AndroidResource Include="Resources\drawable\ic_dropdown.xml" />
+    <AndroidResource Include="Resources\drawable\ic_check.xml" />
+    <AndroidResource Include="Resources\drawable\ic_padlock.xml" />
+    <AndroidResource Include="Resources\drawable\ic_next.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core\Toggl.Core.csproj">
@@ -1301,96 +1129,25 @@
     <ProguardConfiguration Include="ProGuard.cfg" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\add_white.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\add_white.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\add_white.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\add_white.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\add_white.png" />
+    <AndroidResource Include="Resources\layout\DatePickerShortcutCell.axml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\EditDurationActivity.axml" />
+    <AndroidResource Include="Resources\layout\DateRangePicker.axml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\ic_separator_dot.xml" />
+    <AndroidResource Include="Resources\layout\DateRangePickerMonthView.axml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\picker_header_background.xml" />
-    <AndroidResource Include="Resources\drawable\ic_play.xml" />
-    <AndroidResource Include="Resources\drawable\ic_stop.xml" />
+    <AndroidResource Include="Resources\layout\DateRangePickerShortcutCell.axml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\GrayBorderRoundedRectangle.xml" />
-    <AndroidResource Include="Resources\layout\CalendarFragment.axml" />
+    <AndroidResource Include="Resources\layout\ReportDonutChartDonutElement.axml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\ic_launcher.xml" />
+    <AndroidResource Include="Resources\layout\ReportDonutLegendItem.axml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\animator\Collapse.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\animator\Expand.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\TimeEntryWidget.axml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\ic_toggl_logo.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\LicensesActivity.axml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\LicensesActivityCell.axml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\license_background.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values-night\Colors.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values-night\Styles.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\xml\SuggestionsWidgetProvider.xml" />
-    <AndroidResource Include="Resources\xml\TimeEntryWidgetProvider.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\login_background.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values-v26\Styles.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values-ja\strings.xml" />
+    <AndroidResource Include="Resources\layout\ReportsBarChartElement.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\Fody.2.4.6\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.6\build\Fody.targets')" />

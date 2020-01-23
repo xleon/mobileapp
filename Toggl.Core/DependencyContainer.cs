@@ -143,11 +143,12 @@ namespace Toggl.Core
                 new Lazy<IPushNotificationsTokenStorage>(CreatePushNotificationsTokenStorage);
             httpClient = new Lazy<HttpClient>(CreateHttpClient);
 
-            api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
+            api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None, timeService.Value));
             UserAccessManager = new UserAccessManager(
                 apiFactory,
                 database,
-                privateSharedStorageService);
+                privateSharedStorageService,
+                timeService);
 
             UserAccessManager
                 .UserLoggedIn
@@ -268,7 +269,7 @@ namespace Toggl.Core
 
         protected virtual void RecreateLazyDependenciesForLogout()
         {
-            api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
+            api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None, timeService.Value));
 
             dataSource = new Lazy<ITogglDataSource>(CreateDataSource);
             syncManager = new Lazy<ISyncManager>(CreateSyncManager);

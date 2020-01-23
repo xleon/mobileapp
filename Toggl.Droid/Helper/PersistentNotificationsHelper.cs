@@ -67,7 +67,7 @@ namespace Toggl.Droid.Helper
                     .SetContentText(projectDetails)
                     .SetWhen(startTime)
                     .SetContentIntent(getIntentFor(activity))
-                    .SetSmallIcon(Resource.Drawable.ic_icon_running)
+                    .SetSmallIcon(Resource.Drawable.ic_running)
                     .Build();
 
                 notificationManager.Notify(runningTimeEntryNotificationId, notification);
@@ -91,7 +91,7 @@ namespace Toggl.Droid.Helper
                     .SetContentTitle(Resources.AppTitle)
                     .SetContentText(Resources.IdleTimerNotification)
                     .SetContentIntent(getIntentFor(activity))
-                    .SetSmallIcon(Resource.Drawable.ic_icon_notrunning)
+                    .SetSmallIcon(Resource.Drawable.ic_not_running)
                     .Build();
 
                 notificationManager.Notify(idleTimerNotificationId, notification);
