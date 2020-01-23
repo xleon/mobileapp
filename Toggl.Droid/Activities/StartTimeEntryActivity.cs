@@ -6,8 +6,8 @@ using Android.Widget;
 using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using Android.Text;
 using Toggl.Core.Autocomplete;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Onboarding.StartTimeEntryView;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
@@ -67,7 +67,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsSuggestingProjects
-                .Select(isSuggesting => isSuggesting ? Resource.Drawable.te_project_active : Resource.Drawable.project)
+                .Select(isSuggesting => isSuggesting ? Resource.Drawable.ic_project_active : Resource.Drawable.ic_project)
                 .Subscribe(selectProjectToolbarButton.SetImageResource)
                 .DisposedBy(DisposeBag);
 
@@ -77,7 +77,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsSuggestingTags
-                .Select(isSuggesting => isSuggesting ? Resource.Drawable.te_tag_active : Resource.Drawable.tag)
+                .Select(isSuggesting => isSuggesting ? Resource.Drawable.ic_tag_active : Resource.Drawable.ic_tag)
                 .Subscribe(selectTagToolbarButton.SetImageResource)
                 .DisposedBy(DisposeBag);
 
@@ -87,7 +87,7 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsBillable
-                .Select(isSuggesting => isSuggesting ? Resource.Drawable.te_billable_active : Resource.Drawable.billable)
+                .Select(isSuggesting => isSuggesting ? Resource.Drawable.ic_billable_active : Resource.Drawable.ic_billable)
                 .Subscribe(selectBillableToolbarButton.SetImageResource)
                 .DisposedBy(DisposeBag);
 
@@ -119,7 +119,7 @@ namespace Toggl.Droid.Activities
             MenuInflater.Inflate(Resource.Menu.OneButtonMenu, menu);
             var doneMenuItem = menu.FindItem(Resource.Id.ButtonMenuItem);
             doneMenuItem.SetTitle(Shared.Resources.Done);
-            
+
             return true;
         }
 
@@ -196,7 +196,7 @@ namespace Toggl.Droid.Activities
         private void onTextFieldInfo(TextFieldInfo textFieldInfo)
         {
             var (formattedText, cursorPosition) = textFieldInfo.AsSpannableTextAndCursorPosition();
-            if (descriptionField.TextFormatted.ToString() == formattedText.ToString())
+            if (descriptionField.TextFormatted is ISpannable currentFormattedText && formattedText.IsEqualTo(currentFormattedText))
                 return;
 
             descriptionField.TextFormatted = formattedText;

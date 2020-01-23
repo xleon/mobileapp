@@ -65,7 +65,7 @@
             android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/StartDotSeparator"
-            android:src="@drawable/ic_separator_dot"
+            android:src="@drawable/shape_dot"
             app:layout_constraintTop_toTopOf="@id/StartTimeText"
             app:layout_constraintLeft_toRightOf="@id/StartTimeText"
             app:layout_constraintRight_toLeftOf="@+id/StartDateText"
@@ -151,7 +151,8 @@
             android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/StopDotSeparator"
-            android:src="@drawable/ic_separator_dot"
+            android:src="@drawable/shape_dot"
+            android:tint="@color/primaryText"
             app:layout_constraintTop_toTopOf="@id/StopTimeText"
             app:layout_constraintLeft_toRightOf="@id/StopTimeText"
             app:layout_constraintRight_toLeftOf="@+id/StopDateText"

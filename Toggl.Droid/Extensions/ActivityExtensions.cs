@@ -7,14 +7,17 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using AndroidX.AppCompat.App;
 using AndroidX.Core.App;
+using AndroidX.Lifecycle;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Helper;
-using Toggl.Droid.Services;
 using Toggl.Droid.SystemServices;
 using Toggl.Droid.Views;
 using Toggl.Shared.Extensions;
 using static Toggl.Droid.Helper.NotificationsConstants;
+using AlertDialog = AndroidX.AppCompat.App.AlertDialog;
+using Fragment = AndroidX.Fragment.App.Fragment;
 
 namespace Toggl.Droid.Extensions
 {
@@ -170,5 +173,11 @@ namespace Toggl.Droid.Extensions
                 activity.Window.DecorView.SystemUiVisibility = (StatusBarVisibility) (int) uiOptions;
             }
         }
+
+        public static bool IsResumed(this AppCompatActivity activity)
+            => activity.Lifecycle.CurrentState.IsAtLeast(Lifecycle.State.Resumed);
+
+        public static bool IsResumed(this Fragment fragment)
+            => fragment.Lifecycle.CurrentState.IsAtLeast(Lifecycle.State.Resumed);
     }
 }

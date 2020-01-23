@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
@@ -60,6 +62,7 @@ namespace Toggl.Core
         private readonly Lazy<IPrivateSharedStorageService> privateSharedStorageService;
         private readonly Lazy<IPushNotificationsTokenService> pushNotificationsTokenService;
         private readonly Lazy<IPushNotificationsTokenStorage> pushNotificationsTokenStorage;
+        private readonly Lazy<HttpClient> httpClient;
 
         // Non lazy
         public virtual IUserAccessManager UserAccessManager { get; }
@@ -96,6 +99,7 @@ namespace Toggl.Core
         public IPrivateSharedStorageService PrivateSharedStorageService => privateSharedStorageService.Value;
         public IPushNotificationsTokenService PushNotificationsTokenService => pushNotificationsTokenService.Value;
         public IPushNotificationsTokenStorage PushNotificationsTokenStorage => pushNotificationsTokenStorage.Value;
+        public HttpClient HttpClient => httpClient.Value;
 
         protected DependencyContainer(ApiEnvironment apiEnvironment, UserAgent userAgent)
         {
@@ -137,12 +141,14 @@ namespace Toggl.Core
             pushNotificationsTokenService = new Lazy<IPushNotificationsTokenService>(CreatePushNotificationsTokenService);
             pushNotificationsTokenStorage =
                 new Lazy<IPushNotificationsTokenStorage>(CreatePushNotificationsTokenStorage);
+            httpClient = new Lazy<HttpClient>(CreateHttpClient);
 
-            api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
+            api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None, timeService.Value));
             UserAccessManager = new UserAccessManager(
                 apiFactory,
                 database,
-                privateSharedStorageService);
+                privateSharedStorageService,
+                timeService);
 
             UserAccessManager
                 .UserLoggedIn
@@ -178,11 +184,13 @@ namespace Toggl.Core
         protected abstract IPrivateSharedStorageService CreatePrivateSharedStorageService();
         protected abstract IPushNotificationsTokenService CreatePushNotificationsTokenService();
 
+        protected abstract HttpClient CreateHttpClient();
+
         protected virtual ITimeService CreateTimeService()
             => new TimeService(SchedulerProvider.DefaultScheduler);
 
         protected virtual IBackgroundService CreateBackgroundService()
-            => new BackgroundService(TimeService, AnalyticsService, UpdateRemoteConfigCacheService);
+            => new BackgroundService(TimeService, AnalyticsService, UpdateRemoteConfigCacheService, InteractorFactory);
 
         protected virtual IAutomaticSyncingService CreateAutomaticSyncingService()
             => new AutomaticSyncingService(BackgroundService, TimeService, LastTimeUsageStorage);
@@ -197,7 +205,7 @@ namespace Toggl.Core
             => new RxActionFactory(SchedulerProvider);
 
         protected virtual IApiFactory CreateApiFactory()
-            => new ApiFactory(ApiEnvironment, userAgent);
+            => new ApiFactory(ApiEnvironment, userAgent, HttpClient);
 
         protected virtual IUpdateRemoteConfigCacheService CreateUpdateRemoteConfigCacheService()
             => new UpdateRemoteConfigCacheService(TimeService, KeyValueStorage, FetchRemoteConfigService);
@@ -235,6 +243,7 @@ namespace Toggl.Core
             calendarService,
             userPreferences,
             analyticsService,
+            onboardingStorage,
             notificationService,
             lastTimeUsageStorage,
             shortcutCreator,
@@ -260,7 +269,7 @@ namespace Toggl.Core
 
         protected virtual void RecreateLazyDependenciesForLogout()
         {
-            api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None));
+            api = apiFactory.Select(factory => factory.CreateApiWith(Credentials.None, timeService.Value));
 
             dataSource = new Lazy<ITogglDataSource>(CreateDataSource);
             syncManager = new Lazy<ISyncManager>(CreateSyncManager);

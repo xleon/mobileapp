@@ -9,6 +9,6 @@ namespace Toggl.iOS.Extensions
             => new CGPoint(point.X, point.Y);
 
         public static Point ToSharedPoint(this CGPoint point)
-            => new Point { X = point.X, Y = point.Y };
+            => new Point(point.X, point.Y);
     }
 }

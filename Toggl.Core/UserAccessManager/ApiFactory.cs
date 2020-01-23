@@ -1,4 +1,6 @@
-﻿using Toggl.Networking;
+﻿using System.Net.Http;
+using Toggl.Core.Extensions;
+using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Shared;
 
@@ -10,18 +12,26 @@ namespace Toggl.Core.Login
 
         public ApiEnvironment Environment { get; }
 
-        public ApiFactory(ApiEnvironment apiEnvironment, UserAgent userAgent)
+        private readonly HttpClient httpClient;
+
+        public ApiFactory(
+            ApiEnvironment apiEnvironment,
+            UserAgent userAgent,
+            HttpClient httpClient)
         {
             Ensure.Argument.IsNotNull(userAgent, nameof(userAgent));
+            Ensure.Argument.IsNotNull(httpClient, nameof(httpClient));
 
             UserAgent = userAgent;
             Environment = apiEnvironment;
+
+            this.httpClient = httpClient;
         }
 
-        public ITogglApi CreateApiWith(Credentials credentials)
+        public ITogglApi CreateApiWith(Credentials credentials, ITimeService timeService)
         {
             var configuration = new ApiConfiguration(Environment, credentials, UserAgent);
-            return TogglApiFactory.WithConfiguration(configuration);
+            return TogglApiFactory.With(configuration, httpClient, timeService.Now);
         }
     }
 }

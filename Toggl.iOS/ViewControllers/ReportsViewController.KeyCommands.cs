@@ -1,8 +1,13 @@
-using System.Linq;
 using Foundation;
 using ObjCRuntime;
+using Toggl.Core.Analytics;
+using Toggl.Core.Models;
+using Toggl.iOS.Helper;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
+using static Toggl.Core.Models.DateRangePeriod;
+using static Toggl.Core.UI.ViewModels.DateRangePicker.DateRangePickerViewModel;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -11,14 +16,14 @@ namespace Toggl.iOS.ViewControllers
         protected override void ConfigureKeyCommands()
         {
             base.ConfigureKeyCommands();
-            AddKeyCommand(shortcutCommand("1", Resources.Today));
-            AddKeyCommand(shortcutCommand("2", Resources.Yesterday));
-            AddKeyCommand(shortcutCommand("3", Resources.ThisWeek));
-            AddKeyCommand(shortcutCommand("4", Resources.LastWeek));
-            AddKeyCommand(shortcutCommand("5", Resources.ThisMonth));
-            AddKeyCommand(shortcutCommand("6", Resources.LastMonth));
-            AddKeyCommand(shortcutCommand("7", Resources.ThisYear));
-            AddKeyCommand(shortcutCommand("8", Resources.LastYear));
+            AddKeyCommand(shortcutCommand("1", Today));
+            AddKeyCommand(shortcutCommand("2", Yesterday));
+            AddKeyCommand(shortcutCommand("3", ThisWeek));
+            AddKeyCommand(shortcutCommand("4", LastWeek));
+            AddKeyCommand(shortcutCommand("5", ThisMonth));
+            AddKeyCommand(shortcutCommand("6", LastMonth));
+            AddKeyCommand(shortcutCommand("7", ThisYear));
+            AddKeyCommand(shortcutCommand("8", LastYear));
             AddKeyCommand(selectDateRangeCommand);
             AddKeyCommand(selectWorkspaceCommand);
             AddKeyCommand(ShowMainLogKeyCommand);
@@ -26,7 +31,7 @@ namespace Toggl.iOS.ViewControllers
             AddKeyCommand(ShowCalendarKeyCommand);
         }
 
-        private readonly UIKeyCommand selectWorkspaceCommand = UIKeyCommand.Create(
+        private readonly UIKeyCommand selectWorkspaceCommand = KeyCommandFactory.Create(
             title: Resources.Workspace,
             image: null,
             action: new Selector(nameof(selectWorkspace)),
@@ -34,21 +39,21 @@ namespace Toggl.iOS.ViewControllers
             modifierFlags: UIKeyModifierFlags.Command,
             propertyList: null);
 
-        private readonly UIKeyCommand selectDateRangeCommand = UIKeyCommand.Create(
+        private UIKeyCommand shortcutCommand(string input, DateRangePeriod period)
+            => KeyCommandFactory.Create(
+            title: period.ToHumanReadableString(),
+            image: null,
+            action: new Selector("selectShortcut:"),
+            input: input,
+            modifierFlags: UIKeyModifierFlags.Command | UIKeyModifierFlags.Alternate,
+            propertyList: new NSNumber((int)period));
+
+        private readonly UIKeyCommand selectDateRangeCommand = KeyCommandFactory.Create(
             title: Resources.DateRange,
             image: null,
             action: new Selector(nameof(selectDateRange)),
             input: "d",
             modifierFlags: UIKeyModifierFlags.Command,
-            propertyList: null);
-
-        private UIKeyCommand shortcutCommand(string input, string title)
-            => UIKeyCommand.Create(
-            title: title,
-            image: null,
-            action: new Selector("selectShortcut:"),
-            input: input,
-            modifierFlags: UIKeyModifierFlags.Command | UIKeyModifierFlags.Alternate,
             propertyList: null);
 
         [Export(nameof(selectWorkspace))]
@@ -60,21 +65,21 @@ namespace Toggl.iOS.ViewControllers
         [Export(nameof(selectDateRange))]
         private void selectDateRange()
         {
-            toggleCalendar();
+            ViewModel.SelectTimeRange.Execute();
         }
 
         [Export("selectShortcut:")]
         private void selectShortcut(UIKeyCommand command)
         {
-            var title = command.Title;
-            if (title == null)
-                return;
+            var period = (DateRangePeriod)((NSNumber)command.PropertyList).Int32Value;
+            var shortcut = IosDependencyContainer.Instance
+                .DateRangeShortcutsService
+                .GetShortcutFrom(period);
 
-            var shortcut = ViewModel.CalendarViewModel.QuickSelectShortcuts.FirstOrDefault(s => s.Title == title);
-            if (shortcut != null)
-            {
-                ViewModel.CalendarViewModel.SelectShortcut.Execute(shortcut);
-            }
+            var result = new DateRangeSelectionResult(
+                shortcut.DateRange,
+                shortcut.Period.ToDateRangeSelectionSource());
+            ViewModel.SetTimeRange.Execute(result);
         }
     }
 }

@@ -14,7 +14,6 @@ namespace Toggl.Droid.Views.Calendar
         private float timeSliceStartX;
         private float timeSlicesTopPadding;
         private float verticalLineLeftMargin;
-        private float hoursDistanceFromTimeLine;
         private TimeFormat timeOfDayFormat = TimeFormat.TwelveHoursFormat;
         private ImmutableArray<string> hours = ImmutableArray<string>.Empty;
         private ImmutableArray<float> timeLinesYs = ImmutableArray<float>.Empty;
@@ -24,24 +23,23 @@ namespace Toggl.Droid.Views.Calendar
 
         partial void initBackgroundBackingFields()
         {
-            timeSliceStartX = 60.DpToPixels(Context);
             timeSlicesTopPadding = 0;
-            verticalLineLeftMargin = 68.DpToPixels(Context);
-            hoursDistanceFromTimeLine = 12.DpToPixels(Context);
-            hoursX = timeSliceStartX - hoursDistanceFromTimeLine;
+            timeSliceStartX = Context.GetDimen(Resource.Dimension.calendarHourLineStartMargin);
+            verticalLineLeftMargin = Context.GetDimen(Resource.Dimension.calendarVerticalLineDividerStartMargin);
+            hoursX = Context.GetDimen(Resource.Dimension.calendarHoursStartMargin);
             hours = createHours();
 
             linesPaint = new Paint(PaintFlags.AntiAlias)
             {
                 Color = Context.SafeGetColor(Resource.Color.separator),
-                StrokeWidth = 1.DpToPixels(Context)
+                StrokeWidth = Context.GetDimen(Resource.Dimension.calendarHourLinesHeight)
             };
 
             hoursLabelPaint = new Paint(PaintFlags.AntiAlias)
             {
                 Color = Context.SafeGetColor(Resource.Color.reportsLabel),
                 TextAlign = Paint.Align.Right,
-                TextSize = 12.SpToPixels(Context)
+                TextSize = Context.GetDimen(Resource.Dimension.calendarHoursTextSize)
             };
         }
 

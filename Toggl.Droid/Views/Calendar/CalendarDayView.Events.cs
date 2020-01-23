@@ -68,34 +68,34 @@ namespace Toggl.Droid.Views.Calendar
 
         partial void initEventDrawingBackingFields()
         {
-            leftMargin = 68.DpToPixels(Context);
-            leftPadding = 4.DpToPixels(Context);
-            rightPadding = 4.DpToPixels(Context);
-            itemSpacing = 4.DpToPixels(Context);
+            leftMargin = Context.GetDimen(Resource.Dimension.calendarEventsStartMargin);
+            leftPadding = Context.GetDimen(Resource.Dimension.calendarEventsLeftPadding);
+            rightPadding = Context.GetDimen(Resource.Dimension.calendarEventsRightPadding);
+            itemSpacing = Context.GetDimen(Resource.Dimension.calendarEventsItemsSpacing);
             availableWidth = Width - leftMargin;
 
-            shortCalendarItemHeight = 18.DpToPixels(Context);
-            regularCalendarItemVerticalPadding = 2.DpToPixels(Context);
-            regularCalendarItemHorizontalPadding = 4.DpToPixels(Context);
-            shortCalendarItemVerticalPadding = 0.5f.DpToPixels(Context);
-            shortCalendarItemHorizontalPadding = 2.DpToPixels(Context);
-            regularCalendarItemFontSize = 12.DpToPixels(Context);
-            shortCalendarItemFontSize = 10.DpToPixels(Context);
+            shortCalendarItemHeight = Context.GetDimen(Resource.Dimension.shortCalendarItemHeight);
+            regularCalendarItemVerticalPadding = Context.GetDimen(Resource.Dimension.regularCalendarItemVerticalPadding);
+            regularCalendarItemHorizontalPadding = Context.GetDimen(Resource.Dimension.regularCalendarItemHorizontalPadding);
+            shortCalendarItemVerticalPadding = Context.GetDimen(Resource.Dimension.shortCalendarItemVerticalPadding);
+            shortCalendarItemHorizontalPadding = Context.GetDimen(Resource.Dimension.shortCalendarItemHorizontalPadding);
+            regularCalendarItemFontSize = Context.GetDimen(Resource.Dimension.regularCalendarItemFontSize);
+            shortCalendarItemFontSize = Context.GetDimen(Resource.Dimension.shortCalendarItemFontSize);
 
             eventsPaint.SetStyle(Paint.Style.FillAndStroke);
-            textEventsPaint.TextSize = 12.SpToPixels(Context);
+            textEventsPaint.TextSize = Context.GetDimen(Resource.Dimension.textEventsPaintTextSize);
             editingHoursLabelPaint.Color = Context.SafeGetColor(Resource.Color.accent);
             editingHoursLabelPaint.TextAlign = Paint.Align.Right;
-            editingHoursLabelPaint.TextSize = 12.SpToPixels(Context);
-            editingHandlesHorizontalMargins = 8.DpToPixels(Context);
-            editingHandlesRadius = 3.DpToPixels(Context);
-            runningTimeEntryStripesSpacing = 12.DpToPixels(Context);
-            runningTimeEntryThinStripeWidth = 2.DpToPixels(Context);
+            editingHoursLabelPaint.TextSize = Context.GetDimen(Resource.Dimension.editingHoursLabelPaintTextSize);
+            editingHandlesHorizontalMargins = Context.GetDimen(Resource.Dimension.editingHandlesHorizontalMargins);
+            editingHandlesRadius = Context.GetDimen(Resource.Dimension.editingHandlesRadius);
+            runningTimeEntryStripesSpacing = Context.GetDimen(Resource.Dimension.calendarRunningTimeEntryStripesSpacing);
+            runningTimeEntryThinStripeWidth = Context.GetDimen(Resource.Dimension.calendarRunningTimeEntryThinStripeWidth);
             commonRoundRectRadius = leftPadding / 2;
-            runningTimeEntryDashedHourTopPadding = 4.DpToPixels(Context);
-            calendarEventBottomLineHeight = 2.DpToPixels(Context);
-            calendarIconSize = 24.DpToPixels(Context);
-            calendarIconRightInsetMargin = 4.DpToPixels(Context);
+            runningTimeEntryDashedHourTopPadding = Context.GetDimen(Resource.Dimension.calendarRunningTimeEntryDashedHourTopPadding);
+            calendarEventBottomLineHeight = Context.GetDimen(Resource.Dimension.calendarEventBottomLineHeight);
+            calendarIconSize = Context.GetDimen(Resource.Dimension.calendarIconSize);
+            calendarIconRightInsetMargin = Context.GetDimen(Resource.Dimension.calendarIconRightInsetMargin);
             calendarIconBitmap = Context.GetVectorDrawable(Resource.Drawable.ic_calendar).ToBitmap(calendarIconSize, calendarIconSize);
         }
 

@@ -10,7 +10,7 @@ namespace Toggl.Networking.Tests.Integration.BaseTests
         {
             var user = await User.Create();
             var credentials = Credentials.WithApiToken(user.ApiToken);
-            var togglApi = TogglApiWith(credentials);
+            var togglApi = Helper.TogglApiFactory.TogglApiWith(credentials);
 
             return (togglApi, user);
         }

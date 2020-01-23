@@ -63,5 +63,10 @@ namespace Toggl.Shared.Extensions
 
         public static string? ToNullIfEmpty(this string text)
             => text?.Length == 0 ? null : text;
+
+        public static string Ellipsize(this string text, int maxLength)
+            => text.Length <= maxLength
+            ? text
+            : $"{text[0 .. (maxLength - 3)]}...";
     }
 }

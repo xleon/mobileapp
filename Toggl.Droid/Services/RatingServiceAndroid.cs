@@ -33,7 +33,7 @@ namespace Toggl.Droid.Services
         {
             Uri uri = Uri.Parse(uriString);
             Intent intent = new Intent(Intent.ActionView, uri);
-            intent.AddFlags(ActivityFlags.NoHistory | ActivityFlags.NewDocument | ActivityFlags.MultipleTask);
+            intent.AddFlags(ActivityFlags.NoHistory | ActivityFlags.NewDocument | ActivityFlags.MultipleTask | ActivityFlags.NewTask);
             context.StartActivity(intent);
         }
     }

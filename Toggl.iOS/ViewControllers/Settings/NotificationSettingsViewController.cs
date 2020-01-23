@@ -36,6 +36,10 @@ namespace Toggl.iOS.ViewControllers.Settings
                 .Subscribe(CalendarNotificationsContainer.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
+            ViewModel.ButtonTitle
+                .Subscribe(OpenSettingsButton.Rx().Title())
+                .DisposedBy(DisposeBag);
+
             OpenSettingsButton.Rx()
                 .BindAction(ViewModel.RequestAccess)
                 .DisposedBy(DisposeBag);

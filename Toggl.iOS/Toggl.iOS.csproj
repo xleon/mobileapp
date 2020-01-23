@@ -1267,10 +1267,6 @@
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x.png" />
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%403x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata.png" />
-    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\pinata.imageset\pinata%403x.png" />
     <ImageAsset Include="Resources\Images.xcassets\stop.imageset\Contents.json" />
     <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop.png" />
     <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop%403x.png" />
@@ -1377,6 +1373,14 @@
     <ImageAsset Include="Resources\Colors.xcassets\CalendarUnavailableDayText.colorset\Contents.json" />
     <ImageAsset Include="Resources\Colors.xcassets\CalendarUnselectedTodayText.colorset\Contents.json" />
     <ImageAsset Include="Resources\Colors.xcassets\CalendarHeaderLabel.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartFilled.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartTotal.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartFilledPlaceholder.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Colors.xcassets\ReportsBarChartTotalPlaceholder.colorset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorBadData.imageset\error_baddata-2.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorBadData.imageset\error_baddata-1.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorBadData.imageset\error_baddata.png" />
+    <ImageAsset Include="Resources\Images.xcassets\icErrorBadData.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -1399,7 +1403,6 @@
     <InterfaceDefinition Include="ViewControllers\SelectClientViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\OutdatedAppViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\TokenResetViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\ReportsViewController.xib" />
     <InterfaceDefinition Include="Views\Color\ColorSelectionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\ProjectSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\StartTimeEntryEmptyViewCell.xib" />
@@ -1408,11 +1411,8 @@
     <InterfaceDefinition Include="Views\StartTimeEntry\TaskSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\WorkspaceHeaderViewCell.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\WorkspaceViewCell.xib" />
-    <InterfaceDefinition Include="ViewControllers\ReportsCalendarViewController.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsCalendarViewCell.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsCalendarQuickSelectViewCell.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsLegendViewCell.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsHeaderView.xib" />
+    <InterfaceDefinition Include="Views\Reports\DateRangePickerCell.xib" />
+    <InterfaceDefinition Include="Views\Reports\DateRangePickerShortcutCell.xib" />
     <InterfaceDefinition Include="Views\StartTimeEntry\NoEntityInfoViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\SettingsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\AboutViewController.xib" />
@@ -1452,8 +1452,6 @@
     <InterfaceDefinition Include="Views\StartTimeEntry\ReactiveTaskSuggestionViewCell.xib" />
     <InterfaceDefinition Include="Cells\MainLog\TimeEntriesLogHeaderView.xib" />
     <InterfaceDefinition Include="Cells\MainLog\TimeEntriesLogViewCell.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsOverviewCardView.xib" />
-    <InterfaceDefinition Include="Views\Reports\ReportsBarChartCardView.xib" />
     <InterfaceDefinition Include="Views\EntityCreation\CreateEntityViewCell.xib" />
     <InterfaceDefinition Include="Views\Settings\SiriShortcutCell.xib" />
     <InterfaceDefinition Include="Views\Settings\CustomSiriShortcutCell.xib" />
@@ -1469,7 +1467,14 @@
     <InterfaceDefinition Include="Cells\Common\SelectorCell.xib" />
     <InterfaceDefinition Include="ViewControllers\Calendar\CalendarViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\CalendarWeeklyViewDayCollectionViewCell.xib" />
-    <InterfaceDefinition Include="ViewControllers\January2020CampaignViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\ReportsViewController.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsSummaryCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsBarChartCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsDonutChartCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsNoDataCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsErrorCollectionViewCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\DateRangePickerViewController.xib" />
     <InterfaceDefinition Include="Cells\MainLog\SuggestionLogViewCell.xib" />
     <InterfaceDefinition Include="Cells\MainLog\SuggestionsHeaderView.xib" />
     <InterfaceDefinition Include="Cells\MainLog\UserFeedbackTableViewCell.xib" />
@@ -1504,6 +1509,7 @@
     <Compile Include="Extensions\SuggestionExtensions.cs" />
     <Compile Include="Extensions\ViewControllerExtensions.cs" />
     <Compile Include="Helper\PermissionsHelper.cs" />
+    <Compile Include="Helper\KeyCommandFactory.cs" />
     <Compile Include="Presentation\IosPresenter.cs" />
     <Compile Include="Presentation\NavigationPresenter.cs" />
     <Compile Include="Presentation\ModalDialogPresenter.cs" />
@@ -1695,7 +1701,7 @@
     <Compile Include="ViewControllers\SelectClientViewController.designer.cs">
       <DependentUpon>SelectClientViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reports\ReportsCalendarCollectionViewLayout.cs" />
+    <Compile Include="Views\Reports\DateRangePickerCollectionViewLayout.cs" />
     <Compile Include="Views\TextViewWithPlaceholder.cs" />
     <Compile Include="Startup\AppDelegate.cs" />
     <Compile Include="Startup\AppDelegate.Analytics.cs">
@@ -1726,10 +1732,6 @@
     <Compile Include="ViewControllers\LoginViewController.cs" />
     <Compile Include="ViewControllers\LoginViewController.designer.cs">
       <DependentUpon>LoginViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\ReportsViewController.cs" />
-    <Compile Include="ViewControllers\ReportsViewController.designer.cs">
-      <DependentUpon>ReportsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Color\ColorSelectionViewCell.cs" />
     <Compile Include="Views\Color\ColorSelectionViewCell.designer.cs">
@@ -1766,32 +1768,15 @@
       <DependentUpon>WorkspaceViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\KeyboardAwareViewController.cs" />
-    <Compile Include="ViewControllers\ReportsCalendarViewController.cs" />
-    <Compile Include="ViewControllers\ReportsCalendarViewController.designer.cs">
-      <DependentUpon>ReportsCalendarViewController.cs</DependentUpon>
+    <Compile Include="Views\Reports\DateRangePickerCell.cs" />
+    <Compile Include="Views\Reports\DateRangePickerCell.designer.cs">
+      <DependentUpon>DateRangePickerCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewSources\ReportsCalendarCollectionViewSource.cs" />
-    <Compile Include="Views\Reports\ReportsCalendarViewCell.cs" />
-    <Compile Include="Views\Reports\ReportsCalendarViewCell.designer.cs">
-      <DependentUpon>ReportsCalendarViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewSources\ReportsCalendarQuickSelectCollectionViewSource.cs" />
-    <Compile Include="Views\Reports\ReportsCalendarQuickSelectViewCell.cs" />
-    <Compile Include="Views\Reports\ReportsCalendarQuickSelectViewCell.designer.cs">
-      <DependentUpon>ReportsCalendarQuickSelectViewCell.cs</DependentUpon>
+    <Compile Include="Views\Reports\DateRangePickerShortcutCell.cs" />
+    <Compile Include="Views\Reports\DateRangePickerShortcutCell.designer.cs">
+      <DependentUpon>DateRangePickerShortcutCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\RoundedView.cs" />
-    <Compile Include="Views\Reports\PieChartView.cs" />
-    <Compile Include="Views\Reports\PercentageView.cs" />
-    <Compile Include="Views\Reports\ReportsLegendViewCell.cs" />
-    <Compile Include="Views\Reports\ReportsLegendViewCell.designer.cs">
-      <DependentUpon>ReportsLegendViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Reports\ReportsHeaderView.cs" />
-    <Compile Include="Views\Reports\ReportsHeaderView.designer.cs">
-      <DependentUpon>ReportsHeaderView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewSources\ReportsTableViewSource.cs" />
     <Compile Include="Views\StartTimeEntry\NoEntityInfoViewCell.cs" />
     <Compile Include="Views\StartTimeEntry\NoEntityInfoViewCell.designer.cs">
       <DependentUpon>NoEntityInfoViewCell.cs</DependentUpon>
@@ -1799,7 +1784,6 @@
     <Compile Include="Views\EditDuration\WheelBackgroundView.cs" />
     <Compile Include="Views\EditDuration\BaseWheelView.cs" />
     <Compile Include="Views\EditDuration\WheelForegroundView.cs" />
-    <Compile Include="Views\Reports\LoadingPieChartView.cs" />
     <Compile Include="Views\SpiderOnARopeView.cs" />
     <Compile Include="ApplicationShortcutCreator.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
@@ -2008,15 +1992,6 @@
     <Compile Include="Views\EntityCreation\CreateEntityViewCell.designer.cs">
       <DependentUpon>CreateEntityViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reports\ReportsOverviewCardView.cs" />
-    <Compile Include="Views\Reports\ReportsOverviewCardView.designer.cs">
-      <DependentUpon>ReportsOverviewCardView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Cells\BaseReportsCardView.cs" />
-    <Compile Include="Views\Reports\ReportsBarChartCardView.cs" />
-    <Compile Include="Views\Reports\ReportsBarChartCardView.designer.cs">
-      <DependentUpon>ReportsBarChartCardView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Presentation\IScrollableToTop.cs" />
     <Compile Include="Views\Settings\SiriShortcutCell.cs" />
     <Compile Include="Views\Settings\SiriShortcutCell.designer.cs">
@@ -2087,10 +2062,44 @@
     <Compile Include="Extensions\TextViewExtensions.cs" />
     <Compile Include="Analytics\WidgetTrackingEventExtensions.cs" />
     <Compile Include="Analytics\WidgetErrorTrackingEvent.cs" />
-    <Compile Include="ViewControllers\January2020CampaignViewController.cs" />
-    <Compile Include="ViewControllers\January2020CampaignViewController.designer.cs">
-      <DependentUpon>January2020CampaignViewController.cs</DependentUpon>
+    <Compile Include="ViewControllers\ReportsViewController.cs" />
+    <Compile Include="ViewControllers\ReportsViewController.designer.cs">
+      <DependentUpon>ReportsViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Reports\ReportsCollectionViewRegularLayout.cs" />
+    <Compile Include="ViewSources\ReportsCollectionViewSource.cs" />
+    <Compile Include="Cells\Reports\ReportsSummaryCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsSummaryCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsSummaryCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsBarChartCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsBarChartCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsBarChartCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsDonutChartCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsDonutChartCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsDonutChartCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsDonutChartLegendCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reports\ReportsCollectionViewCompactLayout.cs" />
+    <Compile Include="Cells\Reports\ReportsNoDataCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsNoDataCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsNoDataCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsErrorCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsErrorCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsErrorCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reports\DonutChartView.cs" />
+    <Compile Include="ViewControllers\DateRangePickerViewController.cs" />
+    <Compile Include="ViewControllers\DateRangePickerViewController.designer.cs">
+      <DependentUpon>DateRangePickerViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSources\DateRangePickerShortcutsSource.cs" />
+    <Compile Include="ViewSources\DateRangePickerViewSource.cs" />
     <Compile Include="Cells\MainLog\SuggestionsHeaderView.cs" />
     <Compile Include="Cells\MainLog\SuggestionsHeaderView.designer.cs">
       <DependentUpon>SuggestionsHeaderView.cs</DependentUpon>
@@ -2224,6 +2233,11 @@
     <Folder Include="Resources\Colors.xcassets\CalendarUnavailableDayText.colorset\" />
     <Folder Include="Resources\Colors.xcassets\CalendarUnselectedTodayText.colorset\" />
     <Folder Include="Resources\Colors.xcassets\CalendarHeaderLabel.colorset\" />
+    <Folder Include="Cells\Reports\" />
+    <Folder Include="Resources\Colors.xcassets\ReportsBarChartFilled.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ReportsBarChartTotal.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ReportsBarChartFilledPlaceholder.colorset\" />
+    <Folder Include="Resources\Colors.xcassets\ReportsBarChartTotalPlaceholder.colorset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

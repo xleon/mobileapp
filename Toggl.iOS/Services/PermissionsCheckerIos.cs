@@ -15,7 +15,7 @@ namespace Toggl.iOS.Services
         public IObservable<bool> CalendarPermissionGranted
             => PermissionsHelper.CalendarPermissionGranted;
 
-        public IObservable<bool> NotificationPermissionGranted
+        public IObservable<PermissionStatus> NotificationPermissionGranted
             => PermissionsHelper.NotificationPermissionGranted;
     }
 }

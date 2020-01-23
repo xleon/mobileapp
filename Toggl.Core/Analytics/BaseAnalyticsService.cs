@@ -66,9 +66,9 @@ namespace Toggl.Core.Analytics
 
         public IAnalyticsEvent RatingViewSecondStepDontSendFeedback { get; }
 
-        public IAnalyticsEvent<ReportsSource, int, int, double> ReportsSuccess { get; }
+        public IAnalyticsEvent<DateRangeSelectionSource, int, int, double> ReportsSuccess { get; }
 
-        public IAnalyticsEvent<ReportsSource, int, double> ReportsFailure { get; }
+        public IAnalyticsEvent<DateRangeSelectionSource, int, double> ReportsFailure { get; }
 
         public IAnalyticsEvent OfflineModeDetected { get; }
 
@@ -222,12 +222,6 @@ namespace Toggl.Core.Analytics
 
         public IAnalyticsEvent<CalendarSwipeDirection, int, string> CalendarSingleSwipe { get; }
 
-        public IAnalyticsEvent<string> MarketingMessageShown { get; }
-
-        public IAnalyticsEvent<string> MarketingMessageCallToActionHit { get; }
-
-        public IAnalyticsEvent<string> MarketingMessageDismissed { get; }
-
         protected BaseAnalyticsService()
         {
             Login = new AnalyticsEvent<AuthenticationMethod>(this, nameof(Login), "AuthenticationMethod");
@@ -257,8 +251,8 @@ namespace Toggl.Core.Analytics
             RatingViewSecondStepDontRate = new AnalyticsEvent(this, nameof(RatingViewSecondStepDontRate));
             RatingViewSecondStepSendFeedback = new AnalyticsEvent(this, nameof(RatingViewSecondStepSendFeedback));
             RatingViewSecondStepDontSendFeedback = new AnalyticsEvent(this, nameof(RatingViewSecondStepDontSendFeedback));
-            ReportsSuccess = new AnalyticsEvent<ReportsSource, int, int, double>(this, nameof(ReportsSuccess), "Source", "TotalDays", "ProjectsNotSynced", "LoadingTime");
-            ReportsFailure = new AnalyticsEvent<ReportsSource, int, double>(this, nameof(ReportsFailure), "Source", "TotalDays", "LoadingTime");
+            ReportsSuccess = new AnalyticsEvent<DateRangeSelectionSource, int, int, double>(this, nameof(ReportsSuccess), "Source", "TotalDays", "ProjectsNotSynced", "LoadingTime");
+            ReportsFailure = new AnalyticsEvent<DateRangeSelectionSource, int, double>(this, nameof(ReportsFailure), "Source", "TotalDays", "LoadingTime");
             OfflineModeDetected = new AnalyticsEvent(this, nameof(OfflineModeDetected));
             EditViewTapped = new AnalyticsEvent<EditViewTapSource>(this, nameof(EditViewTapped), "TapSource");
             EditViewClosed = new AnalyticsEvent<EditViewCloseReason>(this, nameof(EditViewClosed), "Reason");
@@ -335,9 +329,6 @@ namespace Toggl.Core.Analytics
             CalendarExistingTimeEntryContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarExistingTimeEntryContextualMenu), "SelectedOption");
             CalendarRunningTimeEntryContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarRunningTimeEntryContextualMenu), "SelectedOption");
             CalendarTimeEntryCreated = new AnalyticsEvent<CalendarTimeEntryCreatedType, int, string>(this, nameof(CalendarTimeEntryCreated), "Type", "DaysSinceToday", "DayOfTheWeek");
-            MarketingMessageShown = new AnalyticsEvent<string>(this, nameof(MarketingMessageShown), "Campaign");
-            MarketingMessageCallToActionHit = new AnalyticsEvent<string>(this, nameof(MarketingMessageCallToActionHit), "Campaign");
-            MarketingMessageDismissed = new AnalyticsEvent<string>(this, nameof(MarketingMessageDismissed), "Campaign");
         }
 
         public void TrackAnonymized(Exception exception)

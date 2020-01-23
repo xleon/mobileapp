@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Exceptions;
@@ -15,6 +16,8 @@ using Toggl.Networking.Tests.Integration.Helper;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
+using static Toggl.Networking.Tests.Integration.Helper.TogglApiFactory;
+using TogglApiFactory = Toggl.Networking.Tests.Integration.Helper.TogglApiFactory;
 
 namespace Toggl.Core.Tests.Sync.Helpers
 {
@@ -218,6 +221,7 @@ namespace Toggl.Core.Tests.Sync.Helpers
         {
             private static readonly UserAgent userAgent = new UserAgent("TogglSyncingTests", "0.0.0");
             private static readonly ApiEnvironment environment = ApiEnvironment.Staging;
+            private static readonly LeakyBucket sharedBucket = new LeakyBucket(() => DateTimeOffset.Now, 200, 10);
 
             public static async Task<Server> Create()
             {
@@ -258,9 +262,10 @@ namespace Toggl.Core.Tests.Sync.Helpers
 
             private static IApiClient createApiClient()
             {
-                var realApiClient = Networking.TogglApiFactory.CreateDefaultApiClient(userAgent);
+                var apiClient = CreateApiClientForIntegrationTests(userAgent);
+                var leakyBucket = new LeakyBucket(() => DateTimeOffset.UtcNow, 200, 10);
 
-                return new SlowApiClient(new RetryingApiClient(realApiClient));
+                return new RetryingApiClient(new RateLimitingAwareApiClient(apiClient, leakyBucket));
             }
 
             private static async Task<ServerState> fetchInitialServerState(IUser user, ITogglApi api)
