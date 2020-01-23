@@ -234,7 +234,7 @@ namespace Toggl.iOS.Views.Calendar
                 var attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(kind, indexPath);
                 attributes.Frame = frameForHour((int)indexPath.Item);
                 attributes.ZIndex = 0;
-                supplementaryViewLayoutAttributes[kind] = new Dictionary<NSIndexPath, UICollectionViewLayoutAttributes> { [indexPath] = attributes };
+                cacheSupplementaryItemAttributes(kind, indexPath, attributes);
                 return attributes;
             }
             else if (kind == EditingHourSupplementaryViewKind)
@@ -242,7 +242,7 @@ namespace Toggl.iOS.Views.Calendar
                 var attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(kind, indexPath);
                 attributes.Frame = frameForEditingHour(indexPath);
                 attributes.ZIndex = 200;
-                supplementaryViewLayoutAttributes[kind] = new Dictionary<NSIndexPath, UICollectionViewLayoutAttributes> { [indexPath] = attributes };
+                cacheSupplementaryItemAttributes(kind, indexPath, attributes);
                 return attributes;
             }
             else
@@ -380,6 +380,18 @@ namespace Toggl.iOS.Views.Calendar
         {
             date = dateTimeOffset.ToLocalTime().Date;
             InvalidateLayout();
+        }
+
+        private void cacheSupplementaryItemAttributes(NSString kind, NSIndexPath indexPath, UICollectionViewLayoutAttributes attributes)
+        {
+            if (supplementaryViewLayoutAttributes.ContainsKey(kind))
+            {
+                supplementaryViewLayoutAttributes[kind][indexPath] = attributes;
+            }
+            else
+            {
+                supplementaryViewLayoutAttributes[kind] = new Dictionary<NSIndexPath, UICollectionViewLayoutAttributes> { [indexPath] = attributes };
+            }
         }
     }
 }
