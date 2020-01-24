@@ -252,8 +252,23 @@ namespace Toggl.Droid.Views.Calendar
             eventsPaint.Color = originalColor;
             canvas.DrawRoundRect(calendarItemRect.Left, calendarItemRect.Bottom - calendarEventBottomLineHeight, calendarItemRect.Right, calendarItemRect.Bottom, commonRoundRectRadius, commonRoundRectRadius, eventsPaint);
 
+            var calendarIconRect = calculateCalendarIconRect(calendarItemRect);
             calendarIconPaint.SetColorFilter(new PorterDuffColorFilter(originalColor, PorterDuff.Mode.SrcIn));
-            canvas.DrawBitmap(calendarIconBitmap, calendarItemRect.Left, calendarItemRect.Top, calendarIconPaint);
+            canvas.DrawBitmap(calendarIconBitmap, null, calendarIconRect, calendarIconPaint);
+        }
+
+        private RectF calculateCalendarIconRect(RectF calendarItemRect)
+        {
+            var containerHeight = calendarItemRect.Height();
+            var scale = containerHeight > calendarIconBitmap.Height ? 1.0f : containerHeight / calendarIconBitmap.Height;
+
+            var width = calendarIconBitmap.Width * scale;
+            var top = calendarItemRect.Top;
+            var left = calendarItemRect.Left + ((calendarIconBitmap.Width - width) / 2);
+            var right = left + width;
+            var bottom = top + calendarIconBitmap.Height * scale;
+
+            return new RectF(left, top, right, bottom);
         }
 
         private void drawCalendarTimeEntryItemShape(Canvas canvas, CalendarItem item, RectF calendarItemRect)
