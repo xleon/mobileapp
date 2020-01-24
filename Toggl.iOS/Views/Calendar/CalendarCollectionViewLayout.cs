@@ -111,9 +111,30 @@ namespace Toggl.iOS.Views.Calendar
 
             minHourHeight = (float)CollectionView.Bounds.Height / 26;
             maxHourHeight = minHourHeight * 5;
+        }
 
+        public override void InvalidateLayout()
+        {
             itemLayoutAttributes = new Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>();
             supplementaryViewLayoutAttributes = new Dictionary<NSString, Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>>();
+            base.InvalidateLayout();
+        }
+
+        public override void InvalidateLayout(UICollectionViewLayoutInvalidationContext context)
+        {
+            if (context.InvalidatedItemIndexPaths != null)
+                context.InvalidatedItemIndexPaths.Select(indexPath => itemLayoutAttributes.Remove(indexPath));
+
+            if (context.InvalidatedSupplementaryIndexPaths != null)
+                context.InvalidatedSupplementaryIndexPaths.Select(pair =>
+                {
+                    if (!supplementaryViewLayoutAttributes.ContainsKey((NSString)pair.Key))
+                        return false;
+
+                    return supplementaryViewLayoutAttributes[(NSString)pair.Key].Remove((NSIndexPath)pair.Value);
+                });
+
+            base.InvalidateLayout(context);
         }
 
         public override CGSize CollectionViewContentSize
@@ -167,9 +188,7 @@ namespace Toggl.iOS.Views.Calendar
         {
             var context = new UICollectionViewLayoutInvalidationContext();
             context.InvalidateItems(CollectionView.IndexPathsForVisibleItems);
-            CollectionView.IndexPathsForVisibleItems.Select(indexPath => itemLayoutAttributes.Remove(indexPath));
             context.InvalidateSupplementaryElements(EditingHourSupplementaryViewKind, indexPathsForEditingHours().ToArray());
-            indexPathsForEditingHours().Select(indexPath => supplementaryViewLayoutAttributes[EditingHourSupplementaryViewKind].Remove(indexPath));
             InvalidateLayout(context);
         }
 
