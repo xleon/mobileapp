@@ -339,9 +339,15 @@ namespace Toggl.iOS.Views.Calendar
             var editingItemIndexPath = dataSource.IndexPathForEditingItem();
             var attrs = dataSource.LayoutAttributesForItemAtIndexPath(editingItemIndexPath);
 
-            var time = (int)indexPath.Item == 0 ? attrs.StartTime : attrs.EndTime;
+            var isStartTime = (int)indexPath.Item == 0;
+            var time = isStartTime ? attrs.StartTime : attrs.EndTime;
             var yHour = HourHeight * time.Hour;
             var yMins = HourHeight * time.Minute / 60;
+
+            if (!isStartTime && time.Hour == 0)
+            {
+                yHour = HourHeight * 24;
+            }
 
             var width = CollectionViewContentSize.Width - rightPadding - (sideMargin * 2);
             var height = hourSupplementaryLabelHeight;

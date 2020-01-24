@@ -100,5 +100,8 @@
   <color name="darkBackground">#303030</color>
   <color name="primaryTextOnDarkBackground">#DDFFFFFF</color>
   <color name="weekStripeDisabledDayColor">#BDBDBD</color>
+  
+  <!-- Login/Sign Up -->
+  <color name="loginSignUpOptionsDivider">#F3F3F3</color>
 
 </resources>

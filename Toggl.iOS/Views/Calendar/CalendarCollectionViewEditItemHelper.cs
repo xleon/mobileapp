@@ -2,6 +2,7 @@
 using Foundation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -143,11 +144,17 @@ namespace Toggl.iOS.Views.Calendar
                     return true;
 
                 var point = touch.LocationInView(CollectionView);
-                var thereIsAnItemAtPoint = dataSource.CalendarItemAtPoint(point) != null;
-                return thereIsAnItemAtPoint;
+                return CollectionView.VisibleCells.Any(cell => cellContainsPoint(cell as CalendarItemView, point));
             }
 
             return true;
+        }
+
+        private bool cellContainsPoint(CalendarItemView cell, CGPoint point)
+        {
+            var topDragRect = CollectionView.ConvertRectFromView(cell.TopDragTouchArea, cell);
+            var bottomDragRect = CollectionView.ConvertRectFromView(cell.BottomDragTouchArea, cell);
+            return cell.Frame.Contains(point) || topDragRect.Contains(point) || bottomDragRect.Contains(point);
         }
 
         private void onPan(UIPanGestureRecognizer gesture)

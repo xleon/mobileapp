@@ -308,14 +308,24 @@ namespace Toggl.Core.UI.ViewModels
             userPreferences.SetStoppedTimerNotifications(newState);
         }
 
-        private Task openCalendarSettings()
-            => Navigate<CalendarSettingsViewModel, bool, string[]>(false);
+        private async Task openCalendarSettings()
+        { 
+            await Navigate<CalendarSettingsViewModel, bool, string[]>(false);
+            interactorFactory.UpdateEventNotificationsSchedules().Execute();
+        }
 
-        private Task openCalendarSmartReminders()
-            => Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
+        private async Task openCalendarSmartReminders()
+        {
+            await Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
+            interactorFactory.UpdateEventNotificationsSchedules().Execute();
+        }
 
-        private Task openNotificationSettings()
-            => Navigate<NotificationSettingsViewModel>();
+        private async Task openNotificationSettings()
+        {
+            await Navigate<NotificationSettingsViewModel>();
+            interactorFactory.UpdateEventNotificationsSchedules().Execute();
+        } 
+            
 
         private IObservable<Unit> logout()
         {

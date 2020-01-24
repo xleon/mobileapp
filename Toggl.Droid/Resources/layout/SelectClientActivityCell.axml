@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|left" />
     <View
-        android:background="@drawable/TransparentToCardColorGradient"
+        android:background="@drawable/gradient_transparent_to_card_color"
         android:layout_width="48dp"
         android:layout_marginRight="24dp"
         android:layout_height="match_parent"
@@ -30,7 +30,7 @@
         android:layout_gravity="center_vertical|right" />
     <ImageView
         android:id="@+id/SelectedImageView"
-        android:src="@drawable/check"
+        android:src="@drawable/ic_check"
         android:layout_marginRight="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
