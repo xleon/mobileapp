@@ -123,15 +123,15 @@ namespace Toggl.iOS.Views.Calendar
         public override void InvalidateLayout(UICollectionViewLayoutInvalidationContext context)
         {
             if (context.InvalidatedItemIndexPaths != null)
-                context.InvalidatedItemIndexPaths.Select(indexPath => itemLayoutAttributes.Remove(indexPath));
+                context.InvalidatedItemIndexPaths.ForEach(indexPath => itemLayoutAttributes.Remove(indexPath));
 
             if (context.InvalidatedSupplementaryIndexPaths != null)
-                context.InvalidatedSupplementaryIndexPaths.Select(pair =>
+                context.InvalidatedSupplementaryIndexPaths.ForEach(pair =>
                 {
                     if (!supplementaryViewLayoutAttributes.ContainsKey((NSString)pair.Key))
-                        return false;
+                        return;
 
-                    return supplementaryViewLayoutAttributes[(NSString)pair.Key].Remove((NSIndexPath)pair.Value);
+                    supplementaryViewLayoutAttributes[(NSString)pair.Key].Remove((NSIndexPath)pair.Value);
                 });
 
             base.InvalidateLayout(context);
