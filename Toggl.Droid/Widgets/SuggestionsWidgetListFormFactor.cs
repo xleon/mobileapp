@@ -37,8 +37,7 @@ namespace Toggl.Droid.Widgets
             view.SetTextViewText(Resource.Id.NoData, Resources.NoSuggestionsAvailable);
             view.SetTextViewText(Resource.Id.ShowAllTimeEntriesLabel, Resources.ShowAllTimEntries);
 
-            var openAppIntent = new Intent(context, typeof(SplashScreen)).SetFlags(TaskOnHome);
-            var openAppPendingIntent = PendingIntent.GetActivity(context, 0, openAppIntent, UpdateCurrent);
+            var openAppPendingIntent = WidgetIntentHelper.GetOpenAppPendingIntent(context);
             view.SetOnClickPendingIntent(Resource.Id.ShowAllTimeEntriesLabel, openAppPendingIntent);
 
             return view;

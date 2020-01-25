@@ -19,7 +19,7 @@ namespace Toggl.Droid.Widgets
 
             SetupActionsForStartAndStopButtons(context, view);
             view.SetTextViewText(Resource.Id.NoRunningTimeEntryLabel, Resources.NoRunningTimeEntry);
-            view.SetOnClickPendingIntent(Resource.Id.RootLayout, getOpenAppToLoginPendingIntent(context));
+            view.SetOnClickPendingIntent(Resource.Id.RootLayout, WidgetIntentHelper.GetOpenAppPendingIntent(context));
 
             var timeEntryIsRunning = widgetInfo.IsRunning;
             var timeEntryIsStopped = !widgetInfo.IsRunning;
@@ -68,12 +68,6 @@ namespace Toggl.Droid.Widgets
             }
 
             return view;
-        }
-
-        private PendingIntent getOpenAppToLoginPendingIntent(Context context)
-        {
-            var intent = new Intent(context, typeof(SplashScreen)).AddFlags(ActivityFlags.TaskOnHome);
-            return PendingIntent.GetActivity(context, 0, intent, PendingIntentFlags.UpdateCurrent);
         }
     }
 }
